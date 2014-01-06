@@ -1,0 +1,27 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: medusa_development
+  pool: 5
+  username: medusa
+  password: medusa@pbz
+  #host: localhost
+  #port: 5432
+  #schema_search_path: myapp,sharedapp,public
+  #min_messages: notice
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: medusa_test
+  pool: 5
+  username: medusa
+  password: medusa@pbz
+
+production:
+  adapter: postgresql
+  encoding: unicode
+  database: medusa
+  pool: 5
+  username: medusa
+  password: medusa@pbz
