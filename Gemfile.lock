@@ -59,6 +59,9 @@ GEM
       activesupport (>= 3.0)
       request_store (~> 1.0.3)
     erubis (2.7.0)
+    exception_notification (4.0.1)
+      actionmailer (>= 3.0.4)
+      activesupport (>= 3.0.4)
     execjs (2.0.2)
     faraday (0.8.8)
       multipart-post (~> 1.2.0)
@@ -172,6 +175,7 @@ DEPENDENCIES
   comma
   devise
   draper
+  exception_notification
   geonames
   jbuilder (~> 1.2)
   jquery-rails
