@@ -60,3 +60,15 @@ gem 'acts_as_taggable_on'
 gem 'exception_notification'
 gem 'settingslogic'
 gem 'validates_existence'
+
+group :development, :test do
+  gem 'rspec-rails', '>= 3.0.0.beta1'
+end
+
+group :test do
+  gem 'capybara', '>= 2.2.0'
+  gem 'poltergeist', '>= 1.5.0'
+  gem 'simplecov', :require => false
+  gem 'simplecov-rcov', :require => false
+  gem 'ci_reporter'
+end

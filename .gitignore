@@ -17,3 +17,7 @@
 
 # Ignore configration yaml files.
 /config/application.yml
+
+# Ignore test results.
+/coverage
+/spec/reports

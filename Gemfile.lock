@@ -33,9 +33,18 @@ GEM
     barby (0.5.1)
     bcrypt-ruby (3.1.2)
     builder (3.1.4)
+    capybara (2.2.1)
+      mime-types (>= 1.16)
+      nokogiri (>= 1.3.3)
+      rack (>= 1.0.0)
+      rack-test (>= 0.5.4)
+      xpath (~> 2.0)
     chunky_png (1.2.9)
+    ci_reporter (1.9.1)
+      builder (>= 2.1.2)
     climate_control (0.0.3)
       activesupport (>= 3.0)
+    cliver (0.3.2)
     cocaine (0.5.3)
       climate_control (>= 0.0.3, < 1.0)
     coffee-rails (4.0.1)
@@ -53,6 +62,8 @@ GEM
       railties (>= 3.2.6, < 5)
       thread_safe (~> 0.1)
       warden (~> 1.2.3)
+    diff-lcs (1.2.5)
+    docile (1.1.1)
     draper (1.3.0)
       actionpack (>= 3.0)
       activemodel (>= 3.0)
@@ -86,9 +97,12 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     mime-types (1.25.1)
+    mini_portile (0.5.2)
     minitest (4.7.5)
     multi_json (1.8.2)
     multipart-post (1.2.0)
+    nokogiri (1.6.1)
+      mini_portile (~> 0.5.0)
     oai (0.3.1)
       builder (>= 2.0.0)
       faraday
@@ -100,6 +114,11 @@ GEM
       cocaine (~> 0.5.3)
       mime-types
     pg (0.17.1)
+    poltergeist (1.5.0)
+      capybara (~> 2.1)
+      cliver (~> 0.3.1)
+      multi_json (~> 1.0)
+      websocket-driver (>= 0.2.0)
     polyglot (0.3.3)
     rack (1.5.2)
     rack-test (0.6.2)
@@ -124,6 +143,25 @@ GEM
     ref (1.0.5)
     request_store (1.0.5)
     rqrcode (0.4.2)
+    rspec-collection_matchers (0.0.2)
+      rspec-expectations (>= 2.99.0.beta1)
+    rspec-core (3.0.0.beta1)
+      rspec-support (= 3.0.0.beta1)
+    rspec-expectations (3.0.0.beta1)
+      diff-lcs (>= 1.1.3, < 2.0)
+      rspec-support (= 3.0.0.beta1)
+    rspec-mocks (3.0.0.beta1)
+      rspec-support (= 3.0.0.beta1)
+    rspec-rails (3.0.0.beta1)
+      actionpack (>= 3.0)
+      activemodel (>= 3.0)
+      activesupport (>= 3.0)
+      railties (>= 3.0)
+      rspec-collection_matchers
+      rspec-core (= 3.0.0.beta1)
+      rspec-expectations (= 3.0.0.beta1)
+      rspec-mocks (= 3.0.0.beta1)
+    rspec-support (3.0.0.beta1)
     rubyzip (1.1.0)
     sass (3.2.13)
     sass-rails (4.0.1)
@@ -134,6 +172,13 @@ GEM
       json (>= 1.1.3)
       rdoc (~> 3.10)
     settingslogic (2.0.9)
+    simplecov (0.8.2)
+      docile (~> 1.1.0)
+      multi_json
+      simplecov-html (~> 0.8.0)
+    simplecov-html (0.8.0)
+    simplecov-rcov (0.2.3)
+      simplecov (>= 0.4.1)
     sprockets (2.10.1)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -165,6 +210,9 @@ GEM
       activerecord
     warden (1.2.3)
       rack (>= 1.0)
+    websocket-driver (0.3.2)
+    xpath (2.0.0)
+      nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
@@ -173,7 +221,9 @@ DEPENDENCIES
   acts_as_taggable_on
   alchemist
   barby
+  capybara (>= 2.2.0)
   chunky_png
+  ci_reporter
   coffee-rails (~> 4.0.0)
   comma
   devise
@@ -186,12 +236,16 @@ DEPENDENCIES
   oai
   paperclip
   pg
+  poltergeist (>= 1.5.0)
   rails (= 4.0.2)
   rqrcode
+  rspec-rails (>= 3.0.0.beta1)
   rubyzip
   sass-rails (~> 4.0.0)
   sdoc
   settingslogic
+  simplecov
+  simplecov-rcov
   therubyracer
   uglifier (>= 1.3.0)
   unicorn
