@@ -46,3 +46,4 @@ gem 'unicorn'
 
 gem 'devise'
 gem 'kaminari'
+gem 'draper'
