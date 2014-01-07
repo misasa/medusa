@@ -43,6 +43,8 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    comma (3.2.0)
+      activesupport (>= 3.0.0)
     devise (3.2.2)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.1)
@@ -164,6 +166,7 @@ DEPENDENCIES
   barby
   chunky_png
   coffee-rails (~> 4.0.0)
+  comma
   devise
   draper
   geonames
