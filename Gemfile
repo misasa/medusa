@@ -71,4 +71,5 @@ group :test do
   gem 'simplecov', :require => false
   gem 'simplecov-rcov', :require => false
   gem 'ci_reporter'
+  gem 'factory_girl_rails'
 end
