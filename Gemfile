@@ -60,6 +60,7 @@ gem 'acts_as_taggable_on'
 gem 'exception_notification'
 gem 'settingslogic'
 gem 'validates_existence'
+gem 'acts_as_mappable', git: 'git@devel.misasa.okayama-u.ac.jp:gems/actsasmappable.git'
 
 group :development, :test do
   gem 'rspec-rails', '>= 3.0.0.beta1'
