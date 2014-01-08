@@ -63,6 +63,8 @@ gem 'validates_existence'
 
 group :development, :test do
   gem 'rspec-rails', '>= 3.0.0.beta1'
+  gem 'spring'
+  gem 'guard-rspec', require: false
 end
 
 group :test do
