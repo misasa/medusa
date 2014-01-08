@@ -9,9 +9,9 @@ GIT
 
 GIT
   remote: git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.git
-  revision: c843857fafd9f5e0b98d34e9058a975059a6882f
+  revision: 31ae49c4d08e3840abce77034744812b490e1155
   specs:
-    with_recursive (0.0.1)
+    with_recursive (0.0.2)
       activerecord (~> 4.0)
 
 GEM
