@@ -7,6 +7,13 @@ GIT
       activerecord (~> 4.0)
       railties (~> 4.0)
 
+GIT
+  remote: git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.git
+  revision: c843857fafd9f5e0b98d34e9058a975059a6882f
+  specs:
+    with_recursive (0.0.1)
+      activerecord (~> 4.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -302,3 +309,4 @@ DEPENDENCIES
   uglifier (>= 1.3.0)
   unicorn
   validates_existence
+  with_recursive!

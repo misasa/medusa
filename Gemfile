@@ -61,6 +61,7 @@ gem 'exception_notification'
 gem 'settingslogic'
 gem 'validates_existence'
 gem 'acts_as_mappable', git: 'git@devel.misasa.okayama-u.ac.jp:gems/actsasmappable.git'
+gem 'with_recursive', git: 'git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.git'
 
 group :development, :test do
   gem 'rspec-rails', '>= 3.0.0.beta1'
