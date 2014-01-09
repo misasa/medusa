@@ -66,6 +66,7 @@ gem 'thinreports'
 gem 'bootstrap-sass'
 
 group :development, :test do
+  gem 'pry-rails'
   gem 'rspec-rails', '>= 3.0.0.beta1'
   gem 'spring'
   gem 'guard-rspec', require: false
