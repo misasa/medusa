@@ -21,3 +21,6 @@
 # Ignore test results.
 /coverage
 /spec/reports
+
+# Ignore eclipse files.
+.project
