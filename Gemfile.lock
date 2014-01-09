@@ -50,6 +50,8 @@ GEM
     atomic (1.1.14)
     barby (0.5.1)
     bcrypt-ruby (3.1.2)
+    bootstrap-sass (3.0.3.0)
+      sass (~> 3.2)
     builder (3.1.4)
     capybara (2.2.1)
       mime-types (>= 1.16)
@@ -293,6 +295,7 @@ DEPENDENCIES
   acts_as_taggable_on
   alchemist
   barby
+  bootstrap-sass
   capybara (>= 2.2.0)
   chunky_png
   ci_reporter
