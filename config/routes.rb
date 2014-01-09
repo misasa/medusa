@@ -1,5 +1,15 @@
 Medusa::Application.routes.draw do
   devise_for :users
+
+  root 'facade#index'
+
+  resources :stones
+  resources :boxes
+  resources :places
+  resources :analyses
+  resources :bibs
+  resources :files
+
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
