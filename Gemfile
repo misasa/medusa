@@ -64,6 +64,7 @@ gem 'acts_as_mappable', git: 'git@devel.misasa.okayama-u.ac.jp:gems/actsasmappab
 gem 'with_recursive', git: 'git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.git'
 gem 'thinreports'
 gem 'bootstrap-sass'
+gem 'ransack'
 
 group :development, :test do
   gem 'pry-rails'

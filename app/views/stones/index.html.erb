@@ -1,1 +1,68 @@
-stones#index
+<table>
+  <thead>
+    <%= search_form_for @q do |f| %>
+    <tr>
+      <th><%= f.submit %></th>
+      <th>name</th>
+      <th>parent</th>
+      <th>box</th>
+      <th>physical_form</th>
+      <th>classification</th>
+      <th>tags</th>
+      <th>owner</th>
+      <th>project</th>
+      <th>published</th>
+      <th>modified</th>
+      <th>created</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th><%= f.text_field :name_cont %></th>
+      <th></th>
+      <th><%= f.select :box_id_eq, Box.all.map { |b| [b.name, b.id] }, include_blank: true %></th>
+      <th></th>
+      <th></th>
+      <th><%= f.select :tags_name_eq, ActsAsTaggableOn::Tag.all.map { |t| [t.name, t.name] }, include_blank: true %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th><%= f.text_field :box_name_cont %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <% end %>
+  </thead>
+  <tbody>
+    <% @stones.each do |stone| %>
+    <tr>
+      <td></td>
+      <td><%= stone.name %></td>
+      <td><%= stone.parent_id %></td>
+      <td><%= stone.box.name %></td>
+      <td><%= stone.physical_form.name %></td>
+      <td><%= stone.classification.name %></td>
+      <td><%= stone.tag_list %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
