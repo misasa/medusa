@@ -1,20 +1,24 @@
 <nav class="navbar navbar-default" role="navigation">
   <div class="collapse navbar-collapse" id="menubar">
     <ul class="nav navbar-nav">
-      <li><a href="#">all</a></li>
-      <li><a href="#">stone</a></li>
-      <li><a href="#">box</a></li>
-      <li><a href="#">place</a></li>
-      <li><a href="#">analysis</a></li>
-      <li><a href="#">bib</a></li>
-      <li><a href="#">file</a></li>
+      <li><%= link_to "all", root_path %></li>
+      <li><%= link_to "stone", stones_path %></li>
+      <li><%= link_to "box", boxes_path %></li>
+      <li><%= link_to "place", places_path %></li>
+      <li><%= link_to "analysis", analyses_path %></li>
+      <li><%= link_to "bib", bibs_path %></li>
+      <li><%= link_to "file", files_path %></li>
     </ul>
     <ul class="nav navbar-nav navbar-right">
-      <li><a herf="#"><span class="glyphicon glyphicon-home"></span></a></li>
+      <li>
+	<%= link_to root_path do %>
+	  <span class="glyphicon glyphicon-home"></span>
+	<% end %>
+      </li>
       <li><a herf="#"><span class="glyphicon glyphicon-wrench"></span></a></li>
       <li><a herf="#"><span class="glyphicon glyphicon-user"></span></a></li>
       <li>
-	<%= link_to destroy_user_session_path do %>
+	<%= link_to destroy_user_session_path, method: :delete do %>
 	  <span class="glyphicon glyphicon-off"></span>
 	<% end %>
       </li>
