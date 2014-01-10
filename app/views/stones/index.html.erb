@@ -1,22 +1,27 @@
+<%= paginate @stones %>
 <table>
   <thead>
-    <%= search_form_for @q do |f| %>
+    <%= search_form_for @search do |f| %>
     <tr>
-      <th><%= f.submit %></th>
-      <th>name</th>
+      <th>
+	<%= f.button class: "btn btn-default" do %>
+	<span class="glyphicon glyphicon-refresh"></span>
+	<% end %>
+      </th>
+      <th><%= sort_link @search, :name %></th>
       <th>parent</th>
-      <th>box</th>
-      <th>physical_form</th>
-      <th>classification</th>
-      <th>tags</th>
+      <th><%= sort_link @search, :box_name, "Box" %></th>
+      <th><%= sort_link @search, :physical_form_name, "Physical form" %></th>
+      <th><%= sort_link @search, :classification_name, "Classification" %></th>
+      <th>tags</th><!-- don't sort -->
       <th>owner</th>
       <th>project</th>
       <th>published</th>
-      <th>modified</th>
-      <th>created</th>
+      <th><%= sort_link @search, :updated_at %></th>
+      <th><%= sort_link @search, :created_at %></th>
     </tr>
     <tr>
-      <th></th>
+      <th><%= text_field_tag :per_page, params[:per_page] || Stone.default_per_page %></th>
       <th><%= f.text_field :name_cont %></th>
       <th></th>
       <th><%= f.select :box_id_eq, Box.all.map { |b| [b.name, b.id] }, include_blank: true %></th>
