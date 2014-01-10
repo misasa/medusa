@@ -21,29 +21,13 @@ ActiveRecord::Schema.define(version: 20140109070740) do
     t.text     "description"
     t.integer  "stone_id"
     t.string   "technique"
-    t.string   "instrument"
-    t.string   "analyst"
+    t.string   "device"
+    t.string   "operator"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "analyses", ["stone_id"], name: "index_analyses_on_stone_id", using: :btree
-
-  create_table "analysis_elements", force: true do |t|
-    t.integer  "analysis_id",         null: false
-    t.integer  "measurement_item_id"
-    t.string   "info"
-    t.float    "data"
-    t.string   "label"
-    t.string   "unit"
-    t.text     "description"
-    t.float    "error"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "analysis_elements", ["analysis_id"], name: "index_analysis_elements_on_analysis_id", using: :btree
-  add_index "analysis_elements", ["measurement_item_id"], name: "index_analysis_elements_on_measurement_item_id", using: :btree
 
   create_table "attachings", force: true do |t|
     t.integer  "attachment_file_id"
@@ -58,7 +42,7 @@ ActiveRecord::Schema.define(version: 20140109070740) do
   add_index "attachings", ["attachment_file_id"], name: "index_attachings_on_attachment_file_id", using: :btree
 
   create_table "attachment_files", force: true do |t|
-    t.string   "title"
+    t.string   "name"
     t.text     "description"
     t.string   "md5hash"
     t.string   "file_name"
@@ -67,15 +51,13 @@ ActiveRecord::Schema.define(version: 20140109070740) do
     t.datetime "file_updated_at"
     t.string   "original_geometry"
     t.text     "affine_matrix"
-    t.datetime "created_at"
-    t.datetime "updated_at"
   end
 
   create_table "bibs", force: true do |t|
     t.string   "entry_type"
     t.string   "abbreviation"
     t.string   "authorlist"
-    t.string   "title"
+    t.string   "name"
     t.string   "journal"
     t.string   "year"
     t.string   "volume"
@@ -97,7 +79,6 @@ ActiveRecord::Schema.define(version: 20140109070740) do
 
   create_table "boxes", force: true do |t|
     t.string   "name"
-    t.string   "label_note"
     t.integer  "parent_id"
     t.integer  "position"
     t.string   "path"
@@ -118,6 +99,22 @@ ActiveRecord::Schema.define(version: 20140109070740) do
   add_index "category_measurement_items", ["measurement_category_id"], name: "index_category_measurement_items_on_measurement_category_id", using: :btree
   add_index "category_measurement_items", ["measurement_item_id"], name: "index_category_measurement_items_on_measurement_item_id", using: :btree
 
+  create_table "chemistries", force: true do |t|
+    t.integer  "analysis_id",         null: false
+    t.integer  "measurement_item_id"
+    t.string   "info"
+    t.float    "value"
+    t.string   "label"
+    t.string   "unit"
+    t.text     "description"
+    t.float    "uncertainty"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "chemistries", ["analysis_id"], name: "index_chemistries_on_analysis_id", using: :btree
+  add_index "chemistries", ["measurement_item_id"], name: "index_chemistries_on_measurement_item_id", using: :btree
+
   create_table "classifications", force: true do |t|
     t.string  "name"
     t.string  "full_name"
@@ -129,21 +126,19 @@ ActiveRecord::Schema.define(version: 20140109070740) do
 
   add_index "classifications", ["parent_id"], name: "index_classifications_on_parent_id", using: :btree
 
-  create_table "data_properties", force: true do |t|
-    t.integer  "datum_id"
-    t.string   "datum_type"
-    t.integer  "user_id"
-    t.integer  "project_id"
-    t.integer  "u_permission"
-    t.integer  "p_permission"
-    t.integer  "o_permission"
-    t.string   "uniq_id"
-    t.boolean  "published",    default: false
-    t.datetime "published_at"
+  create_table "group_members", force: true do |t|
+    t.integer "group_id", null: false
+    t.integer "user_id",  null: false
   end
 
-  add_index "data_properties", ["datum_id"], name: "index_data_properties_on_datum_id", using: :btree
-  add_index "data_properties", ["project_id"], name: "index_data_properties_on_project_id", using: :btree
+  add_index "group_members", ["group_id"], name: "index_group_members_on_group_id", using: :btree
+  add_index "group_members", ["user_id"], name: "index_group_members_on_user_id", using: :btree
+
+  create_table "groups", force: true do |t|
+    t.string   "name",       null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "measurement_categories", force: true do |t|
     t.string "name"
@@ -165,7 +160,7 @@ ActiveRecord::Schema.define(version: 20140109070740) do
   end
 
   create_table "places", force: true do |t|
-    t.string   "title"
+    t.string   "name"
     t.text     "description"
     t.float    "latitude"
     t.float    "longitude"
@@ -174,19 +169,22 @@ ActiveRecord::Schema.define(version: 20140109070740) do
     t.datetime "updated_at"
   end
 
-  create_table "project_members", force: true do |t|
-    t.integer "project_id", null: false
-    t.integer "user_id",    null: false
+  create_table "record_properties", force: true do |t|
+    t.integer  "datum_id"
+    t.string   "datum_type"
+    t.integer  "user_id"
+    t.integer  "group_id"
+    t.integer  "permission_u"
+    t.integer  "permission_g"
+    t.integer  "permission_o"
+    t.string   "global_id"
+    t.boolean  "published",    default: false
+    t.datetime "published_at"
   end
 
-  add_index "project_members", ["project_id"], name: "index_project_members_on_project_id", using: :btree
-  add_index "project_members", ["user_id"], name: "index_project_members_on_user_id", using: :btree
-
-  create_table "projects", force: true do |t|
-    t.string   "name",       null: false
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
+  add_index "record_properties", ["datum_id"], name: "index_record_properties_on_datum_id", using: :btree
+  add_index "record_properties", ["group_id"], name: "index_record_properties_on_group_id", using: :btree
+  add_index "record_properties", ["user_id"], name: "index_record_properties_on_user_id", using: :btree
 
   create_table "referrings", force: true do |t|
     t.integer  "bib_id"
@@ -220,17 +218,15 @@ ActiveRecord::Schema.define(version: 20140109070740) do
 
   create_table "stones", force: true do |t|
     t.string   "name"
-    t.string   "label_note"
     t.string   "stone_type"
-    t.string   "box_old_id"
     t.text     "description"
     t.integer  "parent_id"
-    t.integer  "mount_id"
     t.integer  "place_id"
     t.integer  "box_id"
     t.integer  "physical_form_id"
     t.integer  "classification_id"
-    t.float    "weight_in_gram"
+    t.float    "quantity"
+    t.string   "quantity_unit"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
@@ -258,7 +254,7 @@ ActiveRecord::Schema.define(version: 20140109070740) do
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
 
   create_table "uniq_qrs", force: true do |t|
-    t.integer  "data_property_id"
+    t.integer  "record_property_id"
     t.string   "file_name"
     t.string   "content_type"
     t.integer  "file_size"
@@ -266,7 +262,7 @@ ActiveRecord::Schema.define(version: 20140109070740) do
     t.string   "identifier"
   end
 
-  add_index "uniq_qrs", ["data_property_id"], name: "index_uniq_qrs_on_data_property_id", using: :btree
+  add_index "uniq_qrs", ["record_property_id"], name: "index_uniq_qrs_on_record_property_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",    null: false

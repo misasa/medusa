@@ -2,7 +2,6 @@ class CreateBoxes < ActiveRecord::Migration
   def change
     create_table :boxes do |t|
       t.string  :name
-      t.string  :label_note
       t.integer :parent_id
       t.integer :position
       t.string  :path

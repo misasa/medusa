@@ -4,7 +4,7 @@ class CreateBibs < ActiveRecord::Migration
       t.string :entry_type
       t.string :abbreviation
       t.string :authorlist
-      t.string :title
+      t.string :name
       t.string :journal
       t.string :year
       t.string :volume

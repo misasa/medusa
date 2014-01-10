@@ -1,7 +1,7 @@
 class CreateAttachmentFiles < ActiveRecord::Migration
   def change
     create_table :attachment_files do |t|
-      t.string   :title
+      t.string   :name
       t.text     :description
       t.string   :md5hash
       t.string   :file_name
@@ -10,8 +10,6 @@ class CreateAttachmentFiles < ActiveRecord::Migration
       t.datetime :file_updated_at
       t.string   :original_geometry
       t.text     :affine_matrix
-      
-      t.timestamps
     end
   end
 end

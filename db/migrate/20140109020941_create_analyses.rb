@@ -5,8 +5,8 @@ class CreateAnalyses < ActiveRecord::Migration
       t.text    :description
       t.integer :stone_id
       t.string  :technique
-      t.string  :instrument
-      t.string  :analyst
+      t.string  :device
+      t.string  :operator
       
       t.timestamps
     end
