@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<%= render partial: "layouts/navbar" if user_signed_in? %>
+<%= render partial: navbar_path(controller.controller_name) if user_signed_in? %>
 <div class="container">
   <%= yield %>
 </div>

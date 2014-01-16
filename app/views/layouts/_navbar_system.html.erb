@@ -1,0 +1,13 @@
+<nav class="navbar navbar-inverse" role="navigation">
+  <div class="collapse navbar-collapse" id="menubar">
+    <ul class="nav navbar-nav">
+      <li><%= link_to "site", system_preference_path %></li>
+      <li><%= link_to "user", users_path %></li>
+      <li><%= link_to "group", groups_path %></li>
+      <li><%= link_to "stone", classifications_path %></li>
+      <li><%= link_to "box_type", box_types_path %></li>
+      <li><%= link_to "analysis", measurement_items_path %></li>
+    </ul>
+    <%= render partial: "layouts/navbar_common_part" %>
+  </div>
+</nav>
