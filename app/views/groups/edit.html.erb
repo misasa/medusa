@@ -1,0 +1,7 @@
+<%= form_for @group do |f| %>
+  <div>name</div>
+  <div><%= f.text_field :name %></div>
+  </br>
+  <%= f.submit "update" %>
+  <%= link_to "cancel", groups_path %>
+<% end %>

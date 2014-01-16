@@ -1,0 +1,58 @@
+<%= paginate @groups %>
+<table>
+  <thead>
+    <%= search_form_for @search do |f| %>
+    <tr>
+      <th>
+        <%= f.button class: "btn btn-default" do %>
+        <span class="glyphicon glyphicon-refresh"></span>
+        <% end %>
+      </th>
+      <th>name</th>
+      <th></th>
+      <th>updated_at</th>
+      <th>created_at</th>
+    </tr>
+    <tr>
+      <th></th>
+      <th><%= f.text_field :name_cont %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+    <% end %>
+  </thead>
+  <tbody>
+    <% @groups.each do |group| %>
+    <tr>
+      <td>
+        <%= link_to edit_group_path(group) do %>
+        <span class="glyphicon glyphicon-edit"></span>
+        <% end %>
+        <%= link_to group_path(group), method: :delete, confirm: t("confirm.delete") do %>
+        <span class="glyphicon glyphicon-trash"></span>
+        <% end %>
+      </td>
+      <td><%= group.name %></td>
+      <td></td>
+      <td></td>
+      <td></td>
+    </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <%= form_for Group.new do |f| %>
+    <tr>
+      <td></td>
+      <td><%= f.text_field :name %></td>
+      <td>
+        <%= f.button class: "btn btn-default" do %>
+        <span class="glyphicon glyphicon-save"></span>
+        <% end %>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    <% end %>
+  </tfoot>
+</table>
