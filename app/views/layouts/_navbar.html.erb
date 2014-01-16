@@ -15,7 +15,11 @@
 	  <span class="glyphicon glyphicon-home"></span>
 	<% end %>
       </li>
-      <li><a herf="#"><span class="glyphicon glyphicon-wrench"></span></a></li>
+      <li>
+  <%= link_to system_preference_path do %>
+    <span class="glyphicon glyphicon-wrench"></span>
+  <% end %>
+      </li>
       <li><a herf="#"><span class="glyphicon glyphicon-user"></span></a></li>
       <li>
 	<%= link_to destroy_user_session_path, method: :delete, confirm: t("confirm.logout") do %>
