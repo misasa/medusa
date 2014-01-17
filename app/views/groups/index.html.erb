@@ -35,8 +35,8 @@
       </td>
       <td><%= group.name %></td>
       <td></td>
-      <td></td>
-      <td></td>
+      <td><%= difference_from_now(group.updated_at) %></td>
+      <td><%= difference_from_now(group.created_at) %></td>
     </tr>
     <% end %>
   </tbody>
