@@ -8,10 +8,10 @@
         <span class="glyphicon glyphicon-refresh"></span>
         <% end %>
       </th>
-      <th>name</th>
+      <th><%= sort_link @search, :name %></th>
       <th></th>
-      <th>updated_at</th>
-      <th>created_at</th>
+      <th><%= sort_link @search, :updated_at %></th>
+      <th><%= sort_link @search, :created_at %></th>
     </tr>
     <tr>
       <th></th>
