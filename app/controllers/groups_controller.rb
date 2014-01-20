@@ -3,6 +3,7 @@ class GroupsController < ApplicationController
 
   def index
     @search = Group.search(params[:q])
+    @search.build_condition if @search.conditions.empty?
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @groups = @search.result.page(params[:page]).per(params[:per_page])
   end

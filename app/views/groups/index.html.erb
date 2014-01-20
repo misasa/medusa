@@ -15,7 +15,17 @@
     </tr>
     <tr>
       <th></th>
-      <th><%= f.text_field :name_cont %></th>
+      <th>
+        <%= f.condition_fields do |c| %>
+          <%= c.attribute_fields do |a| %>
+            <%= a.hidden_field(:name, value: "name") %>
+          <% end %>
+          <%= c.predicate_select(compounds: false) %>
+          <%= c.value_fields do |v| %>
+            <%= v.text_field :value %>
+          <% end %>
+        <% end %>
+      </th>
       <th></th>
       <th></th>
       <th></th>
