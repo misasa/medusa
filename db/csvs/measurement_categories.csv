@@ -1,0 +1,7 @@
+id,name,description,unit
+2,trace,trace elements,micro_gram_per_gram
+3,major,major element,centi_gram_per_gram
+6,isotope (raw),isotope,parts
+14,volatile,volatile element,micro_gram_per_gram
+15,isotope (epsilon),isotope,parts_per_myriad
+16,isotope (delta),isotope,parts_per_mille

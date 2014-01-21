@@ -1,0 +1,728 @@
+id,name,description,stone_id,technique,device,operator,created_at,updated_at
+179,Elemental and isotopic abundance of I1501,,125,,"",,2009-04-23 09:27:44.998123,2011-04-08 09:12:13.521418
+180,Elemental and isotopic abundance of I1502,,126,,"",,2009-04-23 09:28:59.347941,2011-04-08 09:12:12.728905
+181,Elemental and isotopic abundance of I1503,,127,,"",,2009-04-23 09:30:15.601905,2011-04-08 09:12:12.696317
+182,Elemental and isotopic abundance of I1504,,128,,"",,2009-04-23 09:31:32.180782,2011-04-08 09:12:12.660958
+183,Elemental and isotopic abundance of I1607,,129,,"",,2009-04-23 09:32:47.198329,2011-04-08 09:12:13.137194
+184,Elemental and isotopic abundance of I1608,,130,,"",,2009-04-23 09:34:06.186816,2011-04-08 09:12:13.104997
+185,Elemental and isotopic abundance of I1605,,131,,"",,2009-04-23 09:35:20.234146,2011-04-08 09:12:13.316696
+186,Elemental and isotopic abundance of I1606,,132,,"",,2009-04-23 09:36:40.963245,2011-04-08 09:12:13.171016
+187,Elemental and isotopic abundance of I1603,,133,,"",,2009-04-23 09:37:57.913539,2011-04-08 09:12:13.387294
+188,Elemental and isotopic abundance of I1604,,134,,"",,2009-04-23 09:39:13.471429,2011-04-08 09:12:13.354784
+189,Elemental and isotopic abundance of I1601,,135,,"",,2009-04-23 09:40:32.40286,2011-04-08 09:12:13.45415
+190,Elemental and isotopic abundance of I1602,,136,,"",,2009-04-23 09:41:51.063852,2011-04-08 09:12:13.421568
+191,Elemental and isotopic abundance of I1505,,137,,"",,2009-04-23 09:43:07.863357,2011-04-08 09:12:12.621813
+192,Elemental and isotopic abundance of I1506,,138,,"",,2009-04-23 09:44:24.011879,2011-04-08 09:12:12.587027
+193,Elemental and isotopic abundance of I1507,,139,,"",,2009-04-23 09:45:40.440039,2011-04-08 09:12:12.554353
+194,Elemental and isotopic abundance of I1508,,140,,"",,2009-04-24 08:59:19.670813,2011-04-08 09:12:12.520699
+195,Elemental and isotopic abundance of I1509,,141,,"",,2009-04-24 09:00:36.945858,2011-04-08 09:12:12.487236
+196,Elemental and isotopic abundance of I1510,,142,,"",,2009-04-24 09:01:52.986854,2011-04-08 09:12:12.448119
+197,Elemental and isotopic abundance of IB1608,,143,,"",,2009-04-24 09:03:13.759932,2011-04-08 09:12:12.828543
+199,Elemental and isotopic abundance of IB1610,,145,,"",,2009-04-24 09:05:50.718698,2011-04-08 09:12:12.762465
+200,Elemental and isotopic abundance of IB1606,,146,,"",,2009-04-24 09:07:40.513619,2011-04-08 09:12:12.895761
+201,Elemental and isotopic abundance of IB1607,,147,,"",,2009-04-24 09:09:08.966051,2011-04-08 09:12:12.863373
+203,Elemental and isotopic abundance of IB1602,,149,,"",,2009-04-24 09:11:41.975515,2011-04-08 09:12:13.037626
+204,Elemental and isotopic abundance of IB1603,,150,,"",,2009-04-24 09:12:57.791396,2011-04-08 09:12:13.004311
+205,Elemental and isotopic abundance of IB1604,,151,,"",,2009-04-24 09:14:18.826314,2011-04-08 09:12:12.962569
+206,Elemental and isotopic abundance of IB1605,,152,,"",,2009-04-24 09:15:35.606747,2011-04-08 09:12:12.929608
+207,Elemental and isotopic abundance of IB2201,,153,,"",,2009-04-24 09:16:55.506727,2011-04-08 09:12:12.407313
+208,Elemental and isotopic abundance of I2201,,154,,"",,2009-04-24 09:18:12.891169,2011-04-08 09:12:13.487603
+215,Elemental and isotopic abundance of 0901-4,,2783,,,,2009-08-03 10:10:44.764101,2009-08-03 10:21:30.011976
+216,Elemental and isotopic abundance of 0901-4a,,2900,,,,2009-08-03 10:12:07.753542,2009-08-03 10:12:07.753542
+217,Elemental and isotopic abundance of 0901-4b,,2901,,,,2009-08-03 10:13:23.464554,2009-08-03 10:13:23.464554
+218,Elemental and isotopic abundance of 0901-4c,,2902,,,,2009-08-03 10:14:44.599547,2009-08-03 10:14:44.599547
+219,Elemental and isotopic abundance of 0902-2,,2694,,,,2009-08-03 10:16:06.594212,2009-08-03 10:22:22.614565
+220,Nd and Hf isotopic compositions of 0902-2a,,2693,,,,2009-08-03 10:17:27.048477,2010-01-07 18:54:22.00657
+221,Elemental and isotopic abundance of 0902-8,,2803,,,,2009-08-03 10:18:47.72385,2009-12-16 10:45:40.871676
+222,Elemental and isotopic abundance of 0902-8a,,2903,,,,2009-08-03 10:20:11.625589,2009-08-03 10:20:11.625589
+223,Elemental and isotopic abundance of 0902-8b,,2904,,,,2009-08-03 10:21:31.466283,2009-08-03 10:21:31.466283
+224,Elemental and isotopic abundance of 0902-8c,,2905,,,,2009-08-03 10:22:53.118098,2009-08-03 10:22:53.118098
+225,Elemental and isotopic abundance of 0904-1,,2804,,,,2009-08-03 10:24:13.986713,2009-12-16 10:43:00.372333
+226,Elemental and isotopic abundance of 0904-1a,,2907,,,,2009-08-03 10:25:35.726647,2009-08-03 10:25:35.726647
+227,Elemental and isotopic abundance of 0904-1b,,2908,,,,2009-08-03 10:26:56.721344,2009-08-03 10:26:56.721344
+228,Elemental and isotopic abundance of 0904-1c,,2909,,,,2009-08-03 10:28:17.59857,2009-08-03 10:28:17.59857
+229,Elemental and isotopic abundance of 0901-1,,2630,,,,2009-08-03 10:29:37.869192,2009-12-16 10:39:44.442788
+230,Elemental and isotopic abundance of 0902-1,,2801,,,,2009-08-03 10:30:50.082444,2009-12-16 10:36:13.832344
+231,Elemental and isotopic abundance of 0904-2,,2808,,,,2009-08-03 10:31:56.340838,2009-08-03 10:31:56.340838
+232,Elemental and isotopic abundance of 0901-2,,2781,,,,2009-08-03 10:33:07.626862,2009-12-16 10:38:18.173298
+233,Elemental and isotopic abundance of 0901-3,,2800,,,,2009-08-03 10:34:19.376558,2009-08-03 10:34:19.376558
+234,Elemental and isotopic abundance of 0902-3,,2784,,,,2009-08-03 10:35:27.705003,2009-08-03 10:35:27.705003
+235,Elemental and isotopic abundance of 0902-10,,2806,,,,2009-08-03 10:36:38.406107,2009-08-03 10:36:38.406107
+236,Elemental and isotopic abundance of 0903-13,,2667,,,,2009-08-03 10:37:49.212233,2009-12-16 10:34:27.553915
+237,Elemental and isotopic abundance of 0902-11,,2807,,,,2009-08-03 10:39:00.483389,2009-08-03 10:39:00.483389
+318,Data for HR+5,,2692,,,,2009-12-15 22:51:39.339955,2009-12-15 22:51:39.339955
+319,Data for HR-90,,2684,,,,2009-12-15 22:53:15.059267,2009-12-15 22:53:15.059267
+320,Data for HR-70,,2683,,,,2009-12-15 22:54:49.573031,2009-12-15 22:54:49.573031
+321,Data for HR-60,,2690,,,,2009-12-15 22:56:24.626553,2009-12-15 22:56:24.626553
+322,Data for HR-50,,2688,,,,2009-12-15 22:57:57.679881,2009-12-15 22:57:57.679881
+323,Data for HR-37,,2691,,,,2009-12-15 22:59:30.863101,2009-12-15 22:59:30.863101
+324,Data for HR 0,,2689,,,,2009-12-15 23:01:04.92086,2009-12-15 23:01:04.92086
+325,Data for HR+12,,2687,,,,2009-12-15 23:02:38.158495,2009-12-15 23:02:38.158495
+326,Data for HR+20,,2686,,,,2009-12-15 23:04:09.841966,2009-12-15 23:04:09.841966
+327,Data for HR +55,,2685,,,,2009-12-15 23:05:44.449474,2009-12-15 23:05:44.449474
+328,Major element compositions of 0902-2a measured by XRF,,2693,,,,2010-01-07 18:36:52.160519,2010-01-07 18:38:29.773961
+329,Trace element compositions of 0902-2a measured by ICP-QMS,,2693,,,,2010-01-07 18:43:34.015858,2010-01-07 18:44:47.650758
+330,Pb isotopic composition of 0902-2a,,2693,,,,2010-01-07 18:47:20.407183,2010-01-07 18:51:30.063945
+445,O isotope for ol-sc1,"",6160,laser fluorination,MAT-253 at PML,Ryoji Tanaka,2010-12-02 19:04:24.483266,2013-02-15 10:55:54.480156
+464,O isotope for ol-fukang1,average of duplicates,6847,Dual Inlet,MAT253,Ryoji Tanaka,2011-01-17 11:34:33.331264,2013-02-15 10:59:15.877348
+582,O isotope for ol-fo1,average of quadruplicate,7887,Dual inlet,MAT253,Ryoji Tanaka,2011-03-28 18:40:48.326122,2013-02-15 10:58:21.87096
+776,O isotope for cpx-klb1,average of quadruplicates,7894,Dual Inlet,MAT253,Ryoji Tanaka,2011-04-28 13:51:44.30963,2013-02-15 10:52:25.24089
+783,O isotope for opx-klb1,average of duplicates,7897,Dual Inlet,MAT253,Ryoji Tanaka,2011-04-28 17:23:05.054261,2013-02-15 10:50:31.090237
+865,major for opx-klb1,"",8015,"",JEOL JXA-8800R,"",2011-04-30 14:41:25.601808,2013-02-15 10:53:49.252343
+881,O isotope for gl-ab1,average of duplicates,6184,Dual Inlet,MAT253,Ryoji Tanaka,2011-05-11 14:08:05.300033,2013-02-15 10:46:49.809292
+891,major for gl-ab1,"",6201,"",JEOL JXA-8800R,"",2011-05-12 12:40:00.00185,2013-02-15 10:52:40.918476
+896,in-situ O isotope for Di@755,"",8150,SIMS,Cameca ims 1270,tk,2011-05-20 07:38:16.501279,2012-02-23 19:21:42.393664
+897,in-situ O isotope for Di@756,"",8150,SIMS,Cameca ims 1270,tk,2011-05-20 07:39:17.030149,2012-02-23 19:23:30.752608
+898,in-situ O isotope for diaplectic plagioclase@765,"",8150,SIMS,Cameca ims 1270,tk,2011-05-20 07:40:12.608468,2012-02-23 19:25:34.559068
+914,in-situ major for low-Ca Px,"gold coat 5 nm
+accelerating voltage 15 kV
+beam current 12 nA
+beam size 3 um
+integration time peak 10 s, backgrounds 5 s
+matrix correction oxide ZAF method",8175,EPMA,JEOL JXA-8800R,ttsujimori,2011-05-24 10:06:14.831232,2012-02-23 18:39:06.918756
+915,in-situ O isotope for low-Ca Px@782,"primary impact energy 20 keV
+gold coat (50+)200 × 3 °A
+secondary accelerating voltage −10 kV
+primary beam current 200 pA (4H × 3V μm)
+primary beam raster 5 × 5 μm (7 × 7 μm for first 140 s)
+entrance slit width 80 μm
+field aperture dimension 800 × 800 μm (20 × 20 μm on sample)
+energy band pass from −10 to +30 (40 eV width)
+exit slit width 200 μm for 17O− and 400 μm for 16O− and 18O−
+mass resolution (m/m) 8,000 for 17O− and 2,400 for 16O− and 18O−
+detectors FC (L’2), EM (axial), and EM (H1) for 16O−, 17O−, and 18O−
+peam optimization automatic FA centering at beginning (30 s)
+mass calibration automatic mass centering at beginning (15 s)
+pre-sputter duration 3 min 10 s including beam optimization and mass calibration
+secondary ion integration 14.5 s × 40 cycles
+contribution of 16OH− to 17O− less than 0.1h
+background estimation every 1 hour",8175,SIMS,Cameca ims 1270,tk,2011-05-24 10:24:34.775519,2012-02-23 19:29:04.580021
+916,in-situ O isotope for low-Ca Px@783,"primary impact energy 20 keV
+gold coat (50+)200 × 3 °A
+secondary accelerating voltage −10 kV
+primary beam current 200 pA (4H × 3V μm)
+primary beam raster 5 × 5 μm (7 × 7 μm for first 140 s)
+entrance slit width 80 μm
+field aperture dimension 800 × 800 μm (20 × 20 μm on sample)
+energy band pass from −10 to +30 (40 eV width)
+exit slit width 200 μm for 17O− and 400 μm for 16O− and 18O−
+mass resolution (m/m) 8,000 for 17O− and 2,400 for 16O− and 18O−
+detectors FC (L’2), EM (axial), and EM (H1) for 16O−, 17O−, and 18O−
+peam optimization automatic FA centering at beginning (30 s)
+mass calibration automatic mass centering at beginning (15 s)
+pre-sputter duration 3 min 10 s including beam optimization and mass calibration
+secondary ion integration 14.5 s × 40 cycles
+contribution of 16OH− to 17O− less than 0.1h
+background estimation every 1 hour",8175,SIMS,Cameca ims 1270,tk,2011-05-24 10:32:55.147889,2012-02-23 19:30:31.074211
+923,in-situ major for Di,"",8150,EPMA,JEOL JXA-8800R,TT,2011-05-24 11:44:38.069298,2012-02-23 18:17:23.091943
+924,I1301,11-times diluted lithium tetraborate glass bead,172,XRF,Philips PW2400,hkitagawa,2011-06-02 18:49:46.300284,2011-06-02 18:49:46.300284
+925,I1302,11-times diluted lithium tetraborate glass bead,173,XRF,Philips PW2400,hkitagawa,2011-06-02 18:49:48.076179,2011-06-02 18:49:48.076179
+926,I1303,11-times diluted lithium tetraborate glass bead,174,XRF,Philips PW2400,hkitagawa,2011-06-02 18:49:49.949635,2011-06-02 18:49:49.949635
+927,I1304,11-times diluted lithium tetraborate glass bead,176,XRF,Philips PW2400,hkitagawa,2011-06-02 18:49:51.817235,2011-06-02 18:49:51.817235
+928,I1305,11-times diluted lithium tetraborate glass bead,179,XRF,Philips PW2400,hkitagawa,2011-06-02 18:49:53.555956,2011-06-02 18:49:53.555956
+929,I1306,11-times diluted lithium tetraborate glass bead,181,XRF,Philips PW2400,hkitagawa,2011-06-02 18:49:55.29712,2011-06-02 18:49:55.29712
+930,I1307,11-times diluted lithium tetraborate glass bead,182,XRF,Philips PW2400,hkitagawa,2011-06-02 18:49:57.319234,2011-06-02 18:49:57.319234
+931,I1308,11-times diluted lithium tetraborate glass bead,183,XRF,Philips PW2400,hkitagawa,2011-06-02 18:49:59.073344,2011-06-02 18:49:59.073344
+932,I1309,11-times diluted lithium tetraborate glass bead,184,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:00.834825,2011-06-02 18:50:00.834825
+933,I1310,11-times diluted lithium tetraborate glass bead,185,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:02.584812,2011-06-02 18:50:02.584812
+934,I1311,11-times diluted lithium tetraborate glass bead,186,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:04.622885,2011-06-02 18:50:04.622885
+935,I1312,11-times diluted lithium tetraborate glass bead,187,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:06.207727,2011-06-02 18:50:06.207727
+936,I1313,11-times diluted lithium tetraborate glass bead,188,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:07.866071,2011-06-02 18:50:07.866071
+937,I1314,11-times diluted lithium tetraborate glass bead,189,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:09.864462,2011-06-02 18:50:09.864462
+938,I1315,11-times diluted lithium tetraborate glass bead,190,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:12.214736,2011-06-02 18:50:12.214736
+939,I1401,11-times diluted lithium tetraborate glass bead,169,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:14.102887,2011-06-02 18:50:14.102887
+940,I1402,11-times diluted lithium tetraborate glass bead,170,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:16.117281,2011-06-02 18:50:16.117281
+941,I1403,11-times diluted lithium tetraborate glass bead,175,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:18.095728,2011-06-02 18:50:18.095728
+942,I1404,11-times diluted lithium tetraborate glass bead,177,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:20.416879,2011-06-02 18:50:20.416879
+943,I1405,11-times diluted lithium tetraborate glass bead,178,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:22.276241,2011-06-02 18:50:22.276241
+944,I1406,11-times diluted lithium tetraborate glass bead,180,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:24.141206,2011-06-02 18:50:24.141206
+945,I1407,11-times diluted lithium tetraborate glass bead,191,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:28.18675,2011-06-02 18:50:28.18675
+946,I1408,11-times diluted lithium tetraborate glass bead,193,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:30.024203,2011-06-02 18:50:30.024203
+947,I1409,11-times diluted lithium tetraborate glass bead,195,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:31.935445,2011-06-02 18:50:31.935445
+948,I1410,11-times diluted lithium tetraborate glass bead,196,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:33.772063,2011-06-02 18:50:33.772063
+949,I1411,11-times diluted lithium tetraborate glass bead,198,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:35.599196,2011-06-02 18:50:35.599196
+950,I1412,11-times diluted lithium tetraborate glass bead,201,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:37.438419,2011-06-02 18:50:37.438419
+951,I1413,11-times diluted lithium tetraborate glass bead,202,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:39.170299,2011-06-02 18:50:39.170299
+952,I1414,11-times diluted lithium tetraborate glass bead,203,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:41.080182,2011-06-02 18:50:41.080182
+953,I1415,11-times diluted lithium tetraborate glass bead,204,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:42.815803,2011-06-02 18:50:42.815803
+954,I1416,11-times diluted lithium tetraborate glass bead,205,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:44.843719,2011-06-02 18:50:44.843719
+955,I1417,11-times diluted lithium tetraborate glass bead,206,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:46.901031,2011-06-02 18:50:46.901031
+956,I1418,11-times diluted lithium tetraborate glass bead,207,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:48.652454,2011-06-02 18:50:48.652454
+957,IB1401,11-times diluted lithium tetraborate glass bead,171,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:50.375688,2011-06-02 18:50:50.375688
+958,IB1402,11-times diluted lithium tetraborate glass bead,192,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:52.224528,2011-06-02 18:50:52.224528
+959,IB1403,11-times diluted lithium tetraborate glass bead,194,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:53.896633,2011-06-02 18:50:53.896633
+960,IB1404,11-times diluted lithium tetraborate glass bead,197,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:55.689924,2011-06-02 18:50:55.689924
+961,IB1405,11-times diluted lithium tetraborate glass bead,199,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:57.589812,2011-06-02 18:50:57.589812
+962,IB1406,11-times diluted lithium tetraborate glass bead,200,XRF,Philips PW2400,hkitagawa,2011-06-02 18:50:59.237951,2011-06-02 18:50:59.237951
+963,I1501,11-times diluted lithium tetraborate glass bead,125,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:01.334904,2011-06-02 18:51:01.334904
+964,I1502,11-times diluted lithium tetraborate glass bead,126,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:03.207719,2011-06-02 18:51:03.207719
+965,I1503,11-times diluted lithium tetraborate glass bead,127,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:04.857541,2011-06-02 18:51:04.857541
+966,I1504,11-times diluted lithium tetraborate glass bead,128,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:06.527718,2011-06-02 18:51:06.527718
+967,I1505,11-times diluted lithium tetraborate glass bead,137,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:08.15072,2011-06-02 18:51:08.15072
+968,I1506,11-times diluted lithium tetraborate glass bead,138,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:09.775185,2011-06-02 18:51:09.775185
+969,I1507,11-times diluted lithium tetraborate glass bead,139,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:11.747852,2011-06-02 18:51:11.747852
+970,I1508,11-times diluted lithium tetraborate glass bead,140,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:13.336987,2011-06-02 18:51:13.336987
+971,I1509,11-times diluted lithium tetraborate glass bead,141,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:14.980654,2011-06-02 18:51:14.980654
+972,I1510,11-times diluted lithium tetraborate glass bead,142,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:16.599124,2011-06-02 18:51:16.599124
+973,I1601,11-times diluted lithium tetraborate glass bead,135,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:18.472104,2011-06-02 18:51:18.472104
+974,I1602,11-times diluted lithium tetraborate glass bead,136,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:20.11179,2011-06-02 18:51:20.11179
+975,I1603,11-times diluted lithium tetraborate glass bead,133,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:21.919356,2011-06-02 18:51:21.919356
+976,I1604,11-times diluted lithium tetraborate glass bead,134,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:23.58784,2011-06-02 18:51:23.58784
+977,I1605,11-times diluted lithium tetraborate glass bead,131,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:25.277302,2011-06-02 18:51:25.277302
+978,I1606,11-times diluted lithium tetraborate glass bead,132,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:27.371838,2011-06-02 18:51:27.371838
+979,I1607,11-times diluted lithium tetraborate glass bead,129,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:29.03794,2011-06-02 18:51:29.03794
+980,I1608,11-times diluted lithium tetraborate glass bead,130,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:30.733607,2011-06-02 18:51:30.733607
+981,IB1601,11-times diluted lithium tetraborate glass bead,148,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:32.773891,2011-06-02 18:51:32.773891
+982,IB1602,11-times diluted lithium tetraborate glass bead,149,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:34.440652,2011-06-02 18:51:34.440652
+983,IB1603,11-times diluted lithium tetraborate glass bead,150,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:36.294349,2011-06-02 18:51:36.294349
+984,IB1604,11-times diluted lithium tetraborate glass bead,151,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:38.022971,2011-06-02 18:51:38.022971
+985,IB1605,11-times diluted lithium tetraborate glass bead,152,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:39.620466,2011-06-02 18:51:39.620466
+986,IB1606,11-times diluted lithium tetraborate glass bead,146,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:41.242232,2011-06-02 18:51:41.242232
+987,IB1607,11-times diluted lithium tetraborate glass bead,147,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:42.91889,2011-06-02 18:51:42.91889
+988,IB1608,11-times diluted lithium tetraborate glass bead,143,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:44.809962,2011-06-02 18:51:44.809962
+989,IB1609,11-times diluted lithium tetraborate glass bead,144,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:46.420946,2011-06-02 18:51:46.420946
+990,IB1610,11-times diluted lithium tetraborate glass bead,145,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:48.335437,2011-06-02 18:51:48.335437
+991,I2101,11-times diluted lithium tetraborate glass bead,230,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:49.929833,2011-06-02 18:51:49.929833
+992,I2102,11-times diluted lithium tetraborate glass bead,231,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:51.526986,2011-06-02 18:51:51.526986
+993,I2103,11-times diluted lithium tetraborate glass bead,232,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:53.141932,2011-06-02 18:51:53.141932
+994,I2104,11-times diluted lithium tetraborate glass bead,233,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:54.743657,2011-06-02 18:51:54.743657
+995,I2105,11-times diluted lithium tetraborate glass bead,224,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:56.342149,2011-06-02 18:51:56.342149
+996,I2106,11-times diluted lithium tetraborate glass bead,226,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:58.069723,2011-06-02 18:51:58.069723
+997,I2107,11-times diluted lithium tetraborate glass bead,228,XRF,Philips PW2400,hkitagawa,2011-06-02 18:51:59.745935,2011-06-02 18:51:59.745935
+998,I2108,11-times diluted lithium tetraborate glass bead,220,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:01.712117,2011-06-02 18:52:01.712117
+999,I2109,11-times diluted lithium tetraborate glass bead,221,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:03.409005,2011-06-02 18:52:03.409005
+1000,I2110,11-times diluted lithium tetraborate glass bead,219,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:05.08613,2011-06-02 18:52:05.08613
+1001,I2111,11-times diluted lithium tetraborate glass bead,217,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:06.702543,2011-06-02 18:52:06.702543
+1002,I2112,11-times diluted lithium tetraborate glass bead,216,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:08.310783,2011-06-02 18:52:08.310783
+1003,I2113,11-times diluted lithium tetraborate glass bead,215,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:10.4705,2011-06-02 18:52:10.4705
+1004,I2114,11-times diluted lithium tetraborate glass bead,213,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:12.696904,2011-06-02 18:52:12.696904
+1005,I2115,11-times diluted lithium tetraborate glass bead,212,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:14.426799,2011-06-02 18:52:14.426799
+1006,I2116,11-times diluted lithium tetraborate glass bead,210,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:16.048934,2011-06-02 18:52:16.048934
+1007,I2117,11-times diluted lithium tetraborate glass bead,209,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:18.155946,2011-06-02 18:52:18.155946
+1008,I2118,11-times diluted lithium tetraborate glass bead,208,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:19.900717,2011-06-02 18:52:19.900717
+1009,IB2101,11-times diluted lithium tetraborate glass bead,234,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:21.518466,2011-06-02 18:52:21.518466
+1010,IB2102,11-times diluted lithium tetraborate glass bead,235,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:23.386652,2011-06-02 18:52:23.386652
+1011,IB2103,11-times diluted lithium tetraborate glass bead,225,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:25.09191,2011-06-02 18:52:25.09191
+1012,IB2104,11-times diluted lithium tetraborate glass bead,227,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:26.955846,2011-06-02 18:52:26.955846
+1013,IB2105,11-times diluted lithium tetraborate glass bead,229,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:28.594767,2011-06-02 18:52:28.594767
+1014,IB2106,11-times diluted lithium tetraborate glass bead,222,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:30.254757,2011-06-02 18:52:30.254757
+1015,IB2107,11-times diluted lithium tetraborate glass bead,223,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:32.154726,2011-06-02 18:52:32.154726
+1016,IB2108,11-times diluted lithium tetraborate glass bead,218,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:33.832693,2011-06-02 18:52:33.832693
+1017,IB2109,11-times diluted lithium tetraborate glass bead,214,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:35.543305,2011-06-02 18:52:35.543305
+1018,IB2110,11-times diluted lithium tetraborate glass bead,211,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:37.14143,2011-06-02 18:52:37.14143
+1019,I2201,11-times diluted lithium tetraborate glass bead,154,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:38.749612,2011-06-02 18:52:38.749612
+1020,I2202,11-times diluted lithium tetraborate glass bead,155,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:40.381142,2011-06-02 18:52:40.381142
+1021,I2203,11-times diluted lithium tetraborate glass bead,156,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:42.20675,2011-06-02 18:52:42.20675
+1022,I2204,11-times diluted lithium tetraborate glass bead,158,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:43.809827,2011-06-02 18:52:43.809827
+1023,I2205,11-times diluted lithium tetraborate glass bead,159,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:46.203926,2011-06-02 18:52:46.203926
+1024,I2206,11-times diluted lithium tetraborate glass bead,161,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:47.913001,2011-06-02 18:52:47.913001
+1025,I2207,11-times diluted lithium tetraborate glass bead,162,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:49.498065,2011-06-02 18:52:49.498065
+1026,I2208,11-times diluted lithium tetraborate glass bead,163,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:51.099901,2011-06-02 18:52:51.099901
+1027,I2209,11-times diluted lithium tetraborate glass bead,165,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:52.917684,2011-06-02 18:52:52.917684
+1028,I2210,11-times diluted lithium tetraborate glass bead,167,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:54.529308,2011-06-02 18:52:54.529308
+1029,I2211,11-times diluted lithium tetraborate glass bead,893,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:56.226238,2011-06-02 18:52:56.226238
+1030,I2212,11-times diluted lithium tetraborate glass bead,894,XRF,Philips PW2400,hkitagawa,2011-06-02 18:52:58.341924,2011-06-02 18:52:58.341924
+1031,I2213,11-times diluted lithium tetraborate glass bead,895,XRF,Philips PW2400,hkitagawa,2011-06-02 18:53:00.100762,2011-06-02 18:53:00.100762
+1032,IB2201,11-times diluted lithium tetraborate glass bead,153,XRF,Philips PW2400,hkitagawa,2011-06-02 18:53:02.006655,2011-06-02 18:53:02.006655
+1033,IB2202,11-times diluted lithium tetraborate glass bead,157,XRF,Philips PW2400,hkitagawa,2011-06-02 18:53:03.929296,2011-06-02 18:53:03.929296
+1034,IB2203,11-times diluted lithium tetraborate glass bead,160,XRF,Philips PW2400,hkitagawa,2011-06-02 18:53:05.712589,2011-06-02 18:53:05.712589
+1035,IB2204,11-times diluted lithium tetraborate glass bead,164,XRF,Philips PW2400,hkitagawa,2011-06-02 18:53:07.408418,2011-06-02 18:53:07.408418
+1036,IB2205,11-times diluted lithium tetraborate glass bead,166,XRF,Philips PW2400,hkitagawa,2011-06-02 18:53:09.313455,2011-06-02 18:53:09.313455
+1037,IB2206,11-times diluted lithium tetraborate glass bead,168,XRF,Philips PW2400,hkitagawa,2011-06-02 18:53:10.998286,2011-06-02 18:53:10.998286
+1038,I1301,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",172,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:18:05.997131,2011-06-03 19:18:05.997131
+1039,I1302,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",173,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:18:10.719306,2011-06-03 19:18:10.719306
+1040,I1303,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",174,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:18:16.068156,2011-06-03 19:18:16.068156
+1041,I1304,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",176,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:18:20.400758,2011-06-03 19:18:20.400758
+1042,I1305,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",179,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:18:24.525878,2011-06-03 19:18:24.525878
+1043,I1306,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",181,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:18:28.990529,2011-06-03 19:18:28.990529
+1044,I1307,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",182,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:18:33.313445,2011-06-03 19:18:33.313445
+1045,I1308,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",183,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:18:37.87685,2011-06-03 19:18:37.87685
+1046,I1309,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",184,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:18:42.442245,2011-06-03 19:18:42.442245
+1047,I1310,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",185,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:18:47.445528,2011-06-03 19:18:47.445528
+1048,I1311,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",186,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:18:52.36986,2011-06-03 19:18:52.36986
+1049,I1312,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",187,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:18:56.702478,2011-06-03 19:18:56.702478
+1050,I1313,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",188,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:01.472835,2011-06-03 19:19:01.472835
+1051,I1314,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",189,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:05.785283,2011-06-03 19:19:05.785283
+1052,I1315,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",190,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:10.091789,2011-06-03 19:19:10.091789
+1053,I1401,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",169,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:14.321117,2011-06-03 19:19:14.321117
+1054,I1402,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",170,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:18.418405,2011-06-03 19:19:18.418405
+1055,I1403,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",175,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:22.594169,2011-06-03 19:19:22.594169
+1056,I1404,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",177,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:26.979264,2011-06-03 19:19:26.979264
+1057,I1405,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",178,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:31.34316,2011-06-03 19:19:31.34316
+1058,I1406,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",180,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:35.491334,2011-06-03 19:19:35.491334
+1059,I1407,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",191,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:39.809905,2011-06-03 19:19:39.809905
+1060,I1408,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",193,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:45.537111,2011-06-03 19:19:45.537111
+1061,I1409,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",195,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:49.786573,2011-06-03 19:19:49.786573
+1062,I1410,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",196,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:53.981865,2011-06-03 19:19:53.981865
+1063,I1411,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",198,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:19:58.477598,2011-06-03 19:19:58.477598
+1064,I1412,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",201,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:03.196546,2011-06-03 19:20:03.196546
+1065,I1413,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",202,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:07.187369,2011-06-03 19:20:07.187369
+1066,I1414,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",203,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:11.411025,2011-06-03 19:20:11.411025
+1067,I1415,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",204,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:15.98829,2011-06-03 19:20:15.98829
+1068,I1416,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",205,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:20.134146,2011-06-03 19:20:20.134146
+1069,I1417,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",206,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:24.363903,2011-06-03 19:20:24.363903
+1070,I1418,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",207,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:28.448175,2011-06-03 19:20:28.448175
+1071,IB1401,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",171,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:32.89638,2011-06-03 19:20:32.89638
+1072,IB1402,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",192,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:37.280495,2011-06-03 19:20:37.280495
+1073,IB1403,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",194,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:41.115131,2011-06-03 19:20:41.115131
+1074,IB1404,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",197,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:45.336019,2011-06-03 19:20:45.336019
+1075,IB1405,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",199,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:48.864909,2011-06-03 19:20:48.864909
+1076,IB1406,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",200,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:52.656901,2011-06-03 19:20:52.656901
+1077,I1501,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",125,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:20:56.535417,2011-06-03 19:20:56.535417
+1078,I1502,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",126,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:01.056731,2011-06-03 19:21:01.056731
+1079,I1503,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",127,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:04.868752,2011-06-03 19:21:04.868752
+1080,I1504,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",128,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:09.033947,2011-06-03 19:21:09.033947
+1081,I1505,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",137,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:15.297383,2011-06-03 19:21:15.297383
+1082,I1506,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",138,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:19.769078,2011-06-03 19:21:19.769078
+1083,I1507,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",139,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:24.490673,2011-06-03 19:21:24.490673
+1084,I1508,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",140,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:28.797769,2011-06-03 19:21:28.797769
+1085,I1509,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",141,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:33.298336,2011-06-03 19:21:33.298336
+1086,I1510,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",142,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:37.592487,2011-06-03 19:21:37.592487
+1087,I1601,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",135,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:41.789801,2011-06-03 19:21:41.789801
+1088,I1602,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",136,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:47.056128,2011-06-03 19:21:47.056128
+1089,I1603,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",133,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:51.145081,2011-06-03 19:21:51.145081
+1090,I1604,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",134,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:21:55.48829,2011-06-03 19:21:55.48829
+1091,I1605,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",131,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:00.075297,2011-06-03 19:22:00.075297
+1092,I1606,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",132,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:04.455622,2011-06-03 19:22:04.455622
+1093,I1607,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",129,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:09.119638,2011-06-03 19:22:09.119638
+1094,I1608,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",130,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:13.66144,2011-06-03 19:22:13.66144
+1095,IB1601,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",148,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:18.361219,2011-06-03 19:22:18.361219
+1096,IB1602,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",149,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:22.639899,2011-06-03 19:22:22.639899
+1097,IB1603,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",150,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:27.174251,2011-06-03 19:22:27.174251
+1098,IB1604,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",151,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:32.235542,2011-06-03 19:22:32.235542
+1099,IB1605,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",152,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:36.539871,2011-06-03 19:22:36.539871
+1100,IB1606,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",146,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:40.905365,2011-06-03 19:22:40.905365
+1101,IB1607,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",147,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:45.253398,2011-06-03 19:22:45.253398
+1102,IB1608,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",143,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:49.539535,2011-06-03 19:22:49.539535
+1103,IB1609,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",144,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:54.436431,2011-06-03 19:22:54.436431
+1104,IB1610,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",145,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:22:58.893871,2011-06-03 19:22:58.893871
+1105,I2101,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",230,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:03.627018,2011-06-03 19:23:03.627018
+1106,I2102,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",231,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:08.056818,2011-06-03 19:23:08.056818
+1107,I2103,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",232,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:12.632716,2011-06-03 19:23:12.632716
+1108,I2104,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",233,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:17.522736,2011-06-03 19:23:17.522736
+1109,I2105,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",224,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:22.30017,2011-06-03 19:23:22.30017
+1110,I2106,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",226,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:26.64719,2011-06-03 19:23:26.64719
+1111,I2107,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",228,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:31.704245,2011-06-03 19:23:31.704245
+1112,I2108,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",220,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:36.052332,2011-06-03 19:23:36.052332
+1113,I2109,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",221,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:40.265333,2011-06-03 19:23:40.265333
+1114,I2110,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",219,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:44.823701,2011-06-03 19:23:44.823701
+1115,I2111,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",217,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:49.698421,2011-06-03 19:23:49.698421
+1116,I2112,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",216,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:54.131925,2011-06-03 19:23:54.131925
+1117,I2113,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",215,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:23:58.85538,2011-06-03 19:23:58.85538
+1118,I2114,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",213,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:03.473829,2011-06-03 19:24:03.473829
+1119,I2115,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",212,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:07.777185,2011-06-03 19:24:07.777185
+1120,I2116,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",210,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:12.058846,2011-06-03 19:24:12.058846
+1121,I2117,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",209,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:16.361388,2011-06-03 19:24:16.361388
+1122,I2118,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",208,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:20.688759,2011-06-03 19:24:20.688759
+1123,IB2101,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",234,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:25.017438,2011-06-03 19:24:25.017438
+1124,IB2102,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",235,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:29.388091,2011-06-03 19:24:29.388091
+1125,IB2103,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",225,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:34.112073,2011-06-03 19:24:34.112073
+1126,IB2104,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",227,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:38.582132,2011-06-03 19:24:38.582132
+1127,IB2105,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",229,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:43.719908,2011-06-03 19:24:43.719908
+1128,IB2106,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",222,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:48.269894,2011-06-03 19:24:48.269894
+1129,IB2107,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",223,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:52.583836,2011-06-03 19:24:52.583836
+1130,IB2108,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",218,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:24:56.813918,2011-06-03 19:24:56.813918
+1131,IB2109,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",214,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:00.937319,2011-06-03 19:25:00.937319
+1132,IB2110,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",211,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:05.770218,2011-06-03 19:25:05.770218
+1133,I2201,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",154,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:10.075432,2011-06-03 19:25:10.075432
+1134,I2202,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",155,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:14.981131,2011-06-03 19:25:14.981131
+1135,I2203,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",156,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:19.974601,2011-06-03 19:25:19.974601
+1136,I2204,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",158,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:24.69084,2011-06-03 19:25:24.69084
+1137,I2205,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",159,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:29.236288,2011-06-03 19:25:29.236288
+1138,I2206,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",161,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:34.027422,2011-06-03 19:25:34.027422
+1139,I2207,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",162,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:38.088152,2011-06-03 19:25:38.088152
+1140,I2208,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",163,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:41.971686,2011-06-03 19:25:41.971686
+1141,I2209,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",165,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:46.195213,2011-06-03 19:25:46.195213
+1142,I2210,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",167,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:50.761696,2011-06-03 19:25:50.761696
+1143,I2211,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",893,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:54.836566,2011-06-03 19:25:54.836566
+1144,I2212,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",894,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:25:59.191671,2011-06-03 19:25:59.191671
+1145,I2213,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",895,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:26:03.872115,2011-06-03 19:26:03.872115
+1146,IB2201,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",153,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:26:07.985719,2011-06-03 19:26:07.985719
+1147,IB2202,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",157,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:26:12.902887,2011-06-03 19:26:12.902887
+1148,IB2203,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",160,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:26:19.537675,2011-06-03 19:26:19.537675
+1149,IB2204,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",164,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:26:24.545747,2011-06-03 19:26:24.545747
+1150,IB2205,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",166,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:26:28.986756,2011-06-03 19:26:28.986756
+1151,IB2206,"Methods applied are those described in Makishima et al. (1997, 1999), Makishima and Nakamura (1997, 2006), Yokoyama et al. (1999), Moriguti et al. (2004), and Lu et al. (2007)",168,ICPMS,Yokogawa PMS2000/Ailent 7500cs,hkitagawa,2011-06-03 19:26:33.436928,2011-06-03 19:26:33.436928
+1152,I1301,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,172,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:49.310993,2011-06-06 08:34:49.310993
+1153,I1302,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,173,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:49.973857,2011-06-06 08:34:49.973857
+1154,I1303,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,174,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:50.231711,2011-06-06 08:34:50.231711
+1155,I1304,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,176,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:50.490249,2011-06-06 08:34:50.490249
+1156,I1305,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,179,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:50.748155,2011-06-06 08:34:50.748155
+1157,I1306,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,181,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:51.006905,2011-06-06 08:34:51.006905
+1158,I1307,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,182,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:51.265246,2011-06-06 08:34:51.265246
+1159,I1308,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,183,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:51.62036,2011-06-06 08:34:51.62036
+1160,I1309,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,184,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:51.865356,2011-06-06 08:34:51.865356
+1161,I1310,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,185,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:52.165157,2011-06-06 08:34:52.165157
+1162,I1311,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,186,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:52.41532,2011-06-06 08:34:52.41532
+1163,I1312,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,187,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:52.798602,2011-06-06 08:34:52.798602
+1164,I1313,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,188,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:53.377154,2011-06-06 08:34:53.377154
+1165,I1314,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,189,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:53.648632,2011-06-06 08:34:53.648632
+1166,I1315,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,190,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:53.90774,2011-06-06 08:34:53.90774
+1167,I1401,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,169,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:54.19042,2011-06-06 08:34:54.19042
+1168,I1402,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,170,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:54.557396,2011-06-06 08:34:54.557396
+1169,I1403,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,175,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:54.808927,2011-06-06 08:34:54.808927
+1170,I1404,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,177,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:55.065483,2011-06-06 08:34:55.065483
+1171,I1405,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,178,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:55.323924,2011-06-06 08:34:55.323924
+1172,I1406,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,180,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:55.582059,2011-06-06 08:34:55.582059
+1173,I1407,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,191,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:55.832232,2011-06-06 08:34:55.832232
+1174,I1408,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,193,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:56.090427,2011-06-06 08:34:56.090427
+1175,I1409,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,195,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:56.465587,2011-06-06 08:34:56.465587
+1176,I1410,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,196,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:56.723877,2011-06-06 08:34:56.723877
+1177,I1411,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,198,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:57.090818,2011-06-06 08:34:57.090818
+1178,I1412,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,201,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:57.349097,2011-06-06 08:34:57.349097
+1179,I1413,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,202,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:57.598637,2011-06-06 08:34:57.598637
+1180,I1414,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,203,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:57.848718,2011-06-06 08:34:57.848718
+1181,I1415,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,204,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:58.382902,2011-06-06 08:34:58.382902
+1182,I1416,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,205,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:58.64943,2011-06-06 08:34:58.64943
+1183,I1417,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,206,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:58.899056,2011-06-06 08:34:58.899056
+1184,I1418,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,207,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:59.15722,2011-06-06 08:34:59.15722
+1185,IB1401,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,171,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:59.506547,2011-06-06 08:34:59.506547
+1186,IB1402,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,192,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:34:59.782676,2011-06-06 08:34:59.782676
+1187,IB1403,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,194,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:00.157533,2011-06-06 08:35:00.157533
+1188,IB1404,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,197,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:00.407398,2011-06-06 08:35:00.407398
+1189,IB1405,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,199,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:00.690812,2011-06-06 08:35:00.690812
+1190,IB1406,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,200,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:00.948901,2011-06-06 08:35:00.948901
+1191,I1501,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,125,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:01.19878,2011-06-06 08:35:01.19878
+1192,I1502,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,126,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:01.77562,2011-06-06 08:35:01.77562
+1193,I1503,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,127,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:02.028307,2011-06-06 08:35:02.028307
+1194,I1504,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,128,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:02.965787,2011-06-06 08:35:02.965787
+1195,I1505,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,137,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:03.714584,2011-06-06 08:35:03.714584
+1196,I1506,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,138,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:04.340244,2011-06-06 08:35:04.340244
+1197,I1507,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,139,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:04.62376,2011-06-06 08:35:04.62376
+1198,I1508,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,140,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:05.166315,2011-06-06 08:35:05.166315
+1199,I1509,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,141,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:06.021198,2011-06-06 08:35:06.021198
+1200,I1510,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,142,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:06.709563,2011-06-06 08:35:06.709563
+1201,I1601,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,135,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:07.202759,2011-06-06 08:35:07.202759
+1202,I1602,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,136,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:07.669467,2011-06-06 08:35:07.669467
+1203,I1603,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,133,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:08.087124,2011-06-06 08:35:08.087124
+1204,I1604,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,134,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:08.482816,2011-06-06 08:35:08.482816
+1205,I1605,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,131,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:08.828212,2011-06-06 08:35:08.828212
+1206,I1606,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,132,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:09.543906,2011-06-06 08:35:09.543906
+1207,I1607,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,129,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:12.491501,2011-06-06 08:35:12.491501
+1208,I1608,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,130,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:12.714734,2011-06-06 08:35:12.714734
+1209,IB1601,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,148,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:13.068064,2011-06-06 08:35:13.068064
+1210,IB1602,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,149,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:13.376165,2011-06-06 08:35:13.376165
+1211,IB1603,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,150,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:13.701538,2011-06-06 08:35:13.701538
+1212,IB1604,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,151,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:13.949339,2011-06-06 08:35:13.949339
+1213,IB1605,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,152,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:14.291247,2011-06-06 08:35:14.291247
+1214,IB1606,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,146,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:14.525125,2011-06-06 08:35:14.525125
+1215,IB1607,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,147,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:14.749541,2011-06-06 08:35:14.749541
+1216,IB1608,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,143,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:14.974504,2011-06-06 08:35:14.974504
+1217,IB1609,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,144,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:15.222866,2011-06-06 08:35:15.222866
+1218,IB1610,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,145,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:15.431523,2011-06-06 08:35:15.431523
+1219,I2101,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,230,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:15.639925,2011-06-06 08:35:15.639925
+1220,I2102,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,231,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:15.968372,2011-06-06 08:35:15.968372
+1221,I2103,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,232,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:16.1911,2011-06-06 08:35:16.1911
+1222,I2104,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,233,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:16.412983,2011-06-06 08:35:16.412983
+1223,I2105,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,224,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:16.623146,2011-06-06 08:35:16.623146
+1224,I2106,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,226,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:16.831438,2011-06-06 08:35:16.831438
+1225,I2107,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,228,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:17.04047,2011-06-06 08:35:17.04047
+1226,I2108,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,220,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:17.652889,2011-06-06 08:35:17.652889
+1227,I2109,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,221,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:18.056365,2011-06-06 08:35:18.056365
+1228,I2110,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,219,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:18.493692,2011-06-06 08:35:18.493692
+1229,I2111,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,217,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:18.901504,2011-06-06 08:35:18.901504
+1230,I2112,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,216,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:19.135074,2011-06-06 08:35:19.135074
+1231,I2113,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,215,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:19.359343,2011-06-06 08:35:19.359343
+1232,I2114,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,213,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:19.675304,2011-06-06 08:35:19.675304
+1233,I2115,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,212,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:19.918629,2011-06-06 08:35:19.918629
+1234,I2116,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,210,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:20.144168,2011-06-06 08:35:20.144168
+1235,I2117,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,209,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:20.366932,2011-06-06 08:35:20.366932
+1236,I2118,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,208,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:20.592049,2011-06-06 08:35:20.592049
+1237,IB2101,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,234,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:20.91924,2011-06-06 08:35:20.91924
+1238,IB2102,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,235,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:21.144854,2011-06-06 08:35:21.144854
+1239,IB2103,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,225,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:21.368693,2011-06-06 08:35:21.368693
+1240,IB2104,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,227,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:21.594102,2011-06-06 08:35:21.594102
+1241,IB2105,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,229,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:21.818806,2011-06-06 08:35:21.818806
+1242,IB2106,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,222,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:22.041897,2011-06-06 08:35:22.041897
+1243,IB2107,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,223,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:22.422584,2011-06-06 08:35:22.422584
+1244,IB2108,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,218,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:22.727073,2011-06-06 08:35:22.727073
+1245,IB2109,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,214,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:22.950099,2011-06-06 08:35:22.950099
+1246,IB2110,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,211,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:23.284841,2011-06-06 08:35:23.284841
+1247,I2201,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,154,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:23.508823,2011-06-06 08:35:23.508823
+1248,I2202,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,155,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:23.733582,2011-06-06 08:35:23.733582
+1249,I2203,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,156,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:23.958794,2011-06-06 08:35:23.958794
+1250,I2204,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,158,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:24.30055,2011-06-06 08:35:24.30055
+1251,I2205,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,159,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:24.525586,2011-06-06 08:35:24.525586
+1252,I2206,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,161,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:24.750245,2011-06-06 08:35:24.750245
+1253,I2207,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,162,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:24.975415,2011-06-06 08:35:24.975415
+1254,I2208,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,163,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:25.308105,2011-06-06 08:35:25.308105
+1255,I2209,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,165,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:25.535623,2011-06-06 08:35:25.535623
+1256,I2210,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,167,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:25.759005,2011-06-06 08:35:25.759005
+1257,I2211,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,893,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:25.983998,2011-06-06 08:35:25.983998
+1258,I2212,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,894,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:26.20885,2011-06-06 08:35:26.20885
+1259,I2213,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,895,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:26.433831,2011-06-06 08:35:26.433831
+1260,IB2201,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,153,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:26.659389,2011-06-06 08:35:26.659389
+1261,IB2202,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,157,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:26.883726,2011-06-06 08:35:26.883726
+1262,IB2203,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,160,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:27.108216,2011-06-06 08:35:27.108216
+1263,IB2204,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,164,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:27.64267,2011-06-06 08:35:27.64267
+1264,IB2205,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,166,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:27.867354,2011-06-06 08:35:27.867354
+1265,IB2206,Abundance is estimated from the loss on ignition and ferric-ferrous ratio,168,gravimetry,"microbalance, muffle furnace",hkitagawa,2011-06-06 08:35:28.092169,2011-06-06 08:35:28.092169
+1266,I1301,A method applied are that described in Yokoyama and Nakamura (2002),172,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:27.622916,2011-06-06 08:36:27.622916
+1267,I1302,A method applied are that described in Yokoyama and Nakamura (2002),173,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:27.859205,2011-06-06 08:36:27.859205
+1268,I1303,A method applied are that described in Yokoyama and Nakamura (2002),174,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:28.084389,2011-06-06 08:36:28.084389
+1269,I1304,A method applied are that described in Yokoyama and Nakamura (2002),176,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:28.419963,2011-06-06 08:36:28.419963
+1270,I1305,A method applied are that described in Yokoyama and Nakamura (2002),179,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:28.642661,2011-06-06 08:36:28.642661
+1271,I1306,A method applied are that described in Yokoyama and Nakamura (2002),181,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:28.867734,2011-06-06 08:36:28.867734
+1272,I1307,A method applied are that described in Yokoyama and Nakamura (2002),182,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:29.15935,2011-06-06 08:36:29.15935
+1273,I1308,A method applied are that described in Yokoyama and Nakamura (2002),183,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:29.386464,2011-06-06 08:36:29.386464
+1274,I1309,A method applied are that described in Yokoyama and Nakamura (2002),184,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:29.611338,2011-06-06 08:36:29.611338
+1275,I1310,A method applied are that described in Yokoyama and Nakamura (2002),185,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:29.836566,2011-06-06 08:36:29.836566
+1276,I1311,A method applied are that described in Yokoyama and Nakamura (2002),186,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:30.062118,2011-06-06 08:36:30.062118
+1277,I1312,A method applied are that described in Yokoyama and Nakamura (2002),187,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:30.285799,2011-06-06 08:36:30.285799
+1278,I1313,A method applied are that described in Yokoyama and Nakamura (2002),188,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:30.619872,2011-06-06 08:36:30.619872
+1279,I1314,A method applied are that described in Yokoyama and Nakamura (2002),189,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:30.844864,2011-06-06 08:36:30.844864
+1280,I1315,A method applied are that described in Yokoyama and Nakamura (2002),190,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:31.070108,2011-06-06 08:36:31.070108
+1281,I1401,A method applied are that described in Yokoyama and Nakamura (2002),169,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:31.294897,2011-06-06 08:36:31.294897
+1282,I1402,A method applied are that described in Yokoyama and Nakamura (2002),170,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:31.519176,2011-06-06 08:36:31.519176
+1283,I1403,A method applied are that described in Yokoyama and Nakamura (2002),175,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:31.744304,2011-06-06 08:36:31.744304
+1284,I1404,A method applied are that described in Yokoyama and Nakamura (2002),177,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:31.969163,2011-06-06 08:36:31.969163
+1285,I1405,A method applied are that described in Yokoyama and Nakamura (2002),178,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:32.194337,2011-06-06 08:36:32.194337
+1286,I1406,A method applied are that described in Yokoyama and Nakamura (2002),180,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:32.52015,2011-06-06 08:36:32.52015
+1287,I1407,A method applied are that described in Yokoyama and Nakamura (2002),191,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:32.745123,2011-06-06 08:36:32.745123
+1288,I1408,A method applied are that described in Yokoyama and Nakamura (2002),193,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:32.970219,2011-06-06 08:36:32.970219
+1289,I1409,A method applied are that described in Yokoyama and Nakamura (2002),195,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:33.194288,2011-06-06 08:36:33.194288
+1290,I1410,A method applied are that described in Yokoyama and Nakamura (2002),196,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:33.420015,2011-06-06 08:36:33.420015
+1291,I1411,A method applied are that described in Yokoyama and Nakamura (2002),198,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:33.748927,2011-06-06 08:36:33.748927
+1292,I1412,A method applied are that described in Yokoyama and Nakamura (2002),201,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:34.409878,2011-06-06 08:36:34.409878
+1293,I1413,A method applied are that described in Yokoyama and Nakamura (2002),202,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:34.645226,2011-06-06 08:36:34.645226
+1294,I1414,A method applied are that described in Yokoyama and Nakamura (2002),203,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:34.869285,2011-06-06 08:36:34.869285
+1295,I1415,A method applied are that described in Yokoyama and Nakamura (2002),204,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:35.204274,2011-06-06 08:36:35.204274
+1296,I1416,A method applied are that described in Yokoyama and Nakamura (2002),205,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:35.428797,2011-06-06 08:36:35.428797
+1297,I1417,A method applied are that described in Yokoyama and Nakamura (2002),206,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:35.653723,2011-06-06 08:36:35.653723
+1298,I1418,A method applied are that described in Yokoyama and Nakamura (2002),207,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:35.878635,2011-06-06 08:36:35.878635
+1299,IB1401,A method applied are that described in Yokoyama and Nakamura (2002),171,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:36.102996,2011-06-06 08:36:36.102996
+1300,IB1402,A method applied are that described in Yokoyama and Nakamura (2002),192,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:36.394457,2011-06-06 08:36:36.394457
+1301,IB1403,A method applied are that described in Yokoyama and Nakamura (2002),194,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:36.619534,2011-06-06 08:36:36.619534
+1302,IB1404,A method applied are that described in Yokoyama and Nakamura (2002),197,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:36.845184,2011-06-06 08:36:36.845184
+1303,IB1405,A method applied are that described in Yokoyama and Nakamura (2002),199,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:37.176194,2011-06-06 08:36:37.176194
+1304,IB1406,A method applied are that described in Yokoyama and Nakamura (2002),200,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:37.39578,2011-06-06 08:36:37.39578
+1305,I1501,A method applied are that described in Yokoyama and Nakamura (2002),125,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:37.619742,2011-06-06 08:36:37.619742
+1306,I1502,A method applied are that described in Yokoyama and Nakamura (2002),126,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:37.844629,2011-06-06 08:36:37.844629
+1307,I1503,A method applied are that described in Yokoyama and Nakamura (2002),127,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:38.069715,2011-06-06 08:36:38.069715
+1308,I1504,A method applied are that described in Yokoyama and Nakamura (2002),128,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:38.296312,2011-06-06 08:36:38.296312
+1309,I1505,A method applied are that described in Yokoyama and Nakamura (2002),137,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:38.521774,2011-06-06 08:36:38.521774
+1310,I1506,A method applied are that described in Yokoyama and Nakamura (2002),138,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:38.746709,2011-06-06 08:36:38.746709
+1311,I1507,A method applied are that described in Yokoyama and Nakamura (2002),139,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:39.186509,2011-06-06 08:36:39.186509
+1312,I1508,A method applied are that described in Yokoyama and Nakamura (2002),140,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:39.76229,2011-06-06 08:36:39.76229
+1313,I1509,A method applied are that described in Yokoyama and Nakamura (2002),141,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:39.986597,2011-06-06 08:36:39.986597
+1314,I1510,A method applied are that described in Yokoyama and Nakamura (2002),142,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:40.211499,2011-06-06 08:36:40.211499
+1315,I1601,A method applied are that described in Yokoyama and Nakamura (2002),135,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:40.436399,2011-06-06 08:36:40.436399
+1316,I1602,A method applied are that described in Yokoyama and Nakamura (2002),136,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:40.661519,2011-06-06 08:36:40.661519
+1317,I1603,A method applied are that described in Yokoyama and Nakamura (2002),133,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:40.887035,2011-06-06 08:36:40.887035
+1318,I1604,A method applied are that described in Yokoyama and Nakamura (2002),134,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:41.112277,2011-06-06 08:36:41.112277
+1319,I1605,A method applied are that described in Yokoyama and Nakamura (2002),131,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:41.337477,2011-06-06 08:36:41.337477
+1320,I1606,A method applied are that described in Yokoyama and Nakamura (2002),132,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:41.562358,2011-06-06 08:36:41.562358
+1321,I1607,A method applied are that described in Yokoyama and Nakamura (2002),129,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:41.939992,2011-06-06 08:36:41.939992
+1322,I1608,A method applied are that described in Yokoyama and Nakamura (2002),130,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:42.272371,2011-06-06 08:36:42.272371
+1323,IB1601,A method applied are that described in Yokoyama and Nakamura (2002),148,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:42.496808,2011-06-06 08:36:42.496808
+1324,IB1602,A method applied are that described in Yokoyama and Nakamura (2002),149,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:42.721852,2011-06-06 08:36:42.721852
+1325,IB1603,A method applied are that described in Yokoyama and Nakamura (2002),150,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:42.971864,2011-06-06 08:36:42.971864
+1326,IB1604,A method applied are that described in Yokoyama and Nakamura (2002),151,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:43.196746,2011-06-06 08:36:43.196746
+1327,IB1605,A method applied are that described in Yokoyama and Nakamura (2002),152,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:43.420952,2011-06-06 08:36:43.420952
+1328,IB1606,A method applied are that described in Yokoyama and Nakamura (2002),146,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:43.646081,2011-06-06 08:36:43.646081
+1329,IB1607,A method applied are that described in Yokoyama and Nakamura (2002),147,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:43.979662,2011-06-06 08:36:43.979662
+1330,IB1608,A method applied are that described in Yokoyama and Nakamura (2002),143,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:44.213222,2011-06-06 08:36:44.213222
+1331,IB1609,A method applied are that described in Yokoyama and Nakamura (2002),144,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:44.437367,2011-06-06 08:36:44.437367
+1332,IB1610,A method applied are that described in Yokoyama and Nakamura (2002),145,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:44.988177,2011-06-06 08:36:44.988177
+1333,I2101,A method applied are that described in Yokoyama and Nakamura (2002),230,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:45.213134,2011-06-06 08:36:45.213134
+1334,I2102,A method applied are that described in Yokoyama and Nakamura (2002),231,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:45.432301,2011-06-06 08:36:45.432301
+1335,I2103,A method applied are that described in Yokoyama and Nakamura (2002),232,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:45.655499,2011-06-06 08:36:45.655499
+1336,I2104,A method applied are that described in Yokoyama and Nakamura (2002),233,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:46.028648,2011-06-06 08:36:46.028648
+1337,I2105,A method applied are that described in Yokoyama and Nakamura (2002),224,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:46.254471,2011-06-06 08:36:46.254471
+1338,I2106,A method applied are that described in Yokoyama and Nakamura (2002),226,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:46.588618,2011-06-06 08:36:46.588618
+1339,I2107,A method applied are that described in Yokoyama and Nakamura (2002),228,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:46.812681,2011-06-06 08:36:46.812681
+1340,I2108,A method applied are that described in Yokoyama and Nakamura (2002),220,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:47.036841,2011-06-06 08:36:47.036841
+1341,I2109,A method applied are that described in Yokoyama and Nakamura (2002),221,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:47.262922,2011-06-06 08:36:47.262922
+1342,I2110,A method applied are that described in Yokoyama and Nakamura (2002),219,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:47.488105,2011-06-06 08:36:47.488105
+1343,I2111,A method applied are that described in Yokoyama and Nakamura (2002),217,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:47.712861,2011-06-06 08:36:47.712861
+1344,I2112,A method applied are that described in Yokoyama and Nakamura (2002),216,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:47.938119,2011-06-06 08:36:47.938119
+1345,I2113,A method applied are that described in Yokoyama and Nakamura (2002),215,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:48.161958,2011-06-06 08:36:48.161958
+1346,I2114,A method applied are that described in Yokoyama and Nakamura (2002),213,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:48.387393,2011-06-06 08:36:48.387393
+1347,I2115,A method applied are that described in Yokoyama and Nakamura (2002),212,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:48.721116,2011-06-06 08:36:48.721116
+1348,I2116,A method applied are that described in Yokoyama and Nakamura (2002),210,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:49.453827,2011-06-06 08:36:49.453827
+1349,I2117,A method applied are that described in Yokoyama and Nakamura (2002),209,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:49.763027,2011-06-06 08:36:49.763027
+1350,I2118,A method applied are that described in Yokoyama and Nakamura (2002),208,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:49.987953,2011-06-06 08:36:49.987953
+1351,IB2101,A method applied are that described in Yokoyama and Nakamura (2002),234,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:50.213202,2011-06-06 08:36:50.213202
+1352,IB2102,A method applied are that described in Yokoyama and Nakamura (2002),235,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:50.438063,2011-06-06 08:36:50.438063
+1353,IB2103,A method applied are that described in Yokoyama and Nakamura (2002),225,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:50.663303,2011-06-06 08:36:50.663303
+1354,IB2104,A method applied are that described in Yokoyama and Nakamura (2002),227,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:50.887281,2011-06-06 08:36:50.887281
+1355,IB2105,A method applied are that described in Yokoyama and Nakamura (2002),229,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:51.362307,2011-06-06 08:36:51.362307
+1356,IB2106,A method applied are that described in Yokoyama and Nakamura (2002),222,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:51.587617,2011-06-06 08:36:51.587617
+1357,IB2107,A method applied are that described in Yokoyama and Nakamura (2002),223,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:51.814859,2011-06-06 08:36:51.814859
+1358,IB2108,A method applied are that described in Yokoyama and Nakamura (2002),218,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:52.03769,2011-06-06 08:36:52.03769
+1359,IB2109,A method applied are that described in Yokoyama and Nakamura (2002),214,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:52.262194,2011-06-06 08:36:52.262194
+1360,IB2110,A method applied are that described in Yokoyama and Nakamura (2002),211,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:52.487187,2011-06-06 08:36:52.487187
+1361,I2201,A method applied are that described in Yokoyama and Nakamura (2002),154,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:52.712028,2011-06-06 08:36:52.712028
+1362,I2202,A method applied are that described in Yokoyama and Nakamura (2002),155,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:52.937031,2011-06-06 08:36:52.937031
+1363,I2203,A method applied are that described in Yokoyama and Nakamura (2002),156,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:53.162378,2011-06-06 08:36:53.162378
+1364,I2204,A method applied are that described in Yokoyama and Nakamura (2002),158,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:53.49648,2011-06-06 08:36:53.49648
+1365,I2205,A method applied are that described in Yokoyama and Nakamura (2002),159,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:53.721712,2011-06-06 08:36:53.721712
+1366,I2206,A method applied are that described in Yokoyama and Nakamura (2002),161,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:53.946561,2011-06-06 08:36:53.946561
+1367,I2207,A method applied are that described in Yokoyama and Nakamura (2002),162,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:54.529176,2011-06-06 08:36:54.529176
+1368,I2208,A method applied are that described in Yokoyama and Nakamura (2002),163,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:55.029324,2011-06-06 08:36:55.029324
+1369,I2209,A method applied are that described in Yokoyama and Nakamura (2002),165,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:55.254971,2011-06-06 08:36:55.254971
+1370,I2210,A method applied are that described in Yokoyama and Nakamura (2002),167,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:55.480093,2011-06-06 08:36:55.480093
+1371,I2211,A method applied are that described in Yokoyama and Nakamura (2002),893,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:55.705707,2011-06-06 08:36:55.705707
+1372,I2212,A method applied are that described in Yokoyama and Nakamura (2002),894,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:56.036109,2011-06-06 08:36:56.036109
+1373,I2213,A method applied are that described in Yokoyama and Nakamura (2002),895,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:56.263584,2011-06-06 08:36:56.263584
+1374,IB2201,A method applied are that described in Yokoyama and Nakamura (2002),153,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:56.487393,2011-06-06 08:36:56.487393
+1375,IB2202,A method applied are that described in Yokoyama and Nakamura (2002),157,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:56.712475,2011-06-06 08:36:56.712475
+1376,IB2203,A method applied are that described in Yokoyama and Nakamura (2002),160,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:56.937564,2011-06-06 08:36:56.937564
+1377,IB2204,A method applied are that described in Yokoyama and Nakamura (2002),164,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:57.163526,2011-06-06 08:36:57.163526
+1378,IB2205,A method applied are that described in Yokoyama and Nakamura (2002),166,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:57.389486,2011-06-06 08:36:57.389486
+1379,IB2206,A method applied are that described in Yokoyama and Nakamura (2002),168,titration (developed Wilson's procedure),Schott Titronic 96,hkitagawa,2011-06-06 08:36:57.613314,2011-06-06 08:36:57.613314
+1381,recommended,,473,,JXA-8800,,2011-06-13 18:58:27.920066,2011-06-13 18:58:27.920066
+1393,major for cpx-klb1,"",1421,"",JEOL JXA-8800R,"",2011-06-13 19:24:32.901565,2013-02-15 10:54:05.635106
+1411,ref_ol_sc5,,473,,,,2011-06-15 11:20:12.041202,2011-06-15 11:20:12.041202
+1412,I1301,,172,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:42.667697,2011-07-13 17:37:42.667697
+1413,I1302,,173,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:44.111705,2011-07-13 17:37:44.111705
+1414,I1303,,174,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:44.966895,2011-07-13 17:37:44.966895
+1415,I1304,,176,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:45.810926,2011-07-13 17:37:45.810926
+1416,I1305,,179,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:46.768006,2011-07-13 17:37:46.768006
+1417,I1306,,181,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:47.836215,2011-07-13 17:37:47.836215
+1418,I1307,,182,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:48.692144,2011-07-13 17:37:48.692144
+1419,I1308,,183,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:49.913877,2011-07-13 17:37:49.913877
+1420,I1309,,184,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:50.767419,2011-07-13 17:37:50.767419
+1421,I1310,,185,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:51.602407,2011-07-13 17:37:51.602407
+1422,I1311,,186,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:52.568898,2011-07-13 17:37:52.568898
+1423,I1312,,187,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:53.406615,2011-07-13 17:37:53.406615
+1424,I1313,,188,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:54.33632,2011-07-13 17:37:54.33632
+1425,I1314,,189,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:55.241182,2011-07-13 17:37:55.241182
+1426,I1315,,190,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:56.08032,2011-07-13 17:37:56.08032
+1427,I1401,,169,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:57.30199,2011-07-13 17:37:57.30199
+1428,I1402,,170,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:58.169702,2011-07-13 17:37:58.169702
+1429,I1403,,175,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:37:59.019904,2011-07-13 17:37:59.019904
+1430,I1404,,177,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:00.140005,2011-07-13 17:38:00.140005
+1431,I1405,,178,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:01.308102,2011-07-13 17:38:01.308102
+1432,I1406,,180,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:02.145001,2011-07-13 17:38:02.145001
+1433,I1407,,191,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:03.110727,2011-07-13 17:38:03.110727
+1434,I1408,,193,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:03.965959,2011-07-13 17:38:03.965959
+1435,I1409,,195,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:05.0722,2011-07-13 17:38:05.0722
+1436,I1410,,196,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:06.035701,2011-07-13 17:38:06.035701
+1437,I1411,,198,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:06.87794,2011-07-13 17:38:06.87794
+1438,I1412,,201,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:07.72111,2011-07-13 17:38:07.72111
+1439,I1413,,202,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:08.683783,2011-07-13 17:38:08.683783
+1440,I1414,,203,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:09.529329,2011-07-13 17:38:09.529329
+1441,I1415,,204,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:10.457732,2011-07-13 17:38:10.457732
+1442,I1416,,205,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:11.41875,2011-07-13 17:38:11.41875
+1443,I1417,,206,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:12.270031,2011-07-13 17:38:12.270031
+1444,I1418,,207,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:13.23144,2011-07-13 17:38:13.23144
+1445,IB1401,,171,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:14.077587,2011-07-13 17:38:14.077587
+1446,IB1402,,192,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:15.113532,2011-07-13 17:38:15.113532
+1447,IB1403,,194,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:16.125967,2011-07-13 17:38:16.125967
+1448,IB1404,,197,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:17.102419,2011-07-13 17:38:17.102419
+1449,IB1405,,199,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:17.929771,2011-07-13 17:38:17.929771
+1450,IB1406,,200,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:18.883896,2011-07-13 17:38:18.883896
+1451,I1501,,125,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:20.088687,2011-07-13 17:38:20.088687
+1452,I1502,,126,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:21.044935,2011-07-13 17:38:21.044935
+1453,I1503,,127,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:21.986176,2011-07-13 17:38:21.986176
+1454,I1504,,128,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:22.814129,2011-07-13 17:38:22.814129
+1455,I1505,,137,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:23.665071,2011-07-13 17:38:23.665071
+1456,I1506,,138,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:24.598559,2011-07-13 17:38:24.598559
+1457,I1507,,139,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:25.631514,2011-07-13 17:38:25.631514
+1458,I1508,,140,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:26.738507,2011-07-13 17:38:26.738507
+1459,I1509,,141,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:27.747098,2011-07-13 17:38:27.747098
+1460,I1510,,142,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:28.539653,2011-07-13 17:38:28.539653
+1461,I1601,,135,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:29.291096,2011-07-13 17:38:29.291096
+1462,I1602,,136,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:30.206681,2011-07-13 17:38:30.206681
+1463,I1603,,133,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:30.950301,2011-07-13 17:38:30.950301
+1464,I1604,,134,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:31.85035,2011-07-13 17:38:31.85035
+1465,I1605,,131,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:33.106149,2011-07-13 17:38:33.106149
+1466,I1606,,132,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:33.849867,2011-07-13 17:38:33.849867
+1467,I1607,,129,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:35.507137,2011-07-13 17:38:35.507137
+1468,I1608,,130,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:37.156567,2011-07-13 17:38:37.156567
+1469,IB1601,,148,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:38.088446,2011-07-13 17:38:38.088446
+1470,IB1602,,149,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:39.035027,2011-07-13 17:38:39.035027
+1471,IB1603,,150,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:39.854572,2011-07-13 17:38:39.854572
+1472,IB1604,,151,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:40.749766,2011-07-13 17:38:40.749766
+1473,IB1605,,152,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:41.704732,2011-07-13 17:38:41.704732
+1474,IB1606,,146,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:42.792674,2011-07-13 17:38:42.792674
+1475,IB1607,,147,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:43.618439,2011-07-13 17:38:43.618439
+1476,IB1608,,143,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:44.557151,2011-07-13 17:38:44.557151
+1477,IB1609,,144,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:45.451548,2011-07-13 17:38:45.451548
+1478,IB1610,,145,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:46.27391,2011-07-13 17:38:46.27391
+1479,I2101,,230,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:47.229563,2011-07-13 17:38:47.229563
+1480,I2102,,231,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:48.111599,2011-07-13 17:38:48.111599
+1481,I2103,,232,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:48.957775,2011-07-13 17:38:48.957775
+1482,I2104,,233,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:50.2062,2011-07-13 17:38:50.2062
+1483,I2105,,224,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:51.08684,2011-07-13 17:38:51.08684
+1484,I2106,,226,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:51.935701,2011-07-13 17:38:51.935701
+1485,I2107,,228,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:52.906516,2011-07-13 17:38:52.906516
+1486,I2108,,220,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:53.725183,2011-07-13 17:38:53.725183
+1487,I2109,,221,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:54.686084,2011-07-13 17:38:54.686084
+1488,I2110,,219,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:55.703422,2011-07-13 17:38:55.703422
+1489,I2111,,217,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:56.902816,2011-07-13 17:38:56.902816
+1490,I2112,,216,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:57.757241,2011-07-13 17:38:57.757241
+1491,I2113,,215,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:58.511292,2011-07-13 17:38:58.511292
+1492,I2114,,213,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:38:59.265377,2011-07-13 17:38:59.265377
+1493,I2115,,212,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:00.348973,2011-07-13 17:39:00.348973
+1494,I2116,,210,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:01.290281,2011-07-13 17:39:01.290281
+1495,I2117,,209,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:02.054034,2011-07-13 17:39:02.054034
+1496,I2118,,208,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:02.938608,2011-07-13 17:39:02.938608
+1497,IB2101,,234,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:03.679706,2011-07-13 17:39:03.679706
+1498,IB2102,,235,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:04.435489,2011-07-13 17:39:04.435489
+1499,IB2103,,225,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:05.862557,2011-07-13 17:39:05.862557
+1500,IB2104,,227,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:06.6038,2011-07-13 17:39:06.6038
+1501,IB2105,,229,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:07.605243,2011-07-13 17:39:07.605243
+1502,IB2106,,222,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:08.454959,2011-07-13 17:39:08.454959
+1503,IB2107,,223,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:09.194818,2011-07-13 17:39:09.194818
+1504,IB2108,,218,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:10.049571,2011-07-13 17:39:10.049571
+1505,IB2109,,214,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:11.312034,2011-07-13 17:39:11.312034
+1506,IB2110,,211,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:12.053997,2011-07-13 17:39:12.053997
+1507,I2201,,154,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:13.022603,2011-07-13 17:39:13.022603
+1508,I2202,,155,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:14.007993,2011-07-13 17:39:14.007993
+1509,I2203,,156,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:14.749529,2011-07-13 17:39:14.749529
+1510,I2204,,158,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:15.600608,2011-07-13 17:39:15.600608
+1511,I2205,,159,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:16.341558,2011-07-13 17:39:16.341558
+1512,I2206,,161,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:17.20198,2011-07-13 17:39:17.20198
+1513,I2207,,162,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:18.204325,2011-07-13 17:39:18.204325
+1514,I2208,,163,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:18.948449,2011-07-13 17:39:18.948449
+1515,I2209,,165,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:19.947602,2011-07-13 17:39:19.947602
+1516,I2210,,167,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:20.985365,2011-07-13 17:39:20.985365
+1517,I2211,,893,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:21.729669,2011-07-13 17:39:21.729669
+1518,I2212,,894,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:22.546259,2011-07-13 17:39:22.546259
+1519,I2213,,895,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:23.39643,2011-07-13 17:39:23.39643
+1520,IB2201,,153,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:24.138729,2011-07-13 17:39:24.138729
+1521,IB2202,,157,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:24.879518,2011-07-13 17:39:24.879518
+1522,IB2203,,160,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:26.128596,2011-07-13 17:39:26.128596
+1523,IB2204,,164,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:26.895841,2011-07-13 17:39:26.895841
+1524,IB2205,,166,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:27.637433,2011-07-13 17:39:27.637433
+1525,IB2206,,168,TIMS,Finnigan MAT261/262,hkitagawa,2011-07-13 17:39:28.488379,2011-07-13 17:39:28.488379
+1544,in-situ major for Ol,"",8198,EPMA,JEOL JXA-8800R,"",2012-02-22 19:04:32.149721,2012-02-22 19:48:26.95296
+1545,in-situ major for low-Ca Px,"",8198,EPMA,JEOL JXA-8800R,"",2012-02-22 19:10:14.393198,2012-02-22 19:48:00.051959
+1547,in-situ trace for Ol0.5 low-Ca Px0.5,"",8198,SIMS,Cameca ims-5f,TO,2012-02-22 19:24:29.108304,2012-02-22 19:50:25.759668
+1548,in-situ O isotope for Ol0.5 low-Ca Px0.5,"Primary beam ion; +20 keV Cs-,
+Gold coat thickness; 65 nm,
+Secondary accelerating voltage; -10 kV,
+Primary beam current; 200 pA,
+Primary beam rastering; 5x5 um (7x7 um for first 140s),
+Energy offset; -45 eV,
+Contrast aperture diameter; 40 um
+Entrance slit width; 80 um
+Field aperture dimension; 800x800 um (20x20 um on sample)
+
+",8198,SIMS,Cameca ims-1270,TK,2012-02-22 19:45:21.545211,2012-02-22 20:23:56.082775
+1549,in-situ major for Ol,"",8122,EPMA,JEOL JXA-8800R,TT,2012-02-23 18:08:06.580279,2012-02-23 18:10:30.688453
+1550,in-situ major for Pl,"",8122,EPMA,JEOL JXA-8800R,TT,2012-02-23 18:11:17.828756,2012-02-23 18:14:25.059947
+1551,in-situ major for Kfs,,8150,,JEOL JXA-8800R,,2012-02-23 18:27:05.53591,2012-02-23 18:27:05.53591
+1552,in-situ major for diaplectic plagioclase ,"concentrations less than 0.2 wt% were treated as being ""below detection limit"" and the total abundance of oxides was normalized to 100 wt%",8150,EDS,JEOL JSM-7001F,TT,2012-02-23 18:31:45.054069,2012-02-23 18:36:21.401984
+1553,in-situ O isotope for Ol0.95Pl0.05@694,"",8122,SIMS,Cameca ims 1270,TK,2012-02-23 19:32:44.38805,2012-02-23 19:33:40.871106
+1554,in-situ O isotope for Ol0.8Pl0.2@720,"",8122,SIMS,Cameca ims 1270,TK,2012-02-23 19:34:13.336119,2012-02-23 19:35:15.007704
+1555,in-situ O isotope for Ol0.8Pl0.2@721,"",8122,SIMS,Cameca ims 1270,TK,2012-02-23 19:35:37.79946,2012-02-23 19:36:42.187414
+1556,in-situ O isotope for Ol0.6Pl0.4@723,"",8122,SIMS,Cameca ims 1270,TK,2012-02-23 19:37:12.055835,2012-02-23 19:37:20.888143
+1559,In-situ trace for Ol@2,,8122,SIMS,Cameca ims 5f,,2012-02-24 16:11:29.477498,2012-02-24 16:15:55.772167
+1560,In-situ trace for Ol0.9Pl0.1@3,,8122,SIMS,Cameca ims 5f,,2012-02-24 16:11:49.838361,2012-02-24 16:15:55.738759
+1561,In-situ trace for Pl@4,,8122,SIMS,Cameca ims 5f,,2012-02-24 16:11:53.993008,2012-02-24 16:15:55.705728
+1562,In-situ trace for Pl0.3Ol0.7@5,,8122,SIMS,Cameca ims 5f,,2012-02-24 16:12:03.53907,2012-02-24 16:15:55.672233
+1563,In-situ trace for Pl0.6Ol0.4@6,,8122,SIMS,Cameca ims 5f,,2012-02-24 16:12:09.344386,2012-02-24 16:15:55.629322
+1564,In-situ trace for Di@7,,8150,SIMS,Cameca ims 5f,,2012-02-24 16:55:06.692415,2012-02-24 16:55:06.692415
+1565,In-situ trace for Di@8,,8150,SIMS,Cameca ims 5f,,2012-02-24 16:55:17.352532,2012-02-24 16:55:17.352532
+1566,In-situ trace for diaplectic Pl@9,,8150,SIMS,Cameca ims 5f,,2012-02-24 16:55:49.5962,2012-02-24 16:55:49.5962
+1567,In-situ trace for Pl0.95Di0.05@10,,8150,SIMS,Cameca ims 5f,,2012-02-24 16:56:13.22143,2012-02-24 16:56:13.22143
+1568,In-situ trace for low-Ca Px@11,,8175,SIMS,Cameca ims 5f,,2012-02-24 17:17:43.917658,2012-02-24 17:17:43.917658
+1569,In-situ trace for low-Ca Px@12,,8175,SIMS,Cameca ims 5f,,2012-02-24 17:17:53.431009,2012-02-24 17:17:53.431009
+1570,In-situ trace for low-Ca Px@13,,8175,SIMS,Cameca ims 5f,,2012-02-24 17:17:55.13358,2012-02-24 17:17:55.13358
+1571,F and Cl,"",2902,Ion Chromatography and Pyrohydrolysis,"",Lalindra and Wang,2012-04-03 09:34:41.003388,2012-04-03 09:37:59.020157
+1572,S,"",2902,"",ICP_MS,Max,2012-04-03 09:39:04.819027,2012-04-03 09:41:40.983956
+1573,[H2O+],"",2902,Gravimetry and tritration,"",Lalindra,2012-04-03 09:45:04.094078,2012-04-03 09:47:48.522792
+2211,ref-ol-NM-sc,,472,EPMA,JXA-8800,yyachi,2012-12-10 15:14:24.16275,2012-12-10 15:14:24.16275
