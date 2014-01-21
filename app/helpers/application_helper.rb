@@ -1,5 +1,9 @@
 module ApplicationHelper
 
+  def format_date(date)
+    date.present? ? Date.parse(date).strftime("%Y-%m-%d") : ""
+  end
+
   def difference_from_now(time)
     return unless time
     now = Time.now

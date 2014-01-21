@@ -2,6 +2,26 @@ require 'spec_helper'
 
 describe ApplicationHelper do
 
+  describe "#format_date" do
+    subject { helper.format_date(date) }
+    context "date is nil" do
+      let(:date) { nil }
+      it { expect(subject).to eq "" }
+    end
+    context "date is blank" do
+      let(:date) { "" }
+      it { expect(subject).to eq "" }
+    end
+    context "date is '2014/01/01'" do
+      let(:date) { '2014/01/01' }
+      it { expect(subject).to eq "2014-01-01" }
+    end
+    context "date is '2014-01-01 00:00:00 UTC'" do
+      let(:date) { '2014-01-01 00:00:00 UTC' }
+      it { expect(subject).to eq "2014-01-01" }
+    end
+  end
+
   describe "#difference_from_now" do
     subject { helper.difference_from_now(time) }
     before { allow(Time).to receive(:now).and_return(now) }
