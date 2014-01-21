@@ -1,4 +1,5 @@
 class GroupsController < ApplicationController
+  layout "admin"
 
   def index
     @search = Group.search(params[:q])

@@ -4,7 +4,7 @@
   <%= render partial: "layouts/head" %>
 </head>
 <body>
-  <%= render partial: "layouts/navbar_default" if user_signed_in? %>
+  <%= render partial: "layouts/navbar_admin" if user_signed_in? %>
   <div class="container">
     <%= yield %>
   </div>

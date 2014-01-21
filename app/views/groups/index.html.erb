@@ -3,22 +3,35 @@
   <thead>
     <%= search_form_for @search do |f| %>
     <tr>
+      <th></th>
+      <th><%= sort_link @search, :name %></th>
+      <th></th>
+      <th><%= sort_link @search, :updated_at %></th>
+      <th><%= sort_link @search, :created_at %></th>
+    </tr>
+    <tr>
       <th>
         <%= f.button class: "btn btn-default" do %>
         <span class="glyphicon glyphicon-refresh"></span>
         <% end %>
       </th>
-      <th>name</th>
+      <th><%= f.text_field :name_cont %></th>
       <th></th>
-      <th>updated_at</th>
-      <th>created_at</th>
+      <th>
+        <%= f.text_field :updated_at_gteq, :class => 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]) %>
+      </th>
+      <th>
+        <%= f.text_field :created_at_gteq, :class => 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]) %>
+      </th>
     </tr>
     <tr>
       <th></th>
-      <th><%= f.text_field :name_cont %></th>
       <th></th>
       <th></th>
-      <th></th>
+      <th>
+        <%= f.text_field :updated_at_lteq_end_of_day, :class => 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]) %>
+      </th>
+      <th><%= f.text_field :created_at_lteq_end_of_day, :class => 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]) %></th>
     </tr>
     <% end %>
   </thead>
