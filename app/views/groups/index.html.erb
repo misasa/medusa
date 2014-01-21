@@ -18,10 +18,10 @@
       <th><%= f.text_field :name_cont %></th>
       <th></th>
       <th>
-        <%= f.text_field :updated_at_gteq, :class => 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]) %>
+        <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]) %>
       </th>
       <th>
-        <%= f.text_field :created_at_gteq, :class => 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]) %>
+        <%= f.text_field :created_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]) %>
       </th>
     </tr>
     <tr>
@@ -29,9 +29,11 @@
       <th></th>
       <th></th>
       <th>
-        <%= f.text_field :updated_at_lteq_end_of_day, :class => 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]) %>
+        <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]) %>
       </th>
-      <th><%= f.text_field :created_at_lteq_end_of_day, :class => 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]) %></th>
+      <th>
+        <%= f.text_field :created_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]) %>
+      </th>
     </tr>
     <% end %>
   </thead>

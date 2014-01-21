@@ -13,7 +13,7 @@ class GroupsController < ApplicationController
       redirect_to groups_path
     else
       # TODO: When validation error ...
-      render :index
+      redirect_to groups_path
     end
   end
 
@@ -27,7 +27,6 @@ class GroupsController < ApplicationController
       redirect_to groups_path
     else
       # TODO: When validation error ...
-      @group.attributes = group_params
       render :edit
     end
   end
