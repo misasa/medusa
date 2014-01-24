@@ -71,26 +71,6 @@
     <% end %>
   </tbody>
   <tfoot>
-    <%= form_for Stone.new do |f| %>
-    <tr>
-      <th></th>
-      <th><%= f.text_field :name %></th>
-      <th></th>
-      <th></th>
-      <th><%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), include_blank: true %></th>
-      <th><%= f.select :classification_id, Classification.pluck(:name, :id), include_blank: true %></th>
-      <th><%= f.text_field :tag_list %></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th>
-	<%= f.button class: "btn btn-default" do %>
-	<span class="glyphicon glyphicon-save"></span>
-	<% end %>
-      </th>
-      <th></th>
-    </tr>
-    <% end %>
+    <%= render partial: "new", locals: { stone: Stone.new } %>
   </tfoot>
 </table>
