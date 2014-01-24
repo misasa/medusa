@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140115084254) do
+ActiveRecord::Schema.define(version: 20140124010521) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -127,6 +127,17 @@ ActiveRecord::Schema.define(version: 20140115084254) do
   end
 
   add_index "classifications", ["parent_id"], name: "index_classifications_on_parent_id", using: :btree
+
+  create_table "global_qrs", force: true do |t|
+    t.integer  "record_property_id"
+    t.string   "file_name"
+    t.string   "content_type"
+    t.integer  "file_size"
+    t.datetime "file_updated_at"
+    t.string   "identifier"
+  end
+
+  add_index "global_qrs", ["record_property_id"], name: "index_global_qrs_on_record_property_id", using: :btree
 
   create_table "group_members", force: true do |t|
     t.integer "group_id", null: false
@@ -254,17 +265,6 @@ ActiveRecord::Schema.define(version: 20140115084254) do
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
-
-  create_table "uniq_qrs", force: true do |t|
-    t.integer  "record_property_id"
-    t.string   "file_name"
-    t.string   "content_type"
-    t.integer  "file_size"
-    t.datetime "file_updated_at"
-    t.string   "identifier"
-  end
-
-  add_index "uniq_qrs", ["record_property_id"], name: "index_uniq_qrs_on_record_property_id", using: :btree
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",    null: false
