@@ -1,4 +1,5 @@
 class StonesController < ApplicationController
+  respond_to :html, :xml, :json
 
   def index
     @search = Stone.search(params[:q])
@@ -8,11 +9,8 @@ class StonesController < ApplicationController
 
   def create
     @stone = Stone.new(stone_params)
-    if @stone.save
-      redirect_to stones_path
-    else
-      # TODO: When validation error .....
-    end
+    @stone.save
+    respond_with @stone
   end
 
   private
