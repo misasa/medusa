@@ -1,5 +1,6 @@
 class Bib < ActiveRecord::Base
+  include HasRecordProperty
+
   has_many :attachings, as: :attachable
   has_many :referrings
-  has_one :record_property, as: :datum
 end

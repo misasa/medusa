@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -9,4 +10,6 @@ class User < ActiveRecord::Base
   has_many :record_properties
   belongs_to :box
   #TODO バリデーション:ユーザーにはBoxが必須？
+
+  alias_attribute :admin?, :administrator
 end

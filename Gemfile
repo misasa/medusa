@@ -46,6 +46,7 @@ gem 'unicorn'
 # gem 'debugger', group: [:development, :test]
 
 gem 'devise'
+gem 'cancan'
 gem 'kaminari'
 gem 'draper'
 gem 'paperclip'

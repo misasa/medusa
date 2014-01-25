@@ -1,6 +1,7 @@
 class StonesController < ApplicationController
   respond_to :html, :xml, :json
   before_action :find_resource, only: [:show, :edit, :update, :family, :picture, :map]
+  load_and_authorize_resource
 
   def index
     @search = Stone.search(params[:q])
