@@ -1,0 +1,5 @@
+@for $i from 1 through 10 {
+  .tree-node[data-depth='#{$i}'] {
+    padding-left: #{8 * ($i - 1)}px;
+  }
+}

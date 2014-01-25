@@ -3,7 +3,13 @@ Medusa::Application.routes.draw do
 
   root 'facade#index'
 
-  resources :stones
+  resources :stones do
+    member do
+      get :family
+      get :picture
+      get :map
+    end
+  end
   resources :boxes
   resources :places
   resources :analyses

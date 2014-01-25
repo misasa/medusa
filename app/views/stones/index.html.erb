@@ -56,7 +56,7 @@
     <% @stones.each do |stone| %>
     <tr>
       <td></td>
-      <td><%= stone.name %></td>
+      <td><%= link_to stone.name, stone %></td>
       <td><%= stone.parent_id %></td>
       <td><%= stone.box.try!(:name) %></td>
       <td><%= stone.physical_form.try!(:name) %></td>

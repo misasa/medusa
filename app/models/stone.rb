@@ -1,6 +1,7 @@
 class Stone < ActiveRecord::Base
 
   acts_as_taggable
+  with_recursive
 
   has_many :analyses
   has_many :children, class_name: "Stone", foreign_key: :parent_id
@@ -13,8 +14,10 @@ class Stone < ActiveRecord::Base
   belongs_to :classification
   belongs_to :physical_form
 
-  validates :box, existence: true
-  validates :place, existence: true
-  validates :classification, existence: true
-  validates :physical_form, existence: true
+  delegate :global_id, to: :record_property
+
+  validates :box, existence: true, allow_nil: true
+  validates :place, existence: true, allow_nil: true
+  validates :classification, existence: true, allow_nil: true
+  validates :physical_form, existence: true, allow_nil: true
 end
