@@ -14,13 +14,13 @@ Medusa::Application.routes.draw do
   resources :places
   resources :analyses
   resources :bibs
-  resources :files
+  resources :attachment_files
   resource  :system_preference, only: [:show]
   resources :users
-  resources :groups, except: [:show, :new]
-  resources :classifications, except: [:show, :new]
-  resources :box_types, except: [:show, :new]
-  resources :measurement_items, except: [:show, :new]
+  resources :groups, except: [:new]
+  resources :classifications
+  resources :box_types
+  resources :measurement_items
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

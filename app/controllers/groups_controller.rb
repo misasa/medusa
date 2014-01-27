@@ -1,4 +1,6 @@
 class GroupsController < ApplicationController
+  respond_to :html, :xml, :json
+  before_action :find_resource, only: [:show, :edit, :update, :destroy]
   load_and_authorize_resource
   layout "admin"
 
@@ -8,39 +10,38 @@ class GroupsController < ApplicationController
     @groups = @search.result.page(params[:page]).per(params[:per_page])
   end
 
-  def create
-    @group = Group.new(group_params)
-    if @group.save
-      redirect_to groups_path
-    else
-      # TODO: When validation error ...
-      redirect_to groups_path
-    end
+  def show
+    respond_with @group
   end
 
   def edit
-    @group = Group.find(params[:id])
+    respond_with @group
+  end
+
+  def create
+    @group = Group.new(group_params)
+    @group.save
+    respond_with(@group, :location => groups_path)
   end
 
   def update
-    @group = Group.find(params[:id])
-    if @group.update_attributes(group_params)
-      redirect_to groups_path
-    else
-      # TODO: When validation error ...
-      render :edit
-    end
+    @group.update_attributes(group_params)
+    respond_with(@group, :location => groups_path)
   end
 
   def destroy
-    Group.find(params[:id]).destroy
-    redirect_to groups_path
+    @group.destroy
+    respond_with @group
   end
 
   private
 
   def group_params
     params.require(:group).permit(:name)
+  end
+
+  def find_resource
+    @group = Group.find(params[:id])
   end
 
 end
