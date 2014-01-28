@@ -5,7 +5,7 @@ class AttachmentFilesController < ApplicationController
 
   def index
     @attachment_files = AttachmentFile.all
-    respond_with @files
+    respond_with @attachment_files
   end
 
   def show
