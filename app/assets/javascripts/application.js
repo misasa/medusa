@@ -16,7 +16,3 @@
 //= require bootstrap
 //= require acts_as_mappable
 //= require_tree .
-
-$(document).ready(function(){
-    $(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
-});
