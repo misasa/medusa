@@ -2,6 +2,8 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
+    alias_action :family, :picture, :map, to: :read
+
     if user.admin?
       can :manage, :all
     end

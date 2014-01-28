@@ -1,104 +1,62 @@
 require "spec_helper"
 
 describe RecordProperty do
-  shared_examples "checking user permission" do |method, permission|
+  shared_examples "checking user permission" do |method, owner_permission_attribute, group_permission_attribute, guest_permission_attribute|
     subject { record_property.send(method, user) }
-    let(:record_property) { FactoryGirl.build(:record_property, user_id: user_id, group_id: group_id, permission_u: permission_u, permission_g: permission_g, permission_o: permission_o) }
+    let(:record_property) { FactoryGirl.build(:record_property, user_id: user_id, group_id: group_id, owner_permission_attribute => owner_permission, group_permission_attribute => group_permission, guest_permission_attribute => guest_permission) }
     let(:user) { FactoryGirl.create(:user) }
     let(:group) { FactoryGirl.create(:group) }
     before { GroupMember.create(user: user, group: group) }
     context "when user is owner." do
       let(:user_id) { user.id }
       let(:group_id) { nil }
-      let(:permission_g) { 0 }
-      let(:permission_o) { 0 }
+      let(:group_permission) { false }
+      let(:guest_permission) { false }
       context "when owner is permitted." do
-        let(:permission_u) { permission }
+        let(:owner_permission) { true }
         it { expect(subject).to be_truthy }
       end
       context "when owner is not permitted." do
-        let(:permission_u) { 0 }
+        let(:owner_permission) { false }
         it { expect(subject).to be_falsey }
       end
     end
     context "when user is not owner." do
       let(:user_id) { nil }
-      let(:permission_u) { RecordProperty::WRITE | RecordProperty::READ }
+      let(:owner_permission) { true }
       context "when user belongs to group." do
         let(:group_id) { group.id }
-        let(:permission_o) { 0 }
+        let(:guest_permission) { false }
         context "when group is permitted." do
-          let(:permission_g) { permission }
+          let(:group_permission) { true }
           it { expect(subject).to be_truthy }
         end
         context "when group is not permitted." do
-          let(:permission_g) { 0 }
+          let(:group_permission) { false }
           it { expect(subject).to be_falsey }
         end
       end
       context "when user does not belongs to group." do
         let(:group_id) { nil }
-        let(:permission_g) { RecordProperty::WRITE | RecordProperty::READ }
+        let(:group_permission) { true }
         context "when guest is permitted." do
-          let(:permission_o) { permission }
+          let(:guest_permission) { true }
           it { expect(subject).to be_truthy }
         end
         context "when guest is not permitted." do
-          let(:permission_o) { 0 }
+          let(:guest_permission) { false }
           it { expect(subject).to be_falsey }
         end
       end
     end
   end
 
-  shared_examples "permission check to write" do |method, attribute|
-    subject { record_property.send(method) }
-    let(:record_property) { FactoryGirl.build(:record_property, attribute => permission) }
-    context "when owner is permitted to write and read." do
-      let(:permission) { RecordProperty::WRITE | RecordProperty::READ }
-      it { expect(subject).to be_truthy }
-    end
-    context "when owner is permitted to write." do
-      let(:permission) { RecordProperty::WRITE }
-      it { expect(subject).to be_truthy }
-    end
-    context "when owner is permitted to read." do
-      let(:permission) { RecordProperty::READ }
-      it { expect(subject).to be_falsey }
-    end
-    context "when owner is not permitted to all." do
-      let(:permission) { 0 }
-      it { expect(subject).to be_falsey }
-    end
-  end
-
-  shared_examples "permission check to read" do |method, attribute|
-    subject { record_property.send(method) }
-    let(:record_property) { FactoryGirl.build(:record_property, attribute => permission) }
-    context "when owner is permitted to write and read." do
-      let(:permission) { RecordProperty::WRITE | RecordProperty::READ }
-      it { expect(subject).to be_truthy }
-    end
-    context "when owner is permitted to write." do
-      let(:permission) { RecordProperty::WRITE }
-      it { expect(subject).to be_falsey }
-    end
-    context "when owner is permitted to read." do
-      let(:permission) { RecordProperty::READ }
-      it { expect(subject).to be_truthy }
-    end
-    context "when owner is not permitted to all." do
-      let(:permission) { 0 }
-      it { expect(subject).to be_falsey }
-    end
-  end
-
   describe ".writable?" do
-    it_behaves_like "checking user permission", :writable?, RecordProperty::WRITE
+    it_behaves_like "checking user permission", :writable?, :owner_writable?, :group_writable?, :guest_writable?
   end
 
   describe ".readable?" do
-    it_behaves_like "checking user permission", :readable?, RecordProperty::READ
+    it_behaves_like "checking user permission", :readable?, :owner_readable?, :group_readable?, :guest_readable?
   end
 
   describe ".owner?" do
@@ -129,29 +87,5 @@ describe RecordProperty do
       let(:group_id) { nil }
       it { expect(subject).to be_falsey }
     end
-  end
-
-  describe ".owner_writable?" do
-    it_behaves_like "permission check to write", :owner_writable?, :permission_u
-  end
-
-  describe ".owner_readable?" do
-    it_behaves_like "permission check to read", :owner_readable?, :permission_u
-  end
-
-  describe ".group_writable?" do
-    it_behaves_like "permission check to write", :group_writable?, :permission_g
-  end
-
-  describe ".group_readable?" do
-    it_behaves_like "permission check to read", :group_readable?, :permission_g
-  end
-
-  describe ".guest_writable?" do
-    it_behaves_like "permission check to write", :guest_writable?, :permission_o
-  end
-
-  describe ".guest_readable?" do
-    it_behaves_like "permission check to read", :guest_readable?, :permission_o
   end
 end

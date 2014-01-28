@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140124010521) do
+ActiveRecord::Schema.define(version: 20140128013356) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -187,12 +187,15 @@ ActiveRecord::Schema.define(version: 20140124010521) do
     t.string   "datum_type"
     t.integer  "user_id"
     t.integer  "group_id"
-    t.integer  "permission_u"
-    t.integer  "permission_g"
-    t.integer  "permission_o"
     t.string   "global_id"
-    t.boolean  "published",    default: false
+    t.boolean  "published",      default: false
     t.datetime "published_at"
+    t.boolean  "owner_readable", default: true,  null: false
+    t.boolean  "owner_writable", default: true,  null: false
+    t.boolean  "group_readable", default: true,  null: false
+    t.boolean  "group_writable", default: true,  null: false
+    t.boolean  "guest_readable", default: false, null: false
+    t.boolean  "guest_writable", default: false, null: false
   end
 
   add_index "record_properties", ["datum_id"], name: "index_record_properties_on_datum_id", using: :btree
@@ -283,9 +286,11 @@ ActiveRecord::Schema.define(version: 20140124010521) do
     t.string   "family_name"
     t.string   "first_name"
     t.text     "description"
+    t.string   "username",                               null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
 end
