@@ -3,6 +3,7 @@ Medusa::Application.routes.draw do
 
   root 'facade#index'
 
+  resources :records, id: /((?!\.(html$|json$|xml$)).)*/
   resources :stones do
     member do
       get :family
