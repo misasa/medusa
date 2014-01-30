@@ -1,0 +1,59 @@
+<%= image_tag record.record_property.global_qr.try!(:file_name), alt: "qrcode" %>
+
+<%= form_for record, remote: true, format: :json, html: { class: "update", role: "form" } do |form| %>
+  <%= form.fields_for :record_property do |f| %>
+    <div class="form-group form-group-sm">
+      <%= f.label :global_id, class: "small" %>
+      <%= f.text_field :global_id, class: "form-control input-sm" %>
+    </div>
+    <div class="form-group form-group-sm">
+      <%= f.label :user_id, class: "small" %>
+      <%= f.select :user_id, User.pluck(:username, :id), {}, class: "form-control input-sm" %>
+    </div>
+    <div class="form-group form-group-sm">
+      <%= f.label :group_id, class: "small" %>
+      <%= f.select :group_id, Group.pluck(:name, :id), {}, class: "form-control input-sm" %>
+    </div>
+    <div class="form-group form-group-sm">
+      <%= form.label :updated_at, class: "small" %>
+      <%= form.text_field :updated_at, class: "form-control input-sm", disabled: true %>
+    </div>
+    <div class="form-group form-group-sm">
+      <%= form.label :created_at, class: "small" %>
+      <%= form.text_field :created_at, class: "form-control input-sm", disabled: true %>
+    </div>
+    <div class="form-group form-group-sm">
+      <label class="small">Owner</label>
+      <%= f.label :owner_readable, class: "checkbox-inline" do %>
+        <%= f.check_box :owner_readable %> read
+      <% end %>
+      <%= f.label :owner_writable, class: "checkbox-inline" do %>
+        <%= f.check_box :owner_writable %> write
+      <% end %>
+    </div>
+    <div class="form-group form-group-sm">
+      <label class="small">Group</label>
+      <%= f.label :group_readable, class: "checkbox-inline" do %>
+        <%= f.check_box :group_readable %> read
+      <% end %>
+      <%= f.label :group_writable, class: "checkbox-inline" do %>
+        <%= f.check_box :group_writable %> write
+      <% end %>
+    </div>
+    <div class="form-group form-group-sm">
+      <label class="small">Guest</label>
+      <%= f.label :guest_readable, class: "checkbox-inline" do %>
+        <%= f.check_box :guest_readable %> read
+      <% end %>
+      <%= f.label :guest_writable, class: "checkbox-inline" do %>
+        <%= f.check_box :guest_writable %> write
+      <% end %>
+    </div>
+    <div class="form-group form-group-sm">
+      <%= f.label :published, class: "checkbox-inline" do %>
+        <%= f.check_box :published %> published
+      <% end %>
+    </div>
+  <% end %>
+  <%= form.submit class: "btn btn-sm" %>
+<% end %>

@@ -3,6 +3,7 @@ module HasRecordProperty
 
   included do
     has_one :record_property, as: :datum
+    accepts_nested_attributes_for :record_property
     delegate :global_id, :writable?, :readable?, to: :record_property
 
     scope :readables, ->(user) {

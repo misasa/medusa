@@ -1,6 +1,6 @@
 class StonesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, only: [:show, :edit, :update, :family, :picture, :map]
+  before_action :find_resource, except: [:index, :create]
   load_and_authorize_resource
 
   def index
@@ -40,6 +40,10 @@ class StonesController < ApplicationController
     respond_with @stone, layout: !request.xhr?
   end
 
+  def property
+    respond_with @stone, layout: !request.xhr?
+  end
+
   private
 
   def stone_params
@@ -52,7 +56,19 @@ class StonesController < ApplicationController
       :parent_id,
       :box_id,
       :place_id,
-      :description
+      :description,
+      record_property_attributes: [
+        :global_id,
+        :user_id,
+        :group_id,
+        :owner_readable,
+        :owner_writable,
+        :group_readable,
+        :group_writable,
+        :guest_readable,
+        :guest_writable,
+        :published
+      ]
     )
   end
 

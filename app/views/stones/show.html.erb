@@ -21,7 +21,9 @@
 	<%= link_to edit_stone_path(@stone), class: "btn btn-default", remote: true do %>
 	  <span class="glyphicon glyphicon-pencil"></span>
 	<% end %>
-	<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-cog"></span></button>
+	<%= link_to property_stone_path(@stone), class: "btn btn-default", remote: true do %>
+	  <span class="glyphicon glyphicon-cog"></span>
+	<% end %>
       </div>
       <div class="btn-group btn-group-sm">
 	<button type="button" class="btn btn-default"><span class="glyphicon glyphicon-tag"></span></button>

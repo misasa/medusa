@@ -8,6 +8,7 @@ Medusa::Application.routes.draw do
       get :family
       get :picture
       get :map
+      get :property
     end
   end
   resources :boxes
