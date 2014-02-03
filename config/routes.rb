@@ -11,8 +11,11 @@ Medusa::Application.routes.draw do
       get :map
       get :property
     end
+    resources :daughters, only: [:index, :update]
   end
-  resources :boxes
+  resources :boxes do
+    resources :stones, only: [:index, :update], controller: "boxes/stones"
+  end
   resources :places
   resources :analyses
   resources :bibs
