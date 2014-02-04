@@ -73,6 +73,10 @@ group :development, :test do
   gem 'rspec-rails', '>= 3.0.0.beta1'
   gem 'spring'
   gem 'guard-rspec', require: false
+  gem 'capistrano'
+  gem 'capistrano-rails'
+  gem 'capistrano-rbenv'
+  gem 'capistrano-bundler'
 end
 
 group :test do
