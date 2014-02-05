@@ -18,10 +18,16 @@ test:
   username: medusa
   password: medusa@pbz
 
-production:
+production: &production
   adapter: postgresql
   encoding: unicode
   database: medusa
   pool: 5
   username: medusa
   password: medusa@pbz
+
+staging:
+  <<: *production
+
+timemachine:
+  <<: *production
