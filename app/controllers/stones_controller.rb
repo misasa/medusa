@@ -1,6 +1,6 @@
 class StonesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create]
+  before_action :find_resource, except: [:index, :create, :upload]
   load_and_authorize_resource
 
   def index
@@ -42,6 +42,13 @@ class StonesController < ApplicationController
 
   def property
     respond_with @stone, layout: !request.xhr?
+  end
+
+  def upload
+    @stone = Stone.find(params[:id])
+    @stone.attachment_files << params[:media]
+    @stone.save
+    respond_with @stone
   end
 
   private

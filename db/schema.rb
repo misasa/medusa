@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140128013356) do
+ActiveRecord::Schema.define(version: 20140130021824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -45,10 +45,10 @@ ActiveRecord::Schema.define(version: 20140128013356) do
     t.string   "name"
     t.text     "description"
     t.string   "md5hash"
-    t.string   "file_name"
-    t.string   "content_type"
-    t.integer  "file_size"
-    t.datetime "file_updated_at"
+    t.string   "data_file_name"
+    t.string   "data_content_type"
+    t.integer  "data_file_size"
+    t.datetime "data_updated_at"
     t.string   "original_geometry"
     t.text     "affine_matrix"
     t.datetime "created_at"

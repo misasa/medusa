@@ -10,10 +10,14 @@ Medusa::Application.routes.draw do
       get :picture
       get :map
       get :property
+      post 'attachment_files/upload' => 'stones#upload'
     end
     resources :daughters, only: [:index, :update]
   end
   resources :boxes do
+    member do
+      post 'attachment_files/upload' => 'boxes#upload'
+    end
     resources :stones, only: [:index, :update], controller: "boxes/stones"
   end
   resources :places

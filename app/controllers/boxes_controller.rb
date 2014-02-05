@@ -1,6 +1,6 @@
 class BoxesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, only: [:show, :edit, :update, :destroy]
+  before_action :find_resource, only: [:show, :edit, :update, :destroy, :upload]
   load_and_authorize_resource
 
   def index
@@ -34,6 +34,12 @@ class BoxesController < ApplicationController
 
   def destroy
     @box.destroy
+    respond_with @box
+  end
+
+  def upload
+    @box.attachment_files << params[:media]
+    @box.save
     respond_with @box
   end
 
