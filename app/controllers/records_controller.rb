@@ -13,6 +13,10 @@ class RecordsController < ApplicationController
     end
   end
 
+  def property
+    respond_with @record.record_property
+  end
+
   private
 
   def find_resource

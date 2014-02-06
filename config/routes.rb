@@ -3,7 +3,12 @@ Medusa::Application.routes.draw do
 
   root 'facade#index'
 
-  resources :records, id: /((?!\.(html$|json$|xml$)).)*/
+  resources :records, { id: /((?!\.(html$|json$|xml$)).)*/ } do
+    member do
+      get 'record_property' => 'records#property'
+    end
+  end
+
   resources :stones do
     member do
       get :family
@@ -12,21 +17,45 @@ Medusa::Application.routes.draw do
       get :property
       post 'attachment_files/upload' => 'stones#upload'
     end
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "stone" }
     resources :daughters, only: [:index, :update]
   end
+
   resources :boxes do
     member do
       post 'attachment_files/upload' => 'boxes#upload'
     end
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "box" }
     resources :stones, only: [:index, :update], controller: "boxes/stones"
   end
-  resources :places
-  resources :analyses
-  resources :bibs
-  resources :attachment_files
+
+  resources :places do
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
+  end
+
+  resources :analyses do
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "analysis" }
+  end
+
+  resources :bibs do
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
+  end
+
+  resources :attachment_files do
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "attachment_file" }
+  end
+
+  resources :chemistries do
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "chemistry" }
+  end
+
+  resources :spots do
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "spot" }
+  end
+
   resource  :system_preference, only: [:show]
   resources :users
-  resources :groups, except: [:new]
+  resources :groups
   resources :classifications
   resources :box_types
   resources :measurement_items
