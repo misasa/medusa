@@ -8,6 +8,5 @@ class AttachmentFile < ActiveRecord::Base
 
   has_many :spots
   has_many :attachings
-  has_many :boxes, through: :attachings
-  has_many :stones, through: :attachings
+  has_many :attachable, through: :attachings
 end
