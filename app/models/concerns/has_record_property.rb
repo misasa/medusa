@@ -4,7 +4,7 @@ module HasRecordProperty
   included do
     has_one :record_property, as: :datum
     accepts_nested_attributes_for :record_property
-    delegate :global_id, :writable?, :readable?, to: :record_property
+    delegate :global_id, :readable?, to: :record_property
 
     scope :readables, ->(user) {
       where_clauses = owner_readables_where_clauses(user)
@@ -12,6 +12,10 @@ module HasRecordProperty
       where_clauses = where_clauses.or(guest_readables_where_clauses)
       includes(:record_property).where(where_clauses)
     }
+  end
+
+  def writable?(user)
+    new_record? || record_property.writable?(user)
   end
 
   module ClassMethods

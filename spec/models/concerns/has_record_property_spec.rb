@@ -33,7 +33,6 @@ describe HasRecordProperty do
       allow(record_property).to receive(:readable?).and_return(readable)
     end
     it { expect(obj.global_id).to eq global_id }
-    it { expect(obj.writable?).to be_falsey }
     it { expect(obj.readable?).to be_truthy }
   end
 
@@ -88,6 +87,35 @@ describe HasRecordProperty do
           let(:guest_readable) { false }
           it { expect(subject).to be_blank }
         end
+      end
+    end
+  end
+
+  describe "#writable?" do
+    subject { obj.writable?(user) }
+    let(:obj) { klass.create(name: "foo") }
+    let(:user) { FactoryGirl.create(:user_foo) }
+    before { obj.create_record_property }
+    context "when obj is new_record." do
+      before { allow(obj).to receive(:new_record?).and_return(true) }
+      context "when record_property is writable." do
+        before { allow(obj.record_property).to receive(:writable?).with(user).and_return(true) }
+        it { expect(subject).to eq true }
+      end
+      context "when record_property isn't writable." do
+        before { allow(obj.record_property).to receive(:writable?).with(user).and_return(false) }
+        it { expect(subject).to eq true }
+      end
+    end
+    context "when obj isn't new_record." do
+      before { allow(obj).to receive(:new_record?).and_return(false) }
+      context "when record_property is writable." do
+        before { allow(obj.record_property).to receive(:writable?).with(user).and_return(true) }
+        it { expect(subject).to eq true }
+      end
+      context "when record_property isn't writable." do
+        before { allow(obj.record_property).to receive(:writable?).with(user).and_return(false) }
+        it { expect(subject).to eq false }
       end
     end
   end
