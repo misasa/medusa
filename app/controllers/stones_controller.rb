@@ -46,7 +46,7 @@ class StonesController < ApplicationController
 
   def upload
     @stone = Stone.find(params[:id])
-    @stone.attachment_files << AttachmentFile.new(data: params[:image])
+    @stone.attachment_files << AttachmentFile.new(data: params[:media])
     @stone.save
     respond_with @stone
   end
