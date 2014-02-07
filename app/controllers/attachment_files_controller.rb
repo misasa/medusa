@@ -28,7 +28,7 @@ class AttachmentFilesController < ApplicationController
   end
 
   def update
-    @attachment_file.update_attributes(file_params)
+    @attachment_file.update_attributes(attachment_file_params)
     respond_with @attachment_file
   end
 
@@ -44,10 +44,7 @@ class AttachmentFilesController < ApplicationController
       :name,
       :description,
       :md5hash,
-      :file_name,
-      :content_type,
-      :file_size,
-      :file_updated_at,
+      :data,
       :original_geometry,
       :affine_matrix
     )

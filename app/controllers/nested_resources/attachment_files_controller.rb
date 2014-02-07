@@ -34,10 +34,7 @@ class NestedResources::AttachmentFilesController < ApplicationController
       :name,
       :description,
       :md5hash,
-      :file_name,
-      :content_type,
-      :file_size,
-      :file_updated_at,
+      :data,
       :original_geometry,
       :affine_matrix
     )
