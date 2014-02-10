@@ -22,6 +22,7 @@ Medusa::Application.routes.draw do
     resources :bibs, only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "stone" }
     resources :daughters, only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
     resources :stones, only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
+    resources :analyses, only: [:index, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "stone" }
   end
 
   resources :boxes do
@@ -59,6 +60,7 @@ Medusa::Application.routes.draw do
     resources :stones, only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "attachment_file", association_name: "stones" }
     resources :boxes, only: [:index, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "attachment_file", association_name: "boxes" }
     resources :bibs, only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "attachment_file" }
+    resources :analyses, only: [:index, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "attachment_file" }
   end
 
   resources :chemistries do
