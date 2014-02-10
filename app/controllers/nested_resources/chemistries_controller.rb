@@ -2,8 +2,8 @@ class NestedResources::ChemistriesController < ApplicationController
   respond_to :html, :xml, :json
 
   def index
-    @nested_chemistries = Analysis.where(analysis_id: params[:analysis_id])
-    respond_with @nested_chemistries
+    @chemistries = Analysis.find(params[:analysis_id]).chemistries
+    respond_with @chemistries
   end
 
   def update

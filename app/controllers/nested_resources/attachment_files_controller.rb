@@ -16,9 +16,9 @@ class NestedResources::AttachmentFilesController < ApplicationController
   end
 
   def destroy
-    attachings = Attaching.where(attachable_type: "#{params[:parent_resource].camelize}").where(attachable_id: @parent.id)
-    attachings.destroy_all
-    respond_with AttachmentFile.all
+    @attachment_file = AttachmentFile.find(params[:id])
+    @parent.attachment_files.delete(@attachment_file)
+    respond_with @attachment_file
   end
 
   private

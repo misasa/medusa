@@ -2,8 +2,8 @@ class NestedResources::SpotsController < ApplicationController
   respond_to :html, :xml, :json
 
   def index
-    @nested_spots = AttachmentFile.where(attachment_file_id: params[:attachment_file_id])
-    respond_with @nested_spots
+    @spots = AttachmentFile.find(params[:attachment_file_id]).spots
+    respond_with @spots
   end
 
   def update
