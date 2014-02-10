@@ -39,7 +39,7 @@ class BoxesController < ApplicationController
 
   def upload
     @box.attachment_files << AttachmentFile.new(data: params[:media])
-    @box.save
+    # @box.save
     respond_with @box
   end
 
