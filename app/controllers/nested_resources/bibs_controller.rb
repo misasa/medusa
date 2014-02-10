@@ -16,9 +16,9 @@ class NestedResources::BibsController < ApplicationController
   end
 
   def destroy
-    referrings = Referring.where(referable_type: "#{params[:parent_resource].camelize}").where(referable_id: @parent.id)
-    referrings.destroy_all
-    respond_with Bib.all
+    @bib = Bib.find(params[:id])
+    @parent.bibs.delete(@bib)
+    respond_with @bib
   end
 
   private
