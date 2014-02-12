@@ -6,6 +6,8 @@ module HasRecordProperty
     accepts_nested_attributes_for :record_property
     delegate :global_id, :readable?, to: :record_property
 
+    after_create :create_record_property
+
     scope :readables, ->(user) {
       where_clauses = owner_readables_where_clauses(user)
       where_clauses = where_clauses.or(group_readables_where_clauses(user))
@@ -17,7 +19,13 @@ module HasRecordProperty
   def writable?(user)
     new_record? || record_property.writable?(user)
   end
-
+  
+  def create_record_property
+    self.build_record_property unless self.record_property
+    self.record_property.user_id = User.current.id unless User.current.nil?
+    self.record_property.save
+  end
+  
   module ClassMethods
     private
 

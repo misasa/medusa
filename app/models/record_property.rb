@@ -6,8 +6,10 @@ class RecordProperty < ActiveRecord::Base
 
   delegate :name, :updated_at, to: :datum, allow_nil: true
 
+  before_save :generate_global_id_if_nil
+
   validates :user, existence: true
-  validates :group, existence: true
+  validates :group, existence: true, allow_nil: true
 
   alias_attribute :owner_readable?, :owner_readable
   alias_attribute :owner_writable?, :owner_writable
@@ -31,4 +33,12 @@ class RecordProperty < ActiveRecord::Base
   def group?(user)
     user.group_ids.include?(group_id)
   end
+  
+  def generate_global_id_if_nil
+    if global_id.nil?
+      time = Time.now
+      self.global_id =  time.strftime("%Y%m%d%H%M%S") + '-' + sprintf('%06d',time.usec)[-3..-1] + sprintf('%03d',rand(1000))
+    end
+  end
+  
 end
