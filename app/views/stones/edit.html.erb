@@ -1,0 +1,39 @@
+<%= form_for @stone, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
+  <div class="form-group form-group-sm">
+    <%= f.label :name, class: "small" %>
+    <%= f.text_field :name, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :classification_id, class: "small" %>
+    <%= f.select :classification_id, Classification.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :physical_form__id, class: "small" %>
+    <%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :quantity, class: "small" %>
+    <%= f.text_field :quantity, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :tag_list, class: "small" %>
+    <%= f.text_field :tag_list, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :parent_id, class: "small" %> <span class="text-muted small">TODO: 検索の仕組みが必要か</span>
+    <%= f.text_field :parent_id, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :box_id, class: "small" %> <span class="text-muted small">TODO: 検索の仕組みが必要か</span>
+    <%= f.text_field :box_id, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :place_id, class: "small" %> <span class="text-muted small">TODO: 検索の仕組みが必要か</span>
+    <%= f.text_field :place_id, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :description, class: "small" %>
+    <%= f.text_area :description, class: "form-control input-sm", row: 3 %>
+  </div>
+  <%= f.submit class: "btn btn-sm" %>
+<% end %>

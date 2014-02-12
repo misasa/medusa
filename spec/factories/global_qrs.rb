@@ -1,5 +1,5 @@
 FactoryGirl.define do
-  factory :uniq_qr do
+  factory :global_qr do
     association :record_property, factory: :record_property
     file_name "ファイル名１"
     content_type "コンテンツタイプ１"

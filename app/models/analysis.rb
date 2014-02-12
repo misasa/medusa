@@ -1,9 +1,12 @@
 class Analysis < ActiveRecord::Base
+  include HasRecordProperty
+
   has_many :chemistries
   has_many :attachings, as: :attachable
+  has_many :attachment_files, through: :attachings
   has_many :referrings, as: :referable
-  has_one :record_property, as: :datum
+  has_many :bibs, through: :referrings
   belongs_to :stone
 
-  validates :stone, existence: true
+  validates :stone, existence: true, allow_nil: true
 end

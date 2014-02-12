@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140122061112) do
+ActiveRecord::Schema.define(version: 20140130021824) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,10 +47,10 @@ ActiveRecord::Schema.define(version: 20140122061112) do
     t.string   "name"
     t.text     "description"
     t.string   "md5hash"
-    t.string   "file_name"
-    t.string   "content_type"
-    t.integer  "file_size"
-    t.datetime "file_updated_at"
+    t.string   "data_file_name"
+    t.string   "data_content_type"
+    t.integer  "data_file_size"
+    t.datetime "data_updated_at"
     t.string   "original_geometry"
     t.text     "affine_matrix"
     t.datetime "created_at"
@@ -149,6 +149,17 @@ ActiveRecord::Schema.define(version: 20140122061112) do
     t.datetime "updated_at"
   end
 
+  create_table "global_qrs", force: true do |t|
+    t.integer  "record_property_id"
+    t.string   "file_name"
+    t.string   "content_type"
+    t.integer  "file_size"
+    t.datetime "file_updated_at"
+    t.string   "identifier"
+  end
+
+  add_index "global_qrs", ["record_property_id"], name: "index_global_qrs_on_record_property_id", using: :btree
+
   create_table "group_members", force: true do |t|
     t.integer "group_id", null: false
     t.integer "user_id",  null: false
@@ -197,12 +208,15 @@ ActiveRecord::Schema.define(version: 20140122061112) do
     t.string   "datum_type"
     t.integer  "user_id"
     t.integer  "group_id"
-    t.integer  "permission_u"
-    t.integer  "permission_g"
-    t.integer  "permission_o"
     t.string   "global_id"
-    t.boolean  "published",    default: false
+    t.boolean  "published",      default: false
     t.datetime "published_at"
+    t.boolean  "owner_readable", default: true,  null: false
+    t.boolean  "owner_writable", default: true,  null: false
+    t.boolean  "group_readable", default: true,  null: false
+    t.boolean  "group_writable", default: true,  null: false
+    t.boolean  "guest_readable", default: false, null: false
+    t.boolean  "guest_writable", default: false, null: false
   end
 
   add_index "record_properties", ["datum_id"], name: "index_record_properties_on_datum_id", using: :btree
@@ -282,17 +296,6 @@ ActiveRecord::Schema.define(version: 20140122061112) do
     t.datetime "updated_at"
   end
 
-  create_table "uniq_qrs", force: true do |t|
-    t.integer  "record_property_id"
-    t.string   "file_name"
-    t.string   "content_type"
-    t.integer  "file_size"
-    t.datetime "file_updated_at"
-    t.string   "identifier"
-  end
-
-  add_index "uniq_qrs", ["record_property_id"], name: "index_uniq_qrs_on_record_property_id", using: :btree
-
   create_table "units", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -316,9 +319,11 @@ ActiveRecord::Schema.define(version: 20140122061112) do
     t.string   "family_name"
     t.string   "first_name"
     t.text     "description"
+    t.string   "username",                               null: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
 end

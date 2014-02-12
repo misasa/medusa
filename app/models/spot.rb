@@ -1,5 +1,6 @@
 class Spot < ActiveRecord::Base
-  has_one :record_property, as: :datum
+  include HasRecordProperty
+
   belongs_to :attachment_file
 
   validates :attachment_file, existence: true

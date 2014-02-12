@@ -1,0 +1,19 @@
+<%= paginate @records %>
+<table>
+  <thead>
+    <tr>
+      <th>name < ID ></th>
+      <th>project</th>
+      <th>modified</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @records.each do |record| %>
+    <tr>
+      <td><%= link_to record.name, record.datum %> < <%= record.global_id %> ></td>
+      <td></td>
+      <td><%= record.updated_at %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

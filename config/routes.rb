@@ -3,18 +3,90 @@ Medusa::Application.routes.draw do
 
   root 'facade#index'
 
-  resources :stones
-  resources :boxes
-  resources :places
-  resources :analyses
-  resources :bibs
-  resources :files
+  resources :records, { id: /((?!\.(html$|json$|xml$)).)*/ } do
+    member do
+      get 'record_property' => 'records#property'
+    end
+  end
+
+  resources :stones do
+    member do
+      get :family
+      get :picture
+      get :map
+      get :property
+      post 'attachment_files/upload' => 'stones#upload'
+    end
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "stone" }
+    resources :attachment_files, only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "stone" }
+    resources :bibs, only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "stone" }
+    resources :daughters, only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
+    resources :stones, only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
+    resources :analyses, only: [:index, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "stone" }
+  end
+
+  resources :boxes do
+    member do
+      post 'attachment_files/upload' => 'boxes#upload'
+    end
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "box" }
+    resources :attachment_files, only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "box" }
+    resources :bibs, only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "box" }
+    resources :stones, only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "box", association_name: "stones" }
+    resources :boxes, only: [:index, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "box", association_name: "children" }
+  end
+
+  resources :places do
+    member do
+      post 'attachment_files/upload' => 'places#upload'
+    end
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
+    resources :attachment_files, only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "place" }
+    resources :bibs, only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "place" }
+    resources :stones, only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "place", association_name: "stones" }
+  end
+
+  resources :analyses do
+    member do
+      post 'attachment_files/upload' => 'analyses#upload'
+    end
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "analysis" }
+    resources :attachment_files, only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "analysis" }
+    resources :bibs, only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "analysis" }
+    resources :chemistries, only: [:index, :update, :destroy], controller: "nested_resources/chemistries"
+  end
+
+  resources :bibs do
+    member do
+      post 'attachment_files/upload' => 'bibs#upload'
+    end
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
+  end
+
+  resources :attachment_files do
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "attachment_file" }
+    resources :spots, only: [:index, :update, :destroy], controller: "nested_resources/spots"
+    resources :places, only: [:index, :update, :destroy], controller: "nested_resources/places"
+    resources :stones, only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "attachment_file", association_name: "stones" }
+    resources :boxes, only: [:index, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "attachment_file", association_name: "boxes" }
+    resources :bibs, only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "attachment_file" }
+    resources :analyses, only: [:index, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "attachment_file" }
+  end
+
+  resources :chemistries do
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "chemistry" }
+  end
+
+  resources :spots do
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "spot" }
+  end
+
   resource  :system_preference, only: [:show]
   resources :users
-  resources :groups, except: [:show, :new]
-  resources :classifications, except: [:show, :new]
-  resources :box_types, except: [:show, :new]
-  resources :measurement_items, except: [:show, :new]
+  resources :groups
+  resources :classifications
+  resources :box_types
+  resources :measurement_items
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
