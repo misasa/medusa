@@ -20,14 +20,16 @@ ActiveRecord::Schema.define(version: 20140130021824) do
     t.string   "name"
     t.text     "description"
     t.integer  "stone_id"
-    t.string   "technique"
-    t.string   "device"
     t.string   "operator"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "technique_id"
+    t.integer  "device_id"
   end
 
+  add_index "analyses", ["device_id"], name: "index_analyses_on_device_id", using: :btree
   add_index "analyses", ["stone_id"], name: "index_analyses_on_stone_id", using: :btree
+  add_index "analyses", ["technique_id"], name: "index_analyses_on_technique_id", using: :btree
 
   create_table "attachings", force: true do |t|
     t.integer  "attachment_file_id"
@@ -55,10 +57,23 @@ ActiveRecord::Schema.define(version: 20140130021824) do
     t.datetime "updated_at"
   end
 
+  create_table "authors", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "bib_authors", force: true do |t|
+    t.integer "bib_id"
+    t.integer "author_id"
+  end
+
+  add_index "bib_authors", ["author_id"], name: "index_bib_authors_on_author_id", using: :btree
+  add_index "bib_authors", ["bib_id"], name: "index_bib_authors_on_bib_id", using: :btree
+
   create_table "bibs", force: true do |t|
     t.string   "entry_type"
     t.string   "abbreviation"
-    t.string   "authorlist"
     t.string   "name"
     t.string   "journal"
     t.string   "year"
@@ -107,11 +122,11 @@ ActiveRecord::Schema.define(version: 20140130021824) do
     t.string   "info"
     t.float    "value"
     t.string   "label"
-    t.string   "unit"
     t.text     "description"
     t.float    "uncertainty"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "unit_id"
   end
 
   add_index "chemistries", ["analysis_id"], name: "index_chemistries_on_analysis_id", using: :btree
@@ -127,6 +142,12 @@ ActiveRecord::Schema.define(version: 20140130021824) do
   end
 
   add_index "classifications", ["parent_id"], name: "index_classifications_on_parent_id", using: :btree
+
+  create_table "devices", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "global_qrs", force: true do |t|
     t.integer  "record_property_id"
@@ -154,17 +175,17 @@ ActiveRecord::Schema.define(version: 20140130021824) do
   end
 
   create_table "measurement_categories", force: true do |t|
-    t.string "name"
-    t.string "description"
-    t.text   "unit"
+    t.string  "name"
+    t.string  "description"
+    t.integer "unit_id"
   end
 
   create_table "measurement_items", force: true do |t|
-    t.string "nickname"
-    t.text   "description"
-    t.string "display_in_html"
-    t.string "unit"
-    t.string "display_in_tex"
+    t.string  "nickname"
+    t.text    "description"
+    t.string  "display_in_html"
+    t.string  "display_in_tex"
+    t.integer "unit_id"
   end
 
   create_table "physical_forms", force: true do |t|
@@ -268,6 +289,18 @@ ActiveRecord::Schema.define(version: 20140130021824) do
   end
 
   add_index "tags", ["name"], name: "index_tags_on_name", unique: true, using: :btree
+
+  create_table "techniques", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "units", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "users", force: true do |t|
     t.string   "email",                  default: "",    null: false
