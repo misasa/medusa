@@ -1,5 +1,5 @@
-desc "uniq qrs csv"
-task :uniq_qrs_csv => :environment do
+desc "global qrs csv"
+task :global_qrs_csv => :environment do
   ActiveRecord::Base.establish_connection :medusa_original
   
   ActiveRecord::Base.connection.execute("
@@ -15,25 +15,25 @@ task :uniq_qrs_csv => :environment do
       FROM uniq_qrs
       ORDER BY id
     )
-    TO '/tmp/csv/uniq_qrs.csv'
+    TO '/tmp/csv/global_qrs.csv'
     (FORMAT 'csv', HEADER);
   ")
   
   ActiveRecord::Base.establish_connection :development
   
   ActiveRecord::Base.connection.execute("
-    COPY uniq_qrs
-    FROM '/tmp/csv/uniq_qrs.csv'
+    COPY global_qrs
+    FROM '/tmp/csv/global_qrs.csv'
     WITH CSV HEADER
   ")
   
   max_next_id = ActiveRecord::Base.connection.select_value("
     SELECT MAX(id)
-    FROM uniq_qrs
+    FROM global_qrs
   ").to_i
   
   ActiveRecord::Base.connection.execute("
-    SELECT setval('uniq_qrs_id_seq', #{max_next_id})
+    SELECT setval('global_qrs_id_seq', #{max_next_id})
   ")
   
 end
