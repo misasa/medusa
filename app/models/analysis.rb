@@ -8,5 +8,5 @@ class Analysis < ActiveRecord::Base
   has_many :bibs, through: :referrings
   belongs_to :stone
 
-  validates :stone, existence: true
+  validates :stone, existence: true, allow_nil: true
 end
