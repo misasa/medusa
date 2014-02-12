@@ -37,6 +37,11 @@ class AnalysesController < ApplicationController
     respond_with @analysis
   end
 
+  def upload
+    @analysis.attachment_files << AttachmentFile.new(data: params[:media])
+    respond_with @analysis
+  end
+
   private
 
   def analysis_params

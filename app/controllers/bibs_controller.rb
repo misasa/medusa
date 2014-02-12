@@ -37,6 +37,11 @@ class BibsController < ApplicationController
     respond_with @bib
   end
 
+  def upload
+    @bib.attachment_files << AttachmentFile.new(data: params[:media])
+    respond_with @bib
+  end
+
   private
 
   def bib_params

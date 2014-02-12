@@ -37,6 +37,9 @@ Medusa::Application.routes.draw do
   end
 
   resources :places do
+    member do
+      post 'attachment_files/upload' => 'places#upload'
+    end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
     resources :attachment_files, only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "place" }
     resources :bibs, only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "place" }
@@ -44,6 +47,9 @@ Medusa::Application.routes.draw do
   end
 
   resources :analyses do
+    member do
+      post 'attachment_files/upload' => 'analyses#upload'
+    end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "analysis" }
     resources :attachment_files, only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "analysis" }
     resources :bibs, only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "analysis" }
@@ -51,6 +57,9 @@ Medusa::Application.routes.draw do
   end
 
   resources :bibs do
+    member do
+      post 'attachment_files/upload' => 'bibs#upload'
+    end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
   end
 
