@@ -121,7 +121,7 @@ describe HasRecordProperty do
   end
   
   describe "after_create generate_record_property" do
-    let(:stone) { FactoryGirl.create(:stone)}
+    let(:stone) { FactoryGirl.build(:stone)}
     let(:user) { FactoryGirl.create(:user) }
     before do
       User.current = user
