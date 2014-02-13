@@ -77,6 +77,7 @@ group :development, :test do
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
+  gem 'whenever', require: false
 end
 
 group :test do
