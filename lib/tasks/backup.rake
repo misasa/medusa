@@ -1,3 +1,6 @@
+desc "Execute backup of files and db."
+task backup: ["backup:files", "backup:db"]
+
 namespace :backup do
 
   desc "Execute backup of files by rsync command."
@@ -17,6 +20,22 @@ namespace :backup do
     Rails.logger.info command
     success = system command
     Rails.logger.info "File backup task is #{success ? "succeed" : "failed"}."
+  end
+
+  desc "Execute backup of database."
+  task db: :environment do
+    db_config = Rails.application.config.database_configuration[Rails.env]
+    file_name = "#{Date.today.strftime("%Y%m%d")}.dump"
+    dir_path = Pathname.new(Settings.backup.db.dir_path)
+    file_path = dir_path.join(file_name)
+
+    FileUtils.mkdir_p(dir_path) unless Dir.exist?(dir_path)
+
+    command = "pg_dump -U #{db_config["username"]} -w -Fc #{db_config["database"]} > #{file_path}"
+
+    Rails.logger.info command
+    success = system command
+    Rails.logger.info "Database backup task is #{success ? "succeed" : "failed"}."
   end
 
 end

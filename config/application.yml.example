@@ -2,6 +2,8 @@ defaults: &defaults
   backup:
     files:
       dir_path: "/tmp/medusa/backup/files"
+    db:
+      dir_path: "/tmp/medusa/backup/db"
 
 development:
   <<: *defaults
