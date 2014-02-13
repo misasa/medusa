@@ -39,7 +39,7 @@ describe BoxTypesController do
     describe "with valid attributes" do
       let(:attributes) { {name: "box_type_name", description: "new descripton"} }
       it { expect { post :create, box_type: attributes }.to change(BoxType, :count).by(1) }
-      context  "assigns a newly created box_type as @box_type" do
+      context "assigns a newly created box_type as @box_type" do
         before {post :create, box_type: attributes}
         it{expect(assigns(:box_type)).to be_persisted}
         it{expect(assigns(:box_type).name).to eq(attributes[:name])}
