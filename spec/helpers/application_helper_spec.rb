@@ -64,4 +64,23 @@ describe ApplicationHelper do
     end
   end
 
+  describe "#error_notification" do
+    subject { helper.error_notification(errors) }
+    let(:render_param) { {partial: "shared/error_notification", locals: {errors: errors}} }
+    context "errors is nil" do
+      let(:errors) { nil }
+      it { expect(subject).to be_nil }
+    end
+    context "errors is blank" do
+      let(:errors) { [] }
+      it { expect(subject).to be_nil }
+    end
+    context "errors is present" do
+      let(:errors) { ["error"] }
+      it do
+        expect(helper).to receive(:render).with(render_param)
+        subject
+      end
+    end
+  end
 end

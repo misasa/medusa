@@ -83,7 +83,7 @@ Medusa::Application.routes.draw do
 
   resource  :system_preference, only: [:show]
   resources :users
-  resources :groups
+  resources :groups, except: [:new, :destroy]
   resources :classifications
   resources :box_types
   resources :measurement_items

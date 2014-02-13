@@ -1,6 +1,6 @@
 class GroupsController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, only: [:show, :edit, :update, :destroy]
+  before_action :find_resource, only: [:show, :edit, :update]
   load_and_authorize_resource
   layout "admin"
 
@@ -21,17 +21,12 @@ class GroupsController < ApplicationController
   def create
     @group = Group.new(group_params)
     @group.save
-    respond_with(@group, :location => groups_path)
+    respond_with(@group, location: groups_path)
   end
 
   def update
     @group.update_attributes(group_params)
-    respond_with(@group, :location => groups_path)
-  end
-
-  def destroy
-    @group.destroy
-    respond_with @group
+    respond_with(@group, location: groups_path)
   end
 
   private
