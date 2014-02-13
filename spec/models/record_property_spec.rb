@@ -91,24 +91,21 @@ describe RecordProperty do
 
   describe ".generate_global_id" do
     let(:record_property){FactoryGirl.build(:record_property,global_id: nil)}
-    it "" do
-      record_property.generate_global_id
-      expect(record_property.global_id).not_to be_nil
-    end
+    before { record_property.generate_global_id }
+    it{expect(record_property.global_id).not_to be_nil}
   end
 
   describe "before_save generate_global_id" do
     let(:user) { FactoryGirl.create(:user) }
-    let(:record_property){FactoryGirl.build(:record_property,user_id: user.id)}
-    it "global_id is nil" do
-      record_property.global_id = nil
-      record_property.save
-      expect(record_property.global_id).not_to be_nil
+    context "global_id is nil" do
+      let(:record_property){FactoryGirl.build(:record_property,user_id: user.id,global_id: nil)}
+      before { record_property.save }
+      it{expect(record_property.global_id).to be_present}
     end
-    it "global_id is not nil" do
-      record_property.global_id = "xxx"
-      record_property.save
-      expect(record_property.global_id).to eq "xxx"
+    context "global_id is not nil" do
+      let(:record_property){FactoryGirl.build(:record_property,user_id: user.id,global_id: "xxx")}
+      before { record_property.save }
+      it{expect(record_property.global_id).to eq "xxx"}
     end
   end
 end
