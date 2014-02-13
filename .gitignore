@@ -24,3 +24,4 @@
 
 # Ignore eclipse files.
 .project
+public/system

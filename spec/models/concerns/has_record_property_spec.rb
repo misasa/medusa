@@ -119,4 +119,15 @@ describe HasRecordProperty do
       end
     end
   end
+  
+  describe "after_create generate_record_property" do
+    let(:stone) { FactoryGirl.create(:stone)}
+    let(:user) { FactoryGirl.create(:user) }
+    before do
+      User.current = user
+      stone.save
+    end
+    it{expect(stone.record_property).to be_present}
+    it{expect(stone.record_property).to be_persisted}
+  end
 end
