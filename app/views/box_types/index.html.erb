@@ -1,1 +1,40 @@
-box_types#index
+<%= paginate @box_types %>
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @box_types.each do |box_type| %>
+    <tr>
+      <td>
+        <%= link_to edit_box_type_path(box_type) do %>
+        <span class="glyphicon glyphicon-edit"></span>
+        <% end %>
+      </td>
+      <td><%= box_type.name %></td>
+      <td></td>
+      <td>
+        <%= link_to box_type_path(box_type),:confirm => "Are you sure you want to delete #{box_type.name}?", :method => :delete do %>
+        <span class="glyphicon glyphicon-remove"></span>
+      <% end %>
+    </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <%= form_for BoxType.new, remote: true, format: :json, html: { class: "create" } do |f| %>
+    <tr>
+      <td></td>
+      <td><%= f.text_field :name %></td>
+      <td>
+        <%= f.button class: "btn btn-default" do %>
+        <span class="glyphicon glyphicon-save"></span>
+        <% end %>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    <% end %>
+  </tfoot>
+</table>
