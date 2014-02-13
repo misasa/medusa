@@ -67,6 +67,7 @@ gem 'with_recursive', git: 'git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.
 gem 'thinreports'
 gem 'bootstrap-sass'
 gem 'ransack'
+gem 'whenever', require: false
 
 group :development, :test do
   gem 'pry-rails'
@@ -77,7 +78,6 @@ group :development, :test do
   gem 'capistrano-rails'
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
-  gem 'whenever', require: false
 end
 
 group :test do
