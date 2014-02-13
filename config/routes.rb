@@ -85,7 +85,7 @@ Medusa::Application.routes.draw do
   resources :users
   resources :groups, except: [:new, :destroy]
   resources :physical_forms, except: [:new]
-  resources :classifications
+  resources :classifications, except: [:new]
   resources :box_types, except: [:new]
   resources :measurement_items
 
