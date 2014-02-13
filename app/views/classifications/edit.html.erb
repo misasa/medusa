@@ -1,0 +1,16 @@
+<%= form_for @classification, html: {class: "col-lg-3"} do |f| %>
+  <%= error_notification(@classification.errors) %>
+
+  <div class="form-classification form-classification-sm">
+    <%= f.label :name, class: "small" %>
+    <%= f.text_field :name, class: "form-control input-sm" %>
+  </div>
+
+  <div class="form-classification form-classification-sm">
+    <%= f.label :description, class: "small" %>
+    <%= f.text_area :description, class: "form-control input-sm" %>
+  </div>
+
+  <%= f.submit "update", class: "btn btn-sm" %>
+  <%= link_to "cancel", classifications_path, class: "btn btn-sm" %>
+<% end %>

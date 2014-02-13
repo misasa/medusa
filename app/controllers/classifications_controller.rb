@@ -5,8 +5,9 @@ class ClassificationsController < ApplicationController
   layout "admin"
 
   def index
-    @classifications = Classification.all
-    respond_with @classifications
+    @search = Classification.search(params[:q])
+    @search.sorts = "updated_at ASC" if @search.sorts.empty?
+    @classifications = @search.result.page(params[:page]).per(params[:per_page])
   end
 
   def show
@@ -30,7 +31,8 @@ class ClassificationsController < ApplicationController
 
   def update
     @classification.update_attributes(classification_params)
-    respond_with @classification
+    respond_with(@classification, location: classifications_path)
+
   end
 
   def destroy

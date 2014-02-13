@@ -84,8 +84,9 @@ Medusa::Application.routes.draw do
   resource  :system_preference, only: [:show]
   resources :users
   resources :groups, except: [:new, :destroy]
-  resources :classifications
-  resources :box_types
+  resources :physical_forms, except: [:new]
+  resources :classifications, except: [:new]
+  resources :box_types, except: [:new]
   resources :measurement_items
 
   # The priority is based upon order of creation: first created -> highest priority.
