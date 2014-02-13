@@ -1,0 +1,16 @@
+<%= form_for @physical_form, html: {class: "col-lg-3"} do |f| %>
+  <%= error_notification(@physical_form.errors) %>
+
+  <div class="form-physical_form form-physical_form-sm">
+    <%= f.label :name, class: "small" %>
+    <%= f.text_field :name, class: "form-control input-sm" %>
+  </div>
+
+  <div class="form-physical_form form-physical_form-sm">
+    <%= f.label :description, class: "small" %>
+    <%= f.text_area :description, class: "form-control input-sm" %>
+  </div>
+
+  <%= f.submit "update", class: "btn btn-sm" %>
+  <%= link_to "cancel", physical_forms_path, class: "btn btn-sm" %>
+<% end %>
