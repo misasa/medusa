@@ -16,7 +16,7 @@
       <td><%= box_type.name %></td>
       <td></td>
       <td>
-        <%= link_to box_type_path(box_type),:confirm => "Are you sure you want to delete #{box_type.name}?", :method => :delete do %>
+        <%= link_to box_type_path(box_type), :method => :delete ,confirm: t("confirm.delete") do %>
         <span class="glyphicon glyphicon-remove"></span>
       <% end %>
     </tr>
