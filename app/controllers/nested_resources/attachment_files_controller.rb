@@ -5,20 +5,19 @@ class NestedResources::AttachmentFilesController < ApplicationController
 
   def index
     @attachment_files = @parent.attachment_files
-    respond_with @attachment_files
+    respond_with @attachment_files,methods: :path
   end
 
   def create
     @attachment_file = AttachmentFile.new(attachment_file_params)
     @parent.attachment_files << @attachment_file
-    @parent.save
-    respond_with @attachment_file
+    respond_with @attachment_file,methods: :path
   end
 
   def destroy
     @attachment_file = AttachmentFile.find(params[:id])
     @parent.attachment_files.delete(@attachment_file)
-    respond_with @attachment_file
+    respond_with @attachment_file,methods: :path
   end
 
   private

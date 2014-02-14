@@ -7,21 +7,21 @@ class AttachmentFilesController < ApplicationController
     @search = AttachmentFile.readables(current_user).search(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @attachment_files = @search.result.page(params[:page]).per(params[:per_page])
-    respond_with @attachment_files
+    respond_with @attachment_files,methods: :path
   end
 
   def show
-    respond_with @attachment_file
+    respond_with @attachment_file,methods: :path
   end
 
   def edit
-    respond_with @attachment_file, layout: !request.xhr?
+    respond_with @attachment_file,methods: :path, layout: !request.xhr?
   end
 
   def create
     @attachment_file = AttachmentFile.new(attachment_file_params)
     @attachment_file.save
-    respond_with @attachment_file
+    respond_with @attachment_file,methods: :path
   end
 
   def update
@@ -31,12 +31,12 @@ class AttachmentFilesController < ApplicationController
 
   def destroy
     @attachment_file.destroy
-    respond_with @attachment_file
+    respond_with @attachment_file,methods: :path
   end
 
   def upload
     @attachment_file << AttachmentFile.new(data: params[:media])
-    respond_with @attachment_file
+    respond_with @attachment_file,methods: :path
   end
 
   private
