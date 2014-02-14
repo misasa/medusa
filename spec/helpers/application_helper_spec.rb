@@ -66,7 +66,7 @@ describe ApplicationHelper do
 
   describe "#error_notification" do
     subject { helper.error_notification(errors) }
-    let(:render_param) { {partial: "shared/error_notification", locals: {errors: errors}} }
+    let(:render_param) { {partial: "parts/error_notification", locals: {errors: errors}} }
     context "errors is nil" do
       let(:errors) { nil }
       it { expect(subject).to be_nil }
