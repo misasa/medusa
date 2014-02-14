@@ -7,6 +7,7 @@ class StonesController < ApplicationController
     @search = Stone.readables(current_user).search(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @stones = @search.result.page(params[:page]).per(params[:per_page])
+    respond_with @stones
   end
 
   def show
