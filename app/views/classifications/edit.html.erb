@@ -1,6 +1,11 @@
 <%= form_for @classification, html: {class: "col-lg-3"} do |f| %>
   <%= error_notification(@classification.errors) %>
 
+
+  <div class="form-classification form-classification-sm">
+    <%= f.label :parent, class: "small" %>
+    <%= f.select :parent_id ,Classification.pluck(:full_name,:id),include_blank: true %>
+  </div>
   <div class="form-classification form-classification-sm">
     <%= f.label :name, class: "small" %>
     <%= f.text_field :name, class: "form-control input-sm" %>
