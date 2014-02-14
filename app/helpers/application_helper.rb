@@ -28,7 +28,7 @@ module ApplicationHelper
 
   def error_notification(errors)
     return if errors.blank?
-    render partial: "shared/error_notification", locals: {errors: errors}
+    render partial: "parts/error_notification", locals: {errors: errors}
   end
 
 end
