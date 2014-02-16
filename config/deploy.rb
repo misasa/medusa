@@ -9,7 +9,7 @@ set :repo_url, 'git@devel.misasa.okayama-u.ac.jp:orochi/medusa.git'
 
 # Default deploy_to directory is /var/www/my_app
 # set :deploy_to, '/var/www/my_app'
-set :deploy_to, '/home/medusa/apps/'
+set :deploy_to, '/srv/medusa/'
 
 # Default value for :scm is :git
 # set :scm, :git
