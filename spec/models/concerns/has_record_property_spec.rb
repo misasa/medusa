@@ -24,15 +24,17 @@ describe HasRecordProperty do
 
   describe "deligate methods" do
     let(:obj) { klass.create(name: "foo") }
-    let(:record_property) { obj.build_record_property(global_id: global_id) }
+    let(:record_property) { obj.build_record_property(global_id: global_id, published: published, published_at: published_at) }
     let(:global_id) { "12345" }
-    let(:writable) { false }
+    let(:published) { true }
+    let(:published_at) { Time.now }
     let(:readable) { true }
     before do
-      allow(record_property).to receive(:writable?).and_return(writable)
       allow(record_property).to receive(:readable?).and_return(readable)
     end
     it { expect(obj.global_id).to eq global_id }
+    it { expect(obj.published).to eq published }
+    it { expect(obj.published_at).to eq published_at }
     it { expect(obj.readable?).to be_truthy }
   end
 
