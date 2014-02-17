@@ -9,6 +9,8 @@ namespace :backup do
     current_name = Date.today.strftime("%Y%m%d")
     dir_path = Pathname.new(Settings.backup.files.dir_path)
     current = dir_path.join(current_name)
+
+    FileUtils.mkdir_p(dir_path) unless Dir.exist?(dir_path)
     prev = dir_path.children.select { |dir| dir.basename.to_s < current_name }.max_by(&:basename)
 
     FileUtils.mkdir_p(current) unless Dir.exist?(current)
