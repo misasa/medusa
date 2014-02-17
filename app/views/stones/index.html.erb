@@ -70,7 +70,7 @@
       <td><%= stone.tag_list %></td>
       <td><%= stone.user.try!(:username) %></td>
       <td><%= stone.group.try!(:name) %></td>
-      <td><%= stone.published ? difference_from_now(stone.published_at) : "" %></td>
+      <td><%= difference_from_now(stone.published_at) %></td>
       <td><%= difference_from_now(stone.updated_at) %></td>
       <td><%= difference_from_now(stone.created_at) %></td>
     </tr>

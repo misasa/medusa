@@ -62,7 +62,7 @@
       <td><%= attachment_file.data_file_size %></td>
       <td><%= attachment_file.user.try!(:username) %></td>
       <td><%= attachment_file.group.try!(:name) %></td>
-      <td><%= attachment_file.published ? difference_from_now(attachment_file.published_at) : "" %></td>
+      <td><%= difference_from_now(attachment_file.published_at) %></td>
       <td><%= difference_from_now(attachment_file.updated_at) %></td>
       <td><%= difference_from_now(attachment_file.created_at) %></td>
     </tr>

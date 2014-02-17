@@ -11,6 +11,7 @@ class RecordProperty < ActiveRecord::Base
 
   validates :user, existence: true
   validates :group, existence: true, allow_nil: true
+  validates :published_at, presence: true, if: Proc.new {|record| record.published }
 
   alias_attribute :owner_readable?, :owner_readable
   alias_attribute :owner_writable?, :owner_writable
