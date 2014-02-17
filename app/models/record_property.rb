@@ -4,8 +4,7 @@ class RecordProperty < ActiveRecord::Base
   belongs_to :datum, polymorphic: true
   has_one :global_qr
 
-  # TODO 関連先の１つ Chemistry にはname属性がない
-  delegate :name, :updated_at, to: :datum, allow_nil: true
+  delegate :name, :updated_at, :created_at, to: :datum, allow_nil: true
 
   before_save :generate_global_id, if: "global_id.nil?"
 
