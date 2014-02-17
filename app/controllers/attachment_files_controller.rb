@@ -59,7 +59,8 @@ class AttachmentFilesController < ApplicationController
         :group_writable,
         :guest_readable,
         :guest_writable,
-        :published
+        :published,
+        :published_at
       ]
     )
   end
