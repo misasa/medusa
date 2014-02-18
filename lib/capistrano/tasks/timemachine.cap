@@ -25,7 +25,7 @@ namespace :timemachine do
       with rails_env: fetch(:rails_env), dump_date: date.strftime("%Y%m%d") do
         rake "db:drop"
         rake "db:create"
-        rake "backup:db_restore"
+        rake "db:restore"
       end
     end
   end
