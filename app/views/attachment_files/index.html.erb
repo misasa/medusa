@@ -56,7 +56,7 @@
     <% @attachment_files.each do |attachment_file| %>
     <tr>
       <td></td>
-      <td><%= image_tag(attachment_file.path,width: 70,hight: 70) %></td>
+      <td><%= image_tag(attachment_file.path,width: 70,height: 70) %></td>
       <td><%= link_to attachment_file.data_file_name, attachment_file %></td>
       <td><%= attachment_file.data_content_type %></td>
       <td><%= attachment_file.data_file_size %></td>
