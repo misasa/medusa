@@ -43,7 +43,7 @@ namespace :backup do
   desc "Execute restore of database."
   task db_restore: :environment do
     db_config = Rails.application.config.database_configuration[Rails.env]
-    file_name = "#{ENV["dump_date"]}.dump"
+    file_name = "#{ENV["DUMP_DATE"]}.dump"
     dir_path = Pathname.new(Settings.backup.db.dir_path)
     file_path = dir_path.join(file_name)
 
