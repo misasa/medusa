@@ -30,7 +30,12 @@ staging:
   <<: *production
 
 timemachine:
-  <<: *production
+  adapter: postgresql
+  encoding: unicode
+  database: medusa_timemachine
+  pool: 5
+  username: medusa
+  password: medusa@pbz
 
 medusa_original:
   adapter: postgresql
