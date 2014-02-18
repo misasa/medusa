@@ -15,7 +15,7 @@ namespace :backup do
 
     FileUtils.mkdir_p(current) unless Dir.exist?(current)
 
-    command = "rsync -aL --delete"
+    command = "rsync -aL --delete --exclude=tmp/pids/*"
     command += " --link-dest=#{prev.relative_path_from(current)}/" if prev
     command += " #{master}/ #{current}/"
 
