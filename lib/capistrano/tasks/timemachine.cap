@@ -1,0 +1,33 @@
+namespace :timemachine do
+
+  task :environment do
+    set :timemachine_path, deploy_path.join("timemachine")
+    set :timemachine_dest, Date.parse(ENV["dest"]) if ENV["dest"]
+  end
+
+  def reset_timemachine_dir(date)
+    path = fetch(:timemachine_path)
+    backup_name = date.strftime("%Y%m%d")
+    backup_path = Pathname.new("/tmp/medusa/backup/files").join(backup_name)
+    if test "[ -d #{backup_path} ]"
+      execute :rm, path if test "[ -e #{path} ]"
+      execute :ln, "-s", backup_path, path
+    else
+      warn "Backup directory (#{backup_path}) is not exist."
+    end
+  end
+
+  desc 'Return to yesterday condition.'
+  task go: :environment do
+    on roles(:app) do
+      reset_timemachine_dir(fetch(:timemachine_dest))
+    end
+  end
+
+end
+
+namespace :load do
+  task :defaults do
+    set :timemachine_dest, Date.today - 1
+  end
+end
