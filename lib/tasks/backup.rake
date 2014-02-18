@@ -5,7 +5,7 @@ namespace :backup do
 
   desc "Execute backup of files by rsync command."
   task files: :environment do
-    master = Rails.root.join("public")
+    master = Rails.root
     current_name = Date.today.strftime("%Y%m%d")
     dir_path = Pathname.new(Settings.backup.files.dir_path)
     current = dir_path.join(current_name)
@@ -15,7 +15,7 @@ namespace :backup do
 
     FileUtils.mkdir_p(current) unless Dir.exist?(current)
 
-    command = "rsync -a --delete"
+    command = "rsync -aL --delete"
     command += " --link-dest=#{prev.relative_path_from(current)}/" if prev
     command += " #{master}/ #{current}/"
 
