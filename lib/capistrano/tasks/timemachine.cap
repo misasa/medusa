@@ -4,7 +4,7 @@ namespace :timemachine do
     set :timemachine_path, deploy_path.join("timemachine")
     set :timemachine_dest, Date.parse(ENV["dest"]) if ENV["dest"]
     set :unicorn_root, fetch(:timemachine_path)
-    set :relative_url_root, "timemachine"
+    set :relative_url_root, "/timemachine"
     set :rails_env, "timemachine"
   end
 
