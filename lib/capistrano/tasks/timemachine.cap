@@ -3,6 +3,9 @@ namespace :timemachine do
   task :environment do
     set :timemachine_path, deploy_path.join("timemachine")
     set :timemachine_dest, Date.parse(ENV["dest"]) if ENV["dest"]
+    set :unicorn_root, fetch(:timemachine_path)
+    set :relative_url_root, "timemachine"
+    set :rails_env, "timemachine"
   end
 
   def reset_timemachine_dir(date)
@@ -18,10 +21,24 @@ namespace :timemachine do
   end
 
   desc 'Return to yesterday condition.'
-  task go: :environment do
+  task setup: :environment do
     on roles(:app) do
       reset_timemachine_dir(fetch(:timemachine_dest))
     end
+  end
+
+  task start: :environment do
+    invoke "timemachine:setup"
+    invoke "unicorn:start"
+  end
+
+  task stop: :environment do
+    invoke "unicorn:stop"
+  end
+
+  task restart: :environment do
+    invoke "timemachine:stop"
+    invoke "timemachine:start"
   end
 
 end
