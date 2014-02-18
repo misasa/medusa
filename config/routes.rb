@@ -46,7 +46,7 @@ Medusa::Application.routes.draw do
     resources :stones, only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "place", association_name: "stones" }
   end
 
-  resources :analyses do
+  resources :analyses, except: [:new] do
     member do
       post 'attachment_files/upload' => 'analyses#upload'
     end
