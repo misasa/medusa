@@ -61,7 +61,7 @@
       <td></td>
       <td><%= link_to bib.name, bib %></td>
       <td><%= bib.doi %></td>
-      <td><%= bib.authors.map {|author| author.name }.join(",")%></td>
+      <td><%= bib.authors.map {|author| author.name }.join(" & ")%></td>
       <td><%= bib.year %></td>
       <td><%= bib.entry_type %></td>
       <td><%= bib.user.try!(:username) %></td>
