@@ -2,18 +2,18 @@ module PlaceHelper
 
   def format_latitude(latitude)
     if latitude < 0
-      la = "%.4f S"%(latitude * -1)
+      la = "%.4f S" % (latitude * -1)
     else
-      la = "%.4f N"%latitude
+      la = "%.4f N" % latitude
     end
     la
   end
 
   def format_longitude(longitude)
     if longitude < 0
-      lo = "%.4f W"%(longitude * -1)
+      lo = "%.4f W" % (longitude * -1)
     else
-      lo = "%.4f E"%longitude.to_s
+      lo = "%.4f E" % longitude.to_s
     end
     lo
   end
