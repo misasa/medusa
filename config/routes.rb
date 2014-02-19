@@ -1,5 +1,5 @@
 Medusa::Application.routes.draw do
-  devise_for :users
+  devise_for :users, only: :sessions
 
   root 'facade#index'
 
@@ -82,7 +82,7 @@ Medusa::Application.routes.draw do
   end
 
   resource  :system_preference, only: [:show]
-  resources :users
+  resources :users, except: [:destory]
   resources :groups, except: [:new, :destroy]
   resources :physical_forms, except: [:new]
   resources :classifications, except: [:new]
