@@ -56,6 +56,11 @@ describe PlaceHelper do
       let(:stones){[Stone.new(name: "123"),Stone.new(name: "456"),Stone.new(name: "789")]}
       it {expect(subject).to eq "123, 456,  ... [3]"}
     end
+    context "length 11" do
+      subject{ helper.format_stones_summary(stones,11) }
+      let(:stones){[Stone.new(name: "123"),Stone.new(name: "456"),Stone.new(name: "789")]}
+      it {expect(subject).to eq "123, 456, 7 ... [3]"}
+    end
     context "length no limit" do
       subject{ helper.format_stones_summary(stones,nil) }
       let(:stones){[Stone.new(name: "123"),Stone.new(name: "456"),Stone.new(name: "789")]}
