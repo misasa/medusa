@@ -14,11 +14,6 @@ class PhysicalFormsController < ApplicationController
     respond_with @physical_form
   end
 
-  def new
-    @physical_form = PhysicalForm.new
-    respond_with @physical_form
-  end
-
   def edit
     respond_with @physical_form
   end
