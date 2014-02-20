@@ -14,4 +14,11 @@ describe Settings do
     it { expect(Settings.namespace).to eq Rails.env }
   end
 
+  describe ".barcode_type" do
+    it {expect(Settings.barcode_type).to eq Settings.barcode['type']||'2D'}
+  end
+
+  describe ".barcode_prefix" do
+    it {expect(Settings.barcode_prefix).to eq Settings.barcode['prefix']||''}
+  end
 end
