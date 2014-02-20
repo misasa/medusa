@@ -1,6 +1,9 @@
 class Bib < ActiveRecord::Base
   include HasRecordProperty
 
+  has_many :bib_authors
+  has_many :authors, through: :bib_authors
+
   has_many :attachings, as: :attachable
   has_many :attachment_files, through: :attachings
   has_many :referrings

@@ -1,0 +1,16 @@
+<%= form_for @box_type, html: {class: "col-lg-3"} do |f| %>
+  <%= error_notification(@box_type.errors) %>
+
+  <div class="form-box_type form-box_type-sm">
+    <%= f.label :name, class: "small" %>
+    <%= f.text_field :name, class: "form-control input-sm" %>
+  </div>
+
+  <div class="form-box_type form-box_type-sm">
+    <%= f.label :description, class: "small" %>
+    <%= f.text_area :description, class: "form-control input-sm" %>
+  </div>
+
+  <%= f.submit "update", class: "btn btn-sm" %>
+  <%= link_to "cancel", box_types_path, class: "btn btn-sm" %>
+<% end %>

@@ -4,7 +4,9 @@ class AnalysesController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @analyses = Analysis.all
+    @search = Analysis.readables(current_user).search(params[:q])
+    @search.sorts = "updated_at ASC" if @search.sorts.empty?
+    @analyses = @search.result.includes([:stone, chemistries: :measurement_item]).page(params[:page]).per(params[:per_page])
     respond_with @analyses
   end
 
@@ -12,13 +14,8 @@ class AnalysesController < ApplicationController
     respond_with @analysis
   end
 
-  def new
-    @analysis = Analysis.new
-    respond_with @analysis
-  end
-
   def edit
-    respond_with @analysis
+    respond_with @analysis, layout: !request.xhr?
   end
 
   def create
@@ -49,8 +46,8 @@ class AnalysesController < ApplicationController
       :name,
       :description,
       :stone_id,
-      :technique,
-      :device,
+      :technique_id,
+      :device_id,
       :operator
     )
   end

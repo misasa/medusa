@@ -1,5 +1,5 @@
 Medusa::Application.routes.draw do
-  devise_for :users
+  devise_for :users, only: :sessions
 
   root 'facade#index'
 
@@ -46,7 +46,7 @@ Medusa::Application.routes.draw do
     resources :stones, only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "place", association_name: "stones" }
   end
 
-  resources :analyses do
+  resources :analyses, except: [:new] do
     member do
       post 'attachment_files/upload' => 'analyses#upload'
     end
@@ -82,10 +82,11 @@ Medusa::Application.routes.draw do
   end
 
   resource  :system_preference, only: [:show]
-  resources :users
-  resources :groups
-  resources :classifications
-  resources :box_types
+  resources :users, except: [:destory]
+  resources :groups, except: [:new, :destroy]
+  resources :physical_forms, except: [:new]
+  resources :classifications, except: [:new]
+  resources :box_types, except: [:new]
   resources :measurement_items
 
   # The priority is based upon order of creation: first created -> highest priority.

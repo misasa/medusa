@@ -5,7 +5,9 @@ class UsersController < ApplicationController
   layout "admin"
 
   def index
-    @users = User.all
+    @search = User.search(params[:q])
+    @search.sorts = "updated_at ASC" if @search.sorts.empty?
+    @users = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @users
   end
 
@@ -25,12 +27,15 @@ class UsersController < ApplicationController
   def create
     @user = User.new(user_params)
     @user.save
-    respond_with @user
+    respond_with(@user, location: users_path)
   end
 
   def update
-    @user.update_attributes(user_params)
-    respond_with @user
+    pa = user_params
+    pa.delete(:password) if pa[:password].blank?
+    pa.delete(:password_confirmation) if pa[:password_confirmation].blank?
+    @user.update_attributes(pa)
+    respond_with(@user, location: users_path)
   end
 
   def destroy
@@ -49,7 +54,9 @@ class UsersController < ApplicationController
       :family_name,
       :first_name,
       :description,
-      :box_id
+      :box_id,
+      :username,
+      group_ids: []
     )
   end
 

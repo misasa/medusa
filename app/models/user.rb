@@ -12,4 +12,12 @@ class User < ActiveRecord::Base
   #TODO バリデーション:ユーザーにはBoxが必須？
 
   alias_attribute :admin?, :administrator
+  
+  def self.current
+    Thread.current[:user]
+  end
+  
+  def self.current=(user)
+    Thread.current[:user] = user
+  end
 end

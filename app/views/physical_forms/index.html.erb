@@ -1,0 +1,42 @@
+<div><%= link_to_unless_current Classification.model_name.human.downcase,classifications_path %>
+<%= link_to_unless_current PhysicalForm.model_name.human.downcase,physical_forms_path %></div>
+<%= paginate @physical_forms %>
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @physical_forms.each do |physical_form| %>
+    <tr>
+      <td>
+        <%= link_to edit_physical_form_path(physical_form) do %>
+        <span class="glyphicon glyphicon-edit"></span>
+        <% end %>
+      </td>
+      <td><%= physical_form.name %></td>
+      <td></td>
+      <td>
+        <%= link_to physical_form_path(physical_form), :method => :delete ,confirm: t("confirm.delete") do %>
+        <span class="glyphicon glyphicon-remove"></span>
+      <% end %>
+    </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <%= form_for PhysicalForm.new, remote: true, format: :json, html: { class: "create" } do |f| %>
+    <tr>
+      <td></td>
+      <td><%= f.text_field :name %></td>
+      <td>
+        <%= f.button class: "btn btn-default" do %>
+        <span class="glyphicon glyphicon-save"></span>
+        <% end %>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    <% end %>
+  </tfoot>
+</table>

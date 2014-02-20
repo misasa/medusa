@@ -5,8 +5,9 @@ class BoxTypesController < ApplicationController
   layout "admin"
 
   def index
-    @box_types = BoxType.all
-    respond_with @box_types
+    @search = BoxType.search(params[:q])
+    @search.sorts = "updated_at ASC" if @search.sorts.empty?
+    @box_types = @search.result.page(params[:page]).per(params[:per_page])
   end
 
   def show
@@ -30,7 +31,7 @@ class BoxTypesController < ApplicationController
 
   def update
     @box_type.update_attributes(box_type_params)
-    respond_with @box_type
+    respond_with(@box_type, location: box_types_path)
   end
 
   def destroy

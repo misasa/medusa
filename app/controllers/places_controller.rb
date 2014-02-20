@@ -1,11 +1,14 @@
 class PlacesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, only: [:show, :edit, :update, :destroy]
+  before_action :find_resource, except: [:index, :create, :upload]
   load_and_authorize_resource
 
   def index
-    @places = Place.all
+    @search = Place.readables(current_user).search(params[:q])
+    @search.sorts = "updated_at ASC" if @search.sorts.empty?
+    @places = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @places
+
   end
 
   def show
@@ -50,12 +53,28 @@ class PlacesController < ApplicationController
       :description,
       :latitude,
       :longitude,
-      :elevation
+      :elevation,
+      :link_url,
+      :doi,
+      record_property_attributes: [
+        :global_id,
+        :user_id,
+        :group_id,
+        :owner_readable,
+        :owner_writable,
+        :group_readable,
+        :group_writable,
+        :guest_readable,
+        :guest_writable,
+        :published,
+        :published_at
+      ]
+
     )
   end
 
   def find_resource
-    @place = Place.find(params[:id])
+    @place = Place.find(params[:id]).decorate
   end
 
 end

@@ -1,10 +1,12 @@
 class BibsController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, only: [:show, :edit, :update, :destroy]
+  before_action :find_resource, except: [:index, :create, :upload]
   load_and_authorize_resource
 
   def index
-    @bibs = Bib.all
+    @search = Bib.readables(current_user).search(params[:q])
+    @search.sorts = "updated_at ASC" if @search.sorts.empty?
+    @bibs = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @bibs
   end
 
@@ -59,12 +61,26 @@ class BibsController < ApplicationController
       :note,
       :key,
       :link_url,
-      :doi
+      :doi,
+      record_property_attributes: [
+        :global_id,
+        :user_id,
+        :group_id,
+        :owner_readable,
+        :owner_writable,
+        :group_readable,
+        :group_writable,
+        :guest_readable,
+        :guest_writable,
+        :published,
+        :published_at
+      ]
+
     )
   end
 
   def find_resource
-    @bib = Bib.find(params[:id])
+    @bib = Bib.find(params[:id]).decorate
   end
 
 end

@@ -1,1 +1,43 @@
-classifications#index
+<div><%= link_to_unless_current Classification.model_name.human.downcase,classifications_path %>
+<%= link_to_unless_current PhysicalForm.model_name.human.downcase,physical_forms_path %></div>
+<%= paginate @classifications %>
+<table>
+  <thead>
+    <tr>
+      <th>name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @classifications.each do |classification| %>
+    <tr>
+      <td>
+        <%= link_to edit_classification_path(classification) do %>
+        <span class="glyphicon glyphicon-edit"></span>
+        <% end %>
+      </td>
+      <td><%= classification.full_name %></td>
+      <td></td>
+      <td>
+        <%= link_to classification_path(classification), :method => :delete ,confirm: t("confirm.delete") do %>
+        <span class="glyphicon glyphicon-remove"></span>
+      <% end %>
+    </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <%= form_for Classification.new, remote: true, format: :json, html: { class: "create" } do |f| %>
+    <tr>
+      <td></td>
+      <td><%= f.select :parent_id ,Classification.pluck(:full_name,:id),include_blank: true %></td>
+      <td><%= f.text_field :name %></td>
+      <td>
+        <%= f.button class: "btn btn-default" do %>
+        <span class="glyphicon glyphicon-save"></span>
+        <% end %>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    <% end %>
+  </tfoot>
+</table>

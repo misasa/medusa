@@ -1,7 +1,11 @@
-<%= form_for @group do |f| %>
-  <div>name</div>
-  <div><%= f.text_field :name %></div>
-  </br>
-  <%= f.submit "update" %>
-  <%= link_to "cancel", groups_path %>
+<%= form_for @group, html: {class: "col-lg-3"} do |f| %>
+  <%= error_notification(@group.errors) %>
+
+  <div class="form-group form-group-sm">
+    <%= f.label :name, class: "small" %>
+    <%= f.text_field :name, class: "form-control input-sm" %>
+  </div>
+
+  <%= f.submit "update", class: "btn btn-sm" %>
+  <%= link_to "cancel", groups_path, class: "btn btn-sm" %>
 <% end %>

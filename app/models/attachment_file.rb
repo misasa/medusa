@@ -10,4 +10,10 @@ class AttachmentFile < ActiveRecord::Base
   has_many :boxes, through: :attachings, source: :attachable, source_type: "Box"
   has_many :bibs, through: :attachings, source: :attachable, source_type: "Bib"
   has_many :analyses, through: :attachings, source: :attachable, source_type: "Analysis"
+
+  attr_accessor :path
+
+  def path
+    "/system/attachment_files/" + id.to_s + "/" + data_file_name
+  end
 end

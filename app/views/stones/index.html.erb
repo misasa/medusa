@@ -4,42 +4,44 @@
     <%= search_form_for @search do |f| %>
     <tr>
       <th>
-	<%= f.button class: "btn btn-default" do %>
-	<span class="glyphicon glyphicon-refresh"></span>
-	<% end %>
+        <%= f.button class: "btn btn-default" do %>
+        <span class="glyphicon glyphicon-refresh"></span>
+        <% end %>
       </th>
-      <th><%= sort_link @search, :name %></th>
-      <th>parent</th>
-      <th><%= sort_link @search, :box_name, "Box" %></th>
-      <th><%= sort_link @search, :physical_form_name, "Physical form" %></th>
-      <th><%= sort_link @search, :classification_name, "Classification" %></th>
+      <th><%= sort_link @search, :name, "name" %></th>
+      <th><%= sort_link @search, :parent_name, "parent" %></th>
+      <th><%= sort_link @search, :box_name, "box" %></th>
+      <th><%= sort_link @search, :physical_form_name, "physical form" %></th>
+      <th><%= sort_link @search, :classification_name, "classification" %></th>
       <th>tags</th><!-- don't sort -->
-      <th>owner</th>
-      <th>project</th>
-      <th>published</th>
-      <th><%= sort_link @search, :updated_at %></th>
-      <th><%= sort_link @search, :created_at %></th>
+      <th><%= sort_link @search, :user_username, "owner" %></th>
+      <th><%= sort_link @search, :group_name, "group" %></th>
+      <th><%= sort_link @search, :record_property_published_at, "published" %></th>
+      <th><%= sort_link @search, :updated_at, "updated_at" %></th>
+      <th><%= sort_link @search, :created_at, "created_at" %></th>
     </tr>
     <tr>
-      <th><%= text_field_tag :per_page, params[:per_page] || Stone.default_per_page %></th>
+      <th><%= text_field_tag :per_page, (params[:per_page] || Stone.default_per_page), size: 4 %></th>
       <th><%= f.text_field :name_cont %></th>
-      <th></th>
-      <th><%= f.select :box_id_eq, Box.pluck(:name, :id), include_blank: true %></th>
-      <th></th>
-      <th></th>
+      <th><%= f.text_field :parent_name_cont %></th>
+      <th><%= f.text_field :box_name_cont %></th>
+      <th><%= f.text_field :physical_form_name_cont %></th>
+      <th><%= f.text_field :classification_name_cont %></th>
       <th><%= f.select :tags_name_eq, ActsAsTaggableOn::Tag.pluck(:name), include_blank: true %></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <th><%= f.text_field :user_username_cont %></th>
+      <th><%= f.text_field :group_name_cont %></th>
+      <th><%= f.select :record_property_published_eq, [true, false], include_blank: true %></th>
+      <th>
+        <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]) %>
+      </th>
+      <th>
+        <%= f.text_field :created_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]) %>
+      </th>
     </tr>
     <tr>
       <th></th>
       <th></th>
       <th></th>
-      <th><%= f.text_field :box_name_cont %></th>
       <th></th>
       <th></th>
       <th></th>
@@ -47,8 +49,12 @@
       <th></th>
       <th></th>
       <th></th>
-      <th></th>
-      <th></th>
+      <th>
+        <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]) %>
+      </th>
+      <th>
+        <%= f.text_field :created_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]) %>
+      </th>
     </tr>
     <% end %>
   </thead>
@@ -57,16 +63,16 @@
     <tr>
       <td></td>
       <td><%= link_to stone.name, stone %></td>
-      <td><%= stone.parent_id %></td>
+      <td><%= stone.parent.try!(:name) %></td>
       <td><%= stone.box.try!(:name) %></td>
       <td><%= stone.physical_form.try!(:name) %></td>
       <td><%= stone.classification.try!(:name) %></td>
       <td><%= stone.tag_list %></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
-      <td></td>
+      <td><%= stone.user.try!(:username) %></td>
+      <td><%= stone.group.try!(:name) %></td>
+      <td><%= difference_from_now(stone.published_at) %></td>
+      <td><%= difference_from_now(stone.updated_at) %></td>
+      <td><%= difference_from_now(stone.created_at) %></td>
     </tr>
     <% end %>
   </tbody>

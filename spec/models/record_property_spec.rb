@@ -88,4 +88,54 @@ describe RecordProperty do
       it { expect(subject).to be_falsey }
     end
   end
+
+  describe ".generate_global_id" do
+    let(:record_property){FactoryGirl.build(:record_property,global_id: nil)}
+    before { record_property.generate_global_id }
+    it{expect(record_property.global_id).not_to be_nil}
+  end
+
+  describe "validates" do
+    describe "published_at" do
+      let(:record_property){ FactoryGirl.build(:record_property, published: published, published_at: published_at) }
+      let(:published) { false }
+      let(:published_at) { nil }
+      context "published is false" do
+        context "published_at is nil" do
+          it { expect(record_property).to be_valid }
+        end
+        context "published_at is present" do
+          let(:published_at) { Time.now }
+          it { expect(record_property).to be_valid }
+        end
+      end
+      context "published is true" do
+        let(:published) { true }
+        context "published_at is nil" do
+          it { expect(record_property).not_to be_valid }
+        end
+        context "published_at is present" do
+          let(:published_at) { Time.now }
+          it { expect(record_property).to be_valid }
+        end
+      end
+    end
+  end
+
+  describe "callbacks" do
+    describe "generate_global_id" do
+      let(:user) { FactoryGirl.create(:user) }
+      context "global_id is nil" do
+        let(:record_property){ FactoryGirl.build(:record_property, user_id: user.id, global_id: nil) }
+        before { record_property.save }
+        it{ expect(record_property.global_id).to be_present }
+      end
+      context "global_id is not nil" do
+        let(:record_property){ FactoryGirl.build(:record_property, user_id: user.id, global_id: "xxx") }
+        before { record_property.save }
+        it{ expect(record_property.global_id).to eq "xxx" }
+      end
+    end
+  end
+
 end

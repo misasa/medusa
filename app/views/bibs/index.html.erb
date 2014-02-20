@@ -1,1 +1,79 @@
-bibs#index
+<%= paginate @bibs %>
+<table>
+  <thead>
+    <%= search_form_for @search do |f| %>
+    <tr>
+      <th>
+        <%= f.button class: "btn btn-default" do %>
+        <span class="glyphicon glyphicon-refresh"></span>
+        <% end %>
+      </th>
+      <th><%= sort_link @search, :name, "title" %></th>
+      <th><%= sort_link @search, :doi, "doi" %></th>
+      <th><%= sort_link @search, :author_name, "author" %></th>
+      <th><%= sort_link @search, :year, "year" %></th>
+      <th><%= sort_link @search, :entry_type, "type" %></th>
+      <th><%= sort_link @search, :user_username, "owner" %></th>
+      <th><%= sort_link @search, :group_name, "group" %></th>
+      <th><%= sort_link @search, :record_property_published_at, "published" %></th>
+      <th><%= sort_link @search, :updated_at, "updated_at" %></th>
+      <th><%= sort_link @search, :created_at, "created_at" %></th>
+    </tr>
+    <tr>
+      <th><%= text_field_tag :per_page, (params[:per_page] || Bib.default_per_page), size: 4 %></th>
+      <th><%= f.text_field :name_cont %></th>
+      <th><%= f.text_field :doi_cont %></th>
+      <th><%= f.text_field :authors_name_cont %></th>
+      <th></th>
+      <th><%= f.text_field :entry_type_cont %></th>
+      <th><%= f.text_field :user_username_cont %></th>
+      <th><%= f.text_field :group_name_cont %></th>
+      <th><%= f.select :record_property_published_eq, [true, false], include_blank: true %></th>
+      <th>
+        <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]) %>
+      </th>
+      <th>
+        <%= f.text_field :created_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]) %>
+      </th>
+    </tr>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>
+        <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]) %>
+      </th>
+      <th>
+        <%= f.text_field :created_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]) %>
+      </th>
+    </tr>
+    <% end %>
+  </thead>
+  <tbody>
+    <% @bibs.each do |bib| %>
+    <tr>
+      <td></td>
+      <td><%= link_to bib.name, bib %></td>
+      <td><%= bib.doi %></td>
+      <td><%= bib.authors.map {|author| author.name }.join(" & ")%></td>
+      <td><%= bib.year %></td>
+      <td><%= bib.entry_type %></td>
+      <td><%= bib.user.try!(:username) %></td>
+      <td><%= bib.group.try!(:name) %></td>
+      <td><%= difference_from_now(bib.published_at) %></td>
+      <td><%= difference_from_now(bib.updated_at) %></td>
+      <td><%= difference_from_now(bib.created_at) %></td>
+    </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <%= render partial: "new", locals: { bib: Bib.new } %>
+  </tfoot>
+</table>
+

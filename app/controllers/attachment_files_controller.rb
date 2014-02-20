@@ -1,30 +1,27 @@
 class AttachmentFilesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, only: [:show, :edit, :update, :destroy]
+  before_action :find_resource, except: [:index, :create, :upload]
   load_and_authorize_resource
 
   def index
-    @attachment_files = AttachmentFile.all
-    respond_with @attachment_files
+    @search = AttachmentFile.readables(current_user).search(params[:q])
+    @search.sorts = "updated_at ASC" if @search.sorts.empty?
+    @attachment_files = @search.result.page(params[:page]).per(params[:per_page])
+    respond_with @attachment_files,methods: :path
   end
 
   def show
-    respond_with @attachment_file
-  end
-
-  def new
-    @attachment_file = AttachmentFile.new
-    respond_with @attachment_file
+    respond_with @attachment_file,methods: :path
   end
 
   def edit
-    respond_with @attachment_file
+    respond_with @attachment_file,methods: :path, layout: !request.xhr?
   end
 
   def create
     @attachment_file = AttachmentFile.new(attachment_file_params)
     @attachment_file.save
-    respond_with @attachment_file
+    respond_with @attachment_file,methods: :path
   end
 
   def update
@@ -34,7 +31,12 @@ class AttachmentFilesController < ApplicationController
 
   def destroy
     @attachment_file.destroy
-    respond_with @attachment_file
+    respond_with @attachment_file,methods: :path
+  end
+
+  def upload
+    @attachment_file << AttachmentFile.new(data: params[:media])
+    respond_with @attachment_file,methods: :path
   end
 
   private
@@ -46,12 +48,25 @@ class AttachmentFilesController < ApplicationController
       :md5hash,
       :data,
       :original_geometry,
-      :affine_matrix
+      :affine_matrix,
+      record_property_attributes: [
+        :global_id,
+        :user_id,
+        :group_id,
+        :owner_readable,
+        :owner_writable,
+        :group_readable,
+        :group_writable,
+        :guest_readable,
+        :guest_writable,
+        :published,
+        :published_at
+      ]
     )
   end
 
   def find_resource
-    @attachment_file = AttachmentFile.find(params[:id])
+    @attachment_file = AttachmentFile.find(params[:id]).decorate
   end
 
 end

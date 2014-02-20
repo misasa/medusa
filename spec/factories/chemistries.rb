@@ -5,7 +5,7 @@ FactoryGirl.define do
     info "インフォ１"
     value 1
     label "ラベル１"
-    unit "parts１"
+    association :unit, factory: :unit
     description "説明１"
     uncertainty 1
   end

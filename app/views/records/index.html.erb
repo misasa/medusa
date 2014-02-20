@@ -2,17 +2,23 @@
 <table>
   <thead>
     <tr>
-      <th>name < ID ></th>
-      <th>project</th>
-      <th>modified</th>
+      <th>name</th>
+      <th>global_id</th>
+      <th>owner</th>
+      <th>group</th>
+      <th>updated_at</th>
+      <th>created_at</th>
     </tr>
   </thead>
   <tbody>
     <% @records.each do |record| %>
     <tr>
-      <td><%= link_to record.name, record.datum %> < <%= record.global_id %> ></td>
-      <td></td>
-      <td><%= record.updated_at %></td>
+      <td><%= link_to record.name, record.datum %></td>
+      <td><%= record.global_id %></td>
+      <td><%= record.user.try!(:username) %></td>
+      <td><%= record.group.try!(:name) %></td>
+      <td><%= difference_from_now(record.updated_at) %></td>
+      <td><%= difference_from_now(record.created_at) %></td>
     </tr>
     <% end %>
   </tbody>
