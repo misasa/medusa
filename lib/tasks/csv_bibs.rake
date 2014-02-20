@@ -56,7 +56,7 @@ task :bibs_csv => :environment do
         id,
         entry_type,
         abbreviation,
-        publisher as name,
+        title as name,
         journal,
         year,
         volume,
