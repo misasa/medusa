@@ -26,6 +26,13 @@ describe UsersController do
     it { expect(response.body).to eq(user.to_json) }
   end
 
+  describe "GET new" do
+    before do
+      get :new
+    end
+    it {expect(assigns(:user)).to be_new_record}
+  end
+
   describe "GET edit" do
     let(:user) { FactoryGirl.create(:user) }
     before do
