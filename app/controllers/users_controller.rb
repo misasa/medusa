@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, only: [:show, :edit, :update, :destroy]
+  before_action :find_resource, only: [:show, :edit, :update]
   load_and_authorize_resource
   layout "admin"
 
@@ -36,11 +36,6 @@ class UsersController < ApplicationController
     pa.delete(:password_confirmation) if pa[:password_confirmation].blank?
     @user.update_attributes(pa)
     respond_with(@user, location: users_path)
-  end
-
-  def destroy
-    @user.destroy
-    respond_with @user
   end
 
   private
