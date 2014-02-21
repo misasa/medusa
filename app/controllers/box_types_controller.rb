@@ -14,11 +14,6 @@ class BoxTypesController < ApplicationController
     respond_with @box_type
   end
 
-  def new
-    @box_type = BoxType.new
-    respond_with @box_type
-  end
-
   def edit
     respond_with @box_type
   end

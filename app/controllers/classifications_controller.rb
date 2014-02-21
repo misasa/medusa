@@ -14,11 +14,6 @@ class ClassificationsController < ApplicationController
     respond_with @classification
   end
 
-  def new
-    @classification = Classification.new
-    respond_with @classification
-  end
-
   def edit
     respond_with @classification
   end
