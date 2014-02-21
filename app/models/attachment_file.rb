@@ -1,7 +1,7 @@
 class AttachmentFile < ActiveRecord::Base
   include HasRecordProperty
 
-  has_attached_file :data, path: ":rails_root/public/system/:class/:id/:filename", url: "/system/:class/:id/:filename"
+  has_attached_file :data, path: ":rails_root/public/system/:class/:id_partition/:filename", url: "/system/:class/:id/:filename"
 
   has_many :spots
   has_many :attachings
