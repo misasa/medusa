@@ -30,7 +30,6 @@ namespace :timemachine do
     end
   end
 
-  desc 'Return to yesterday condition.'
   task setup: :environment do
     on roles(:app) do
       reset_timemachine_dir(fetch(:timemachine_dest))
@@ -38,15 +37,18 @@ namespace :timemachine do
     end
   end
 
+  desc "Start application that is rollbacked."
   task start: :environment do
     invoke "timemachine:setup"
     invoke "unicorn:start"
   end
 
+  desc "Stop application that is rollbacked."
   task stop: :environment do
     invoke "unicorn:stop"
   end
 
+  desc "Restart application that is rollbacked."
   task restart: :environment do
     invoke "timemachine:stop"
     invoke "timemachine:start"
