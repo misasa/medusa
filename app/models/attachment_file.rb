@@ -14,6 +14,8 @@ class AttachmentFile < ActiveRecord::Base
   attr_accessor :path
 
   def path
-    "/system/attachment_files/" + id.to_s + "/" + data_file_name
+    id_partition = ("%08d" % id.to_s).scan(/\d{4}/).join("/")
+    table_name = self.class.name.tableize
+    "/system/#{table_name}/#{id_partition}/#{data_file_name}"
   end
 end
