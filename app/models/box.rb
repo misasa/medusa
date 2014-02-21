@@ -1,6 +1,9 @@
 class Box < ActiveRecord::Base
   include HasRecordProperty
 
+  acts_as_taggable
+  with_recursive
+
   has_many :users
   has_many :stones
   has_many :children, class_name: "Box", foreign_key: :parent_id
@@ -11,5 +14,5 @@ class Box < ActiveRecord::Base
   belongs_to :parent, class_name: "Box", foreign_key: :parent_id
   belongs_to :box_type
 
-  validates :box_type, existence: true
+  validates :box_type, existence: true, allow_nil: true
 end
