@@ -26,7 +26,7 @@
       <td><%= measurement_item.display_in_tex %></td>
       <td>
         <% measurement_item.measurement_categories.each do |measurement_category| %>
-          <%= link_to measurement_category.name,measurement_categories_path(measurement_category) %>
+          <%= link_to measurement_category.name,edit_measurement_category_path(measurement_category) %>
         <% end -%>
       </td>
       <td><%= measurement_item.chemistries.size  %></td>

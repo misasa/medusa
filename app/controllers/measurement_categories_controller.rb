@@ -32,7 +32,9 @@ class MeasurementCategoriesController < ApplicationController
     measuerement_category_orgin.measurement_items.each do |measurement_item|
       @measurement_category.measurement_items << measurement_item
     end
-    respond_with(@measurement_category, location: measurement_categories_path)
+    respond_with @measurement_category do |format|
+      format.html {render :edit}
+    end
   end
 
   def update
