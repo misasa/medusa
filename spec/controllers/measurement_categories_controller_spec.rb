@@ -98,7 +98,7 @@ describe MeasurementCategoriesController do
       it { expect(assigns(:measurement_category).description).to eq "description"}
       it { expect(assigns(:measurement_category).measurement_items.count).to eq 1}
       it { expect(assigns(:measurement_category).measurement_items[0]).to eq measurement_item}
-      it { expect(response).to redirect_to(measurement_categories_path) }
+      it { expect(response).to render_template("edit") }
     end
   end
 

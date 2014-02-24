@@ -68,6 +68,7 @@ gem 'thinreports'
 gem 'bootstrap-sass'
 gem 'ransack'
 gem 'whenever', require: false
+gem 'acts_as_list'
 
 group :development, :test do
   gem 'pry-rails'

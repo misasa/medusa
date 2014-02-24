@@ -1,3 +1,4 @@
+<div>
 <%= form_for @measurement_category, html: {class: "col-lg-3"} do |f| %>
   <%= error_notification(@measurement_category.errors) %>
 
@@ -19,3 +20,35 @@
   <%= f.submit "update", class: "btn btn-sm" %>
   <%= link_to "cancel", measurement_categories_path, class: "btn btn-sm" %>
 <% end %>
+</div>
+
+<div>
+<table>
+  <thead>
+  <th>name</th>
+  <th></th>
+  <th></th>
+  </thead>
+  <tbody>
+    <% @measurement_category.category_measurement_items.order("position ASC").each do |category_measurement_item| %>
+    <% measurement_item = category_measurement_item.measurement_item %>
+    <tr>
+    <% if measurement_item %>
+      <td><%= measurement_item.display_in_html.blank? ? measurement_item.nickname : measurement_item.display_in_html %></td>
+      <td>
+        <%= form_tag(move_to_top_category_measurement_item_path(category_measurement_item)) do %>
+          <%= submit_tag "move_to_top" %>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to category_measurement_item_path(category_measurement_item), :method => :delete ,:title => "unlink item" do %>
+          <span class="glyphicon glyphicon-remove"></span>
+        <% end %>
+      </td>
+    <% end %>
+    </tr>
+    <% end %>
+  </tbody>
+</table>
+</div>
+
