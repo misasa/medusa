@@ -63,7 +63,7 @@
       <td><%= format_latitude(place.latitude) %></td>
       <td><%= format_longitude(place.longitude) %></td>
       <td><%= format_elevation(place.elevation) %></td>
-      <td><%= format_stones_summary(place.stones)%></td>
+      <td><%= format_stones_count(place.stones)%></td>
       <td><%= place.user.try!(:username) %></td>
       <td><%= place.group.try!(:name) %></td>
       <td><%= difference_from_now(place.published_at) %></td>

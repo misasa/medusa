@@ -68,4 +68,19 @@ describe PlaceHelper do
     end
   end
 
+  describe ".format_stones_count" do
+    subject{ helper.format_stones_count(stones) }
+    context "count 0" do
+      let(:stones){[]}
+      it {expect(subject).to eq ""}
+    end
+    context "count 1" do
+      let(:stones){[Stone.new(name: "123")]}
+      it {expect(subject).to eq "1"}
+    end
+    context "count 2" do
+      let(:stones){[Stone.new(name: "123"),Stone.new(name: "456")]}
+      it {expect(subject).to eq "2"}
+    end
+  end
 end

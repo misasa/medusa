@@ -34,4 +34,8 @@ module PlaceHelper
     text + " [#{stones.count}]"
   end
 
+  def format_stones_count(stones)
+    stones.count > 0 ? stones.count.to_s : ""
+  end
+
 end
