@@ -20,9 +20,9 @@
   <li><a href="#"><span class="glyphicon glyphicon-question-sign"></span></a></li>
 </ul>
 
-<form class="navbar-form navbar-right" role="search">
+<%= search_form_for @records_search, url: records_path, class: "navbar-form navbar-right" do |f| %>
   <div class="form-group">
-    <input type="text" class="form-control" placeholder="Search">
+    <%= f.text_field((records_search_matcher("name") + "_or_global_id_cont").to_sym, class: "form-control") %>
   </div>
-  <button type="submit" class="btn btn-default">search</button>
-</form>
+  <%= f.submit "search", class: "btn btn-default" %>
+<% end %>

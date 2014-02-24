@@ -3,9 +3,6 @@ class RecordsController < ApplicationController
   before_action :find_resource, except: [:index]
 
   def index
-    @search = RecordProperty.where.not(datum_type: ["Chemistry", "Spot"]).search(params[:q])
-    @search.sorts = "updated_at ASC" if @search.sorts.empty?
-    @records = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @records # TODO: jsonおよびxml表現ではどのような形式で欲しいのか？
   end
 

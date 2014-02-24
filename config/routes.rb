@@ -1,7 +1,7 @@
 Medusa::Application.routes.draw do
   devise_for :users, only: :sessions
 
-  root 'facade#index'
+  root 'records#index'
 
   resources :records, { id: /((?!\.(html$|json$|xml$)).)*/ } do
     member do

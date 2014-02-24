@@ -4,13 +4,12 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :authenticate_user!
+  before_action :authenticate_user!, :set_current_user, :set_searchable_records
   before_action do
     resource = controller_name.singularize.to_sym
     method = "#{resource}_params"
     params[resource] &&= send(method) if respond_to?(method, true)
   end
-  before_filter :set_current_user
   skip_before_filter :verify_authenticity_token # allow CSRF
 
   def configure_permitted_parameters
@@ -21,5 +20,11 @@ class ApplicationController < ActionController::Base
   
   def set_current_user
     User.current = current_user
+  end
+
+  def set_searchable_records
+    @records_search = RecordProperty.where.not(datum_type: ["Chemistry", "Spot"]).search(params[:q])
+    @records_search.sorts = "updated_at ASC" if @records_search.sorts.empty?
+    @records = @records_search.result.page(params[:page]).per(params[:per_page])
   end
 end
