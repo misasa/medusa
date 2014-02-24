@@ -14,7 +14,7 @@ module HasRecordProperty
       where_clauses = owner_readables_where_clauses(user)
       where_clauses = where_clauses.or(group_readables_where_clauses(user))
       where_clauses = where_clauses.or(guest_readables_where_clauses)
-      includes(:record_property).where(where_clauses)
+      includes(:record_property, :user, :group).where(where_clauses)
     }
   end
 
