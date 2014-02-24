@@ -87,7 +87,12 @@ Medusa::Application.routes.draw do
   resources :physical_forms, except: [:new]
   resources :classifications, except: [:new]
   resources :box_types, except: [:new]
-  resources :measurement_items
+  resources :measurement_items, except: [:new]
+  resources :measurement_categories, except: [:new] do
+    member do
+      post 'duplicate'
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

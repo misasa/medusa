@@ -5,16 +5,12 @@ class MeasurementItemsController < ApplicationController
   layout "admin"
 
   def index
-    @measurement_items = MeasurementItem.all
-    respond_with @measurement_items
+    @search = MeasurementItem.search(params[:q])
+    @search.sorts = "updated_at ASC" if @search.sorts.empty?
+    @measurement_items = @search.result.page(params[:page]).per(params[:per_page])
   end
 
   def show
-    respond_with @measurement_item
-  end
-
-  def new
-    @measurement_item = MeasurementItem.new
     respond_with @measurement_item
   end
 
@@ -30,7 +26,8 @@ class MeasurementItemsController < ApplicationController
 
   def update
     @measurement_item.update_attributes(measurement_item_params)
-    respond_with @measurement_item
+    respond_with(@measurement_item, location: measurement_items_path)
+
   end
 
   def destroy
@@ -45,8 +42,9 @@ class MeasurementItemsController < ApplicationController
       :nickname,
       :description,
       :display_in_html,
-      :unit,
-      :display_in_tex
+      :display_in_tex,
+      :unit_id,
+      measurement_category_ids: []
     )
   end
 

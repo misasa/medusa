@@ -1,0 +1,21 @@
+<%= form_for @measurement_category, html: {class: "col-lg-3"} do |f| %>
+  <%= error_notification(@measurement_category.errors) %>
+
+  <div>
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div>
+    <%= f.label :unit_id %>
+    <%= f.select :unit_id ,Unit.pluck(:name,:id),include_blank: true %>
+  </div>
+
+  <div>
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+  </div>
+
+  <%= f.submit "update", class: "btn btn-sm" %>
+  <%= link_to "cancel", measurement_categories_path, class: "btn btn-sm" %>
+<% end %>

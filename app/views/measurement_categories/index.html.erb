@@ -1,0 +1,49 @@
+<div><%= link_to_unless_current MeasurementItem.model_name.human.downcase,measurement_items_path %>
+<%= link_to_unless_current MeasurementCategory.model_name.human.downcase,measurement_categories_path %></div>
+<%= paginate @measurement_categories %>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>name</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @measurement_categories.each do |measurement_category| %>
+    <tr>
+      <td>
+        <%= link_to edit_measurement_category_path(measurement_category) do %>
+        <span class="glyphicon glyphicon-edit"></span>
+        <% end %>
+      </td>
+      <td><%= measurement_category.name %></td>
+      <td>
+        <%= form_tag(duplicate_measurement_category_path(measurement_category)) do %>
+        <%= submit_tag "duplicate" %>
+        <% end %>
+      </td>
+      <td>
+        <%= link_to measurement_category_path(measurement_category), :method => :delete ,confirm: t("confirm.delete") do %>
+        <span class="glyphicon glyphicon-remove"></span>
+      <% end %>
+    </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <%= form_for MeasurementCategory.new, remote: true, format: :json, html: { class: "create" } do |f| %>
+    <tr>
+      <td></td>
+      <td><%= f.text_field :name %></td>
+      <td>
+        <%= f.button class: "btn btn-default" do %>
+        <span class="glyphicon glyphicon-save"></span>
+        <% end %>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    <% end %>
+  </tfoot>
+</table>

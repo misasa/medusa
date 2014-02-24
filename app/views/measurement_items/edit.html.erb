@@ -1,0 +1,36 @@
+<%= form_for @measurement_item, html: {class: "col-lg-3"} do |f| %>
+  <%= error_notification(@measurement_item.errors) %>
+
+  <div>
+    <%= f.label :nickname %>
+    <%= f.text_field :nickname %>
+  </div>
+
+  <div>
+    <%= f.label :display_in_html %>
+    <%= f.text_field :display_in_html %>
+  </div>
+
+  <div>
+    <%= f.label :display_in_tex %>
+    <%= f.text_field :display_in_tex %>
+  </div>
+
+  <div>
+    <%= f.label :unit_id %>
+    <%= f.select :unit_id ,Unit.pluck(:name,:id),include_blank: true %>
+  </div>
+
+  <div>
+    <%= f.label :description %>
+    <%= f.text_area :description %>
+  </div>
+
+  <div>
+    <%= f.label "Category" %><br/>
+    <%= f.collection_check_boxes :measurement_category_ids,MeasurementCategory.all,:id,:name %>
+  </div>
+
+  <%= f.submit "update", class: "btn btn-sm" %>
+  <%= link_to "cancel", measurement_items_path, class: "btn btn-sm" %>
+<% end %>

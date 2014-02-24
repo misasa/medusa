@@ -1,1 +1,55 @@
-measurement_items#index
+<div><%= link_to_unless_current MeasurementItem.model_name.human.downcase,measurement_items_path %>
+<%= link_to_unless_current MeasurementCategory.model_name.human.downcase,measurement_categories_path %></div>
+<%= paginate @measurement_items %>
+<table>
+  <thead>
+    <tr>
+      <th></th>
+      <th>nickname</th>
+      <th>html</th>
+      <th>tex</th>
+      <th>category</th>
+      <th>size</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @measurement_items.each do |measurement_item| %>
+    <tr>
+      <td>
+        <%= link_to edit_measurement_item_path(measurement_item) do %>
+        <span class="glyphicon glyphicon-edit"></span>
+        <% end %>
+      </td>
+      <td><%= measurement_item.nickname %></td>
+      <td><%= measurement_item.display_in_html %></td>
+      <td><%= measurement_item.display_in_tex %></td>
+      <td>
+        <% measurement_item.measurement_categories.each do |measurement_category| %>
+          <%= link_to measurement_category.name,measurement_categories_path(measurement_category) %>
+        <% end -%>
+      </td>
+      <td><%= measurement_item.chemistries.size  %></td>
+      <td>
+        <%= link_to measurement_item_path(measurement_item), :method => :delete ,confirm: t("confirm.delete") do %>
+        <span class="glyphicon glyphicon-remove"></span>
+      <% end %>
+    </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <%= form_for MeasurementItem.new, remote: true, format: :json, html: { class: "create" } do |f| %>
+    <tr>
+      <td></td>
+      <td><%= f.text_field :nickname %></td>
+      <td>
+        <%= f.button class: "btn btn-default" do %>
+        <span class="glyphicon glyphicon-save"></span>
+        <% end %>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    <% end %>
+  </tfoot>
+</table>
