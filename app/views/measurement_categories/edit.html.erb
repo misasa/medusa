@@ -34,7 +34,7 @@
     <% measurement_item = category_measurement_item.measurement_item %>
     <tr>
     <% if measurement_item %>
-      <td><%= measurement_item.display_in_html.blank? ? measurement_item.nickname : measurement_item.display_in_html %></td>
+      <td><%== measurement_item.display_in_html.blank? ? measurement_item.nickname : measurement_item.display_in_html %></td>
       <td>
         <%= link_to move_to_top_category_measurement_item_path(category_measurement_item), :method => :move_to_top ,:title => "move to top" do %>
           <span class="glyphicon glyphicon-arrow-up"></span>
