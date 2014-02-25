@@ -1,3 +1,4 @@
+<div>
 <%= form_for(@user,url: account_path) do |f| %>
   <%= error_notification(@user.errors) %>
 
@@ -44,3 +45,62 @@
   <%= f.submit  "Update",class: "btn btn-sm" %>
 
 <% end %>
+</div>
+<div>
+  <div>
+  <%= form_tag(quick_search_account_path,method: :get) do %>
+Table of records that you can access: Fill ID <%= text_field_tag("global_id", '',:size => "10") %> to <%=submit_tag 'go' %>.
+  <% end %>
+  </div>
+  <div>
+   <% object_names =  
+   {"stone"          => "stones",
+    "box"             => "boxes",
+    "place"           => "places",
+    "analysis"        => "analyses",
+    "bib"             => "bibs",
+    "attachment_file" => "attachment_files"} %>
+  <table class="table">
+    <tr>
+      <th></th>
+      <% object_names.each do |object_name,table_name| %>
+        <th><%= link_to object_name.downcase,table_name + "#{table_name}_path" %></th>
+      <% end %>
+    </tr>
+    <!-- searchable -->
+    <tr>
+      <td>searchable</td>
+      <% object_names.each do |object_name,table_name| %>
+        <td>0</td>
+      <% end %>
+    </tr>
+    <!-- yours (ungroup) -->
+    <tr>
+      <td>yours (ungroup)</td>
+      <% object_names.each do |object_name,table_name| %>
+        <td>0&nbsp;(0)</td>
+      <% end %>
+    </tr>
+    <!-- groups -->
+    <% unless @user.groups.empty? %>
+      <tr><td colspan=<%= object_names.size + 1%>>group of</td></tr>
+      <% @user.groups.each do |group| %>
+        <tr>
+        <td>&nbsp;-&nbsp;<%= group.name %></td>
+        <% object_names.each do |object_name,table_name| %>
+          <td>0</td>
+        <% end %>
+        </tr>
+      <% end %>
+    <% end %>
+    <!-- ungroup -->
+    <tr>
+      <td>ungroup</td>
+      <% object_names.each do |object_name,table_name| %>
+        <td>0</td>
+      <% end %>
+    </tr>
+    <tr><td colspan=<%= object_names.size + 1%>></td></tr>
+  </table>
+</div>
+</div>

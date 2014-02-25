@@ -1,7 +1,11 @@
 class AccountsController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource
+  before_action :find_resource,except: [ :quick_search ]
   authorize_resource :class => false
+
+  def quick_search
+    redirect_to "/records/#{params[:global_id]}"
+  end
 
   def show
     respond_with @user

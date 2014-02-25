@@ -82,7 +82,11 @@ Medusa::Application.routes.draw do
   end
 
   resource  :system_preference, only: [:show]
-  resource  :account, only: [:show, :edit, :update]
+  resource  :account, only: [:show, :edit, :update] do
+    member do
+      get 'quick_search'
+    end
+  end
   resources :users, except: [:destory]
   resources :groups, except: [:new, :destroy]
   resources :physical_forms, except: [:new]
