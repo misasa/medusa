@@ -36,8 +36,8 @@
     <% if measurement_item %>
       <td><%= measurement_item.display_in_html.blank? ? measurement_item.nickname : measurement_item.display_in_html %></td>
       <td>
-        <%= form_tag(move_to_top_category_measurement_item_path(category_measurement_item)) do %>
-          <%= submit_tag "move_to_top" %>
+        <%= link_to move_to_top_category_measurement_item_path(category_measurement_item), :method => :move_to_top ,:title => "move to top" do %>
+          <span class="glyphicon glyphicon-arrow-up"></span>
         <% end %>
       </td>
       <td>

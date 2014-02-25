@@ -20,8 +20,8 @@
       </td>
       <td><%= measurement_category.name %></td>
       <td>
-        <%= form_tag(duplicate_measurement_category_path(measurement_category)) do %>
-        <%= submit_tag "duplicate" %>
+        <%= link_to duplicate_measurement_category_path(measurement_category), :method => :duplicate ,:title => "duplicate" do %>
+          <span class="glyphicon glyphicon-plus-sign"></span>
         <% end %>
       </td>
       <td>
