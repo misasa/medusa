@@ -8,6 +8,7 @@ class HasRecordPropertySpecMigration < ActiveRecord::Migration
   def self.up
     create_table :has_record_property_specs do |t|
       t.string :name
+      t.timestamps
     end
   end
   def self.down
@@ -122,14 +123,36 @@ describe HasRecordProperty do
     end
   end
   
-  describe "after_create generate_record_property" do
-    let(:stone) { FactoryGirl.build(:stone)}
-    let(:user) { FactoryGirl.create(:user) }
-    before do
-      User.current = user
-      stone.save
+  describe "callbacks" do
+    describe "after_create" do
+      describe "generate_record_property" do
+        let(:user) { FactoryGirl.create(:user) }
+        let(:stone) { FactoryGirl.build(:stone) }
+        before do
+          User.current = user
+          stone.save
+        end
+        it{ expect(stone.record_property).to be_present }
+        it{ expect(stone.record_property).to be_persisted }
+      end
     end
-    it{expect(stone.record_property).to be_present}
-    it{expect(stone.record_property).to be_persisted}
+    describe "after_save" do
+      describe "update_record_property" do
+        context "name attribute is exist" do
+          let(:stone) { FactoryGirl.create(:stone, name: name) }
+          let(:name) { "stone" }
+          before { stone }
+          it { expect(stone.record_property).to be_present }
+          it { expect(stone.record_property.name).to eq name }
+        end
+        context "name attribute isn't exist" do
+          let(:chemistry) { FactoryGirl.create(:chemistry) }
+          before { chemistry }
+          it { expect(chemistry.record_property).to be_present }
+          it { expect(chemistry.record_property.name).to be_nil }
+        end
+      end
+    end
   end
+
 end

@@ -4,8 +4,6 @@ class RecordProperty < ActiveRecord::Base
   belongs_to :datum, polymorphic: true
   has_one :global_qr
 
-  delegate :name, :updated_at, :created_at, to: :datum, allow_nil: true
-
   before_save :generate_global_id, if: "global_id.nil?"
 
   validates :user, existence: true

@@ -31,13 +31,4 @@ module ApplicationHelper
     render partial: "parts/error_notification", locals: {errors: errors}
   end
 
-  def records_search_matcher(attribute)
-    str = "datum_of_Stone_type_#{attribute}_or_"
-    str += "datum_of_Box_type_#{attribute}_or_"
-    str += "datum_of_Place_type_#{attribute}_or_"
-    str += "datum_of_Analysis_type_#{attribute}_or_"
-    str += "datum_of_Bib_type_#{attribute}_or_"
-    str += "datum_of_AttachmentFile_type_#{attribute}"
-    str
-  end
 end

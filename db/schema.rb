@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140225025325) do
+ActiveRecord::Schema.define(version: 20140225060412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -217,6 +217,9 @@ ActiveRecord::Schema.define(version: 20140225025325) do
     t.boolean  "group_writable", default: true,  null: false
     t.boolean  "guest_readable", default: false, null: false
     t.boolean  "guest_writable", default: false, null: false
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "record_properties", ["datum_id"], name: "index_record_properties_on_datum_id", using: :btree

@@ -84,9 +84,4 @@ describe ApplicationHelper do
     end
   end
 
-  describe "#records_search_matcher" do
-    subject { helper.records_search_matcher(attribute) }
-    let(:attribute) { "name" }
-    it { expect(subject).to eq "datum_of_Stone_type_name_or_datum_of_Box_type_name_or_datum_of_Place_type_name_or_datum_of_Analysis_type_name_or_datum_of_Bib_type_name_or_datum_of_AttachmentFile_type_name" }
-  end
 end
