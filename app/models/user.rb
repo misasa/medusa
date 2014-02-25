@@ -9,9 +9,9 @@ class User < ActiveRecord::Base
   has_many :groups, through: :group_members
   has_many :record_properties
   belongs_to :box
-  #TODO バリデーション:ユーザーにはBoxが必須？
   
   validates :username, presence: true, length: {maximum: 255}, uniqueness: true
+  validates :box, existence: true, allow_nil: true
 
 
   alias_attribute :admin?, :administrator

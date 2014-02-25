@@ -1,0 +1,46 @@
+<%= form_for(@user,url: account_path) do |f| %>
+  <%= error_notification(@user.errors) %>
+
+  <div>
+    <%= f.label :box_id %><br>
+    <%= f.select :box_id, Box.pluck(:name, :id), include_blank: true %>
+  </div>
+
+  <div>
+    <%= f.label :username %><br>
+    <%= f.text_field :username, {size: 20,autocomplete: "off"} %>
+  </div>
+
+  <div>
+    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+    <%= f.password_field :password,{size: 30,autocomplete: "off"} %>
+  </div>
+
+  <div>
+    <%= f.label :password_confirmation %><br />
+    <%= f.password_field :password_confirmation,{size: 30,autocomplete: "off"} %>
+  </div>
+
+  <div>
+    <%= f.label :family_name %><br />
+    <%= f.text_field :family_name ,size: 20%>
+  </div>
+
+  <div>
+    <%= f.label :first_name %><br />
+    <%= f.text_field :first_name ,size: 20 %>
+  </div>
+
+  <div>
+    <%= f.label :email %><br />
+    <%= f.text_field :email, size: 30 %>
+  </div>
+
+  <div>
+    <%= f.label :description %><br />
+    <%= f.text_area :description , size: "18x3" %>
+  </div>
+
+  <%= f.submit  "Update",class: "btn btn-sm" %>
+
+<% end %>

@@ -82,6 +82,7 @@ Medusa::Application.routes.draw do
   end
 
   resource  :system_preference, only: [:show]
+  resource  :account, only: [:show, :edit, :update]
   resources :users, except: [:destory]
   resources :groups, except: [:new, :destroy]
   resources :physical_forms, except: [:new]

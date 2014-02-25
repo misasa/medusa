@@ -6,14 +6,18 @@
   </li>
   <% if current_user.admin? %>
   <li>
-  <%= link_to system_preference_path do %>
+  <%= link_to system_preference_path ,title: "system preference" do %>
     <span class="glyphicon glyphicon-wrench"></span>
   <% end %>
   </li>
   <% end %>
-  <li><a href="#"><span class="glyphicon glyphicon-user"></span></a></li>
   <li>
-  <%= link_to destroy_user_session_path, method: :delete, confirm: t("confirm.logout") do %>
+  <%= link_to edit_account_path,title: "account" do %>
+    <span class="glyphicon glyphicon-user"></span>
+  <% end %>
+  </li>
+  <li>
+  <%= link_to destroy_user_session_path, method: :delete, confirm: t("confirm.logout"),title: "logout" do %>
     <span class="glyphicon glyphicon-off"></span>
   <% end %>
   </li>

@@ -1,0 +1,18 @@
+<div>
+	<% if @user.box %>
+		<%= link_to(@user.box.name, box_path(@user.box))  %>
+	<% end %>
+	
+	<ul>
+    <% {'user name: ' => @user.username,
+        'first name: ' => @user.first_name,
+        'family name: ' => @user.family_name,
+        'e-mail: ' => @user.email,
+        'description: ' => @user.description,
+        'groups: ' =>@user.groups.map{|g| g.name}.join(", ")}.each do |k,v| %>
+      <% unless v.blank? %>
+        <li><%= k + v.to_s %></li>
+      <% end %>
+    <% end %>
+	</ul>
+</div>
