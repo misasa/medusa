@@ -18,6 +18,15 @@ describe AccountsController do
     it { expect(assigns(:user)).to eq User.current }
   end
 
+  describe "GET quick_search" do
+    let(:stone){FactoryGirl.create(:stone)}
+    before do
+      stone
+      get :quick_search ,global_id: stone.record_property.global_id
+    end
+    it { expect(response).to redirect_to(record_path(stone.record_property.global_id)) }
+  end
+
   describe "PUT update" do
     before do
       put :update, user: attributes
