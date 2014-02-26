@@ -27,4 +27,5 @@ class ApplicationController < ActionController::Base
     @records_search.sorts = "updated_at ASC" if @records_search.sorts.empty?
     @records = @records_search.result.page(params[:page]).per(params[:per_page])
   end
+
 end
