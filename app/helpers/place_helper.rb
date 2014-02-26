@@ -1,6 +1,7 @@
 module PlaceHelper
 
   def format_latitude(latitude)
+    return "" if latitude.blank?
     if latitude < 0
       la = "%.4f S" % (latitude * -1)
     else
@@ -10,6 +11,7 @@ module PlaceHelper
   end
 
   def format_longitude(longitude)
+    return "" if longitude.blank?
     if longitude < 0
       lo = "%.4f W" % (longitude * -1)
     else
@@ -19,7 +21,7 @@ module PlaceHelper
   end
 
   def format_elevation(elevation)
-    return "" unless elevation
+    return "" if elevation.blank?
     return elevation.to_s
   end
 

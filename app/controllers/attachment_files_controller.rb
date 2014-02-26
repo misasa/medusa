@@ -49,6 +49,7 @@ class AttachmentFilesController < ApplicationController
       :data,
       :original_geometry,
       :affine_matrix,
+      :media,
       record_property_attributes: [
         :global_id,
         :user_id,

@@ -5,6 +5,11 @@
   <th><%= f.text_field :latitude %></th>
   <th><%= f.text_field :longitude %></th>
   <th><%= f.text_field :elevation %></th>
+  <th></th>
+  <%= f.fields_for :record_property_attributes do |r| %>
+  <th><%= @current_user.username %><%= r.hidden_field :user_id ,value: @current_user.id %></th>
+  <th><%= r.select :group_id ,Group.pluck(:name, :id),include_blank: true %></th>
+  <% end %>
   <th>
     <%= f.button class: "btn btn-default" do %>
     <span class="glyphicon glyphicon-save"></span>

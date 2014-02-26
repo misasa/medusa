@@ -4,6 +4,10 @@ describe PlaceHelper do
 
   describe ".format_latitude" do
     subject{ helper.format_latitude(latitude) }
+    context "latitude is null" do
+      let(:latitude) {nil }
+      it { expect(subject).to eq "" }
+    end
     context "latitude S" do
       let(:latitude) { -9.9999 }
       it { expect(subject).to eq "9.9999 S" }
@@ -16,6 +20,10 @@ describe PlaceHelper do
 
   describe ".format_longitude" do
     subject{ helper.format_longitude(longitude) }
+    context "longitude is null" do
+      let(:longitude) {nil }
+      it { expect(subject).to eq "" }
+    end
     context "longitude W" do
       let(:longitude) { -9.9999 }
       it { expect(subject).to eq "9.9999 W" }
@@ -28,11 +36,11 @@ describe PlaceHelper do
 
   describe ".format_elevation" do
     subject{ helper.format_elevation(elevation) }
-    context "nil" do
+    context "elevation nil" do
       let(:elevation) { nil }
       it { expect(subject).to eq "" }
     end
-    context "not nill" do
+    context "elevation not nill" do
       let(:elevation) {9.9 }
       it { expect(subject).to eq "9.9" }
     end
