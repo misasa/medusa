@@ -53,42 +53,67 @@ Table of records that you can access: Fill ID <%= text_field_tag("global_id", ''
   <% end %>
   </div>
   <div>
-   <% object_names =  
-   {"stone"          => "stones",
-    "box"             => "boxes",
-    "place"           => "places",
-    "analysis"        => "analyses",
-    "bib"             => "bibs",
-    "attachment_file" => "attachment_files"} %>
+   <%
+    resource_names =  
+     {"Stone"           => "stones",
+      "Box"             => "boxes",
+      "Place"           => "places",
+      "Analysis"        => "analyses",
+      "Bib"             => "bibs",
+      "AttachmentFile" => "attachment_files"}
+    object_names =  
+     {"Stone"           => "stone",
+      "Box"             => "box",
+      "Place"           => "place",
+      "Analysis"        => "analysis",
+      "Bib"             => "bib",
+      "AttachmentFile"  => "attachment_file"} 
+  %>
+  
   <table class="table">
     <tr>
       <th></th>
-      <% object_names.each do |object_name,table_name| %>
-        <th><%= link_to object_name.downcase,table_name + "#{table_name}_path" %></th>
+      <% resource_names.each do |class_name,resource_name| %>
+        <th>
+        <%= link_to object_names[class_name],send("#{resource_name}_path") %>
+        </th>
       <% end %>
     </tr>
     <!-- searchable -->
     <tr>
       <td>searchable</td>
-      <% object_names.each do |object_name,table_name| %>
-        <td>0</td>
+      <% resource_names.each do |class_name,resource_name| %>
+        <td>
+        <% count = Module.const_get(class_name).readables(@user).count%>
+        <%= count > 0 ? link_to(count.to_s,send("#{resource_name}_path")) : "0" %>
+        </td>
       <% end %>
     </tr>
     <!-- yours (ungroup) -->
     <tr>
       <td>yours (ungroup)</td>
-      <% object_names.each do |object_name,table_name| %>
-        <td>0&nbsp;(0)</td>
+      <% resource_names.each do |class_name,resource_name| %>
+        <td>
+        <% count = Module.const_get(class_name).readables(@user).where(:record_properties => {:user_id => @user.id}).count%>
+        <%= count > 0 ? link_to(count.to_s,send(("#{resource_name}_path").to_sym,{"q[user_username_cont]" => @user.username})) : "0" %>
+        &nbsp;(
+        <% count = Module.const_get(class_name).readables(@user).where(:record_properties => {:user_id => @user.id,:group_id => nil}).count%>
+        <%= count > 0 ? link_to(count.to_s,send(("#{resource_name}_path").to_sym,{"q[user_username_cont]" => @user.username,"q[group_name_null]" => true})) : "0" %>
+        )
+        </td>
       <% end %>
     </tr>
     <!-- groups -->
     <% unless @user.groups.empty? %>
-      <tr><td colspan=<%= object_names.size + 1%>>group of</td></tr>
+      <tr><td colspan=<%= resource_names.size + 1%>>group of</td></tr>
       <% @user.groups.each do |group| %>
         <tr>
         <td>&nbsp;-&nbsp;<%= group.name %></td>
-        <% object_names.each do |object_name,table_name| %>
-          <td>0</td>
+        <% resource_names.each do |class_name,resource_name| %>
+          <td>
+          <% count = Module.const_get(class_name).readables(@user).where(:record_properties => {:group_id => group.id}).count%>
+          <%= count > 0 ? link_to(count.to_s,send(("#{resource_name}_path").to_sym,{"q[group_name_cont]" => group.name})) : "0" %>
+          </td>
         <% end %>
         </tr>
       <% end %>
@@ -96,11 +121,14 @@ Table of records that you can access: Fill ID <%= text_field_tag("global_id", ''
     <!-- ungroup -->
     <tr>
       <td>ungroup</td>
-      <% object_names.each do |object_name,table_name| %>
-        <td>0</td>
+      <% resource_names.each do |class_name,resource_name| %>
+        <td>
+        <% count = Module.const_get(class_name).readables(@user).where(:record_properties => {:group_id => nil}).count%>
+        <%= count > 0 ? link_to(count.to_s,send(("#{resource_name}_path").to_sym,{"q[group_name_null]" => true})) : "0" %>
+        </td>
       <% end %>
     </tr>
-    <tr><td colspan=<%= object_names.size + 1%>></td></tr>
+    <tr><td colspan=<%= resource_names.size + 1%>></td></tr>
   </table>
 </div>
 </div>
