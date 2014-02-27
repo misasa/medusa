@@ -1,6 +1,15 @@
 require "spec_helper"
 
 describe AttachmentFile do
+  describe "alias_attribute" do
+    describe "name" do
+      subject { attachment_file.name }
+      let(:attachment_file) { FactoryGirl.build(:attachment_file, name: "name", data_file_name: data_file_name) }
+      let(:data_file_name) { "test.jpg" }
+      it { expect(subject).to eq data_file_name }
+    end
+  end
+
   describe ".path" do
     subject { attachment_file.path }
     let(:attachment_file) { FactoryGirl.create(:attachment_file, :id => attachment_file_id, :data_file_name => "test.jpg") }
