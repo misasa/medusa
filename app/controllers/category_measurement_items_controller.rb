@@ -16,12 +16,6 @@ class CategoryMeasurementItemsController < ApplicationController
 
   private
 
-  def category_measurement_item_params
-    params.require(:category_measurement_item).permit(
-      :id
-    )
-  end
-
   def find_resource
     @category_measurement_item = CategoryMeasurementItem.find(params[:id])
   end
