@@ -2,6 +2,17 @@ require "spec_helper"
 include ActionDispatch::TestProcess
 
 describe AttachmentFile do
+<<<<<<< HEAD
+=======
+  describe "alias_attribute" do
+    describe "name" do
+      subject { attachment_file.name }
+      let(:attachment_file) { FactoryGirl.build(:attachment_file, name: "name", data_file_name: data_file_name) }
+      let(:data_file_name) { "test.jpg" }
+      it { expect(subject).to eq data_file_name }
+    end
+  end
+>>>>>>> f3d39734663c87d2aa0d6d7ac5550630ea92c8c8
 
   describe ".path" do
     subject { attachment_file.path }
