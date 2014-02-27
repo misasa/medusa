@@ -1,6 +1,8 @@
 require "spec_helper"
+include ActionDispatch::TestProcess
 
 describe AttachmentFile do
+
   describe ".path" do
     subject { attachment_file.path }
     let(:attachment_file) { FactoryGirl.create(:attachment_file, :id => attachment_file_id, :data_file_name => "test.jpg") }
@@ -27,5 +29,20 @@ describe AttachmentFile do
       end
     end
   end
+
+  describe ".data_fingerprint" do
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    before{attachment_file.data_fingerprint = "test"}
+    it {expect(attachment_file.data_fingerprint).to eq("test")}
+  end
   
+  describe ".save_geometry" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:attachment_file) { AttachmentFile.new(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+    before do
+      User.current = user
+      attachment_file
+    end
+    it {expect(attachment_file.original_geometry).to eq("2352x1568")}
+  end
 end

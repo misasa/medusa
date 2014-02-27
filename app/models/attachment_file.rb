@@ -12,10 +12,24 @@ class AttachmentFile < ActiveRecord::Base
   has_many :analyses, through: :attachings, source: :attachable, source_type: "Analysis"
 
   attr_accessor :path
+  after_post_process :save_geometry
 
   def path
     id_partition = ("%08d" % id.to_s).scan(/\d{4}/).join("/")
     table_name = self.class.name.tableize
     "/system/#{table_name}/#{id_partition}/#{data_file_name}"
   end
+
+  def data_fingerprint
+    self.md5hash
+  end
+
+  def data_fingerprint=(md5Hash)
+    self.md5hash=md5Hash
+  end
+
+  def save_geometry
+    self.original_geometry = Paperclip::Geometry.from_file(data.queued_for_write[:original]).to_s
+  end
+
 end
