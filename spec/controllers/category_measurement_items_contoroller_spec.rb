@@ -24,7 +24,7 @@ describe CategoryMeasurementItemsController do
     end
     it { expect { delete :destroy,id: category_measurement_item.id }.to change(CategoryMeasurementItem, :count).by(-1) }
     context "" do
-      before {post :move_to_top, id: category_measurement_item.id}
+      before {delete :destroy, id: category_measurement_item.id}
       it { expect(response).to redirect_to(edit_measurement_category_path(measurement_category))}
     end
   end
