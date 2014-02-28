@@ -1,7 +1,7 @@
 <%= form_for @author, html: {class: "col-lg-3"} do |f| %>
   <%= error_notification(@author.errors) %>
 
-  <div class="form-technique form-technique-sm">
+  <div class="form-author form-author-sm">
     <%= f.label :name, class: "small" %>
     <%= f.text_field :name, class: "form-control input-sm" %>
   </div>
