@@ -3,7 +3,7 @@
   <th></th>
   <th></th>
   <th><%= f.file_field :data %></th>
-  <th></th>
+  <th>></th>
   <th></th>
   <%= f.fields_for :record_property_attributes do |r| %>
   <th><%= @current_user.username %><%= r.hidden_field :user_id ,value: @current_user.id %></th>
@@ -14,7 +14,9 @@
     <span class="glyphicon glyphicon-save"></span>
     <% end %>
   </th>
-  <th></th>
+  <th>
+    <%= hidden_field_tag :page,params[:page]||"1" %>
+  </th>
 </tr>
 <% end %>
 

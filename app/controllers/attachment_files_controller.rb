@@ -22,7 +22,7 @@ class AttachmentFilesController < ApplicationController
     @attachment_file = AttachmentFile.new(attachment_file_params)
     @attachment_file.save
     respond_with @attachment_file do |format|
-      format.html { redirect_to action: :index }
+      format.html { redirect_to action: :index,page: params[:page]}
       format.json { render json: @attachment_file,methods: :path }
       format.xml { render xml: @attachment_file,methods: :path }
     end
