@@ -1,0 +1,11 @@
+<%= form_for @device, html: {class: "col-lg-3"} do |f| %>
+  <%= error_notification(@device.errors) %>
+
+  <div class="form-device form-device-sm">
+    <%= f.label :name, class: "small" %>
+    <%= f.text_field :name, class: "form-control input-sm" %>
+  </div>
+
+  <%= f.submit "update", class: "btn btn-sm" %>
+  <%= link_to "cancel", devices_path, class: "btn btn-sm" %>
+<% end %>

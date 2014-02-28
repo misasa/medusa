@@ -106,6 +106,7 @@ Medusa::Application.routes.draw do
   resources :units, except: [:new, :destroy]
   resources :techniques, except: [:new, :destroy]
   resources :authors, except: [:new, :destroy]
+  resources :devices, except: [:new, :destroy]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
