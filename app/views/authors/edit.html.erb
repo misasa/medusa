@@ -1,0 +1,11 @@
+<%= form_for @author, html: {class: "col-lg-3"} do |f| %>
+  <%= error_notification(@author.errors) %>
+
+  <div class="form-technique form-technique-sm">
+    <%= f.label :name, class: "small" %>
+    <%= f.text_field :name, class: "form-control input-sm" %>
+  </div>
+
+  <%= f.submit "update", class: "btn btn-sm" %>
+  <%= link_to "cancel", authors_path, class: "btn btn-sm" %>
+<% end %>
