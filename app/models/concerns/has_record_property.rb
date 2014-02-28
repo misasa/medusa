@@ -30,7 +30,7 @@ module HasRecordProperty
   end
 
   def update_record_property
-    record_property.name = name if self.try(:name)
+    record_property.name = self.try(:name)
     record_property.update_attribute(:updated_at, updated_at)
   end
 

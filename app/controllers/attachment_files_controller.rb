@@ -21,7 +21,11 @@ class AttachmentFilesController < ApplicationController
   def create
     @attachment_file = AttachmentFile.new(attachment_file_params)
     @attachment_file.save
-    respond_with @attachment_file,methods: :path
+    respond_with @attachment_file do |format|
+      format.html { redirect_to action: :index }
+      format.json { render json: @attachment_file,methods: :path }
+      format.xml { render xml: @attachment_file,methods: :path }
+    end
   end
 
   def update
@@ -31,11 +35,6 @@ class AttachmentFilesController < ApplicationController
 
   def destroy
     @attachment_file.destroy
-    respond_with @attachment_file,methods: :path
-  end
-
-  def upload
-    @attachment_file << AttachmentFile.new(data: params[:media])
     respond_with @attachment_file,methods: :path
   end
 
@@ -49,7 +48,6 @@ class AttachmentFilesController < ApplicationController
       :data,
       :original_geometry,
       :affine_matrix,
-      :media,
       record_property_attributes: [
         :global_id,
         :user_id,
