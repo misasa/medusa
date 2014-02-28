@@ -1,0 +1,11 @@
+<%= form_for @unit, html: {class: "col-lg-3"} do |f| %>
+  <%= error_notification(@unit.errors) %>
+
+  <div class="form-unit form-unit-sm">
+    <%= f.label :name, class: "small" %>
+    <%= f.text_field :name, class: "form-control input-sm" %>
+  </div>
+
+  <%= f.submit "update", class: "btn btn-sm" %>
+  <%= link_to "cancel", groups_path, class: "btn btn-sm" %>
+<% end %>
