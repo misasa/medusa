@@ -1,0 +1,70 @@
+<%= paginate @techniques %>
+<table>
+  <thead>
+    <%= search_form_for @search do |f| %>
+    <tr>
+      <th>
+        <%= f.button class: "btn btn-default" do %>
+        <span class="glyphicon glyphicon-refresh"></span>
+        <% end %>
+      </th>
+      <th><%= sort_link @search, :name, "name" %></th>
+      <th></th>
+      <th><%= sort_link @search, :updated_at, "updated_at" %></th>
+      <th><%= sort_link @search, :created_at, "created_at" %></th>
+    </tr>
+    <tr>
+      <th></th>
+      <th><%= f.text_field :name_cont %></th>
+      <th></th>
+      <th>
+        <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]) %>
+      </th>
+      <th>
+        <%= f.text_field :created_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]) %>
+      </th>
+    </tr>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th>
+        <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]) %>
+      </th>
+      <th>
+        <%= f.text_field :created_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]) %>
+      </th>
+    </tr>
+    <% end %>
+  </thead>
+  <tbody>
+    <% @techniques.each do |technique| %>
+    <tr>
+      <td>
+        <%= link_to edit_technique_path(technique) do %>
+        <span class="glyphicon glyphicon-edit"></span>
+        <% end %>
+      </td>
+      <td><%= technique.name %></td>
+      <td></td>
+      <td><%= difference_from_now(technique.updated_at) %></td>
+      <td><%= difference_from_now(technique.created_at) %></td>
+    </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <%= form_for Technique.new, remote: true, format: :json, html: { class: "create" } do |f| %>
+    <tr>
+      <td></td>
+      <td><%= f.text_field :name %></td>
+      <td>
+        <%= f.button class: "btn btn-default", id: "save-button" do %>
+        <span class="glyphicon glyphicon-save"></span>
+        <% end %>
+      </td>
+      <td></td>
+      <td></td>
+    </tr>
+    <% end %>
+  </tfoot>
+</table>
