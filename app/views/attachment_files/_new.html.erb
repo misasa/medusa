@@ -1,9 +1,10 @@
+<% require "base64" %>
 <%= form_for attachment_file, remote: false, format: :html, html: { class: "create"} do |f| %>
 <tr>
   <th></th>
   <th></th>
   <th><%= f.file_field :data %></th>
-  <th>></th>
+  <th></th>
   <th></th>
   <%= f.fields_for :record_property_attributes do |r| %>
   <th><%= @current_user.username %><%= r.hidden_field :user_id ,value: @current_user.id %></th>
@@ -15,7 +16,12 @@
     <% end %>
   </th>
   <th>
-    <%= hidden_field_tag :page,params[:page]||"1" %>
+    <% if params[:page] %>
+      <%= hidden_field_tag :page,params[:page] %>
+    <% end %>
+    <% if params[:q] %>
+      <%= hidden_field_tag :qq,Base64.encode64(Marshal.dump(params[:q])) %>
+    <% end %>
   </th>
 </tr>
 <% end %>
