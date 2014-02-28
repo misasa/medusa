@@ -1,7 +1,7 @@
 <%= form_for @device, html: {class: "col-lg-3"} do |f| %>
   <%= error_notification(@device.errors) %>
 
-  <div class="form-device form-device-sm">
+  <div class="form-group form-group-sm">
     <%= f.label :name, class: "small" %>
     <%= f.text_field :name, class: "form-control input-sm" %>
   </div>

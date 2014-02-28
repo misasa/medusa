@@ -1,6 +1,6 @@
 class TechniquesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload]
+  before_action :find_resource, except: [:index, :create]
   load_and_authorize_resource
   layout "admin"
   
