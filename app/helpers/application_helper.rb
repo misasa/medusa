@@ -31,4 +31,9 @@ module ApplicationHelper
     render partial: "parts/error_notification", locals: {errors: errors}
   end
 
+  def qrcode(value, alt: nil)
+    alt ||= value
+    image_tag(qrcode_path(value), alt: alt)
+  end
+
 end

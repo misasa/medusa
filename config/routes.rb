@@ -107,6 +107,7 @@ Medusa::Application.routes.draw do
   resources :techniques, except: [:new, :destroy]
   resources :authors, except: [:new, :destroy]
   resources :devices, except: [:new, :destroy]
+  resources :qrcodes, id: /((?!\.(html$|json$|xml$)).)*/, only: [:show]
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

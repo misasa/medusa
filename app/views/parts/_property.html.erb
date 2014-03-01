@@ -1,4 +1,4 @@
-<%= image_tag record.record_property.global_qr.try!(:file_name), alt: "qrcode" %>
+<%= qrcode record.global_id %>
 
 <%= form_for record, remote: true, format: :json, html: { class: "update", role: "form" } do |form| %>
   <%= form.fields_for :record_property do |f| %>
