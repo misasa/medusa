@@ -17,7 +17,7 @@
   <% end %>
   </li>
   <li>
-  <%= link_to destroy_user_session_path, method: :delete, confirm: t("confirm.logout"),title: "logout" do %>
+  <%= link_to destroy_user_session_path, method: :delete, data: {confirm: t("confirm.logout")}, title: "logout" do %>
     <span class="glyphicon glyphicon-off"></span>
   <% end %>
   </li>

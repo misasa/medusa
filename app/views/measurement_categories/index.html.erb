@@ -25,9 +25,10 @@
         <% end %>
       </td>
       <td>
-        <%= link_to measurement_category_path(measurement_category), :method => :delete ,confirm: t("confirm.delete") do %>
+        <%= link_to measurement_category_path(measurement_category), method: :delete, data: {confirm: t("confirm.delete")} do %>
         <span class="glyphicon glyphicon-remove"></span>
-      <% end %>
+        <% end %>
+      </td>
     </tr>
     <% end %>
   </tbody>

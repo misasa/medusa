@@ -19,9 +19,10 @@
       <td><%= classification.full_name %></td>
       <td></td>
       <td>
-        <%= link_to classification_path(classification), :method => :delete ,confirm: t("confirm.delete") do %>
+        <%= link_to classification_path(classification), method: :delete, data: {confirm: t("confirm.delete")} do %>
         <span class="glyphicon glyphicon-remove"></span>
-      <% end %>
+        <% end %>
+      </td>
     </tr>
     <% end %>
   </tbody>

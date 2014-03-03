@@ -17,9 +17,10 @@
       <td><%= box_type.name %></td>
       <td></td>
       <td>
-        <%= link_to box_type_path(box_type), :method => :delete ,confirm: t("confirm.delete") do %>
+        <%= link_to box_type_path(box_type), method: :delete , data: {confirm: t("confirm.delete")} do %>
         <span class="glyphicon glyphicon-remove"></span>
-      <% end %>
+        <% end %>
+      </td>
     </tr>
     <% end %>
   </tbody>
