@@ -1,4 +1,3 @@
-require "base64"
 class AttachmentFilesController < ApplicationController
   respond_to :html, :xml, :json
   before_action :find_resource, except: [:index, :create, :upload]
@@ -22,12 +21,9 @@ class AttachmentFilesController < ApplicationController
   def create
     @attachment_file = AttachmentFile.new(attachment_file_params)
     @attachment_file.save
-    pa = Hash.new
-    pa[:action] = :index
-    pa[:page] = params[:page] if params[:page]
-    pa[:q] = Marshal.restore(Base64.decode64(params[:qq])) if params[:qq]
     respond_with @attachment_file do |format|
-      format.html { redirect_to pa}
+      format.html { redirect_to ({action: :index}.merge(Marshal.restore(Base64.decode64(params[:page_params]))
+))}
       format.json { render json: @attachment_file,methods: :path }
       format.xml { render xml: @attachment_file,methods: :path }
     end

@@ -1,4 +1,3 @@
-<% require "base64" %>
 <%= form_for attachment_file, remote: false, format: :html, html: { class: "create"} do |f| %>
 <tr>
   <th></th>
@@ -16,12 +15,13 @@
     <% end %>
   </th>
   <th>
-    <% if params[:page] %>
-      <%= hidden_field_tag :page,params[:page] %>
-    <% end %>
-    <% if params[:q] %>
-      <%= hidden_field_tag :qq,Base64.encode64(Marshal.dump(params[:q])) %>
-    <% end %>
+    <%
+      page_params = {}
+      [:page , :per_page , :q].each do |key|
+        page_params[key] = params[key] if params[key]
+      end
+    %>
+    <%= hidden_field_tag :page_params,Base64.encode64(Marshal.dump(page_params)) %>
   </th>
 </tr>
 <% end %>
