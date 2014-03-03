@@ -1,6 +1,6 @@
 class AnalysesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, only: [:show, :edit, :update, :destroy]
+  before_action :find_resource, except: [:index, :create, :upload]
   load_and_authorize_resource
 
   def index
@@ -35,6 +35,7 @@ class AnalysesController < ApplicationController
   end
 
   def upload
+    @analysis = Analysis.find(params[:id])
     @analysis.attachment_files << AttachmentFile.new(data: params[:media])
     respond_with @analysis
   end

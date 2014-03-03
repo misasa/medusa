@@ -15,11 +15,6 @@ class PlacesController < ApplicationController
     respond_with @place
   end
 
-  def new
-    @place = Place.new
-    respond_with @place
-  end
-
   def edit
     respond_with @place
   end
@@ -41,6 +36,7 @@ class PlacesController < ApplicationController
   end
 
   def upload
+    @place = Place.find(params[:id])
     @place.attachment_files << AttachmentFile.new(data: params[:media])
     respond_with @place
   end
