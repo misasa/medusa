@@ -4,7 +4,8 @@ class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception
 
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :authenticate_user!, :set_current_user, :set_searchable_records
+  before_action :authenticate_user!, :set_current_user
+  before_action :set_searchable_records, if: Proc.new {|controller| controller.current_user }
   before_action do
     resource = controller_name.singularize.to_sym
     method = "#{resource}_params"
@@ -23,7 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_searchable_records
-    @records_search = RecordProperty.where.not(datum_type: ["Chemistry", "Spot"]).search(params[:q])
+    @records_search = RecordProperty.readables(current_user).where.not(datum_type: ["Chemistry", "Spot"]).search(params[:q])
     @records_search.sorts = "updated_at ASC" if @records_search.sorts.empty?
     @records = @records_search.result.page(params[:page]).per(params[:per_page])
   end

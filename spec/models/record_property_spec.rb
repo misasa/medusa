@@ -138,4 +138,59 @@ describe RecordProperty do
     end
   end
 
+  describe ".readables" do
+    subject { RecordProperty.readables(user) }
+    let(:record_property) { FactoryGirl.create(:record_property, owner_readable: owner_readable, group_readable: group_readable, guest_readable: guest_readable, user_id: user_id, group_id: group_id) }
+    let(:user) { FactoryGirl.create(:user_foo) }
+    let(:group) { FactoryGirl.create(:group) }
+    let(:another_user) { FactoryGirl.create(:user_baa) }
+    let(:another_group) { FactoryGirl.create(:group) }
+    before do
+      GroupMember.create(user: user, group: group)
+      record_property
+    end
+    context "when user is record owner." do
+      let(:user_id) { user.id }
+      let(:group_id) { another_group.id }
+      let(:group_readable) { false }
+      let(:guest_readable) { false }
+      context "when owner is permitted to read." do
+        let(:owner_readable) { true }
+        it { expect(subject).to be_present }
+      end
+      context "when owner is not permitted to read." do
+        let(:owner_readable) { false }
+        it { expect(subject).to be_blank }
+      end
+    end
+    context "when user is not record owner." do
+      let(:user_id) { another_user.id }
+      let(:owner_readable) { true }
+      context "when user belongs to record group." do
+        let(:group_id) { group.id }
+        let(:guest_readable) { false }
+        context "when group member is permitted to read." do
+          let(:group_readable) { true }
+          it { expect(subject).to be_present }
+        end
+        context "when group member is not permitted to read." do
+          let(:group_readable) { false }
+          it { expect(subject).to be_blank }
+        end
+      end
+      context "when user does not belongs to record group." do
+        let(:group_id) { another_group.id }
+        let(:group_readable) { true }
+        context "when guest is permitted to read." do
+          let(:guest_readable) { true }
+          it { expect(subject).to be_present }
+        end
+        context "when guest is not permitted to read." do
+          let(:guest_readable) { false }
+          it { expect(subject).to be_blank }
+        end
+      end
+    end
+  end
+
 end
