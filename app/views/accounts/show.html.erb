@@ -1,9 +1,9 @@
 <div>
-	<% if @user.box %>
-		<%= link_to(@user.box.name, box_path(@user.box))  %>
-	<% end %>
-	
-	<ul>
+  <% if @user.box %>
+    <%= link_to(@user.box.name, box_path(@user.box))  %>
+  <% end %>
+  
+  <ul>
     <% {'user name: ' => @user.username,
         'first name: ' => @user.first_name,
         'family name: ' => @user.family_name,
@@ -14,5 +14,5 @@
         <li><%= k + v.to_s %></li>
       <% end %>
     <% end %>
-	</ul>
+  </ul>
 </div>

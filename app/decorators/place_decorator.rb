@@ -5,4 +5,5 @@ class PlaceDecorator < Draper::Decorator
   def name_with_id
     h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + " #{name} < #{global_id} >"
   end
+
 end

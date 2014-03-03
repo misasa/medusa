@@ -15,13 +15,8 @@ class PlacesController < ApplicationController
     respond_with @place
   end
 
-  def new
-    @place = Place.new
-    respond_with @place
-  end
-
   def edit
-    respond_with @place
+    respond_with @place, layout: !request.xhr?
   end
 
   def create
@@ -35,12 +30,21 @@ class PlacesController < ApplicationController
     respond_with @place
   end
 
+  def map
+    respond_with @stone, layout: !request.xhr?
+  end
+
+  def property
+    respond_with @stone, layout: !request.xhr?
+  end
+
   def destroy
     @place.destroy
     respond_with @place
   end
 
   def upload
+    @place = Place.find(params[:id])
     @place.attachment_files << AttachmentFile.new(data: params[:media])
     respond_with @place
   end
