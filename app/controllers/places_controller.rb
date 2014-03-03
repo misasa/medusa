@@ -16,7 +16,7 @@ class PlacesController < ApplicationController
   end
 
   def edit
-    respond_with @place
+    respond_with @place, layout: !request.xhr?
   end
 
   def create
@@ -28,6 +28,14 @@ class PlacesController < ApplicationController
   def update
     @place.update_attributes(place_params)
     respond_with @place
+  end
+
+  def map
+    respond_with @stone, layout: !request.xhr?
+  end
+
+  def property
+    respond_with @stone, layout: !request.xhr?
   end
 
   def destroy

@@ -38,6 +38,8 @@ Medusa::Application.routes.draw do
 
   resources :places do
     member do
+      get :map
+      get :property
       post 'attachment_files/upload' => 'places#upload'
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }

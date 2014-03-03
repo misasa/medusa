@@ -1,0 +1,45 @@
+<div class="row">
+  <div id="show-caption" class="col-lg-12">
+    <%= @place.name_with_id %>
+  </div>
+</div>
+<div class="row">
+  <div id="show-tools" class="col-lg-4">
+    <div class="row btn-toolbar tool-selector" role="toolbar">
+      <div class="btn-group btn-group-sm">
+	<%= link_to map_place_path(@place), class: "btn btn-default activate", remote: true do %>
+	  <span class="glyphicon glyphicon-globe"></span>
+	<% end %>
+      </div>
+      <div class="btn-group btn-group-sm">
+	<%= link_to edit_place_path(@place), class: "btn btn-default", remote: true do %>
+	  <span class="glyphicon glyphicon-pencil"></span>
+	<% end %>
+	<%= link_to property_place_path(@place), class: "btn btn-default", remote: true do %>
+	  <span class="glyphicon glyphicon-cog"></span>
+	<% end %>
+      </div>
+    </div>
+    <img>
+    <div class="row tool-content">
+    </div>
+  </div>
+  <div id="show-body" class="col-lg-8">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+      <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
+      <li><a href="#stone" data-toggle="tab">stone</a></li>
+      <li><a href="#neighbor" data-toggle="tab">neighbor</a></li>
+      <li><a href="#file" data-toggle="tab">file</a></li>
+      <li><a href="#geoname" data-toggle="tab">geoname</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
+      <div class="tab-pane" id="stone">...</div>
+      <div class="tab-pane" id="neighbor">...</div>
+      <div class="tab-pane" id="file">...</div>
+      <div class="tab-pane" id="geoname">...</div>
+    </div>
+  </div>
+</div>
