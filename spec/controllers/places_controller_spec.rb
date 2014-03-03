@@ -1,9 +1,10 @@
 require 'spec_helper'
+include ActionDispatch::TestProcess
 
 describe PlacesController do
-  before { sign_in user }
   let(:user) { FactoryGirl.create(:user, :username => "user_1") }
-  
+  before { sign_in user }
+
   describe "GET index" do
     let(:place_1) { FactoryGirl.create(:place, :name => "place_1") }
     let(:place_2) { FactoryGirl.create(:place, :name => "place_2") }
@@ -54,32 +55,30 @@ describe PlacesController do
       end
     end
   end
-  
+
   describe "GET show" do
-    
-  end
-  
-  describe "GET new" do
-    
   end
   
   describe "GET edit" do
   end
   
   describe "POST create" do
-    
   end
   
   describe "PUT update" do
-    
   end
-  
+
   describe "DELETE destroy" do
-    
   end
-  
+
   describe "POST upload" do
-    
+    let(:obj){FactoryGirl.create(:place) }
+    let(:media) {fixture_file_upload("/files/test_image.jpg",'image/jpeg') }
+    it { expect {post :upload, id: obj.id  ,media: media}.to change(AttachmentFile, :count).by(1) }
+    context "" do
+      before{post :upload, id: obj.id  ,media: media}
+      it{expect(assigns(:place).attachment_files.last.data_file_name).to eq "test_image.jpg"}
+    end
   end
-  
+
 end

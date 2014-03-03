@@ -14,11 +14,6 @@ class BoxesController < ApplicationController
     respond_with @box
   end
 
-  def new
-    @box = Box.new
-    respond_with @box
-  end
-
   def edit
     respond_with @box
   end
@@ -40,6 +35,7 @@ class BoxesController < ApplicationController
   end
 
   def upload
+    @box = Box.find(params[:id])
     @box.attachment_files << AttachmentFile.new(data: params[:media])
     respond_with @box
   end
@@ -71,7 +67,6 @@ class BoxesController < ApplicationController
 
   def find_resource
     @box = Box.find(params[:id]).decorate
-
   end
 
 end
