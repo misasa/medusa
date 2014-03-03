@@ -5,6 +5,17 @@ describe StonesController do
   let(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
 
+  describe "GET index" do
+    let(:stone_1) { FactoryGirl.create(:stone, name: "hoge") }
+    let(:stone_2) { FactoryGirl.create(:stone, name: "stone_2") }
+    let(:stone_3) { FactoryGirl.create(:stone, name: "stone_3") }
+    before do
+      stone_1;stone_2;stone_3
+      get :index
+    end
+    it { expect(assigns(:stones).count).to eq 3 }
+  end
+
   describe "POST upload" do
     let(:obj){FactoryGirl.create(:stone) }
     let(:media) {fixture_file_upload("/files/test_image.jpg",'image/jpeg') }
