@@ -4,7 +4,7 @@
     <%= search_form_for @search do |f| %>
     <tr>
       <th>
-        <%= f.button class: "btn btn-default" do %>
+        <%= f.button class: "btn btn-default", id: "refresh-button" do %>
         <span class="glyphicon glyphicon-refresh"></span>
         <% end %>
       </th>
@@ -41,7 +41,7 @@
     <% @groups.each do |group| %>
     <tr>
       <td>
-        <%= link_to edit_group_path(group) do %>
+        <%= link_to edit_group_path(group), id: "group-#{group.id}-link" do %>
         <span class="glyphicon glyphicon-edit"></span>
         <% end %>
       </td>
@@ -58,7 +58,7 @@
       <td></td>
       <td><%= f.text_field :name %></td>
       <td>
-        <%= f.button class: "btn btn-default" do %>
+        <%= f.button class: "btn btn-default", id: "save-button" do %>
         <span class="glyphicon glyphicon-save"></span>
         <% end %>
       </td>
