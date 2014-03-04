@@ -5,7 +5,7 @@ class PlacesController < ApplicationController
 
   def index
     @search = Place.readables(current_user).search(params[:q])
-    @search.sorts = "updated_at ASC" if @search.sorts.empty?
+    @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @places = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @places
 

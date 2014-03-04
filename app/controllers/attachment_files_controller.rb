@@ -5,7 +5,7 @@ class AttachmentFilesController < ApplicationController
 
   def index
     @search = AttachmentFile.readables(current_user).search(params[:q])
-    @search.sorts = "updated_at ASC" if @search.sorts.empty?
+    @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @attachment_files = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @attachment_files,methods: :path
   end

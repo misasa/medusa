@@ -5,7 +5,7 @@ class BibsController < ApplicationController
 
   def index
     @search = Bib.readables(current_user).search(params[:q])
-    @search.sorts = "updated_at ASC" if @search.sorts.empty?
+    @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @bibs = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @bibs
   end
