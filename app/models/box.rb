@@ -15,4 +15,15 @@ class Box < ActiveRecord::Base
   belongs_to :box_type
 
   validates :box_type, existence: true, allow_nil: true
+  validates :parent_id, existence: true, allow_nil: true
+  validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :parent_id }
+  validate :parent_id_not_equal_id, if: ->(box) { box.parent_id }
+
+  private
+
+  def parent_id_not_equal_id
+    if self.id == self.parent_id
+      errors.add(:parent_id, " make loop.")
+    end
+  end
 end

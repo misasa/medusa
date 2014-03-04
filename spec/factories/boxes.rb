@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :box do
-    name "保管場所１"
-    parent_id ""
+    sequence(:name) { |n| "box_#{n}" }
+    parent_id nil
     position 1
-    path "/パス１"
+    path "/path"
     association :box_type, factory: :box_type
   end
 end
