@@ -1,3 +1,4 @@
-<div>
-  <%= @stone.primary_picture %>
-</div>
+<%= content_tag :svg, nil, class: "spot-viewer", width: 300, height: 300, "data-image" => @stone.attachment_files.first.path %>
+<%= javascript_tag do %>
+  $("svg.spot-viewer").spotViewer();
+<% end %>
