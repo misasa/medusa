@@ -1,0 +1,52 @@
+<div class="row">
+  <div id="show-caption" class="col-lg-12">
+    <%= @box.name_with_id %>
+  </div>
+</div>
+<div class="row">
+  <div id="show-tools" class="col-lg-4">
+    <div class="row btn-toolbar tool-selector" role="toolbar">
+      <div class="btn-group btn-group-sm">
+        <%= link_to family_box_path(@box), class: "btn btn-default activate", remote: true do %>
+          <span class="glyphicon glyphicon-tree-conifer"></span>
+        <% end %>
+        <%= link_to picture_box_path(@box), class: "btn btn-default", remote: true do %>
+          <span class="glyphicon glyphicon-picture"></span>
+        <% end %>
+      </div>
+      <div class="btn-group btn-group-sm">
+        <%= link_to edit_box_path(@box), class: "btn btn-default", remote: true do %>
+          <span class="glyphicon glyphicon-pencil"></span>
+        <% end %>
+        <%= link_to property_box_path(@box), class: "btn btn-default", remote: true do %>
+          <span class="glyphicon glyphicon-cog"></span>
+        <% end %>
+      </div>
+      <div class="btn-group btn-group-sm">
+        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-tag"></span></button>
+        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-file"></span></button>
+      </div>
+    </div>
+    <img>
+    <div class="row tool-content">
+    </div>
+  </div>
+
+  <div id="show-body" class="col-lg-8">
+    <%= @box.path %>
+    <ul class="nav nav-tabs">
+      <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
+      <li><a href="#stone" data-toggle="tab">stone</a></li>
+      <li><a href="#box" data-toggle="tab">box</a></li>
+      <li><a href="#bib" data-toggle="tab">bib</a></li>
+      <li><a href="#file" data-toggle="tab">file</a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane active" id="at-a-glance">at_a_glance</div>
+      <div class="tab-pane" id="stone">...</div>
+      <div class="tab-pane" id="box">...</div>
+      <div class="tab-pane" id="bib">...</div>
+      <div class="tab-pane" id="file">...</div>
+    </div>
+  </div>
+</div>
