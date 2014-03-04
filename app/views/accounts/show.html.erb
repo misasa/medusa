@@ -10,9 +10,9 @@
         'e-mail: ' => @user.email,
         'description: ' => @user.description,
         'groups: ' =>@user.groups.map{|g| g.name}.join(", ")}.each do |k,v| %>
-      <% unless v.blank? %>
-        <li><%= k + v.to_s %></li>
-      <% end %>
+        <% unless v.blank? %>
+          <li><%= k + v.to_s %></li>
+        <% end %>
     <% end %>
   </ul>
 </div>
