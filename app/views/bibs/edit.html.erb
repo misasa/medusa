@@ -1,0 +1,51 @@
+<%= form_for @bib, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
+  <div class="form-group form-group-sm">
+    <%= f.label :entry_type, class: "small" %>
+    <%= f.text_field :entry_type, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :abbreviation, class: "small" %>
+    <%= f.text_field :abbreviation, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :name, class: "small" %>
+    <%= f.text_field :name, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :doi, class: "small" %>
+    <%= f.text_field :doi, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :journal, class: "small" %>
+    <%= f.text_field :journal, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :year, class: "small" %>
+    <%= f.text_field :year, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :volume, class: "small" %>
+    <%= f.text_field :volume, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :number, class: "small" %>
+    <%= f.text_field :number, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :pages, class: "small" %>
+    <%= f.text_field :pages, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :note, class: "small" %>
+    <%= f.text_field :note, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :key, class: "small" %>
+    <%= f.text_field :key, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :link_url, class: "small" %>
+    <%= f.text_field :link_url, class: "form-control input-sm" %>
+  </div>
+  <%= f.submit class: "btn btn-sm" %>
+<% end %>

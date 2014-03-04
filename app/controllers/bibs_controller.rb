@@ -15,7 +15,7 @@ class BibsController < ApplicationController
   end
 
   def edit
-    respond_with @bib
+    respond_with @bib, layout: !request.xhr?
   end
 
   def create
@@ -28,7 +28,7 @@ class BibsController < ApplicationController
     @bib.update_attributes(bib_params)
     respond_with @bib
   end
-
+  
   def destroy
     @bib.destroy
     respond_with @bib
@@ -38,6 +38,10 @@ class BibsController < ApplicationController
     @bib = Bib.find(params[:id])
     @bib.attachment_files << AttachmentFile.new(data: params[:media])
     respond_with @bib
+  end
+  
+  def property
+    respond_with @bib, layout: !request.xhr?
   end
 
   private
