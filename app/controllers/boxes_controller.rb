@@ -6,7 +6,7 @@ class BoxesController < ApplicationController
   def index
     @search = Box.readables(current_user).search(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
-    @boxes = @search.result.page(params[:page]).per(params[:per_page])
+    @boxes = @search.result.includes(:box_type).page(params[:page]).per(params[:per_page])
     respond_with @boxes
   end
 
@@ -15,7 +15,7 @@ class BoxesController < ApplicationController
   end
 
   def edit
-    respond_with @box
+    respond_with @box, layout: !request.xhr?
   end
 
   def create
@@ -38,6 +38,18 @@ class BoxesController < ApplicationController
     @box = Box.find(params[:id])
     @box.attachment_files << AttachmentFile.new(data: params[:media])
     respond_with @box
+  end
+
+  def family
+    respond_with @box, layout: !request.xhr?
+  end
+
+  def picture
+    respond_with @box, layout: !request.xhr?
+  end
+
+  def property
+    respond_with @box, layout: !request.xhr?
   end
 
   private

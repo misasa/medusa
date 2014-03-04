@@ -27,6 +27,9 @@ Medusa::Application.routes.draw do
 
   resources :boxes do
     member do
+      get :family
+      get :picture
+      get :property
       post 'attachment_files/upload' => 'boxes#upload'
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "box" }
@@ -60,6 +63,7 @@ Medusa::Application.routes.draw do
 
   resources :bibs do
     member do
+      get :property
       post 'attachment_files/upload' => 'bibs#upload'
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
