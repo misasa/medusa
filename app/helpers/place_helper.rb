@@ -40,4 +40,12 @@ module PlaceHelper
     stones.count > 0 ? stones.count.to_s : ""
   end
 
+  def format_country_name(place)
+    return "" unless place
+    country_subdivisions = Geonames::WebService.country_subdivision("%0.2f" % place.latitude, "%0.2f" % place.longitude)
+    return "" unless country_subdivisions
+    return "" unless country_subdivisions.count > 0
+    country_subdivisions[0].country_name
+  end
+
 end

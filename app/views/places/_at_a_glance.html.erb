@@ -1,1 +1,11 @@
-at_a_glance
+<ul>
+  <li>country: <%= format_country_name(@place) %></li>
+  <li>name: <%= @place.name %></li>
+  <li>latitude: <%= format_latitude(@place.latitude) %></li>
+  <li>longitude: <%= format_longitude(@place.longitude) %></li>
+  <li>description: <%= @place.description %></li>
+  <li>sample: <% @place.stones.each do |stone| %>
+    <%= link_to stone.name, stone_path(stone) %>
+  <% end %></li>
+  <li>modified at <%= difference_from_now(@place.updated_at) -%></li>
+</ul>
