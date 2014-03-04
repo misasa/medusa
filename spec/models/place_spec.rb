@@ -2,6 +2,10 @@ require "spec_helper"
 
 describe Place do
 
+  describe ".geonames" do
+
+  end
+
   describe ".readable_neighbors" do
     let(:user){ FactoryGirl.create(:user,administrator: false) }
     let(:place){FactoryGirl.create(:place,latitude:0,longitude:0)}
@@ -20,7 +24,7 @@ describe Place do
       User.current = user
       place
     end
-    context "" do
+    context "count >= 10" do
       before do
         place1
         place2
