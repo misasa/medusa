@@ -92,15 +92,4 @@ describe PlaceHelper do
     end
   end
 
-  describe ".format_country_name" do
-    subject{ helper.format_country_name(place) }
-    context "place nil" do
-      let(:place){nil}
-      it {expect(subject).to eq ""}
-    end
-    context "get country name" do
-      let(:place){FactoryGirl.build(:place,latitude: 35.360654,longitude: 132.756125)}
-      it {expect(subject).to eq "Japan"}
-    end
-  end
 end

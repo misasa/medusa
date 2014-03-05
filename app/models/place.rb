@@ -9,6 +9,18 @@ class Place < ActiveRecord::Base
   has_many :referrings, as: :referable
   has_many :bibs, through: :referrings
 
+  def country_name
+    country_subdivisions = Geonames::WebService.country_subdivision "%0.2f" % latitude, "%0.2f" % longitude
+    return "" if country_subdivisions.blank?
+    country_subdivisions[0].country_name
+  end
+
+  def nearby_geonames
+    geonames = Geonames::WebService.find_nearby "%0.2f" % latitude, "%0.2f" % longitude,{radius: 100,maxRows: 10,style: "FULL"}
+    geonames
+
+  end
+
   def readable_neighbors(current_user)
     places = Place.readables(current_user).where.not(id: self.id)
     places.each do |place|
@@ -31,6 +43,8 @@ class Place < ActiveRecord::Base
     dy = a * dlat
     Math.sqrt(dx**2 + dy**2)
   end
+
+private
 
   def self.deg2rad(deg)
     (deg/180)*Math::PI

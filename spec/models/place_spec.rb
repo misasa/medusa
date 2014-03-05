@@ -84,7 +84,7 @@ describe Place do
       it{expect(place.distance_from(0,0)).to eq Float::DIG}
     end
 
-    context "lognitude.blank" do
+    context "longitude.blank" do
       let(:place){FactoryGirl.create(:place,longitude: nil)}
       it{expect(place.distance_from(0,0)).to eq Float::DIG}
     end
@@ -94,20 +94,45 @@ describe Place do
       it{expect(place.distance_from(nil,132.75656819343567)).to eq Float::DIG}
     end
 
-    context "lognitude.blank" do
+    context "param longitude.blank" do
       let(:place){FactoryGirl.create(:place,latitude:35.68107370561057,longitude:139.76707935333252)}
       it{expect(place.distance_from(35.36069738459534,nil)).to eq Float::DIG}
     end
 
-    context "" do
-      let(:place){FactoryGirl.create(:place,latitude:35.681309,longitude:139.766048)}
-      it{expect(place.distance_from(35.36068,132.756545).round(3)).to eq 781.098}
+    context "latitude,longitude all not blank" do
+      let(:place){FactoryGirl.create(:place,latitude:35.36068,longitude:132.756545)}
+      it{expect(place.distance_from(35.681309,139.766048).round(3)).to eq 781.098}
 
     end
   end
 
   describe "self.deg2rad" do
     it{expect(Place.deg2rad(180).round(4)).to eq 3.14159.round(4)}
+  end
+
+  describe ".country_name" do
+    subject{ place.country_name }
+    let(:place){FactoryGirl.create(:place,latitude: latitude,longitude: longitude)}
+    context "get country name ng" do
+      let(:latitude){360}
+      let(:longitude){360}
+      it {expect(subject).to eq ""}
+    end
+    context "get country name" do
+      let(:latitude){35.3606}
+      let(:longitude){132.75558}
+      it {expect(subject).to eq "Japan"}
+    end
+  end
+
+  describe ".nearby_geonames" do
+    subject{ place.nearby_geonames }
+    let(:user){ FactoryGirl.create(:user,administrator: false) }
+    before{User.current = user}
+    let(:latitude){35.3606}
+    let(:longitude){132.75558}
+    let(:place){FactoryGirl.create(:place,latitude: latitude,longitude: longitude)}
+    it {expect(subject.count).to eq 10}
   end
 
 end
