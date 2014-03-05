@@ -62,6 +62,7 @@ class BibsController < ApplicationController
       :key,
       :link_url,
       :doi,
+      author_ids: [],
       record_property_attributes: [
         :global_id,
         :user_id,
