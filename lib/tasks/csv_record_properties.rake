@@ -8,8 +8,11 @@ task :record_properties_csv => :environment do
     ADD owner_writable BOOLEAN,
     ADD group_readable BOOLEAN,
     ADD group_writable BOOLEAN,
-    ADD gest_readable BOOLEAN,
-    ADD gest_writable BOOLEAN
+    ADD guest_readable BOOLEAN,
+    ADD guest_writable BOOLEAN,
+    ADD name VARCHAR(255),
+    ADD created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    ADD updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
   ")
   
   ActiveRecord::Base.connection.execute("
@@ -62,13 +65,16 @@ task :record_properties_csv => :environment do
           WHEN o_permission = 2 THEN true
           WHEN o_permission = 6 THEN true
           ELSE false
-        END as gest_readable,
+        END as guest_readable,
         CASE
           WHEN o_permission = 0 THEN false
           WHEN o_permission = 4 THEN true
           WHEN o_permission = 6 THEN true
           ELSE false
-        END as gest_writable
+        END as guest_writable,
+        name,
+        created_at,
+        updated_at
       FROM data_properties
       ORDER BY id
      )
@@ -82,8 +88,11 @@ task :record_properties_csv => :environment do
     DROP owner_writable,
     DROP group_readable,
     DROP group_writable,
-    DROP gest_readable,
-    DROP gest_writable
+    DROP guest_readable,
+    DROP guest_writable,
+    DROP name,
+    DROP created_at,
+    DROP updated_at
   ")
   
   ActiveRecord::Base.establish_connection :development
