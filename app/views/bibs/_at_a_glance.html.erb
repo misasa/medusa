@@ -1,1 +1,20 @@
-at_a_glance
+<ul>
+  <%= li_if_exist("entry type: ", @bib.entry_type) %>
+  <%= li_if_exist("abbreviation: ", @bib.abbreviation) %>
+  <%= li_if_exist("name: ", @bib.name) %>
+  <%= li_if_exist("doi: ", link_to((@bib.doi), @bib.doi_link_url)) %>
+  <%= li_if_exist("journal: ", @bib.journal) %>
+  <%= li_if_exist("year: ", @bib.year) %>
+  <%= li_if_exist("volume: ", @bib.volume) %>
+  <%= li_if_exist("number: ", @bib.number) %>
+  <%= li_if_exist("pages: ", @bib.pages) %>
+  <%= li_if_exist("note: ", @bib.note) %>
+  <%= li_if_exist("key: ", @bib.key) %>
+  <%= li_if_exist("link url: ", @bib.link_url) %>
+  <%= li_if_exist("month: ", @bib.month) %>
+  <%= li_if_exist("", @bib.stones.map{ |stone| link_to(stone.name, url_for(stone)) }.join(" ")) %>
+  <%= li_if_exist("", @bib.boxes.map{ |box| link_to(box.name, url_for(box)) }.join(" ")) %>
+  <%= li_if_exist("", @bib.places.map{ |place| link_to(place.name, url_for(place)) }.join(" ")) %>
+  <%= li_if_exist("", @bib.analyses.map{ |place| link_to(place.name, url_for(place)) }.join(" ")) %>
+  <%= li_if_exist("modified at ", difference_from_now(@bib.updated_at)) %>
+</ul>

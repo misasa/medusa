@@ -11,4 +11,10 @@ class Bib < ActiveRecord::Base
   has_many :places, through: :referrings, source: :referable, source_type: "Place"
   has_many :boxes, through: :referrings, source: :referable, source_type: "Box"
   has_many :analyses, through: :referrings, source: :referable, source_type: "Analysis"
+  
+  def doi_link_url
+    return unless doi
+    "http://dx.doi.org/#{doi}"
+  end
+  
 end
