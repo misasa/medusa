@@ -17,7 +17,7 @@
       <td><%= image_tag(attachment_file.path,width: 70,height: 70) %></td>
       <td><%= link_to attachment_file.data_file_name,attachment_file %></td>
       <td><%= attachment_file.data_content_type %></td>
-      <td><%= attachment_file.record_property.global_id %></td> 
+      <td><%= attachment_file.global_id %></td> 
       <td><%= link_to move_to_top_attaching_path(attaching), method: :move_to_top ,title: "move to top" do %>
           <span class="glyphicon glyphicon-arrow-up"></span>
         <% end %></td>
