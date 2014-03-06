@@ -12,7 +12,7 @@
     <tr>
       <td></td>
       <td><%= link_to neighbor.name,place_path(neighbor) %></td>
-      <td><%= "[#{format_latitude(neighbor.latitude)},#{format_longitude(neighbor.longitude)}]" %></td>
+      <td><%= "[#{neighbor.latitude_to_text},#{neighbor.longitude_to_text}]" %></td>
       <td align="right"><%= "%0.3f" % neighbor.distance.to_f %></td>
       <td>
         <% neighbor.stones do |stone| %>

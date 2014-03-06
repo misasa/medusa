@@ -44,6 +44,7 @@ Medusa::Application.routes.draw do
       get :map
       get :property
       post 'attachment_files/upload' => 'places#upload'
+      post :link_by_global_id
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
     resources :attachment_files, only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "place" }
@@ -109,6 +110,12 @@ Medusa::Application.routes.draw do
       post 'move_to_top'
     end
   end
+  resources :attachings ,only: [:destroy] do
+    member do
+      post 'move_to_top'
+    end
+  end
+  resources :units, except: [:new, :destroy]
   resources :units, except: [:new, :destroy]
   resources :techniques, except: [:new, :destroy]
   resources :authors, except: [:new, :destroy]

@@ -1,6 +1,6 @@
 class PlacesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload]
+  before_action :find_resource, except: [:index, :create]
   load_and_authorize_resource
 
   def index
@@ -44,8 +44,12 @@ class PlacesController < ApplicationController
   end
 
   def upload
-    @place = Place.find(params[:id])
     @place.attachment_files << AttachmentFile.new(data: params[:media])
+    respond_with @place
+  end
+
+  def link_by_global_id
+    @place.attachment_files << AttachmentFile.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
     respond_with @place
   end
 
