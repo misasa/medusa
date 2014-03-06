@@ -94,9 +94,7 @@ describe "group master" do
           expect(page).to have_field("q_created_at_gteq", with: "")
           expect(page).to have_field("q_created_at_lteq_end_of_day", with: "")
         end
-        it "search result" do
-          expect(page).to have_css("tbody tr", :count => 2)
-        end
+        it { expect(page).to have_css("tbody tr", count: 2) }
       end
     end
     describe "search date" do
@@ -119,7 +117,7 @@ describe "group master" do
             let(:fill_in_search_condition) { fill_in("q_updated_at_gteq", with: "9999-12-31") }
             it "input keep content" do
               #TODO nameのtext_feildのvalueがないため""(空文字)でのマッチングができない
-              #expect(page).to have_field("q_name_cont", :with => "")
+              #expect(page).to have_field("q_name_cont", with: "")
               expect(page).to have_field("q_updated_at_gteq", with: "9999-12-31")
               expect(page).to have_field("q_updated_at_lteq_end_of_day", with: "")
               expect(page).to have_field("q_created_at_gteq", with: "")
@@ -169,9 +167,7 @@ describe "group master" do
               expect(page).to have_field("q_created_at_gteq", with: "")
               expect(page).to have_field("q_created_at_lteq_end_of_day", with: "")
             end
-            it "search result" do
-              expect(page).to have_css("tbody tr", count: 3)
-            end
+            it { expect(page).to have_css("tbody tr", count: 3) }
           end
           context "input to" do
             let(:fill_in_search_condition) { fill_in("q_updated_at_lteq_end_of_day", with: updated_at_2) }
@@ -259,9 +255,7 @@ describe "group master" do
               expect(page).to have_field("q_created_at_gteq", with: created_at_1)
               expect(page).to have_field("q_created_at_lteq_end_of_day", with: "")
             end
-            it "search result" do
-              expect(page).to have_css("tbody tr", count: 3)
-            end
+            it { expect(page).to have_css("tbody tr", count: 3) }
           end
           context "input to" do
             let(:fill_in_search_condition) { fill_in("q_created_at_lteq_end_of_day", with: created_at_2) }
@@ -272,9 +266,7 @@ describe "group master" do
               expect(page).to have_field("q_created_at_gteq", with: "")
               expect(page).to have_field("q_created_at_lteq_end_of_day", with: created_at_2)
             end
-            it "search result" do
-              expect(page).to have_css("tbody tr", :count => 2)
-            end
+            it { expect(page).to have_css("tbody tr", count: 2) }
           end
           context "input from and to" do
             let(:fill_in_search_condition) do
@@ -288,9 +280,7 @@ describe "group master" do
               expect(page).to have_field("q_created_at_gteq", with: created_at_1)
               expect(page).to have_field("q_created_at_lteq_end_of_day", with: created_at_2)
             end
-            it "search result" do
-              expect(page).to have_css("tbody tr", count: 2)
-            end
+            it { expect(page).to have_css("tbody tr", count: 2) }
           end
         end
       end
@@ -308,9 +298,7 @@ describe "group master" do
           expect(page).to have_field("q_created_at_gteq", with: created_at_1)
           expect(page).to have_field("q_created_at_lteq_end_of_day", with: created_at_3)
         end 
-        it "search result" do
-          expect(page).to have_css("tbody tr", :count => 3)
-        end
+        it { expect(page).to have_css("tbody tr", count: 3) }
       end
     end
   end
@@ -392,13 +380,13 @@ describe "group master" do
       click_button("save-button")
     end
     context "新規レコード作成が失敗した場合" do
-      let(:new_record_condition) { fill_in("group_name", :with => "") }
+      let(:new_record_condition) { fill_in("group_name", with: "") }
       it "ダイアログの内容が表示されていること" do
        #TODO　テスト内で新規作成ボタンを押下してもモーダルウィンドウが表示されないため検証保留
       end
     end
     context "新規レコード作成が成功した場合" do
-      let(:new_record_condition) { fill_in("group_name", :with => "test") }
+      let(:new_record_condition) { fill_in("group_name", with: "test") }
       it "ダイアログの内容が表示されていること" do
        #TODO　テスト内で新規作成ボタンを押下してもモーダルウィンドウが表示されないため検証保留
       end
@@ -421,7 +409,7 @@ describe "group master" do
     end
     describe "update" do
       before do
-        fill_in("group_name", :with => name)
+        fill_in("group_name", with: name)
         click_button("update")
       end
       context "failure" do
@@ -436,7 +424,7 @@ describe "group master" do
           expect(page).to have_link("cancel")
         end
         it "input keep edit" do
-          fill_in("group_name", :with => "")
+          fill_in("group_name", with: "")
         end
         it "error message" do
           expect(page).to have_content("Name can't be blank")
