@@ -35,5 +35,10 @@ module ApplicationHelper
     alt ||= value
     image_tag(qrcode_path(value), alt: alt)
   end
+  
+  def li_if_exist(prefix, value)
+    return if value.blank?
+    content_tag(:li, prefix + value.to_s, {}, false)
+  end
 
 end

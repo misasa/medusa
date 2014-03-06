@@ -47,8 +47,8 @@
     <%= f.label :link_url, class: "small" %>
     <%= f.text_field :link_url, class: "form-control input-sm" %>
   </div>
-  <div>
-    <%= f.label "author" %><br/>
+  <div class="form-group form-group-sm">
+    <%= f.label :author, class: "small" %><br/>
     <%= f.collection_select(:author_ids, Author.all.to_a, :id, :name, { include_blank: true }, multiple: true) %>
   </div>
   <%= f.submit class: "btn btn-sm" %>

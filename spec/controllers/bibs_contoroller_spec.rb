@@ -25,7 +25,7 @@ describe BibsController do
   
   describe "GET edit" do
     let(:bib) { FactoryGirl.create(:bib) }
-    before { get :show, id: bib.id }
+    before { get :edit, id: bib.id }
     it{ expect(assigns(:bib)).to eq bib }
   end
   
@@ -34,8 +34,8 @@ describe BibsController do
     it { expect { post :create, bib: attributes }.to change(Bib, :count).by(1) }
     describe "assigns as @bib" do
       before{ post :create, bib: attributes }
-      it{ expect(assigns(:bib).name).to eq attributes[:name] }
-      it { expect(assigns(:bib).name).to eq attributes[:name]}
+      it{ expect(assigns(:bib)).to be_persisted }
+      it { expect(assigns(:bib).name).to eq attributes[:name] }
     end
   end
   
