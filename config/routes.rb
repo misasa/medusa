@@ -3,13 +3,20 @@ Medusa::Application.routes.draw do
 
   root 'records#index'
 
+  concern :bundleable do
+    collection do
+      post :bundle_edit
+      post :bundle_update
+    end
+  end
+
   resources :records, { id: /((?!\.(html$|json$|xml$)).)*/ } do
     member do
       get 'record_property' => 'records#property'
     end
   end
 
-  resources :stones do
+  resources :stones, concerns: :bundleable do
     member do
       get :family
       get :picture
