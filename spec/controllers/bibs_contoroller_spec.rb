@@ -58,10 +58,10 @@ describe BibsController do
 
   describe "POST upload" do
     let(:bib) { FactoryGirl.create(:bib) }
-    let(:media) { fixture_file_upload("/files/test_image.jpg",'image/jpeg') }
-    it { expect { post :upload, id: bib.id  ,media: media}.to change(AttachmentFile, :count).by(1) }
+    let(:data) { fixture_file_upload("/files/test_image.jpg",'image/jpeg') }
+    it { expect { post :upload, id: bib.id  ,data: data}.to change(AttachmentFile, :count).by(1) }
     describe "assigns @bib.attachment_files" do
-      before { post :upload, id: bib.id  ,media: media }
+      before { post :upload, id: bib.id  ,data: data }
       it{expect(assigns(:bib).attachment_files.last.data_file_name).to eq "test_image.jpg"}
     end
   end

@@ -36,7 +36,7 @@ class BibsController < ApplicationController
 
   def upload
     @bib = Bib.find(params[:id])
-    @bib.attachment_files << AttachmentFile.new(data: params[:media])
+    @bib.attachment_files << AttachmentFile.new(data: params[:data])
     respond_with @bib
   end
   

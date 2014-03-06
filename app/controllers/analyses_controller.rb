@@ -36,7 +36,7 @@ class AnalysesController < ApplicationController
 
   def upload
     @analysis = Analysis.find(params[:id])
-    @analysis.attachment_files << AttachmentFile.new(data: params[:media])
+    @analysis.attachment_files << AttachmentFile.new(data: params[:data])
     respond_with @analysis
   end
 
