@@ -94,9 +94,7 @@ describe "group master" do
           expect(page).to have_field("q_created_at_gteq", with: "")
           expect(page).to have_field("q_created_at_lteq_end_of_day", with: "")
         end
-        it "search result" do
-          expect(page).to have_css("tbody tr", count: 2)
-        end
+        it { expect(page).to have_css("tbody tr", count: 2) }
       end
     end
     describe "search date" do
@@ -169,9 +167,7 @@ describe "group master" do
               expect(page).to have_field("q_created_at_gteq", with: "")
               expect(page).to have_field("q_created_at_lteq_end_of_day", with: "")
             end
-            it "search result" do
-              expect(page).to have_css("tbody tr", count: 3)
-            end
+            it { expect(page).to have_css("tbody tr", count: 3) }
           end
           context "input to" do
             let(:fill_in_search_condition) { fill_in("q_updated_at_lteq_end_of_day", with: updated_at_2) }
@@ -259,9 +255,7 @@ describe "group master" do
               expect(page).to have_field("q_created_at_gteq", with: created_at_1)
               expect(page).to have_field("q_created_at_lteq_end_of_day", with: "")
             end
-            it "search result" do
-              expect(page).to have_css("tbody tr", count: 3)
-            end
+            it { expect(page).to have_css("tbody tr", count: 3) }
           end
           context "input to" do
             let(:fill_in_search_condition) { fill_in("q_created_at_lteq_end_of_day", with: created_at_2) }
@@ -272,9 +266,7 @@ describe "group master" do
               expect(page).to have_field("q_created_at_gteq", with: "")
               expect(page).to have_field("q_created_at_lteq_end_of_day", with: created_at_2)
             end
-            it "search result" do
-              expect(page).to have_css("tbody tr", count: 2)
-            end
+            it { expect(page).to have_css("tbody tr", count: 2) }
           end
           context "input from and to" do
             let(:fill_in_search_condition) do
@@ -288,9 +280,7 @@ describe "group master" do
               expect(page).to have_field("q_created_at_gteq", with: created_at_1)
               expect(page).to have_field("q_created_at_lteq_end_of_day", with: created_at_2)
             end
-            it "search result" do
-              expect(page).to have_css("tbody tr", count: 2)
-            end
+            it { expect(page).to have_css("tbody tr", count: 2) }
           end
         end
       end
@@ -308,9 +298,7 @@ describe "group master" do
           expect(page).to have_field("q_created_at_gteq", with: created_at_1)
           expect(page).to have_field("q_created_at_lteq_end_of_day", with: created_at_3)
         end 
-        it "search result" do
-          expect(page).to have_css("tbody tr", count: 3)
-        end
+        it { expect(page).to have_css("tbody tr", count: 3) }
       end
     end
   end
