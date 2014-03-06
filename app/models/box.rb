@@ -19,11 +19,18 @@ class Box < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :parent_id }
   validate :parent_id_not_equal_id, if: ->(box) { box.parent_id }
 
+  after_save :reset_path
+
   private
 
   def parent_id_not_equal_id
     if self.id == self.parent_id
       errors.add(:parent_id, " make loop.")
     end
+  end
+
+  def reset_path
+    self.path = ""
+    self.update_column(:path, "/#{self.ancestors.map(&:name).join('/')}") if self.parent
   end
 end

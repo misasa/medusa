@@ -33,4 +33,11 @@ class AttachmentFile < ActiveRecord::Base
     self.original_geometry = Paperclip::Geometry.from_file(data.queued_for_write[:original]).to_s
   end
 
+  def pdf?
+    !(data_content_type =~ /pdf$/).nil?
+  end
+  
+  def image?
+    !(data_content_type =~ /^image.*/).nil?
+  end
 end
