@@ -24,6 +24,13 @@
         return false;
       });
     },
+    loadImage: function(path) {
+      this.image.setAttributeNS("http://www.w3.org/1999/xlink", "href", path);
+      this.image.setAttribute("x", 0);
+      this.image.setAttribute("y", 0);
+      this.image.setAttribute("width", this.options.width);
+      this.image.setAttribute("height", this.options.height);
+    },
     zoomIn: function() {
       var x = parseFloat(this.image.getAttribute("x")), y = parseFloat(this.image.getAttribute("y")),
           width = parseFloat(this.image.getAttribute("width")),
@@ -44,13 +51,9 @@
     },
     _addImage: function() {
       var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-      image.setAttributeNS("http://www.w3.org/1999/xlink", "href", this.element.data("image"));
-      image.setAttribute("x", 0);
-      image.setAttribute("y", 0);
-      image.setAttribute("width", this.options.width);
-      image.setAttribute("height", this.options.height);
       this.image = image;
       this.element.append(image);
+      this.loadImage(this.element.data("image"));
     },
     _addSight: function() {
       this.element.append(this._createLine({

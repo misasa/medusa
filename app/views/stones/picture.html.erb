@@ -1,4 +1,18 @@
-<%= content_tag :svg, nil, class: "spot-viewer", width: 300, height: 300, "data-image" => @stone.attachment_files.first.path %>
+<%= content_tag :svg, nil, class: "spot-viewer", width: 300, height: 300, "data-image" => @stone.attachment_files.first.try!(:path) %>
+<% @stone.attachment_files.each_slice(4) do |files| %>
+<div class="row spot-thumbnails">
+  <% files.each do |file| %>
+  <div class="col-lg-3">
+    <a href="#" class="thumbnail">
+      <%= image_tag file.path %>
+    </a>
+  </div>
+  <% end %>
+</div>
+<% end %>
 <%= javascript_tag do %>
   $("svg.spot-viewer").spotViewer();
+  $(document).on("click", "a.thumbnail", function() {
+    $("svg.spot-viewer").spotViewer("loadImage", $(this).find("img").attr("src"));
+  });
 <% end %>
