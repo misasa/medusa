@@ -25,7 +25,7 @@ describe BibsController do
   
   describe "GET edit" do
     let(:bib) { FactoryGirl.create(:bib) }
-    before { get :show, id: bib.id }
+    before { get :edit, id: bib.id }
     it{ expect(assigns(:bib)).to eq bib }
   end
   
@@ -34,8 +34,8 @@ describe BibsController do
     it { expect { post :create, bib: attributes }.to change(Bib, :count).by(1) }
     describe "assigns as @bib" do
       before{ post :create, bib: attributes }
-      it{ expect(assigns(:bib).name).to eq attributes[:name] }
-      it { expect(assigns(:bib).name).to eq attributes[:name]}
+      it{ expect(assigns(:bib)).to be_persisted }
+      it { expect(assigns(:bib).name).to eq attributes[:name] }
     end
   end
   
@@ -58,10 +58,10 @@ describe BibsController do
 
   describe "POST upload" do
     let(:bib) { FactoryGirl.create(:bib) }
-    let(:media) { fixture_file_upload("/files/test_image.jpg",'image/jpeg') }
-    it { expect { post :upload, id: bib.id  ,media: media}.to change(AttachmentFile, :count).by(1) }
+    let(:data) { fixture_file_upload("/files/test_image.jpg",'image/jpeg') }
+    it { expect { post :upload, id: bib.id  ,data: data}.to change(AttachmentFile, :count).by(1) }
     describe "assigns @bib.attachment_files" do
-      before { post :upload, id: bib.id  ,media: media }
+      before { post :upload, id: bib.id  ,data: data }
       it{expect(assigns(:bib).attachment_files.last.data_file_name).to eq "test_image.jpg"}
     end
   end

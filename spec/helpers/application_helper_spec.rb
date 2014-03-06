@@ -83,5 +83,18 @@ describe ApplicationHelper do
       end
     end
   end
+  
+  describe "#li_if_exist" do
+    after { helper.li_if_exist(prefix, value) }
+    let(:prefix) { "pre: " }
+    context "value is nil" do
+      let(:value) { nil }
+      it { expect(helper).not_to receive(:content_tag) }
+    end
+    context "value is not nil" do
+      let(:value) { "value" }
+      it { expect(helper).to receive(:content_tag).with(:li, "pre: value", {}, false) }
+    end
+  end
 
 end
