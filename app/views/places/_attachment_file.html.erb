@@ -18,41 +18,36 @@
       <td><%= link_to attachment_file.data_file_name,attachment_file %></td>
       <td><%= attachment_file.data_content_type %></td>
       <td><%= attachment_file.record_property.global_id %></td> 
-      <td>
-        <%= link_to move_to_top_attaching_path(attaching), method: :move_to_top ,title: "move to top" do %>
+      <td><%= link_to move_to_top_attaching_path(attaching), method: :move_to_top ,title: "move to top" do %>
           <span class="glyphicon glyphicon-arrow-up"></span>
-        <% end %>
-      </td>
-      <td>
-        <%= link_to attaching_path(attaching), method: :delete ,title: "unlink attachment file",data: {confirm: t("confirm.unlink")} do %>
+        <% end %></td>
+      <td><%= link_to attaching_path(attaching), method: :delete ,title: "unlink attachment file",data: {confirm: t("confirm.unlink")} do %>
           <span class="glyphicon glyphicon-remove"></span>
-        <% end %>
-      </td>
+        <% end %></td>
     </tr>
   <% end %>
   <tr><th colspan="7"></th></tr>
   <tr>
     <td></td>
     <td colspan="3">
-      <div>
       <%= form_tag attachment_files_upload_place_path(@place),method: :post,multipart: true do %>
-        <%= file_field_tag :media -%>
-        <%= button_tag title:"add attachment file",class: "btn btn-default" do %>
-          <span class="glyphicon glyphicon-save"></span>
-        <% end %>
+        <table>
+          <tr><td><%= file_field_tag :media %></td>
+          <td><%= button_tag title:"add attachment file",class: "btn btn-default" do %>
+              <span class="glyphicon glyphicon-save"></span>
+            <% end %></td></tr>
+        </table>
       <% end %>
-      <div>
     </td>
-    <td>
-      <div>
+    <td colspan="3">
       <%= form_tag link_by_global_id_place_path(@place),method: :post do %>
-          <%= text_field_tag :global_id %></th>
-
-        <%= button_tag title: "link attachment file by global id",class: "btn btn-default" do %>
-          <span class="glyphicon glyphicon-save"></span>
-        <% end %>
+        <table>
+          <tr><td><%= text_field_tag :global_id %></td>
+          <td><%= button_tag title: "link attachment file by global id",class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %></td></tr>
+        </table>
       <% end %>
-      </div>
     </td>
   </tr>
 </table>
