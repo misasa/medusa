@@ -375,20 +375,21 @@ describe "group master" do
   end
   
   describe "create", js: true do
-    before do
-      new_record_condition
-      click_button("save-button")
-    end
-    context "新規レコード作成が失敗した場合" do
-      let(:new_record_condition) { fill_in("group_name", with: "") }
-      it "ダイアログの内容が表示されていること" do
-       #TODO　テスト内で新規作成ボタンを押下してもモーダルウィンドウが表示されないため検証保留
+    pending "テスト内で新規作成ボタンを押下時にモーダルウィンドウが表示されない" do
+      #TODO　テスト内で新規作成ボタンを押下時にモーダルウィンドウが表示されないため検証保留
+      before do
+        new_record_condition
+        click_button("save-button")
       end
-    end
-    context "新規レコード作成が成功した場合" do
-      let(:new_record_condition) { fill_in("group_name", with: "test") }
-      it "ダイアログの内容が表示されていること" do
-       #TODO　テスト内で新規作成ボタンを押下してもモーダルウィンドウが表示されないため検証保留
+      context "新規レコード作成が失敗した場合" do
+        let(:new_record_condition) { fill_in("group_name", with: "") }
+        it "ダイアログの内容が表示されていること" do
+        end
+      end
+      context "新規レコード作成が成功した場合" do
+        let(:new_record_condition) { fill_in("group_name", with: "test") }
+        it "ダイアログの内容が表示されていること" do
+        end
       end
     end
   end
