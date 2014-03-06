@@ -1,6 +1,7 @@
 class Attaching < ActiveRecord::Base
   belongs_to :attachment_file
   belongs_to :attachable, polymorphic: true
+  acts_as_list scope: [:attachable_id , :attachable_type], column: :position
 
   validates :attachment_file, existence: true
 end

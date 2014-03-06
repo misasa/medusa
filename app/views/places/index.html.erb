@@ -56,14 +56,14 @@
     <% end %>
   </thead>
   <tbody>
-    <% @places.each do |place| %>
+    <% PlaceDecorator.decorate_collection(@places).each do |place| %>
     <tr>
       <td></td>
       <td><%= link_to place.name, place %></td>
-      <td><%= format_latitude(place.latitude) %></td>
-      <td><%= format_longitude(place.longitude) %></td>
-      <td><%= format_elevation(place.elevation) %></td>
-      <td><%= format_stones_count(place.stones)%></td>
+      <td><%= place.latitude_to_text %></td>
+      <td><%= place.longitude_to_text %></td>
+      <td><%= place.elevation_to_text %></td>
+      <td><%= place.stones_count %></td>
       <td><%= place.user.try!(:username) %></td>
       <td><%= place.group.try!(:name) %></td>
       <td><%= difference_from_now(place.published_at) %></td>

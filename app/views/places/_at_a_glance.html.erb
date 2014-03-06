@@ -1,8 +1,8 @@
 <ul>
   <li>country: <%= @place.country_name %></li>
   <li>name: <%= @place.name %></li>
-  <li>latitude: <%= format_latitude(@place.latitude) %></li>
-  <li>longitude: <%= format_longitude(@place.longitude) %></li>
+  <li>latitude: <%= @place.latitude_to_text %></li>
+  <li>longitude: <%= @place.longitude_to_text %></li>
   <li>description: <%= @place.description %></li>
   <li>sample: <% @place.stones.each do |stone| %>
     <%= link_to stone.name, stone_path(stone) %>
