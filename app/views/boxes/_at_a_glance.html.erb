@@ -1,0 +1,11 @@
+<ul>
+  <%= li_if_exist("box_type: ", @box.box_type.name) %>
+  <%= li_if_exist("tag list: ", @box.tag_list) %>
+  <li>updated_at: <%= difference_from_now(@box.updated_at) %></li>
+  <% @box.bibs.each do |bib| %>
+    <li>
+      bib: <%= link_to(bib.abbreviation, bib_path(bib)) %>
+      <%= link_to(image_tag("icon_pdf_1.png", size: "20x20"), download_attachment_file_path(bib.primary_pdf_attachment_file)) if bib.primary_pdf_attachment_file %>
+    </li>
+  <% end %>
+</ul>

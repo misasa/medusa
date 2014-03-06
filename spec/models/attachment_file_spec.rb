@@ -54,4 +54,38 @@ describe AttachmentFile do
     end
     it {expect(attachment_file.original_geometry).to eq("2352x1568")}
   end
+
+  describe "#pdf?" do
+    subject { attachment_file.pdf? }
+    let(:attachment_file) { FactoryGirl.build(:attachment_file, data_content_type: data_content_type) }
+    context "data_content_type is pdf" do
+      let(:data_content_type) { "application/pdf" }
+      it { expect(subject).to eq true }
+    end
+    context "data_content_type is jpeg" do
+      let(:data_content_type) { "image/jpeg" }
+      it { expect(subject).to eq false }
+    end
+    context "data_content_type is excel" do
+      let(:data_content_type) { "application/vnd.ms-excel" }
+      it { expect(subject).to eq false }
+    end
+  end
+
+  describe "#image?" do
+    subject { attachment_file.image? }
+    let(:attachment_file) { FactoryGirl.build(:attachment_file, data_content_type: data_content_type) }
+    context "data_content_type is pdf" do
+      let(:data_content_type) { "application/pdf" }
+      it { expect(subject).to eq false }
+    end
+    context "data_content_type is jpeg" do
+      let(:data_content_type) { "image/jpeg" }
+      it { expect(subject).to eq true }
+    end
+    context "data_content_type is excel" do
+      let(:data_content_type) { "application/vnd.ms-excel" }
+      it { expect(subject).to eq false }
+    end
+  end
 end

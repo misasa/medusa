@@ -63,4 +63,27 @@ describe Box do
     end
   end
 
+  describe "callbacks" do
+    describe "after_save" do
+      describe "reset_path" do
+        let(:box) { FactoryGirl.build(:box, path: "path", parent_id: parent_id) }
+        before { box.save }
+        context "box has no parent" do
+          let(:parent_id) { nil }
+          it { expect(box.path).to eq "" }
+        end
+        context "box has a parent" do
+          let(:parent_id) { parent.id }
+          let(:parent) { FactoryGirl.create(:box) }
+          it { expect(box.path).to eq "/#{parent.name}" }
+        end
+        context "box has parent and grand_parent" do
+          let(:parent_id) { parent.id }
+          let(:parent) { FactoryGirl.create(:box, parent_id: grand_parent.id) }
+          let(:grand_parent) { FactoryGirl.create(:box) }
+          it { expect(box.path).to eq "/#{grand_parent.name}/#{parent.name}" }
+        end
+      end
+    end
+  end
 end

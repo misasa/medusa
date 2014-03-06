@@ -17,4 +17,15 @@ class Bib < ActiveRecord::Base
     "http://dx.doi.org/#{doi}"
   end
   
+  def primary_pdf_attachment_file
+    pdf_files.first if pdf_files.present?
+  end
+
+  private
+
+  def pdf_files
+    if attachment_files.present?
+      attachment_files.order("updated_at desc").select {|file| file.pdf? }
+    end
+  end
 end

@@ -1,6 +1,6 @@
 class AttachmentFilesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload]
+  before_action :find_resource, except: [:index, :create, :upload, :download]
   load_and_authorize_resource
 
   def index
@@ -37,6 +37,11 @@ class AttachmentFilesController < ApplicationController
   def destroy
     @attachment_file.destroy
     respond_with @attachment_file,methods: :path
+  end
+
+  def download
+    @attachment_file = AttachmentFile.find(params[:id])
+    send_file(@attachment_file.path, filename: @attachment_file.data_file_name, type: @attachment_file.data_content_type)
   end
 
   private

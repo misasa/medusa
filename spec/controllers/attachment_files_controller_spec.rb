@@ -16,4 +16,14 @@ describe AttachmentFilesController do
     it { expect(assigns(:attachment_files).count).to eq 3 }
   end
 
+  describe "GET download" do
+    after { get :download, id: attachment_file.id }
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    before do
+      attachment_file
+      allow(controller).to receive(:send_file).and_return{controller.render :nothing => true}
+    end
+    it { expect(controller).to receive(:send_file).with(attachment_file.path, filename: attachment_file.data_file_name, type: attachment_file.data_content_type) }
+  end
+
 end

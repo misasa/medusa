@@ -71,6 +71,9 @@ Medusa::Application.routes.draw do
   end
 
   resources :attachment_files do
+    member do
+      get :download
+    end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "attachment_file" }
     resources :spots, only: [:index, :update, :destroy], controller: "nested_resources/spots"
     resources :places, only: [:index, :update, :destroy], controller: "nested_resources/places"
