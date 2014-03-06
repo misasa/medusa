@@ -114,10 +114,10 @@ describe PlacesController do
 
   describe "POST upload" do
     let(:obj){FactoryGirl.create(:place) }
-    let(:media) {fixture_file_upload("/files/test_image.jpg",'image/jpeg') }
-    it { expect {post :upload, id: obj.id  ,media: media}.to change(AttachmentFile, :count).by(1) }
+    let(:data) {fixture_file_upload("/files/test_image.jpg",'image/jpeg') }
+    it { expect {post :upload, id: obj.id  ,data: data}.to change(AttachmentFile, :count).by(1) }
     context "" do
-      before{post :upload, id: obj.id  ,media: media}
+      before{post :upload, id: obj.id  ,data: data}
       it{expect(assigns(:place).attachment_files.last.data_file_name).to eq "test_image.jpg"}
     end
   end
