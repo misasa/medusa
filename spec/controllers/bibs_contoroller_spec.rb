@@ -25,7 +25,7 @@ describe BibsController do
   
   describe "GET edit" do
     let(:bib) { FactoryGirl.create(:bib) }
-    before { get :show, id: bib.id }
+    before { get :edit, id: bib.id }
     it{ expect(assigns(:bib)).to eq bib }
   end
   
