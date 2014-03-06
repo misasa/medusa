@@ -44,7 +44,7 @@ class PlacesController < ApplicationController
   end
 
   def upload
-    @place.attachment_files << AttachmentFile.new(data: params[:media])
+    @place.attachment_files << AttachmentFile.new(data: params[:data])
     respond_with @place
   end
 

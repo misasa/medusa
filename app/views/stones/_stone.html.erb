@@ -1,0 +1,14 @@
+<tr>
+  <td><%= check_box_tag("ids[]", stone.id, checked, id: "ids_#{stone.id}", class: "select-row") if can?(:update, stone) %></td>
+  <td><%= link_to stone.name, stone %></td>
+  <td><%= stone.parent.try!(:name) %></td>
+  <td><%= stone.box.try!(:name) %></td>
+  <td><%= stone.physical_form.try!(:name) %></td>
+  <td><%= stone.classification.try!(:name) %></td>
+  <td><%= stone.tag_list %></td>
+  <td><%= stone.user.try!(:username) %></td>
+  <td><%= stone.group.try!(:name) %></td>
+  <td><%= difference_from_now(stone.published_at) %></td>
+  <td><%= difference_from_now(stone.updated_at) %></td>
+  <td><%= difference_from_now(stone.created_at) %></td>
+</tr>

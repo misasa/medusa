@@ -1,6 +1,7 @@
 class StonesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload]
+  before_action :find_resource, except: [:index, :create, :upload, :bundle_edit, :bundle_update]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
 
   def index
@@ -47,8 +48,17 @@ class StonesController < ApplicationController
 
   def upload
     @stone = Stone.find(params[:id])
-    @stone.attachment_files << AttachmentFile.new(data: params[:media])
+    @stone.attachment_files << AttachmentFile.new(data: params[:data])
     respond_with @stone
+  end
+
+  def bundle_edit
+    respond_with @stones
+  end
+
+  def bundle_update
+    @stones.each { |stone| stone.update_attributes(stone_params.only_presence) }
+    render :bundle_edit
   end
 
   private
@@ -64,6 +74,8 @@ class StonesController < ApplicationController
       :box_id,
       :place_id,
       :description,
+      :user_id,
+      :group_id,
       record_property_attributes: [
         :global_id,
         :user_id,
@@ -82,6 +94,10 @@ class StonesController < ApplicationController
 
   def find_resource
     @stone = Stone.find(params[:id]).decorate
+  end
+
+  def find_resources
+    @stones = Stone.where(id: params[:ids])
   end
 
 end

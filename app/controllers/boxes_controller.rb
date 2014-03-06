@@ -36,7 +36,7 @@ class BoxesController < ApplicationController
 
   def upload
     @box = Box.find(params[:id])
-    @box.attachment_files << AttachmentFile.new(data: params[:media])
+    @box.attachment_files << AttachmentFile.new(data: params[:data])
     respond_with @box
   end
 
