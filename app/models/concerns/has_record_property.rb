@@ -7,11 +7,20 @@ module HasRecordProperty
     has_one :group, through: :record_property
     accepts_nested_attributes_for :record_property
     delegate :global_id, :published, :published_at, :readable?, to: :record_property
+    delegate :user_id, :group_id, to: :record_property, allow_nil: true
 
     after_create :generate_record_property
     after_save :update_record_property
 
     scope :readables, ->(user) { includes(:record_property).joins(:record_property).merge(RecordProperty.readables(user)) }
+  end
+
+  def user_id=(id)
+    record_property && record_property.user_id = id
+  end
+
+  def group_id=(id)
+    record_property && record_property.group_id = id
   end
 
   def writable?(user)
