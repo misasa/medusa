@@ -1,0 +1,12 @@
+<tr>
+  <td><%= check_box_tag("ids[]", box.id, checked, id: "ids_#{box.id}", class: "select-row") if can?(:update, box) %></td>
+  <td><%= link_to box.name, box %></td>
+  <td><%= box.parent.try!(:name) %></td>
+  <td><%= box.box_type.try!(:name) %></td>
+  <td><%= box.tag_list %></td>
+  <td><%= box.user.try!(:username) %></td>
+  <td><%= box.group.try!(:name) %></td>
+  <td><%= difference_from_now(box.published_at) %></td>
+  <td><%= difference_from_now(box.updated_at) %></td>
+  <td><%= difference_from_now(box.created_at) %></td>
+</tr>

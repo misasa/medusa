@@ -1,5 +1,5 @@
 <%= paginate @boxes %>
-<table>
+<table class="table table-condensed table-striped">
   <thead>
     <%= search_form_for @search do |f| %>
     <tr>
@@ -53,22 +53,12 @@
     <% end %>
   </thead>
   <tbody>
-    <% @boxes.each do |box| %>
-    <tr>
-      <td></td>
-      <td><%= link_to box.name, box %></td>
-      <td><%= box.parent.try!(:name) %></td>
-      <td><%= box.box_type.try!(:name) %></td>
-      <td><%= box.tag_list %></td>
-      <td><%= box.user.try!(:username) %></td>
-      <td><%= box.group.try!(:name) %></td>
-      <td><%= difference_from_now(box.published_at) %></td>
-      <td><%= difference_from_now(box.updated_at) %></td>
-      <td><%= difference_from_now(box.created_at) %></td>
-    </tr>
+    <%= form_tag bundle_edit_stones_path, id: "bundle-form" do %>
+    <%= render partial: :box, collection: @boxes, locals: { checked: false } %>
     <% end %>
   </tbody>
   <tfoot>
     <%= render partial: "new", locals: { box: Box.new } %>
   </tfoot>
 </table>
+<%= link_to_function "edit", "$('#bundle-form').submit();", class: "btn btn-default" %>
