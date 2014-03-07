@@ -1,4 +1,4 @@
-<table  class="table">
+<table class="table table-condensed table-striped">
   <thead>
     <tr>
       <th></th>
@@ -8,14 +8,15 @@
       <th>distance [km]</th>
     </tr>
   </thead>
-  <% @place.nearby_geonames.each do |geoname| %>
-    <tr>
-      <td></td>
-      <td><%= geoname.name %></td>
-      <td><%= geoname.country_name %></td>
-      <td><%= geoname.feature_code_name %></td>
-      <td align="right"><%= "%0.3f" % geoname.distance.to_f %></td>
-    </tr>
-  <% end %>
-  <tr><th colspan="5"></th></tr>
+  <tbody>
+    <% @place.nearby_geonames.each do |geoname| %>
+      <tr>
+        <td></td>
+        <td><%= geoname.name %></td>
+        <td><%= geoname.country_name %></td>
+        <td><%= geoname.feature_code_name %></td>
+        <td align="right"><%= "%0.3f" % geoname.distance.to_f %></td>
+      </tr>
+    <% end %>
+  </tbody>
 </table>
