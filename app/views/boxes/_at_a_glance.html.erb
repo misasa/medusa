@@ -3,9 +3,55 @@
   <%= li_if_exist("tag list: ", @box.tag_list) %>
   <li>updated_at: <%= difference_from_now(@box.updated_at) %></li>
   <% @box.bibs.each do |bib| %>
-    <li>
-      bib: <%= link_to(bib.abbreviation, bib_path(bib)) %>
-      <%= link_to(image_tag("icon_pdf_1.png", size: "20x20"), download_attachment_file_path(bib.primary_pdf_attachment_file)) if bib.primary_pdf_attachment_file %>
-    </li>
+  <li>
+    bib: <%= link_to(bib.abbreviation, bib_path(bib)) %>
+    <%= link_to(image_tag("icon_pdf_1.png", size: "20x20"), download_attachment_file_path(bib.primary_pdf_attachment_file)) if bib.primary_pdf_attachment_file %>
+  </li>
   <% end %>
 </ul>
+<table  class="table-condensed">
+  <thead>
+    <tr>
+      <th></th>
+      <th>name</th>
+      <th>form</th>
+      <th>global_id</th>
+      <th>boxes</th>
+      <th>stones</th>
+      <th>owner</th>
+      <th>group</th>
+      <th>updated_at</th>
+      <th>created_at</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @box.boxed_boxes.each do |child_box| %>
+    <tr>
+      <td></td>
+      <td><%= link_to(child_box.name, box_path(child_box)) %></td>
+      <td><%= child_box.box_type.try(:name) %></td>
+      <td><%= child_box.global_id %></td>
+      <td><%= child_box.children.count %></td>
+      <td><%= child_box.stones.count %></td>
+      <td><%= child_box.user.try(:username) %></td>
+      <td><%= child_box.group.try(:name) %></td>
+      <td><%= child_box.updated_at.to_date %></td>
+      <td><%= child_box.created_at.to_date %></td>
+    </tr>
+    <% end %>
+    <% @box.boxed_stones.each do |stone| %>
+    <tr>
+      <td></td>
+      <td><%= link_to(stone.name, stone_path(stone)) %></td>
+      <td><%= stone.physical_form.try(:name) %></td>
+      <td><%= stone.global_id %></td>
+      <td></td>
+      <td></td>
+      <td><%= stone.user.try(:username) %></td>
+      <td><%= stone.group.try(:name) %></td>
+      <td><%= stone.updated_at.to_date %></td>
+      <td><%= stone.created_at.to_date %></td>
+    </tr>
+    <% end %>
+  </tbody>
+</table>

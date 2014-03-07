@@ -20,4 +20,12 @@ class BoxDecorator < Draper::Decorator
     link = current ? h.content_tag(:strong, name) : name
     h.link_to(link, self)
   end
+
+  def boxed_stones
+    Stone.includes(:record_property, :user, :group, :physical_form).where(box_id: self.id)
+  end
+
+  def boxed_boxes
+    Box.includes(:record_property, :user, :group).where(parent_id: self.id)
+  end
 end
