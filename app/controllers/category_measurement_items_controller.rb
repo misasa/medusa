@@ -1,15 +1,16 @@
 class CategoryMeasurementItemsController < ApplicationController
+  respond_to  :html, :xml, :json
   load_and_authorize_resource
 
   def move_to_top
     @category_measurement_item.move_to_top
-    redirect_to edit_measurement_category_path(@category_measurement_item.measurement_category) 
+    respond_with @category_measurement_item, location: request.referer
   end
 
   def destroy
     measurement_category = @category_measurement_item.measurement_category
     @category_measurement_item.destroy
-    redirect_to edit_measurement_category_path(measurement_category) 
+    respond_with @category_measurement_item, location: request.referer
   end
 
 end
