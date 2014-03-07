@@ -61,6 +61,11 @@ class StonesController < ApplicationController
     render :bundle_edit
   end
 
+  def download_card
+    report = Stone.find(params[:id]).build_report
+    send_data(report.generate, filename: "stone_card.pdf", type: "application/pdf")
+  end
+
   private
 
   def stone_params

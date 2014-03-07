@@ -26,4 +26,16 @@ describe StonesController do
     end
   end
 
+  pending "GET download_card" do
+    after { get :download_card, id: stone.id }
+    let(:stone) { FactoryGirl.create(:stone) }
+    before do
+      stone
+      allow(stone).to receive(:build_report).and_return(double(:report))
+      allow(double(:report)).to receive(:generate).and_return(double(:generate))
+      allow(controller).to receive(:send_data).and_return{controller.render nothing: true}
+    end
+    it { expect(controller).to receive(:send_data).with(double(:generate), filename: "stone_card.pdf", type: "application/pdf") }
+  end
+
 end

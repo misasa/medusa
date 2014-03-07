@@ -22,6 +22,7 @@ Medusa::Application.routes.draw do
       get :picture
       get :map
       get :property
+      get :download_card
       post 'attachment_files/upload' => 'stones#upload'
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "stone" }
