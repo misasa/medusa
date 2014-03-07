@@ -1,5 +1,5 @@
 <%= paginate @places %>
-<table>
+<table class="table table-condensed table-striped">
   <thead>
     <%= search_form_for @search do |f| %>
     <tr>
@@ -56,24 +56,13 @@
     <% end %>
   </thead>
   <tbody>
-    <% PlaceDecorator.decorate_collection(@places).each do |place| %>
-    <tr>
-      <td></td>
-      <td><%= link_to place.name, place %></td>
-      <td><%= place.latitude_to_text %></td>
-      <td><%= place.longitude_to_text %></td>
-      <td><%= place.elevation_to_text %></td>
-      <td><%= place.stones_count %></td>
-      <td><%= place.user.try!(:username) %></td>
-      <td><%= place.group.try!(:name) %></td>
-      <td><%= difference_from_now(place.published_at) %></td>
-      <td><%= difference_from_now(place.updated_at) %></td>
-      <td><%= difference_from_now(place.created_at) %></td>
-    </tr>
+    <%= form_tag bundle_edit_places_path, id: "bundle-form" do %>
+    <%= render partial: :place, collection: PlaceDecorator.decorate_collection(@places), locals: { checked: false } %>
     <% end %>
+
   </tbody>
   <tfoot>
     <%= render partial: "new", locals: { place: Place.new } %>
   </tfoot>
 </table>
-
+<%= link_to_function "edit", "$('#bundle-form').submit();", class: "btn btn-default" %>

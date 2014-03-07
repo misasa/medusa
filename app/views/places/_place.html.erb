@@ -1,0 +1,14 @@
+<tr>
+  <td><%= check_box_tag("ids[]", place.id, checked, id: "ids_#{place.id}", class: "select-row") if can?(:update, place) %></td>
+  <td><%= link_to place.name, place %></td>
+  <td><%= place.latitude_to_text %></td>
+  <td><%= place.longitude_to_text %></td>
+  <td><%= place.elevation_to_text %></td>
+  <td><%= place.stones_count %></td>
+  <td><%= place.user.try!(:username) %></td>
+  <td><%= place.group.try!(:name) %></td>
+  <td><%= difference_from_now(place.published_at) %></td>
+  <td><%= difference_from_now(place.updated_at) %></td>
+  <td><%= difference_from_now(place.created_at) %></td>
+</tr>
+

@@ -16,7 +16,7 @@ Medusa::Application.routes.draw do
     end
   end
 
-  resources :stones, concerns: :bundleable do
+  resources :stones, concerns: :bundleable , except: [:new] do
     member do
       get :family
       get :picture
@@ -32,7 +32,7 @@ Medusa::Application.routes.draw do
     resources :analyses, only: [:index, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "stone" }
   end
 
-  resources :boxes do
+  resources :boxes, concerns: :bundleable, except: [:new] do
     member do
       get :family
       get :picture
@@ -46,7 +46,7 @@ Medusa::Application.routes.draw do
     resources :boxes, only: [:index, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "box", association_name: "children" }
   end
 
-  resources :places do
+  resources :places, concerns: :bundleable, except: [:new] do
     member do
       get :map
       get :property
@@ -60,7 +60,7 @@ Medusa::Application.routes.draw do
     resources :stones, only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "place", association_name: "stones" }
   end
 
-  resources :analyses, except: [:new] do
+  resources :analyses, concerns: :bundleable, except: [:new] do
     member do
       post 'attachment_files/upload' => 'analyses#upload'
     end
@@ -70,7 +70,7 @@ Medusa::Application.routes.draw do
     resources :chemistries, only: [:index, :update, :destroy], controller: "nested_resources/chemistries"
   end
 
-  resources :bibs do
+  resources :bibs, concerns: :bundleable, except: [:new] do
     member do
       get :property
       post 'attachment_files/upload' => 'bibs#upload'
@@ -78,7 +78,8 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
   end
 
-  resources :attachment_files, concerns: :bundleable do
+  resources :attachment_files, concerns: :bundleable , except: [:new] do
+
     member do
       get :download
     end

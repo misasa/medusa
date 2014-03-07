@@ -1,5 +1,5 @@
 <%= paginate @attachment_files %>
-<table>
+<table class="table table-condensed table-striped">
   <thead>
     <%= search_form_for @search do |f| %>
     <tr>
@@ -53,23 +53,12 @@
     <% end %>
   </thead>
   <tbody>
-    <% @attachment_files.each do |attachment_file| %>
-    <tr>
-      <td></td>
-      <td><%= image_tag(attachment_file.path,width: 70,height: 70) %></td>
-      <td><%= link_to attachment_file.data_file_name, attachment_file %></td>
-      <td><%= attachment_file.data_content_type %></td>
-      <td><%= attachment_file.data_file_size %></td>
-      <td><%= attachment_file.user.try!(:username) %></td>
-      <td><%= attachment_file.group.try!(:name) %></td>
-      <td><%= difference_from_now(attachment_file.published_at) %></td>
-      <td><%= difference_from_now(attachment_file.updated_at) %></td>
-      <td><%= difference_from_now(attachment_file.created_at) %></td>
-    </tr>
+    <%= form_tag bundle_edit_attachment_files_path, id: "bundle-form" do %>
+    <%= render partial: :attachment_file, collection: @attachment_files, locals: { checked: false } %>
     <% end %>
   </tbody>
   <tfoot>
     <%= render partial: "new", locals: { attachment_file: AttachmentFile.new } %>
   </tfoot>
 </table>
-
+<%= link_to_function "edit", "$('#bundle-form').submit();", class: "btn btn-default" %>
