@@ -9,6 +9,7 @@
         width: this.element.attr("width"),
         height: this.element.attr("height")
       }, this.options);
+      self._addGroup();
       self._addImage();
       self._addSight();
       self._addZoomInButton();
@@ -30,29 +31,44 @@
       this.image.setAttribute("y", 0);
       this.image.setAttribute("width", this.options.width);
       this.image.setAttribute("height", this.options.height);
+      this.translateX = 0;
+      this.translateY = 0;
+      this.scale = 1;
+      this.group.setAttribute("transform", "translate(" + this.translateX + "," + this.translateY + ") scale(" + this.scale + ")");
+    },
+    addSpot: function(cx, cy, r, options) {
+      var circle = this._createSvgElement("circle", $.extend({}, options, {
+        cx: cx,
+        cy: cy,
+        r: r
+      }));
+      this.group.appendChild(circle);
     },
     zoomIn: function() {
-      var x = parseFloat(this.image.getAttribute("x")), y = parseFloat(this.image.getAttribute("y")),
-          width = parseFloat(this.image.getAttribute("width")),
+      var width = parseFloat(this.image.getAttribute("width")),
           height = parseFloat(this.image.getAttribute("height"));
-      this.image.setAttribute("x", x - width / 2);
-      this.image.setAttribute("y", y - height / 2);
-      this.image.setAttribute("width", width * 2);
-      this.image.setAttribute("height", height * 2);
+      this.translateX = (this.translateX * 2) - (width / 2);
+      this.translateY = (this.translateY * 2) - (height / 2);
+      this.scale = this.scale * 2;
+      this.group.setAttribute("transform", "translate(" + this.translateX + "," + this.translateY + ") scale(" + this.scale + ")");
     },
     zoomOut: function() {
-      var x = parseFloat(this.image.getAttribute("x")), y = parseFloat(this.image.getAttribute("y")),
-          width = parseFloat(this.image.getAttribute("width")),
+      var width = parseFloat(this.image.getAttribute("width")),
           height = parseFloat(this.image.getAttribute("height"));
-      this.image.setAttribute("x", x + width / 4);
-      this.image.setAttribute("y", y + height / 4);
-      this.image.setAttribute("width", width / 2);
-      this.image.setAttribute("height", height / 2);
+      this.translateX = (this.translateX + width / 2) / 2;
+      this.translateY = (this.translateY + height / 2) / 2;
+      this.scale = this.scale / 2;
+      this.group.setAttribute("transform", "translate(" + this.translateX + "," + this.translateY + ") scale(" + this.scale + ")");
+    },
+    _addGroup: function() {
+      var group = this._createSvgElement("g");
+      this.group = group;
+      this.element.append(group);
     },
     _addImage: function() {
       var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
       this.image = image;
-      this.element.append(image);
+      this.group.appendChild(image);
       this.loadImage(this.element.data("image"));
     },
     _addSight: function() {
@@ -128,6 +144,7 @@
     },
     _createSvgElement: function(name, options) {
       var element = document.createElementNS("http://www.w3.org/2000/svg", name);
+      options = $.extend({}, options);
       $.each(options, function(key, value) {
         element.setAttribute(key, value);
       });
@@ -144,8 +161,9 @@
     _scroll: function(e) {
       var x = parseFloat(this.image.getAttribute("x")), y = parseFloat(this.image.getAttribute("y"));
       if (this.scroll) {
-        this.image.setAttribute("x", x + (this.pageX - e.pageX));
-        this.image.setAttribute("y", y + (this.pageY - e.pageY));
+        this.translateX = this.translateX + (this.pageX - e.pageX);
+        this.translateY = this.translateY + (this.pageY - e.pageY);
+        this.group.setAttribute("transform", "translate(" + this.translateX + "," + this.translateY + ") scale(" + this.scale + ")");
         this.pageX = e.pageX;
         this.pageY = e.pageY;
       }
