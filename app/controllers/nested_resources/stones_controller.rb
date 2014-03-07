@@ -1,5 +1,5 @@
 class NestedResources::StonesController < ApplicationController
-  respond_to :html, :xml, :json
+  respond_to  :html, :xml, :json
   before_action :find_resource
   load_and_authorize_resource
 
@@ -11,7 +11,7 @@ class NestedResources::StonesController < ApplicationController
   def create
     @stone = Stone.new(stone_params)
     @parent.stones << @stone
-    respond_with @stone
+    respond_with @stone, location: request.referer
   end
 
   def update
@@ -24,7 +24,7 @@ class NestedResources::StonesController < ApplicationController
   def destroy
     @stone = Stone.find(params[:id])
     @parent.send(params[:association_name]).delete(@stone)
-    respond_with @stone
+    respond_with @stone, location: request.referer
   end
 
   private

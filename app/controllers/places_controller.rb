@@ -48,9 +48,14 @@ class PlacesController < ApplicationController
     respond_with @place
   end
 
-  def link_by_global_id
+  def link_attachment_file_by_global_id
     @place.attachment_files << AttachmentFile.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    respond_with @place
+    redirect_to :back
+  end
+
+  def link_stone_by_global_id
+    @place.stones << Stone.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
+    redirect_to :back
   end
 
   private

@@ -95,7 +95,7 @@ describe PlacesController do
   describe "POST create" do
     let(:attributes) { {name: "place_name"} }
     it { expect {post :create ,place: attributes}.to change(Place, :count).by(1) }
-    context "" do
+    context "create" do
       before{post :create ,place: attributes}
       it{expect(assigns(:place).name).to eq attributes[:name]}
     end
@@ -125,7 +125,33 @@ describe PlacesController do
   describe "DELETE destroy" do
     let(:obj){FactoryGirl.create(:place) }
     before { obj }
-    it { expect { delete :destroy,id: obj.id }.to change(Place, :count).by(-1) }
+    it { expect{delete :destroy,id: obj.id}.to change(Place, :count).by(-1) }
+  end
+
+  describe "POST link_attachment_file_by_global_id" do
+    let(:obj){FactoryGirl.create(:place) }
+    let(:attachment_file){FactoryGirl.create(:attachment_file) }
+    before do
+      request.env["HTTP_REFERER"]  = "where_i_came_from"
+      attachment_file.record_property.global_id = "test_global_id"
+      attachment_file.record_property.save
+      post :link_attachment_file_by_global_id,id:obj.id,global_id: attachment_file.global_id
+    end
+    it {expect(obj.attachment_files[0]).to  eq(attachment_file)}
+    it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+  end
+
+  describe "POST link_stone_by_global_id" do
+    let(:obj){FactoryGirl.create(:place) }
+    let(:stone){FactoryGirl.create(:stone) }
+    before do
+      request.env["HTTP_REFERER"]  = "where_i_came_from"
+      stone.record_property.global_id = "test_global_id"
+      stone.record_property.save
+      post :link_stone_by_global_id,id:obj.id,global_id: stone.global_id
+    end
+    it { expect(obj.stones[0]).to eq(stone)}
+    it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
   end
 
 end

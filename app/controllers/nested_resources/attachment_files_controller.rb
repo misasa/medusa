@@ -11,13 +11,13 @@ class NestedResources::AttachmentFilesController < ApplicationController
   def create
     @attachment_file = AttachmentFile.new(attachment_file_params)
     @parent.attachment_files << @attachment_file
-    respond_with @attachment_file,methods: :path
+    respond_with @attachment_file, methods: :path, location: request.referer
   end
 
   def destroy
     @attachment_file = AttachmentFile.find(params[:id])
     @parent.attachment_files.delete(@attachment_file)
-    respond_with @attachment_file,methods: :path
+    respond_with @attachment_file, methods: :path, location: request.referer
   end
 
   private
@@ -35,7 +35,21 @@ class NestedResources::AttachmentFilesController < ApplicationController
       :md5hash,
       :data,
       :original_geometry,
-      :affine_matrix
+      :affine_matrix,
+      record_property_attributes: [
+        :global_id,
+        :user_id,
+        :group_id,
+        :owner_readable,
+        :owner_writable,
+        :group_readable,
+        :group_writable,
+        :guest_readable,
+        :guest_writable,
+        :published,
+        :published_at
+      ]
+
     )
   end
 

@@ -18,6 +18,7 @@ describe AttachingsController do
     
 
   describe "POST move_to_top" do
+    before{request.env["HTTP_REFERER"]  = "where_i_came_from"}
     context "not count change" do
       it { expect { post :move_to_top, id: attaching2.id  }.to change(Attaching, :count).by(0) }
     end
@@ -33,19 +34,8 @@ describe AttachingsController do
       it { expect(attaching1.position).to eq 2}
       it { expect(attaching2.position).to eq 1}
       it { expect(attaching3.position).to eq 1}
+      it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
     end
   end
 
-  describe "DELETE destroy" do
-    context "count 1 gain " do
-      it { expect { delete :destroy,id: attaching1.id }.to change(Attaching, :count).by(-1) }
-    end
-    context "delete " do
-      before { delete :destroy,id: attaching1.id }
-      it {expect( Attaching.count ).to be 2}
-      it {expect( Attaching.exists?(attaching1.id)).to be_falsey}
-      it {expect( Attaching.exists?(attaching2.id)).to be_truthy} 
-      it {expect( Attaching.exists?(attaching3.id)).to be_truthy}
-    end
-  end
 end

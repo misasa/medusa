@@ -51,12 +51,13 @@ Medusa::Application.routes.draw do
       get :map
       get :property
       post 'attachment_files/upload' => 'places#upload'
-      post :link_by_global_id
+      post :link_attachment_file_by_global_id
+      post :link_stone_by_global_id
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
     resources :attachment_files, only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "place" }
     resources :bibs, only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "place" }
-    resources :stones, only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "place", association_name: "stones" }
+    resources :stones, only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "place", association_name: "stones" }
   end
 
   resources :analyses, except: [:new] do
@@ -77,7 +78,7 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
   end
 
-  resources :attachment_files do
+  resources :attachment_files, concerns: :bundleable do
     member do
       get :download
     end
@@ -120,7 +121,7 @@ Medusa::Application.routes.draw do
       post 'move_to_top'
     end
   end
-  resources :attachings ,only: [:destroy] do
+  resources :attachings  do
     member do
       post 'move_to_top'
     end
