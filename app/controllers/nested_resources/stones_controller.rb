@@ -8,6 +8,12 @@ class NestedResources::StonesController < ApplicationController
     respond_with @stones
   end
 
+  def create
+    @stone = Stone.new(stone_params)
+    @parent.stones << @stone
+    respond_with @stone
+  end
+
   def update
     @stone = Stone.find(params[:id])
     @parent.send(params[:association_name]) << @stone
@@ -22,6 +28,34 @@ class NestedResources::StonesController < ApplicationController
   end
 
   private
+
+  def stone_params
+    params.require(:stone).permit(
+      :name,
+      :physical_form_id,
+      :classification_id,
+      :quantity,
+      :quantity_unit,
+      :tag_list,
+      :parent_id,
+      :box_id,
+      :place_id,
+      :description,
+      record_property_attributes: [
+        :global_id,
+        :user_id,
+        :group_id,
+        :owner_readable,
+        :owner_writable,
+        :group_readable,
+        :group_writable,
+        :guest_readable,
+        :guest_writable,
+        :published,
+        :published_at
+      ]
+    )
+  end
 
   def find_resource
     resource_name = params[:parent_resource]

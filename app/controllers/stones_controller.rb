@@ -69,6 +69,7 @@ class StonesController < ApplicationController
       :physical_form_id,
       :classification_id,
       :quantity,
+      :quantity_unit,
       :tag_list,
       :parent_id,
       :box_id,
