@@ -1,5 +1,5 @@
 <%= paginate @records %>
-<table>
+<table class="table table-condensed table-striped">
   <thead>
     <%= search_form_for @records_search, url: records_path do |f| %>
     <tr>
