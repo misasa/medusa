@@ -3,16 +3,24 @@
 <div class="row spot-thumbnails">
   <% files.each do |file| %>
   <div class="col-lg-3">
-    <a href="#" class="thumbnail">
+    <%= link_to attachment_file_spots_path(file, format: :json), remote: true, class: "thumbnail" do %>
       <%= image_tag file.path %>
-    </a>
+    <% end %>
   </div>
   <% end %>
 </div>
 <% end %>
 <%= javascript_tag do %>
   $("svg.spot-viewer").spotViewer();
-  $(document).on("click", "a.thumbnail", function() {
+  $(document).on("ajax:success", "a.thumbnail", function(event, data, status) {
     $("svg.spot-viewer").spotViewer("loadImage", $(this).find("img").attr("src"));
+    $.each(data, function(index, spot) {
+      $("svg.spot-viewer").spotViewer("addSpot", spot.spot_x, spot.spot_y, spot.radius_in_percent, {
+        fill: spot.fill_color,
+        "fill-opacity": spot.opacity,
+        stroke: spot.stroke_color,
+        "stroke-width": spot.stroke_width
+      });
+    });
   });
 <% end %>
