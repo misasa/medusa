@@ -10,19 +10,27 @@ Medusa::Application.routes.draw do
     end
   end
 
+  concern :reportable do
+    member do
+      get :download_card
+    end
+    collection do
+      get :download_bundle_card
+    end
+  end
+
   resources :records, { id: /((?!\.(html$|json$|xml$)).)*/ } do
     member do
       get 'record_property' => 'records#property'
     end
   end
 
-  resources :stones, concerns: :bundleable , except: [:new] do
+  resources :stones, concerns: [:bundleable, :reportable], except: [:new] do
     member do
       get :family
       get :picture
       get :map
       get :property
-      get :download_card
       post 'attachment_files/upload' => 'stones#upload'
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "stone" }
