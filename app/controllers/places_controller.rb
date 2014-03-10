@@ -1,6 +1,8 @@
 class PlacesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create]
+  before_action :find_resource, except: [:index, :create,:bundle_edit, :bundle_update]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update]
+
   load_and_authorize_resource
 
   def index
@@ -58,6 +60,16 @@ class PlacesController < ApplicationController
     redirect_to :back
   end
 
+  def bundle_edit
+    respond_with @places
+  end
+
+  def bundle_update
+    @places.each { |place| place.update_attributes(place_params.only_presence) }
+    render :bundle_edit
+  end
+
+
   private
 
   def place_params
@@ -69,6 +81,8 @@ class PlacesController < ApplicationController
       :elevation,
       :link_url,
       :doi,
+      :user_id,
+      :group_id,
       record_property_attributes: [
         :global_id,
         :user_id,
@@ -88,6 +102,10 @@ class PlacesController < ApplicationController
 
   def find_resource
     @place = Place.find(params[:id]).decorate
+  end
+
+  def find_resources
+    @places = Place.where(id: params[:ids])
   end
 
 end

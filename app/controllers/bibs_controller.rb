@@ -1,6 +1,7 @@
 class BibsController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload]
+  before_action :find_resource, except: [:index, :create, :upload,:bundle_edit, :bundle_update]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
 
   def index
@@ -44,13 +45,21 @@ class BibsController < ApplicationController
     respond_with @bib, layout: !request.xhr?
   end
 
+  def bundle_edit
+    respond_with @bibs
+  end
+
+  def bundle_update
+    @bibs.each { |bib| bib.update_attributes(bib_params.only_presence) }
+    render :bundle_edit
+  end
+
   private
 
   def bib_params
     params.require(:bib).permit(
       :entry_type,
       :abbreviation,
-      :authorlist,
       :name,
       :journal,
       :year,
@@ -62,6 +71,8 @@ class BibsController < ApplicationController
       :key,
       :link_url,
       :doi,
+      :user_id,
+      :group_id,
       author_ids: [],
       record_property_attributes: [
         :global_id,
@@ -76,12 +87,15 @@ class BibsController < ApplicationController
         :published,
         :published_at
       ]
-
     )
   end
 
   def find_resource
     @bib = Bib.find(params[:id]).decorate
+  end
+
+  def find_resources
+    @bibs = Bib.where(id: params[:ids])
   end
 
 end

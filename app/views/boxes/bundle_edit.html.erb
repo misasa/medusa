@@ -1,16 +1,11 @@
-<div class="text-right">
-  A4<%= link_to(image_tag("icon_pdf_1.png", size: "18x18"), download_bundle_card_stones_path(ids: @stones.pluck(:id))) %>
-</div>
-<%= form_for Stone.new, url: bundle_update_stones_path do |f| %>
+<%= form_for Box.new, url: bundle_update_boxes_path do |f| %>
 <table class="table table-condensed table-striped">
   <thead>
     <tr>
       <th></th>
       <th>name</th>
       <th>parent</th>
-      <th>box</th>
-      <th>physical form</th>
-      <th>classification</th>
+      <th>box_type</th>
       <th>tags</th>
       <th>owner</th>
       <th>group</th>
@@ -20,16 +15,14 @@
     </tr>
   </thead>
   <tbody>
-    <%= render partial: :stone, collection: @stones, locals: { checked: true } %>
+    <%= render partial: :box, collection: @boxes, locals: { checked: true } %>
   </tbody>
   <tfoot>
     <tr>
       <th><%= check_box_tag nil, nil, true, class: "select-row-all" %></th>
       <th></th>
-      <th><%= f.select :parent_id, Stone.pluck(:name, :id), include_blank: true %></th>
-      <th><%= f.select :box_id, Box.pluck(:name, :id), include_blank: true %></th>
-      <th><%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), include_blank: true %></th>
-      <th><%= f.select :classification_id, Classification.pluck(:name, :id), include_blank: true %></th>
+      <th><%= f.select :parent_id, Box.pluck(:name, :id), include_blank: true %></th>
+  <th><%= f.select :box_type_id, BoxType.pluck(:name, :id), include_blank: true %></th>
       <th><%= f.text_field :tag_list %></th>
       <th><%= f.select :user_id ,User.pluck(:username, :id), include_blank: true %></th>
       <th><%= f.select :group_id ,Group.pluck(:name, :id), include_blank: true %></th>

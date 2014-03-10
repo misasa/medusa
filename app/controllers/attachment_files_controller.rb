@@ -1,6 +1,7 @@
 class AttachmentFilesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload, :download]
+  before_action :find_resource, except: [:index, :create, :upload, :download,:bundle_edit, :bundle_update]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
 
   def index
@@ -34,6 +35,14 @@ class AttachmentFilesController < ApplicationController
     respond_with @attachment_file
   end
 
+  def picture
+    respond_with @attachment_file,methods: :path, layout: !request.xhr?
+  end
+
+  def property
+    respond_with @attachment_file,methods: :path, layout: !request.xhr?
+  end
+
   def destroy
     @attachment_file.destroy
     respond_with @attachment_file,methods: :path
@@ -41,7 +50,21 @@ class AttachmentFilesController < ApplicationController
 
   def download
     @attachment_file = AttachmentFile.find(params[:id])
-    send_file(@attachment_file.path, filename: @attachment_file.data_file_name, type: @attachment_file.data_content_type)
+    send_file("public" + @attachment_file.path, filename: @attachment_file.data_file_name, type: @attachment_file.data_content_type)
+  end
+
+  def link_stone_by_global_id
+    @attachment_file.stones << Stone.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
+    redirect_to :back
+  end
+
+  def bundle_edit
+    respond_with @attachment_files
+  end
+
+  def bundle_update
+    @attachment_files.each { |attachment_file| attachment_file.update_attributes(attachment_file_params.only_presence) }
+    render :bundle_edit
   end
 
   private
@@ -54,6 +77,8 @@ class AttachmentFilesController < ApplicationController
       :data,
       :original_geometry,
       :affine_matrix,
+      :user_id,
+      :group_id,
       record_property_attributes: [
         :global_id,
         :user_id,
@@ -72,6 +97,9 @@ class AttachmentFilesController < ApplicationController
 
   def find_resource
     @attachment_file = AttachmentFile.find(params[:id]).decorate
+  end
+  def find_resources
+    @attachment_files = AttachmentFile.where(id: params[:ids])
   end
 
 end

@@ -1,0 +1,38 @@
+<%= form_for AttachmentFile.new, url: bundle_update_attachment_files_path do |f| %>
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>name</th>
+      <th>type</th>
+      <th>size</th>
+      <th>owner</th>
+      <th>group</th>
+      <th>published</th>
+      <th>updated_at</th>
+      <th>created_at</th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render partial: :attachment_file, collection: @attachment_files, locals: { checked: true } %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th><%= check_box_tag nil, nil, true, class: "select-row-all" %></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th><%= f.select :user_id ,User.pluck(:username, :id), include_blank: true %></th>
+      <th><%= f.select :group_id ,Group.pluck(:name, :id), include_blank: true %></th>
+      <th>
+        <%= f.button class: "btn btn-default" do %>
+          <span class="glyphicon glyphicon-save"></span>
+        <% end %>
+      </th>
+      <th></th>
+    </tr>
+  </tfoot>
+</table>
+<% end %>

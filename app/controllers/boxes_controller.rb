@@ -1,6 +1,7 @@
 class BoxesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload]
+  before_action :find_resource, except: [:index, :create, :upload, :bundle_edit, :bundle_update]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
 
   def index
@@ -52,6 +53,15 @@ class BoxesController < ApplicationController
     respond_with @box, layout: !request.xhr?
   end
 
+  def bundle_edit
+    respond_with @boxes
+  end
+
+  def bundle_update
+    @boxes.each { |box| box.update_attributes(box_params.only_presence) }
+    render :bundle_edit
+  end
+
   private
 
   def box_params
@@ -61,6 +71,9 @@ class BoxesController < ApplicationController
       :position,
       :path,
       :box_type_id,
+      :tag_list,
+      :user_id,
+      :group_id,
       record_property_attributes: [
         :global_id,
         :user_id,
@@ -79,6 +92,10 @@ class BoxesController < ApplicationController
 
   def find_resource
     @box = Box.find(params[:id]).decorate
+  end
+
+  def find_resources
+    @boxes = Box.where(id: params[:ids])
   end
 
 end

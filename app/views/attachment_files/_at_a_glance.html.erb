@@ -1,0 +1,52 @@
+<ul>
+  <% unless @attachment_file.attachings.empty? %>
+    <li>linked to
+    <% @attachment_file.attachings.each do |attaching| %>
+       <% attachable = attaching.attachable %>
+       <% if attachable %>
+         <% controller = attaching.attachable.class.to_s.downcase.pluralize %>
+         <%=link_to attachable.name, controller: controller, action: :show , id: attachable.id %>
+       <% end %>
+     <% end %>
+    </li>
+  <% end %>
+  <%= li_if_exist("name: ", @attachment_file.name) %>
+  <%= li_if_exist("description: ", @attachment_file.description) %>
+  <li>content-type: <%= @attachment_file.data_content_type %></li>
+  <li>size: <%= number_to_human_size(@attachment_file.data_file_size) %></li>
+  <% if !(@attachment_file.data_content_type=~ /^image.*/).nil? %>
+    <li>geometry: <%= @attachment_file.original_width.to_s + "x" + @attachment_file.original_height.to_s %> pix<%= ", " + sprintf("%.1f", @attachment_file.width_in_um) + "x" + sprintf("%.1f", @attachment_file.height_in_um) + "&#181;m" unless @attachment_file.affine_matrix.blank? %> </li>
+    <% if @attachment_file.affine_matrix %>
+      <li>affine matrix: <%= @attachment_file.affine_matrix_in_string %></li>
+    <% end %>
+  <% end %>
+  <li>modified at <%= difference_from_now(@attachment_file.updated_at) -%></li>
+</ul>
+
+
+<% if !(@attachment_file.data_content_type=~ /^image.*/).nil? && @attachment_file.spots.size > 0%>
+  <%= pluralize @attachment_file.spots.size, Spot.underscore %> on image.
+  <table class="table table-condensed table-striped">
+    <thead>
+    <tr>
+      <th></th>
+      <th>name</th>
+      <th>link</th>
+      <th></th>
+    </tr>
+    </thead>
+    <tbody>
+      <% @attachment_file.points.each do |spot| %>
+        <tr>
+          <td></td>
+          <td>point.name</td>
+          <td>
+          </td>
+          <td>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
+

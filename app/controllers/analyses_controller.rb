@@ -1,6 +1,7 @@
 class AnalysesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload]
+  before_action :find_resource, except: [:index, :create, :upload,:bundle_edit, :bundle_update]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
 
   def index
@@ -40,6 +41,15 @@ class AnalysesController < ApplicationController
     respond_with @analysis
   end
 
+  def bundle_edit
+    respond_with @analyses
+  end
+
+  def bundle_update
+    @analyses.each { |analysis| analysis.update_attributes(analysis_params.only_presence) }
+    render :bundle_edit
+  end
+
   private
 
   def analysis_params
@@ -49,12 +59,31 @@ class AnalysesController < ApplicationController
       :stone_id,
       :technique_id,
       :device_id,
-      :operator
+      :operator,
+      :user_id,
+      :group_id,
+      record_property_attributes: [
+        :global_id,
+        :user_id,
+        :group_id,
+        :owner_readable,
+        :owner_writable,
+        :group_readable,
+        :group_writable,
+        :guest_readable,
+        :guest_writable,
+        :published,
+        :published_at
+      ]
     )
   end
 
   def find_resource
     @analysis = Analysis.find(params[:id])
+  end
+
+  def find_resources
+    @analyses = Analysis.where(id: params[:ids])
   end
 
 end
