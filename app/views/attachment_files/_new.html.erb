@@ -1,6 +1,6 @@
 <%= form_for attachment_file, remote: false, format: :html, html: { class: "create"} do |f| %>
 <tr>
-  <th></th>
+  <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
   <th></th>
   <th><%= f.file_field :data %></th>
   <th></th>
