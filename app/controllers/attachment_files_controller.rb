@@ -1,6 +1,7 @@
 class AttachmentFilesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload, :download]
+  before_action :find_resource, except: [:index, :create, :upload, :download,:bundle_edit, :bundle_update]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
 
   def index
@@ -44,6 +45,15 @@ class AttachmentFilesController < ApplicationController
     send_file(@attachment_file.path, filename: @attachment_file.data_file_name, type: @attachment_file.data_content_type)
   end
 
+  def bundle_edit
+    respond_with @attachment_files
+  end
+
+  def bundle_update
+    @attachment_files.each { |attachment_file| attachment_file.update_attributes(attachment_file_params.only_presence) }
+    render :bundle_edit
+  end
+
   private
 
   def attachment_file_params
@@ -54,6 +64,8 @@ class AttachmentFilesController < ApplicationController
       :data,
       :original_geometry,
       :affine_matrix,
+      :user_id,
+      :group_id,
       record_property_attributes: [
         :global_id,
         :user_id,
@@ -72,6 +84,9 @@ class AttachmentFilesController < ApplicationController
 
   def find_resource
     @attachment_file = AttachmentFile.find(params[:id]).decorate
+  end
+  def find_resources
+    @attachment_files = AttachmentFile.where(id: params[:ids])
   end
 
 end

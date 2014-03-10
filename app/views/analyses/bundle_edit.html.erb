@@ -1,14 +1,12 @@
-<%= form_for Stone.new, url: bundle_update_stones_path do |f| %>
+<%= form_for Analysis.new, url: bundle_update_analyses_path do |f| %>
 <table class="table table-condensed table-striped">
   <thead>
     <tr>
       <th></th>
       <th>name</th>
-      <th>parent</th>
-      <th>box</th>
-      <th>physical form</th>
-      <th>classification</th>
-      <th>tags</th>
+      <th>device</th>
+      <th>stone</th>
+      <th>summary</th>
       <th>owner</th>
       <th>group</th>
       <th>published</th>
@@ -17,17 +15,15 @@
     </tr>
   </thead>
   <tbody>
-    <%= render partial: :stone, collection: @stones, locals: { checked: true } %>
+    <%= render partial: :analysis, collection: @analyses, locals: { checked: true } %>
   </tbody>
   <tfoot>
     <tr>
       <th><%= check_box_tag nil, nil, true, class: "select-row-all" %></th>
       <th></th>
-      <th><%= f.select :parent_id, Stone.pluck(:name, :id), include_blank: true %></th>
-      <th><%= f.select :box_id, Box.pluck(:name, :id), include_blank: true %></th>
-      <th><%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), include_blank: true %></th>
-      <th><%= f.select :classification_id, Classification.pluck(:name, :id), include_blank: true %></th>
-      <th><%= f.text_field :tag_list %></th>
+      <th><%= f.select :device_id, Device.pluck(:name, :id), include_blank: true %></th>
+      <th><%= f.select :stone_id, Stone.pluck(:name, :id), include_blank: true %></th>
+      <th></th>
       <th><%= f.select :user_id ,User.pluck(:username, :id), include_blank: true %></th>
       <th><%= f.select :group_id ,Group.pluck(:name, :id), include_blank: true %></th>
       <th>

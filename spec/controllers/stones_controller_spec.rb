@@ -26,4 +26,41 @@ describe StonesController do
     end
   end
 
+  describe "POST bundle_edit" do
+    let(:obj1) { FactoryGirl.create(:stone, name: "obj1") }
+    let(:obj2) { FactoryGirl.create(:stone, name: "obj2") }
+    let(:obj3) { FactoryGirl.create(:stone, name: "obj3") }
+    let(:ids){[obj1.id,obj2.id]}
+    before do
+      obj1
+      obj2
+      obj3
+      post :bundle_edit, ids: ids
+    end
+    it {expect(assigns(:stones).include?(obj1)).to be_truthy}
+    it {expect(assigns(:stones).include?(obj2)).to be_truthy}
+    it {expect(assigns(:stones).include?(obj3)).to be_falsey}
+  end
+
+  describe "POST bundle_update" do
+    let(:obj3name){"obj3"}
+    let(:obj1) { FactoryGirl.create(:stone, name: "obj1") }
+    let(:obj2) { FactoryGirl.create(:stone, name: "obj2") }
+    let(:obj3) { FactoryGirl.create(:stone, name: obj3name) }
+    let(:attributes) { {name: "update_name"} }
+    let(:ids){[obj1.id,obj2.id]}
+    before do
+      obj1
+      obj2
+      obj3
+      post :bundle_update, ids: ids,stone: attributes
+      obj1.reload
+      obj2.reload
+      obj3.reload
+    end
+    it {expect(obj1.name).to eq attributes[:name]}
+    it {expect(obj2.name).to eq attributes[:name]}
+    it {expect(obj3.name).to eq obj3name}
+  end
+
 end

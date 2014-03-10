@@ -153,6 +153,21 @@ describe HasRecordProperty do
         end
       end
     end
+
+    describe ".user_id=" do
+      let(:stone) { FactoryGirl.create(:stone) }
+      let(:user_id){999}
+      before{stone.user_id = user_id}
+      it { expect(stone.user_id).to eq user_id}
+    end
+
+    describe ".group_id=" do
+      let(:stone) { FactoryGirl.create(:stone) }
+      let(:group_id){999}
+      before{stone.group_id = group_id}
+      it { expect(stone.group_id).to eq group_id}
+    end
+
   end
 
 end
