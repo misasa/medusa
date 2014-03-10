@@ -23,7 +23,20 @@ describe AttachmentFilesController do
       attachment_file
       allow(controller).to receive(:send_file).and_return{controller.render :nothing => true}
     end
-    it { expect(controller).to receive(:send_file).with(attachment_file.path, filename: attachment_file.data_file_name, type: attachment_file.data_content_type) }
+    it { expect(controller).to receive(:send_file).with("public" + attachment_file.path, filename: attachment_file.data_file_name, type: attachment_file.data_content_type) }
+  end
+
+  describe "POST link_stone_by_global_id" do
+    let(:obj){FactoryGirl.create(:attachment_file) }
+    let(:stone){FactoryGirl.create(:stone) }
+    before do
+      request.env["HTTP_REFERER"]  = "where_i_came_from"
+      stone.record_property.global_id = "test_global_id"
+      stone.record_property.save
+      post :link_stone_by_global_id,id:obj.id,global_id: stone.global_id
+    end
+    it { expect(obj.stones[0]).to eq(stone)}
+    it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
   end
 
   describe "POST bundle_edit" do

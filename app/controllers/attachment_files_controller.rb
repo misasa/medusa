@@ -35,6 +35,14 @@ class AttachmentFilesController < ApplicationController
     respond_with @attachment_file
   end
 
+  def picture
+    respond_with @attachment_file,methods: :path, layout: !request.xhr?
+  end
+
+  def property
+    respond_with @attachment_file,methods: :path, layout: !request.xhr?
+  end
+
   def destroy
     @attachment_file.destroy
     respond_with @attachment_file,methods: :path
@@ -42,7 +50,12 @@ class AttachmentFilesController < ApplicationController
 
   def download
     @attachment_file = AttachmentFile.find(params[:id])
-    send_file(@attachment_file.path, filename: @attachment_file.data_file_name, type: @attachment_file.data_content_type)
+    send_file("public" + @attachment_file.path, filename: @attachment_file.data_file_name, type: @attachment_file.data_content_type)
+  end
+
+  def link_stone_by_global_id
+    @attachment_file.stones << Stone.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
+    redirect_to :back
   end
 
   def bundle_edit

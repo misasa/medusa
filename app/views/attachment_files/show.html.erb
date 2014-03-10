@@ -1,0 +1,52 @@
+<div class="row">
+  <div id="show-caption" class="col-lg-12">
+    <%= @attachment_file.name_with_id %>
+  </div>
+</div>
+<div class="row">
+  <div id="show-tools" class="col-lg-4">
+    <div class="row btn-toolbar tool-selector" role="toolbar">
+      <div class="btn-group btn-group-sm">
+        <%= link_to edit_attachment_file_path(@attachment_file), class: "btn btn-default", remote: true do %>
+          <span class="glyphicon glyphicon-pencil"></span>
+        <% end %>
+        <%= link_to property_attachment_file_path(@attachment_file), class: "btn btn-default", remote: true do %>
+          <span class="glyphicon glyphicon-cog"></span>
+        <% end %>
+      </div>
+      <div class="btn-group btn-group-sm">
+        <%= link_to picture_attachment_file_path(@attachment_file), class: "btn btn-default  activate", remote: true do %>
+          <span class="glyphicon glyphicon-picture"></span>
+        <% end %>
+        <%= link_to download_attachment_file_path(@attachment_file), class: "btn btn-default" do %>
+          <span class="glyphicon glyphicon-file"></span>
+        <% end %>
+      </div>
+    </div>
+    <img>
+    <div class="row tool-content">
+    </div>
+  </div>
+  <div id="show-body" class="col-lg-8">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+      <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
+      <li><a href="#stone" data-toggle="tab">stone</a></li>
+      <li><a href="#box" data-toggle="tab">box</a></li>
+      <li><a href="#place" data-toggle="tab">place</a></li>
+      <li><a href="#analysis" data-toggle="tab">analysis</a></li>
+      <li><a href="#bib" data-toggle="tab">bib</a></li>
+      <li><a href="#spot" data-toggle="tab">spot</a></li>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
+      <div class="tab-pane" id="stone"><%= render partial: "stone" %></div>
+      <div class="tab-pane" id="box">...</div>
+      <div class="tab-pane" id="analysis">...</div>
+      <div class="tab-pane" id="place">...</div>
+      <div class="tab-pane" id="bib">...</div>
+      <div class="tab-pane" id="spot">...</div>
+    </div>
+  </div>
+</div>
