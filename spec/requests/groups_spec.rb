@@ -194,9 +194,7 @@ describe "group master" do
               expect(page).to have_field("q_created_at_gteq", with: "")
               expect(page).to have_field("q_created_at_lteq_end_of_day", with: "")
             end
-            it "search resu" do
-              expect(page).to have_css("tbody tr", count: 2)
-            end
+            it { expect(page).to have_css("tbody tr", count: 2) }
           end
         end
       end
