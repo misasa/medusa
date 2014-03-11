@@ -77,6 +77,7 @@ Medusa::Application.routes.draw do
       post 'attachment_files/upload' => 'bibs#upload'
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
+    resources :stones, only: [:index, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "bib", association_name: "bibs" }
   end
 
   resources :attachment_files, concerns: :bundleable , except: [:new] do
@@ -86,6 +87,7 @@ Medusa::Application.routes.draw do
       get :picture
       get :download
       post :link_stone_by_global_id
+      post :link_bib_by_global_id
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "attachment_file" }
     resources :spots, only: [:index, :update, :destroy], controller: "nested_resources/spots"

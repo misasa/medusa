@@ -18,7 +18,7 @@ class NestedResources::BibsController < ApplicationController
   def destroy
     @bib = Bib.find(params[:id])
     @parent.bibs.delete(@bib)
-    respond_with @bib
+    respond_with @bib, location: request.referer
   end
 
   private

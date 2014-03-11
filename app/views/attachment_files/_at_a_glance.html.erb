@@ -6,8 +6,8 @@
        <% if attachable %>
          <% controller = attaching.attachable.class.to_s.downcase.pluralize %>
          <%=link_to attachable.name, controller: controller, action: :show , id: attachable.id %>
-       <% end %>
-     <% end %>
+      <% end %>
+    <% end %>
     </li>
   <% end %>
   <%= li_if_exist("name: ", @attachment_file.name) %>
@@ -22,7 +22,6 @@
   <% end %>
   <li>modified at <%= difference_from_now(@attachment_file.updated_at) -%></li>
 </ul>
-
 
 <% if !(@attachment_file.data_content_type=~ /^image.*/).nil? && @attachment_file.spots.size > 0%>
   <%= pluralize @attachment_file.spots.size, Spot.underscore %> on image.

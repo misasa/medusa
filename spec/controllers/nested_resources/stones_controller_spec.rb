@@ -19,4 +19,23 @@ describe NestedResources::StonesController do
     end
   end
 
+  describe "DELETE destory" do
+    let(:parent){FactoryGirl.create(:bib) }
+    let(:child){FactoryGirl.create(:stone)}
+    before do
+      request.env["HTTP_REFERER"]  = "where_i_came_from"
+      parent
+      child
+    end
+    it  {expect {delete :destroy, parent_resource: :bib, bib_id: parent,id: child.id,association_name: :stones}.to change(Stone, :count).by(0)}
+    context "parent place" do
+      before do
+        parent.stones << child
+        delete :destroy, parent_resource: :bib, bib_id: parent, id: child.id,association_name: :stones
+      end
+      it {expect(parent.stones.count).to eq 0}
+      it {expect(response).to redirect_to request.env["HTTP_REFERER"]}
+    end
+  end
+
 end
