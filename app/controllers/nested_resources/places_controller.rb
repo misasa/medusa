@@ -18,13 +18,15 @@ class NestedResources::PlacesController < ApplicationController
   def destroy
     @place = Place.find(params[:id])
     @parent.places.delete(@place)
-    respond_with @place
+    respond_with @place, location: request.referer
   end
 
   private
 
   def find_resource
-    @parent = AttachmentFile.find(params[:attachment_file_id])
+    resource_name = params[:parent_resource]
+    resource_class = resource_name.camelize.constantize
+    @parent = resource_class.find(params["#{resource_name}_id"])
   end
 
 end

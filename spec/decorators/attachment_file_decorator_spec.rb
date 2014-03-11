@@ -1,4 +1,5 @@
 require 'spec_helper'
+include ActionDispatch::TestProcess
 
 describe AttachmentFileDecorator do
   let(:user){ FactoryGirl.create(:user)}
@@ -29,5 +30,17 @@ describe AttachmentFileDecorator do
       let(:original_geometry){"111x222"}
       it {expect(subject).to eq 222}
     end
+  end
+
+  describe ".picture" do
+    subject{ attachment_file.picture }
+    let(:attachment_file) { AttachmentFile.new(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')).decorate}
+    before{attachment_file.save}
+    it {expect(subject).to include "<img"}
+    it {expect(subject).to include "/>"}
+    it {expect(subject).to include "width=\"250\""}
+    it {expect(subject).to include "height=\"250\""}
+    it {expect(subject).to include "src=\"#{attachment_file.path}\""}
+    it {expect(subject).to include "alt=\"Test image\""}
   end
 end

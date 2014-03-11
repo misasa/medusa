@@ -85,10 +85,12 @@ Medusa::Application.routes.draw do
       post 'attachment_files/upload' => 'bibs#upload'
       post :link_stone_by_global_id
       post :link_box_by_global_id
+      post :link_place_by_global_id
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
     resources :stones, only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "bib", association_name: "stones" }
     resources :boxes, only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "bib", association_name: "boxes" }
+    resources :places, only: [:index, :create, :update, :destroy], controller: "nested_resources/places", defaults: { parent_resource: "bib", association_name: "places" }
   end
 
   resources :attachment_files, concerns: :bundleable , except: [:new] do
@@ -98,13 +100,16 @@ Medusa::Application.routes.draw do
       get :picture
       get :download
       post :link_stone_by_global_id
+      post :link_box_by_global_id
+      post :link_place_by_global_id
+      post :link_analysis_by_global_id
       post :link_bib_by_global_id
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "attachment_file" }
-    resources :spots, only: [:index, :update, :destroy], controller: "nested_resources/spots"
+    resources :spots, only: [:index, :create, :update, :destroy], controller: "nested_resources/spots"
     resources :places, only: [:index, :update, :destroy], controller: "nested_resources/places"
     resources :stones, only: [:index, :create,:update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "attachment_file", association_name: "stones" }
-    resources :boxes, only: [:index, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "attachment_file", association_name: "boxes" }
+    resources :boxes, only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "attachment_file", association_name: "boxes" }
     resources :bibs, only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "attachment_file" }
     resources :analyses, only: [:index, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "attachment_file" }
   end
@@ -113,7 +118,7 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "chemistry" }
   end
 
-  resources :spots do
+  resources :spots, only: [] do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "spot" }
   end
 
