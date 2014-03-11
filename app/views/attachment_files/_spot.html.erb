@@ -1,0 +1,25 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>name</th>
+      <th>link</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+      <% SpotDecorator.decorate_collection(@attachment_file.spots).each do |spot| %>
+        <tr>
+          <td></td>
+          <td><%= spot.try!(:name) %></td>
+          <td><%= spot.target_link %></td>
+          <td>
+            <%= link_to attachment_file_spot_path(@attachment_file,spot), method: :delete ,title: "delete spot",data: {confirm: t("confirm.delete")} do %>
+              <span class="glyphicon glyphicon-remove"></span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+  </tbody>
+</table>
+

@@ -16,6 +16,24 @@ describe AttachmentFilesController do
     it { expect(assigns(:attachment_files).count).to eq 3 }
   end
 
+  describe "GET property" do
+    let(:attachment_file) { FactoryGirl.create(:attachment_file,name: "test") }
+    before do
+      attachment_file
+      get :property,id: attachment_file.id
+    end
+    it {expect(assigns(:attachment_file)).to eq attachment_file}
+  end
+
+  describe "GET picture" do
+    let(:attachment_file) { FactoryGirl.create(:attachment_file,name: "test") }
+    before do
+      attachment_file
+      get :picture,id: attachment_file.id
+    end
+    it {expect(assigns(:attachment_file)).to eq attachment_file}
+  end
+
   describe "GET download" do
     after { get :download, id: attachment_file.id }
     let(:attachment_file) { FactoryGirl.create(:attachment_file) }
@@ -36,6 +54,45 @@ describe AttachmentFilesController do
       post :link_stone_by_global_id,id:obj.id,global_id: stone.global_id
     end
     it { expect(obj.stones[0]).to eq(stone)}
+    it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+  end
+
+  describe "POST link_box_by_global_id" do
+    let(:obj){FactoryGirl.create(:attachment_file) }
+    let(:box){FactoryGirl.create(:box) }
+    before do
+      request.env["HTTP_REFERER"]  = "where_i_came_from"
+      box.record_property.global_id = "test_global_id"
+      box.record_property.save
+      post :link_box_by_global_id,id:obj.id,global_id: box.global_id
+    end
+    it { expect(obj.boxes[0]).to eq(box)}
+    it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+  end
+
+  describe "POST link_place_by_global_id" do
+    let(:obj){FactoryGirl.create(:attachment_file) }
+    let(:place){FactoryGirl.create(:place) }
+    before do
+      request.env["HTTP_REFERER"]  = "where_i_came_from"
+      place.record_property.global_id = "test_global_id"
+      place.record_property.save
+      post :link_place_by_global_id,id:obj.id,global_id: place.global_id
+    end
+    it { expect(obj.places[0]).to eq(place)}
+    it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+  end
+
+  describe "POST link_analysis_by_global_id" do
+    let(:obj){FactoryGirl.create(:attachment_file) }
+    let(:analysis){FactoryGirl.create(:analysis) }
+    before do
+      request.env["HTTP_REFERER"]  = "where_i_came_from"
+      analysis.record_property.global_id = "test_global_id"
+      analysis.record_property.save
+      post :link_analysis_by_global_id,id:obj.id,global_id: analysis.global_id
+    end
+    it { expect(obj.analyses[0]).to eq(analysis)}
     it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
   end
 

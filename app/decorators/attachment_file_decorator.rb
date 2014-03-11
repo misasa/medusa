@@ -16,4 +16,8 @@ class AttachmentFileDecorator < Draper::Decorator
     original_geometry.split("x")[1].to_i
   end
 
+   def picture(width: 250, height: 250)
+    h.image_tag(path, width: width, height: height) if image?
+  end
+
 end

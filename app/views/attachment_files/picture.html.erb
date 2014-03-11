@@ -1,1 +1,15 @@
-<%= content_tag :svg, nil, class: "spot-viewer", width: 300, height: 300, "data-image" => @attachment_file.try!(:path) %>
+<%= @attachment_file.picture %>
+<%= form_for Spot.new, url: attachment_file_spots_path(@attachment_file) do |f|%>
+  <table>
+    <tr>
+      <td>new spot with link(ID </td>
+      <td><%= f.text_field :target_uid, class: "form-control input-sm" %></td>
+      <td>)</td>
+      <td>
+        <%= f.button title:"add new spot" ,class: "btn btn-default" do %>
+          <span class="glyphicon glyphicon-save"></span>
+        <% end %>
+      </td>
+    </tr>
+  </table>
+<% end %>

@@ -1,6 +1,6 @@
 class AttachmentFilesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload, :download,:bundle_edit, :bundle_update]
+  before_action :find_resource, except: [:index, :create, :download, :bundle_edit, :bundle_update]
   before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
 
@@ -35,11 +35,11 @@ class AttachmentFilesController < ApplicationController
     respond_with @attachment_file
   end
 
-  def picture
+  def property
     respond_with @attachment_file,methods: :path, layout: !request.xhr?
   end
 
-  def property
+  def picture 
     respond_with @attachment_file,methods: :path, layout: !request.xhr?
   end
 
@@ -55,6 +55,21 @@ class AttachmentFilesController < ApplicationController
 
   def link_stone_by_global_id
     @attachment_file.stones << Stone.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
+    redirect_to :back
+  end
+
+  def link_box_by_global_id
+    @attachment_file.boxes << Box.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
+    redirect_to :back
+  end
+
+  def link_place_by_global_id
+    @attachment_file.places << Place.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
+    redirect_to :back
+  end
+
+  def link_analysis_by_global_id
+    @attachment_file.analyses << Analysis.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
     redirect_to :back
   end
 

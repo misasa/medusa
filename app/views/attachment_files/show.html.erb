@@ -7,6 +7,11 @@
   <div id="show-tools" class="col-lg-4">
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
+        <%= link_to picture_attachment_file_path(@attachment_file), class: "btn btn-default activate", remote: true do %>
+          <span class="glyphicon glyphicon-globe"></span>
+        <% end %>
+      </div>
+      <div class="btn-group btn-group-sm">
         <%= link_to edit_attachment_file_path(@attachment_file), class: "btn btn-default", remote: true do %>
           <span class="glyphicon glyphicon-pencil"></span>
         <% end %>
@@ -15,7 +20,7 @@
         <% end %>
       </div>
       <div class="btn-group btn-group-sm">
-        <%= link_to picture_attachment_file_path(@attachment_file), class: "btn btn-default  activate", remote: true do %>
+        <%= link_to @attachment_file.path, class: "btn btn-default " do %>
           <span class="glyphicon glyphicon-picture"></span>
         <% end %>
         <%= link_to download_attachment_file_path(@attachment_file), class: "btn btn-default" do %>
@@ -46,7 +51,7 @@
       <div class="tab-pane" id="analysis">...</div>
       <div class="tab-pane" id="place">...</div>
       <div class="tab-pane" id="bib"><%= render partial: "bib" %></div>
-      <div class="tab-pane" id="spot">...</div>
+      <div class="tab-pane" id="spot"><%= render partial: "spot" %></div>
     </div>
   </div>
 </div>

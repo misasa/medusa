@@ -1,3 +1,4 @@
+<%= @attachment_file.picture %>
 <%= form_for @attachment_file, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
   <div class="form-group form-group-sm">
     <%= f.label :affine_matrix, class: "small" -%>
