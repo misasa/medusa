@@ -23,6 +23,29 @@ class StoneDecorator < Draper::Decorator
 
   def tree_node(current=false)
     link = current ? h.content_tag(:strong, name) : name
-    h.link_to(link, self)
+    icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
+    icon + h.link_to(link, self) + children_count + analyses_count + bibs_count + files_count
+  end
+
+  def children_count
+    icon_with_count("cloud", children.count)
+  end
+
+  def analyses_count
+    icon_with_count("stats", analyses.count)
+  end
+
+  def bibs_count
+    icon_with_count("book", bibs.count)
+  end
+
+  def files_count
+    icon_with_count("file", attachment_files.count)
+  end
+
+  private
+
+  def icon_with_count(icon, count)
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}") + h.content_tag(:span, count) if count.nonzero?
   end
 end
