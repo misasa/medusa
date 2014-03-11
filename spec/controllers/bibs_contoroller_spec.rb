@@ -55,6 +55,32 @@ describe BibsController do
     before { bib }
     it { expect { delete :destroy, id: bib.id }.to change(Bib, :count).by(-1) }
   end
+  
+  describe "POST link_stone_by_global_id" do
+    let(:bib) { FactoryGirl.create(:bib) }
+    let(:stone) { FactoryGirl.create(:stone) }
+    before do
+      request.env["HTTP_REFERER"]  = "where_i_came_from"
+      stone.record_property.global_id = "test_global_id"
+      stone.record_property.save
+      post :link_stone_by_global_id, id: bib.id, global_id: stone.global_id
+    end
+    it { expect(bib.stones[0]).to eq(stone)}
+    it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+  end
+  
+  describe "POST link_box_by_global_id" do
+    let(:bib) { FactoryGirl.create(:bib) }
+    let(:box) { FactoryGirl.create(:box) }
+    before do
+      request.env["HTTP_REFERER"]  = "where_i_came_from"
+      box.record_property.global_id = "test_global_id"
+      box.record_property.save
+      post :link_box_by_global_id, id: bib.id, global_id: box.global_id
+    end
+    it { expect(bib.boxes[0]).to eq(box)}
+    it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+  end
 
   describe "POST upload" do
     let(:bib) { FactoryGirl.create(:bib) }

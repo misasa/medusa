@@ -23,7 +23,7 @@ describe AttachmentFilesController do
       attachment_file
       allow(controller).to receive(:send_file).and_return{controller.render :nothing => true}
     end
-    it { expect(controller).to receive(:send_file).with("public" + attachment_file.path, filename: attachment_file.data_file_name, type: attachment_file.data_content_type) }
+    it { expect(controller).to receive(:send_file).with("#{Rails.root}/public#{attachment_file.path}", filename: attachment_file.data_file_name, type: attachment_file.data_content_type) }
   end
 
   describe "POST link_stone_by_global_id" do
@@ -36,6 +36,19 @@ describe AttachmentFilesController do
       post :link_stone_by_global_id,id:obj.id,global_id: stone.global_id
     end
     it { expect(obj.stones[0]).to eq(stone)}
+    it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+  end
+
+  describe "POST link_bib_by_global_id" do
+    let(:obj){FactoryGirl.create(:attachment_file) }
+    let(:bib){FactoryGirl.create(:bib) }
+    before do
+      request.env["HTTP_REFERER"]  = "where_i_came_from"
+      bib.record_property.global_id = "test_global_id"
+      bib.record_property.save
+      post :link_bib_by_global_id,id:obj.id,global_id: bib.global_id
+    end
+    it { expect(obj.bibs[0]).to eq(bib)}
     it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
   end
 
