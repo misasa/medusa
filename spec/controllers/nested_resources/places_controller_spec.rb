@@ -12,7 +12,7 @@ describe NestedResources::PlacesController do
       parent
       child
     end
-    it {expect {delete :destroy, parent_resource: :bib, bib_id: parent, id: child.id}.to change(Place, :count).by(0)}
+    it {expect {delete :destroy, parent_resource: :bib, bib_id: parent, id: child.id, association_name: :places}.to change(Place, :count).by(0)}
     context "parent bib" do
       let(:parent){FactoryGirl.create(:bib) }
       before do
