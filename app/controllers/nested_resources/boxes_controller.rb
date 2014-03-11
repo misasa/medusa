@@ -11,7 +11,7 @@ class NestedResources::BoxesController < ApplicationController
   def create
     @box = Box.new(box_params)
     @parent.boxes << @box
-    respond_with @stone, location: request.referer
+    respond_with @box, location: request.referer
   end
 
   def update
