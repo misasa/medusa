@@ -8,19 +8,22 @@ module OutputPdf
   end
 
   def build_card
-    resource = self
     report = ThinReports::Report.new(layout: report_template("card"))
-    report.start_new_page do
-      item(:name).value(resource.try(:name))
-      item(:global_id).value(resource.global_id)
-      item(:qr_code).src(resource.qr_image)
-      item(:image).value(resource.primary_attachment_file_path)
+    report.start_new_page do |page|
+      set_card_data(page)
     end
     report
   end
 
   def report_template(type)
     File.join(Rails.root, "app", "assets", "reports", "#{type}_template.tlf")
+  end
+
+  def set_card_data(page)
+    page.item(:name).value(self.try(:name))
+    page.item(:global_id).value(global_id)
+    page.item(:qr_code).src(qr_image)
+    page.item(:image).value(primary_attachment_file_path)
   end
 
   def qr_image
@@ -36,13 +39,23 @@ module OutputPdf
   end
 
   module ClassMethods
-    def build_bundle_card(resources)
+    def build_a_four(resources)
       report = ThinReports::Report.new(layout: resources.first.report_template("bundle"))
       divide_by_three(resources).each do |resource_1, resource_2, resource_3|
         report.list.add_row do |row|
-          set_card_data(row, 1, resource_1)
-          set_card_data(row, 2, resource_2)
-          set_card_data(row, 3, resource_3)
+          set_bundle_data(row, 1, resource_1)
+          set_bundle_data(row, 2, resource_2)
+          set_bundle_data(row, 3, resource_3)
+        end
+      end
+      report
+    end
+
+    def build_cards(resources)
+      report = ThinReports::Report.new(layout: resources.first.report_template("card"))
+      resources.each do |resource|
+        report.start_new_page do |page|
+          resource.set_card_data(page)
         end
       end
       report
@@ -56,7 +69,7 @@ module OutputPdf
       ary
     end
 
-    def set_card_data(row, num, resource)
+    def set_bundle_data(row, num, resource)
       targets = ["name_#{num}", "global_id_#{num}", "qr_code_#{num}", "image_#{num}"].map!(&:to_sym)
       if resource
         row.item(targets[0]).value(resource.try(:name))

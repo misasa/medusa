@@ -1,8 +1,7 @@
 <% if @stones.present? %>
   <div class="text-right">
-    A4<%= link_to(image_tag("icon_pdf_1.png", size: "18x18"),
-                   download_bundle_card_stones_path(ids: @stones.pluck(:id))
-                   ) %>
+    <%= link_to(image_tag("icon_pdf_1.png", size: "20x20"), download_bundle_card_stones_path(ids: @stones.pluck(:id)) ) %>
+    and <%= link_to("A4", download_bundle_card_stones_path(ids: @stones.pluck(:id), a4: true)) %>
   </div>
 <% end %>
 

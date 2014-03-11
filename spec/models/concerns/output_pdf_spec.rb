@@ -32,17 +32,11 @@ describe OutputPdf do
 
   describe "build_card" do
     let(:obj) { klass.create(name: "foo", global_id: "1234") }
-    before do
-      allow(obj).to receive(:qr_image)
-      allow(obj).to receive(:primary_attachment_file_path)
-    end
+    before { allow(obj).to receive(:set_card_data) }
     after { obj.build_card }
     it { expect(ThinReports::Report).to receive(:new).and_call_original }
     it { expect(obj).to receive(:report_template).with("card").and_call_original }
-    it { expect(obj).to receive(:try).with(:name) }
-    it { expect(obj).to receive(:global_id) }
-    it { expect(obj).to receive(:qr_image) }
-    it { expect(obj).to receive(:primary_attachment_file_path) }
+    it { expect(obj).to receive(:set_card_data) }
     it { expect(obj.build_card.class).to eq ThinReports::Report::Base }
   end
 
@@ -51,6 +45,40 @@ describe OutputPdf do
     let(:obj) { klass.create(name: "foo", global_id: "1234") }
     let(:type) { "bar" }
     it { expect(subject).to eq "#{Rails.root}/app/assets/reports/bar_template.tlf" }
+  end
+
+  describe "set_card_data" do
+    after { obj.set_card_data(page) }
+    let(:obj) { klass.create(name: name, global_id: global_id) }
+    let(:name) { "foo" }
+    let(:global_id) { "1234" }
+    let(:page) { double(:page) }
+    let(:item_name) { double(:item_name) }
+    let(:item_global_id) { double(:item_global_id) }
+    let(:item_qr_code) { double(:item_qr_code) }
+    let(:item_image) { double(:item_image) }
+    let(:qr_image) { double(:qr_image) }
+    let(:primary_attachment_file_path) { double(:primary_attachment_file_path) }
+    before do
+      allow(obj).to receive(:qr_image).and_return(qr_image)
+      allow(obj).to receive(:primary_attachment_file_path).and_return(primary_attachment_file_path)
+      allow(page).to receive(:item).with(:name).and_return(item_name)
+      allow(page).to receive(:item).with(:global_id).and_return(item_global_id)
+      allow(page).to receive(:item).with(:qr_code).and_return(item_qr_code)
+      allow(page).to receive(:item).with(:image).and_return(item_image)
+      allow(item_name).to receive(:value).with(name)
+      allow(item_global_id).to receive(:value).with(global_id)
+      allow(item_qr_code).to receive(:src).with(qr_image)
+      allow(item_image).to receive(:value).with(primary_attachment_file_path)
+    end
+    it { expect(page).to receive(:item).with(:name) }
+    it { expect(item_name).to receive(:value).with(name) }
+    it { expect(page).to receive(:item).with(:global_id) }
+    it { expect(item_global_id).to receive(:value).with(global_id) }
+    it { expect(page).to receive(:item).with(:qr_code) }
+    it { expect(item_qr_code).to receive(:src).with(qr_image) }
+    it { expect(page).to receive(:item).with(:image) }
+    it { expect(item_image).to receive(:value).with(primary_attachment_file_path) }
   end
 
   describe "qr_image" do
@@ -89,8 +117,8 @@ describe OutputPdf do
     end
   end
 
-  describe "build_bundle_card" do
-    after { klass.build_bundle_card(resources) }
+  describe "build_a_four" do
+    after { klass.build_a_four(resources) }
     let(:resources) { [obj] }
     let(:obj) { klass.create(name: "foo", global_id: "1234") }
     before do
@@ -99,8 +127,19 @@ describe OutputPdf do
     it { expect(ThinReports::Report).to receive(:new).and_call_original }
     it { expect(obj).to receive(:report_template).with("bundle").and_call_original }
     it { expect(klass).to receive(:divide_by_three).with(resources).and_call_original }
-    it { expect(klass).to receive(:set_card_data).exactly(3).times }
-    it { expect(klass.build_bundle_card(resources).class).to eq ThinReports::Report::Base }
+    it { expect(klass).to receive(:set_bundle_data).exactly(3).times }
+    it { expect(klass.build_a_four(resources).class).to eq ThinReports::Report::Base }
+  end
+
+  describe "build_cards" do
+    after { klass.build_cards(resources) }
+    let(:resources) { [obj] }
+    let(:obj) { klass.create(name: "foo", global_id: "1234") }
+    before { allow(obj).to receive(:set_card_data) }
+    it { expect(ThinReports::Report).to receive(:new).and_call_original }
+    it { expect(obj).to receive(:report_template).with("card").and_call_original }
+    it { expect(obj).to receive(:set_card_data) }
+    it { expect(klass.build_cards(resources).class).to eq ThinReports::Report::Base }
   end
 
   describe "divide_by_three" do
@@ -127,8 +166,8 @@ describe OutputPdf do
     end
   end
 
-  describe "set_card_data" do
-    after { klass.send(:set_card_data, row, num, resource) }
+  describe "set_bundle_data" do
+    after { klass.send(:set_bundle_data, row, num, resource) }
     let(:row) { double(:row) }
     let(:num) { 1 }
     let(:row_item) { double(:item) }

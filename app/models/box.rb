@@ -1,5 +1,6 @@
 class Box < ActiveRecord::Base
   include HasRecordProperty
+  include OutputPdf
 
   acts_as_taggable
   with_recursive

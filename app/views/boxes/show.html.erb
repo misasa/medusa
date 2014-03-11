@@ -24,7 +24,9 @@
       </div>
       <div class="btn-group btn-group-sm">
         <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-tag"></span></button>
-        <button type="button" class="btn btn-default"><span class="glyphicon glyphicon-file"></span></button>
+        <%= link_to download_card_box_path(@box), class: "btn btn-default" do %>
+          <span class="glyphicon glyphicon-file"></span>
+        <% end %>
       </div>
     </div>
     <img>

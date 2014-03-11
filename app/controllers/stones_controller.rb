@@ -67,7 +67,7 @@ class StonesController < ApplicationController
   end
 
   def download_bundle_card
-    report = Stone.build_bundle_card(@stones)
+    report = (params[:a4] == "true") ? Stone.build_a_four(@stones) : Stone.build_cards(@stones)
     send_data(report.generate, filename: "stones.pdf", type: "application/pdf")
   end
 
