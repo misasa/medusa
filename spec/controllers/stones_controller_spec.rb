@@ -63,16 +63,21 @@ describe StonesController do
     it {expect(obj3.name).to eq obj3name}
   end
 
+  # send_data test returns unexpected object.
   pending "GET download_card" do
     after { get :download_card, id: stone.id }
     let(:stone) { FactoryGirl.create(:stone) }
     before do
       stone
-      allow(stone).to receive(:build_report).and_return(double(:report))
+      allow(stone).to receive(:build_card).and_return(double(:report))
       allow(double(:report)).to receive(:generate).and_return(double(:generate))
       allow(controller).to receive(:send_data).and_return{controller.render nothing: true}
     end
-    it { expect(controller).to receive(:send_data).with(double(:generate), filename: "stone_card.pdf", type: "application/pdf") }
+    it { expect(controller).to receive(:send_data).with(double(:generate), filename: "stone.pdf", type: "application/pdf") }
+  end
+
+  describe "GET download_bundle_card" do
+    # send_data
   end
 
 end

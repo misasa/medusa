@@ -1,6 +1,6 @@
 class Stone < ActiveRecord::Base
   include HasRecordProperty
-  include OutputReport
+  include OutputPdf
 
   acts_as_taggable
   with_recursive

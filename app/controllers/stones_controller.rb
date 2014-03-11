@@ -1,7 +1,7 @@
 class StonesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload, :bundle_edit, :bundle_update]
-  before_action :find_resources, only: [:bundle_edit, :bundle_update]
+  before_action :find_resource, except: [:index, :create, :upload, :bundle_edit, :bundle_update, :download_card, :download_bundle_card]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card]
   load_and_authorize_resource
 
   def index
@@ -62,8 +62,13 @@ class StonesController < ApplicationController
   end
 
   def download_card
-    report = Stone.find(params[:id]).build_report
-    send_data(report.generate, filename: "stone_card.pdf", type: "application/pdf")
+    report = Stone.find(params[:id]).build_card
+    send_data(report.generate, filename: "stone.pdf", type: "application/pdf")
+  end
+
+  def download_bundle_card
+    report = Stone.build_bundle_card(@stones)
+    send_data(report.generate, filename: "stones.pdf", type: "application/pdf")
   end
 
   private
