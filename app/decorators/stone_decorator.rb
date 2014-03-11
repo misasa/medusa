@@ -7,8 +7,13 @@ class StoneDecorator < Draper::Decorator
   end
 
   def path
-    # TODO: pending
-    "/foo/baa/baz/me"
+    nodes = []
+    if box
+      nodes += box.ancestors.map { |b| box_node(b) }
+      nodes += [box_node(box)]
+    end
+    nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + "me"]
+    h.raw(nodes.join("／"))
   end
 
   def primary_picture(width: 250, height: 250)
@@ -44,6 +49,10 @@ class StoneDecorator < Draper::Decorator
   end
 
   private
+
+  def box_node(box)
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + h.link_to(box.name, box)
+  end
 
   def icon_with_count(icon, count)
     h.content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}") + h.content_tag(:span, count) if count.nonzero?
