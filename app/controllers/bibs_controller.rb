@@ -49,6 +49,11 @@ class BibsController < ApplicationController
     @bib.stones << Stone.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
     redirect_to :back
   end
+  
+  def link_box_by_global_id
+    @bib.boxes << Box.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
+    redirect_to :back
+  end
 
   def bundle_edit
     respond_with @bibs
