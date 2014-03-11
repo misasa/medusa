@@ -5,27 +5,20 @@
     scroll: false,
     _create: function() {
       var self = this;
+      this.canvas = this.element.find("svg.spot-canvas");
+      this.thumbnails = this.element.find("div.spot-thumbnails");
       this.options = $.extend({
-        width: this.element.attr("width"),
-        height: this.element.attr("height")
+        width: this.canvas.attr("width"),
+        height: this.canvas.attr("height")
       }, this.options);
-      self._addGroup();
-      self._addImage();
-      self._addSight();
-      self._addZoomInButton();
-      self._addZoomOutButton();
-      self.element.mousedown(function(e) {
-        self._startScroll(e);
-        return false;
-      });
-      self.element.mouseup(function(e) { self._stopScroll(e) });
-      self.element.mouseout(function(e) { self._stopScroll(e) });
-      self.element.mousemove(function(e) {
-        self._scroll(e);
-        return false;
-      });
+      this._initCanvas();
+      this._initThumbnails();
     },
     loadImage: function(path) {
+      var self = this,  image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+      $(this.group).empty();
+      this.image = image;
+      this.group.appendChild(image);
       this.image.setAttributeNS("http://www.w3.org/1999/xlink", "href", path);
       this.image.setAttribute("x", 0);
       this.image.setAttribute("y", 0);
@@ -35,6 +28,12 @@
       this.translateY = 0;
       this.scale = 1;
       this.group.setAttribute("transform", "translate(" + this.translateX + "," + this.translateY + ") scale(" + this.scale + ")");
+      $(this.image).dblclick(function(e) {
+        var offsetX = e.pageX - $(this).offset().left, offsetY = e.pageY - $(this).offset().top,
+            x = (self.options.width) / 2 - offsetX, y = (self.options.height) / 2 - offsetY;
+        self.translate(x, y);
+        return false;
+      });
     },
     addSpot: function(cx, cy, r, options) {
       var circle = this._createSvgElement("circle", $.extend({}, options, {
@@ -44,48 +43,59 @@
       }));
       this.group.appendChild(circle);
     },
+    translate: function(x, y) {
+      this.transform(x, y, this.scale);
+    },
+    transform: function(x, y, scale) {
+      this.translateX = x;
+      this.translateY = y;
+      this.scale = scale;
+      this.group.setAttribute("transform", "translate(" + x + "," + y + ") scale(" + scale + ")");
+    },
     zoomIn: function() {
       var width = parseFloat(this.image.getAttribute("width")),
           height = parseFloat(this.image.getAttribute("height"));
-      this.translateX = (this.translateX * 2) - (width / 2);
-      this.translateY = (this.translateY * 2) - (height / 2);
-      this.scale = this.scale * 2;
-      this.group.setAttribute("transform", "translate(" + this.translateX + "," + this.translateY + ") scale(" + this.scale + ")");
+          x = (this.translateX * 2) - (width / 2), y = (this.translateY * 2) - (height / 2),
+          scale = this.scale * 2;
+      this.transform(x, y, scale);
     },
     zoomOut: function() {
       var width = parseFloat(this.image.getAttribute("width")),
           height = parseFloat(this.image.getAttribute("height"));
-      this.translateX = (this.translateX + width / 2) / 2;
-      this.translateY = (this.translateY + height / 2) / 2;
-      this.scale = this.scale / 2;
-      this.group.setAttribute("transform", "translate(" + this.translateX + "," + this.translateY + ") scale(" + this.scale + ")");
+          x = (this.translateX + width / 2) / 2, y = (this.translateY + height / 2) / 2,
+          scale = this.scale / 2;
+      this.transform(x, y, scale);
+    },
+    _initCanvas: function() {
+      var self = this;
+      self._addGroup();
+      self._addSight();
+      self._addZoomButtons();
     },
     _addGroup: function() {
       var group = this._createSvgElement("g");
       this.group = group;
-      this.element.append(group);
-    },
-    _addImage: function() {
-      var image = document.createElementNS("http://www.w3.org/2000/svg", "image");
-      this.image = image;
-      this.group.appendChild(image);
-      this.loadImage(this.element.data("image"));
+      this.canvas.append(group);
     },
     _addSight: function() {
-      this.element.append(this._createLine({
+      this.canvas.append(this._createLine({
         "x1": this.options.width / 2,
         "y1": 0,
         "x2": this.options.width / 2,
         "y2": this.options.height,
         "style": "stroke:red"
       }));
-      this.element.append(this._createLine({
+      this.canvas.append(this._createLine({
         "x1": 0,
         "y1": this.options.height / 2,
         "x2": this.options.width,
         "y2": this.options.height / 2,
         "style": "stroke:red"
       }));
+    },
+    _addZoomButtons: function() {
+      this._addZoomInButton();
+      this._addZoomOutButton();
     },
     _addZoomInButton: function() {
       var self = this;
@@ -96,14 +106,14 @@
         "height": 30,
         "fill": "#EEFFFF"
       })
-      this.element.append(this.zoomInButton);
-      this.element.append(this._createLine({
+      this.canvas.append(this.zoomInButton);
+      this.canvas.append(this._createLine({
         "x1": 15,
         "y1": 25,
         "x2": 35,
         "y2": 25
       }));
-      this.element.append(this._createLine({
+      this.canvas.append(this._createLine({
         "x1": 25,
         "y1": 15,
         "x2": 25,
@@ -120,8 +130,8 @@
         "height": 30,
         "fill": "#EEFFFF"
       });
-      this.element.append(this.zoomOutButton);
-      this.element.append(this._createLine({
+      this.canvas.append(this.zoomOutButton);
+      this.canvas.append(this._createLine({
         "x1": 15,
         "y1": 65,
         "x2": 35,
@@ -167,6 +177,21 @@
         this.pageX = e.pageX;
         this.pageY = e.pageY;
       }
+    },
+    _initThumbnails: function() {
+      var self = this;
+      $(self.thumbnails).on("ajax:success", "a.thumbnail", function(event, data, status) {
+        self.loadImage($(this).find("img").attr("src"));
+        $.each(data, function(index, spot) {
+          self.addSpot(spot.spot_x, spot.spot_y, spot.radius_in_percent, {
+            fill: spot.fill_color,
+            "fill-opacity": spot.opacity,
+            stroke: spot.stroke_color,
+            "stroke-width": spot.stroke_width
+          });
+        });
+      });
+      self.thumbnails.find("a.thumbnail").first().click();
     }
   });
 }) (jQuery);
