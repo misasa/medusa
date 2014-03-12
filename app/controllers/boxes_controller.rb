@@ -68,7 +68,8 @@ class BoxesController < ApplicationController
   end
 
   def download_bundle_card
-    report = (params[:a4] == "true") ? Box.build_a_four(@boxes) : Box.build_cards(@boxes)
+    method = (params[:a4] == "true") ? :build_a_four : :build_cards
+    report = Box.send(method, @boxes)
     send_data(report.generate, filename: "boxes.pdf", type: "application/pdf")
   end
 

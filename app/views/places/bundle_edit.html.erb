@@ -1,3 +1,10 @@
+<% if @places.present? %>
+  <div class="text-right">
+    <%= link_to(image_tag("icon_pdf_1.png", size: "20x20"), download_bundle_card_places_path(ids: @places.pluck(:id)) ) %>
+    and <%= link_to("A4", download_bundle_card_places_path(ids: @places.pluck(:id), a4: true)) %>
+  </div>
+<% end %>
+
 <%= form_for Place.new, url: bundle_update_places_path do |f| %>
 <table class="table table-condensed table-striped">
   <thead>
