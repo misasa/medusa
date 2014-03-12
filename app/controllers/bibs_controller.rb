@@ -1,7 +1,7 @@
 class BibsController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload,:bundle_edit, :bundle_update]
-  before_action :find_resources, only: [:bundle_edit, :bundle_update]
+  before_action :find_resource, except: [:index, :create, :upload,:bundle_edit, :bundle_update, :download_bundle_card, :download_label, :download_bundle_label]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label]
   load_and_authorize_resource
 
   def index
@@ -59,6 +59,16 @@ class BibsController < ApplicationController
     @bib.places << Place.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
     redirect_to :back
   end
+  
+  def link_analysis_by_global_id
+    @bib.analyses << Analysis.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
+    redirect_to :back
+  end
+  
+  def link_attachment_file_by_global_id
+    @bib.attachment_files << AttachmentFile.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
+    redirect_to :back
+  end
 
   def bundle_edit
     respond_with @bibs
@@ -67,6 +77,22 @@ class BibsController < ApplicationController
   def bundle_update
     @bibs.each { |bib| bib.update_attributes(bib_params.only_presence) }
     render :bundle_edit
+  end
+
+  def download_bundle_card
+    method = (params[:a4] == "true") ? :build_a_four : :build_cards
+    report = Bib.send(method, @bibs)
+    send_data(report.generate, filename: "bibs.pdf", type: "application/pdf")
+  end
+
+  def download_label
+    bib = Bib.find(params[:id])
+    send_data(bib.build_label, filename: "bib_#{bib.id}.csv", type: "text/csv")
+  end
+
+  def download_bundle_label
+    label = Bib.build_bundle_label(@bibs)
+    send_data(label, filename: "bibs.csv", type: "text/csv")
   end
 
   private

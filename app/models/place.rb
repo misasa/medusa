@@ -1,5 +1,7 @@
 class Place < ActiveRecord::Base
   include HasRecordProperty
+  include OutputPdf
+  include OutputCsv
 
   acts_as_mappable
 

@@ -1,7 +1,7 @@
 class BoxesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload, :bundle_edit, :bundle_update, :download_card, :download_bundle_card]
-  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card]
+  before_action :find_resource, except: [:index, :create, :upload, :bundle_edit, :bundle_update, :download_card, :download_bundle_card, :download_label, :download_bundle_label]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label]
   load_and_authorize_resource
 
   def index
@@ -68,8 +68,19 @@ class BoxesController < ApplicationController
   end
 
   def download_bundle_card
-    report = (params[:a4] == "true") ? Box.build_a_four(@boxes) : Box.build_cards(@boxes)
+    method = (params[:a4] == "true") ? :build_a_four : :build_cards
+    report = Box.send(method, @boxes)
     send_data(report.generate, filename: "boxes.pdf", type: "application/pdf")
+  end
+
+  def download_label
+    box = Box.find(params[:id])
+    send_data(box.build_label, filename: "box_#{box.id}.csv", type: "text/csv")
+  end
+
+  def download_bundle_label
+    label = Box.build_bundle_label(@boxes)
+    send_data(label, filename: "boxes.csv", type: "text/csv")
   end
 
   private
