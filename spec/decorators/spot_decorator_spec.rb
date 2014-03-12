@@ -29,5 +29,4 @@ describe SpotDecorator do
       it {expect(subject).to eq "<a href=\"/bibs/#{bib.id}\">test bib</a>"}
     end
   end
-
 end

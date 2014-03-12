@@ -8,6 +8,6 @@ FactoryGirl.define do
     data_file_size 12345
     data_updated_at DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
     original_geometry "123x123"
-    affine_matrix "affine_matrix１"
+    affine_matrix [1,0,0,0,1,0,0,0,1]
   end
 end

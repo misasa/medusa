@@ -96,7 +96,7 @@ class AttachmentFilesController < ApplicationController
       :md5hash,
       :data,
       :original_geometry,
-      :affine_matrix,
+      :affine_matrix_in_string,
       :user_id,
       :group_id,
       record_property_attributes: [
