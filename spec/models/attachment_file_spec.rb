@@ -88,4 +88,33 @@ describe AttachmentFile do
       it { expect(subject).to eq false }
     end
   end
+
+  describe ".original_width" do
+    let(:attachment_file){FactoryGirl.create(:attachment_file)}
+    subject{ attachment_file.original_width }
+    before{attachment_file.original_geometry = original_geometry}
+    context "original_geometry is blank" do
+      let(:original_geometry){nil}
+      it {expect(subject).to eq nil}
+    end
+    context "original_geometry is not blank" do
+      let(:original_geometry){"111x222"}
+      it {expect(subject).to eq 111}
+    end
+  end
+
+  describe ".original_height" do
+    let(:attachment_file){FactoryGirl.create(:attachment_file)}
+    subject{ attachment_file.original_height }
+    before{attachment_file.original_geometry = original_geometry}
+    context "original_geometry is blank" do
+      let(:original_geometry){nil}
+      it {expect(subject).to eq nil}
+    end
+    context "original_geometry is not blank" do
+      let(:original_geometry){"111x222"}
+      it {expect(subject).to eq 222}
+    end
+  end
+
 end

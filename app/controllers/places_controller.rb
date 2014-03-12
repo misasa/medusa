@@ -1,8 +1,7 @@
 class PlacesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create,:bundle_edit, :bundle_update, :download_bundle_card]
-  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card]
-
+  before_action :find_resource, except: [:index, :create,:bundle_edit, :bundle_update, :download_bundle_card, :download_label, :download_bundle_label]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label]
   load_and_authorize_resource
 
   def index
@@ -72,6 +71,16 @@ class PlacesController < ApplicationController
     method = (params[:a4] == "true") ? :build_a_four : :build_cards
     report = Place.send(method, @places)
     send_data(report.generate, filename: "places.pdf", type: "application/pdf")
+  end
+
+  def download_label
+    place = Place.find(params[:id])
+    send_data(place.build_label, filename: "place_#{place.id}.csv", type: "text/csv")
+  end
+
+  def download_bundle_label
+    label = Place.build_bundle_label(@places)
+    send_data(label, filename: "places.csv", type: "text/csv")
   end
 
   private

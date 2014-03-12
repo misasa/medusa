@@ -1,30 +1,40 @@
-<ul>
-  <% unless @attachment_file.attachings.empty? %>
-    <li>linked to
-    <% @attachment_file.attachings.each do |attaching| %>
-       <% attachable = attaching.attachable %>
-       <% if attachable %>
-         <% controller = attaching.attachable.class.to_s.downcase.pluralize %>
-         <%=link_to attachable.name, controller: controller, action: :show , id: attachable.id %>
+<div class="display-type">
+  <div id="display-type-html">
+    <ul>
+      <% unless @attachment_file.attachings.empty? %>
+        <li>linked to
+        <% @attachment_file.attachings.each do |attaching| %>
+           <% attachable = attaching.attachable %>
+           <% if attachable %>
+             <% controller = attaching.attachable.class.to_s.downcase.pluralize %>
+             <%=link_to attachable.name, controller: controller, action: :show , id: attachable.id %>
+          <% end %>
+        <% end %>
+        </li>
       <% end %>
-    <% end %>
-    </li>
-  <% end %>
-  <%= li_if_exist("name: ", @attachment_file.name) %>
-  <%= li_if_exist("description: ", @attachment_file.description) %>
-  <li>content-type: <%= @attachment_file.data_content_type %></li>
-  <li>size: <%= number_to_human_size(@attachment_file.data_file_size) %></li>
-  <% if @attachment_file.image? %>
-    <li>geometry: <%= @attachment_file.original_width.to_s + "x" + @attachment_file.original_height.to_s %> pix<%= ", " + sprintf("%.1f", @attachment_file.width_in_um) + "x" + sprintf("%.1f", @attachment_file.height_in_um) + "&#181;m" unless @attachment_file.affine_matrix.blank? %> </li>
-    <% if @attachment_file.affine_matrix %>
-      <li>affine matrix: <%= @attachment_file.affine_matrix_in_string %></li>
-    <% end %>
-  <% end %>
-  <li>modified at <%= difference_from_now(@attachment_file.updated_at) -%></li>
-</ul>
+      <%= li_if_exist("name: ", @attachment_file.name) %>
+      <%= li_if_exist("description: ", @attachment_file.description) %>
+      <li>content-type: <%= @attachment_file.data_content_type %></li>
+      <li>size: <%= number_to_human_size(@attachment_file.data_file_size) %></li>
+      <% if @attachment_file.image? %>
+        <li>geometry: <%= sprintf("%sx%s pix, %.1fx%.1f µm",@attachment_file.original_width.to_s,@attachment_file.original_height.to_s , @attachment_file.width_in_um,@attachment_file.height_in_um) unless @attachment_file.affine_matrix.blank? %> </li>
+        <% unless @attachment_file.affine_matrix.blank? %>
+          <li>affine matrix: <%= @attachment_file.affine_matrix_in_string %></li>
+        <% end %>
+      <% end %>
+      <li>modified at <%= difference_from_now(@attachment_file.updated_at) -%></li>
+    </ul>
 
-<% if @attachment_file.image? && @attachment_file.spots.size  %>
-  <%= "#{@attachment_file.spots.size}" + "spot".pluralize %> on image.
-  <%= render partial: "spot" %>
-<% end %>
-
+    <% if @attachment_file.image? && @attachment_file.spots.size  %>
+      <%= "#{@attachment_file.spots.size}" + "spot".pluralize %> on image.
+      <%= render partial: "spot" %>
+    <% end %>
+</div>
+  <div class="hidden" id="display-type-tex">
+    <pre><code><%= @attachment_file.to_tex %></code></pre>
+  </div>
+</div>
+<div class="btn-group">
+  <a href="#display-type-html" class="btn radio-button-group">html</a>
+  <a href="#display-type-tex" class="btn radio-button-group">tex</a>
+</div>

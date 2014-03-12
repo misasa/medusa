@@ -8,6 +8,12 @@ class NestedResources::BibsController < ApplicationController
     respond_with @bibs
   end
 
+  def create
+    @bib = Bib.new(bib_params)
+    @parent.bibs << @bib
+    respond_with @bib, location: request.referer
+  end
+
   def update
     @bib = Bib.find(params[:id])
     @parent.bibs << @bib
@@ -22,6 +28,40 @@ class NestedResources::BibsController < ApplicationController
   end
 
   private
+
+  def bib_params
+    params.require(:bib).permit(
+      :entry_type,
+      :abbreviation,
+      :name,
+      :journal,
+      :year,
+      :volume,
+      :number,
+      :pages,
+      :month,
+      :note,
+      :key,
+      :link_url,
+      :doi,
+      :user_id,
+      :group_id,
+      author_ids: [],
+      record_property_attributes: [
+        :global_id,
+        :user_id,
+        :group_id,
+        :owner_readable,
+        :owner_writable,
+        :group_readable,
+        :group_writable,
+        :guest_readable,
+        :guest_writable,
+        :published,
+        :published_at
+      ]
+    )
+  end
 
   def find_resource
     resource_name = params[:parent_resource]

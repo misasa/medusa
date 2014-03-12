@@ -6,6 +6,13 @@
       <td><%= f.text_field :target_uid, class: "form-control input-sm" %></td>
       <td>)</td>
       <td>
+        <%= f.hidden_field :spot_x ,value: "0" %>
+        <%= f.hidden_field :spot_y ,value: "0" %>
+        <%= f.hidden_field :radius_in_percent ,value: "2" %>
+        <%= f.hidden_field :stroke_color ,value: "blue" %>
+        <%= f.hidden_field :fill_color ,value: "blue" %>
+        <%= f.hidden_field :opacity ,value: "0" %>
+        <%= f.hidden_field :with_cross ,value: "false" %>
         <%= f.button title:"add new spot" ,class: "btn btn-default" do %>
           <span class="glyphicon glyphicon-save"></span>
         <% end %>
