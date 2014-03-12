@@ -13,9 +13,11 @@ Medusa::Application.routes.draw do
   concern :reportable do
     member do
       get :download_card
+      get :download_label
     end
     collection do
       get :download_bundle_card
+      get :download_bundle_label
     end
   end
 
