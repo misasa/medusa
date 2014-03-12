@@ -87,12 +87,14 @@ Medusa::Application.routes.draw do
       post :link_box_by_global_id
       post :link_place_by_global_id
       post :link_analysis_by_global_id
+      post :link_attachment_file_by_global_id
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
     resources :stones, only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "bib", association_name: "stones" }
     resources :boxes, only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "bib", association_name: "boxes" }
     resources :places, only: [:index, :create, :update, :destroy], controller: "nested_resources/places", defaults: { parent_resource: "bib", association_name: "places" }
     resources :analyses, only: [:index, :create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "bib", association_name: "analyses" }
+    resources :attachment_files, only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "bib" }
   end
 
   resources :attachment_files, concerns: :bundleable , except: [:new] do

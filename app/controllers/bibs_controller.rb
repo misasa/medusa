@@ -64,6 +64,11 @@ class BibsController < ApplicationController
     @bib.analyses << Analysis.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
     redirect_to :back
   end
+  
+  def link_attachment_file_by_global_id
+    @bib.attachment_files << AttachmentFile.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
+    redirect_to :back
+  end
 
   def bundle_edit
     respond_with @bibs
