@@ -1,7 +1,7 @@
 class BibsController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload,:bundle_edit, :bundle_update]
-  before_action :find_resources, only: [:bundle_edit, :bundle_update]
+  before_action :find_resource, except: [:index, :create, :upload,:bundle_edit, :bundle_update, :download_bundle_card]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card]
   load_and_authorize_resource
 
   def index
@@ -67,6 +67,12 @@ class BibsController < ApplicationController
   def bundle_update
     @bibs.each { |bib| bib.update_attributes(bib_params.only_presence) }
     render :bundle_edit
+  end
+
+  def download_bundle_card
+    method = (params[:a4] == "true") ? :build_a_four : :build_cards
+    report = Bib.send(method, @bibs)
+    send_data(report.generate, filename: "bibs.pdf", type: "application/pdf")
   end
 
   private

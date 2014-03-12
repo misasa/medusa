@@ -1,3 +1,10 @@
+<% if @bibs.present? %>
+  <div class="text-right">
+    <%= link_to(image_tag("icon_pdf_1.png", size: "20x20"), download_bundle_card_bibs_path(ids: @bibs.pluck(:id)) ) %>
+    and <%= link_to("A4", download_bundle_card_bibs_path(ids: @bibs.pluck(:id), a4: true)) %>
+  </div>
+<% end %>
+
 <%= form_for Bib.new, url: bundle_update_bibs_path do |f| %>
 <table class="table table-condensed table-striped">
   <thead>

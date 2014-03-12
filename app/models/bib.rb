@@ -1,5 +1,6 @@
 class Bib < ActiveRecord::Base
   include HasRecordProperty
+  include OutputPdf
 
   has_many :bib_authors
   has_many :authors, through: :bib_authors
