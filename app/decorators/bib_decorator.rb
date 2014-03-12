@@ -16,39 +16,35 @@ class BibDecorator < Draper::Decorator
   end
   
   def article_tex
-    bib = object
     bib_array = []
-    authors_name = bib_author_lists
-    bib_array << "\tauthor = \"#{authors_name}\""
-    bib_array << "\tname = \"#{bib.name}\""
-    bib_array << "\tjournal = \"#{bib.journal}\""
-    bib_array << "\tyear = \"#{bib.year}\""
-    bib_array << "\tnumber = \"#{bib.number}\"" if bib.number.present?
-    bib_array << "\tmonth = \"#{bib.month}\"" if bib.month.present?
-    bib_array << "\tvolume = \"#{bib.volume}\"" if bib.volume.present?
-    bib_array << "\tpages = \"#{bib.pages}\"" if bib.pages.present?
-    bib_array << "\tnote = \"#{bib.note}\"" if bib.note.present?
-    bib_array << "\tdoi = \"#{bib.doi}\"" if bib.doi.present?
-    bib_array << "\tkey = \"#{bib.key}\"" if bib.key.present?
+    bib_array << "\tauthor = \"#{bib_author_lists}\""
+    bib_array << "\tname = \"#{name}\""
+    bib_array << "\tjournal = \"#{journal}\""
+    bib_array << "\tyear = \"#{year}\""
+    bib_array << "\tnumber = \"#{number}\"" if number.present?
+    bib_array << "\tmonth = \"#{month}\"" if month.present?
+    bib_array << "\tvolume = \"#{volume}\"" if volume.present?
+    bib_array << "\tpages = \"#{pages}\"" if pages.present?
+    bib_array << "\tnote = \"#{note}\"" if note.present?
+    bib_array << "\tdoi = \"#{doi}\"" if doi.present?
+    bib_array << "\tkey = \"#{key}\"" if key.present?
     
     bib_array.join(",\n")
   end
   
   def misc_tex
-    bib = object
     bib_array = []
-    authors_name = bib_author_lists
-    bib_array << "\tauthor = \"#{authors_name}\""
-    bib_array << "\tname = \"#{bib.name}\""
-    bib_array << "\tnumber = \"#{bib.number}\"" if bib.number.present?
-    bib_array << "\tmonth = \"#{bib["month"]}\"" if bib.month.present?
-    bib_array << "\tjournal = \"#{bib["journal"]}\"" if bib.journal.present?
-    bib_array << "\tvolume = \"#{bib["volume"]}\"" if bib.volume.present?
-    bib_array << "\tpages = \"#{bib["pages"]}\"" if bib.pages.present?
-    bib_array << "\tyear = \"#{bib["year"]}\"" if bib.year.present?
-    bib_array << "\tnote = \"#{bib["note"]}\"" if bib.note.present?
-    bib_array << "\tdoi = \"#{bib["doi"]}\"" if bib.doi.present?
-    bib_array << "\tkey = \"#{bib["key"]}\"" if bib.key.present?
+    bib_array << "\tauthor = \"#{bib_author_lists}\""
+    bib_array << "\tname = \"#{name}\""
+    bib_array << "\tnumber = \"#{number}\"" if number.present?
+    bib_array << "\tmonth = \"#{month}\"" if month.present?
+    bib_array << "\tjournal = \"#{journal}\"" if journal.present?
+    bib_array << "\tvolume = \"#{volume}\"" if volume.present?
+    bib_array << "\tpages = \"#{pages}\"" if pages.present?
+    bib_array << "\tyear = \"#{year}\"" if year.present?
+    bib_array << "\tnote = \"#{note}\"" if note.present?
+    bib_array << "\tdoi = \"#{doi}\"" if doi.present?
+    bib_array << "\tkey = \"#{key}\"" if key.present?
     
     bib_array.join(",\n")
   end
