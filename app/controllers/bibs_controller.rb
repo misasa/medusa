@@ -59,6 +59,11 @@ class BibsController < ApplicationController
     @bib.places << Place.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
     redirect_to :back
   end
+  
+  def link_analysis_by_global_id
+    @bib.analyses << Analysis.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
+    redirect_to :back
+  end
 
   def bundle_edit
     respond_with @bibs

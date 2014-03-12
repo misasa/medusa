@@ -94,6 +94,19 @@ describe BibsController do
     it { expect(bib.places[0]).to eq(place)}
     it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
   end
+  
+  describe "POST link_analysis_by_global_id" do
+    let(:bib) { FactoryGirl.create(:bib) }
+    let(:analysis) { FactoryGirl.create(:analysis) }
+    before do
+      request.env["HTTP_REFERER"]  = "where_i_came_from"
+      analysis.record_property.global_id = "test_global_id"
+      analysis.record_property.save
+      post :link_analysis_by_global_id, id: bib.id, global_id: analysis.global_id
+    end
+    it { expect(bib.analyses[0]).to eq(analysis)}
+    it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+  end
 
   describe "POST upload" do
     let(:bib) { FactoryGirl.create(:bib) }
