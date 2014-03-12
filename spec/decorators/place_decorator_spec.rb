@@ -108,9 +108,21 @@ describe PlaceDecorator do
   describe ".country_name" do
     subject{ place.country_name }
     context "get country name ng" do
-      let(:latitude){360}
-      let(:longitude){360}
-      it {expect(subject).to eq ""}
+      context " latitude is nil" do
+        let(:latitude){nil}
+        let(:longitude){132.75558}
+        it {expect(subject).to eq ""}
+      end
+      context " longitude is nil" do
+        let(:latitude){35.3606}
+        let(:longitude){nil}
+        it {expect(subject).to eq ""}
+      end
+      context " error latitude and longitude" do
+        let(:latitude){360}
+        let(:longitude){360}
+        it {expect(subject).to eq ""}
+      end
     end
     context "get country name" do
       let(:latitude){35.3606}
@@ -121,9 +133,28 @@ describe PlaceDecorator do
 
   describe ".nearby_geonames" do
     subject{ place.nearby_geonames }
-    let(:latitude){35.3606}
-    let(:longitude){132.75558}
-    it {expect(subject.count).to eq 10}
+   context "get country name ng" do
+      context " latitude is nil" do
+        let(:latitude){nil}
+        let(:longitude){132.75558}
+        it {expect(subject).to eq []}
+      end
+      context " longitude is nil" do
+        let(:latitude){35.3606}
+        let(:longitude){nil}
+        it {expect(subject).to eq []}
+      end
+      context " error latitude and longitude" do
+        let(:latitude){360}
+        let(:longitude){360}
+        it {expect(subject).to eq []}
+      end
+    end
+    context "get country name" do
+      let(:latitude){35.3606}
+      let(:longitude){132.75558}
+      it {expect(subject.count).to eq 10}
+    end
   end
 
   describe ".readable_neighbors" do

@@ -47,12 +47,14 @@ class PlaceDecorator < Draper::Decorator
   end
 
   def country_name
+    return "" if latitude.blank? || longitude.blank?
     country_subdivisions = Geonames::WebService.country_subdivision "%0.2f" % latitude, "%0.2f" % longitude
     return "" if country_subdivisions.blank?
     country_subdivisions[0].country_name
   end
 
   def nearby_geonames
+    return [] if latitude.blank? || longitude.blank?
     geonames = Geonames::WebService.find_nearby "%0.2f" % latitude, "%0.2f" % longitude,{radius: 100,maxRows: 10,style: "FULL"}
     geonames
 
