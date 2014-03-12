@@ -1,7 +1,8 @@
 class Bib < ActiveRecord::Base
   include HasRecordProperty
   include OutputPdf
-  include OutputCsv
+
+  LABEL_HEADER = ["Id", "Name", "Authors"]
 
   has_many :bib_authors
   has_many :authors, through: :bib_authors
@@ -21,6 +22,24 @@ class Bib < ActiveRecord::Base
   
   def primary_pdf_attachment_file
     pdf_files.first if pdf_files.present?
+  end
+
+  def build_label
+    CSV.generate do |csv|
+      csv << LABEL_HEADER
+      author_names = self.decorate.bib_author_lists
+      csv << ["#{global_id}", "#{name}", "#{author_names}"]
+    end
+  end
+
+  def self.build_bundle_label(bibs)
+    CSV.generate do |csv|
+      csv << LABEL_HEADER
+      bibs.each do |bib|
+        author_names = bib.decorate.bib_author_lists
+        csv << ["#{bib.global_id}", "#{bib.name}", "#{author_names}"]
+      end
+    end
   end
 
   private

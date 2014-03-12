@@ -1,7 +1,13 @@
 require "spec_helper"
 
 describe Bib do
-  
+  describe "constants" do
+    describe "LABEL_HEADER" do
+      subject { Bib::LABEL_HEADER }
+      it { expect(subject).to eq ["Id","Name","Authors"] }
+    end
+  end
+
   describe ".doi_link_url" do
     subject { bib.doi_link_url }
     let(:bib) { FactoryGirl.create(:bib, doi: doi_1) }
@@ -34,6 +40,34 @@ describe Bib do
       let(:pdf_files) { ["a","b","c"] }
       it { expect(subject).to eq "a" }
     end
+  end
+
+  describe "#build_label" do
+    subject { bib.build_label }
+    let(:bib) { FactoryGirl.create(:bib, name: "foo") }
+    let(:author_1) { FactoryGirl.create(:author, name: "bar") }
+    let(:author_2) { FactoryGirl.create(:author, name: "baz") }
+    before do
+      bib.authors << author_1
+      bib.authors << author_2
+    end
+    it { expect(subject).to eq "Id,Name,Authors\n#{bib.global_id},foo,bar baz\n" }
+  end
+
+  describe ".build_bundle_label" do
+    subject { Bib.build_bundle_label(bibs) }
+    let(:bibs) { Bib.all }
+    let(:bib_1) { FactoryGirl.create(:bib, name: "bib_1") }
+    let(:bib_2) { FactoryGirl.create(:bib, name: "bib_2") }
+    let(:author_1) { FactoryGirl.create(:author, name: "author_1") }
+    let(:author_2) { FactoryGirl.create(:author, name: "author_2") }
+    before do
+      bib_1.authors << author_1
+      bib_2.authors << author_2
+    end
+    it { expect(subject).to start_with "Id,Name,Authors\n" }
+    it { expect(subject).to include("#{bib_1.global_id},bib_1,author_1\n") }
+    it { expect(subject).to include("#{bib_2.global_id},bib_2,author_2\n") }
   end
 
   describe "#pdf_files" do
