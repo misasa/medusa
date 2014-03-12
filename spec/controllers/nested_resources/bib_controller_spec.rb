@@ -4,6 +4,20 @@ describe NestedResources::BibsController do
   let(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
 
+  describe "POST create" do
+    let(:parent) { FactoryGirl.create(:attachment_file) }
+    let(:attributes) { {name: "bib_name"} }
+    before do
+      request.env["HTTP_REFERER"]  = "where_i_came_from"
+    end
+    it { expect {post :create, parent_resource: :attachment_file, attachment_file_id: parent, bib: attributes}.to change(Bib, :count).by(1) }
+    context "parent attachment_file" do
+      before { post :create, parent_resource: :attachment_file, attachment_file_id: parent, bib: attributes }
+      it { expect(parent.bibs.last.name).to eq attributes[:name]}
+      it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+    end
+  end
+
   describe "DELETE destory" do
     let(:parent){FactoryGirl.create(:place) }
     let(:child){FactoryGirl.create(:bib)}
