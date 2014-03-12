@@ -17,10 +17,9 @@ describe SpotDecorator do
     end
     context "target_uid is no datum  global_id" do
       let(:bib){FactoryGirl.create(:bib,name: "test bib")}
-      let(:record_property){bib.record_property}
       before do
+        spot.target_uid = bib.record_property.global_id
         bib.destroy
-        spot.target_uid = record_property.global_id
       end
       it {expect(subject).to eq ""}
     end
