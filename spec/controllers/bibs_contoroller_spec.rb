@@ -131,6 +131,12 @@ describe BibsController do
     end
   end
   
+  describe "GET picture" do
+    let(:bib) { FactoryGirl.create(:bib) }
+    before { get :picture, id: bib.id }
+    it { expect(assigns(:bib)).to eq bib }
+  end
+  
   describe "GET property" do
     let(:bib) { FactoryGirl.create(:bib) }
     before { get :property, id: bib.id }

@@ -41,6 +41,10 @@ class BibsController < ApplicationController
     respond_with @bib
   end
   
+  def picture
+    respond_with @bib, layout: !request.xhr?
+  end
+  
   def property
     respond_with @bib, layout: !request.xhr?
   end

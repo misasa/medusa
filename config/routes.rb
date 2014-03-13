@@ -83,6 +83,7 @@ Medusa::Application.routes.draw do
 
   resources :bibs, concerns: [:bundleable, :reportable], except: [:new] do
     member do
+      get :picture
       get :property
       post 'attachment_files/upload' => 'bibs#upload'
       post :link_stone_by_global_id
