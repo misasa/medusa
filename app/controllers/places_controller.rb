@@ -1,6 +1,6 @@
 class PlacesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create,:bundle_edit, :bundle_update, :download_bundle_card, :download_label, :download_bundle_label]
+  before_action :find_resource, except: [:index, :new, :create, :bundle_edit, :bundle_update, :download_bundle_card, :download_label, :download_bundle_label]
   before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label]
   load_and_authorize_resource
 
@@ -9,6 +9,13 @@ class PlacesController < ApplicationController
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @places = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @places
+  end
+
+  def new
+    respond_to do |format|
+      csv_header = "name,latitude(decimal degree),longitude(decimal degree),elevation(m),description\n"
+      format.csv { send_data(csv_header, type: "text/csv", filename: "my_place.csv") }
+    end
   end
 
   def show

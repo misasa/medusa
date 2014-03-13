@@ -27,7 +27,6 @@ describe PlacesController do
       record_property_3.update_attributes(:user_id => user_3.id, :group_id => group_3.id, :guest_readable => true, :guest_writable => true)
       get :index, params
     end
-    
     describe "search" do
       context "name search" do
         let(:query) { {"name_cont" => "place"} }
@@ -42,7 +41,6 @@ describe PlacesController do
         it { expect(assigns(:places)).to eq [place_3, place_1] }
       end
     end
-    
     describe "sort" do
       let(:params) { {q: query, page: 2, per_page: 1} }
       context "sort condition is present" do
@@ -56,19 +54,8 @@ describe PlacesController do
     end
   end
 
-  describe "GET show" do
-  end
-  
-  describe "GET edit" do
-  end
-  
-  describe "POST create" do
-  end
-  
-  describe "PUT update" do
-  end
-
-  describe "DELETE destroy" do
+  # send_data test returns unexpected object.
+  describe "GET new" do
   end
 
   describe "GET show" do
@@ -78,18 +65,7 @@ describe PlacesController do
     it{expect(response).to render_template("show") }
   end
 
-  describe "GET map" do
-    let(:obj){FactoryGirl.create(:place) }
-    before{get :map,id:obj.id}
-    it{expect(assigns(:place)).to eq obj}
-    it{expect(response).to render_template("map") }
-  end
-
-  describe "GET property" do
-    let(:obj){FactoryGirl.create(:place) }
-    before{get :property,id:obj.id}
-    it{expect(assigns(:place)).to eq obj}
-    it{expect(response).to render_template("property") }
+  describe "GET edit" do
   end
 
   describe "POST create" do
@@ -110,6 +86,20 @@ describe PlacesController do
       put :update, id: obj.id, place: attributes
     end
     it{expect(assigns(:place).name).to eq attributes[:name]}
+  end
+
+  describe "GET map" do
+    let(:obj){FactoryGirl.create(:place) }
+    before{get :map,id:obj.id}
+    it{expect(assigns(:place)).to eq obj}
+    it{expect(response).to render_template("map") }
+  end
+
+  describe "GET property" do
+    let(:obj){FactoryGirl.create(:place) }
+    before{get :property,id:obj.id}
+    it{expect(assigns(:place)).to eq obj}
+    it{expect(response).to render_template("property") }
   end
 
   describe "POST upload" do

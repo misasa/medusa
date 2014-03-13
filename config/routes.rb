@@ -57,7 +57,7 @@ Medusa::Application.routes.draw do
     resources :boxes, only: [:index, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "box", association_name: "children" }
   end
 
-  resources :places, concerns: [:bundleable, :reportable], except: [:new] do
+  resources :places, concerns: [:bundleable, :reportable] do
     member do
       get :map
       get :property
