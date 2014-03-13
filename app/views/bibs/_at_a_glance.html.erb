@@ -15,10 +15,10 @@
       <%= li_if_exist("note: ", @bib.note) %>
       <%= li_if_exist("key: ", @bib.key) %>
       <%= li_if_exist("link url: ", @bib.link_url) %>
-      <%= li_if_exist("", @bib.stones.map{ |stone| link_to(stone.name, url_for(stone)) }.join(" ")) %>
-      <%= li_if_exist("", @bib.boxes.map{ |box| link_to(box.name, url_for(box)) }.join(" ")) %>
-      <%= li_if_exist("", @bib.places.map{ |place| link_to(place.name, url_for(place)) }.join(" ")) %>
-      <%= li_if_exist("", @bib.analyses.map{ |place| link_to(place.name, url_for(place)) }.join(" ")) %>
+      <%= li_if_exist("", @bib.stones.map{ |stone| content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + link_to(stone.name, url_for(stone))  }.join(" ")) %>
+      <%= li_if_exist("", @bib.boxes.map{ |box| content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + link_to(box.name, url_for(box)) }.join(" ")) %>
+      <%= li_if_exist("", @bib.places.map{ |place| content_tag(:span, nil, class: "glyphicon glyphicon-globe") + link_to(place.name, url_for(place)) }.join(" ")) %>
+      <%= li_if_exist("", @bib.analyses.map{ |analysis| content_tag(:span, nil, class: "glyphicon glyphicon-stats") + link_to(analysis.name, url_for(analysis)) }.join(" ")) %>
       <%= li_if_exist("modified at ", difference_from_now(@bib.updated_at)) %>
     </ul>
   </div>
