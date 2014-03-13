@@ -4,7 +4,7 @@
       <%= li_if_exist("entry type: ", @bib.entry_type) %>
       <%= li_if_exist("abbreviation: ", @bib.abbreviation) %>
       <%= li_if_exist("name: ", @bib.name) %>
-      <%= li_if_exist("author: ", @bib.bib_author_lists) %>
+      <%= li_if_exist("author: ", @bib.author_lists) %>
       <%= li_if_exist("doi: ", link_to((@bib.doi), @bib.doi_link_url)) %>
       <%= li_if_exist("journal: ", @bib.journal) %>
       <%= li_if_exist("year: ", @bib.year) %>

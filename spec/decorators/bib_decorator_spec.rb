@@ -45,8 +45,7 @@ describe BibDecorator do
   describe ".article_tex" do
     subject { bib.article_tex }
     before do
-      bib
-      allow(bib).to receive(:bib_author_lists).and_return(author.name)
+      bib.authors << author
     end
     let(:bib) do
       FactoryGirl.create(:bib,
@@ -85,8 +84,7 @@ describe BibDecorator do
   describe ".misc_tex" do
     subject { bib.misc_tex }
     before do
-      bib
-      allow(bib).to receive(:bib_author_lists).and_return(author.name)
+      bib.authors << author
     end
     let(:bib) do
       FactoryGirl.create(:bib,
@@ -126,17 +124,6 @@ describe BibDecorator do
       let(:key) { "key" }
       it { expect(subject).to eq "\tauthor = \"著者１\",\n\tname = \"書誌情報１\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tjournal = \"journal\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tyear = \"2014\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
     end
-  end
-  
-  describe ".bib_author_lists" do
-    subject { bib.bib_author_lists }
-    before do
-      bib
-      allow(bib.authors).to receive(:pluck).with(:name).and_return([author.name])
-    end
-    let(:bib) { FactoryGirl.create(:bib).decorate }
-    let(:author) { FactoryGirl.create(:author) }
-    it { expect(subject).to eq "著者１" }
   end
   
 end

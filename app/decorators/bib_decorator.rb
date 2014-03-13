@@ -17,7 +17,7 @@ class BibDecorator < Draper::Decorator
   
   def article_tex
     bib_array = []
-    bib_array << "\tauthor = \"#{bib_author_lists}\""
+    bib_array << "\tauthor = \"#{author_lists}\""
     bib_array << "\tname = \"#{name}\""
     bib_array << "\tjournal = \"#{journal}\""
     bib_array << "\tyear = \"#{year}\""
@@ -28,13 +28,12 @@ class BibDecorator < Draper::Decorator
     bib_array << "\tnote = \"#{note}\"" if note.present?
     bib_array << "\tdoi = \"#{doi}\"" if doi.present?
     bib_array << "\tkey = \"#{key}\"" if key.present?
-    
     bib_array.join(",\n")
   end
   
   def misc_tex
     bib_array = []
-    bib_array << "\tauthor = \"#{bib_author_lists}\""
+    bib_array << "\tauthor = \"#{author_lists}\""
     bib_array << "\tname = \"#{name}\""
     bib_array << "\tnumber = \"#{number}\"" if number.present?
     bib_array << "\tmonth = \"#{month}\"" if month.present?
@@ -45,12 +44,7 @@ class BibDecorator < Draper::Decorator
     bib_array << "\tnote = \"#{note}\"" if note.present?
     bib_array << "\tdoi = \"#{doi}\"" if doi.present?
     bib_array << "\tkey = \"#{key}\"" if key.present?
-    
     bib_array.join(",\n")
-  end
-  
-  def bib_author_lists
-    authors.pluck(:name).join(" ")
   end
   
 end

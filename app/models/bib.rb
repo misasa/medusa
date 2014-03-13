@@ -27,8 +27,7 @@ class Bib < ActiveRecord::Base
   def build_label
     CSV.generate do |csv|
       csv << LABEL_HEADER
-      author_names = self.decorate.bib_author_lists
-      csv << ["#{global_id}", "#{name}", "#{author_names}"]
+      csv << ["#{global_id}", "#{name}", "#{author_lists}"]
     end
   end
 
@@ -36,10 +35,13 @@ class Bib < ActiveRecord::Base
     CSV.generate do |csv|
       csv << LABEL_HEADER
       bibs.each do |bib|
-        author_names = bib.decorate.bib_author_lists
-        csv << ["#{bib.global_id}", "#{bib.name}", "#{author_names}"]
+        csv << ["#{bib.global_id}", "#{bib.name}", "#{bib.author_lists}"]
       end
     end
+  end
+
+  def author_lists
+    authors.pluck(:name).join(" ")
   end
 
   private

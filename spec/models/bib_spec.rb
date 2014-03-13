@@ -61,13 +61,27 @@ describe Bib do
     let(:bib_2) { FactoryGirl.create(:bib, name: "bib_2") }
     let(:author_1) { FactoryGirl.create(:author, name: "author_1") }
     let(:author_2) { FactoryGirl.create(:author, name: "author_2") }
+    let(:author_3) { FactoryGirl.create(:author, name: "author_3") }
     before do
       bib_1.authors << author_1
       bib_2.authors << author_2
+      bib_2.authors << author_3
     end
     it { expect(subject).to start_with "Id,Name,Authors\n" }
     it { expect(subject).to include("#{bib_1.global_id},bib_1,author_1\n") }
-    it { expect(subject).to include("#{bib_2.global_id},bib_2,author_2\n") }
+    it { expect(subject).to include("#{bib_2.global_id},bib_2,author_2 author_3\n") }
+  end
+
+  describe "#author_lists" do
+    subject { bib.author_lists }
+    before do
+      bib.authors << author_1
+      bib.authors << author_2
+    end
+    let(:bib) { FactoryGirl.create(:bib) }
+    let(:author_1) { FactoryGirl.create(:author, name: "author_1") }
+    let(:author_2) { FactoryGirl.create(:author, name: "author_2") }
+    it { expect(subject).to eq "author_1 author_2" }
   end
 
   describe "#pdf_files" do
