@@ -65,6 +65,9 @@ Medusa::Application.routes.draw do
       post :link_attachment_file_by_global_id
       post :link_stone_by_global_id
     end
+    collection do
+      post :import
+    end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
     resources :attachment_files, only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "place" }
     resources :bibs, only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "place" }

@@ -1,6 +1,6 @@
 class PlacesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :new, :create, :bundle_edit, :bundle_update, :download_bundle_card, :download_label, :download_bundle_label]
+  before_action :find_resource, except: [:index, :new, :create, :bundle_edit, :bundle_update, :download_bundle_card, :download_label, :download_bundle_label, :import]
   before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label]
   load_and_authorize_resource
 
@@ -13,8 +13,7 @@ class PlacesController < ApplicationController
 
   def new
     respond_to do |format|
-      csv_header = "name,latitude(decimal degree),longitude(decimal degree),elevation(m),description\n"
-      format.csv { send_data(csv_header, type: "text/csv", filename: "my_place.csv") }
+      format.csv { send_data(Place.TEMPLATE_HEADER, type: "text/csv", filename: "my_place.csv") }
     end
   end
 
@@ -88,6 +87,16 @@ class PlacesController < ApplicationController
   def download_bundle_label
     label = Place.build_bundle_label(@places)
     send_data(label, filename: "places.csv", type: "text/csv")
+  end
+
+  def import
+    if Place.import_csv(params[:data])
+      redirect_to places_path
+    else
+      render "import_invalid"
+    end
+  rescue
+    render "import_invalid"
   end
 
   private

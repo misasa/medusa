@@ -71,4 +71,8 @@
   To create place records at once, download
   <%= link_to "template", new_place_path(format: :csv) %>,
   and modify, then upload.
+  <%= form_tag(import_places_path, method: :post, multipart: true) do %>
+    <%= file_field_tag :data %>
+    <%= submit_tag :upload %>
+  <% end %>
 </div>

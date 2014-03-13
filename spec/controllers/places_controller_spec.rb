@@ -181,4 +181,29 @@ describe PlacesController do
     it {expect(obj3.name).to eq obj3name}
   end
 
+  describe "POST import" do
+    let(:data) { double(:upload_data) }
+    context "return raise" do
+      before do
+        allow(Place).to receive(:import_csv).with(data.to_s).and_raise("error")
+        post :import, data: data
+      end
+      it { expect(response).to render_template("import_invalid") }
+    end
+    context "return no error" do
+      before do
+        allow(Place).to receive(:import_csv).with(data.to_s).and_return(import_result)
+        post :import, data: data
+      end
+      context "import success" do
+        let(:import_result) { true }
+        it { expect(response).to redirect_to(places_path) }
+      end
+      context "import false" do
+        let(:import_result) { false }
+        it { expect(response).to render_template("import_invalid") }
+      end
+    end
+  end
+
 end
