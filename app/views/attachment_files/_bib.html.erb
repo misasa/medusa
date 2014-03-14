@@ -36,7 +36,8 @@
           <% end %>
         </th>
       <% end %>
-    <%= form_tag link_bib_by_global_id_attachment_file_path(@attachment_file),method: :post do %>
+    <%= form_tag link_by_global_id_attachment_file_bibs_path(@attachment_file),method: :post do %>
+        <th><%= text_field_tag :global_id, "", class: "form-control input-sm" %></th>
         <th>
           <%= button_tag title: "link bib by global id",class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>

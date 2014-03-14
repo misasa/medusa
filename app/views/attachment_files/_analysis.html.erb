@@ -44,7 +44,7 @@
         </th>
         <th></th>
       <% end %>
-      <%= form_tag link_analysis_by_global_id_attachment_file_path(@attachment_file),method: :post do %>
+      <%= form_tag link_by_global_id_attachment_file_analyses_path(@attachment_file),method: :post do %>
         <th><%= text_field_tag :global_id, nil,class: "form-control input-sm" %></th>
         <th>
           <%= button_tag title: "link analysis by global id",class: "btn btn-default" do %>

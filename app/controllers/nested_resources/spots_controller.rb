@@ -16,7 +16,8 @@ class NestedResources::SpotsController < ApplicationController
   end
 
   def update
-    @spot.update_attributes(spot_params)
+    @spot = Spot.find(params[:id])
+    @parent.spots << @spot
     respond_with @spot, location: request.referer
   end
 
@@ -25,7 +26,7 @@ class NestedResources::SpotsController < ApplicationController
     @parent.spots.delete(@spot)
     respond_with @spot, location: request.referer
   end
-  
+
   private
 
   def spot_params

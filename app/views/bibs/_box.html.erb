@@ -41,7 +41,7 @@
           <% end %>
         </th>
       <% end %>
-      <%= form_tag link_box_by_global_id_bib_path(@bib), method: :post do %>
+      <%= form_tag link_by_global_id_bib_boxes_path(@bib), method: :post do %>
         <th><%= text_field_tag :global_id, nil, class: "form-control input-sm" %></th>
         <th>
           <%= button_tag title: "link box by global id", class: "btn btn-default" do %>

@@ -47,7 +47,7 @@
           <% end %>
         </th>
       <% end %>
-      <%= form_tag link_stone_by_global_id_place_path(@place),method: :post do %>
+      <%= form_tag link_by_global_id_place_stones_path(@place),method: :post do %>
         <th><%= text_field_tag :global_id, nil,class: "form-control input-sm" %></th>
         <th>
           <%= button_tag title: "link stone by global id",class: "btn btn-default" do %>
