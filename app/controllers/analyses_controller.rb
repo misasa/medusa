@@ -30,6 +30,14 @@ class AnalysesController < ApplicationController
     respond_with @analysis
   end
 
+  def picture
+    respond_with @analysis, layout: !request.xhr?
+  end
+
+  def property
+    respond_with @analysis, layout: !request.xhr?
+  end
+
   def destroy
     @analysis.destroy
     respond_with @analysis
@@ -57,6 +65,7 @@ class AnalysesController < ApplicationController
       :name,
       :description,
       :stone_id,
+      :stone_global_id,
       :technique_id,
       :device_id,
       :operator,
@@ -79,7 +88,7 @@ class AnalysesController < ApplicationController
   end
 
   def find_resource
-    @analysis = Analysis.find(params[:id])
+    @analysis = Analysis.find(params[:id]).decorate
   end
 
   def find_resources

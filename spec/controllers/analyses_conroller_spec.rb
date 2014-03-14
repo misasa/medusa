@@ -6,14 +6,46 @@ describe AnalysesController do
   before { sign_in user }
 
   describe "GET index" do
-    let(:analysis_1) { FactoryGirl.create(:analysis, name: "hoge") }
-    let(:analysis_2) { FactoryGirl.create(:analysis, name: "analysis_2") }
-    let(:analysis_3) { FactoryGirl.create(:analysis, name: "analysis_3") }
+    let(:obj_1) { FactoryGirl.create(:analysis, name: "hoge") }
+    let(:obj_2) { FactoryGirl.create(:analysis, name: "analysis_2") }
+    let(:obj_3) { FactoryGirl.create(:analysis, name: "analysis_3") }
     before do
-      analysis_1;analysis_2;analysis_3
+      obj_1;obj_2;obj_3
       get :index
     end
     it { expect(assigns(:analyses).count).to eq 3 }
+  end
+
+  describe "GET show" do
+    let(:obj) { FactoryGirl.create(:analysis) }
+    before { get :show, id: obj.id }
+    it{ expect(assigns(:analysis)).to eq obj }
+  end
+
+  describe "GET edit" do
+    let(:obj) { FactoryGirl.create(:analysis) }
+    before { get :edit, id: obj.id }
+    it{ expect(assigns(:analysis)).to eq obj }
+  end
+
+  describe "POST create" do
+    let(:attributes) { {name: "obj_name"} }
+    it { expect { post :create, analysis: attributes }.to change(Analysis, :count).by(1) }
+    describe "assigns as @analysis" do
+      before{ post :create, analysis: attributes }
+      it{ expect(assigns(:analysis)).to be_persisted }
+      it { expect(assigns(:analysis).name).to eq attributes[:name] }
+    end
+  end
+
+  describe "PUT update" do
+    let(:obj) { FactoryGirl.create(:analysis) }
+    let(:attributes) { {name: "update_name"} }
+    before do
+      put :update, id: obj.id, analysis: attributes
+    end
+    it { expect(assigns(:analysis)).to eq obj }
+    it { expect(assigns(:analysis).name).to eq attributes[:name] }
   end
 
   describe "POST upload" do
@@ -61,6 +93,18 @@ describe AnalysesController do
     it {expect(obj1.name).to eq attributes[:name]}
     it {expect(obj2.name).to eq attributes[:name]}
     it {expect(obj3.name).to eq obj3name}
+  end
+
+  describe "GET picture" do
+    let(:obj) { FactoryGirl.create(:analysis) }
+    before { get :picture, id: obj.id }
+    it { expect(assigns(:analysis)).to eq obj }
+  end
+
+  describe "GET property" do
+    let(:obj) { FactoryGirl.create(:analysis) }
+    before { get :property, id: obj.id }
+    it { expect(assigns(:analysis)).to eq obj }
   end
 
 end

@@ -80,12 +80,14 @@ Medusa::Application.routes.draw do
 
   resources :analyses, concerns: :bundleable, except: [:new] do
     member do
+      get :picture
+      get :property
       post 'attachment_files/upload' => 'analyses#upload'
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "analysis" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "analysis" }
-    resources :bibs, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "analysis" }
-    resources :chemistries, only: [:index, :update, :destroy], controller: "nested_resources/chemistries"
+    resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "analysis" }
+    resources :chemistries, only: [:index, :create, :update, :destroy], controller: "nested_resources/chemistries"
   end
 
   resources :bibs, concerns: [:bundleable, :reportable], except: [:new] do
