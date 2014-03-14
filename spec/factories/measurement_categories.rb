@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :measurement_category do
-    name "測定種類１"
+    sequence(:name) { |n| "measurement_category_#{n}" }
     description "説明１"
     association :unit, factory: :unit
   end

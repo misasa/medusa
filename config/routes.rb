@@ -78,7 +78,7 @@ Medusa::Application.routes.draw do
     resources :stones, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "place", association_name: "stones" }
   end
 
-  resources :analyses, concerns: :bundleable, except: [:new] do
+  resources :analyses, concerns: :bundleable do
     member do
       post 'attachment_files/upload' => 'analyses#upload'
     end
