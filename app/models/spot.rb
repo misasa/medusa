@@ -37,6 +37,22 @@ class Spot < ActiveRecord::Base
     [spot_x - cpt[0], cpt[1] - spot_y]
   end
 
+  def to_svg
+    "<circle #{svg_attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/>"
+  end
+
+  def svg_attributes
+    {
+      cx: spot_x,
+      cy: spot_y,
+      r: radius_in_percent,
+      fill: fill_color,
+      "fill-opacity" => opacity,
+      stroke: stroke_color,
+      "stroke-width" => stroke_width
+    }
+  end
+
 private
 
   def spot_center_xy

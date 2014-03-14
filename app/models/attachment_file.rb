@@ -150,6 +150,11 @@ class AttachmentFile < ActiveRecord::Base
     return Math.sqrt(dx * dx + dy * dy)
   end
 
+  def to_svg
+    image = %Q|<image xlink:href="#{path}" x="0" y="0" width="#{original_width}" height="#{original_height}"/>|
+    spots.inject(image) { |svg, spot| svg + spot.to_svg }
+  end
+
   private
 
   def x_max
@@ -198,7 +203,6 @@ class AttachmentFile < ActiveRecord::Base
     end
     return dst_points
   end
-
 
 end
 
