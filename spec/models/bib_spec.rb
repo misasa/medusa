@@ -7,9 +7,46 @@ describe Bib do
       it { expect(subject).to eq ["Id","Name","Authors"] }
     end
   end
+    
+  describe "validates" do
+    describe "name" do
+      let(:bib) { FactoryGirl.build(:bib, name: name) }
+      context "is presence" do
+        let(:name) { "sample_bib_name" }
+        it { expect(bib).to be_valid }
+      end
+      context "is blank" do
+        let(:name) { "" }
+        it { expect(bib).not_to be_valid }
+      end
+      describe "length" do
+        context "is 255 characters" do
+          let(:name) { "a" * 255 }
+          it { expect(bib).to be_valid }
+        end
+        context "is 256 characters" do
+          let(:name) { "a" * 256 }
+          it { expect(bib).not_to be_valid }
+        end
+      end
+    end
+    describe "author" do
+      context "is presence" do
+        let(:bib) { FactoryGirl.build(:bib, authors: [author_1, author_2]) }
+        let(:author_1) { FactoryGirl.create(:author, name: "name_1") }
+        let(:author_2) { FactoryGirl.create(:author, name: "name_2") }
+        it { expect(bib).to be_valid }
+      end
+      context "is blank" do
+        let(:bib) { FactoryGirl.build(:bib, authors: []) }
+        it { expect(bib).not_to be_valid }
+      end
+    end
+  end
 
   describe ".doi_link_url" do
     subject { bib.doi_link_url }
+    before { bib }
     let(:bib) { FactoryGirl.create(:bib, doi: doi_1) }
     context "doi is nil" do
       let(:doi_1) { nil }
@@ -44,28 +81,23 @@ describe Bib do
 
   describe "#build_label" do
     subject { bib.build_label }
-    let(:bib) { FactoryGirl.create(:bib, name: "foo") }
+    let(:bib) { FactoryGirl.create(:bib, name: "foo", authors: [author_1, author_2]) }
     let(:author_1) { FactoryGirl.create(:author, name: "bar") }
     let(:author_2) { FactoryGirl.create(:author, name: "baz") }
-    before do
-      bib.authors << author_1
-      bib.authors << author_2
-    end
     it { expect(subject).to eq "Id,Name,Authors\n#{bib.global_id},foo,bar baz\n" }
   end
 
   describe ".build_bundle_label" do
     subject { Bib.build_bundle_label(bibs) }
     let(:bibs) { Bib.all }
-    let(:bib_1) { FactoryGirl.create(:bib, name: "bib_1") }
-    let(:bib_2) { FactoryGirl.create(:bib, name: "bib_2") }
+    let(:bib_1) { FactoryGirl.create(:bib, name: "bib_1", authors: [author_1]) }
+    let(:bib_2) { FactoryGirl.create(:bib, name: "bib_2", authors: [author_2, author_3]) }
     let(:author_1) { FactoryGirl.create(:author, name: "author_1") }
     let(:author_2) { FactoryGirl.create(:author, name: "author_2") }
     let(:author_3) { FactoryGirl.create(:author, name: "author_3") }
     before do
-      bib_1.authors << author_1
-      bib_2.authors << author_2
-      bib_2.authors << author_3
+      bib_1
+      bib_2
     end
     it { expect(subject).to start_with "Id,Name,Authors\n" }
     it { expect(subject).to include("#{bib_1.global_id},bib_1,author_1\n") }
@@ -74,11 +106,7 @@ describe Bib do
 
   describe "#author_lists" do
     subject { bib.author_lists }
-    before do
-      bib.authors << author_1
-      bib.authors << author_2
-    end
-    let(:bib) { FactoryGirl.create(:bib) }
+    let(:bib) { FactoryGirl.create(:bib, authors: [author_1, author_2]) }
     let(:author_1) { FactoryGirl.create(:author, name: "author_1") }
     let(:author_2) { FactoryGirl.create(:author, name: "author_2") }
     it { expect(subject).to eq "author_1 author_2" }
@@ -112,6 +140,12 @@ describe Bib do
         it { expect(subject).to eq [] }
       end
     end
+  end
+  
+  describe "#author_valid?" do
+    subject { bib.send(:author_valid?) }
+    let(:bib) { FactoryGirl.build(:bib, authors: []) }
+    it { expect(subject).to eq "can't be blank" }
   end
 
 end

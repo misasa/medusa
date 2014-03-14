@@ -15,6 +15,19 @@ class Analysis < ActiveRecord::Base
   validates :technique, existence: true, allow_nil: true
   validates :name, presence: true, length: { maximum: 255 }
 
+  MeasurementCategory.all.each do |mc|
+    comma mc.name.to_sym do
+      name "session"
+      name "instrument"
+      name "technique"
+      name "description"
+      name "analyst"
+      name "analysed_at"
+      name "sample_uid"
+      mc.export_headers.map { |header| name header }
+    end
+  end
+
   def chemistry_summary(length=100)
     display_names = chemistries.map { |ch| ch.display_name if ch.measurement_item }.compact
     display_names.join(", ").truncate(length)

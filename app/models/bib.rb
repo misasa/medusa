@@ -15,6 +15,9 @@ class Bib < ActiveRecord::Base
   has_many :boxes, through: :referrings, source: :referable, source_type: "Box"
   has_many :analyses, through: :referrings, source: :referable, source_type: "Analysis"
   
+  validates :name, presence: true, length: { maximum: 255 }
+  validate :author_valid?, if: Proc.new{|bib| bib.authors.blank?}
+  
   def doi_link_url
     return unless doi
     "http://dx.doi.org/#{doi}"
@@ -50,5 +53,9 @@ class Bib < ActiveRecord::Base
     if attachment_files.present?
       attachment_files.order("updated_at desc").select {|file| file.pdf? }
     end
+  end
+  
+  def author_valid?
+    errors[:author] = "can't be blank"
   end
 end

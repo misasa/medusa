@@ -6,7 +6,8 @@ describe NestedResources::BibsController do
 
   describe "POST create" do
     let(:parent) { FactoryGirl.create(:attachment_file) }
-    let(:attributes) { {name: "bib_name"} }
+    let(:attributes) { {name: "bib_name", author_ids: ["#{author_id}"]} }
+    let(:author_id) { FactoryGirl.create(:author).id } 
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
     end

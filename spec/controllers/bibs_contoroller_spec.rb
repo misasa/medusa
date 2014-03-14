@@ -30,12 +30,25 @@ describe BibsController do
   end
   
   describe "POST create" do
-    let(:attributes) { {name: "bib_name"} }
-    it { expect { post :create, bib: attributes }.to change(Bib, :count).by(1) }
-    describe "assigns as @bib" do
-      before{ post :create, bib: attributes }
-      it{ expect(assigns(:bib)).to be_persisted }
-      it { expect(assigns(:bib).name).to eq attributes[:name] }
+    describe "with valid attributes" do
+      let(:attributes) { {name: "bib_name", author_ids: ["#{author_id}"]} }
+      let(:author_id) { FactoryGirl.create(:author, name: "name_1").id }
+      it { expect { post :create, bib: attributes }.to change(Bib, :count).by(1) }
+      it "assigns a newly created bib as @bib" do
+        post :create, bib: attributes
+        expect(assigns(:bib)).to be_persisted
+        expect(assigns(:bib).name).to eq(attributes[:name])
+      end
+    end
+    describe "with invalid attributes" do
+      let(:attributes) { {name: "", author_ids: [""]} }
+      before { allow_any_instance_of(Bib).to receive(:save).and_return(false) }
+      it { expect { post :create, bib: attributes }.not_to change(Bib, :count) }
+      it "assigns a newly created bib as @bib" do
+        post :create, bib: attributes
+        expect(assigns(:bib)).to be_new_record
+        expect(assigns(:bib).name).to eq(attributes[:name])
+      end
     end
   end
   
