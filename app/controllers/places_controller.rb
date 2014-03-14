@@ -13,7 +13,7 @@ class PlacesController < ApplicationController
 
   def new
     respond_to do |format|
-      format.csv { send_data(Place.TEMPLATE_HEADER, type: "text/csv", filename: "my_place.csv") }
+      format.csv { send_data(Place::TEMPLATE_HEADER, type: "text/csv", filename: "my_place.csv") }
     end
   end
 

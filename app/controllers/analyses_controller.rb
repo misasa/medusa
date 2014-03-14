@@ -1,14 +1,21 @@
 class AnalysesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload,:bundle_edit, :bundle_update]
+  before_action :find_resource, except: [:index, :new, :create, :upload,:bundle_edit, :bundle_update]
   before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
 
   def index
     @search = Analysis.readables(current_user).search(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
-    @analyses = @search.result.includes([:stone, chemistries: :measurement_item]).page(params[:page]).per(params[:per_page])
+    @analyses = @search.result.includes([:stone, :device, chemistries: :measurement_item]).page(params[:page]).per(params[:per_page])
     respond_with @analyses
+  end
+
+  def new
+    mc = MeasurementCategory.find(params[:measurement_category_id])
+    respond_to do |format|
+      format.csv { render csv: [Analysis.new], style: "#{mc.name}".to_sym, filename: "my_#{mc.name}" }
+    end
   end
 
   def show
