@@ -117,7 +117,7 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "attachment_file" }
     resources :spots, only: [:index, :create, :update, :destroy], controller: "nested_resources/spots"
     resources :places, only: [:index, :create, :update, :destroy], controller: "nested_resources/places", defaults: { parent_resource: "attachment_file", association_name: "places" }
-    resources :stones, only: [:index, :create,:update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "attachment_file", association_name: "stones" }
+    resources :stones, only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "attachment_file", association_name: "stones" }
     resources :boxes, only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "attachment_file", association_name: "boxes" }
     resources :bibs, only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "attachment_file" }
     resources :analyses, only: [:index, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "attachment_file" }
@@ -127,7 +127,7 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "chemistry" }
   end
 
-  resources :spots, only: [] do
+  resources :spots, only: [:edit, :update] do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "spot" }
   end
 

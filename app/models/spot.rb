@@ -4,6 +4,9 @@ class Spot < ActiveRecord::Base
   belongs_to :attachment_file
 
   validates :attachment_file, existence: true
+  validates :name, presence: true, length: { maximum: 255 }
+  validates :spot_x, presence: true
+  validates :spot_y, presence: true
 
   before_validation :generate_name, if: "name.blank?"
   before_validation :generate_stroke_width, if: "stroke_width.blank?"

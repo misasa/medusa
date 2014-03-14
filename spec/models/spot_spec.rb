@@ -4,6 +4,50 @@ describe Spot do
   let(:user){FactoryGirl.create(:user)}
   before{User.current = user}
 
+  describe "validates" do
+    describe "name" do
+      let(:obj) { FactoryGirl.build(:spot, name: name) }
+      context "is presence" do
+        let(:name) { "sample_spot" }
+        it { expect(obj).to be_valid }
+      end
+      context "is blank" do
+        let(:name) { "" }
+        it { expect(obj).to be_valid }
+      end
+      context "is 255 characters" do
+        let(:name) { "a" * 255 }
+        it { expect(obj).to be_valid }
+      end
+      context "is 256 characters" do
+        let(:name) { "a" * 256 }
+        it { expect(obj).not_to be_valid }
+      end
+    end
+    describe "spot_x" do
+      let(:obj) { FactoryGirl.build(:spot, spot_x: spot_x) }
+      context "is presence" do
+        let(:spot_x) { "0" }
+        it { expect(obj).to be_valid }
+      end
+      context "is blank" do
+        let(:spot_x) { "" }
+        it { expect(obj).not_to be_valid }
+      end
+    end
+    describe "spot_y" do
+      let(:obj) { FactoryGirl.build(:spot, spot_y: spot_y) }
+      context "is presence" do
+        let(:spot_y) { "0" }
+        it { expect(obj).to be_valid }
+      end
+      context "is blank" do
+        let(:spot_y) { "" }
+        it { expect(obj).not_to be_valid }
+      end
+    end
+  end
+
   describe ".generate_name" do
     subject{ spot.name }
     before{spot}

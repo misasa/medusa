@@ -11,7 +11,7 @@
       <% SpotDecorator.decorate_collection(@attachment_file.spots).each do |spot| %>
         <tr>
           <td></td>
-          <td><%= spot.try!(:name) %></td>
+          <td><%= link_to spot.try!(:name),edit_spot_path(spot) %></td>
           <td><%= spot.target_link %></td>
           <td>
             <%= link_to attachment_file_spot_path(@attachment_file,spot), method: :delete ,title: "delete spot",data: {confirm: t("confirm.delete")} do %>

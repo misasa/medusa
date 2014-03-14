@@ -6,7 +6,7 @@ describe NestedResources::SpotsController do
 
   describe "POST create" do
     let(:parent){FactoryGirl.create(:attachment_file) }
-    let(:attributes) { {name: "spot_name"} }
+    let(:attributes) { {name: "spot_name",spot_x: 0,spot_y:0} }
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
     end
@@ -29,7 +29,7 @@ describe NestedResources::SpotsController do
     end
     it { expect {put :update, attachment_file_id: parent, id: child.id, spot: attributes}.to change(Spot, :count).by(0) }
     context "parent attachment_file" do
-      before{put :create, attachment_file_id: parent,id: child.id, spot: attributes}
+      before{put :update, attachment_file_id: parent,id: child.id, spot: attributes}
       it{ expect(parent.spots.last.name).to eq attributes[:name]}
       it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
     end
