@@ -44,9 +44,6 @@ describe BibDecorator do
   
   describe ".article_tex" do
     subject { bib.article_tex }
-    before do
-      bib.authors << author
-    end
     let(:bib) do
       FactoryGirl.create(:bib,
         number: number,
@@ -55,10 +52,11 @@ describe BibDecorator do
         pages: pages,
         note: note,
         doi: doi,
-        key: key
+        key: key,
+        authors: [author]
       ).decorate
     end
-    let(:author) { FactoryGirl.create(:author) }
+    let(:author) { FactoryGirl.create(:author, name: "name_1") }
     context "value is nil" do
       let(:number) { "" }
       let(:month) { "" }
@@ -67,7 +65,7 @@ describe BibDecorator do
       let(:note) { "" }
       let(:doi) { "" }
       let(:key) { "" }
-      it { expect(subject).to eq "\tauthor = \"著者１\",\n\tname = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\"" }
+      it { expect(subject).to eq "\tauthor = \"name_1\",\n\tname = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\"" }
     end
     context "value is not nil" do
       let(:number) { "1" }
@@ -77,15 +75,12 @@ describe BibDecorator do
       let(:note) { "note" }
       let(:doi) { "doi" }
       let(:key) { "key" }
-      it { expect(subject).to eq "\tauthor = \"著者１\",\n\tname = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
+      it { expect(subject).to eq "\tauthor = \"name_1\",\n\tname = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
     end
   end
   
   describe ".misc_tex" do
     subject { bib.misc_tex }
-    before do
-      bib.authors << author
-    end
     let(:bib) do
       FactoryGirl.create(:bib,
         number: number,
@@ -96,10 +91,11 @@ describe BibDecorator do
         year: year,
         note: note,
         doi: doi,
-        key: key
+        key: key,
+        authors: [author]
       ).decorate
     end
-    let(:author) { FactoryGirl.create(:author) }
+    let(:author) { FactoryGirl.create(:author, name: "name_1") }
     context "value is nil" do
       let(:number) { "" }
       let(:month) { "" }
@@ -110,7 +106,7 @@ describe BibDecorator do
       let(:note) { "" }
       let(:doi) { "" }
       let(:key) { "" }
-      it { expect(subject).to eq "\tauthor = \"著者１\",\n\tname = \"書誌情報１\"" }
+      it { expect(subject).to eq "\tauthor = \"name_1\",\n\tname = \"書誌情報１\"" }
     end
     context "value is not nil" do
       let(:number) { "1" }
@@ -122,7 +118,7 @@ describe BibDecorator do
       let(:note) { "note" }
       let(:doi) { "doi" }
       let(:key) { "key" }
-      it { expect(subject).to eq "\tauthor = \"著者１\",\n\tname = \"書誌情報１\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tjournal = \"journal\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tyear = \"2014\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
+      it { expect(subject).to eq "\tauthor = \"name_1\",\n\tname = \"書誌情報１\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tjournal = \"journal\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tyear = \"2014\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
     end
   end
   
