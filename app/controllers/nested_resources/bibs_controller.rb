@@ -17,13 +17,18 @@ class NestedResources::BibsController < ApplicationController
   def update
     @bib = Bib.find(params[:id])
     @parent.bibs << @bib
-    @parent.save
-    respond_with @bib
+    respond_with @bib, location: request.referer
   end
 
   def destroy
     @bib = Bib.find(params[:id])
     @parent.bibs.delete(@bib)
+    respond_with @bib, location: request.referer
+  end
+
+  def link_by_global_id
+    @bib = Bib.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
+    @parent.bibs << @bib
     respond_with @bib, location: request.referer
   end
 

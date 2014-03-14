@@ -10,20 +10,25 @@ class NestedResources::BoxesController < ApplicationController
   
   def create
     @box = Box.new(box_params)
-    @parent.boxes << @box
+    @parent.send(params[:association_name]) << @box
     respond_with @box, location: request.referer
   end
 
   def update
     @box = Box.find(params[:id])
     @parent.send(params[:association_name]) << @box
-    @parent.save
-    respond_with @box
+    respond_with @box, location: request.referer
   end
 
   def destroy
     @box = Box.find(params[:id])
     @parent.send(params[:association_name]).delete(@box)
+    respond_with @box, location: request.referer
+  end
+
+  def link_by_global_id
+    @box = Box.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
+    @parent.send(params[:association_name]) << @box
     respond_with @box, location: request.referer
   end
 

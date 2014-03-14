@@ -17,13 +17,18 @@ class NestedResources::PlacesController < ApplicationController
   def update
     @place = Place.find(params[:id])
     @parent.places << @place
-    @parent.save
-    respond_with @place
+    respond_with @place, location: request.referer
   end
 
   def destroy
     @place = Place.find(params[:id])
     @parent.places.delete(@place)
+    respond_with @place, location: request.referer
+  end
+
+  def link_by_global_id
+    @place = Place.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
+    @parent.places << @place
     respond_with @place, location: request.referer
   end
 

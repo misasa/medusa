@@ -17,13 +17,18 @@ class NestedResources::AnalysesController < ApplicationController
   def update
     @analysis = Analysis.find(params[:id])
     @parent.analyses << @analysis
-    @parent.save
-    respond_with @analysis
+    respond_with @analysis, location: request.referer
   end
 
   def destroy
     @analysis = Analysis.find(params[:id])
     @parent.analyses.delete(@analysis)
+    respond_with @analysis, location: request.referer
+  end
+
+  def link_by_global_id
+    @analysis = Analysis.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
+    @parent.analyses << @analysis
     respond_with @analysis, location: request.referer
   end
 

@@ -118,32 +118,6 @@ describe PlacesController do
     it { expect{delete :destroy,id: obj.id}.to change(Place, :count).by(-1) }
   end
 
-  describe "POST link_attachment_file_by_global_id" do
-    let(:obj){FactoryGirl.create(:place) }
-    let(:attachment_file){FactoryGirl.create(:attachment_file) }
-    before do
-      request.env["HTTP_REFERER"]  = "where_i_came_from"
-      attachment_file.record_property.global_id = "test_global_id"
-      attachment_file.record_property.save
-      post :link_attachment_file_by_global_id,id:obj.id,global_id: attachment_file.global_id
-    end
-    it {expect(obj.attachment_files[0]).to  eq(attachment_file)}
-    it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
-  end
-
-  describe "POST link_stone_by_global_id" do
-    let(:obj){FactoryGirl.create(:place) }
-    let(:stone){FactoryGirl.create(:stone) }
-    before do
-      request.env["HTTP_REFERER"]  = "where_i_came_from"
-      stone.record_property.global_id = "test_global_id"
-      stone.record_property.save
-      post :link_stone_by_global_id,id:obj.id,global_id: stone.global_id
-    end
-    it { expect(obj.stones[0]).to eq(stone)}
-    it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
-  end
-
   describe "POST bundle_edit" do
     let(:obj1) { FactoryGirl.create(:place, name: "obj1") }
     let(:obj2) { FactoryGirl.create(:place, name: "obj2") }

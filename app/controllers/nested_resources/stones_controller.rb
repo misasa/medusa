@@ -10,20 +10,25 @@ class NestedResources::StonesController < ApplicationController
 
   def create
     @stone = Stone.new(stone_params)
-    @parent.stones << @stone
+    @parent.send(params[:association_name]) << @stone
     respond_with @stone, location: request.referer
   end
 
   def update
     @stone = Stone.find(params[:id])
     @parent.send(params[:association_name]) << @stone
-    @parent.save
     respond_with @stone
   end
 
   def destroy
     @stone = Stone.find(params[:id])
     @parent.send(params[:association_name]).delete(@stone)
+    respond_with @stone, location: request.referer
+  end
+
+  def link_by_global_id
+    @stone = Stone.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
+    @parent.send(params[:association_name]) << @stone
     respond_with @stone, location: request.referer
   end
 

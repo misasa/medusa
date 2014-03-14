@@ -47,7 +47,7 @@
           <% end %>
         </th>
       <% end %>
-      <%= form_tag link_attachment_file_by_global_id_place_path(@place),method: :post do %>
+      <%= form_tag link_by_global_id_place_attachment_files_path(@place),method: :post do %>
         <th><%= text_field_tag :global_id,nil, class: "form-control input-sm" %></th>
         <th>
           <%= button_tag title: "link attachment file by global id",class: "btn btn-default" do %>
