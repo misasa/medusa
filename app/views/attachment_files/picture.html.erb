@@ -1,4 +1,6 @@
-<%= @attachment_file.picture %>
+<div class="spot-viewer">
+  <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300, "data-image" => attachment_file_path(@attachment_file, format: :svg) %>
+</div>
 <%= form_for Spot.new, url: attachment_file_spots_path(@attachment_file) do |f|%>
   <table>
     <tr>
@@ -13,10 +15,19 @@
         <%= f.hidden_field :fill_color ,value: "blue" %>
         <%= f.hidden_field :opacity ,value: "0" %>
         <%= f.hidden_field :with_cross ,value: "false" %>
-        <%= f.button title:"add new spot" ,class: "btn btn-default" do %>
+        <%= f.button title:"add new spot", class: "btn btn-default" do %>
           <span class="glyphicon glyphicon-save"></span>
         <% end %>
       </td>
     </tr>
   </table>
+<% end %>
+
+<%= javascript_tag do %>
+  $("div.spot-viewer").spotViewer();
+  $(document).on("submit", "#new_spot", function() {
+    var center = $("div.spot-viewer").spotViewer("center");
+    $("#spot_spot_x").val(center.left);
+    $("#spot_spot_y").val(center.top);
+  });
 <% end %>
