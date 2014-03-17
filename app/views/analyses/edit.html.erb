@@ -4,19 +4,19 @@
     <%= f.text_field :name, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
-    <%= f.label "stone global id", class: "small" %>
+    <%= f.label :sample, class: "small" %>
     <%= f.text_field :stone_global_id, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
-    <%= f.label "device", class: "small" %>
+    <%= f.label :device, class: "small" %>
     <%= f.select :device_id, Device.pluck(:name, :id), include_blank: true %>
   </div>
   <div class="form-group form-group-sm">
-    <%= f.label "technique", class: "small" %>
+    <%= f.label :technique, class: "small" %>
     <%= f.select :technique_id, Technique.pluck(:name, :id), include_blank: true %>
   </div>
   <div class="form-group form-group-sm">
-    <%= f.label :oprator ,class: "small" %>
+    <%= f.label :operator ,class: "small" %>
     <%= f.text_field :operator, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
