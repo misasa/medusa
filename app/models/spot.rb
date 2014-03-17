@@ -45,7 +45,7 @@ class Spot < ActiveRecord::Base
     {
       cx: spot_x,
       cy: spot_y,
-      r: radius_in_percent,
+      r: [attachment_file.original_width, attachment_file.original_height].max * radius_in_percent / 100,
       fill: fill_color,
       "fill-opacity" => opacity,
       stroke: stroke_color,
