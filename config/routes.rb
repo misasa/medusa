@@ -122,7 +122,7 @@ Medusa::Application.routes.draw do
     resources :analyses, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "attachment_file" }
   end
 
-  resources :chemistries do
+  resources :chemistries , only: [:edit, :update] do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "chemistry" }
   end
 
