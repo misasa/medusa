@@ -37,5 +37,5 @@
   </div>
 
   <%= f.submit "update chemistry", class: "btn btn-sm" %>
-  <%= link_to "cancel", :back, class: "btn btn-sm" %>
+  <%= link_to "cancel", request.referer, class: "btn btn-sm" %>
 <% end %>

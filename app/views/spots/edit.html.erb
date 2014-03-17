@@ -50,7 +50,7 @@
     </div>
 
     <%= f.submit "update spot", class: "btn btn-sm" %>
-    <%= link_to "cancel", :back, class: "btn btn-sm" %>
+    <%= link_to "cancel", request.referer, class: "btn btn-sm" %>
     <% end %>
   </div>
 </div>
