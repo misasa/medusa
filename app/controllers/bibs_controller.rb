@@ -49,31 +49,6 @@ class BibsController < ApplicationController
     respond_with @bib, layout: !request.xhr?
   end
 
-  def link_stone_by_global_id
-    @bib.stones << Stone.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-  
-  def link_box_by_global_id
-    @bib.boxes << Box.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-  
-  def link_place_by_global_id
-    @bib.places << Place.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-  
-  def link_analysis_by_global_id
-    @bib.analyses << Analysis.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-  
-  def link_attachment_file_by_global_id
-    @bib.attachment_files << AttachmentFile.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-
   def bundle_edit
     respond_with @bibs
   end
