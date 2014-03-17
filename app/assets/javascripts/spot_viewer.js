@@ -18,12 +18,15 @@
       var self = this, scaleX, scaleY;
       $(this.group).empty();
       this.image = $(svg).find("image");
+      this.spots = $(svg).find("circle");
       scaleX = this.options.width / this.image.attr("width");
       scaleY = this.options.height / this.image.attr("height");
       this.scale = (scaleX < scaleY) ? scaleX : scaleY;
       this.translateX = (this.options.width - this.image.attr("width") * this.scale) / 2;
       this.translateY = (this.options.height - this.image.attr("height") * this.scale) / 2;
       this.group.setAttribute("transform", "translate(" + this.translateX + "," + this.translateY + ") scale(" + this.scale + ")");
+      svg.setAttribute("width", this.image.attr("width"));
+      svg.setAttribute("height", this.image.attr("height"));
       this.group.appendChild(svg);
       $(this.image).dblclick(function(e) {
         var offsetX = e.pageX - $(this).offset().left, offsetY = e.pageY - $(this).offset().top,
@@ -31,6 +34,13 @@
         self.translate(x, y);
         return false;
       });
+      $(this.spots).css("cursor", "pointer");
+      $(this.spots).click(function(e) {
+        location.href = $(this).data("spot");
+      });
+    },
+    center: function() {
+      return { left: ((this.options.width / 2) - this.translateX) / this.scale, top: ((this.options.height / 2) - this.translateY) / this.scale };
     },
     translate: function(x, y) {
       this.transform(x, y, this.scale);

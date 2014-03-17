@@ -49,7 +49,8 @@ class Spot < ActiveRecord::Base
       fill: fill_color,
       "fill-opacity" => opacity,
       stroke: stroke_color,
-      "stroke-width" => stroke_width
+      "stroke-width" => stroke_width,
+      "data-spot" => Rails.application.routes.url_helpers.edit_spot_path(self)
     }
   end
 
