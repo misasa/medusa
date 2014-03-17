@@ -82,6 +82,11 @@ class BoxesController < ApplicationController
     label = Box.build_bundle_label(@boxes)
     send_data(label, filename: "boxes.csv", type: "text/csv")
   end
+  
+  def link_stone_by_global_id
+    @box.stones << Stone.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
+    redirect_to :back
+  end
 
   private
 
