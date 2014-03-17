@@ -18,6 +18,7 @@
       var self = this, scaleX, scaleY;
       $(this.group).empty();
       this.image = $(svg).find("image");
+      this.spots = $(svg).find("circle");
       scaleX = this.options.width / this.image.attr("width");
       scaleY = this.options.height / this.image.attr("height");
       this.scale = (scaleX < scaleY) ? scaleX : scaleY;
@@ -32,6 +33,9 @@
             x = (self.options.width) / 2 - offsetX, y = (self.options.height) / 2 - offsetY;
         self.translate(x, y);
         return false;
+      });
+      $(this.spots).click(function(e) {
+        location.href = $(this).data("spot");
       });
     },
     center: function() {
