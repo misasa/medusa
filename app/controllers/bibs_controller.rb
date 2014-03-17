@@ -1,7 +1,7 @@
 class BibsController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload,:bundle_edit, :bundle_update, :download_bundle_card, :download_label, :download_bundle_label]
-  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label]
+  before_action :find_resource, except: [:index, :create, :upload,:bundle_edit, :bundle_update, :download_bundle_card, :download_label, :download_bundle_label, :download_to_tex]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label, :download_to_tex]
   load_and_authorize_resource
 
   def index
@@ -97,6 +97,11 @@ class BibsController < ApplicationController
   def download_bundle_label
     label = Bib.build_bundle_label(@bibs)
     send_data(label, filename: "bibs.csv", type: "text/csv")
+  end
+  
+  def download_to_tex
+    tex = Bib.build_bundle_tex(@bibs)
+    send_data(tex, filename: "bibs.bib", type: "text")
   end
 
   private

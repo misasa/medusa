@@ -127,5 +127,20 @@ describe BibsController do
     it {expect(obj2.name).to eq attributes[:name]}
     it {expect(obj3.name).to eq obj3name}
   end
+  
+  describe "GET download_to_tex" do
+    after { get :download_to_tex, ids: params_ids }
+    let(:bib) { FactoryGirl.create(:bib) }
+    let(:params_ids) { [bib.id.to_s] }
+    let(:tex) { double(:tex) }
+    let(:bibs) { Bib.all }
+    before do
+      bib
+      allow(Bib).to receive(:where).with(id: params_ids).and_return(bibs)
+      allow(Bib).to receive(:build_bundle_tex).with(bibs).and_return(tex)
+      allow(controller).to receive(:send_data).and_return{controller.render nothing: true}
+    end
+    it { expect(controller).to receive(:send_data).with(tex, filename: "bibs.bib", type: "text") }
+  end
 
 end

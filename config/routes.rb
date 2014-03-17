@@ -96,6 +96,9 @@ Medusa::Application.routes.draw do
       get :property
       post 'attachment_files/upload' => 'bibs#upload'
     end
+    collection do
+      get :download_to_tex
+    end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
     resources :stones, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "bib", association_name: "stones" }
     resources :boxes, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "bib", association_name: "boxes" }
