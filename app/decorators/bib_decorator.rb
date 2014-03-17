@@ -6,4 +6,31 @@ class BibDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + " #{name} < #{global_id} >"
   end
 
+  def to_html
+    html = author_short
+    html += " (#{year})" unless year.blank?
+    html += " #{name}" unless name.blank?
+    html += ", <i>#{journal}</i>" unless journal.blank?
+    html += ", <b>#{volume}</b>" unless volume.blank?
+    html += ", #{pages}" unless pages.blank?
+    html += " at " + updated_at.strftime("%Y-%m-%d %H:%M")
+    html += "."
+    html
+  end
+
+  private
+  
+  def author_short
+    author_names = authors.map{|authors| authors.name}
+    if (author_names.length == 1)
+      author_names[0]
+    elsif (author_names.length == 2)
+      author_names.join(' & ')
+    elsif (author_names.length > 2)
+      author_names[0] + " et al."
+    else
+      ""
+    end
+  end
+
 end

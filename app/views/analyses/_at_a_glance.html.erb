@@ -10,9 +10,10 @@
   <% unless @analysis.bibs.empty? %>
     <li>references:</li>
     <ul>
-      <% @analysis.bibs.each do |bib| %>
+      <% BibDecorator.decorate_collection(@analysis.bibs).each do |bib| %>
         <li>
-          <%= link_to bib.name, bib %>
+          <%== bib.to_html %>
+          <%= link_to "more", bib %>
           <% if bib.primary_pdf_attachment_file %>
             <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(bib.primary_pdf_attachment_file)) %>
           <% end %>
