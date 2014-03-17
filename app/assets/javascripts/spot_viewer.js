@@ -34,6 +34,7 @@
         self.translate(x, y);
         return false;
       });
+      $(this.spots).css("cursor", "pointer");
       $(this.spots).click(function(e) {
         location.href = $(this).data("spot");
       });
