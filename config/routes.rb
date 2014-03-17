@@ -43,10 +43,10 @@ Medusa::Application.routes.draw do
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "stone" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "stone" }
-    resources :bibs, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "stone" }
-    resources :daughters, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
+    resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "stone" }
+    resources :daughters, concerns: [:link_by_global_id], only: [:index, :create,:update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
     resources :stones, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
-    resources :analyses, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "stone" }
+    resources :analyses, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "stone" }
   end
 
   resources :boxes, concerns: [:bundleable, :reportable], except: [:new] do
