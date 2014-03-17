@@ -34,6 +34,9 @@
         return false;
       });
     },
+    center: function() {
+      return { left: ((this.options.width / 2) - this.translateX) / this.scale, top: ((this.options.height / 2) - this.translateY) / this.scale };
+    },
     translate: function(x, y) {
       this.transform(x, y, this.scale);
     },
