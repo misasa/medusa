@@ -24,9 +24,9 @@
       this.translateX = (this.options.width - this.image.attr("width") * this.scale) / 2;
       this.translateY = (this.options.height - this.image.attr("height") * this.scale) / 2;
       this.group.setAttribute("transform", "translate(" + this.translateX + "," + this.translateY + ") scale(" + this.scale + ")");
-      $.each(svg.children, function(index, elm) {
-        self.group.appendChild(elm);
-      });
+      svg.setAttribute("width", this.image.attr("width"));
+      svg.setAttribute("height", this.image.attr("height"));
+      this.group.appendChild(svg);
       $(this.image).dblclick(function(e) {
         var offsetX = e.pageX - $(this).offset().left, offsetY = e.pageY - $(this).offset().top,
             x = (self.options.width) / 2 - offsetX, y = (self.options.height) / 2 - offsetY;
