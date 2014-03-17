@@ -9,22 +9,22 @@
       this.thumbnails = this.element.find("div.spot-thumbnails");
       this.options = $.extend({
         width: this.canvas.attr("width"),
-        height: this.canvas.attr("height")
+        height: this.canvas.attr("height"),
+        scale: this.canvas.data("scale"),
+        center: {
+          x: this.canvas.data("center-x"),
+          y: this.canvas.data("center-y")
+        }
       }, this.options);
       this._initCanvas();
       this._initThumbnails();
     },
     loadImage: function(svg) {
-      var self = this, scaleX, scaleY;
+      var self = this;
       $(this.group).empty();
       this.image = $(svg).find("image");
       this.spots = $(svg).find("circle");
-      scaleX = this.options.width / this.image.attr("width");
-      scaleY = this.options.height / this.image.attr("height");
-      this.scale = (scaleX < scaleY) ? scaleX : scaleY;
-      this.translateX = (this.options.width - this.image.attr("width") * this.scale) / 2;
-      this.translateY = (this.options.height - this.image.attr("height") * this.scale) / 2;
-      this.group.setAttribute("transform", "translate(" + this.translateX + "," + this.translateY + ") scale(" + this.scale + ")");
+      this._initTransform(this.image.attr("width"), this.image.attr("height"));
       svg.setAttribute("width", this.image.attr("width"));
       svg.setAttribute("height", this.image.attr("height"));
       this.group.appendChild(svg);
@@ -75,6 +75,23 @@
           self.loadImage(data.documentElement);
         });
       }
+    },
+    _initTransform: function(width, height) {
+      var scaleX, scaleY, left, top;
+      scaleX = this.options.width / width;
+      scaleY = this.options.height / height;
+      scale = (scaleX < scaleY) ? scaleX : scaleY;
+      if (this.options.scale) {
+        scale = scale * this.options.scale;
+      }
+      if (this.options.center.x && this.options.center.y) {
+        left = (this.options.width / 2) - this.options.center.x * scale;
+        top = (this.options.height / 2) - this.options.center.y * scale;
+      } else {
+        left = (this.options.width - width * scale) / 2;
+        top = (this.options.height - height * scale) / 2;
+      }
+      this.transform(left, top, scale);
     },
     _addGroup: function() {
       var group = this._createSvgElement("g");

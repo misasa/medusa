@@ -1,47 +1,60 @@
-<%= form_for @spot, html: {class: "col-lg-3"} do |f| %>
-  <%= error_notification(@spot.errors) %>
-
-  <div class="form-group form-group-sm">
-    <%= f.label :name, class: "small" %>
-    <%= f.text_field :name, class: "form-control input-sm" %>
+<div class="row">
+  <div class="col-lg-4">
+    <div class="spot-viewer">
+      <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300, "data-center-x" => @spot.spot_x, "data-center-y" => @spot.spot_y, "data-scale" => 4, "data-image" => attachment_file_path(@spot.attachment_file, format: :svg) %>
+    </div>
   </div>
+  <div class="col-lg-8">
+    <%= form_for @spot, html: {class: "col-lg-3"} do |f| %>
+    <%= error_notification(@spot.errors) %>
 
-  <div class="form-group form-group-sm">
-    <%= f.label "link ID", class: "small" %>
-    <%= f.text_field :target_uid, class: "form-control input-sm" %>
-  </div>
+    <div class="form-group form-group-sm">
+      <%= f.label :name, class: "small" %>
+      <%= f.text_field :name, class: "form-control input-sm" %>
+    </div>
 
-  <div class="form-group form-group-sm">
-    <%= f.label :radius_in_percent, class: "small" %>
-    <%= f.text_field :radius_in_percent, class: "form-control input-sm" %>
-  </div>
+    <div class="form-group form-group-sm">
+      <%= f.label "link ID", class: "small" %>
+      <%= f.text_field :target_uid, class: "form-control input-sm" %>
+    </div>
 
-  <div class="form-group form-group-sm">
-    <%= f.label :stroke_width, class: "small" %>
-    <%= f.text_field :stroke_width, class: "form-control input-sm" %>
-  </div>
+    <div class="form-group form-group-sm">
+      <%= f.label :radius_in_percent, class: "small" %>
+      <%= f.text_field :radius_in_percent, class: "form-control input-sm" %>
+    </div>
 
-  <div class="form-group form-group-sm">
-    <%= f.label :stroke_color, class: "small" %>
-    <%= f.text_field :stroke_color, class: "form-control input-sm" %>
-  </div>
+    <div class="form-group form-group-sm">
+      <%= f.label :stroke_width, class: "small" %>
+      <%= f.text_field :stroke_width, class: "form-control input-sm" %>
+    </div>
 
-  <div class="form-group form-group-sm">
-    <%= f.label :fill_color, class: "small" %>
-    <%= f.text_field :fill_color, class: "form-control input-sm" %>
-  </div>
+    <div class="form-group form-group-sm">
+      <%= f.label :stroke_color, class: "small" %>
+      <%= f.text_field :stroke_color, class: "form-control input-sm" %>
+    </div>
 
-  <div class="form-group form-group-sm">
-    <%= f.label :opacity, class: "small" %>
-    <%= f.text_field :opacity, class: "form-control input-sm" %>
-  </div>
+    <div class="form-group form-group-sm">
+      <%= f.label :fill_color, class: "small" %>
+      <%= f.text_field :fill_color, class: "form-control input-sm" %>
+    </div>
 
-  <div class="form-group form-group-sm">
-    <%= f.label :opacity, class: "checkbox-inline" do%>
+    <div class="form-group form-group-sm">
+      <%= f.label :opacity, class: "small" %>
+      <%= f.text_field :opacity, class: "form-control input-sm" %>
+    </div>
+
+    <div class="form-group form-group-sm">
+      <%= f.label :opacity, class: "checkbox-inline" do%>
       <%= f.check_box :opacity, class: "form-control input-sm" %> cross line
+      <% end %>
+    </div>
+
+    <%= f.submit "update spot", class: "btn btn-sm" %>
+    <%= link_to "cancel", :back, class: "btn btn-sm" %>
     <% end %>
   </div>
+</div>
 
-  <%= f.submit "update spot", class: "btn btn-sm" %>
-  <%= link_to "cancel", :back, class: "btn btn-sm" %>
+<%= javascript_tag do %>
+  $("div.spot-viewer").spotViewer();
 <% end %>
