@@ -53,31 +53,6 @@ class AttachmentFilesController < ApplicationController
     send_file("#{Rails.root}/public#{@attachment_file.path}", filename: @attachment_file.data_file_name, type: @attachment_file.data_content_type)
   end
 
-  def link_stone_by_global_id
-    @attachment_file.stones << Stone.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-
-  def link_box_by_global_id
-    @attachment_file.boxes << Box.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-
-  def link_place_by_global_id
-    @attachment_file.places << Place.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-
-  def link_analysis_by_global_id
-    @attachment_file.analyses << Analysis.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-
-  def link_bib_by_global_id
-    @attachment_file.bibs << Bib.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-
   def bundle_edit
     respond_with @attachment_files
   end
