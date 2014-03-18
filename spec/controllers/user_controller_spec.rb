@@ -95,5 +95,11 @@ describe UsersController do
       it { expect(response).to render_template("edit") }
     end
   end
+  
+  describe "DELETE destroy" do
+    let(:user) { FactoryGirl.create(:user) }
+    before { user }
+    it { expect { delete :destroy, id: user.id }.to change(User, :count).by(-1) }
+  end
 
 end

@@ -37,6 +37,11 @@ class UsersController < ApplicationController
     @user.update_attributes(pa)
     respond_with(@user, location: users_path)
   end
+  
+  def destroy
+    @user.destroy
+    respond_with @user
+  end
 
   private
 
