@@ -12,9 +12,13 @@ module ActiveRecord::Associations::Builder
         end
 
         def #{name}_global_id=(id)
-          record = ::RecordProperty.find_by(global_id: id).try!(:datum)
-          if record.is_a? association(:#{name}).klass
-            write_attribute(association(:#{name}).reflection.foreign_key, record.id)
+          if id.present?
+            record = ::RecordProperty.find_by(global_id: id).try!(:datum)
+            if record.is_a? association(:#{name}).klass
+              write_attribute(association(:#{name}).reflection.foreign_key, record.id)
+            end
+          else
+            write_attribute(association(:#{name}).reflection.foreign_key, nil)
           end
         end
       CODE
