@@ -55,5 +55,10 @@
       <% end %>
     </div>
   <% end %>
-  <%= form.submit class: "btn btn-sm" %>
+  <div class="pull-left"><%= form.submit class: "btn btn-sm" %></div>
+  <div class="pull-right">
+    <%= link_to record_path(record.global_id), method: :delete , data: {confirm: t("confirm.delete")} do %>
+      <span class="glyphicon glyphicon-remove"></span>
+    <% end %>
+  </div>
 <% end %>

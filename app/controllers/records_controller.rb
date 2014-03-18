@@ -17,6 +17,11 @@ class RecordsController < ApplicationController
   def property
     respond_with @record.record_property
   end
+  
+  def destroy
+    @record.destroy
+    respond_with @record
+  end
 
   private
 
