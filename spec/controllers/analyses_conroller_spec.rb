@@ -107,4 +107,20 @@ describe AnalysesController do
     it { expect(assigns(:analysis)).to eq obj }
   end
 
+  describe "POST import" do
+    let(:data) { double(:upload_data) }
+    before do
+      allow(Analysis).to receive(:import_csv).with(data.to_s).and_return(import_result)
+      post :import, data: data
+    end
+    context "import success" do
+      let(:import_result) { true }
+      it { expect(response).to redirect_to(analyses_path) }
+    end
+    context "import false" do
+      let(:import_result) { false }
+      it { expect(response).to render_template("import_invalid") }
+    end
+  end
+
 end

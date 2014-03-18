@@ -69,4 +69,8 @@
     <%= link_to name, new_analysis_path(format: :csv, measurement_category_id: id) %>
   <% end %>
   ),<br/>and modify, then upload.
+  <%= form_tag(import_analyses_path, method: :post, multipart: true) do %>
+    <%= file_field_tag :data %>
+    <%= submit_tag :upload %>
+  <% end %>
 </div>

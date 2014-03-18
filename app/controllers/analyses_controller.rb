@@ -1,6 +1,6 @@
 class AnalysesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :new, :create, :upload,:bundle_edit, :bundle_update]
+  before_action :find_resource, except: [:index, :new, :create, :upload,:bundle_edit, :bundle_update, :import]
   before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
 
@@ -14,7 +14,7 @@ class AnalysesController < ApplicationController
   def new
     mc = MeasurementCategory.find(params[:measurement_category_id])
     respond_to do |format|
-      format.csv { render csv: [Analysis.new], style: "#{mc.name}".to_sym, filename: "my_#{mc.name}" }
+      format.csv { render csv: [Analysis.new], style: "#{mc.name}".to_sym, filename: "my_#{mc.name.gsub(' ','')}" }
     end
   end
 
@@ -63,6 +63,14 @@ class AnalysesController < ApplicationController
   def bundle_update
     @analyses.each { |analysis| analysis.update_attributes(analysis_params.only_presence) }
     render :bundle_edit
+  end
+
+  def import
+    if Analysis.import_csv(params[:data])
+      redirect_to analyses_path
+    else
+      render "import_invalid"
+    end
   end
 
   private

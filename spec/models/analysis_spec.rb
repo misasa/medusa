@@ -2,6 +2,13 @@ require 'spec_helper'
 
 describe Analysis do
 
+  describe "constants" do
+    describe "PERMIT_IMPORT_TYPES" do
+      subject { Analysis::PERMIT_IMPORT_TYPES }
+      it { expect(subject).to include("text/plain", "text/csv", "application/csv") }
+    end
+  end
+
   describe "validates" do
     describe "name" do
       let(:obj) { FactoryGirl.build(:analysis, name: name) }
@@ -103,5 +110,76 @@ describe Analysis do
         it {expect(analysis.stone).to eq stone}
       end
     end
+  end
+
+  describe "#device_name=" do
+    before { analysis.device_name = name }
+    let(:analysis) { FactoryGirl.build(:analysis, device: nil) }
+    context "name is exist device name" do
+      let(:name) { device.name }
+      let(:device) { FactoryGirl.create(:device) }
+      it { expect(analysis.device_id).to eq device.id }
+    end
+    context "name is not device name" do
+      let(:name) { "hoge" }
+      it { expect(analysis.device_id).to be_nil }
+    end
+  end
+
+  describe "#technique_name=" do
+    before { analysis.technique_name = name }
+    let(:analysis) { FactoryGirl.build(:analysis, technique: nil) }
+    context "name is exist technique name" do
+      let(:name) { technique.name }
+      let(:technique) { FactoryGirl.create(:technique) }
+      it { expect(analysis.technique_id).to eq technique.id }
+    end
+    context "name is not technique name" do
+      let(:name) { "hoge" }
+      it { expect(analysis.technique_id).to be_nil }
+    end
+  end
+
+  describe ".import_csv" do
+    subject { Analysis.import_csv(file) }
+    context "file is nil" do
+      let(:file) { nil }
+      it { expect(subject).to be_nil }
+    end
+    context "file is present" do
+      let(:file) { double(:file) }
+      let(:objects) { [analysis] }
+      before do
+        allow(file).to receive(:content_type).and_return(content_type)
+        allow(Analysis).to receive(:build_objects_from_csv).with(file).and_return(objects)
+      end
+      context "content_type is 'csv'" do
+        let(:content_type) { 'text/csv' }
+        context "objects is all valid" do
+          let(:analysis) { FactoryGirl.build(:analysis) }
+          it { expect(subject).to be_present }
+        end
+        context "object is invalid" do
+          let(:analysis) { FactoryGirl.build(:analysis, name: nil) }
+          it { expect(subject).to eq false }
+        end
+      end
+      context "content_type is not 'csv'" do
+        let(:content_type) { 'image/png' }
+        context "objects is all valid" do
+          let(:analysis) { FactoryGirl.build(:analysis) }
+          it { expect(subject).to be_nil }
+        end
+        context "object is invalid" do
+          let(:analysis) { FactoryGirl.build(:analysis, name: nil) }
+          it { expect(subject).to be_nil }
+        end
+      end
+    end
+  end
+
+  pending "build_objects_from_csv" do
+  end
+  pending "set_object" do
   end
 end

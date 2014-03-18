@@ -84,6 +84,9 @@ Medusa::Application.routes.draw do
       get :property
       post 'attachment_files/upload' => 'analyses#upload'
     end
+    collection do
+      post :import
+    end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "analysis" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "analysis" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "analysis" }
