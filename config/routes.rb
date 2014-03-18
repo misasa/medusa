@@ -143,7 +143,7 @@ Medusa::Application.routes.draw do
       get 'quick_search'
     end
   end
-  resources :users, except: [:destory]
+  resources :users
   resources :groups, except: [:new]
   resources :physical_forms, except: [:new]
   resources :classifications, except: [:new]

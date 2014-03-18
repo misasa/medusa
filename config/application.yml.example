@@ -20,7 +20,8 @@ timemachine:
   <<: *defaults
 
 backup:
-  files:
-    dir_path: "/tmp/medusa/backup/files"
-  db:
-    dir_path: "/tmp/medusa/backup/db"
+  host: devel.misasa.okayama-u.ac.jp
+  username: medusa
+  dir_path:
+    files: /tmp/medusa/backup/files
+    db: /tmp/medusa/backup/db

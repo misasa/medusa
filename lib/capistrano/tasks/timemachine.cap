@@ -3,6 +3,12 @@ require File.expand_path("../../../../app/models/backup.rb", __FILE__)
 namespace :timemachine do
 
   task :environment do
+    run_locally do
+      unless :timemachine == fetch(:stage)
+        error "Timemachine task must be called in timemachine stage."
+        raise
+      end
+    end
     set :timemachine_path, deploy_path.join("timemachine")
     set :timemachine_dest, Date.parse(ENV["dest"]) if ENV["dest"]
     set :unicorn_root, fetch(:timemachine_path)
@@ -13,7 +19,7 @@ namespace :timemachine do
   def reset_timemachine_dir(date)
     path = fetch(:timemachine_path)
     backup_name = date.strftime("%Y%m%d")
-    backup_path = Pathname.new(Backup.files.dir_path).join(backup_name)
+    backup_path = Pathname.new(Backup.dir_path.files).join(backup_name)
     if test "[ -d #{backup_path} ]"
       execute :rm, path if test "[ -e #{path} ]"
       execute :ln, "-s", backup_path, path
