@@ -1,0 +1,41 @@
+<%= form_for @chemistry, html: {class: "col-lg-3"} do |f| %>
+  <%= error_notification(@chemistry.errors) %>
+
+  <div class="form-group form-group-sm">
+    <%= f.label :measurement, class: "small" %>
+    <%= f.select :measurement_item_id ,MeasurementItem.all.map{|r|[raw(r.display_name),r.id]}, class: "form-control input-sm"  %>
+  </div>
+
+  <div class="form-group form-group-sm">
+    <%= f.label "value", class: "small" %>
+    <%= f.text_field :value, class: "form-control input-sm" %>
+  </div>
+
+  <div class="form-group form-group-sm">
+    <%= f.label :unit, class: "small" %>
+    <%= f.select :unit_id ,Unit.pluck(:name, :id), class: "form-control input-sm"  %>
+  </div>
+
+  <div class="form-group form-group-sm">
+    <%= f.label :uncertainty, class: "small" %>
+    <%= f.text_field :uncertainty, class: "form-control input-sm" %>
+  </div>
+
+ <div class="form-group form-group-sm">
+    <%= f.label :description, class: "small" %>
+    <%= f.text_area :description, class: "form-control input-sm", row: 3 %>
+  </div>
+
+  <div class="form-group form-group-sm">
+    <%= f.label :info, class: "small" %>
+    <%= f.text_field :info, class: "form-control input-sm" %>
+  </div>
+
+  <div class="form-group form-group-sm">
+    <%= f.label :label, class: "small" %>
+    <%= f.text_field :label, class: "form-control input-sm" %>
+  </div>
+
+  <%= f.submit "update chemistry", class: "btn btn-sm" %>
+  <%= link_to "cancel", request.referer, class: "btn btn-sm" %>
+<% end %>

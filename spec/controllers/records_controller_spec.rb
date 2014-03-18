@@ -89,4 +89,10 @@ describe RecordsController do
       it { expect(response.status).to eq 404 }
     end
   end
+  
+  describe "DELETE destroy" do
+    let(:stone) { FactoryGirl.create(:stone) }
+    before { stone }
+    it { expect { delete :destroy, id: stone.record_property.global_id }.to change(RecordProperty, :count).by(-1) }
+  end
 end

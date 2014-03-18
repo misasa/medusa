@@ -84,5 +84,11 @@ describe GroupsController do
       it { expect(response).to render_template("edit") }
     end
   end
+  
+  describe "DELETE destroy" do
+    let(:group) { FactoryGirl.create(:group, name: "group") }
+    before { group }
+    it { expect { delete :destroy, id: group.id }.to change(Group, :count).by(-1) }
+  end
 
 end

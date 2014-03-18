@@ -1,3 +1,75 @@
 <ul>
+  <%= li_if_exist 'technique: ', @analysis.technique.try!(:name) %>
+  <%= li_if_exist 'device: ', @analysis.device.try!(:name) %>
+  <%= li_if_exist 'operator: ', @analysis.try!(:operator) %>
+  <%= li_if_exist 'description: ', @analysis.try!(:description) %>
   <li>modified at <%= difference_from_now(@analysis.updated_at) -%></li>
+  <% if @analysis.stone %>
+    <li>sample: <%= link_to @analysis.stone.name,stone_path(@analysis.stone) %></li>
+  <% end %>
+  <% unless @analysis.bibs.empty? %>
+    <li>references:</li>
+    <ul>
+      <% BibDecorator.decorate_collection(@analysis.bibs).each do |bib| %>
+        <li>
+          <%== bib.to_html %>
+          <%= link_to "more", bib %>
+          <% if bib.primary_pdf_attachment_file %>
+            <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(bib.primary_pdf_attachment_file)) %>
+          <% end %>
+        </li>
+      <% end %>
+    </ul>
+  <% end %>
 </ul>
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th>measured</th>
+      <th>value</th>
+      <th>uncertainty</th>
+      <th>unit</th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @analysis.chemistries.each do |chemistry| %>
+      <tr>
+        <td><%= link_to raw(chemistry.measurement_item.display_name),edit_chemistry_path(chemistry) %></td>
+        <td><%= chemistry.try!(:value) %></td>
+        <td><%= chemistry.try!(:uncertainty) %></td>
+        <td><%= chemistry.unit.try!(:name) %></td>
+        <td>
+          <%= link_to analysis_chemistry_path(@analysis,chemistry), method: :delete ,title: "delete chemistory",data: {confirm: t("confirm.delete")} do %>
+              <span class="glyphicon glyphicon-remove"></span>
+            <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+   <tr>
+     <%= form_for Chemistry.new, url: analysis_chemistries_path(@analysis) do |f|%>
+        <th><%= f.select :measurement_item_id ,MeasurementItem.all.map{|r|[raw(r.display_in_html.blank? ? r.nickname : r.display_in_html),r.id]} %></th>
+        <th><%= f.text_field :value %></th>
+        <th><%= f.text_field :uncertainty %></th>
+        <th><%= f.select :unit_id ,Unit.pluck(:name, :id) %></th>
+        <th>
+          <%= f.button title:"add chemistry",class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+        </th>
+      <% end %>
+    <tr>
+  </tfoot>
+
+  </tfoot>
+</table>
+<% if @analysis.chemistries.empty? %>
+  <div>
+  form for 
+  <% MeasurementCategory.pluck(:name, :id).each do |name, id| %>
+    <%= link_to name,multiple_new_analysis_chemistries_path(@analysis,measurement_category_id: id) %>
+  <% end %>
+</div>
+<% end %>

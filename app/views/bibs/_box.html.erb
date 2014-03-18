@@ -14,7 +14,7 @@
       <% @bib.boxes.each do |box| %>
         <tr>
           <td>
-            <%= check_box_tag("ids[]", box.id, checked: false, id: "ids_#{box.id}", class: "select-row") if can?(:update, box) %>
+            <%= check_box_tag("ids[]", box.id, false, {id: "ids_#{box.id}", class: "select-row"}) if can?(:update, box) %>
           </td>
           <td><%= link_to box.name,box %></td>
           <td><%= box.box_type.try!(:name) %></td>

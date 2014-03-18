@@ -82,13 +82,13 @@ class BoxesController < ApplicationController
     label = Box.build_bundle_label(@boxes)
     send_data(label, filename: "boxes.csv", type: "text/csv")
   end
-
+  
   private
 
   def box_params
     params.require(:box).permit(
       :name,
-      :parent_id,
+      :parent_global_id,
       :position,
       :path,
       :box_type_id,

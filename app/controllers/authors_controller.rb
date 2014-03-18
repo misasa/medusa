@@ -30,6 +30,11 @@ class AuthorsController < ApplicationController
     respond_with(@author, location: authors_path)
   end
   
+  def destroy
+    @author.destroy
+    respond_with @author
+  end
+  
   private
   
   def author_params

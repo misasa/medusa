@@ -15,7 +15,7 @@
       <% @bib.places.each do |place| %>
         <tr>
           <td>
-            <%= check_box_tag("ids[]", place.id, checked: false, id: "ids_#{place.id}", class: "select-row") if can?(:update, place) %>
+            <%= check_box_tag("ids[]", place.id, false, {id: "ids_#{place.id}", class: "select-row"}) if can?(:update, place) %>
           </td>
           <td><%= link_to place.name, place %></td>
           <td><%= place.decorate.latitude_to_text %></td>

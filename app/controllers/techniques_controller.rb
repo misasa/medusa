@@ -30,6 +30,11 @@ class TechniquesController < ApplicationController
     respond_with(@technique, location: techniques_path)
   end
   
+  def destroy
+    @technique.destroy
+    respond_with @technique
+  end
+  
   private
   
   def technique_params

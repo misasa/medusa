@@ -21,7 +21,7 @@ class AttachmentFile < ActiveRecord::Base
   def path
     id_partition = ("%08d" % id.to_s).scan(/\d{4}/).join("/")
     table_name = self.class.name.tableize
-    "/system/#{table_name}/#{id_partition}/#{data_file_name}"
+    "#{Rails.application.config.relative_url_root}/system/#{table_name}/#{id_partition}/#{data_file_name}"
   end
 
   def data_fingerprint
@@ -39,7 +39,7 @@ class AttachmentFile < ActiveRecord::Base
   def pdf?
     !(data_content_type =~ /pdf$/).nil?
   end
-  
+
   def image?
     !(data_content_type =~ /^image.*/).nil?
   end
@@ -150,6 +150,11 @@ class AttachmentFile < ActiveRecord::Base
     return Math.sqrt(dx * dx + dy * dy)
   end
 
+  def to_svg
+    image = %Q|<image xlink:href="#{path}" x="0" y="0" width="#{original_width}" height="#{original_height}"/>|
+    spots.inject(image) { |svg, spot| svg + spot.to_svg }
+  end
+
   private
 
   def x_max
@@ -199,6 +204,4 @@ class AttachmentFile < ActiveRecord::Base
     return dst_points
   end
 
-
 end
-

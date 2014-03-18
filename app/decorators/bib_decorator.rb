@@ -5,46 +5,32 @@ class BibDecorator < Draper::Decorator
   def name_with_id
     h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + " #{name} < #{global_id} >"
   end
+
+  def to_html
+    html = author_short
+    html += " (#{year})" unless year.blank?
+    html += " #{name}" unless name.blank?
+    html += ", <i>#{journal}</i>" unless journal.blank?
+    html += ", <b>#{volume}</b>" unless volume.blank?
+    html += ", #{pages}" unless pages.blank?
+    html += " at " + updated_at.strftime("%Y-%m-%d %H:%M")
+    html += "."
+    html
+  end
+
+  private
   
-  def to_tex
-    if entry_type == "article"
-      tex = "\n@article{#{abbreviation.presence || global_id},\n#{article_tex},\n}"
+  def author_short
+    author_names = authors.map{|authors| authors.name}
+    if (author_names.length == 1)
+      author_names[0]
+    elsif (author_names.length == 2)
+      author_names.join(' & ')
+    elsif (author_names.length > 2)
+      author_names[0] + " et al."
     else
-      tex = "\n@misc{#{abbreviation.presence || global_id},\n#{misc_tex},\n}"
+      ""
     end
-    return tex
   end
-  
-  def article_tex
-    bib_array = []
-    bib_array << "\tauthor = \"#{author_lists}\""
-    bib_array << "\tname = \"#{name}\""
-    bib_array << "\tjournal = \"#{journal}\""
-    bib_array << "\tyear = \"#{year}\""
-    bib_array << "\tnumber = \"#{number}\"" if number.present?
-    bib_array << "\tmonth = \"#{month}\"" if month.present?
-    bib_array << "\tvolume = \"#{volume}\"" if volume.present?
-    bib_array << "\tpages = \"#{pages}\"" if pages.present?
-    bib_array << "\tnote = \"#{note}\"" if note.present?
-    bib_array << "\tdoi = \"#{doi}\"" if doi.present?
-    bib_array << "\tkey = \"#{key}\"" if key.present?
-    bib_array.join(",\n")
-  end
-  
-  def misc_tex
-    bib_array = []
-    bib_array << "\tauthor = \"#{author_lists}\""
-    bib_array << "\tname = \"#{name}\""
-    bib_array << "\tnumber = \"#{number}\"" if number.present?
-    bib_array << "\tmonth = \"#{month}\"" if month.present?
-    bib_array << "\tjournal = \"#{journal}\"" if journal.present?
-    bib_array << "\tvolume = \"#{volume}\"" if volume.present?
-    bib_array << "\tpages = \"#{pages}\"" if pages.present?
-    bib_array << "\tyear = \"#{year}\"" if year.present?
-    bib_array << "\tnote = \"#{note}\"" if note.present?
-    bib_array << "\tdoi = \"#{doi}\"" if doi.present?
-    bib_array << "\tkey = \"#{key}\"" if key.present?
-    bib_array.join(",\n")
-  end
-  
+
 end

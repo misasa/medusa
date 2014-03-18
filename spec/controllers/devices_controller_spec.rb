@@ -85,4 +85,10 @@ describe DevicesController do
     end
   end
   
+  describe "DELETE destroy" do
+    let(:device) { FactoryGirl.create(:device, name: "device") }
+    before { device }
+    it { expect { delete :destroy, id: device.id }.to change(Device, :count).by(-1) }
+  end
+  
 end

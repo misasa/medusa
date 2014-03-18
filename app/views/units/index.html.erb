@@ -49,6 +49,11 @@
       <td></td>
       <td><%= difference_from_now(unit.updated_at) %></td>
       <td><%= difference_from_now(unit.created_at) %></td>
+      <td>
+        <%= link_to unit_path(unit), method: :delete , data: {confirm: t("confirm.delete")} do %>
+        <span class="glyphicon glyphicon-remove"></span>
+        <% end %>
+      </td>
     </tr>
     <% end %>
   </tbody>

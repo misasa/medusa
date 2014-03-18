@@ -4,7 +4,7 @@
   <div class="row spot-thumbnails">
     <% files.each do |file| %>
     <div class="col-lg-3">
-      <%= link_to attachment_file_spots_path(file, format: :json), remote: true, class: "thumbnail" do %>
+      <%= link_to attachment_file_path(file, format: :svg), remote: true, class: "thumbnail" do %>
       <%= image_tag file.path %>
       <% end %>
     </div>

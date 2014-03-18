@@ -182,4 +182,5 @@ describe Analysis do
   end
   pending "set_object" do
   end
+
 end

@@ -85,4 +85,10 @@ describe TechniquesController do
     end
   end
   
+  describe "DELETE destroy" do
+    let(:technique) { FactoryGirl.create(:technique, name: "technique") }
+    before { technique }
+    it { expect { delete :destroy, id: technique.id }.to change(Technique, :count).by(-1) }
+  end
+  
 end

@@ -1,7 +1,7 @@
 class BibsController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload,:bundle_edit, :bundle_update, :download_bundle_card, :download_label, :download_bundle_label]
-  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label]
+  before_action :find_resource, except: [:index, :create, :upload,:bundle_edit, :bundle_update, :download_bundle_card, :download_label, :download_bundle_label, :download_to_tex]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label, :download_to_tex]
   load_and_authorize_resource
 
   def index
@@ -49,31 +49,6 @@ class BibsController < ApplicationController
     respond_with @bib, layout: !request.xhr?
   end
 
-  def link_stone_by_global_id
-    @bib.stones << Stone.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-  
-  def link_box_by_global_id
-    @bib.boxes << Box.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-  
-  def link_place_by_global_id
-    @bib.places << Place.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-  
-  def link_analysis_by_global_id
-    @bib.analyses << Analysis.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-  
-  def link_attachment_file_by_global_id
-    @bib.attachment_files << AttachmentFile.joins(:record_property).where(record_properties: {global_id: params[:global_id]})
-    redirect_to :back
-  end
-
   def bundle_edit
     respond_with @bibs
   end
@@ -97,6 +72,11 @@ class BibsController < ApplicationController
   def download_bundle_label
     label = Bib.build_bundle_label(@bibs)
     send_data(label, filename: "bibs.csv", type: "text/csv")
+  end
+  
+  def download_to_tex
+    tex = Bib.build_bundle_tex(@bibs)
+    send_data(tex, filename: "bibs.bib", type: "text")
   end
 
   private

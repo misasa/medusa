@@ -5,7 +5,9 @@
       <%= li_if_exist("abbreviation: ", @bib.abbreviation) %>
       <%= li_if_exist("name: ", @bib.name) %>
       <%= li_if_exist("author: ", @bib.author_lists) %>
-      <%= li_if_exist("doi: ", link_to((@bib.doi), @bib.doi_link_url)) %>
+      <% if @bib.doi.present? %>
+        <li>doi: <%= link_to(@bib.doi, @bib.doi_link_url) %></li>
+      <% end %>
       <%= li_if_exist("journal: ", @bib.journal) %>
       <%= li_if_exist("year: ", @bib.year) %>
       <%= li_if_exist("volume: ", @bib.volume) %>

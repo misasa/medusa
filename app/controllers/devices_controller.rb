@@ -30,6 +30,11 @@ class DevicesController < ApplicationController
     respond_with(@device, location: devices_path)
   end
   
+  def destroy
+    @device.destroy
+    respond_with @device
+  end
+  
   private
   
   def device_params

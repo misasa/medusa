@@ -37,6 +37,23 @@ class Spot < ActiveRecord::Base
     [spot_x - cpt[0], cpt[1] - spot_y]
   end
 
+  def to_svg
+    "<circle #{svg_attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/>"
+  end
+
+  def svg_attributes
+    {
+      cx: spot_x,
+      cy: spot_y,
+      r: [attachment_file.original_width, attachment_file.original_height].max * radius_in_percent / 100,
+      fill: fill_color,
+      "fill-opacity" => opacity,
+      stroke: stroke_color,
+      "stroke-width" => stroke_width,
+      "data-spot" => Rails.application.routes.url_helpers.edit_spot_path(self, script_name: Rails.application.config.relative_url_root)
+    }
+  end
+
 private
 
   def spot_center_xy

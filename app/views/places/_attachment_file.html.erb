@@ -16,7 +16,7 @@
         <tr>
           <% attachment_file = attaching.attachment_file %>
           <td>
-            <%= check_box_tag("ids[]", attachment_file.id, checked: false, id: "ids_#{attachment_file.id}", class: "select-row") if can?(:update, attachment_file) %>
+            <%= check_box_tag("ids[]", attachment_file.id, false, {id: "ids_#{attachment_file.id}", class: "select-row"}) if can?(:update, attachment_file) %>
           </td>
           <td><%= image_tag(attachment_file.path,width: 70,height: 70) %></td>
           <td><%= link_to attachment_file.data_file_name,attachment_file %></td>

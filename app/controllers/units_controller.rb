@@ -30,6 +30,11 @@ class UnitsController < ApplicationController
     respond_with(@unit, location: units_path)
   end
   
+  def destroy
+    @unit.destroy
+    respond_with @unit
+  end
+  
   private
   
   def unit_params

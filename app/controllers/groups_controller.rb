@@ -28,6 +28,11 @@ class GroupsController < ApplicationController
     @group.update_attributes(group_params)
     respond_with(@group, location: groups_path)
   end
+  
+  def destroy
+    @group.destroy
+    respond_with @group
+  end
 
   private
 

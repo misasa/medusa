@@ -27,6 +27,13 @@ Medusa::Application.routes.draw do
     end
   end
 
+  concern :multiple do
+    collection do
+      get :multiple_new
+      post :multiple_create
+    end
+  end
+
   resources :records, { id: /((?!\.(html$|json$|xml$)).)*/ } do
     member do
       get 'record_property' => 'records#property'
@@ -43,10 +50,10 @@ Medusa::Application.routes.draw do
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "stone" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "stone" }
-    resources :bibs, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "stone" }
-    resources :daughters, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
+    resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "stone" }
+    resources :daughters, concerns: [:link_by_global_id], only: [:index, :create,:update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
     resources :stones, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
-    resources :analyses, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "stone" }
+    resources :analyses, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "stone" }
   end
 
   resources :boxes, concerns: [:bundleable, :reportable], except: [:new] do
@@ -58,9 +65,9 @@ Medusa::Application.routes.draw do
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "box" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "box" }
-    resources :bibs, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "box" }
-    resources :stones, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "box", association_name: "stones" }
-    resources :boxes, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "box", association_name: "children" }
+    resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "box" }
+    resources :stones, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "box", association_name: "stones" }
+    resources :boxes, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "box", association_name: "children" }
   end
 
   resources :places, concerns: [:bundleable, :reportable] do
@@ -90,7 +97,7 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "analysis" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "analysis" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "analysis" }
-    resources :chemistries, only: [:index, :create, :update, :destroy], controller: "nested_resources/chemistries"
+    resources :chemistries, concerns: [:multiple],only: [:index, :create, :update, :destroy], controller: "nested_resources/chemistries"
   end
 
   resources :bibs, concerns: [:bundleable, :reportable], except: [:new] do
@@ -98,6 +105,9 @@ Medusa::Application.routes.draw do
       get :picture
       get :property
       post 'attachment_files/upload' => 'bibs#upload'
+    end
+    collection do
+      get :download_to_tex
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
     resources :stones, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "bib", association_name: "stones" }
@@ -122,7 +132,7 @@ Medusa::Application.routes.draw do
     resources :analyses, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "attachment_file" }
   end
 
-  resources :chemistries do
+  resources :chemistries , only: [:edit, :update] do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "chemistry" }
   end
 
@@ -136,8 +146,8 @@ Medusa::Application.routes.draw do
       get 'quick_search'
     end
   end
-  resources :users, except: [:destory]
-  resources :groups, except: [:new, :destroy]
+  resources :users
+  resources :groups, except: [:new]
   resources :physical_forms, except: [:new]
   resources :classifications, except: [:new]
   resources :box_types, except: [:new]
@@ -157,11 +167,10 @@ Medusa::Application.routes.draw do
       post 'move_to_top'
     end
   end
-  resources :units, except: [:new, :destroy]
-  resources :units, except: [:new, :destroy]
-  resources :techniques, except: [:new, :destroy]
-  resources :authors, except: [:new, :destroy]
-  resources :devices, except: [:new, :destroy]
+  resources :units, except: [:new]
+  resources :techniques, except: [:new]
+  resources :authors, except: [:new]
+  resources :devices, except: [:new]
   resources :qrcodes, id: /((?!\.(html$|json$|xml$)).)*/, only: [:show]
 
   # The priority is based upon order of creation: first created -> highest priority.

@@ -9,39 +9,38 @@
       this.thumbnails = this.element.find("div.spot-thumbnails");
       this.options = $.extend({
         width: this.canvas.attr("width"),
-        height: this.canvas.attr("height")
+        height: this.canvas.attr("height"),
+        scale: this.canvas.data("scale"),
+        center: {
+          x: this.canvas.data("center-x"),
+          y: this.canvas.data("center-y")
+        }
       }, this.options);
       this._initCanvas();
       this._initThumbnails();
     },
-    loadImage: function(path) {
-      var self = this,  image = document.createElementNS("http://www.w3.org/2000/svg", "image");
+    loadImage: function(svg) {
+      var self = this;
       $(this.group).empty();
-      this.image = image;
-      this.group.appendChild(image);
-      this.image.setAttributeNS("http://www.w3.org/1999/xlink", "href", path);
-      this.image.setAttribute("x", 0);
-      this.image.setAttribute("y", 0);
-      this.image.setAttribute("width", this.options.width);
-      this.image.setAttribute("height", this.options.height);
-      this.translateX = 0;
-      this.translateY = 0;
-      this.scale = 1;
-      this.group.setAttribute("transform", "translate(" + this.translateX + "," + this.translateY + ") scale(" + this.scale + ")");
+      this.image = $(svg).find("image");
+      this.spots = $(svg).find("circle");
+      this._initTransform(this.image.attr("width"), this.image.attr("height"));
+      svg.setAttribute("width", this.image.attr("width"));
+      svg.setAttribute("height", this.image.attr("height"));
+      this.group.appendChild(svg);
       $(this.image).dblclick(function(e) {
         var offsetX = e.pageX - $(this).offset().left, offsetY = e.pageY - $(this).offset().top,
             x = (self.options.width) / 2 - offsetX, y = (self.options.height) / 2 - offsetY;
         self.translate(x, y);
         return false;
       });
+      $(this.spots).css("cursor", "pointer");
+      $(this.spots).click(function(e) {
+        location.href = $(this).data("spot");
+      });
     },
-    addSpot: function(cx, cy, r, options) {
-      var circle = this._createSvgElement("circle", $.extend({}, options, {
-        cx: cx,
-        cy: cy,
-        r: r
-      }));
-      this.group.appendChild(circle);
+    center: function() {
+      return { left: ((this.options.width / 2) - this.translateX) / this.scale, top: ((this.options.height / 2) - this.translateY) / this.scale };
     },
     translate: function(x, y) {
       this.transform(x, y, this.scale);
@@ -53,24 +52,46 @@
       this.group.setAttribute("transform", "translate(" + x + "," + y + ") scale(" + scale + ")");
     },
     zoomIn: function() {
-      var width = parseFloat(this.image.getAttribute("width")),
-          height = parseFloat(this.image.getAttribute("height"));
+      var width = parseFloat(this.options.width),
+          height = parseFloat(this.options.height);
           x = (this.translateX * 2) - (width / 2), y = (this.translateY * 2) - (height / 2),
           scale = this.scale * 2;
       this.transform(x, y, scale);
     },
     zoomOut: function() {
-      var width = parseFloat(this.image.getAttribute("width")),
-          height = parseFloat(this.image.getAttribute("height"));
+      var width = parseFloat(this.options.width),
+          height = parseFloat(this.options.height);
           x = (this.translateX + width / 2) / 2, y = (this.translateY + height / 2) / 2,
           scale = this.scale / 2;
       this.transform(x, y, scale);
     },
     _initCanvas: function() {
       var self = this;
-      self._addGroup();
-      self._addSight();
-      self._addZoomButtons();
+      this._addGroup();
+      this._addSight();
+      this._addZoomButtons();
+      if (this.canvas.data("image")) {
+        $.get(this.canvas.data("image"), function(data) {
+          self.loadImage(data.documentElement);
+        });
+      }
+    },
+    _initTransform: function(width, height) {
+      var scaleX, scaleY, left, top;
+      scaleX = this.options.width / width;
+      scaleY = this.options.height / height;
+      scale = (scaleX < scaleY) ? scaleX : scaleY;
+      if (this.options.scale) {
+        scale = scale * this.options.scale;
+      }
+      if (this.options.center.x && this.options.center.y) {
+        left = (this.options.width / 2) - this.options.center.x * scale;
+        top = (this.options.height / 2) - this.options.center.y * scale;
+      } else {
+        left = (this.options.width - width * scale) / 2;
+        top = (this.options.height - height * scale) / 2;
+      }
+      this.transform(left, top, scale);
     },
     _addGroup: function() {
       var group = this._createSvgElement("g");
@@ -160,36 +181,10 @@
       });
       return element;
     },
-    _startScroll: function(e) {
-      this.pageX = e.pageX;
-      this.pageY = e.pageY;
-      this.scroll = true;
-    },
-    _stopScroll: function() {
-      this.scroll = false;
-    },
-    _scroll: function(e) {
-      var x = parseFloat(this.image.getAttribute("x")), y = parseFloat(this.image.getAttribute("y"));
-      if (this.scroll) {
-        this.translateX = this.translateX + (this.pageX - e.pageX);
-        this.translateY = this.translateY + (this.pageY - e.pageY);
-        this.group.setAttribute("transform", "translate(" + this.translateX + "," + this.translateY + ") scale(" + this.scale + ")");
-        this.pageX = e.pageX;
-        this.pageY = e.pageY;
-      }
-    },
     _initThumbnails: function() {
       var self = this;
       $(self.thumbnails).on("ajax:success", "a.thumbnail", function(event, data, status) {
-        self.loadImage($(this).find("img").attr("src"));
-        $.each(data, function(index, spot) {
-          self.addSpot(spot.spot_x, spot.spot_y, spot.radius_in_percent, {
-            fill: spot.fill_color,
-            "fill-opacity": spot.opacity,
-            stroke: spot.stroke_color,
-            "stroke-width": spot.stroke_width
-          });
-        });
+        self.loadImage(data.documentElement);
       });
       self.thumbnails.find("a.thumbnail").first().click();
     }

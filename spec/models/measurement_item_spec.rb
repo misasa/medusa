@@ -23,4 +23,19 @@ describe MeasurementItem do
       end
     end
   end
+
+  describe ".display_name" do
+    subject{obj.display_name}
+    let(:obj) { FactoryGirl.build(:measurement_item, nickname: nickname,display_in_html: display_in_html) }
+    context "display_in_html is not blank" do
+      let(:nickname){"nickname"}
+      let(:display_in_html){"display_in_html"}
+      it {expect(subject).to eq display_in_html}
+    end
+    context "display_in_html is blank" do
+      let(:nickname){"nickname"}
+      let(:display_in_html){""}
+      it {expect(subject).to eq nickname}
+    end
+  end
 end
