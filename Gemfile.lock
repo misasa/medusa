@@ -1,4 +1,10 @@
 GIT
+  remote: git://github.com/halogenandtoast/alchemist.git
+  revision: 5c086daffa1baf962b6b0e304234535ba964b86a
+  specs:
+    alchemist (0.1.7)
+
+GIT
   remote: git@devel.misasa.okayama-u.ac.jp:gems/actsasmappable.git
   revision: b9f525091e71c90d9e1237e7de11d656e9df30d1
   specs:
@@ -47,7 +53,6 @@ GEM
     acts_as_taggable_on (3.0.0.rc2)
       rails (>= 3, < 5)
     afm (0.2.0)
-    alchemist (0.1.7)
     arel (4.0.1)
     atomic (1.1.14)
     barby (0.5.1)
@@ -334,7 +339,7 @@ DEPENDENCIES
   acts_as_list
   acts_as_mappable!
   acts_as_taggable_on
-  alchemist
+  alchemist!
   barby
   bootstrap-sass
   cancan
