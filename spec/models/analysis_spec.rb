@@ -72,36 +72,4 @@ describe Analysis do
     end
   end
 
-  describe "stone_global_id" do
-    let(:stone){FactoryGirl.create(:stone)}
-    let(:analysis){FactoryGirl.create(:analysis)}
-    context "get" do
-      context "stone_id is nil" do
-        before{analysis.stone_id = nil}
-        it {expect(analysis.stone_global_id).to be_blank}
-      end
-      context "stone_id is ng" do
-        before{analysis.stone_id = 0}
-        it {expect(analysis.stone_global_id).to be_blank}
-      end
-      context "stone_id is ok" do
-        before{analysis.stone_id = stone.id}
-        it {expect(analysis.stone_global_id).to eq stone.global_id}
-      end
-    end
-    context "set" do
-      context "stone_global_id is nil" do
-        before{analysis.stone_global_id = nil}
-        it {expect(analysis.stone).to be_blank}
-      end
-      context "stone_global_id is ng" do
-        before{analysis.stone_global_id = "xxxxxxxxxxxxxxxxx"}
-        it {expect(analysis.stone).to be_blank}
-      end
-      context "stone_global_id is ok" do
-        before{analysis.stone_global_id = stone.global_id}
-        it {expect(analysis.stone).to eq stone}
-      end
-    end
-  end
 end
