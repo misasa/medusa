@@ -1,11 +1,9 @@
 module OutputPdf
   extend ActiveSupport::Concern
 
-  included do
-    require 'barby/barcode/qr_code'
-    require 'barby/outputter/png_outputter'
-    QRCODE_DIM = 2
-  end
+  require 'barby/barcode/qr_code'
+  require 'barby/outputter/png_outputter'
+  QRCODE_DIM = 2
 
   def build_card
     report = ThinReports::Report.new(layout: report_template("card"))

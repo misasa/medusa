@@ -1,9 +1,6 @@
 module OutputCsv
   extend ActiveSupport::Concern
-
-  included do
-    LABEL_HEADER = ["Id","Name"]
-  end
+  LABEL_HEADER = ["Id","Name"]
 
   def build_label
     CSV.generate do |csv|
