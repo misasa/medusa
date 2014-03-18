@@ -21,7 +21,7 @@ class AttachmentFile < ActiveRecord::Base
   def path
     id_partition = ("%08d" % id.to_s).scan(/\d{4}/).join("/")
     table_name = self.class.name.tableize
-    "/system/#{table_name}/#{id_partition}/#{data_file_name}"
+    "#{Rails.application.config.relative_url_root}/system/#{table_name}/#{id_partition}/#{data_file_name}"
   end
 
   def data_fingerprint
@@ -39,7 +39,7 @@ class AttachmentFile < ActiveRecord::Base
   def pdf?
     !(data_content_type =~ /pdf$/).nil?
   end
-  
+
   def image?
     !(data_content_type =~ /^image.*/).nil?
   end
@@ -205,4 +205,3 @@ class AttachmentFile < ActiveRecord::Base
   end
 
 end
-
