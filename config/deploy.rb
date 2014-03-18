@@ -56,4 +56,30 @@ namespace :deploy do
     end
   end
 
+  desc "Recompile assets"
+  task :recompile_assets do
+    invoke "deploy:assets:clobber"
+    invoke "deploy:compile_assets"
+  end
+
+  namespace :assets do
+    task :precompile do
+      on roles(fetch(:assets_roles)) do
+        within release_path do
+          with rails_env: fetch(:rails_env), rails_relative_url_root: fetch(:relative_url_root, "/medusa") do
+            execute :rake, "assets:precompile"
+          end
+        end
+      end
+    end
+    task :clobber do
+      on roles(fetch(:assets_roles)) do
+        within release_path do
+          with rails_env: fetch(:rails_env) do
+            execute :rake, "assets:clobber"
+          end
+        end
+      end
+    end
+  end
 end
