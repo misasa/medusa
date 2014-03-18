@@ -13,7 +13,7 @@ namespace :timemachine do
   def reset_timemachine_dir(date)
     path = fetch(:timemachine_path)
     backup_name = date.strftime("%Y%m%d")
-    backup_path = Pathname.new(Backup.files.dir_path).join(backup_name)
+    backup_path = Pathname.new(Backup.dir_path.files).join(backup_name)
     if test "[ -d #{backup_path} ]"
       execute :rm, path if test "[ -e #{path} ]"
       execute :ln, "-s", backup_path, path
