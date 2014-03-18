@@ -1,3 +1,5 @@
+require File.expand_path("../../../../app/models/backup.rb", __FILE__)
+
 namespace :timemachine do
 
   task :environment do
@@ -11,7 +13,7 @@ namespace :timemachine do
   def reset_timemachine_dir(date)
     path = fetch(:timemachine_path)
     backup_name = date.strftime("%Y%m%d")
-    backup_path = Pathname.new("/tmp/medusa/backup/files").join(backup_name)
+    backup_path = Pathname.new(Backup.files.dir_path).join(backup_name)
     if test "[ -d #{backup_path} ]"
       execute :rm, path if test "[ -e #{path} ]"
       execute :ln, "-s", backup_path, path
@@ -53,7 +55,6 @@ namespace :timemachine do
     invoke "timemachine:stop"
     invoke "timemachine:start"
   end
-
 end
 
 namespace :load do
