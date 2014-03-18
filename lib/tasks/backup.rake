@@ -7,7 +7,7 @@ namespace :backup do
   task files: :environment do
     master = Rails.root
     current_name = Date.today.strftime("%Y%m%d")
-    dir_path = Pathname.new(Settings.backup.files.dir_path)
+    dir_path = Pathname.new(Backup.files.dir_path)
     current = dir_path.join(current_name)
 
     FileUtils.mkdir_p(dir_path) unless Dir.exist?(dir_path)

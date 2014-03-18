@@ -4,7 +4,7 @@ namespace :db do
   task dump: :environment do
     db_config = Rails.application.config.database_configuration[Rails.env]
     file_name = "#{Date.today.strftime("%Y%m%d")}.dump"
-    dir_path = Pathname.new(Settings.backup.db.dir_path)
+    dir_path = Pathname.new(Backup.db.dir_path)
     file_path = dir_path.join(file_name)
 
     FileUtils.mkdir_p(dir_path) unless Dir.exist?(dir_path)
@@ -20,7 +20,7 @@ namespace :db do
   task restore: :environment do
     db_config = Rails.application.config.database_configuration[Rails.env]
     file_name = "#{ENV["DUMP_DATE"]}.dump"
-    dir_path = Pathname.new(Settings.backup.db.dir_path)
+    dir_path = Pathname.new(Backup.db.dir_path)
     file_path = dir_path.join(file_name)
 
     command = "pg_restore -U #{db_config["username"]} -w -Fc -d #{db_config["database"]} #{file_path}"

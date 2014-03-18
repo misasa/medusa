@@ -1,14 +1,8 @@
 defaults: &defaults
-  backup:
-    files:
-      dir_path: "/tmp/medusa/backup/files"
-    db:
-      dir_path: "/tmp/medusa/backup/db"
   site_name: "Medusa"
   barcode:
     prefix:
     type: 2D
-
 
 development:
   <<: *defaults
@@ -24,3 +18,9 @@ staging:
 
 timemachine:
   <<: *defaults
+
+backup:
+  files:
+    dir_path: "/tmp/medusa/backup/files"
+  db:
+    dir_path: "/tmp/medusa/backup/db"
