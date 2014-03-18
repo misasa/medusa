@@ -16,7 +16,7 @@
       <% @bib.stones.each do |stone| %>
         <tr>
           <td>
-            <%= check_box_tag("ids[]", stone.id, checked: false, id: "ids_#{stone.id}", class: "select-row") if can?(:update, stone) %>
+            <%= check_box_tag("ids[]", stone.id, false, {id: "ids_#{stone.id}", class: "select-row"}) if can?(:update, stone) %>
           </td>
           <td><%= link_to stone.name,stone %></td>
           <td><%= stone.physical_form.try!(:name) %></td>

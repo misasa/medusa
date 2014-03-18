@@ -12,7 +12,7 @@
       <% @box.bibs.each do |bib| %>
         <tr>
           <td>
-              <%= check_box_tag("ids[]", bib.id, checked: false, id: "ids_#{bib.id}", class: "select-row") if can?(:update, bib) %>
+              <%= check_box_tag("ids[]", bib.id, false, {id: "ids_#{bib.id}", class: "select-row"}) if can?(:update, bib) %>
             </td>
           <td colspan="2"><%= link_to bib.name, bib %></td>
           <td><%= bib.try!(:global_id) %></td>

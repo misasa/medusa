@@ -15,7 +15,7 @@
       <% @stone.analyses.each do |analysis| %>
         <tr>
           <td>
-            <%= check_box_tag("ids[]", analysis.id, checked: false, id: "ids_#{analysis.id}", class: "select-row") if can?(:update, analysis) %>
+            <%= check_box_tag("ids[]", analysis.id, false, {id: "ids_#{analysis.id}", class: "select-row"}) if can?(:update, analysis) %>
           </td>
           <td><%= link_to analysis.name, analysis %></td>
           <td><%= analysis.device.try!(:name) %></td>
