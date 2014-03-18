@@ -28,8 +28,8 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <li><a href="#at-a-glance" data-toggle="tab">At a glance</a></li>
-      <li><a href="#bib" data-toggle="tab">Bib</a></li>
-      <li><a href="#file" data-toggle="tab">File</a></li>
+      <li><a href="#bib" data-toggle="tab"><%= @analysis.bibs.blank? ? "Bib" : "Bib (#{@analysis.bibs.count})" %></a></li>
+      <li><a href="#file" data-toggle="tab"><%= @analysis.attachment_files.blank? ? "File" : "File (#{@analysis.attachment_files.count})" %></a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">

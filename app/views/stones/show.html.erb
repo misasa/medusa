@@ -43,10 +43,10 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <li><a href="#at-a-glance" data-toggle="tab">At a glance</a></li>
-      <li><a href="#daughter" data-toggle="tab">Daughter</a></li>
-      <li><a href="#analysis" data-toggle="tab">Analysis</a></li>
-      <li><a href="#bib" data-toggle="tab">Bib</a></li>
-      <li><a href="#file" data-toggle="tab">File</a></li>
+      <li><a href="#daughter" data-toggle="tab"><%= @stone.children.blank? ? "daughter" : "daughter (#{@stone.children.count})" %></a></li>
+      <li><a href="#analysis" data-toggle="tab"><%= @stone.analyses.blank? ? "analysis" : "analysis (#{@stone.analyses.count})" %></a></li>
+      <li><a href="#bib" data-toggle="tab"><%= @stone.bibs.blank? ? "bib" : "bib (#{@stone.bibs.count})" %></a></li>
+      <li><a href="#file" data-toggle="tab"><%= @stone.attachment_files.blank? ? "attachment_file" : "attachment_file (#{@stone.attachment_files.count})" %></a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">

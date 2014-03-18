@@ -40,10 +40,10 @@
     <%= @box.path %>
     <ul class="nav nav-tabs">
       <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
-      <li><a href="#stone" data-toggle="tab">stone</a></li>
-      <li><a href="#box" data-toggle="tab">box</a></li>
-      <li><a href="#bib" data-toggle="tab">bib</a></li>
-      <li><a href="#attachment_file" data-toggle="tab">attachment_file</a></li>
+      <li><a href="#stone" data-toggle="tab"><%= @box.stones.blank? ? "stone" : "stone (#{@box.stones.count})" %></a></li>
+      <li><a href="#box" data-toggle="tab"><%= @box.children.blank? ? "box" : "box (#{@box.children.count})" %></a></li>
+      <li><a href="#bib" data-toggle="tab"><%= @box.bibs.blank? ? "bib" : "bib (#{@box.bibs.count})" %></a></li>
+      <li><a href="#attachment_file" data-toggle="tab"><%= @box.attachment_files.blank? ? "attachment_file" : "attachment_file (#{@box.attachment_files.count})" %></a></li>
     </ul>
     <div class="tab-content">
       <div class="tab-pane active" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
