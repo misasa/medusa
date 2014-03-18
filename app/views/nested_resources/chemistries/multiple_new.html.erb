@@ -1,0 +1,32 @@
+<ul>
+  <%= li_if_exist 'technique: ', @parent.technique.try!(:name) %>
+  <%= li_if_exist 'device: ', @parent.device.try!(:name) %>
+  <%= li_if_exist 'operator: ', @parent.try!(:operator) %>
+  <%= li_if_exist 'description: ', @parent.try!(:description) %>
+  <li>modified at <%= difference_from_now(@parent.updated_at) -%></li>
+</ul>
+<%= form_tag  multiple_create_analysis_chemistries_path(@parent),method: :post do %>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th>measured</th>
+        <th>value</th>
+        <th>uncertainty</th>
+        <th>unit</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @chemistries.each do |chemistry| %>
+          <tr>
+            <td><%= raw(chemistry.measurement_item.display_name) %></td>
+            <td><%= text_field_tag "chemistries[][value]" ,chemistry.value %></td>
+            <td><%= text_field_tag "chemistries[][uncertainty]",chemistry.uncertainty %></td>
+            <td><%= select_tag "chemistries[][unit_id]",options_for_select(Unit.pluck(:name, :id),chemistry.unit_id) %></td>
+            <%= hidden_field_tag "chemistries[][measurement_item_id]",chemistry.measurement_item_id %>
+          </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= submit_tag "create",class: "btn btn-sm" %>
+  <%= link_to "cancel", request.referer, class: "btn btn-sm" %>
+<% end %>

@@ -25,7 +25,6 @@
 <table class="table table-condensed table-striped">
   <thead>
     <tr>
-      <th></th>
       <th>measured</th>
       <th>value</th>
       <th>uncertainty</th>
@@ -36,8 +35,7 @@
   <tbody>
     <% @analysis.chemistries.each do |chemistry| %>
       <tr>
-        <td></td>
-        <td><%== link_to raw(chemistry.measurement_item.display_in_html.blank? ? chemistry.measurement_item.nickname : chemistry.measurement_item.display_in_html),edit_chemistry_path(chemistry) %></td>
+        <td><%= link_to raw(chemistry.measurement_item.display_name),edit_chemistry_path(chemistry) %></td>
         <td><%= chemistry.try!(:value) %></td>
         <td><%= chemistry.try!(:uncertainty) %></td>
         <td><%= chemistry.unit.try!(:name) %></td>
@@ -52,7 +50,6 @@
   <tfoot>
    <tr>
      <%= form_for Chemistry.new, url: analysis_chemistries_path(@analysis) do |f|%>
-        <th></th>
         <th><%= f.select :measurement_item_id ,MeasurementItem.all.map{|r|[raw(r.display_in_html.blank? ? r.nickname : r.display_in_html),r.id]} %></th>
         <th><%= f.text_field :value %></th>
         <th><%= f.text_field :uncertainty %></th>
@@ -68,3 +65,11 @@
 
   </tfoot>
 </table>
+<% if @analysis.chemistries.empty? %>
+  <div>
+  form for 
+  <% MeasurementCategory.pluck(:name, :id).each do |name, id| %>
+    <%= link_to name,multiple_new_analysis_chemistries_path(@analysis,measurement_category_id: id) %>
+  <% end %>
+</div>
+<% end %>

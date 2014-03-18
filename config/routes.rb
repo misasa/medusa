@@ -27,6 +27,13 @@ Medusa::Application.routes.draw do
     end
   end
 
+  concern :multiple do
+    collection do
+      get :multiple_new
+      post :multiple_create
+    end
+  end
+
   resources :records, { id: /((?!\.(html$|json$|xml$)).)*/ } do
     member do
       get 'record_property' => 'records#property'
@@ -87,7 +94,7 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "analysis" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "analysis" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "analysis" }
-    resources :chemistries, only: [:index, :create, :update, :destroy], controller: "nested_resources/chemistries"
+    resources :chemistries, concerns: [:multiple],only: [:index, :create, :update, :destroy], controller: "nested_resources/chemistries"
   end
 
   resources :bibs, concerns: [:bundleable, :reportable], except: [:new] do

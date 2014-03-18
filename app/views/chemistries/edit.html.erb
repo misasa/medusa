@@ -3,7 +3,7 @@
 
   <div class="form-group form-group-sm">
     <%= f.label :measurement, class: "small" %>
-    <%= f.select :measurement_item_id ,MeasurementItem.all.map{|r|[raw(r.display_in_html.blank? ? r.nickname : r.display_in_html),r.id]}, class: "form-control input-sm"  %>
+    <%= f.select :measurement_item_id ,MeasurementItem.all.map{|r|[raw(r.display_name),r.id]}, class: "form-control input-sm"  %>
   </div>
 
   <div class="form-group form-group-sm">
