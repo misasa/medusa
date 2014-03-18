@@ -85,4 +85,10 @@ describe UnitsController do
     end
   end
   
+  describe "DELETE destroy" do
+    let(:unit) { FactoryGirl.create(:unit, name: "unit") }
+    before { unit }
+    it { expect { delete :destroy, id: unit.id }.to change(Unit, :count).by(-1) }
+  end
+  
 end

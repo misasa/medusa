@@ -85,4 +85,10 @@ describe AuthorsController do
     end
   end
   
+  describe "DELETE destroy" do
+    let(:author) { FactoryGirl.create(:author, name: "author") }
+    before { author }
+    it { expect { delete :destroy, id: author.id }.to change(Author, :count).by(-1) }
+  end
+  
 end

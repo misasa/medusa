@@ -137,7 +137,7 @@ Medusa::Application.routes.draw do
     end
   end
   resources :users, except: [:destory]
-  resources :groups, except: [:new, :destroy]
+  resources :groups, except: [:new]
   resources :physical_forms, except: [:new]
   resources :classifications, except: [:new]
   resources :box_types, except: [:new]
@@ -157,11 +157,10 @@ Medusa::Application.routes.draw do
       post 'move_to_top'
     end
   end
-  resources :units, except: [:new, :destroy]
-  resources :units, except: [:new, :destroy]
-  resources :techniques, except: [:new, :destroy]
-  resources :authors, except: [:new, :destroy]
-  resources :devices, except: [:new, :destroy]
+  resources :units, except: [:new]
+  resources :techniques, except: [:new]
+  resources :authors, except: [:new]
+  resources :devices, except: [:new]
   resources :qrcodes, id: /((?!\.(html$|json$|xml$)).)*/, only: [:show]
 
   # The priority is based upon order of creation: first created -> highest priority.
