@@ -33,13 +33,5 @@ class Analysis < ActiveRecord::Base
     display_names.join(", ").truncate(length)
   end
 
-  def stone_global_id
-    stone.try!(:global_id)
-  end
-
-  def stone_global_id=(global_id)
-    self.stone = Stone.joins(:record_property).where(record_properties: {global_id: global_id}).first
-  end
-
 end
 
