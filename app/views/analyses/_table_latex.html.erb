@@ -1,1 +1,50 @@
-latex
+<div style="padding: 40px;">
+<pre><code>
+%------------
+\begin{scriptsize}
+\begin{longtable}{l<%= Array.new(@analyses.size,'r').join %>}
+\caption{overwrite me}\\
+\hline
+&<%= @analyses.each_with_index.map{|analysis,i|i +1}.join("&") %>\\
+\hline
+\endfirsthead
+\caption{Continued} \\
+\hline
+&<%= @analyses.each_with_index.map{|analysis,i|i +1}.join("&") %>\\
+\hline
+\endhead
+sample&<%= @analyses.map{|analysis| analysis.stone.name if analysis.stone}.join("&") %>\\
+name&<%= @analyses.map{|analysis| analysis.name}.join("&") %>\\
+\hline
+<% if params[:measurement_category_id].blank? %>
+  <% measurement_items = MeasurementItem.all %>
+<% else %>
+  <% measurement_items = MeasurementItem.joins(:measurement_categories).where(measurement_categories: {id: params[:measurement_category_id]}) %>
+<% end %>
+<% measurement_items.each do |measurement_item| %>
+<%= measurement_item.tex_name -%>&<%
+  values = []
+  @analyses.each do |analysis|
+    value = ""
+    analysis.chemistries.each do |chemistry|
+      if chemistry.measurement_item_id == measurement_item.id
+        if params[:unit_id].blank?
+          value = chemistry.value
+        else
+          if chemistry.unit
+            value = chemistry.value.send(chemistry.unit.name).to(Unit.find(params[:unit_id]).name.to_sym).value
+          end
+        end
+      end
+    end
+    values << (value.present? ? sprintf(@fmt_str , value) : "")
+  end %><%= values.join("&") %>//
+<% end -%>
+\hline
+\label{}
+\end{longtable}
+\end{scriptsize}
+%------------
+</code></pre>
+</div>
+

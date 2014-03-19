@@ -11,4 +11,7 @@ class MeasurementItem < ActiveRecord::Base
     display_in_html.blank? ? nickname : display_in_html
   end
 
+  def tex_name
+    display_in_tex.blank? ? nickname : display_in_tex
+  end
 end

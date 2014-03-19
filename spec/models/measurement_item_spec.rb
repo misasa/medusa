@@ -38,4 +38,20 @@ describe MeasurementItem do
       it {expect(subject).to eq nickname}
     end
   end
+
+  describe ".tex_name" do
+    subject{obj.tex_name}
+    let(:obj) { FactoryGirl.build(:measurement_item, nickname: nickname,display_in_tex: display_in_tex) }
+    context "display_in_tex is not blank" do
+      let(:nickname){"nickname"}
+      let(:display_in_tex){"display_in_tex"}
+      it {expect(subject).to eq display_in_tex}
+    end
+    context "display_in_tex is blank" do
+      let(:nickname){"nickname"}
+      let(:display_in_tex){""}
+      it {expect(subject).to eq nickname}
+    end
+  end
+
 end

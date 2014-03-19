@@ -2,7 +2,7 @@
   <table>
     <tr>
       <th colspan="<%= @analyses.size + 1 %>"></th>
-      <th<</th>
+      <th></th>
     </tr>
     <tr>
       <th>no.</th>
@@ -33,24 +33,24 @@
     <% end %>
     <% measurement_items.each do |measurement_item| %>
       <tr>
-        <th><%== measurement_item.display_name %></th>
+        <th align="right"><%== measurement_item.display_name %></th>
+        <% value = "" %>
         <% @analyses.each do |analysis| %>
-          <td>
-            <% value = "" %>
-            <% analysis.chemistries.each do |chemistry| %>
-              <% if chemistry.measurement_item_id == measurement_item.id %>
-                <% if params[:unit_id].blank? %>
-                  <% value = chemistry.value %>
-                <% else %>
-                  <% if chemistry.unit %>
-                    <% value = chemistry.value.send(chemistry.unit.name).to(Unit.find(params[:unit_id]).name.to_sym).value %>
-                  <% end %>
+          <% analysis.chemistries.each do |chemistry| %>
+            <% if chemistry.measurement_item_id == measurement_item.id %>
+              <% if params[:unit_id].blank? %>
+                <% value = chemistry.value %>
+              <% else %>
+                <% if chemistry.unit %>
+                  <% value = chemistry.value.send(chemistry.unit.name).to(Unit.find(params[:unit_id]).name.to_sym).value %>
                 <% end %>
               <% end %>
             <% end %>
-            <%= value %>
-          </td>
+          <% end %>
         <% end %>
+        <td align="right">
+          <%= sprintf(@fmt_str , value) unless value.blank? %>
+        </td>
       </tr>
     <% end %>
     <tr>
