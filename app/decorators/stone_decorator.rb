@@ -20,6 +20,16 @@ class StoneDecorator < Draper::Decorator
     h.image_tag(attachment_files.first.path, width: width, height: height) if attachment_files.present?
   end
 
+  def attachment_file_image_link(attachment_file, width: 40, height: 40)
+    if attachment_file.image?
+      h.link_to(h.image_tag(attachment_file.path, width: width, height: height), h.attachment_file_path(attachment_file))
+    else
+      h.link_to h.attachment_file_path(attachment_file) do
+        h.content_tag(:span, nil, class: "glyphicon glyphicon-file")
+      end
+    end
+  end
+
   def family_tree
     h.tree(families.group_by(&:parent_id)) do |obj|
       obj.decorate.tree_node(self == obj)

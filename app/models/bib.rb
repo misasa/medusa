@@ -92,6 +92,16 @@ class Bib < ActiveRecord::Base
     authors.pluck(:name).join(" ")
   end
 
+  def to_html
+    html = authors.first.name
+    html += " (#{year})" if year.present?
+    html += " #{name}" if name.present?
+    html += ", <i>#{journal}</i>" if journal.present?
+    html += ", <b>#{volume}</b>" if volume.present?
+    html += ", #{pages}" if pages.present?
+    return "#{html}."
+  end
+
   private
 
   def pdf_files

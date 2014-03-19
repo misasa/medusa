@@ -1,1 +1,24 @@
-at_a_glance
+<ul>
+  <% if @stone.place %>
+    <% place = @stone.place.decorate %>
+    <li>
+      place: <%= place.try!(:latitude_to_text) + ", " + place.try!(:longitude_to_text) %> <%= link_to "more", place_path(place) %>
+    </li>
+  <% end %>
+  <%= li_if_exist("classification: ", @stone.classification.try!(:name)) %>
+  <%= li_if_exist("physical_form: ", @stone.physical_form.try!(:name)) %>
+  <%= li_if_exist("quantity (#{@stone.quantity_unit}): ", @stone.quantity) %>
+  <%= li_if_exist("tag list: ", @stone.tag_list) %>
+  <%= li_if_exist("description: ", @stone.description) %>
+  <li>modified at <%= difference_from_now(@stone.updated_at) %></li>
+  <% if @stone.attachment_files.present? %>
+    <li>
+      <% @stone.attachment_files.each do |attachment_file| %>
+        <%= @stone.attachment_file_image_link(attachment_file) %>
+      <% end %>
+    </li>
+  <% end %>
+  <%= li_if_exist("", @stone.bibs.map{ |bib| content_tag(:span, nil, class: "glyphicon glyphicon-book") + raw(bib.to_html) + link_to(" more", url_for(bib)) }.join(" ")) %>
+</ul>
+
+<!-- TODO @stone.analysesを使った<table>表示 -->

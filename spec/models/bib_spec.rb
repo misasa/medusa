@@ -266,6 +266,27 @@ describe Bib do
     end
   end
   
+  describe "#to_html" do
+    subject { bib.to_html }
+    let(:bib) do
+      FactoryGirl.create(:bib,
+        name: "bib_name",
+        journal: journal,
+        volume: volume,
+        pages: pages,
+        year: year,
+        authors: [author_1, author_2]
+       )
+    end
+    let(:journal) { "journal" }
+    let(:volume) { "1" }
+    let(:pages) { "100" }
+    let(:year) { "2014" }
+    let(:author_1) { FactoryGirl.create(:author, name: "author_1") }
+    let(:author_2) { FactoryGirl.create(:author, name: "author_2") }
+    it { expect(subject).to eq "author_1 (#{year}) bib_name, <i>#{journal}</i>, <b>#{volume}</b>, #{pages}." }
+  end
+
   describe "#author_valid?" do
     subject { bib.send(:author_valid?) }
     let(:bib) { FactoryGirl.build(:bib, authors: []) }

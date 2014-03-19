@@ -3,7 +3,7 @@ class AttachmentFileDecorator < Draper::Decorator
   delegate_all
 
   def name_with_id
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + " #{name} < #{global_id} >"
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-file") + " #{name} < #{global_id} >"
   end
 
    def picture(width: 250, height: 250)
