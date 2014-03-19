@@ -1,10 +1,10 @@
-id,name,conversion,html,text,created_at,updated_at
-1,parts,1, , ,2014-03-18,2014-03-18
-2,parts_per_cent,100,&#37;,ppc,2014-03-18,2014-03-18
-3,parts_per_mille,1000,&#8240;,permil,2014-03-18,2014-03-18
-4,parts_per_myriad,10000,&#8241;,permyriad,2014-03-18,2014-03-18
-5,parts_per_milli,1000000,ppm,ppm,2014-03-18,2014-03-18
-6,parts_per_billi,1000000000,ppb,ppb,2014-03-18,2014-03-18
-7,gram_per_gram,1,g/g,g/g,2014-03-18,2014-03-18
-8,centi_gram_per_gram,100,cg/g,cg/g,2014-03-18,2014-03-18
-9,micro_gram_per_gram,1000000,ug/g,ug/g,2014-03-18,2014-03-18
+id,name,created_at,updated_at,conversion,html,text
+1,parts,2014-03-18,2014-03-18,1, , 
+2,parts_per_cent,2014-03-18,2014-03-18,100,&#37;,ppc
+3,parts_per_mille,2014-03-18,2014-03-18,1000,&#8240;,permil
+4,parts_per_myriad,2014-03-18,2014-03-18,10000,&#8241;,permyriad
+5,parts_per_milli,2014-03-18,2014-03-18,1000000,ppm,ppm
+6,parts_per_billi,2014-03-18,2014-03-18,1000000000,ppb,ppb
+7,gram_per_gram,2014-03-18,2014-03-18,1,g/g,g/g
+8,centi_gram_per_gram,2014-03-18,2014-03-18,100,cg/g,cg/g
+9,micro_gram_per_gram,2014-03-18,2014-03-18,1000000,ug/g,ug/g
