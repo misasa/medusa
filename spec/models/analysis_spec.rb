@@ -183,4 +183,46 @@ describe Analysis do
   pending "set_object" do
   end
 
+  describe "#to_castemls" do
+    subject { Analysis.to_castemls(objs) }
+    let(:obj) { FactoryGirl.create(:analysis) }
+    let(:obj2) { FactoryGirl.create(:analysis) }
+    let(:objs){ [obj,obj2]}
+    it {expect(subject).to be_present}
+  end
+
+  describe ".get_spot" do
+    subject { obj.get_spot }
+    let(:user){FactoryGirl.create(:user)}
+    let(:obj) {FactoryGirl.create(:analysis) }
+    let(:spot1){FactoryGirl.create(:spot,target_uid: global_id)}
+    let(:spot2){FactoryGirl.create(:spot,target_uid: global_id)}
+    before{User.current = user}
+    context "no spots" do
+      let(:global_id){"xxx"}
+      before do
+        obj
+        spot1
+      end
+      it{expect(subject).to be_nil}
+    end
+    context "1 spot exists" do
+      let(:global_id){obj.global_id}
+      before do
+        obj
+        spot1
+      end
+      it{expect(subject).to eq spot1}
+    end
+    context "2 spot exists" do
+      let(:global_id){obj.global_id}
+      before do
+        obj
+        spot1
+        spot2
+      end
+      it{expect(subject).to eq spot1}
+    end
+  end
+    
 end

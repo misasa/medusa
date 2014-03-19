@@ -133,5 +133,56 @@ class Analysis < ActiveRecord::Base
     chemistries.joins(:measurement_item).merge(MeasurementItem.where(nickname: nickname)).first
   end
 
-end
+  def self.to_castemls(analyses)
+    xml = ::Builder::XmlMarkup.new(indent: 2)
+    xml.instruct!
+    xml.acquisitions do
+      analyses.each do |analysis|
+        analysis.to_pml(xml)
+      end
+    end
+  end
 
+  def to_pml(xml)
+    xml.acquisition do
+      xml.global_id(global_id)
+      xml.name(name)
+      xml.device(device.try!(:name))
+      xml.technique(technique.try!(:name))
+      xml.operator(operator)
+      xml.sample_global_id(stone.try!(:global_id))
+      xml.sample_name(stone.try!(:name))
+      xml.description(description)
+      spot = get_spot
+      if spot
+        xml.spot do
+          xml.global_id(spot.global_id)
+          xml.attachment_file_global_id(spot.attachment_file.try!(:global_id))
+          xml.x_image(spot.spot_x_from_center)
+          xml.y_image(spot.spot_y_from_center)
+        end
+      end
+      unless chemistries.empty?
+        xml.chemistries do
+          chemistries.each do |chemistry|
+            xml.analysis do
+              xml.nickname(chemistry.measurement_item.try!(:nickname))
+              xml.value(chemistry.value)
+              xml.unit(chemistry.unit.try!(:text))
+              xml.uncertainty(chemistry.uncertainty)
+              xml.label(chemistry.label)
+              xml.info(chemistry.info)
+            end
+          end
+        end
+      end
+    end
+  end
+
+  def get_spot
+    spots =  Spot.find_all_by_target_uid(global_id)
+    return if spots.empty?
+    spots[0]
+  end 
+
+end

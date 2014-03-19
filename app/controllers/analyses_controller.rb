@@ -1,7 +1,7 @@
 class AnalysesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :new, :create, :upload,:bundle_edit, :bundle_update, :import]
-  before_action :find_resources, only: [:bundle_edit, :bundle_update]
+  before_action :find_resource, except: [:index, :new, :create, :upload,:bundle_edit, :bundle_update, :import, :table, :castemls]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update, :table, :castemls]
   load_and_authorize_resource
 
   def index
@@ -71,6 +71,17 @@ class AnalysesController < ApplicationController
     else
       render "import_invalid"
     end
+  end
+
+  def table
+    respond_with @analyses
+  end
+
+  def castemls
+    send_data(Analysis.to_castemls(@analyses),
+              :type => 'application/xml',
+              :filename => 'my-great-analysis.pml', 
+              :disposition=>'attached')
   end
 
   private

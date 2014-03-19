@@ -93,6 +93,8 @@ Medusa::Application.routes.draw do
     end
     collection do
       post :import
+      get :table
+      get :castemls
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "analysis" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "analysis" }

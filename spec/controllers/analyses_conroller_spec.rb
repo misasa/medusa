@@ -123,4 +123,22 @@ describe AnalysesController do
     end
   end
 
+  describe "GET table" do
+    let(:obj) { FactoryGirl.create(:analysis) }
+    let(:obj2) { FactoryGirl.create(:analysis) }
+    let(:objs){ [obj,obj2]}
+    before { get :table, ids: objs.map {|obj| obj.id} }
+    it { expect(assigns(:analyses)).to eq objs }
+    it { expect(response).to render_template("table") }
+  end
+
+  describe "GET castemls" do
+    let(:obj) { FactoryGirl.create(:analysis) }
+    let(:obj2) { FactoryGirl.create(:analysis) }
+    let(:objs){ [obj,obj2]}
+    let(:castemls){Analysis.to_castemls(objs)}
+    after{get :castemls, ids: objs.map {|obj| obj.id} }
+    it { expect(controller).to receive(:send_data).with(castemls, filename: "my-great-analysis.pml", type: "application/xml", disposition: "attached").and_return{controller.render nothing: true} }
+  end
+
 end

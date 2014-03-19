@@ -37,6 +37,14 @@ class Spot < ActiveRecord::Base
     [spot_x - cpt[0], cpt[1] - spot_y]
   end
 
+  def spot_x_from_center
+    spot_xy_from_center[0] if spot_xy_from_center
+  end
+
+  def spot_y_from_center
+    spot_xy_from_center[1] if spot_xy_from_center
+  end
+
   def to_svg
     "<circle #{svg_attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/>"
   end
