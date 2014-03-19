@@ -1,0 +1,61 @@
+<div>
+  <table>
+    <tr>
+      <th colspan="<%= @analyses.size + 1 %>"></th>
+      <th<</th>
+    </tr>
+    <tr>
+      <th>no.</th>
+      <% @analyses.each_with_index do |analysis,i| %>
+        <td><%= i + 1 %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <th>stone</th>
+      <% @analyses.each do |analysis| %>
+        <td><%= analysis.stone.try!(:name)%></td>
+      <% end %>
+    </tr>
+    <tr>
+      <th>name</th>
+      <% @analyses.each do |analysis| %>
+        <td><%= analysis.name%></td>
+      <% end %>
+    </tr>
+    <tr>
+      <th colspan="<%= @analyses.size + 1 %>"></th>
+      <th<</th>
+    </tr>
+    <% if params[:measurement_category_id].blank? %>
+      <% measurement_items = MeasurementItem.all %>
+    <% else %>
+      <% measurement_items = MeasurementItem.joins(:measurement_categories).where(measurement_categories: {id: params[:measurement_category_id]}) %>
+    <% end %>
+    <% measurement_items.each do |measurement_item| %>
+      <tr>
+        <th><%== measurement_item.display_name %></th>
+        <% @analyses.each do |analysis| %>
+          <td>
+            <% value = "" %>
+            <% analysis.chemistries.each do |chemistry| %>
+              <% if chemistry.measurement_item_id == measurement_item.id %>
+                <% if params[:unit_id].blank? %>
+                  <% value = chemistry.value %>
+                <% else %>
+                  <% if chemistry.unit %>
+                    <% value = chemistry.value.send(chemistry.unit.name).to(Unit.find(params[:unit_id]).name.to_sym).value %>
+                  <% end %>
+                <% end %>
+              <% end %>
+            <% end %>
+            <%= value %>
+          </td>
+        <% end %>
+      </tr>
+    <% end %>
+    <tr>
+      <th colspan="<%= @analyses.size + 1 %>"></th>
+      <th<</th>
+    </tr>
+  </table>
+</div>

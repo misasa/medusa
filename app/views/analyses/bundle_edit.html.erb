@@ -1,8 +1,8 @@
 <% if @analyses.present? %>
   <% analysis_ids = @analyses.pluck(:id) %>
   <div class="text-right">
-1 in <%= link_to('table',table_analyses_path(ids: analysis_ids)) %>
- and <%= link_to('casteml',castemls_analyses_path(ids: analysis_ids)) %>
+1 in <%= link_to 'table',table_analyses_path(ids: analysis_ids)  %>
+ and <%= link_to 'casteml',castemls_analyses_path(ids: analysis_ids)  %>
   </div>
 <% end %>
 <%= form_for Analysis.new, url: bundle_update_analyses_path do |f| %>
