@@ -5,6 +5,7 @@ class MeasurementItem < ActiveRecord::Base
   belongs_to :unit
 
   validates :nickname, presence: true, length: {maximum: 255}
+  validates :unit, existence: true, allow_nil: true
   
   def display_name
     display_in_html.blank? ? nickname : display_in_html

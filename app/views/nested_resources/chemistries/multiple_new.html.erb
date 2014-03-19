@@ -21,7 +21,7 @@
             <td><%= raw(chemistry.measurement_item.display_name) %></td>
             <td><%= text_field_tag "chemistries[][value]" ,chemistry.value %></td>
             <td><%= text_field_tag "chemistries[][uncertainty]",chemistry.uncertainty %></td>
-            <td><%= select_tag "chemistries[][unit_id]",options_for_select(Unit.pluck(:name, :id),chemistry.unit_id) %></td>
+            <td><%= select_tag "chemistries[][unit_id]",options_for_select(Unit.all.map{|r|[raw(r.html),r.id]},chemistry.unit_id),include_blank: true %></td>
             <%= hidden_field_tag "chemistries[][measurement_item_id]",chemistry.measurement_item_id %>
           </tr>
       <% end %>

@@ -9,7 +9,7 @@
 
   <div>
     <%= f.label :unit_id %>
-    <%= f.select :unit_id ,Unit.pluck(:name,:id),include_blank: true %>
+    <%= f.select :unit_id ,Unit.all.map{|r|[raw(r.html),r.id]},include_blank: true %>
   </div>
 
   <div>

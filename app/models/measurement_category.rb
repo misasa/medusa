@@ -4,6 +4,7 @@ class MeasurementCategory < ActiveRecord::Base
   belongs_to :unit
 
   validates :name, presence: true, length: {maximum: 255}, uniqueness: :name
+  validates :unit, existence: true, allow_nil: true
 
   def export_headers
     nicknames_with_unit.concat(nicknames.map { |nickname| "#{nickname}_error" })

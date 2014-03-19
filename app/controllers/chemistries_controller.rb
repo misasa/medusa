@@ -1,6 +1,6 @@
 class ChemistriesController < ApplicationController
   respond_to :html, :xml, :json
-  load_and_authorize_resource
+  before_action :find_resource
 
   def edit
     respond_with @chemistry, layout: !request.xhr?
@@ -36,6 +36,10 @@ class ChemistriesController < ApplicationController
         :published_at
       ]
     )
+  end
+
+  def find_resource
+    @chemistry = Chemistry.find(params[:id])
   end
 
 end
