@@ -32,7 +32,7 @@
     <tr>
       <th><%= check_box_tag nil, nil, true, class: "select-row-all" %></th>
       <th></th>
-      <th><%= f.select :parent_id, Box.pluck(:name, :id), include_blank: true %></th>
+      <th><%= f.text_field :parent_global_id %></th>
   <th><%= f.select :box_type_id, BoxType.pluck(:name, :id), include_blank: true %></th>
       <th><%= f.text_field :tag_list %></th>
       <th><%= f.select :user_id ,User.pluck(:username, :id), include_blank: true %></th>

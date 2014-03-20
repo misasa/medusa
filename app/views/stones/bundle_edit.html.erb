@@ -34,8 +34,8 @@
     <tr>
       <th><%= check_box_tag nil, nil, true, class: "select-row-all" %></th>
       <th></th>
-      <th><%= f.select :parent_id, Stone.pluck(:name, :id), include_blank: true %></th>
-      <th><%= f.select :box_id, Box.pluck(:name, :id), include_blank: true %></th>
+      <th><%= f.text_field :parent_global_id %></th>
+      <th><%= f.text_field :box_global_id %></th>
       <th><%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), include_blank: true %></th>
       <th><%= f.select :classification_id, Classification.pluck(:name, :id), include_blank: true %></th>
       <th><%= f.text_field :tag_list %></th>
