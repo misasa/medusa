@@ -35,11 +35,11 @@
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-      <div class="tab-pane active" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
-      <div class="tab-pane" id="stone"><%= render partial: "stone" %></div>
-      <div class="tab-pane" id="neighbor"><%= render partial: "neighbor" %></div>
-      <div class="tab-pane" id="attachment_file"><%= render partial: "attachment_file" %></div>
-      <div class="tab-pane" id="geoname"><%= render partial: "geoname" %></div>
+      <div class="tab-pane<%= if_active %>" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
+      <div class="tab-pane<%= if_active "stone" %>" id="stone"><%= render partial: "stone" %></div>
+      <div class="tab-pane<%= if_active "neighbor" %>" id="neighbor"><%= render partial: "neighbor" %></div>
+      <div class="tab-pane<%= if_active "attachment_file" %>" id="attachment_file"><%= render partial: "attachment_file" %></div>
+      <div class="tab-pane<%= if_active "geoname" %>" id="geoname"><%= render partial: "geoname" %></div>
     </div>
   </div>
 </div>

@@ -43,12 +43,12 @@
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-      <div class="tab-pane active" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
-      <div class="tab-pane" id="stone"><%= render partial: "stone" %></div>
-      <div class="tab-pane" id="box"><%= render partial: "box" %></div>
-      <div class="tab-pane" id="place"><%= render partial: "place" %></div>
-      <div class="tab-pane" id="analysis"><%= render partial: "analysis" %></div>
-      <div class="tab-pane" id="attachment_file"><%= render partial: "attachment_file" %></div>
+      <div class="tab-pane"tab-pane<%= if_active %>" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
+      <div class="tab-pane"tab-pane<%= if_active "stone" %>" id="stone"><%= render partial: "stone" %></div>
+      <div class="tab-pane"tab-pane<%= if_active "box" %>" id="box"><%= render partial: "box" %></div>
+      <div class="tab-pane"tab-pane<%= if_active "place" %>" id="place"><%= render partial: "place" %></div>
+      <div class="tab-pane"tab-pane<%= if_active "analysis" %>" id="analysis"><%= render partial: "analysis" %></div>
+      <div class="tab-pane"tab-pane<%= if_active "attachment_file" %>" id="attachment_file"><%= render partial: "attachment_file" %></div>
     </div>
   </div>
 </div>
