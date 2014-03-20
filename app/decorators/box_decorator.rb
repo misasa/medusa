@@ -37,7 +37,7 @@ class BoxDecorator < Draper::Decorator
   end
   
   def analyses_count
-    #TODO :analysesのカウント数を取得
+    icon_with_count("stats", stones.inject(0) {|count, stone| count += stone.analyses.size })
   end
   
   def bibs_count

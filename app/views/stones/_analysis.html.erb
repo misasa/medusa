@@ -23,7 +23,7 @@
           <td><%= analysis.chemistries.size %></td>
           <td><%= analysis.try!(:global_id) %></td> 
           <td>
-            <%= link_to stone_analysis_path(@stone,analysis), method: :delete ,title: "unlink analysis",data: {confirm: t("confirm.unlink")} do %>
+            <%= link_to stone_analysis_path(@stone, analysis), method: :delete, title: "unlink analysis", data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
             <% end %>
           </td>
@@ -45,9 +45,9 @@
         <th></th>
       <% end %>
       <%= form_tag link_by_global_id_stone_analyses_path(@stone),method: :post do %>
-        <th><%= text_field_tag :global_id, nil,class: "form-control input-sm" %></th>
+        <th><%= text_field_tag :global_id, nil, class: "form-control input-sm" %></th>
         <th>
-          <%= button_tag title: "link analysis by global id",class: "btn btn-default" do %>
+          <%= button_tag title: "link analysis by global id", class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>
           <% end %>
         </th>
@@ -56,4 +56,3 @@
   </tfoot>
 </table>
 <%= link_to_function "edit", "$('#analysis-bundle-form').submit();", class: "btn btn-default" %>
-
