@@ -24,6 +24,14 @@ class Box < ActiveRecord::Base
 
   after_save :reset_path
 
+  def analyses
+    analyses = []
+    stones.each do |stone| 
+      (analyses = analyses + stone.analyses) unless stone.analyses.empty?
+    end
+    analyses
+  end
+
   private
 
   def parent_id_not_equal_id
@@ -36,4 +44,5 @@ class Box < ActiveRecord::Base
     self.path = ""
     self.update_column(:path, "/#{self.ancestors.map(&:name).join('/')}") if self.parent
   end
+
 end

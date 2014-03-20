@@ -1,42 +1,45 @@
-<div>
+<%
+analyses = @box.analyses
+if params[:measurement_category_id].blank?
+  measurement_items = MeasurementItem.all
+else
+  measurement_items = MeasurementItem.joins(:measurement_categories).where(measurement_categories: {id: params[:measurement_category_id]})
+end
+%>
+<% unless analyses.empty? %>
   Table of analysis on <%= content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + link_to(@box.name, box_path(@box)) %>
-  <table>
-    <tr>
-      <th colspan="<%= @box.stones.each{|stone| stone.analyses }.size + 1 %>"></th>
-      <th></th>
-    </tr>
-    <% if params[:measurement_category_id].blank? %>
-      <% measurement_items = MeasurementItem.all %>
-    <% else %>
-      <% measurement_items = MeasurementItem.joins(:measurement_categories).where(measurement_categories: {id: params[:measurement_category_id]}) %>
-    <% end %>
-    <% measurement_items.each do |measurement_item| %>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr><th colspan="<%= analyses.size + 2 %>"></th></tr>
       <tr>
-        <th align="right"><%== measurement_item.display_name %></th>
-        <% value = "" %>
-        <% unit_value = "" %>
-        <% @box.stones.each do |stone| %>
-          <% stone.analyses.each do |analysis| %>
-            <% analysis.chemistries.each do |chemistry| %>
-              <% if chemistry.measurement_item_id == measurement_item.id %>
-                <% value = chemistry.value %>
-                <% unit_value = chemistry.unit.text %>
-              <% end %>
-            <% end %>
-            <td align="right">
-              <%= value.blank? ? "ー" : value %>
+        <th></th>
+        <th>unit</th>
+        <% analyses.each do |analysis| %>
+          <th <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>><%= analysis.name %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% measurement_items.each do |measurement_item| %>
+        <tr>
+          <th align="right"><%== measurement_item.display_name %></th>
+          <th> <%== measurement_item.unit.try!(:html) %></th>
+          <% value = "ー" %>
+          <% analyses.each do |analysis| %>
+            <% analysis.chemistries.each{|chemistry| value = chemistry.value if chemistry.measurement_item_id == measurement_item.id } %>
+            <td <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>align="right">
+              <%= value %>
             </td>
           <% end %>
-        <% end %>
-        <td>
-          <%= unit_value %>
-        </td>
-      </tr>
-    <% end %>
+        </tr>
+      <% end %>
+    </tbody>
   </table>
-  <%= @box.analysis_name %>
-  <%= form_tag(box_path(@box), method: :get) do %>
+  <%= form_tag( box_path(@box), method: :get) do %>
+    analysis:
+    <%= select_tag :analysis_id,options_for_select(analyses.map{|analysis|[analysis.name,analysis.id]},params[:analysis_id]),include_blank: true %>
+    measurement_category:
     <%= select_tag(:measurement_category_id, options_for_select(MeasurementCategory.pluck(:name, :id), params[:measurement_category_id]), include_blank: true) %>
     <%= submit_tag "reload" %>
   <% end %>
-</div>
+<% end %>
