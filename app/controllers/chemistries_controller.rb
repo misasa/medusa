@@ -31,9 +31,7 @@ class ChemistriesController < ApplicationController
         :group_readable,
         :group_writable,
         :guest_readable,
-        :guest_writable,
-        :published,
-        :published_at
+        :guest_writable
       ]
     )
   end

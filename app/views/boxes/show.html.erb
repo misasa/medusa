@@ -10,8 +10,10 @@
         <%= link_to family_box_path(@box), class: "btn btn-default activate", remote: true do %>
           <span class="glyphicon glyphicon-tree-conifer"></span>
         <% end %>
-        <%= link_to picture_box_path(@box), class: "btn btn-default", remote: true do %>
-          <span class="glyphicon glyphicon-picture"></span>
+        <% if @box.has_image? %>
+          <%= link_to picture_box_path(@box), class: "btn btn-default", remote: true do %>
+            <span class="glyphicon glyphicon-picture"></span>
+          <% end %>
         <% end %>
       </div>
       <div class="btn-group btn-group-sm">

@@ -74,6 +74,7 @@ class AttachmentFilesController < ApplicationController
       :affine_matrix_in_string,
       :user_id,
       :group_id,
+      :published,
       record_property_attributes: [
         :global_id,
         :user_id,
@@ -83,9 +84,7 @@ class AttachmentFilesController < ApplicationController
         :group_readable,
         :group_writable,
         :guest_readable,
-        :guest_writable,
-        :published,
-        :published_at
+        :guest_writable
       ]
     )
   end

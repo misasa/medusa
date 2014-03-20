@@ -10,8 +10,10 @@
         <%= link_to family_stone_path(@stone), class: "btn btn-default activate", remote: true do %>
           <span class="glyphicon glyphicon-tree-conifer"></span>
         <% end %>
-        <%= link_to picture_stone_path(@stone), class: "btn btn-default", remote: true do %>
-          <span class="glyphicon glyphicon-picture"></span>
+        <% if @stone.has_image? %>
+          <%= link_to picture_stone_path(@stone), class: "btn btn-default", remote: true do %>
+            <span class="glyphicon glyphicon-picture"></span>
+          <% end %>
         <% end %>
         <%= link_to map_stone_path(@stone), class: "btn btn-default", remote: true do %>
           <span class="glyphicon glyphicon-globe"></span>

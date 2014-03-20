@@ -7,8 +7,10 @@
   <div id="show-tools" class="col-lg-4">
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
-        <%= link_to picture_analysis_path(@analysis), class: "btn btn-default  activate", remote: true do %>
-          <span class="glyphicon glyphicon-picture"></span>
+        <% if @analysis.has_image? %>
+          <%= link_to picture_analysis_path(@analysis), class: "btn btn-default  activate", remote: true do %>
+            <span class="glyphicon glyphicon-picture"></span>
+          <% end %>
         <% end %>
       </div>
       <div class="btn-group btn-group-sm">

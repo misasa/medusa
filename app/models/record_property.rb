@@ -5,10 +5,10 @@ class RecordProperty < ActiveRecord::Base
   has_one :global_qr
 
   before_save :generate_global_id, if: "global_id.blank?"
+  before_save :adjust_published_at
 
   validates :user, existence: true
   validates :group, existence: true, allow_nil: true
-  validates :published_at, presence: true, if: Proc.new {|record| record.published }
 
   alias_attribute :owner_readable?, :owner_readable
   alias_attribute :owner_writable?, :owner_writable
@@ -43,6 +43,14 @@ class RecordProperty < ActiveRecord::Base
   def generate_global_id
     time = Time.now
     self.global_id =  time.strftime("%Y%m%d%H%M%S") + '-' + sprintf('%06d',time.usec)[-3..-1] + sprintf('%03d',rand(1000))
+  end
+
+  def adjust_published_at
+    if published
+      self.published_at = Time.now if published_at.blank?
+    else
+      self.published_at = nil
+    end
   end
 
   private

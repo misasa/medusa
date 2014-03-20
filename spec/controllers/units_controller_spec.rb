@@ -3,7 +3,7 @@ require 'spec_helper'
 describe UnitsController do
   let(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
-  
+
   describe "GET index" do
     let(:unit_1) { FactoryGirl.create(:unit, name: "hoge") }
     let(:unit_2) { FactoryGirl.create(:unit, name: "unit_2") }
@@ -22,7 +22,7 @@ describe UnitsController do
       it { expect(assigns(:units)).to eq [unit_3] }
     end
   end
-  
+
   # This "GET show" has no html.
   describe "GET show" do
     let(:unit) { FactoryGirl.create(:unit) }
@@ -32,7 +32,7 @@ describe UnitsController do
     end
     it { expect(response.body).to eq(unit.to_json) }
   end
-  
+
   describe "GET edit" do
     let(:unit) { FactoryGirl.create(:unit) }
     before do
@@ -41,15 +41,18 @@ describe UnitsController do
     end
     it { expect(assigns(:unit)).to eq unit }
   end
-  
+
   describe "POST create" do
     describe "with valid attributes" do
-      let(:attributes) { {name: "unit_name"} }
+      let(:attributes) { {name: "unit_name", conversion: 1, html: "html", text: "text"} }
       it { expect { post :create, unit: attributes }.to change(Unit, :count).by(1) }
       it "assigns a newly created unit as @unit" do
         post :create, unit: attributes
         expect(assigns(:unit)).to be_persisted
         expect(assigns(:unit).name).to eq(attributes[:name])
+        expect(assigns(:unit).conversion).to eq(attributes[:conversion])
+        expect(assigns(:unit).html).to eq(attributes[:html])
+        expect(assigns(:unit).text).to eq(attributes[:text])
       end
     end
     describe "with invalid attributes" do
@@ -63,7 +66,7 @@ describe UnitsController do
       end
     end
   end
-  
+
   describe "PUT update" do
     let(:unit) { FactoryGirl.create(:unit, name: "unit") }
     before do
@@ -84,11 +87,11 @@ describe UnitsController do
       it { expect(response).to render_template("edit") }
     end
   end
-  
+
   describe "DELETE destroy" do
     let(:unit) { FactoryGirl.create(:unit, name: "unit") }
     before { unit }
     it { expect { delete :destroy, id: unit.id }.to change(Unit, :count).by(-1) }
   end
-  
+
 end

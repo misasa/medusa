@@ -28,8 +28,6 @@ class RecordPropertiesController < ApplicationController
       :group_id,
       :global_id,
       :published,
-      :published_at,
-      :owner_readable,
       :owner_writable,
       :group_readable,
       :group_writable,
