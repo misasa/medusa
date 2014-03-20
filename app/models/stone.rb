@@ -1,5 +1,6 @@
 class Stone < ActiveRecord::Base
   include HasRecordProperty
+  include HasViewSpot
   include OutputPdf
   include OutputCsv
 
