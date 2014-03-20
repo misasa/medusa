@@ -97,4 +97,46 @@ describe ApplicationHelper do
     end
   end
 
+  describe "#data_count" do
+    subject { helper.data_count(array) }
+    context "array size is 0" do
+      let(:array) { [] }
+      it { expect(subject).to eq "" }
+    end
+    context "array size is 1" do
+      let(:array) { [:a] }
+      it { expect(subject).to eq "(1)" }
+    end
+    context "array size is 2" do
+      let(:array) { [:a, :b] }
+      it { expect(subject).to eq "(2)" }
+    end
+  end
+
+  describe "#if_active" do
+    subject { helper.if_active(tabname) }
+    context "tabname is nil" do
+      let(:tabname) { nil }
+      context "params[:tab] is nil" do
+        before { allow(helper).to receive(:params).and_return({tab: nil}) }
+        it { expect(subject).to eq " active" }
+      end
+      context "params[:tab] is present" do
+        before { allow(helper).to receive(:params).and_return({tab: "tab"}) }
+        it { expect(subject).to eq nil }
+      end
+    end
+    context "tabname is present" do
+      let(:tabname) { "tabname" }
+      context "params[:tab] equal tabname" do
+        before { allow(helper).to receive(:params).and_return({tab: "tabname"}) }
+        it { expect(subject).to eq " active" }
+      end
+      context "params[:tab] not equal tabname" do
+        before { allow(helper).to receive(:params).and_return({tab: "tab"}) }
+        it { expect(subject).to eq nil }
+      end
+    end
+  end
+
 end
