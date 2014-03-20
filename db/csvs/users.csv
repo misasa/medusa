@@ -1,0 +1,2 @@
+id,email,encrypted_password,reset_password_token,reset_password_sent_at,remember_created_at,sign_in_count,current_sign_in_at,last_sign_in_at,current_sign_in_ip,last_sign_in_ip,created_at,updated_at,administrator,family_name,first_name,description,username,box_id
+1,devel.misasa@gmail.com,$2a$10$H7Ff7PtQQzPMU99js0X2puzM5gAtLqOPiuOv7STazQj1eV337ks9i,,,,0,,,,,2014-03-20,2014-03-20,t,,,,admin,
