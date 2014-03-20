@@ -41,4 +41,8 @@ module ApplicationHelper
     content_tag(:li, prefix + value.to_s, {}, false)
   end
 
+  def data_count(array)
+    return "" if array.empty?
+    "(#{array.size})"
+  end
 end

@@ -28,9 +28,9 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
-      <li><a href="#stone" data-toggle="tab">stone <%= "(#{@place.stones.count})" if @place.stones.present? %></a></li>
+      <li><a href="#stone" data-toggle="tab">stone <%= data_count(@place.stones) %></a></li>
       <li><a href="#neighbor" data-toggle="tab">neighbor</a></li>
-      <li><a href="#attachment_file" data-toggle="tab">attachment_file <%= "(#{@place.attachment_files.count})" if @place.attachment_files.present? %></a></li>
+      <li><a href="#attachment_file" data-toggle="tab">attachment_file <%= data_count(@place.attachment_files) %></a></li>
       <li><a href="#geoname" data-toggle="tab">geoname</a></li>
     </ul>
     <!-- Tab panes -->

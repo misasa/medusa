@@ -45,10 +45,10 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <li><a href="#at-a-glance" data-toggle="tab">At a glance</a></li>
-      <li><a href="#daughter" data-toggle="tab">daughter <%= "(#{@stone.children.count})" if @stone.children.present? %></a></li>
-      <li><a href="#analysis" data-toggle="tab">analysis <%= "(#{@stone.analyses.count})" if @stone.analyses.present? %></a></li>
-      <li><a href="#bib" data-toggle="tab">bib <%= "(#{@stone.bibs.count})" if @stone.bibs.present? %></a></li>
-      <li><a href="#file" data-toggle="tab">attachment_file <%= "(#{@stone.attachment_files.count})" if @stone.attachment_files.present? %></a></li>
+      <li><a href="#daughter" data-toggle="tab">daughter <%= data_count(@stone.children) %></a></li>
+      <li><a href="#analysis" data-toggle="tab">analysis <%= data_count(@stone.analyses) %></a></li>
+      <li><a href="#bib" data-toggle="tab">bib <%= data_count(@stone.bibs) %></a></li>
+      <li><a href="#file" data-toggle="tab">attachment_file <%= data_count(@stone.attachment_files) %></a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">

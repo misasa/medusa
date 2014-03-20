@@ -35,11 +35,11 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
-      <li><a href="#stone" data-toggle="tab">stone <%= "(#{@bib.stones.count})" if @bib.stones.present? %></a></li>
-      <li><a href="#box" data-toggle="tab">box <%= "(#{@bib.boxes.count})" if @bib.boxes.present? %></a></li>
-      <li><a href="#place" data-toggle="tab">place <%= "(#{@bib.places.count})" if @bib.places.present? %></a></li>
-      <li><a href="#analysis" data-toggle="tab">analysis <%= "(#{@bib.analyses.count})" if @bib.analyses.present? %></a></li>
-      <li><a href="#attachment_file" data-toggle="tab">attachment_file <%= "(#{@bib.attachment_files.count})" if @bib.attachment_files.present? %></a></li>
+      <li><a href="#stone" data-toggle="tab">stone <%= data_count(@bib.stones) %></a></li>
+      <li><a href="#box" data-toggle="tab">box <%= data_count(@bib.boxes) %></a></li>
+      <li><a href="#place" data-toggle="tab">place <%= data_count(@bib.places) %></a></li>
+      <li><a href="#analysis" data-toggle="tab">analysis <%= data_count(@bib.analyses) %></a></li>
+      <li><a href="#attachment_file" data-toggle="tab">attachment_file <%= data_count(@bib.attachment_files) %></a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
