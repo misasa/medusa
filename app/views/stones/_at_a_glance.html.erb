@@ -21,4 +21,47 @@
   <%= li_if_exist("", @stone.bibs.map{ |bib| content_tag(:span, nil, class: "glyphicon glyphicon-book") + raw(bib.to_html) + link_to(" more", url_for(bib)) }.join(" ")) %>
 </ul>
 
-<!-- TODO @stone.analysesを使った<table>表示 -->
+<% unless @stone.analyses.empty? %>
+  Table of analysis on <%= content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + link_to(@stone.name, stone_path(@stone)) %>
+  <table class="table table-condensed table-striped">
+    <%
+    if params[:measurement_category_id].blank?
+      measurement_items = MeasurementItem.all
+    else
+      measurement_items = MeasurementItem.categorize(params[:measurement_category_id])
+    end
+    %>
+    <thead>
+      <tr><th colspan="<%= @stone.analyses.size + 2 %>"></th></tr>
+      <tr>
+        <th></th>
+        <th>unit</th>
+        <% @stone.analyses.each do |analysis| %>
+          <th <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>><%= analysis.name %></th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <% measurement_items.each do |measurement_item| %>
+        <tr>
+          <th align="right"><%== measurement_item.display_name %></th>
+          <th> <%== measurement_item.unit.try!(:html) %></th>
+          <% value = "ー" %>
+          <% @stone.analyses.each do |analysis| %>
+            <% analysis.chemistries.each {|chemistry| value = chemistry.value if chemistry.measurement_item_id == measurement_item.id } %>
+            <td <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>align="right">
+              <%= value %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= form_tag(stone_path(@stone), method: :get) do %>
+    analysis:
+    <%= select_tag :analysis_id, options_for_select(@stone.analyses.map {|analysis| [analysis.name, analysis.id]}, params[:analysis_id]), include_blank: true %>
+    measurement_category:
+    <%= select_tag :measurement_category_id, options_for_select(MeasurementCategory.pluck(:name, :id), params[:measurement_category_id]), include_blank: true %>
+    <%= submit_tag "reload" %>
+  <% end %>
+<% end %>

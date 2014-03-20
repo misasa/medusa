@@ -3,7 +3,7 @@ analyses = @box.analyses
 if params[:measurement_category_id].blank?
   measurement_items = MeasurementItem.all
 else
-  measurement_items = MeasurementItem.joins(:measurement_categories).where(measurement_categories: {id: params[:measurement_category_id]})
+  measurement_items = MeasurementItem.categorize(params[:measurement_category_id])
 end
 %>
 <% unless analyses.empty? %>

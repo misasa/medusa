@@ -24,6 +24,15 @@ describe MeasurementItem do
     end
   end
 
+  describe ".categorize" do
+    subject { MeasurementItem.categorize(measurement_category_id) }
+    let(:measurement_category_id) { "123" }
+    it { expect(subject.to_sql).to include 'SELECT "measurement_items".* FROM "measurement_items"' }
+    it { expect(subject.to_sql).to include 'INNER JOIN "category_measurement_items" ON "category_measurement_items"."measurement_item_id" = "measurement_items"."id"' }
+    it { expect(subject.to_sql).to include 'INNER JOIN "measurement_categories" ON "measurement_categories"."id" = "category_measurement_items"."measurement_category_id"' }
+    it { expect(subject.to_sql).to include 'WHERE "measurement_categories"."id" = 123' }
+  end
+
   describe ".display_name" do
     subject{obj.display_name}
     let(:obj) { FactoryGirl.build(:measurement_item, nickname: nickname,display_in_html: display_in_html) }

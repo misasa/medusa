@@ -6,6 +6,8 @@ class MeasurementItem < ActiveRecord::Base
 
   validates :nickname, presence: true, length: {maximum: 255}
   validates :unit, existence: true, allow_nil: true
+
+  scope :categorize, ->(measurement_category_id) { joins(:measurement_categories).where(measurement_categories: {id: measurement_category_id}) }
   
   def display_name
     display_in_html.blank? ? nickname : display_in_html
