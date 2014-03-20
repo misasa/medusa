@@ -97,6 +97,7 @@ class AnalysesController < ApplicationController
       :operator,
       :user_id,
       :group_id,
+      :published,
       record_property_attributes: [
         :global_id,
         :user_id,
@@ -106,9 +107,7 @@ class AnalysesController < ApplicationController
         :group_readable,
         :group_writable,
         :guest_readable,
-        :guest_writable,
-        :published,
-        :published_at
+        :guest_writable
       ]
     )
   end

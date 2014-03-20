@@ -40,12 +40,12 @@
       <th><%= f.text_field :entry_type %></th>
       <th><%= f.select :user_id ,User.pluck(:username, :id), include_blank: true %></th>
       <th><%= f.select :group_id ,Group.pluck(:name, :id), include_blank: true %></th>
+      <th><%= f.select :published ,[true, false], include_blank: true %></th>
       <th>
         <%= f.button class: "btn btn-default" do %>
           <span class="glyphicon glyphicon-save"></span>
         <% end %>
       </th>
-      <th></th>
       <th></th>
     </tr>
   </tfoot>

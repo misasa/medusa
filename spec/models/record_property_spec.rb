@@ -90,34 +90,44 @@ describe RecordProperty do
   end
 
   describe ".generate_global_id" do
-    let(:record_property){FactoryGirl.build(:record_property,global_id: nil)}
-    before { record_property.generate_global_id }
-    it{expect(record_property.global_id).not_to be_nil}
+    subject { obj.global_id }
+    let(:obj){FactoryGirl.build(:record_property,global_id: global_id)}
+    before { obj.save }
+    context "global_id is nil" do
+      let(:global_id){nil}
+      it{expect(subject).to be_present}
+    end
+    context "global_id is not nil" do
+      let(:global_id){"aaa"}
+      it{expect(subject).to eq global_id}
+    end
   end
 
-  describe "validates" do
-    describe "published_at" do
-      let(:record_property){ FactoryGirl.build(:record_property, published: published, published_at: published_at) }
-      let(:published) { false }
-      let(:published_at) { nil }
-      context "published is false" do
-        context "published_at is nil" do
-          it { expect(record_property).to be_valid }
-        end
-        context "published_at is present" do
-          let(:published_at) { Time.now }
-          it { expect(record_property).to be_valid }
-        end
+  describe ".adjust_pubulished_at" do
+    subject { obj.published_at }
+    let(:obj){FactoryGirl.build(:record_property,published: published,published_at: published_at)}
+    context "publishd true" do
+      let(:published){true}
+      before{obj.save}
+      context "published_at is nil" do
+        let(:published_at){nil}
+        it{expect(subject).to be_present}
       end
-      context "published is true" do
-        let(:published) { true }
-        context "published_at is nil" do
-          it { expect(record_property).not_to be_valid }
-        end
-        context "published_at is present" do
-          let(:published_at) { Time.now }
-          it { expect(record_property).to be_valid }
-        end
+      context "published_at is not nil" do
+        let(:published_at){Time.now - 1}
+        it{expect(subject).to eq published_at}
+      end
+    end
+    context "publishd false" do
+      let(:published){false}
+      before{obj.save}
+      context "published_at is nil" do
+        let(:published_at){nil}
+        it{expect(subject).to be_nil}
+      end
+      context "published_at is not nil" do
+        let(:published_at){Time.now - 1}
+        it{expect(subject).to be_nil}
       end
     end
   end
