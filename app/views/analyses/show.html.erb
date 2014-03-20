@@ -30,8 +30,8 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <li><a href="#at-a-glance" data-toggle="tab">At a glance</a></li>
-      <li><a href="#bib" data-toggle="tab"><%= @analysis.bibs.blank? ? "Bib" : "Bib (#{@analysis.bibs.count})" %></a></li>
-      <li><a href="#file" data-toggle="tab"><%= @analysis.attachment_files.blank? ? "File" : "File (#{@analysis.attachment_files.count})" %></a></li>
+      <li><a href="#bib" data-toggle="tab">Bib <%= "(#{@analysis.bibs.count})" if @analysis.bibs.present?  %></a></li>
+      <li><a href="#file" data-toggle="tab">File <%= "(#{@analysis.attachment_files.count})" if @analysis.attachment_files.present? %></a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">

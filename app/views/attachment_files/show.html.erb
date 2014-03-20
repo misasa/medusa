@@ -36,12 +36,12 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
-      <li><a href="#stone" data-toggle="tab"><%= @attachment_file.stones.blank? ? "stone" : "stone (#{@attachment_file.stones.count})" %></a></li>
-      <li><a href="#box" data-toggle="tab"><%= @attachment_file.boxes.blank? ? "box" : "box (#{@attachment_file.boxes.count})" %></a></li>
-      <li><a href="#place" data-toggle="tab"><%= @attachment_file.places.blank? ? "place" : "place (#{@attachment_file.places.count})" %></a></li>
-      <li><a href="#analysis" data-toggle="tab"><%= @attachment_file.analyses.blank? ? "analysis" : "analysis (#{@attachment_file.analyses.count})" %></a></li>
-      <li><a href="#bib" data-toggle="tab"><%= @attachment_file.bibs.blank? ? "bib" : "bib (#{@attachment_file.bibs.count})" %></a></li>
-      <li><a href="#spot" data-toggle="tab"><%= @attachment_file.spots.blank? ? "spot" : "spot (#{@attachment_file.spots.count})" %></a></li>
+      <li><a href="#stone" data-toggle="tab">stone <%= "(#{@attachment_file.stones.count})" if @attachment_file.stones.present? %></a></li>
+      <li><a href="#box" data-toggle="tab">box <%= "(#{@attachment_file.boxes.count})" if @attachment_file.boxes.present? %></a></li>
+      <li><a href="#place" data-toggle="tab">place <%= "(#{@attachment_file.places.count})" if @attachment_file.places.present? %></a></li>
+      <li><a href="#analysis" data-toggle="tab">analysis <%= "(#{@attachment_file.analyses.count})" if @attachment_file.analyses.present? %></a></li>
+      <li><a href="#bib" data-toggle="tab">bib <%= "(#{@attachment_file.bibs.count})" if @attachment_file.bibs.present? %></a></li>
+      <li><a href="#spot" data-toggle="tab">spot <%= "(#{@attachment_file.spots.count})" if @attachment_file.spots.present? %></a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
