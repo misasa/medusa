@@ -178,8 +178,23 @@ describe Analysis do
     end
   end
 
-  pending "build_objects_from_csv" do
+  describe ".build_objects_from_csv" do
+    subject { Analysis.build_objects_from_csv(file) }
+    let(:file) { double(:file) }
+    let(:csv_read) { [["header ", nil], [row_1], [row_2]] }
+    let(:row_1) { "row_1" }
+    let(:row_2) { "row_2" }
+    let(:object_1) { double(:object_1) }
+    let(:object_2) { double(:object_2) }
+    before do
+      allow(file).to receive(:read)
+      allow(CSV).to receive(:parse).and_return(csv_read)
+      allow(Analysis).to receive(:set_object).with(["header_"], [row_1]).and_return(object_1)
+      allow(Analysis).to receive(:set_object).with(["header_"], [row_2]).and_return(object_2)
+    end
+    it { expect(subject).to eq [object_1, object_2] }
   end
+
   pending "set_object" do
   end
 
