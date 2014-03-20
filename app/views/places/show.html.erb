@@ -28,18 +28,18 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
-      <li><a href="#stone" data-toggle="tab">stone <%= "(#{@place.stones.count})" if @place.stones.present? %></a></li>
+      <li><a href="#stone" data-toggle="tab">stone <%= data_count(@place.stones) %></a></li>
       <li><a href="#neighbor" data-toggle="tab">neighbor</a></li>
-      <li><a href="#attachment_file" data-toggle="tab">attachment_file <%= "(#{@place.attachment_files.count})" if @place.attachment_files.present? %></a></li>
+      <li><a href="#attachment_file" data-toggle="tab">attachment_file <%= data_count(@place.attachment_files) %></a></li>
       <li><a href="#geoname" data-toggle="tab">geoname</a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-      <div class="tab-pane active" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
-      <div class="tab-pane" id="stone"><%= render partial: "stone" %></div>
-      <div class="tab-pane" id="neighbor"><%= render partial: "neighbor" %></div>
-      <div class="tab-pane" id="attachment_file"><%= render partial: "attachment_file" %></div>
-      <div class="tab-pane" id="geoname"><%= render partial: "geoname" %></div>
+      <div class="tab-pane<%= if_active %>" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
+      <div class="tab-pane<%= if_active "stone" %>" id="stone"><%= render partial: "stone" %></div>
+      <div class="tab-pane<%= if_active "neighbor" %>" id="neighbor"><%= render partial: "neighbor" %></div>
+      <div class="tab-pane<%= if_active "attachment_file" %>" id="attachment_file"><%= render partial: "attachment_file" %></div>
+      <div class="tab-pane<%= if_active "geoname" %>" id="geoname"><%= render partial: "geoname" %></div>
     </div>
   </div>
 </div>

@@ -41,4 +41,17 @@ module ApplicationHelper
     content_tag(:li, prefix + value.to_s, {}, false)
   end
 
+  def data_count(array)
+    return "" if array.empty?
+    "(#{array.size})"
+  end
+
+  def if_active(tabname = nil)
+    if tabname
+      " active" if params[:tab] == tabname
+    else
+      " active" if params[:tab].blank?
+    end
+  end
+
 end

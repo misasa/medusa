@@ -42,19 +42,19 @@
     <%= @box.box_path %>
     <ul class="nav nav-tabs">
       <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
-      <li><a href="#stone" data-toggle="tab">stone <%= "(#{@box.stones.count})" if @box.stones.present? %></a></li>
-      <li><a href="#box" data-toggle="tab">box <%= "(#{@box.children.count})" if @box.children.present? %></a></li>
-      <li><a href="#analysis" data-toggle="tab">analysis</a></li>
-      <li><a href="#bib" data-toggle="tab">bib <%= "(#{@box.bibs.count})" if @box.bibs.present? %></a></li>
-      <li><a href="#attachment_file" data-toggle="tab">attachment_file <%= "(#{@box.attachment_files.count})" if @box.attachment_files.present? %></a></li>
+      <li><a href="#stone" data-toggle="tab">stone <%= data_count(@box.stones) %></a></li>
+      <li><a href="#box" data-toggle="tab">box <%= data_count(@box.children) %></a></li>
+      <li><a href="#analysis" data-toggle="tab">analysis <%= data_count(@box.analyses) %></a></li>
+      <li><a href="#bib" data-toggle="tab">bib <%= data_count(@box.bibs) %></a></li>
+      <li><a href="#attachment_file" data-toggle="tab">attachment_file <%= data_count(@box.attachment_files) %></a></li>
     </ul>
     <div class="tab-content">
-      <div class="tab-pane active" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
-      <div class="tab-pane" id="stone"><%= render partial: "stone" %></div>
-      <div class="tab-pane" id="box"><%= render partial: "daughter" %></div>
-      <div class="tab-pane" id="analysis"><%= render partial: "analysis" %></div>
-      <div class="tab-pane" id="bib"><%= render partial: "bib" %></div>
-      <div class="tab-pane" id="attachment_file"><%= render partial: "attachment_file" %></div>
+      <div class="tab-pane<%= if_active %>" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
+      <div class="tab-pane<%= if_active "stone" %>" id="stone"><%= render partial: "stone" %></div>
+      <div class="tab-pane<%= if_active "box" %>" id="box"><%= render partial: "daughter" %></div>
+      <div class="tab-pane<%= if_active "analysis" %>" id="analysis"><%= render partial: "analysis" %></div>
+      <div class="tab-pane<%= if_active "bib" %>" id="bib"><%= render partial: "bib" %></div>
+      <div class="tab-pane<%= if_active "attachment_file" %>" id="attachment_file"><%= render partial: "attachment_file" %></div>
     </div>
   </div>
 </div>
