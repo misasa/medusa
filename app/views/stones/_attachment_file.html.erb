@@ -1,0 +1,62 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>name</th>
+      <th>type</th>
+      <th>global_id</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= form_tag bundle_edit_attachment_files_path, id: "attachment-file-bundle-form" do %>
+      <% @stone.attachings.where(attachable_type: "Analysis").order("position ASC").each do |attaching| %>
+        <tr>
+          <% attachment_file = attaching.attachment_file %>
+          <td>
+            <%= check_box_tag("ids[]", attachment_file.id, checked: false, id: "ids_#{attachment_file.id}", class: "select-row") if can?(:update, attachment_file) %>
+          </td>
+          <td><%= image_tag(attachment_file.path, width: 70, height: 70) %></td>
+          <td><%= link_to attachment_file.data_file_name, attachment_file %></td>
+          <td><%= attachment_file.try!(:data_content_type) %></td>
+          <td><%= attachment_file.try!(:global_id) %></td> 
+          <td>
+            <%= link_to move_to_top_attaching_path(attaching), method: :move_to_top ,title: "move to top" do %>
+              <span class="glyphicon glyphicon-arrow-up"></span>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to stone_attachment_file_path(@stone, attachment_file), method: :delete, title: "unlink attachment file", data: {confirm: t("confirm.unlink")} do %>
+              <span class="glyphicon glyphicon-remove"></span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <%= form_for AttachmentFile.new, url: stone_attachment_files_path(@stone), multipart: true do |f|%>
+        <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
+        <th colspan= "2"><%= f.file_field :data %></th>
+        <th>
+          <%= f.button title:"add attachment file", class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+        </th>
+      <% end %>
+      <%= form_tag link_by_global_id_stone_attachment_files_path(@stone), method: :post do %>
+        <th><%= text_field_tag :global_id, nil, class: "form-control input-sm" %></th>
+        <th>
+          <%= button_tag title: "link attachment file by global id", class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+        </th>
+      <% end %>
+    </tr>
+  </tfoot>
+</table>
+<%= link_to_function "edit", "$('#attachment-file-bundle-form').submit();", class: "btn btn-default" %>
+
