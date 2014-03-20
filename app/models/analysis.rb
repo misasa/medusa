@@ -1,5 +1,6 @@
 class Analysis < ActiveRecord::Base
   include HasRecordProperty
+  include HasViewSpot
 
   PERMIT_IMPORT_TYPES = ["text/plain", "text/csv", "application/csv"]
 

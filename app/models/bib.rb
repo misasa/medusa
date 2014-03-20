@@ -1,5 +1,6 @@
 class Bib < ActiveRecord::Base
   include HasRecordProperty
+  include HasViewSpot
   include OutputPdf
 
   LABEL_HEADER = ["Id", "Name", "Authors"]
