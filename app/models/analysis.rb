@@ -121,10 +121,12 @@ class Analysis < ActiveRecord::Base
     end
   end
 
-  # TODO chemistry.value を単位変換して返す
   def get_chemistry_value(measurement_item_name, unit_name)
     chemistry = associate_chemistry_by_item_nickname(measurement_item_name)
     if chemistry
+      if chemistry.unit
+        return chemistry.value.send(chemistry.unit.name).to(unit_name.to_sym).value
+      end
       chemistry.value
     end
   end
