@@ -35,11 +35,11 @@
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
-      <li><a href="#stone" data-toggle="tab"><%= @bib.stones.blank? ? "stone" : "stone (#{@bib.stones.count})" %></a></li>
-      <li><a href="#box" data-toggle="tab"><%= @bib.boxes.blank? ? "box" : "box (#{@bib.boxes.count})" %></a></li>
-      <li><a href="#place" data-toggle="tab"><%= @bib.places.blank? ? "place" : "place (#{@bib.places.count})" %></a></li>
-      <li><a href="#analysis" data-toggle="tab"><%= @bib.analyses.blank? ? "analysis" : "analysis (#{@bib.analyses.count})" %></a></li>
-      <li><a href="#attachment_file" data-toggle="tab"><%= @bib.attachment_files.blank? ? "attachment_file" : "attachment_file (#{@bib.attachment_files.count})" %></a></li>
+      <li><a href="#stone" data-toggle="tab">stone <%= "(#{@bib.stones.count})" if @bib.stones.present? %></a></li>
+      <li><a href="#box" data-toggle="tab">box <%= "(#{@bib.boxes.count})" if @bib.boxes.present? %></a></li>
+      <li><a href="#place" data-toggle="tab">place <%= "(#{@bib.places.count})" if @bib.places.present? %></a></li>
+      <li><a href="#analysis" data-toggle="tab">analysis <%= "(#{@bib.analyses.count})" if @bib.analyses.present? %></a></li>
+      <li><a href="#attachment_file" data-toggle="tab">attachment_file <%= "(#{@bib.attachment_files.count})" if @bib.attachment_files.present? %></a></li>
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
