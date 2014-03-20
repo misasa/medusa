@@ -37,12 +37,11 @@ describe BoxDecorator do
   describe ".to_tex" do
     subject { box.to_tex }
     let(:box) { FactoryGirl.create(:box).decorate }
-    let(:stone) { FactoryGirl.create(:stone, name: "name_1").decorate }
+    let(:stone) { FactoryGirl.create(:stone, name: "name_1", box_id: box.id) }
     let(:time_now) { Time.now.to_date }
     before do
       box
-      box.stones << stone
-      time_now
+      stone
     end
     it { expect(subject).to eq "%------------\nThe sample names and ID of each mounted materials are listed in Table \\ref{mount:materials}.\n%------------\n\\begin{footnotesize}\n\\begin{table}\n\\caption{Stones mounted on box_1 (#{box.global_id}) as of #{time_now}.}\n\\begin{center}\n\\begin{tabular}{lll}\n\\hline\nstone name\t&\tID\t&\tremark\\\\\n\\hline\nname_1\t&\t#{stone.global_id}\t&\t\\\\\n\\hline\n\\end{tabular}\n\\end{center}\n\\label{mount:materials}\n\\end{table}\n\\end{footnotesize}\n%------------" }
   end
