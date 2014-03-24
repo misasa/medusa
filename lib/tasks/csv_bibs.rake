@@ -61,7 +61,7 @@ task :bibs_csv => :environment do
         year,
         volume,
         number,
-        series as pages,
+        pages,
         month,
         note,
         key,
