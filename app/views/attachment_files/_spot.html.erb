@@ -14,7 +14,7 @@
           <td><%= link_to spot.try!(:name),edit_spot_path(spot) %></td>
           <td><%= spot.target_link %></td>
           <td>
-            <%= link_to attachment_file_spot_path(@attachment_file,spot), method: :delete ,title: "delete spot",data: {confirm: t("confirm.delete")} do %>
+            <%= link_to attachment_file_spot_path(@attachment_file,spot)+ tab_param(__FILE__), method: :delete ,title: "delete spot",data: {confirm: t("confirm.delete")} do %>
               <span class="glyphicon glyphicon-remove"></span>
             <% end %>
           </td>

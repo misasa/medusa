@@ -25,7 +25,7 @@
           <td></td>
           <td><%= stone.try!(:global_id) %></td> 
           <td>
-            <%= link_to bib_stone_path(@bib,stone), method: :delete ,title: "unlink stone",data: {confirm: t("confirm.unlink")} do %>
+            <%= link_to bib_stone_path(@bib,stone) + tab_param(__FILE__), method: :delete ,title: "unlink stone",data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
             <% end %>
           </td>
@@ -36,6 +36,7 @@
   <tfoot>
     <tr>
       <%= form_for Stone.new, url: bib_stones_path(@bib) do |f|%>
+        <%= hidden_tabname_tag(__FILE__) %>
         <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
         <th><%= f.text_field :name, class: "form-control input-sm" %></th>
         <th><%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), include_blank: true, class: "form-control input-sm" %></th>
@@ -48,6 +49,7 @@
         </th>
       <% end %>
       <%= form_tag link_by_global_id_bib_stones_path(@bib),method: :post do %>
+        <%= hidden_tabname_tag(__FILE__) %>
         <th><%= text_field_tag :global_id, nil,class: "form-control input-sm" %></th>
         <th>
           <%= button_tag title: "link stone by global id",class: "btn btn-default" do %>

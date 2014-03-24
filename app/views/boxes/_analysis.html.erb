@@ -36,7 +36,7 @@ end
     </tbody>
   </table>
   <%= form_tag( box_path(@box), method: :get) do %>
-    <%= hidden_field_tag :tab,File.basename(__FILE__).gsub(/^_/,"").gsub(/.html.erb/,"") %>
+    <%= hidden_tabname_tag(__FILE__) %>
     analysis:
     <%= select_tag :analysis_id,options_for_select(analyses.map{|analysis|[analysis.name,analysis.id]},params[:analysis_id]),include_blank: true %>
     measurement_category:

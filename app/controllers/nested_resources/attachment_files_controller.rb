@@ -1,4 +1,6 @@
 class NestedResources::AttachmentFilesController < ApplicationController
+  include TabParam
+
   respond_to :html, :xml, :json
   before_action :find_resource
   load_and_authorize_resource
@@ -11,19 +13,19 @@ class NestedResources::AttachmentFilesController < ApplicationController
   def create
     @attachment_file = AttachmentFile.new(attachment_file_params)
     @parent.attachment_files << @attachment_file
-    respond_with @attachment_file, methods: :path, location: request.referer
+    respond_with @attachment_file, methods: :path, location: add_tab_param(request.referer)
   end
 
   def destroy
     @attachment_file = AttachmentFile.find(params[:id])
     @parent.attachment_files.delete(@attachment_file)
-    respond_with @attachment_file, methods: :path, location: request.referer
+    respond_with @attachment_file, methods: :path, location: add_tab_param(request.referer)
   end
 
   def link_by_global_id
     @attachment_file = AttachmentFile.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
     @parent.attachment_files << @attachment_file
-    respond_with @attachment_file, methods: :path, location: request.referer
+    respond_with @attachment_file, methods: :path, location: add_tab_param(request.referer)
   end
 
   private

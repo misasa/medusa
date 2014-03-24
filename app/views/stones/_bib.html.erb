@@ -17,7 +17,7 @@
           <td colspan="2"><%= link_to bib.name, bib %></td>
           <td><%= bib.try!(:global_id) %></td>
           <td>
-            <%= link_to stone_bib_path(@stone,bib), method: :delete ,title: "unlink bib",data: {confirm: t("confirm.unlink")} do %>
+            <%= link_to stone_bib_path(@stone,bib) + tab_param(__FILE__), method: :delete ,title: "unlink bib",data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
             <% end %>
           </td>
@@ -28,15 +28,17 @@
   <tfoot>
     <tr>
      <%= form_for Bib.new, url: stone_bibs_path(@stone) do |f|%>
+        <%= hidden_tabname_tag(__FILE__) %>
         <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
-        <th><%= f.text_field :name, class: "form-control input-sm" %></th>
+        <th><%#= f.text_field :name, class: "form-control input-sm" %></th>
         <th>
-          <%= f.button title:"add bib",class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-save"></span>
-          <% end %>
+          <%#= f.button title:"add bib",class: "btn btn-default" do %>
+            <%#<span class="glyphicon glyphicon-save"></span>%>
+          <%# end %>
         </th>
       <% end %>
     <%= form_tag link_by_global_id_stone_bibs_path(@stone), method: :post do %>
+        <%= hidden_tabname_tag(__FILE__) %>
         <th><%= text_field_tag :global_id, "", class: "form-control input-sm" %></th>
         <th>
           <%= button_tag title: "link bib by global id",class: "btn btn-default" do %>

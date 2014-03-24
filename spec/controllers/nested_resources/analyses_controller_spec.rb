@@ -51,4 +51,41 @@ describe NestedResources::AnalysesController do
     it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
   end
 
+  describe ".add_tab_param" do
+    let(:tabname){"bib"}
+    let(:parent){FactoryGirl.create(:attachment_file) }
+    let(:child){FactoryGirl.create(:bib) }
+    let(:base_url){"http://wwww.test.co.jp/"}
+    before do
+      request.env["HTTP_REFERER"]  = url
+      child.record_property.global_id = "test_global_id"
+      child.record_property.save
+      post :link_by_global_id, parent_resource: :attachment_file, attachment_file_id: parent.id, global_id: child.global_id, association_name: :bibs, tab: tab 
+    end
+    context "add none param" do
+      let(:tab){""}
+      let(:url){base_url}
+      it { expect(response).to redirect_to base_url}
+    end
+    context "add param" do
+      let(:tab){tabname}
+      context "1st param" do
+        let(:url){base_url}
+        it { expect(response).to redirect_to base_url + "?tab=" + tabname}
+      end
+      context "2nd param" do
+        let(:url){base_url + "?aaa=aaa"}
+        it { expect(response).to redirect_to base_url + "?aaa=aaa&tab=" + tabname}
+      end
+      context "exsist tab param other param" do
+        let(:url){base_url + "?tab=aaa&aaa=aaa"}
+        it { expect(response).to redirect_to base_url + "?aaa=aaa&tab=" + tabname}
+      end
+      context "exsist tab param other none param" do
+        let(:url){base_url + "?tab=aaa"}
+        it { expect(response).to redirect_to base_url + "?tab=" + tabname}
+      end
+    end
+  end
+
 end

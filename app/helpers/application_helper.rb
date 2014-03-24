@@ -54,4 +54,18 @@ module ApplicationHelper
     end
   end
 
+  def tab_param(filename)
+    "?tab=#{tabname_from_filename(filename)}"
+  end
+
+  def hidden_tabname_tag(filename)
+    hidden_field_tag :tab,tabname_from_filename(filename)
+  end
+
+  private
+
+  def tabname_from_filename(filename)
+    File.basename(filename).sub(/^_/,"").sub(/.html.erb$/,"")
+  end
+
 end
