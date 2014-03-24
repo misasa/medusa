@@ -1,8 +1,8 @@
 <tr>
   <td><%= check_box_tag("ids[]", stone.id, checked, id: "ids_#{stone.id}", class: "select-row") if can?(:update, stone) %></td>
   <td><%= link_to stone.name, stone %></td>
-  <td><%= stone.parent.try!(:name) %></td>
-  <td><%= stone.box.try!(:name) %></td>
+  <td><%= link_to stone.parent.name,stone.parent if stone.parent %></td>
+  <td><%= link_to stone.box.name,stone.box if stone.box %></td>
   <td><%= stone.physical_form.try!(:name) %></td>
   <td><%= stone.classification.try!(:name) %></td>
   <td><%= stone.tag_list %></td>
