@@ -200,9 +200,17 @@ describe Analysis do
 
   describe "#to_castemls" do
     subject { Analysis.to_castemls(objs) }
+    let(:spot){FactoryGirl.create(:spot)}
+    let(:attachment_file){FactoryGirl.create(:attachment_file)}
+    let(:chemistry){FactoryGirl.create(:chemistry)}
     let(:obj) { FactoryGirl.create(:analysis) }
     let(:obj2) { FactoryGirl.create(:analysis) }
     let(:objs){ [obj,obj2]}
+    before do
+      attachment_file.spots << spot
+      obj.attachment_files << attachment_file
+      obj.chemistries << chemistry
+    end
     it {expect(subject).to be_present}
   end
 
