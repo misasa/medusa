@@ -42,21 +42,24 @@
   </div>
   <div id="show-body" class="col-lg-8">
     <%= @stone.path %>
+    <% tab_info = [
+        ["at-a-glance",nil],
+        ["daughter",@stone.children],
+        ["analysis",@stone.analyses],
+        ["bib",@stone.bibs],
+        ["attachment_file",@stone.attachment_files]] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
-      <li><a href="#at-a-glance" data-toggle="tab">At a glance</a></li>
-      <li><a href="#daughter" data-toggle="tab">daughter <%= data_count(@stone.children) %></a></li>
-      <li><a href="#analysis" data-toggle="tab">analysis <%= data_count(@stone.analyses) %></a></li>
-      <li><a href="#bib" data-toggle="tab">bib <%= data_count(@stone.bibs) %></a></li>
-      <li><a href="#file" data-toggle="tab">attachment_file <%= data_count(@stone.attachment_files) %></a></li>
+      <% tab_info.each do |key,array| %>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= key + data_count(array) %></a></li>
+      <% end %>
+
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-      <div class="tab-pane<%= if_active %>" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
-      <div class="tab-pane<%= if_active "daughter" %>" id="daughter"><%= render partial: "daughter" %></div>
-      <div class="tab-pane<%= if_active "analysis" %>" id="analysis"><%= render partial: "analysis" %></div>
-      <div class="tab-pane<%= if_active "bib" %>" id="bib"><%= render partial: "bib" %></div>
-      <div class="tab-pane<%= if_active "attachment_file" %>" id="attachment_file"><%= render partial: "attachment_file" %></div>
+      <% tab_info.each do |key,array| %>
+        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
+      <% end %>
     </div>
   </div>
 </div>

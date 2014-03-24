@@ -33,25 +33,26 @@
     </div>
   </div>
   <div id="show-body" class="col-lg-8">
+    <% tab_info = [
+        ["at-a-glance",nil],
+        ["stone",@attachment_file.stones],
+        ["box",@attachment_file.boxes],
+        ["place",@attachment_file.places],
+        ["analysis",@attachment_file.analyses],
+        ["bib",@attachment_file.bibs],
+        ["spot",@attachment_file.spots]] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
-      <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
-      <li><a href="#stone" data-toggle="tab">stone <%= data_count(@attachment_file.stones) %></a></li>
-      <li><a href="#box" data-toggle="tab">box <%= data_count(@attachment_file.boxes) %></a></li>
-      <li><a href="#place" data-toggle="tab">place <%= data_count(@attachment_file.places) %></a></li>
-      <li><a href="#analysis" data-toggle="tab">analysis <%= data_count(@attachment_file.analyses) %></a></li>
-      <li><a href="#bib" data-toggle="tab">bib <%= data_count(@attachment_file.bibs) %></a></li>
-      <li><a href="#spot" data-toggle="tab">spot <%= data_count(@attachment_file.spots) %></a></li>
+      <% tab_info.each do |key,array| %>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= key + data_count(array) %></a></li>
+      <% end %>
+
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-      <div class="tab-pane<%= if_active %>"" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
-      <div class="tab-pane<%= if_active "stone" %>"" id="stone"><%= render partial: "stone" %></div>
-      <div class="tab-pane<%= if_active "box" %>"" id="box"><%= render partial: "box" %></div>
-      <div class="tab-pane<%= if_active "analysis" %>"" id="analysis"><%= render partial: "analysis" %></div>
-      <div class="tab-pane<%= if_active "place" %>"" id="place"><%= render partial: "place" %></div>
-      <div class="tab-pane<%= if_active "bib" %>"" id="bib"><%= render partial: "bib" %></div>
-      <div class="tab-pane<%= if_active "spot" %>"" id="spot"><%= render partial: "spot" %></div>
+      <% tab_info.each do |key,array| %>
+        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
+      <% end %>
     </div>
   </div>
 </div>

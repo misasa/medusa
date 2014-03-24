@@ -66,4 +66,40 @@ describe NestedResources::ChemistriesController do
     end
   end
 
+  describe ".add_tab_param" do
+    let(:tabname){"chemistry"}
+    let(:parent){FactoryGirl.create(:analysis) }
+    let(:child){FactoryGirl.create(:chemistry) }
+    let(:base_url){"http://wwww.test.co.jp/"}
+    before do
+      request.env["HTTP_REFERER"]  = url
+      delete :destroy, analysis_id: parent,id: child.id,tab: tab
+    end
+    context "add none param" do
+      let(:tab){""}
+      let(:url){base_url}
+      it { expect(response).to redirect_to base_url}
+    end
+    context "add param" do
+      let(:tab){tabname}
+      context "1st param" do
+        let(:url){base_url}
+        it { expect(response).to redirect_to base_url + "?tab=" + tabname}
+      end
+      context "2nd param" do
+        let(:url){base_url + "?aaa=aaa"}
+        it { expect(response).to redirect_to base_url + "?aaa=aaa&tab=" + tabname}
+      end
+      context "exsist tab param other param" do
+        let(:url){base_url + "?tab=aaa&aaa=aaa"}
+        it { expect(response).to redirect_to base_url + "?aaa=aaa&tab=" + tabname}
+      end
+      context "exsist tab param other none param" do
+        let(:url){base_url + "?tab=aaa"}
+        it { expect(response).to redirect_to base_url + "?tab=" + tabname}
+      end
+    end
+  end
+
 end
+

@@ -42,16 +42,30 @@ module ApplicationHelper
   end
 
   def data_count(array)
-    return "" if array.empty?
+    return "" if array.nil? || array.empty?
     "(#{array.size})"
   end
 
-  def if_active(tabname = nil)
-    if tabname
+  def active_if_current(tabname)
+    if params[:tab]
       " active" if params[:tab] == tabname
-    else
-      " active" if params[:tab].blank?
+    else 
+      " active" if tabname == "at-a-glance" 
     end
+  end
+
+  def tab_param(filename)
+    "?tab=#{tabname_from_filename(filename)}"
+  end
+
+  def hidden_tabname_tag(filename)
+    hidden_field_tag :tab,tabname_from_filename(filename)
+  end
+
+  private
+
+  def tabname_from_filename(filename)
+    File.basename(filename).sub(/^_/,"").sub(/.html.erb$/,"")
   end
 
 end

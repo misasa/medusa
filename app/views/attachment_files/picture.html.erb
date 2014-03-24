@@ -2,6 +2,7 @@
   <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300, "data-image" => attachment_file_path(@attachment_file, format: :svg) %>
 </div>
 <%= form_for Spot.new, url: attachment_file_spots_path(@attachment_file) do |f|%>
+  <%= hidden_field_tag :tab,"" %>
   <table>
     <tr>
       <td>new spot with link(ID </td>

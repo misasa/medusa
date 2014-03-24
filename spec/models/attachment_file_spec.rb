@@ -46,24 +46,24 @@ describe AttachmentFile do
   end
 
   describe ".data_fingerprint" do
-    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
-    before{attachment_file.data_fingerprint = "test"}
-    it {expect(attachment_file.data_fingerprint).to eq("test")}
+    let(:obj) { FactoryGirl.create(:attachment_file) }
+    before{obj.data_fingerprint = "test"}
+    it {expect(obj.data_fingerprint).to eq("test")}
   end
 
   describe ".save_geometry" do
     let(:user) { FactoryGirl.create(:user) }
-    let(:attachment_file) { AttachmentFile.new(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+    let(:obj) { AttachmentFile.new(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
     before do
       User.current = user
-      attachment_file
+      obj
     end
-    it {expect(attachment_file.original_geometry).to eq("2352x1568")}
+    it {expect(obj.original_geometry).to eq("2352x1568")}
   end
 
   describe "#pdf?" do
-    subject { attachment_file.pdf? }
-    let(:attachment_file) { FactoryGirl.build(:attachment_file, data_content_type: data_content_type) }
+    subject { obj.pdf? }
+    let(:obj) { FactoryGirl.build(:attachment_file, data_content_type: data_content_type) }
     context "data_content_type is pdf" do
       let(:data_content_type) { "application/pdf" }
       it { expect(subject).to eq true }
@@ -79,8 +79,8 @@ describe AttachmentFile do
   end
 
   describe "#image?" do
-    subject { attachment_file.image? }
-    let(:attachment_file) { FactoryGirl.build(:attachment_file, data_content_type: data_content_type) }
+    subject { obj.image? }
+    let(:obj) { FactoryGirl.build(:attachment_file, data_content_type: data_content_type) }
     context "data_content_type is pdf" do
       let(:data_content_type) { "application/pdf" }
       it { expect(subject).to eq false }
@@ -96,9 +96,9 @@ describe AttachmentFile do
   end
 
   describe ".original_width" do
-    let(:attachment_file){FactoryGirl.create(:attachment_file)}
-    subject{ attachment_file.original_width }
-    before{attachment_file.original_geometry = original_geometry}
+    let(:obj){FactoryGirl.create(:attachment_file)}
+    subject{ obj.original_width }
+    before{obj.original_geometry = original_geometry}
     context "original_geometry is blank" do
       let(:original_geometry){nil}
       it {expect(subject).to eq nil}
@@ -110,9 +110,9 @@ describe AttachmentFile do
   end
 
   describe ".original_height" do
-    let(:attachment_file){FactoryGirl.create(:attachment_file)}
-    subject{ attachment_file.original_height }
-    before{attachment_file.original_geometry = original_geometry}
+    let(:obj){FactoryGirl.create(:attachment_file)}
+    subject{ obj.original_height }
+    before{obj.original_geometry = original_geometry}
     context "original_geometry is blank" do
       let(:original_geometry){nil}
       it {expect(subject).to eq nil}
@@ -123,4 +123,33 @@ describe AttachmentFile do
     end
   end
 
+  describe ".width_in_um" do
+    let(:obj){FactoryGirl.create(:attachment_file)}
+    subject{obj.width_in_um}
+    context "affine_matrix is blank" do
+      before{obj.affine_matrix = nil}
+      it {expect(subject).to eq nil}
+    end
+    pending "affine_matrix is  not blank" do
+      it {expect(subject).not_to eq nil}
+    end
+  end
+
+  describe ".height_in_um" do
+    let(:obj){FactoryGirl.create(:attachment_file)}
+    subject{obj.height_in_um}
+    context "affine_matrix is blank" do
+      before{obj.affine_matrix = nil}
+      it {expect(subject).to eq nil}
+    end
+    pending "affine_matrix is not blank" do
+      it {expect(subject).not_to eq nil}
+    end
+  end
+
+  pending ".affine_matrix_in_string" do
+
+  end
+
 end
+
