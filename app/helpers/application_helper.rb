@@ -42,15 +42,15 @@ module ApplicationHelper
   end
 
   def data_count(array)
-    return "" if array.empty?
+    return "" if array.nil? || array.empty?
     "(#{array.size})"
   end
 
-  def if_active(tabname = nil)
-    if tabname
+  def active_if_current(tabname)
+    if params[:tab]
       " active" if params[:tab] == tabname
-    else
-      " active" if params[:tab].blank?
+    else 
+      " active" if tabname == "at-a-glance" 
     end
   end
 

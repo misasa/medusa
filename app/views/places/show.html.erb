@@ -25,21 +25,25 @@
     </div>
   </div>
   <div id="show-body" class="col-lg-8">
+    <% tab_info = [
+        ["at-a-glance",nil],
+        ["stone",@place.stones],
+        ["neighbor",nil],
+        ["attachment_file",@place.attachment_files],
+        ["geoname",nil]] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
-      <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
-      <li><a href="#stone" data-toggle="tab">stone <%= data_count(@place.stones) %></a></li>
-      <li><a href="#neighbor" data-toggle="tab">neighbor</a></li>
-      <li><a href="#attachment_file" data-toggle="tab">attachment_file <%= data_count(@place.attachment_files) %></a></li>
-      <li><a href="#geoname" data-toggle="tab">geoname</a></li>
+      <% tab_info.each do |key,array| %>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= key + data_count(array) %></a></li>
+      <% end %>
+
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-      <div class="tab-pane<%= if_active %>" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
-      <div class="tab-pane<%= if_active "stone" %>" id="stone"><%= render partial: "stone" %></div>
-      <div class="tab-pane<%= if_active "neighbor" %>" id="neighbor"><%= render partial: "neighbor" %></div>
-      <div class="tab-pane<%= if_active "attachment_file" %>" id="attachment_file"><%= render partial: "attachment_file" %></div>
-      <div class="tab-pane<%= if_active "geoname" %>" id="geoname"><%= render partial: "geoname" %></div>
+      <% tab_info.each do |key,array| %>
+        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
+      <% end %>
     </div>
   </div>
 </div>
+~                                 

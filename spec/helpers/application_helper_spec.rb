@@ -113,30 +113,42 @@ describe ApplicationHelper do
     end
   end
 
-  describe "#if_active" do
-    subject { helper.if_active(tabname) }
-    context "tabname is nil" do
-      let(:tabname) { nil }
-      context "params[:tab] is nil" do
-        before { allow(helper).to receive(:params).and_return({tab: nil}) }
+  describe "#active_if_current" do
+    subject { helper.active_if_current(tabname) }
+    context "param[:tab] is present" do
+      before { allow(helper).to receive(:params).and_return({tab: "box"}) }
+      context "param[:tab] == tabname" do
+        let(:tabname) { "box" }
         it { expect(subject).to eq " active" }
       end
-      context "params[:tab] is present" do
-        before { allow(helper).to receive(:params).and_return({tab: "tab"}) }
+      context "param[:tab] != tabname" do
+        let(:tabname) { "stone" }
         it { expect(subject).to eq nil }
       end
     end
-    context "tabname is present" do
-      let(:tabname) { "tabname" }
-      context "params[:tab] equal tabname" do
-        before { allow(helper).to receive(:params).and_return({tab: "tabname"}) }
+    context "param[:tab] is nil" do
+      before { allow(helper).to receive(:params).and_return({tab: nil}) }
+      context "tabname is at-a-glance" do
+        let(:tabname) { "at-a-glance" }
         it { expect(subject).to eq " active" }
       end
-      context "params[:tab] not equal tabname" do
-        before { allow(helper).to receive(:params).and_return({tab: "tab"}) }
+      context "tabname is not at-a-glance" do
+        let(:tabname) { "box" }
         it { expect(subject).to eq nil }
       end
     end
+  end
+
+  describe "#tab_param" do
+    subject { helper.tab_param(filename) }
+    let(:filename){"_stone.html.erb"}
+    it { expect(subject).to eq "?tab=stone"}
+  end
+
+  describe "#hidden_tabname_tag" do
+    subject { helper.hidden_tabname_tag(filename) }
+    let(:filename){"_stone.html.erb"}
+    it { expect(subject).to eq hidden_field_tag(:tab,"stone")}
   end
 
 end

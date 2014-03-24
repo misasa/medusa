@@ -27,17 +27,22 @@
     </div>
   </div>
   <div id="show-body" class="col-lg-8">
+   <% tab_info = [
+        ["at-a-glance",nil],
+        ["bib",@analysis.bibs],
+        ["attachment_file",@analysis.attachment_files]] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
-      <li><a href="#at-a-glance" data-toggle="tab">at a glance</a></li>
-      <li><a href="#bib" data-toggle="tab">bib <%= data_count(@analysis.bibs) %></a></li>
-      <li><a href="#attachment_file" data-toggle="tab">attachment_file <%= data_count(@analysis.attachment_files) %></a></li>
+      <% tab_info.each do |key,array| %>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= key + data_count(array) %></a></li>
+      <% end %>
+
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
-      <div class="tab-pane<%= if_active %>" id="at-a-glance"><%= render partial: "at_a_glance" %></div>
-      <div class="tab-pane<%= if_active "bib"  %>" id="bib"><%= render partial: "bib" %></div>
-      <div class="tab-pane<%= if_active "attachment_file"  %>" id="attachment_file"><%= render partial: "attachment_file" %></div>
+      <% tab_info.each do |key,array| %>
+        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
+      <% end %>
     </div>
   </div>
 </div>
