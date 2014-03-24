@@ -65,7 +65,6 @@ class Spot < ActiveRecord::Base
 private
 
   def spot_center_xy
-    return unless attachment_file
     [attachment_file.width.to_f / attachment_file.length / 2 * 100, attachment_file.height.to_f / attachment_file.length / 2 * 100]
   end
 
