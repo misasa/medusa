@@ -13,7 +13,7 @@ class NestedResources::StonesController < ApplicationController
   def create
     @stone = Stone.new(stone_params)
     @parent.send(params[:association_name]) << @stone if @stone.save
-    respond_with @stone, location: add_tab_param(request.referer)
+    respond_with @stone, location: add_tab_param(request.referer), action: "error" 
   end
 
   def update

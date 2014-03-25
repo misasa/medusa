@@ -6,16 +6,26 @@ describe NestedResources::BoxesController do
   
   describe "POST create" do
     let(:parent) { FactoryGirl.create(:bib) }
-    let(:attributes) { {name: "box_name"} }
+    let(:attributes) { {name: name} }
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
     end
-    it { expect {post :create, parent_resource: :bib, bib_id: parent, box: attributes, association_name: :boxes}.to change(Box, :count).by(1) }
-    context "parent box" do
-      before { post :create, parent_resource: :bib, bib_id: parent, box: attributes ,association_name: :boxes
-}
-      it { expect(parent.boxes.last.name).to eq attributes[:name]}
-      it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+    context "validate" do
+      let(:name){"box_name"}
+      it { expect {post :create, parent_resource: :bib, bib_id: parent, box: attributes, association_name: :boxes}.to change(Box, :count).by(1) }
+      context "parent bib" do
+        before { post :create, parent_resource: :bib, bib_id: parent, box: attributes, association_name: :boxes }
+        it { expect(parent.boxes.last.name).to eq attributes[:name]}
+        it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+      end
+    end
+    context "invalidate" do
+      let(:name){""}
+      it { expect {post :create, parent_resource: :bib, bib_id: parent, box: attributes, association_name: :boxes}.to change(Box, :count).by(0) }
+      context "parent bib" do
+        before { post :create, parent_resource: :bib, bib_id: parent, box: attributes, association_name: :boxes }
+        it { expect(response).to render_template("error")}
+      end
     end
   end
   

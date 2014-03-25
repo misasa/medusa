@@ -13,7 +13,7 @@ class NestedResources::BoxesController < ApplicationController
   def create
     @box = Box.new(box_params)
     @parent.send(params[:association_name]) << @box if @box.save
-    respond_with @box, location: add_tab_param(request.referer)
+    respond_with @box, location: add_tab_param(request.referer), action: "error"
   end
 
   def update

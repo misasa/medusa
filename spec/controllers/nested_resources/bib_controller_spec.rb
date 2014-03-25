@@ -5,17 +5,29 @@ describe NestedResources::BibsController do
   before { sign_in user }
 
   describe "POST create" do
-    let(:parent) { FactoryGirl.create(:attachment_file) }
-    let(:attributes) { {name: "bib_name", author_ids: ["#{author_id}"]} }
     let(:author_id) { FactoryGirl.create(:author).id } 
+    let(:parent) { FactoryGirl.create(:analysis) }
+    let(:attributes) { {name: name, author_ids: ["#{author_id}"]} }
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
     end
-    it { expect {post :create, parent_resource: :attachment_file, attachment_file_id: parent, bib: attributes}.to change(Bib, :count).by(1) }
-    context "parent attachment_file" do
-      before { post :create, parent_resource: :attachment_file, attachment_file_id: parent, bib: attributes }
-      it { expect(parent.bibs.last.name).to eq attributes[:name]}
-      it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+    context "validate" do
+      let(:name){"bib_name"}
+      it { expect {post :create, parent_resource: :analysis, analysis_id: parent, bib: attributes}.to change(Bib, :count).by(1) }
+      context "parent analysis" do
+        before { post :create, parent_resource: :analysis, analysis_id: parent, bib: attributes }
+        it { expect(parent.bibs.last.name).to eq attributes[:name]}
+        it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+      end
+    end
+    context "invalidate" do
+      let(:name){""}
+      it { expect {post :create, parent_resource: :analysis, analysis_id: parent, bib: attributes}.to change(Bib, :count).by(0) }
+      context "parent analysis" do
+        before { post :create, parent_resource: :analysis, analysis_id: parent, bib: attributes }
+        it { expect(response).to render_template("error")}
+      end
+
     end
   end
 

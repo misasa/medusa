@@ -6,15 +6,26 @@ describe NestedResources::PlacesController do
   
   describe "POST create" do
     let(:parent) { FactoryGirl.create(:bib) }
-    let(:attributes) { {name: "place_name"} }
+    let(:attributes) { {name: name} }
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
     end
-    it { expect {post :create, parent_resource: :bib, bib_id: parent, place: attributes}.to change(Place, :count).by(1) }
-    context "parent place" do
-      before { post :create, parent_resource: :bib, bib_id: parent, place: attributes }
-      it { expect(parent.places.last.name).to eq attributes[:name]}
-      it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+    context "validate" do
+      let(:name){"place_name"}
+      it { expect {post :create, parent_resource: :bib, bib_id: parent, place: attributes}.to change(Place, :count).by(1) }
+      context "parent bib" do
+        before { post :create, parent_resource: :bib, bib_id: parent, place: attributes }
+        it { expect(parent.places.last.name).to eq attributes[:name]}
+        it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+      end
+    end
+    context "invalidate" do
+      let(:name){""}
+      it { expect {post :create, parent_resource: :bib, bib_id: parent, place: attributes}.to change(Place, :count).by(0) }
+      context "parent bib" do
+        before { post :create, parent_resource: :bib, bib_id: parent, place: attributes }
+        it { expect(response).to render_template("error")}
+      end
     end
   end
   

@@ -5,16 +5,27 @@ describe NestedResources::SpotsController do
   before { sign_in user }
 
   describe "POST create" do
-    let(:parent){FactoryGirl.create(:attachment_file) }
-    let(:attributes) { {name: "spot_name",spot_x: 0,spot_y:0} }
+    let(:parent) { FactoryGirl.create(:attachment_file) }
+    let(:attributes) { {spot_x: spot_x,spot_y: 0} }
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
     end
-    it { expect {post :create, parent_resource: :attachment_file, attachment_file_id: parent, spot: attributes}.to change(Spot, :count).by(1) }
-    context "parent attachment_file" do
-      before{post :create, parent_resource: :attachment_file, attachment_file_id: parent, spot: attributes}
-      it{ expect(parent.spots.last.name).to eq attributes[:name]}
-      it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+    context "validate" do
+      let(:spot_x){1}
+      it { expect {post :create, parent_resource: :attachment_file, attachment_file_id: parent, spot: attributes}.to change(Spot, :count).by(1) }
+      context "parent attachment_file" do
+        before { post :create, parent_resource: :attachment_file, attachment_file_id: parent, spot: attributes }
+        it { expect(parent.spots.last.spot_x).to eq attributes[:spot_x]}
+        it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+      end
+    end
+    context "invalidate" do
+      let(:spot_x){nil}
+      it { expect {post :create, parent_resource: :attachment_file, attachment_file_id: parent, spot: attributes}.to change(Spot, :count).by(0) }
+      context "parent attachment_file" do
+        before { post :create, parent_resource: :attachment_file, attachment_file_id: parent, spot: attributes }
+        it { expect(response).to render_template("error")}
+      end
     end
   end
 

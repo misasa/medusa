@@ -4,7 +4,6 @@ class Spot < ActiveRecord::Base
   belongs_to :attachment_file
 
   validates :attachment_file, existence: true
-  validates :name, presence: true, length: { maximum: 255 }
   validates :spot_x, presence: true
   validates :spot_y, presence: true
 

@@ -41,13 +41,24 @@ describe NestedResources::ChemistriesController do
     let(:measurement_item){FactoryGirl.create(:measurement_item) }
     let(:unit){FactoryGirl.create(:unit) }
     let(:parent){FactoryGirl.create(:analysis) }
-    let(:attributes) { {measurement_item_id: measurement_item.id,unit_id: unit.id,value: 1,uncertainty: 1} }
+    let(:attributes) { {measurement_item_id: measurement_item.id,unit_id: unit.id,value: value ,uncertainty: 1} }
     before {request.env["HTTP_REFERER"]  = "where_i_came_from"}
-    it { expect {post :create, parent_resource: :analysis, analysis_id: parent, chemistry: attributes}.to change(Chemistry, :count).by(1) }
-    context "parent analysis" do
-      before{post :create, parent_resource: :analysis, analysis_id: parent, chemistry: attributes}
-      it{ expect(parent.chemistries.last.measurement_item_id).to eq attributes[:measurement_item_id]}
-      it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+    context "validate" do
+      let(:value){1}
+      it { expect {post :create, parent_resource: :analysis, analysis_id: parent, chemistry: attributes}.to change(Chemistry, :count).by(1) }
+      context "parent analysis" do
+        before { post :create, parent_resource: :analysis, analysis_id: parent, chemistry: attributes }
+        it { expect(parent.chemistries.last.value).to eq attributes[:value]}
+        it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
+      end
+    end
+    context "invalidate" do
+      let(:value){""}
+      it { expect {post :create, parent_resource: :analysis, analysis_id: parent, chemistry: attributes}.to change(Chemistry, :count).by(0) }
+      context "parent analysis" do
+        before { post :create, parent_resource: :analysis, analysis_id: parent, chemistry: attributes }
+        it { expect(response).to render_template("error")}
+      end
     end
   end
 

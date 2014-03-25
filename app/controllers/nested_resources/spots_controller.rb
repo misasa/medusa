@@ -13,8 +13,8 @@ class NestedResources::SpotsController < ApplicationController
 
   def create
     @spot = Spot.new(spot_params)
-    @parent.spots << @spot if @spot.save
-    respond_with @spot, location: add_tab_param(request.referer)
+    @parent.spots << @spot
+    respond_with @spot, location: add_tab_param(request.referer), action: "error"
   end
 
   def update
