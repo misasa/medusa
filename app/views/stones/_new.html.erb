@@ -12,10 +12,11 @@
     <%= f.text_field :tag_list %>
   <% end %>
   <%= f.fields_for :record_property_attributes do |r| %>
-  <%= th_if_expand do %>
-    <%= @current_user.username %><%= r.hidden_field :user_id ,value: @current_user.id %>
-  <% end %>
-  <th><%= r.select :group_id ,Group.pluck(:name, :id),include_blank: true %></th>
+  <%= th_if_expand @current_user.username %>
+  <th>
+    <%= r.select :group_id ,Group.pluck(:name, :id),include_blank: true %>
+    <%= r.hidden_field :user_id ,value: @current_user.id %>
+  </th>
   <% end %>
   <th>
     <%= f.button class: "btn btn-default" do %>
