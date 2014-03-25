@@ -3,7 +3,7 @@ require "spec_helper"
 describe Stone do
   describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:bib, name: name) }
+      let(:obj) { FactoryGirl.build(:stone, name: name) }
       context "is presence" do
         let(:name) { "sample_obj_name" }
         it { expect(obj).to be_valid }
