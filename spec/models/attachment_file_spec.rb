@@ -130,8 +130,8 @@ describe AttachmentFile do
       before{obj.affine_matrix = nil}
       it {expect(subject).to eq nil}
     end
-    pending "affine_matrix is  not blank" do
-      it {expect(subject).not_to eq nil}
+    context "affine_matrix is not blank" do
+      it {expect(subject).to eq 100.0}
     end
   end
 
@@ -142,13 +142,21 @@ describe AttachmentFile do
       before{obj.affine_matrix = nil}
       it {expect(subject).to eq nil}
     end
-    pending "affine_matrix is not blank" do
-      it {expect(subject).not_to eq nil}
+    context "affine_matrix is not blank" do
+      it {expect(subject).to eq 100.0}
     end
   end
 
-  pending ".affine_matrix_in_string" do
-
+  describe ".affine_matrix_in_string" do
+    subject{obj.affine_matrix_in_string}
+    let(:obj){FactoryGirl.create(:attachment_file)}
+    context "affine_matrix is blank" do
+      before{obj.affine_matrix = nil}
+      it {expect(subject).to eq nil}
+    end
+    context "affine_matrix is not blank" do
+      it {expect(subject).to eq "[1.000e+00,0.000e+00,0.000e+00;0.000e+00,1.000e+00,0.000e+00;0.000e+00,0.000e+00,1.000e+00]" }
+    end
   end
 
 end
