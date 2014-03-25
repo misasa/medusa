@@ -29,6 +29,11 @@ class StonesController < ApplicationController
     @stone.update_attributes(stone_params)
     respond_with @stone
   end
+  
+  def destroy
+    @stone.destroy
+    respond_with @stone
+  end
 
   def family
     respond_with @stone, layout: !request.xhr?

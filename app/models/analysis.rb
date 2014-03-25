@@ -5,9 +5,9 @@ class Analysis < ActiveRecord::Base
   PERMIT_IMPORT_TYPES = ["text/plain", "text/csv", "application/csv"]
 
   has_many :chemistries
-  has_many :attachings, as: :attachable
+  has_many :attachings, as: :attachable, dependent: :destroy
   has_many :attachment_files, through: :attachings
-  has_many :referrings, as: :referable
+  has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
   belongs_to :stone
   belongs_to :device

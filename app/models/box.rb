@@ -9,10 +9,10 @@ class Box < ActiveRecord::Base
 
   has_many :users
   has_many :stones
-  has_many :children, class_name: "Box", foreign_key: :parent_id
-  has_many :attachings, as: :attachable
+  has_many :children, class_name: "Box", foreign_key: :parent_id, dependent: :nullify
+  has_many :attachings, as: :attachable, dependent: :destroy
   has_many :attachment_files, through: :attachings
-  has_many :referrings, as: :referable
+  has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
   belongs_to :parent, class_name: "Box", foreign_key: :parent_id
   belongs_to :box_type

@@ -9,9 +9,9 @@ class Place < ActiveRecord::Base
   acts_as_mappable
 
   has_many :stones
-  has_many :attachings, as: :attachable
+  has_many :attachings, as: :attachable, dependent: :destroy
   has_many :attachment_files, through: :attachings
-  has_many :referrings, as: :referable
+  has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
 
   validates :name, presence: true, length: { maximum: 255 }

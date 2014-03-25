@@ -25,6 +25,12 @@ describe StonesController do
       it{expect(assigns(:stone).attachment_files.last.data_file_name).to eq "test_image.jpg"}
     end
   end
+  
+  describe "DELETE destroy" do
+    let(:stone) { FactoryGirl.create(:stone) }
+    before { stone }
+    it { expect { delete :destroy, id: stone.id }.to change(Stone, :count).by(-1) }
+  end
 
   describe "POST bundle_edit" do
     let(:obj1) { FactoryGirl.create(:stone, name: "obj1") }
