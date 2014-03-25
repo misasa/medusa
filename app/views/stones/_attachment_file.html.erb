@@ -40,6 +40,9 @@
     <tr>
       <%= form_for AttachmentFile.new, url: stone_attachment_files_path(@stone), multipart: true do |f|%>
         <%= hidden_tabname_tag(__FILE__) %>
+        <%= f.fields_for :record_property_attributes do |r| %>
+          <%= r.hidden_field :user_id ,value: @current_user.id %>
+        <% end %>
         <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
         <th colspan= "2"><%= f.file_field :data %></th>
         <th>
