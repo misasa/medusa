@@ -10,51 +10,68 @@
       </th>
       <th><%= sort_link @search, :name, "name" %></th>
       <th><%= sort_link @search, :parent_name, "parent" %></th>
-      <th><%= sort_link @search, :box_name, "box" %></th>
+      <%= th_if_expand do %>
+        <%= sort_link @search, :box_name, "box" %>
+      <% end %>
       <th><%= sort_link @search, :physical_form_name, "physical form" %></th>
       <th><%= sort_link @search, :classification_name, "classification" %></th>
-      <th>tags</th><!-- don't sort -->
-      <th><%= sort_link @search, :user_username, "owner" %></th>
+      <%= th_if_expand "tags" %><!-- don't sort -->
+      <%= th_if_expand do %>
+        <%= sort_link @search, :user_username, "owner" %>
+      <% end %>
       <th><%= sort_link @search, :group_name, "group" %></th>
-      <th><%= sort_link @search, :record_property_published_at, "published" %></th>
+      <%= th_if_expand do %>
+        <%= sort_link @search, :record_property_published_at, "published" %>
+      <% end %>
       <th><%= sort_link @search, :updated_at, "updated_at" %></th>
-      <th><%= sort_link @search, :created_at, "created_at" %></th>
+      <%= th_if_expand do %>
+        <%= sort_link @search, :created_at, "created_at" %>
+      <% end %>
+      <th><%= toggle_column_link %></th>
     </tr>
     <tr>
       <th><%= text_field_tag :per_page, (params[:per_page] || Stone.default_per_page), size: 4 %></th>
       <th><%= f.text_field :name_cont %></th>
       <th><%= f.text_field :parent_name_cont %></th>
-      <th><%= f.text_field :box_name_cont %></th>
+      <%= th_if_expand do %>
+        <%= f.text_field :box_name_cont %>
+      <% end %>
       <th><%= f.text_field :physical_form_name_cont %></th>
       <th><%= f.text_field :classification_name_cont %></th>
-      <th><%= f.select :tags_name_eq, ActsAsTaggableOn::Tag.pluck(:name), include_blank: true %></th>
-      <th><%= f.text_field :user_username_cont %></th>
+      <%= th_if_expand do %>
+        <%= f.select :tags_name_eq, ActsAsTaggableOn::Tag.pluck(:name), include_blank: true %>
+      <% end %>
+      <%= th_if_expand do %>
+        <%= f.text_field :user_username_cont %>
+      <% end %>
       <th><%= f.text_field :group_name_cont %></th>
-      <th><%= f.select :record_property_published_eq, [true, false], include_blank: true %></th>
+      <%= th_if_expand do %>
+        <%= f.select :record_property_published_eq, [true, false], include_blank: true %>
+      <% end %>
       <th>
         <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]) %>
       </th>
-      <th>
+      <%= th_if_expand do %>
         <%= f.text_field :created_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]) %>
-      </th>
+      <% end %>
     </tr>
     <tr>
       <th></th>
       <th></th>
       <th></th>
+      <%= th_if_expand nil %>
       <th></th>
       <th></th>
+      <%= th_if_expand nil %>
+      <%= th_if_expand nil %>
       <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
+      <%= th_if_expand nil %>
       <th>
         <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]) %>
       </th>
-      <th>
+      <%= th_if_expand do %>
         <%= f.text_field :created_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]) %>
-      </th>
+      <% end %>
     </tr>
     <% end %>
   </thead>
