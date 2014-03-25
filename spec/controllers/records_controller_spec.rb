@@ -21,6 +21,7 @@ describe RecordsController do
       attachment_file
       get :index
     end
+    it { expect(assigns(:records_search).class).to eq Ransack::Search }
     it { expect(assigns(:records).size).to eq(allcount) }
   end
 
