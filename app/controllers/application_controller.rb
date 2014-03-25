@@ -24,9 +24,7 @@ class ApplicationController < ActionController::Base
   end
 
   def set_searchable_records
-    @records_search = RecordProperty.readables(current_user).where.not(datum_type: ["Chemistry", "Spot"]).search(params[:q])
-    @records_search.sorts = "updated_at DESC" if @records_search.sorts.empty?
-    @records = @records_search.result.page(params[:page]).per(params[:per_page])
+    @records_search = RecordProperty.search
   end
 
 end
