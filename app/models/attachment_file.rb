@@ -18,6 +18,8 @@ class AttachmentFile < ActiveRecord::Base
 
   serialize :affine_matrix, Array
 
+  validates :data, presence: true
+
   def path
     id_partition = ("%08d" % id.to_s).scan(/\d{4}/).join("/")
     table_name = self.class.name.tableize

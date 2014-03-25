@@ -3,6 +3,23 @@ include ActionDispatch::TestProcess
 
 describe AttachmentFile do
 
+ describe "validates" do
+    let(:user){FactoryGirl.create(:user)}
+    before{User.current = user}
+    describe "data" do
+      before{obj.save}
+      context "is presence" do
+        let(:data) { fixture_file_upload("/files/test_image.jpg",'image/jpeg')}
+        let(:obj){AttachmentFile.new(data: data)}
+        it { expect(obj).to be_valid }
+      end
+      context "is blank" do
+        let(:obj){AttachmentFile.new()}
+        it { expect(obj).not_to be_valid }
+      end
+    end
+  end
+
   describe "alias_attribute" do
     describe "name" do
       subject { attachment_file.name }
