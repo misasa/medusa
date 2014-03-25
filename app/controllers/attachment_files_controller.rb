@@ -23,8 +23,11 @@ class AttachmentFilesController < ApplicationController
     @attachment_file = AttachmentFile.new(attachment_file_params)
     @attachment_file.save
     respond_with @attachment_file do |format|
-      format.html { redirect_to ({action: :index}.merge(Marshal.restore(Base64.decode64(params[:page_params]))
-))}
+      if @attachment_file.new_record?
+        format.html { render action: "error"}
+      else
+        format.html { redirect_to ({action: :index}.merge(Marshal.restore(Base64.decode64(params[:page_params]))))}
+      end
       format.json { render json: @attachment_file,methods: :path }
       format.xml { render xml: @attachment_file,methods: :path }
     end
