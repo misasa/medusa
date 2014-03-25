@@ -30,7 +30,7 @@ class NestedResources::ChemistriesController < ApplicationController
 
   def create
     @chemistry = Chemistry.new(chemistry_params)
-    @parent.chemistries << @chemistry
+    @parent.chemistries << @chemistry if @chemistry.save
     respond_with @chemistry, location: add_tab_param(request.referer)
   end
 

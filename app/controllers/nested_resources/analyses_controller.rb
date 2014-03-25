@@ -12,7 +12,7 @@ class NestedResources::AnalysesController < ApplicationController
 
   def create
     @analysis = Analysis.new(analysis_params)
-    @parent.analyses << @analysis
+    @parent.analyses << @analysis if @analysis.save
     respond_with @analysis, location: add_tab_param(request.referer)
   end
 

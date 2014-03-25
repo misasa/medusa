@@ -12,7 +12,7 @@ class NestedResources::PlacesController < ApplicationController
   
   def create
     @place = Place.new(place_params)
-    @parent.places << @place
+    @parent.places << @place if @place.save
     respond_with @place, location: add_tab_param(request.referer)
   end
 

@@ -12,7 +12,7 @@ class NestedResources::AttachmentFilesController < ApplicationController
 
   def create
     @attachment_file = AttachmentFile.new(attachment_file_params)
-    @parent.attachment_files << @attachment_file
+    @parent.attachment_files << @attachment_file if @attachment_file.save
     respond_with @attachment_file, methods: :path, location: add_tab_param(request.referer)
   end
 

@@ -12,7 +12,7 @@ class NestedResources::BibsController < ApplicationController
 
   def create
     @bib = Bib.new(bib_params)
-    @parent.bibs << @bib
+    @parent.bibs << @bib if @bib.save
     respond_with @bib, location: add_tab_param(request.referer)
   end
 
