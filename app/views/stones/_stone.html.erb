@@ -2,13 +2,15 @@
   <td><%= check_box_tag("ids[]", stone.id, checked, id: "ids_#{stone.id}", class: "select-row") if can?(:update, stone) %></td>
   <td><%= link_to stone.name, stone %></td>
   <td><%= link_to stone.parent.name,stone.parent if stone.parent %></td>
-  <td><%= link_to stone.box.name,stone.box if stone.box %></td>
+  <%= td_if_expand do %>
+    <%= link_to stone.box.name,stone.box if stone.box %>
+  <% end %>
   <td><%= stone.physical_form.try!(:name) %></td>
   <td><%= stone.classification.try!(:name) %></td>
-  <td><%= stone.tag_list %></td>
-  <td><%= stone.user.try!(:username) %></td>
+  <%= td_if_expand stone.tag_list %>
+  <%= td_if_expand stone.user.try!(:username) %>
   <td><%= stone.group.try!(:name) %></td>
-  <td><%= difference_from_now(stone.published_at) %></td>
+  <%= td_if_expand difference_from_now(stone.published_at) %>
   <td><%= difference_from_now(stone.updated_at) %></td>
-  <td><%= difference_from_now(stone.created_at) %></td>
+  <%= td_if_expand difference_from_now(stone.created_at) %>
 </tr>
