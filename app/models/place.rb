@@ -14,6 +14,8 @@ class Place < ActiveRecord::Base
   has_many :referrings, as: :referable
   has_many :bibs, through: :referrings
 
+  validates :name, presence: true, length: { maximum: 255 }
+
   def self.import_csv(file)
     if file && PERMIT_IMPORT_TYPES.include?(file.content_type)
       table = CSV.parse(file.read, headers: [:name, :latitude, :longitude, :elevation, :description])

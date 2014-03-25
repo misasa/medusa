@@ -23,4 +23,7 @@ class Stone < ActiveRecord::Base
   validates :place, existence: true, allow_nil: true
   validates :classification, existence: true, allow_nil: true
   validates :physical_form, existence: true, allow_nil: true
+
+  validates :name, presence: true, length: { maximum: 255 }
+
 end
