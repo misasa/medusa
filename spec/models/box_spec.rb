@@ -41,10 +41,13 @@ describe Box do
     describe "parent_id" do
       let(:parent_box) { FactoryGirl.create(:box) }
       let(:box) { FactoryGirl.create(:box, parent_id: parent_id) }
+      let(:child_box) { FactoryGirl.create(:box, parent_id: box.id) }
       let(:user) { FactoryGirl.create(:user) }
       before do
         User.current = user
+        parent_box
         box
+        child_box
       end
       context "is nil" do
         let(:parent_id) { nil }
@@ -52,12 +55,16 @@ describe Box do
       end
       context "is present" do
         let(:parent_id) { parent_box.id }
-        context "not equal self.id" do
-          it { expect(box).to be_valid }
-        end
-        context "equal self.id" do
+        context "and parent_id equal self.id" do
           before { box.parent_id = box.id }
           it { expect(box).not_to be_valid }
+        end
+        context "and parent_id equal child_box.id" do
+          before { box.parent_id = child_box.id }
+          it { expect(box).not_to be_valid }
+        end
+        context "and valid id" do
+          it { expect(box).to be_valid }
         end
       end
     end

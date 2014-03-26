@@ -24,12 +24,13 @@ class Stone < ActiveRecord::Base
   validates :classification, existence: true, allow_nil: true
   validates :physical_form, existence: true, allow_nil: true
   validates :name, presence: true, length: { maximum: 255 }
-  validate :parent_id_not_equal_id, if: ->(stone) { stone.parent_id }
+  validate :parent_id_cannot_self_children, if: ->(stone) { stone.parent_id }
 
   private
 
-  def parent_id_not_equal_id
-    if self.id == self.parent_id
+  def parent_id_cannot_self_children
+    invalid_ids = descendants.map(&:id).unshift(self.id)
+    if invalid_ids.include?(self.parent_id)
       errors.add(:parent_id, " make loop.")
     end
   end
