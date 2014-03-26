@@ -1,15 +1,16 @@
 require 'spec_helper'
 
 describe NestedResources::AnalysesController do
+  let(:parent) { FactoryGirl.create(:bib) }
+  let(:child) { FactoryGirl.create(:analysis) }
   let(:user) { FactoryGirl.create(:user) }
+  let(:url){"where_i_came_from"}
+  let(:attributes) { {name: name} }
+  before { request.env["HTTP_REFERER"]  = url }
   before { sign_in user }
+  before { parent }
   
   describe "POST create" do
-    let(:parent) { FactoryGirl.create(:bib) }
-    let(:attributes) { {name: name} }
-    before do
-      request.env["HTTP_REFERER"]  = "where_i_came_from"
-    end
     context "validate" do
       let(:name){"analysis_name"}
       it { expect {post :create, parent_resource: :bib, bib_id: parent, analysis: attributes}.to change(Analysis, :count).by(1) }
@@ -30,16 +31,9 @@ describe NestedResources::AnalysesController do
   end
   
   describe "DELETE destory" do
-    let(:parent) { FactoryGirl.create(:bib) }
-    let(:child) { FactoryGirl.create(:analysis) }
-    before do
-      request.env["HTTP_REFERER"]  = "where_i_came_from"
-      parent
-      child
-    end
+    before { child }
     it {expect {delete :destroy, parent_resource: :bib, bib_id: parent, id: child.id, association_name: :analyses}.to change(Analysis, :count).by(0)}
     context "parent analysis" do
-      let(:parent) { FactoryGirl.create(:bib) }
       before do
         parent.analyses << child
         delete :destroy, parent_resource: :bib, bib_id: parent, id: child.id, association_name: :analyses
@@ -50,10 +44,7 @@ describe NestedResources::AnalysesController do
   end
 
   describe "POST link_by_global_id" do
-    let(:parent){FactoryGirl.create(:bib) }
-    let(:child){FactoryGirl.create(:analysis) }
     before do
-      request.env["HTTP_REFERER"]  = "where_i_came_from"
       child.record_property.global_id = "test_global_id"
       child.record_property.save
       post :link_by_global_id, parent_resource: :bib,bib_id: parent.id, global_id: child.global_id
@@ -63,15 +54,12 @@ describe NestedResources::AnalysesController do
   end
 
   describe ".add_tab_param" do
-    let(:tabname){"bib"}
-    let(:parent){FactoryGirl.create(:attachment_file) }
-    let(:child){FactoryGirl.create(:bib) }
+    let(:tabname){"analysis"}
     let(:base_url){"http://wwww.test.co.jp/"}
     before do
-      request.env["HTTP_REFERER"]  = url
       child.record_property.global_id = "test_global_id"
       child.record_property.save
-      post :link_by_global_id, parent_resource: :attachment_file, attachment_file_id: parent.id, global_id: child.global_id, association_name: :bibs, tab: tab 
+      post :link_by_global_id, parent_resource: :bib, bib_id: parent.id, global_id: child.global_id, association_name: :analysiss, tab: tab 
     end
     context "add none param" do
       let(:tab){""}

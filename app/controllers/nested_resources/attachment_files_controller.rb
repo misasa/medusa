@@ -16,6 +16,12 @@ class NestedResources::AttachmentFilesController < ApplicationController
     respond_with @attachment_file, methods: :path, location: add_tab_param(request.referer), action: "error"      
   end
 
+  def update
+    @attachment_file = AttachmentFile.find(params[:id])
+    @parent.attachment_files << @attachment_file
+    respond_with @attachment_file, methods: :path
+  end
+
   def destroy
     @attachment_file = AttachmentFile.find(params[:id])
     @parent.attachment_files.delete(@attachment_file)

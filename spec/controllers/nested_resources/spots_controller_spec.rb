@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe NestedResources::SpotsController do
+  let(:parent) { FactoryGirl.create(:attachment_file) }
   let(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
 
   describe "POST create" do
-    let(:parent) { FactoryGirl.create(:attachment_file) }
     let(:attributes) { {spot_x: spot_x,spot_y: 0} }
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
@@ -30,7 +30,6 @@ describe NestedResources::SpotsController do
   end
 
   describe "DELETE destory" do
-    let(:parent){FactoryGirl.create(:attachment_file) }
     let(:child){FactoryGirl.create(:spot)}
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
@@ -46,7 +45,6 @@ describe NestedResources::SpotsController do
 
   describe ".add_tab_param" do
     let(:tabname){"spot"}
-    let(:parent){FactoryGirl.create(:attachment_file) }
     let(:child){FactoryGirl.create(:spot) }
     let(:base_url){"http://wwww.test.co.jp/"}
     before do

@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe NestedResources::BoxesController do
+  let(:parent) { FactoryGirl.create(:bib) }
   let(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
   
   describe "POST create" do
-    let(:parent) { FactoryGirl.create(:bib) }
     let(:attributes) { {name: name} }
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
@@ -30,7 +30,6 @@ describe NestedResources::BoxesController do
   end
   
   describe "DELETE destory" do
-    let(:parent) { FactoryGirl.create(:bib) }
     let(:child) { FactoryGirl.create(:box) }
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
@@ -39,7 +38,6 @@ describe NestedResources::BoxesController do
     end
     it {expect {delete :destroy, parent_resource: :bib, bib_id: parent, id: child.id, association_name: :boxes}.to change(Box, :count).by(0)}
     context "parent bib" do
-      let(:parent) { FactoryGirl.create(:bib) }
       before do
         parent.boxes << child
         delete :destroy, parent_resource: :bib, bib_id: parent, id: child.id, association_name: :boxes
@@ -50,7 +48,6 @@ describe NestedResources::BoxesController do
   end
 
   describe "POST link_by_global_id" do
-    let(:parent){FactoryGirl.create(:bib) }
     let(:child){FactoryGirl.create(:box) }
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
@@ -63,14 +60,13 @@ describe NestedResources::BoxesController do
   end
   describe ".add_tab_param" do
     let(:tabname){"box"}
-    let(:parent){FactoryGirl.create(:attachment_file) }
     let(:child){FactoryGirl.create(:box) }
     let(:base_url){"http://wwww.test.co.jp/"}
     before do
       request.env["HTTP_REFERER"]  = url
       child.record_property.global_id = "test_global_id"
       child.record_property.save
-      post :link_by_global_id, parent_resource: :attachment_file, attachment_file_id: parent.id, global_id: child.global_id, association_name: :boxes, tab: tab 
+      post :link_by_global_id, parent_resource: :bib, bib_id: parent.id, global_id: child.global_id, association_name: :boxes, tab: tab 
     end
     context "add none param" do
       let(:tab){""}

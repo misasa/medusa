@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 describe NestedResources::PlacesController do
+  let(:parent) { FactoryGirl.create(:bib) }
   let(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
   
   describe "POST create" do
-    let(:parent) { FactoryGirl.create(:bib) }
     let(:attributes) { {name: name} }
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
@@ -30,7 +30,6 @@ describe NestedResources::PlacesController do
   end
   
   describe "DELETE destory" do
-    let(:parent) { FactoryGirl.create(:bib) }
     let(:child) { FactoryGirl.create(:place) }
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
@@ -39,7 +38,6 @@ describe NestedResources::PlacesController do
     end
     it {expect {delete :destroy, parent_resource: :bib, bib_id: parent, id: child.id, association_name: :places}.to change(Place, :count).by(0)}
     context "parent bib" do
-      let(:parent){FactoryGirl.create(:bib) }
       before do
         parent.places << child
         delete :destroy, parent_resource: :bib, bib_id: parent, id: child.id, association_name: :places
@@ -50,7 +48,6 @@ describe NestedResources::PlacesController do
   end
 
   describe "POST link_by_global_id" do
-    let(:parent){FactoryGirl.create(:bib) }
     let(:child){FactoryGirl.create(:place) }
     before do
       request.env["HTTP_REFERER"]  = "where_i_came_from"
@@ -64,7 +61,6 @@ describe NestedResources::PlacesController do
 
   describe ".add_tab_param" do
     let(:tabname){"place"}
-    let(:parent){FactoryGirl.create(:bib) }
     let(:child){FactoryGirl.create(:place) }
     let(:base_url){"http://wwww.test.co.jp/"}
     before do
