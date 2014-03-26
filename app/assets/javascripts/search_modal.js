@@ -11,8 +11,6 @@
   $(document).on("click.bs.modal.data-api", "[data-toggle='modal']", function() {
     if($(this).data("target") === "#search-modal") {
       input = $(this).data("input");
-    } else {
-      input = undefined;
     }
   });
 

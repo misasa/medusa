@@ -1,0 +1,12 @@
+<tr>
+  <td>
+    <%= button_tag class: "btn btn-default btn-xs determine", "data-id" => box.global_id do %>
+    <span class="glyphicon glyphicon-link"></span>
+    <% end %>
+  </td>
+  <td><%= link_to box.name, box_path(box, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal" %></td>
+  <td><%= box.parent.try!(:name) %></td>
+  <td><%= box.box_type.try!(:name) %></td>
+  <td><%= box.group.try!(:name) %></td>
+  <td><%= difference_from_now(box.updated_at) %></td>
+</tr>
