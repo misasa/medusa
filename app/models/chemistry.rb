@@ -12,7 +12,6 @@ class Chemistry < ActiveRecord::Base
   validates :uncertainty, numericality: true, allow_nil: true
 
   def display_name
-    disp_name = measurement_item.display_in_html ? measurement_item.display_in_html : measurement_item.nickname
-    "#{disp_name}: #{sprintf("%.2f", self.value)}"
+    "#{measurement_item.display_name}: #{sprintf("%.2f", self.value)}"
   end
 end

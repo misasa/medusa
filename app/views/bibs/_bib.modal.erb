@@ -1,0 +1,15 @@
+<tr>
+  <td>
+    <%= button_tag class: "btn btn-default btn-xs determine", "data-id" => bib.global_id do %>
+    <span class="glyphicon glyphicon-link"></span>
+    <% end %>
+  </td>
+  <td><%= link_to bib.name, bib_path(bib, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal" %></td>
+  <td><%= bib.try!(:doi) %></td>
+  <td><%= bib.authors.map {|author| author.name }.join(" & ")%></td>
+  <td><%= bib.try!(:year) %></td>
+  <td><%= bib.try!(:entry_type) %></td>
+  <td><%= bib.group.try!(:name) %></td>
+  <td><%= difference_from_now(bib.updated_at) %></td>
+</tr>
+

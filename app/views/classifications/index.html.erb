@@ -1,7 +1,7 @@
 <div><%= link_to_unless_current Classification.model_name.human.downcase,classifications_path %>
 <%= link_to_unless_current PhysicalForm.model_name.human.downcase,physical_forms_path %></div>
 <%= paginate @classifications %>
-<table>
+<table class="table table-condensed table-striped">
   <thead>
     <tr>
       <th></th>
