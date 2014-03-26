@@ -36,11 +36,11 @@ describe AccountsController do
     end
   end
 
-  describe "GET quick_search" do
+  describe "GET find_by_global_id" do
     let(:stone){FactoryGirl.create(:stone)}
     before do
       stone
-      get :quick_search ,global_id: stone.record_property.global_id
+      get :find_by_global_id ,global_id: stone.record_property.global_id
     end
     context "administrator" do
       it { expect(response).to redirect_to(record_path(stone.record_property.global_id)) }

@@ -145,7 +145,7 @@ Medusa::Application.routes.draw do
   resource  :system_preference, only: [:show]
   resource  :account, only: [:show, :edit, :update] do
     member do
-      get 'quick_search'
+      get 'find_by_global_id'
     end
   end
   resources :users

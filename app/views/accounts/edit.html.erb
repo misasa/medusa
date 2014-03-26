@@ -48,7 +48,7 @@
 </div>
 <div>
   <div>
-  <%= form_tag(quick_search_account_path,method: :get) do %>
+  <%= form_tag(find_by_global_id_account_path,method: :get) do %>
 Table of records that you can access: Fill ID <%= text_field_tag("global_id", '',:size => "10") %> to <%=submit_tag 'go' %>.
   <% end %>
   </div>
