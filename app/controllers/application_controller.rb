@@ -3,6 +3,8 @@ class ApplicationController < ActionController::Base
   # For APIs, you may want to use :null_session instead.
   protect_from_forgery with: :exception
 
+  helper_method :adjust_url_by_requesting_tab
+
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!, :set_current_user
   before_action :set_searchable_records, if: Proc.new {|controller| controller.current_user }
@@ -25,6 +27,12 @@ class ApplicationController < ActionController::Base
 
   def set_searchable_records
     @records_search = RecordProperty.search
+  end
+
+  def adjust_url_by_requesting_tab(url)
+    return url if params[:tab].blank?
+    work_url = url.sub(/tab=.*&/,"").sub(/\?tab=.*/,"")
+    work_url + (work_url.include?("?") ? "&" : "?") + "tab=#{params[:tab]}"
   end
 
 end

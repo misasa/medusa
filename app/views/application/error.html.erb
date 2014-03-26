@@ -1,5 +1,5 @@
 <div class="alert alert-danger">
-<div><%= link_to :back,request.referer.sub(/tab=.*&/,"").sub(/\?tab=.*/,"") + (params[:tab].blank? ? "" : "?tab=#{params[:tab]}") %></div>
+<div><%= link_to :back,adjust_url_by_requesting_tab(request.referer) %></div>
 <ul>
 <% [@stone,@box,@analysis,@place,@bib,@attachment_file,@chemistry,@spot].each do |record| %>
   <% if record %>

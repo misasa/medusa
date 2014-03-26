@@ -1,5 +1,4 @@
 class NestedResources::BibsController < ApplicationController
-  include TabParam
 
   respond_to :html, :xml, :json
   before_action :find_resource
@@ -13,25 +12,25 @@ class NestedResources::BibsController < ApplicationController
   def create
     @bib = Bib.new(bib_params)
     @parent.bibs << @bib if @bib.save
-    respond_with @bib, location: add_tab_param(request.referer), action: "error"
+    respond_with @bib, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
   def update
     @bib = Bib.find(params[:id])
     @parent.bibs << @bib
-    respond_with @bib, location: add_tab_param(request.referer)
+    respond_with @bib, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def destroy
     @bib = Bib.find(params[:id])
     @parent.bibs.delete(@bib)
-    respond_with @bib, location: add_tab_param(request.referer)
+    respond_with @bib, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def link_by_global_id
     @bib = Bib.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
     @parent.bibs << @bib
-    respond_with @bib, location: add_tab_param(request.referer)
+    respond_with @bib, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   private

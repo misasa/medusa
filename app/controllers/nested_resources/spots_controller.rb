@@ -1,5 +1,4 @@
 class NestedResources::SpotsController < ApplicationController
-  include TabParam
 
   respond_to :html, :xml, :json, :svg
   before_action :find_resource, except: [:index, :create]
@@ -14,19 +13,19 @@ class NestedResources::SpotsController < ApplicationController
   def create
     @spot = Spot.new(spot_params)
     @parent.spots << @spot
-    respond_with @spot, location: add_tab_param(request.referer), action: "error"
+    respond_with @spot, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
   def update
     @spot = Spot.find(params[:id])
     @parent.spots << @spot
-    respond_with @spot, location: add_tab_param(request.referer)
+    respond_with @spot, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def destroy
     @spot.destroy
     @parent.spots.delete(@spot)
-    respond_with @spot, location: add_tab_param(request.referer)
+    respond_with @spot, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   private

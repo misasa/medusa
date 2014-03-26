@@ -1,5 +1,4 @@
 class NestedResources::AttachmentFilesController < ApplicationController
-  include TabParam
 
   respond_to :html, :xml, :json
   before_action :find_resource
@@ -13,7 +12,7 @@ class NestedResources::AttachmentFilesController < ApplicationController
   def create
     @attachment_file = AttachmentFile.new(attachment_file_params)
     @parent.attachment_files << @attachment_file if @attachment_file.save
-    respond_with @attachment_file, methods: :path, location: add_tab_param(request.referer), action: "error"      
+    respond_with @attachment_file, methods: :path, location: adjust_url_by_requesting_tab(request.referer), action: "error"      
   end
 
   def update
@@ -25,13 +24,13 @@ class NestedResources::AttachmentFilesController < ApplicationController
   def destroy
     @attachment_file = AttachmentFile.find(params[:id])
     @parent.attachment_files.delete(@attachment_file)
-    respond_with @attachment_file, methods: :path, location: add_tab_param(request.referer)
+    respond_with @attachment_file, methods: :path, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def link_by_global_id
     @attachment_file = AttachmentFile.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
     @parent.attachment_files << @attachment_file
-    respond_with @attachment_file, methods: :path, location: add_tab_param(request.referer)
+    respond_with @attachment_file, methods: :path, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   private
