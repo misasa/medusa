@@ -23,7 +23,15 @@ class Stone < ActiveRecord::Base
   validates :place, existence: true, allow_nil: true
   validates :classification, existence: true, allow_nil: true
   validates :physical_form, existence: true, allow_nil: true
-
   validates :name, presence: true, length: { maximum: 255 }
+  validate :parent_id_not_equal_id, if: ->(stone) { stone.parent_id }
+
+  private
+
+  def parent_id_not_equal_id
+    if self.id == self.parent_id
+      errors.add(:parent_id, " make loop.")
+    end
+  end
 
 end

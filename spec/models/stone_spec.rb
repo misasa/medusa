@@ -23,5 +23,29 @@ describe Stone do
         end
       end
     end
+    describe "parent_id" do
+      let(:parent_stone) { FactoryGirl.create(:stone) }
+      let(:stone) { FactoryGirl.create(:stone, parent_id: parent_id) }
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        User.current = user
+        stone
+      end
+      context "is nil" do
+        let(:parent_id) { nil }
+        it { expect(stone).to be_valid }
+      end
+      context "is present" do
+        let(:parent_id) { parent_stone.id }
+        context "not equal self.id" do
+          it { expect(stone).to be_valid }
+        end
+        context "equal self.id" do
+          before { stone.parent_id = stone.id }
+          it { expect(stone).not_to be_valid }
+        end
+      end
+    end
   end
+
 end
