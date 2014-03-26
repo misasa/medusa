@@ -74,3 +74,9 @@
     <%= submit_tag :upload %>
   <% end %>
 </div>
+
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#new_analysis", function() {
+    $("#analysis_search").submit();
+  });
+<% end %>

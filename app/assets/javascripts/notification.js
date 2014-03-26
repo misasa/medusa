@@ -16,6 +16,9 @@
         $dl.append("<dt>" + key + "</dt><dd>" + message + "</dd>");
       });
       $.notification.error($dl);
+    },
+    modalObject: function() {
+      return $("#notification-modal");
     }
   };
 
