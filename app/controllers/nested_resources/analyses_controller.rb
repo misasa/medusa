@@ -17,13 +17,11 @@ class NestedResources::AnalysesController < ApplicationController
   end
 
   def update
-    @analysis = Analysis.find(params[:id])
     @parent.analyses << @analysis
     respond_with @analysis, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def destroy
-    @analysis = Analysis.find(params[:id])
     @parent.analyses.delete(@analysis)
     respond_with @analysis, location: adjust_url_by_requesting_tab(request.referer)
   end

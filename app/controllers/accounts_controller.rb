@@ -1,8 +1,8 @@
 class AccountsController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource,except: [ :quick_search ]
+  before_action :find_resource,except: [ :find_by_global_id ]
 
-  def quick_search
+  def find_by_global_id
     redirect_to "/records/#{params[:global_id]}"
   end
 
