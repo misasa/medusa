@@ -1,5 +1,5 @@
 <%= paginate @units %>
-<table>
+<table class="table table-condensed table-striped">
   <thead>
     <%= search_form_for @search do |f| %>
     <tr>
@@ -24,10 +24,10 @@
       <th><%= f.text_field :text_cont %></th>
       <th></th>
       <th>
-        <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]) %>
+        <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]), size: 15 %>
       </th>
       <th>
-        <%= f.text_field :created_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]) %>
+        <%= f.text_field :created_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]), size: 15 %>
       </th>
     </tr>
     <tr>
@@ -38,10 +38,10 @@
       <th></th>
       <th></th>
       <th>
-        <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]) %>
+        <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]), size: 15 %>
       </th>
       <th>
-        <%= f.text_field :created_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]) %>
+        <%= f.text_field :created_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]), size: 15 %>
       </th>
     </tr>
     <% end %>

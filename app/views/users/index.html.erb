@@ -1,6 +1,6 @@
 <%= paginate @users %>
 <%= link_to "new...",new_user_path %>
-<table>
+<table class="table table-condensed table-striped">
   <thead>
     <%= search_form_for @search do |f| %>
     <tr>
