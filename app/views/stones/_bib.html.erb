@@ -39,7 +39,16 @@
       <% end %>
     <%= form_tag link_by_global_id_stone_bibs_path(@stone), method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
-        <th><%= text_field_tag :global_id, "", class: "form-control input-sm" %></th>
+        <th>
+	  <div class="input-group">
+	    <%= text_field_tag :global_id, "", id: "bib-global-id", class: "form-control input-sm" %>
+	    <span class="input-group-addon">
+	      <%= link_to bibs_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#bib-global-id" do %>
+	      <span class="glyphicon glyphicon-search"></span>
+	      <% end %>
+	    </span>
+	  </div>
+	</th>
         <th>
           <%= button_tag title: "link bib by global id",class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>

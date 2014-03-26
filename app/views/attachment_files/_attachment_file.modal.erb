@@ -1,0 +1,13 @@
+<tr>
+  <td>
+    <%= button_tag class: "btn btn-default btn-xs determine", "data-id" => attachment_file.global_id do %>
+    <span class="glyphicon glyphicon-link"></span>
+    <% end %>
+  </td>
+  <td><%= image_tag(attachment_file.path,width: 70,height: 70) %></td>
+  <td><%= link_to attachment_file.data_file_name, attachment_file_path(attachment_file, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal" %></td>
+  <td><%= attachment_file.data_content_type %></td>
+  <td><%= attachment_file.data_file_size %></td>
+  <td><%= attachment_file.group.try!(:name) %></td>
+  <td><%= difference_from_now(attachment_file.updated_at) %></td>
+</tr>

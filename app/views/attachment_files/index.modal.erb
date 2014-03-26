@@ -1,4 +1,4 @@
-<%= paginate @places, remote: true %>
+<%= paginate @attachment_files, remote: true %>
 <%= search_form_for @search, url: polymorphic_path(@search.klass, format: :modal), remote: true do |f| %>
 <table class="table table-condensed table-striped">
   <thead>
@@ -8,20 +8,18 @@
         <span class="glyphicon glyphicon-refresh"></span>
         <% end %>
       </th>
-      <th><%= sort_link @search, :name, "name", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :latitude, "latitude", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :longitude, "longitude", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :elevation, "elevation", { format: :modal }, remote: true %></th>
-      <th>stone</th><!-- don't sort -->
+      <th></th>
+      <th><%= sort_link @search, :data_file_name, "name", { format: :modal }, remote: true %></th>
+      <th><%= sort_link @search, :data_content_type, "type", { format: :modal }, remote: true %></th>
+      <th><%= sort_link @search, :data_file_size, "size", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :group_name, "group", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :updated_at, "updated_at", { format: :modal }, remote: true %></th>
     </tr>
     <tr>
-      <th><%= text_field_tag :per_page, (params[:per_page] || Place.default_per_page), size: 4, readonly: true %></th>
-      <th><%= f.text_field :name_cont, size: 15 %></th>
+      <th><%= text_field_tag :per_page, (params[:per_page] || AttachmentFile.default_per_page), size: 4, readonly: true %></th>
       <th></th>
-      <th></th>
-      <th></th>
+      <th><%= f.text_field :data_file_name_cont, size: 15 %></th>
+      <th><%= f.text_field :data_content_type_cont, size: 10 %></th>
       <th></th>
       <th><%= f.text_field :group_name_cont, size: 15 %></th>
       <th>
@@ -35,14 +33,13 @@
       <th></th>
       <th></th>
       <th></th>
-      <th></th>
       <th>
         <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]), size: 10 %>
       </th>
     </tr>
   </thead>
   <tbody>
-    <%= render partial: "place.modal", collection: PlaceDecorator.decorate_collection(@places), locals: { checked: false } %>
+    <%= render partial: "attachment_file.modal", collection: @attachment_files, locals: { checked: false } %>
   </tbody>
 </table>
 <% end %>

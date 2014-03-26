@@ -1,0 +1,22 @@
+<dl class="dl-horizontal">
+  <dt>name</dt>
+  <dd><%= @bib.name %></dd>
+  <dt>doi</dt>
+  <dd><%= @bib.doi %></dd>
+  <dt>author</dt>
+  <dd><%= @bib.authors.map { |author| author.name }.join(" & ") %></dd>
+  <dt>year</dt>
+  <dd><%= @bib.year %></dd>
+  <dt>type</dt>
+  <dd><%= @bib.entry_type %></dd>
+  <dt>owner</dt>
+  <dd><%= @bib.user.try!(:username) %></dd>
+  <dt>group</dt>
+  <dd><%= @bib.group.try!(:name) %></dd>
+  <dt>published at</dt>
+  <dd><%= difference_from_now(@bib.published_at) %></dd>
+  <dt>updated at</dt>
+  <dd><%= difference_from_now(@bib.updated_at) %></dd>
+  <dt>created at</dt>
+  <dd><%= difference_from_now(@bib.created_at) %></dd>
+</dl>

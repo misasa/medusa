@@ -1,4 +1,4 @@
-<%= paginate @places, remote: true %>
+<%= paginate @bibs, remote: true %>
 <%= search_form_for @search, url: polymorphic_path(@search.klass, format: :modal), remote: true do |f| %>
 <table class="table table-condensed table-striped">
   <thead>
@@ -9,21 +9,21 @@
         <% end %>
       </th>
       <th><%= sort_link @search, :name, "name", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :latitude, "latitude", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :longitude, "longitude", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :elevation, "elevation", { format: :modal }, remote: true %></th>
-      <th>stone</th><!-- don't sort -->
+      <th><%= sort_link @search, :doi, "doi", { format: :modal }, remote: true %></th>
+      <th>author</th><!-- don't sort -->
+      <th><%= sort_link @search, :year, "year", { format: :modal }, remote: true %></th>
+      <th><%= sort_link @search, :entry_type, "type", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :group_name, "group", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :updated_at, "updated_at", { format: :modal }, remote: true %></th>
     </tr>
     <tr>
-      <th><%= text_field_tag :per_page, (params[:per_page] || Place.default_per_page), size: 4, readonly: true %></th>
+      <th><%= text_field_tag :per_page, (params[:per_page] || Bib.default_per_page), size: 4, readonly: true %></th>
       <th><%= f.text_field :name_cont, size: 15 %></th>
+      <th><%= f.text_field :doi_cont, size: 10 %></th>
+      <th><%= f.text_field :authors_name_cont, size: 12 %></th>
       <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th><%= f.text_field :group_name_cont, size: 15 %></th>
+      <th><%= f.text_field :entry_type_cont, size: 6 %></th>
+      <th><%= f.text_field :group_name_cont, size: 12 %></th>
       <th>
         <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]), size: 10 %>
       </th>
@@ -42,7 +42,7 @@
     </tr>
   </thead>
   <tbody>
-    <%= render partial: "place.modal", collection: PlaceDecorator.decorate_collection(@places), locals: { checked: false } %>
+    <%= render partial: "bib.modal", collection: @bibs, locals: { checked: false } %>
   </tbody>
 </table>
 <% end %>
