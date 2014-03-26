@@ -1,5 +1,4 @@
 class NestedResources::PlacesController < ApplicationController
-  include TabParam
 
   respond_to :html, :xml, :json
   before_action :find_resource
@@ -13,25 +12,25 @@ class NestedResources::PlacesController < ApplicationController
   def create
     @place = Place.new(place_params)
     @parent.places << @place if @place.save
-    respond_with @place, location: add_tab_param(request.referer), action: "error"
+    respond_with @place, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
   def update
     @place = Place.find(params[:id])
     @parent.places << @place
-    respond_with @place, location: add_tab_param(request.referer)
+    respond_with @place, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def destroy
     @place = Place.find(params[:id])
     @parent.places.delete(@place)
-    respond_with @place, location: add_tab_param(request.referer)
+    respond_with @place, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def link_by_global_id
     @place = Place.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
     @parent.places << @place
-    respond_with @place, location: add_tab_param(request.referer)
+    respond_with @place, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   private

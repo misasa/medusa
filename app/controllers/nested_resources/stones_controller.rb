@@ -1,5 +1,4 @@
 class NestedResources::StonesController < ApplicationController
-  include TabParam
 
   respond_to  :html, :xml, :json
   before_action :find_resource
@@ -13,7 +12,7 @@ class NestedResources::StonesController < ApplicationController
   def create
     @stone = Stone.new(stone_params)
     @parent.send(params[:association_name]) << @stone if @stone.save
-    respond_with @stone, location: add_tab_param(request.referer), action: "error" 
+    respond_with @stone, location: adjust_url_by_requesting_tab(request.referer), action: "error" 
   end
 
   def update
@@ -25,13 +24,13 @@ class NestedResources::StonesController < ApplicationController
   def destroy
     @stone = Stone.find(params[:id])
     @parent.send(params[:association_name]).delete(@stone)
-    respond_with @stone, location: add_tab_param(request.referer)
+    respond_with @stone, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def link_by_global_id
     @stone = Stone.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
     @parent.send(params[:association_name]) << @stone
-    respond_with @stone, location: add_tab_param(request.referer)
+    respond_with @stone, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   private

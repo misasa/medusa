@@ -1,5 +1,4 @@
 class NestedResources::ChemistriesController < ApplicationController
-  include TabParam
 
   respond_to :html, :xml, :json
   before_action :find_resource, except: [:index, :multiple_new, :multiple_create, :create]
@@ -31,19 +30,19 @@ class NestedResources::ChemistriesController < ApplicationController
   def create
     @chemistry = Chemistry.new(chemistry_params)
     @parent.chemistries << @chemistry
-    respond_with @chemistry, location: add_tab_param(request.referer), action: "error"
+    respond_with @chemistry, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
   def update
     @chemistry = Chemistry.find(params[:id])
     @parent.chemistries << @chemistry
-    respond_with @chemistry, location: add_tab_param(request.referer)
+    respond_with @chemistry, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def destroy
     @chemistry.destroy
     @parent.chemistries.delete(@chemistry)
-    respond_with @chemistry, location: add_tab_param(request.referer)
+    respond_with @chemistry, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   private

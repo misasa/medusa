@@ -1,5 +1,4 @@
 class NestedResources::AnalysesController < ApplicationController
-  include TabParam
 
   respond_to :html, :xml, :json
   before_action :find_resource
@@ -13,26 +12,26 @@ class NestedResources::AnalysesController < ApplicationController
   def create
     @analysis = Analysis.new(analysis_params)
     @parent.analyses << @analysis if @analysis.save
-    respond_with @analysis, location: add_tab_param(request.referer), action: "error"      
+    respond_with @analysis, location: adjust_url_by_requesting_tab(request.referer), action: "error"      
 
   end
 
   def update
     @analysis = Analysis.find(params[:id])
     @parent.analyses << @analysis
-    respond_with @analysis, location: add_tab_param(request.referer)
+    respond_with @analysis, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def destroy
     @analysis = Analysis.find(params[:id])
     @parent.analyses.delete(@analysis)
-    respond_with @analysis, location: add_tab_param(request.referer)
+    respond_with @analysis, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def link_by_global_id
     @analysis = Analysis.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
     @parent.analyses << @analysis
-    respond_with @analysis, location: add_tab_param(request.referer)
+    respond_with @analysis, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   private

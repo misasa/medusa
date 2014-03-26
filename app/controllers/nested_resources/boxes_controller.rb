@@ -1,5 +1,4 @@
 class NestedResources::BoxesController < ApplicationController
-  include TabParam
 
   respond_to :html, :xml, :json
   before_action :find_resource
@@ -13,25 +12,25 @@ class NestedResources::BoxesController < ApplicationController
   def create
     @box = Box.new(box_params)
     @parent.send(params[:association_name]) << @box if @box.save
-    respond_with @box, location: add_tab_param(request.referer), action: "error"
+    respond_with @box, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
   def update
     @box = Box.find(params[:id])
     @parent.send(params[:association_name]) << @box
-    respond_with @box, location: add_tab_param(request.referer)
+    respond_with @box, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def destroy
     @box = Box.find(params[:id])
     @parent.send(params[:association_name]).delete(@box)
-    respond_with @box, location: add_tab_param(request.referer)
+    respond_with @box, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def link_by_global_id
     @box = Box.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
     @parent.send(params[:association_name]) << @box
-    respond_with @box, location: add_tab_param(request.referer)
+    respond_with @box, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   private
