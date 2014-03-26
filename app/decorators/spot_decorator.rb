@@ -6,6 +6,6 @@ class SpotDecorator < Draper::Decorator
   def target_link
     record_property = RecordProperty.find_by_global_id(target_uid)
     return "" if record_property.blank? || record_property.datum.blank?
-    h.link_to(record_property.datum.name, send(("#{record_property.datum_type.downcase}_path").to_sym,{id: record_property.datum_id}))
+    h.link_to(record_property.datum.name, record_property.datum)
   end
 end
