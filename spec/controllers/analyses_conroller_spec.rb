@@ -17,15 +17,31 @@ describe AnalysesController do
   end
 
   describe "GET show" do
+    let(:method){get :show, id: id}
     let(:obj) { FactoryGirl.create(:analysis) }
-    before { get :show, id: obj.id }
-    it{ expect(assigns(:analysis)).to eq obj }
+    context "record found" do
+      let(:id){obj.id}
+      before { method }
+      it{ expect(assigns(:analysis)).to eq obj }
+    end
+    context "record not found" do
+      let(:id){0}
+      it {expect{method}.to raise_error(ActiveRecord::RecordNotFound)}
+    end
   end
 
   describe "GET edit" do
+    let(:method){get :edit, id: id}
     let(:obj) { FactoryGirl.create(:analysis) }
-    before { get :edit, id: obj.id }
-    it{ expect(assigns(:analysis)).to eq obj }
+    context "record found" do
+      let(:id){obj.id}
+      before { method }
+      it{ expect(assigns(:analysis)).to eq obj }
+    end
+    context "record not found" do
+      let(:id){0}
+      it {expect{method}.to raise_error(ActiveRecord::RecordNotFound)}
+    end
   end
 
   describe "POST create" do
@@ -39,13 +55,19 @@ describe AnalysesController do
   end
 
   describe "PUT update" do
+    let(:method){put :update, id: id, analysis: attributes}
     let(:obj) { FactoryGirl.create(:analysis) }
     let(:attributes) { {name: "update_name"} }
-    before do
-      put :update, id: obj.id, analysis: attributes
+    context "record found" do
+      let(:id){obj.id}
+      before { method }
+      it { expect(assigns(:analysis)).to eq obj }
+      it { expect(assigns(:analysis).name).to eq attributes[:name] }
     end
-    it { expect(assigns(:analysis)).to eq obj }
-    it { expect(assigns(:analysis).name).to eq attributes[:name] }
+    context "record not found " do
+      let(:id){0}
+      it {expect{method}.to raise_error(ActiveRecord::RecordNotFound)}
+    end
   end
 
   describe "POST upload" do
@@ -53,8 +75,8 @@ describe AnalysesController do
     let(:data) {fixture_file_upload("/files/test_image.jpg",'image/jpeg') }
     it { expect {post :upload, id: obj.id  ,data: data}.to change(AttachmentFile, :count).by(1) }
     context "" do
-      before{post :upload, id: obj.id  ,data: data}
-      it{expect(assigns(:analysis).attachment_files.last.data_file_name).to eq "test_image.jpg"}
+      before{post :upload, id: obj.id, data: data}
+      it{expect(assigns(:analysis).attachment_files.exists?(data_file_name: "test_image.jpg")).to be_truthy }
     end
   end
 

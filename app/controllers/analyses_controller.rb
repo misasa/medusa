@@ -12,9 +12,11 @@ class AnalysesController < ApplicationController
   end
 
   def new
-    mc = MeasurementCategory.find(params[:measurement_category_id])
     respond_to do |format|
-      format.csv { render csv: [Analysis.new], style: "#{mc.name}".to_sym, filename: "my_#{mc.name.gsub(' ','')}" }
+      format.csv do
+        mc = MeasurementCategory.find(params[:measurement_category_id])
+        render csv: [Analysis.new], style: "#{mc.name}".to_sym, filename: "my_#{mc.name.gsub(' ','')}"
+      end
     end
   end
 

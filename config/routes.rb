@@ -49,7 +49,7 @@ Medusa::Application.routes.draw do
       post 'attachment_files/upload' => 'stones#upload'
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "stone" }
-    resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "stone" }
+    resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "stone" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "stone" }
     resources :daughters, concerns: [:link_by_global_id], only: [:index, :create,:update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
     resources :stones, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
@@ -64,7 +64,7 @@ Medusa::Application.routes.draw do
       post 'attachment_files/upload' => 'boxes#upload'
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "box" }
-    resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "box" }
+    resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "box" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "box" }
     resources :stones, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "box", association_name: "stones" }
     resources :boxes, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "box", association_name: "children" }
@@ -80,7 +80,7 @@ Medusa::Application.routes.draw do
       post :import
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
-    resources :attachment_files, concerns: [:link_by_global_id],only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "place" }
+    resources :attachment_files, concerns: [:link_by_global_id],only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "place" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "place" }
     resources :stones, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "place", association_name: "stones" }
   end
@@ -97,7 +97,7 @@ Medusa::Application.routes.draw do
       get :castemls
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "analysis" }
-    resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "analysis" }
+    resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "analysis" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "analysis" }
     resources :chemistries, concerns: [:multiple],only: [:index, :create, :update, :destroy], controller: "nested_resources/chemistries"
   end
@@ -116,7 +116,7 @@ Medusa::Application.routes.draw do
     resources :boxes, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "bib", association_name: "boxes" }
     resources :places, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/places", defaults: { parent_resource: "bib", association_name: "places" }
     resources :analyses, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "bib", association_name: "analyses" }
-    resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "bib" }
+    resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "bib" }
   end
 
   resources :attachment_files, concerns: :bundleable , except: [:new] do
