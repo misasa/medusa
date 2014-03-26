@@ -1,0 +1,24 @@
+<dl class="dl-horizontal">
+  <dt>name</dt>
+  <dd><%= @stone.name %></dd>
+  <dt>parent</dt>
+  <dd><%= @stone.parent.try!(:name) %></dd>
+  <dt>box</dt>
+  <dd><%= @stone.box.try!(:name) %></dd>
+  <dt>physical form</dt>
+  <dd><%= @stone.physical_form.try!(:name) %></dd>
+  <dt>classification</dt>
+  <dd><%= @stone.classification.try!(:name) %></dd>
+  <dt>tags</dt>
+  <dd><%= @stone.tag_list %></dd>
+  <dt>owner</dt>
+  <dd><%= @stone.user.try!(:username) %></dd>
+  <dt>group</dt>
+  <dd><%= @stone.group.try!(:name) %></dd>
+  <dt>published at</dt>
+  <dd><%= difference_from_now(@stone.published_at) %></dd>
+  <dt>created at</dt>
+  <dd><%= difference_from_now(@stone.created_at) %></dd>
+  <dt>updated at</dt>
+  <dd><%= difference_from_now(@stone.updated_at) %></dd>
+</dl>

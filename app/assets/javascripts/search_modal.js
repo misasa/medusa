@@ -24,4 +24,12 @@
     $(this).on("click", ".determine", determine);
   });
 
+  $(document).on("hidden.bs.modal", "#search-modal", function() {
+    $(this).removeData("bs.modal");
+  });
+
+  $(document).on("hidden.bs.modal", "#show-modal", function() {
+    $(this).removeData("bs.modal");
+  });
+
 }) (jQuery);

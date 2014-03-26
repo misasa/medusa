@@ -4,7 +4,7 @@
     <span class="glyphicon glyphicon-link"></span>
     <% end %>
   </td>
-  <td><%= stone.name %></td>
+  <td><%= link_to stone.name, stone_path(stone, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal" %></td>
   <td><%= stone.parent.try!(:name) %></td>
   <td><%= stone.physical_form.try!(:name) %></td>
   <td><%= stone.classification.try!(:name) %></td>
