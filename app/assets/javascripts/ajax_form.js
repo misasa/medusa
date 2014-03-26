@@ -8,6 +8,12 @@
 
   function success(message) {
     return function(event, data, status) {
+      var self = this, $modal = $.notification.modalObject(), succeed = function(e) {
+        $(self).trigger("succeed.ajaxForm");
+        $modal.off("hidden.bs.modal", succeed);
+      };
+
+      $modal.on("hidden.bs.modal", succeed);
       $.notification.success(message);
     };
   }
