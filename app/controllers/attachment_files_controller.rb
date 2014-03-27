@@ -53,7 +53,7 @@ class AttachmentFilesController < ApplicationController
 
   def download
     @attachment_file = AttachmentFile.find(params[:id])
-    send_file("#{Rails.root}/public#{@attachment_file.path}", filename: @attachment_file.data_file_name, type: @attachment_file.data_content_type)
+    send_file(@attachment_file.data.path, filename: @attachment_file.data_file_name, type: @attachment_file.data_content_type)
   end
 
   def bundle_edit

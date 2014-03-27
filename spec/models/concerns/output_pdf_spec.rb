@@ -105,12 +105,11 @@ describe OutputPdf do
     context "attachment_files is present" do
       let(:attachment_files) { [file] }
       let(:file) { FactoryGirl.create(:attachment_file) }
-      before { allow(file).to receive(:path).and_return("foo") }
-      context "file.path is exist" do
+      context "file.data.path is exist" do
         before { allow(File).to receive(:exist?).and_return(true) }
-        it { expect(subject).to eq "#{Rails.root}/public/foo" }
+        it { expect(subject).to eq file.data.path }
       end
-      context "file.path isn't exist" do
+      context "file.data.path isn't exist" do
         before { allow(File).to receive(:exist?).and_return(false) }
         it { expect(subject).to be_nil }
       end

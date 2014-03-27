@@ -41,7 +41,7 @@ describe AttachmentFilesController do
       attachment_file
       allow(controller).to receive(:send_file).and_return{controller.render :nothing => true}
     end
-    it { expect(controller).to receive(:send_file).with("#{Rails.root}/public#{attachment_file.path}", filename: attachment_file.data_file_name, type: attachment_file.data_content_type) }
+    it { expect(controller).to receive(:send_file).with(attachment_file.data.path, filename: attachment_file.data_file_name, type: attachment_file.data_content_type) }
   end
 
   describe "POST bundle_edit" do
