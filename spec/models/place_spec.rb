@@ -9,7 +9,7 @@ describe Place do
     end
     describe "PERMIT_IMPORT_TYPES" do
       subject { Place::PERMIT_IMPORT_TYPES }
-      it { expect(subject).to include("text/plain", "text/csv", "application/csv") }
+      it { expect(subject).to include("text/plain", "text/csv", "application/csv", "application/vnd.ms-excel") }
     end
   end
 
