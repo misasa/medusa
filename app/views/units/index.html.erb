@@ -18,16 +18,16 @@
     </tr>
     <tr>
       <th></th>
-      <th><%= f.text_field :name_cont %></th>
-      <th><%= f.text_field :conversion_eq %></th>
-      <th><%= f.text_field :html_cont %></th>
-      <th><%= f.text_field :text_cont %></th>
+      <th><%= f.text_field :name_cont, class: "form-control input-sm" %></th>
+      <th><%= f.text_field :conversion_eq, class: "form-control input-sm" %></th>
+      <th><%= f.text_field :html_cont, class: "form-control input-sm" %></th>
+      <th><%= f.text_field :text_cont, class: "form-control input-sm" %></th>
       <th></th>
       <th>
-        <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]), size: 15 %>
+        <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]), class: "form-control input-sm", size: 15 %>
       </th>
       <th>
-        <%= f.text_field :created_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]), size: 15 %>
+        <%= f.text_field :created_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]), class: "form-control input-sm", size: 15 %>
       </th>
     </tr>
     <tr>
@@ -38,10 +38,10 @@
       <th></th>
       <th></th>
       <th>
-        <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]), size: 15 %>
+        <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]), class: "form-control input-sm", size: 15 %>
       </th>
       <th>
-        <%= f.text_field :created_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]), size: 15 %>
+        <%= f.text_field :created_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]), class: "form-control input-sm", size: 15 %>
       </th>
     </tr>
     <% end %>
@@ -73,10 +73,10 @@
     <%= form_for Unit.new, remote: true, format: :json, html: { class: "create" } do |f| %>
     <tr>
       <td></td>
-      <td><%= f.text_field :name %></td>
-      <td><%= f.text_field :conversion %></td>
-      <td><%= f.text_field :html %></td>
-      <td><%= f.text_field :text %></td>
+      <td><%= f.text_field :name, class: "form-control input-sm" %></td>
+      <td><%= f.text_field :conversion, class: "form-control input-sm" %></td>
+      <td><%= f.text_field :html, class: "form-control input-sm" %></td>
+      <td><%= f.text_field :text, class: "form-control input-sm" %></td>
       <td>
         <%= f.button class: "btn btn-default", id: "save-button" do %>
         <span class="glyphicon glyphicon-save"></span>

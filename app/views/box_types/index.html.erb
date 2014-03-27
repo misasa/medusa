@@ -28,7 +28,7 @@
     <%= form_for BoxType.new, remote: true, format: :json, html: { class: "create" } do |f| %>
     <tr>
       <td></td>
-      <td><%= f.text_field :name %></td>
+      <td><%= f.text_field :name, class: "form-control input-sm" %></td>
       <td>
         <%= f.button class: "btn btn-default" do %>
         <span class="glyphicon glyphicon-save"></span>

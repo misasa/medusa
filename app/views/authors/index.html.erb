@@ -15,13 +15,13 @@
     </tr>
     <tr>
       <th></th>
-      <th><%= f.text_field :name_cont %></th>
+      <th><%= f.text_field :name_cont, class: "form-control input-sm" %></th>
       <th></th>
       <th>
-        <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]) %>
+        <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]), class: "form-control input-sm" %>
       </th>
       <th>
-        <%= f.text_field :created_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]) %>
+        <%= f.text_field :created_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]), class: "form-control input-sm" %>
       </th>
     </tr>
     <tr>
@@ -29,10 +29,10 @@
       <th></th>
       <th></th>
       <th>
-        <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]) %>
+        <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]), class: "form-control input-sm" %>
       </th>
       <th>
-        <%= f.text_field :created_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]) %>
+        <%= f.text_field :created_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]), class: "form-control input-sm" %>
       </th>
     </tr>
     <% end %>
@@ -61,7 +61,7 @@
     <%= form_for Author.new, remote: true, format: :json, html: { class: "create" } do |f| %>
     <tr>
       <td></td>
-      <td><%= f.text_field :name %></td>
+      <td><%= f.text_field :name, class: "form-control input-sm" %></td>
       <td>
         <%= f.button class: "btn btn-default", id: "save-button" do %>
         <span class="glyphicon glyphicon-save"></span>
