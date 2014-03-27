@@ -2,7 +2,10 @@ require 'matrix'
 class AttachmentFile < ActiveRecord::Base
   include HasRecordProperty
 
-  has_attached_file :data, path: ":rails_root/public/system/:class/:id_partition/:filename", url: "/system/:class/:id_partition/:filename"
+  has_attached_file :data,
+                    styles: { thumb: "160x120>", tiny: "50x50" },
+                    path: ":rails_root/public/system/:class/:id_partition/:basename_with_style.:extension",
+                    url: "/system/:class/:id_partition/:basename_with_style.:extension"
   alias_attribute :name, :data_file_name
 
   has_many :spots
@@ -20,10 +23,12 @@ class AttachmentFile < ActiveRecord::Base
 
   validates :data, presence: true
 
-  def path
-    id_partition = ("%08d" % id.to_s).scan(/\d{4}/).join("/")
-    table_name = self.class.name.tableize
-    "#{Rails.application.config.relative_url_root}/system/#{table_name}/#{id_partition}/#{data_file_name}"
+  def path(style = :original)
+    self.data.url(style)
+  end
+
+  def thumbnail_path
+    File.exists?(path(:thumb)) ? path(:thumb) : path
   end
 
   def data_fingerprint
