@@ -41,7 +41,7 @@
             <%= hidden_tabname_tag(__FILE__) %>
             <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
             <th><%= f.text_field :name, class: "form-control input-sm" %></th>
-            <th><%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), include_blank: true, class: "form-control input-sm" %></th>
+            <th><%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
             <th><%= f.text_field :quantity, class: "form-control input-sm" %></th>
             <th><%= f.text_field :quantity_unit, class: "form-control input-sm" %></th>
             <th>

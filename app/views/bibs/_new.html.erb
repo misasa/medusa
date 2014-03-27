@@ -1,15 +1,15 @@
 <%= form_for bib, remote: true, format: :json, html: { class: "create" } do |f| %>
 <tr>
   <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
-  <th><%= f.text_field :name, size: 15 %></th>
-  <th><%= f.text_field :doi, size: 10 %></th>
-  <th><%= f.collection_select(:author_ids, Author.all.to_a, :id, :name, {}, multiple: true) %></th>
-  <th><%= f.text_field :year, size: 4 %></th>
-  <th><%= f.text_field :entry_type, size: 6 %></th>
+  <th><%= f.text_field :name, class: "form-control input-sm", size: 15 %></th>
+  <th><%= f.text_field :doi, class: "form-control input-sm", size: 10 %></th>
+  <th><%= f.collection_select(:author_ids, Author.all.to_a, :id, :name, {}, multiple: true, class: "form-control input-sm") %></th>
+  <th><%= f.text_field :year, class: "form-control input-sm", size: 4 %></th>
+  <th><%= f.text_field :entry_type, class: "form-control input-sm", size: 6 %></th>
   <%= f.fields_for :record_property_attributes do |r| %>
   <%= th_if_expand @current_user.username %>
   <th>
-    <%= r.select :group_id ,Group.pluck(:name, :id),include_blank: true %>
+    <%= r.select :group_id ,Group.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
     <%= r.hidden_field :user_id ,value: @current_user.id %>
   </th>
   <% end %>

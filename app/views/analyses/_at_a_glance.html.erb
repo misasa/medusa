@@ -50,10 +50,10 @@
   <tfoot>
    <tr>
      <%= form_for Chemistry.new, url: analysis_chemistries_path(@analysis) do |f|%>
-        <th><%= f.select :measurement_item_id ,MeasurementItem.all.map{|r|[raw(r.display_name),r.id]} %></th>
-        <th><%= f.text_field :value %></th>
-        <th><%= f.text_field :uncertainty %></th>
-        <th><%= f.select :unit_id ,Unit.all.map{|r|[raw(r.html),r.id]},include_blank: true %></th>
+        <th><%= f.select :measurement_item_id, MeasurementItem.all.map{|r|[raw(r.display_name),r.id]}, {}, class: "form-control input-sm" %></th>
+        <th><%= f.text_field :value, class: "form-control input-sm" %></th>
+        <th><%= f.text_field :uncertainty, class: "form-control input-sm" %></th>
+        <th><%= f.select :unit_id ,Unit.all.map{|r|[raw(r.html),r.id]}, { include_blank: true }, class: "form-control input-sm" %></th>
         <th>
           <%= f.button title:"add chemistry",class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>

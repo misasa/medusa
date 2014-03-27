@@ -9,11 +9,11 @@
   </div>
   <div class="form-group form-group-sm">
     <%= f.label :device, class: "small" %>
-    <%= f.select :device_id, Device.pluck(:name, :id), include_blank: true %>
+    <%= f.select :device_id, Device.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
     <%= f.label :technique, class: "small" %>
-    <%= f.select :technique_id, Technique.pluck(:name, :id), include_blank: true %>
+    <%= f.select :technique_id, Technique.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
     <%= f.label :operator ,class: "small" %>

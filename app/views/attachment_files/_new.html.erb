@@ -7,7 +7,7 @@
   <%= f.fields_for :record_property_attributes do |r| %>
   <%= th_if_expand @current_user.username %>
   <th>
-    <%= r.select :group_id ,Group.pluck(:name, :id),include_blank: true %>
+    <%= r.select :group_id ,Group.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
     <%= r.hidden_field :user_id ,value: @current_user.id %>
   </th>
   <% end %>
