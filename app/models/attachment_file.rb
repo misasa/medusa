@@ -5,7 +5,7 @@ class AttachmentFile < ActiveRecord::Base
   has_attached_file :data,
                     styles: { thumb: "160x120>", tiny: "50x50" },
                     path: ":rails_root/public/system/:class/:id_partition/:basename_with_style.:extension",
-                    url: "/system/:class/:id_partition/:basename_with_style.:extension"
+                    url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension"
   alias_attribute :name, :data_file_name
 
   has_many :spots
