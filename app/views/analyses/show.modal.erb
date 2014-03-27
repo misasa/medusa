@@ -1,20 +1,27 @@
-<dl class="dl-horizontal">
-  <dt>name</dt>
-  <dd><%= @analysis.name %></dd>
-  <dt>device</dt>
-  <dd><%= @analysis.device.try!(:name) %></dd>
-  <dt>stone</dt>
-  <dd><%= @analysis.stone.try!(:name) %></dd>
-  <dt>summary</dt>
-  <dd><%= @analysis.chemistry_summary %></dd>
-  <dt>owner</dt>
-  <dd><%= @analysis.user.try!(:username) %></dd>
-  <dt>group</dt>
-  <dd><%= @analysis.group.try!(:name) %></dd>
-  <dt>published at</dt>
-  <dd><%= difference_from_now(@analysis.published_at) %></dd>
-  <dt>updated at</dt>
-  <dd><%= difference_from_now(@analysis.updated_at) %></dd>
-  <dt>created at</dt>
-  <dd><%= difference_from_now(@analysis.created_at) %></dd>
-</dl>
+<div class="row">
+  <div class="col-lg-4">
+    <%= @analysis.primary_picture %>
+  </div>
+  <div class="col-lg-8">
+    <dl class="dl-horizontal">
+      <dt>name</dt>
+      <dd><%= @analysis.name %></dd>
+      <dt>device</dt>
+      <dd><%= @analysis.device.try!(:name) %></dd>
+      <dt>stone</dt>
+      <dd><%= @analysis.stone.try!(:name) %></dd>
+      <dt>summary</dt>
+      <dd><%= @analysis.chemistry_summary %></dd>
+      <dt>owner</dt>
+      <dd><%= @analysis.user.try!(:username) %></dd>
+      <dt>group</dt>
+      <dd><%= @analysis.group.try!(:name) %></dd>
+      <dt>published at</dt>
+      <dd><%= difference_from_now(@analysis.published_at) %></dd>
+      <dt>updated at</dt>
+      <dd><%= difference_from_now(@analysis.updated_at) %></dd>
+      <dt>created at</dt>
+      <dd><%= difference_from_now(@analysis.created_at) %></dd>
+    </dl>
+  </div>
+</div>

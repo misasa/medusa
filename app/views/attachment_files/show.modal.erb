@@ -1,18 +1,25 @@
-<dl class="dl-horizontal">
-  <dt>name</dt>
-  <dd><%= @attachment_file.name %></dd>
-  <dt>type</dt>
-  <dd><%= @attachment_file.data_content_type %></dd>
-  <dt>size</dt>
-  <dd><%= @attachment_file.data_file_size %></dd>
-  <dt>owner</dt>
-  <dd><%= @attachment_file.user.try!(:username) %></dd>
-  <dt>group</dt>
-  <dd><%= @attachment_file.group.try!(:name) %></dd>
-  <dt>published at</dt>
-  <dd><%= difference_from_now(@attachment_file.published_at) %></dd>
-  <dt>updated at</dt>
-  <dd><%= difference_from_now(@attachment_file.updated_at) %></dd>
-  <dt>created at</dt>
-  <dd><%= difference_from_now(@attachment_file.created_at) %></dd>
-</dl>
+<div class="row">
+  <div class="col-lg-4">
+    <%= image_tag @attachment_file.path, width: 250, height: 250 %>
+  </div>
+  <div class="col-lg-8">
+    <dl class="dl-horizontal">
+      <dt>name</dt>
+      <dd><%= @attachment_file.name %></dd>
+      <dt>type</dt>
+      <dd><%= @attachment_file.data_content_type %></dd>
+      <dt>size</dt>
+      <dd><%= @attachment_file.data_file_size %></dd>
+      <dt>owner</dt>
+      <dd><%= @attachment_file.user.try!(:username) %></dd>
+      <dt>group</dt>
+      <dd><%= @attachment_file.group.try!(:name) %></dd>
+      <dt>published at</dt>
+      <dd><%= difference_from_now(@attachment_file.published_at) %></dd>
+      <dt>updated at</dt>
+      <dd><%= difference_from_now(@attachment_file.updated_at) %></dd>
+      <dt>created at</dt>
+      <dd><%= difference_from_now(@attachment_file.created_at) %></dd>
+    </dl>
+  </div>
+</div>

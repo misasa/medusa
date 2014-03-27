@@ -3,14 +3,31 @@ require 'spec_helper'
 describe BibDecorator do
   let(:user) { FactoryGirl.create(:user) }
   before{ User.current = user }
-  
+
+  describe ".primary_picture" do
+    after { bib.primary_picture(width: width, height: height) }
+    let(:bib) { FactoryGirl.create(:bib).decorate }
+    let(:width) { 250 }
+    let(:height) { 250 }
+    before { bib }
+    context "attachment_files is null" do
+      let(:attachment_file_1) { [] }
+      it { expect(helper).not_to receive(:image_tag) }
+    end
+    context "attachment_files is not null" do
+      let(:attachment_file_1) { FactoryGirl.create(:attachment_file, name: "att_1") }
+      before { bib.attachment_files << attachment_file_1 }
+      it { expect(helper).to receive(:image_tag).with(attachment_file_1.path, width: width, height: height) }
+    end
+  end
+
   describe ".name_with_id" do
   end
 
   describe ".to_html" do
     subject{ obj.to_html }
     let(:obj){FactoryGirl.create(:bib).decorate}
-    
+
     context "author" do
       context "is blank" do
         before{obj.authors.clear}

@@ -1,22 +1,30 @@
-<dl class="dl-horizontal">
-  <dt>name</dt>
-  <dd><%= @place.name %></dd>
-  <dt>latitude</dt>
-  <dd><%= @place.latitude_to_text %></dd>
-  <dt>longitude</dt>
-  <dd><%= @place.longitude_to_text %></dd>
-  <dt>elevation</dt>
-  <dd><%= @place.elevation_to_text %></dd>
-  <dt>stone</dt>
-  <dd><%= @place.stones_count %></dd>
-  <dt>owner</dt>
-  <dd><%= @place.user.try!(:username) %></dd>
-  <dt>group</dt>
-  <dd><%= @place.group.try!(:name) %></dd>
-  <dt>published at</dt>
-  <dd><%= difference_from_now(@place.published_at) %></dd>
-  <dt>updated at</dt>
-  <dd><%= difference_from_now(@place.updated_at) %></dd>
-  <dt>created at</dt>
-  <dd><%= difference_from_now(@place.created_at) %></dd>
-</dl>
+<div class="row">
+  <div class="col-lg-4">
+    <%= @place.try(:to_map) %>
+  </div>
+  <div class="col-lg-8">
+    <dl class="dl-horizontal">
+      <dt>name</dt>
+      <dd><%= @place.name %></dd>
+      <dt>latitude</dt>
+      <dd><%= @place.latitude_to_text %></dd>
+      <dt>longitude</dt>
+      <dd><%= @place.longitude_to_text %></dd>
+      <dt>elevation</dt>
+      <dd><%= @place.elevation_to_text %></dd>
+      <dt>stone</dt>
+      <dd><%= @place.stones_count %></dd>
+      <dt>owner</dt>
+      <dd><%= @place.user.try!(:username) %></dd>
+      <dt>group</dt>
+      <dd><%= @place.group.try!(:name) %></dd>
+      <dt>published at</dt>
+      <dd><%= difference_from_now(@place.published_at) %></dd>
+      <dt>updated at</dt>
+      <dd><%= difference_from_now(@place.updated_at) %></dd>
+      <dt>created at</dt>
+      <dd><%= difference_from_now(@place.created_at) %></dd>
+    </dl>
+  </div>
+</div>
+<%= javascript_tag "actsAsMappable.initToMap();" %>

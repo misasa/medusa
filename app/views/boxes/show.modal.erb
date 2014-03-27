@@ -1,20 +1,27 @@
-<dl class="dl-horizontal">
-  <dt>name</dt>
-  <dd><%= @box.name %></dd>
-  <dt>parent</dt>
-  <dd><%= @box.parent.try!(:name) %></dd>
-  <dt>box type</dt>
-  <dd><%= @box.box_type.try!(:name) %></dd>
-  <dt>tags</dt>
-  <dd><%= @box.tag_list %></dd>
-  <dt>owner</dt>
-  <dd><%= @box.user.try!(:username) %></dd>
-  <dt>group</dt>
-  <dd><%= @box.group.try!(:name) %></dd>
-  <dt>published at</dt>
-  <dd><%= difference_from_now(@box.published_at) %></dd>
-  <dt>updated at</dt>
-  <dd><%= difference_from_now(@box.updated_at) %></dd>
-  <dt>created at</dt>
-  <dd><%= difference_from_now(@box.created_at) %></dd>
-</dl>
+<div class="row">
+  <div class="col-lg-4">
+    <%= @box.primary_picture %>
+  </div>
+  <div class="col-lg-8">
+    <dl class="dl-horizontal">
+      <dt>name</dt>
+      <dd><%= @box.name %></dd>
+      <dt>parent</dt>
+      <dd><%= @box.parent.try!(:name) %></dd>
+      <dt>box type</dt>
+      <dd><%= @box.box_type.try!(:name) %></dd>
+      <dt>tags</dt>
+      <dd><%= @box.tag_list %></dd>
+      <dt>owner</dt>
+      <dd><%= @box.user.try!(:username) %></dd>
+      <dt>group</dt>
+      <dd><%= @box.group.try!(:name) %></dd>
+      <dt>published at</dt>
+      <dd><%= difference_from_now(@box.published_at) %></dd>
+      <dt>updated at</dt>
+      <dd><%= difference_from_now(@box.updated_at) %></dd>
+      <dt>created at</dt>
+      <dd><%= difference_from_now(@box.created_at) %></dd>
+    </dl>
+  </div>
+</div>
