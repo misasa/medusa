@@ -32,7 +32,7 @@ task :chemistries_csv => :environment do
       SELECT *
       FROM units
     )
-    TO '/tmp/csv/units.csv'
+    TO '/tmp/csv/units_1.csv'
     (FORMAT 'csv', HEADER);
   ")
   
@@ -50,7 +50,7 @@ task :chemistries_csv => :environment do
   ")
   
   abundance_elements = CSV.table("/tmp/csv/abundance_elements.csv")
-  units = CSV.table("/tmp/csv/units.csv")
+  units = CSV.table("/tmp/csv/units_1.csv")
   
   units_hash = units.each_with_object({}) do |unit, hash|
     hash[unit[:name]] = unit[:id]
@@ -124,6 +124,6 @@ task :chemistries_csv => :environment do
   ")
   
   FileUtils.rm("/tmp/csv/abundance_elements.csv")
-  FileUtils.rm("/tmp/csv/units.csv")
+  FileUtils.rm("/tmp/csv/units_1.csv")
   
 end

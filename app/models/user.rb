@@ -23,4 +23,11 @@ class User < ActiveRecord::Base
   def self.current=(user)
     Thread.current[:user] = user
   end
+  
+  protected
+     
+  def email_required?
+    false
+  end
+  
 end
