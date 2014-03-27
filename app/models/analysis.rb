@@ -2,7 +2,7 @@ class Analysis < ActiveRecord::Base
   include HasRecordProperty
   include HasViewSpot
 
-  PERMIT_IMPORT_TYPES = ["text/plain", "text/csv", "application/csv"]
+  PERMIT_IMPORT_TYPES = ["text/plain", "text/csv", "application/csv", "application/vnd.ms-excel"]
 
   has_many :chemistries
   has_many :attachings, as: :attachable, dependent: :destroy
