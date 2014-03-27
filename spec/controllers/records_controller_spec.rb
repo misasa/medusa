@@ -46,7 +46,7 @@ describe RecordsController do
       before do
         get :show, id: "not_found_id" ,format: :json
       end
-      it { expect(response.body).to eq("") }
+      it { expect(response.body).to be_blank }
       it { expect(response.status).to eq 404 }
     end
     context "record not found html" do
@@ -79,7 +79,7 @@ describe RecordsController do
       before do
         get :property, id: "not_found_id" ,format: :json
       end
-      it { expect(response.body).to eq("") }
+      it { expect(response.body).to be_blank }
       it { expect(response.status).to eq 404 }
     end
     context "record not found html" do
