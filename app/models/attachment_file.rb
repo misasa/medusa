@@ -28,7 +28,7 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def thumbnail_path
-    File.exists?(path(:thumb)) ? path(:thumb) : path
+    File.exists?(data.path(:thumb)) ? path(:thumb) : path
   end
 
   def data_fingerprint
