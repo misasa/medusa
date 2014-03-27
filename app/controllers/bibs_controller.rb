@@ -1,6 +1,6 @@
 class BibsController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload,:bundle_edit, :bundle_update, :download_bundle_card, :download_label, :download_bundle_label, :download_to_tex]
+  before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update, :download_bundle_card, :download_label, :download_bundle_label, :download_to_tex]
   before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label, :download_to_tex]
   load_and_authorize_resource
 
@@ -35,12 +35,6 @@ class BibsController < ApplicationController
     respond_with @bib
   end
 
-  def upload
-    @bib = Bib.find(params[:id])
-    @bib.attachment_files << AttachmentFile.new(data: params[:data])
-    respond_with @bib
-  end
-  
   def picture
     respond_with @bib, layout: !request.xhr?
   end

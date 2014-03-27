@@ -1,6 +1,6 @@
 class BoxesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :upload, :bundle_edit, :bundle_update, :download_card, :download_bundle_card, :download_label, :download_bundle_label]
+  before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update, :download_card, :download_bundle_card, :download_label, :download_bundle_label]
   before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label]
   load_and_authorize_resource
 
@@ -32,12 +32,6 @@ class BoxesController < ApplicationController
 
   def destroy
     @box.destroy
-    respond_with @box
-  end
-
-  def upload
-    @box = Box.find(params[:id])
-    @box.attachment_files << AttachmentFile.new(data: params[:data])
     respond_with @box
   end
 

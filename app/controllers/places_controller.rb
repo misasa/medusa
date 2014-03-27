@@ -49,11 +49,6 @@ class PlacesController < ApplicationController
     respond_with @place
   end
 
-  def upload
-    @place.attachment_files << AttachmentFile.new(data: params[:data])
-    respond_with @place
-  end
-
   def bundle_edit
     respond_with @places
   end
