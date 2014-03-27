@@ -34,7 +34,11 @@ class RecordsController < ApplicationController
   end
 
   def record_not_found(e)
-    render  'record_not_found', status: 404
+    respond_to do |format|
+      format.html { render 'record_not_found', status: :not_found }
+      format.json { render nothing: true, status: :not_found }
+      format.xml { render nothing: true, status: :not_found }
+    end
   end
 
 end
