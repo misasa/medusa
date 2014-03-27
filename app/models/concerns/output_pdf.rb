@@ -31,7 +31,7 @@ module OutputPdf
 
   def primary_attachment_file_path
     if attachment_files.present?
-      path = File.join(Rails.root, "public", attachment_files.first.path)
+      path = attachment_files.first.data.path
       File.exist?(path) ? path : nil
     end
   end
