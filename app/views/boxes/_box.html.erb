@@ -3,10 +3,10 @@
   <td><%= link_to box.name, box %></td>
   <td><%= link_to box.parent.name,box.parent if box.parent %></td>
   <td><%= box.box_type.try!(:name) %></td>
-  <td><%= box.tag_list %></td>
-  <td><%= box.user.try!(:username) %></td>
+  <%= td_if_expand box.tag_list %>
+  <%= td_if_expand box.user.try!(:username) %>
   <td><%= box.group.try!(:name) %></td>
-  <td><%= difference_from_now(box.published_at) %></td>
+  <%= td_if_expand difference_from_now(box.published_at) %>
   <td><%= difference_from_now(box.updated_at) %></td>
-  <td><%= difference_from_now(box.created_at) %></td>
+  <%= td_if_expand difference_from_now(box.created_at) %>
 </tr>

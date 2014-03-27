@@ -5,10 +5,10 @@
   <td><%= bib.authors.map {|author| author.name }.join(" & ")%></td>
   <td><%= bib.try!(:year) %></td>
   <td><%= bib.try!(:entry_type) %></td>
-  <td><%= bib.user.try!(:username) %></td>
+  <%= td_if_expand bib.user.try!(:username) %>
   <td><%= bib.group.try!(:name) %></td>
-  <td><%= difference_from_now(bib.published_at) %></td>
+  <%= td_if_expand difference_from_now(bib.published_at) %>
   <td><%= difference_from_now(bib.updated_at) %></td>
-  <td><%= difference_from_now(bib.created_at) %></td>
+  <%= td_if_expand difference_from_now(bib.created_at) %>
 </tr>
 

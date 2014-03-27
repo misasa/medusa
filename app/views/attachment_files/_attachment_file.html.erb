@@ -4,9 +4,9 @@
   <td><%= link_to attachment_file.data_file_name, attachment_file %></td>
   <td><%= attachment_file.data_content_type %></td>
   <td><%= attachment_file.data_file_size %></td>
-  <td><%= attachment_file.user.try!(:username) %></td>
+  <%= td_if_expand attachment_file.user.try!(:username) %>
   <td><%= attachment_file.group.try!(:name) %></td>
-  <td><%= difference_from_now(attachment_file.published_at) %></td>
+  <%= td_if_expand difference_from_now(attachment_file.published_at) %>
   <td><%= difference_from_now(attachment_file.updated_at) %></td>
-  <td><%= difference_from_now(attachment_file.created_at) %></td>
+  <%= td_if_expand difference_from_now(attachment_file.created_at) %>
 </tr>

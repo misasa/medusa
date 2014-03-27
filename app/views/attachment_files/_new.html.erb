@@ -2,12 +2,14 @@
 <tr>
   <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
   <th></th>
-  <th><%= f.file_field :data %></th>
-  <th></th>
+  <th colspan="2"><%= f.file_field :data %></th>
   <th></th>
   <%= f.fields_for :record_property_attributes do |r| %>
-  <th><%= @current_user.username %><%= r.hidden_field :user_id ,value: @current_user.id %></th>
-  <th><%= r.select :group_id ,Group.pluck(:name, :id),include_blank: true %></th>
+  <%= th_if_expand @current_user.username %>
+  <th>
+    <%= r.select :group_id ,Group.pluck(:name, :id),include_blank: true %>
+    <%= r.hidden_field :user_id ,value: @current_user.id %>
+  </th>
   <% end %>
   <th>
     <%= f.button class: "btn btn-default" do %>

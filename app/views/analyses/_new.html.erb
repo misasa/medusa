@@ -1,13 +1,16 @@
 <%= form_for analysis, remote: true, format: :json, html: { class: "create" } do |f| %>
 <tr>
   <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
-  <th><%= f.text_field :name %></th>
+  <th><%= f.text_field :name, size: 15 %></th>
   <th><%= f.select :device_id, Device.pluck(:name, :id), include_blank: true %></th>
-  <th><%= f.text_field :stone_global_id %></th>
+  <th><%= f.text_field :stone_global_id, size: 15 %></th>
   <th></th>
   <%= f.fields_for :record_property_attributes do |r| %>
-  <th><%= @current_user.username %><%= r.hidden_field :user_id ,value: @current_user.id %></th>
-  <th><%= r.select :group_id ,Group.pluck(:name, :id),include_blank: true %></th>
+  <%= th_if_expand @current_user.username %>
+  <th>
+    <%= r.select :group_id ,Group.pluck(:name, :id),include_blank: true %>
+    <%= r.hidden_field :user_id ,value: @current_user.id %>
+  </th>
   <% end %>
   <th>
     <%= f.button class: "btn btn-default" do %>

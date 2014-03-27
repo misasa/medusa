@@ -4,9 +4,9 @@
   <td><%= analysis.device.try!(:name) %></td>
   <td><%= link_to analysis.stone.name,analysis.stone if analysis.stone %></td>
   <td><%= raw(analysis.chemistry_summary) %></td>
-  <td><%= analysis.user.try!(:username) %></td>
+  <%= td_if_expand analysis.user.try!(:username) %>
   <td><%= analysis.group.try!(:name) %></td>
-  <td><%= difference_from_now(analysis.published_at) %></td>
+  <%= td_if_expand difference_from_now(analysis.published_at) %>
   <td><%= difference_from_now(analysis.updated_at) %></td>
-  <td><%= difference_from_now(analysis.created_at) %></td>
+  <%= td_if_expand difference_from_now(analysis.created_at) %>
 </tr>

@@ -5,10 +5,10 @@
   <td><%= place.longitude_to_text %></td>
   <td><%= place.elevation_to_text %></td>
   <td><%= place.stones_count %></td>
-  <td><%= place.user.try!(:username) %></td>
+  <%= td_if_expand place.user.try!(:username) %>
   <td><%= place.group.try!(:name) %></td>
-  <td><%= difference_from_now(place.published_at) %></td>
+  <%= td_if_expand difference_from_now(place.published_at) %>
   <td><%= difference_from_now(place.updated_at) %></td>
-  <td><%= difference_from_now(place.created_at) %></td>
+  <%= td_if_expand difference_from_now(place.created_at) %>
 </tr>
 

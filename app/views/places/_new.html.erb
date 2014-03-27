@@ -1,14 +1,17 @@
 <%= form_for place, remote: true, format: :json, html: { class: "create" } do |f| %>
 <tr>
   <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
-  <th><%= f.text_field :name,class: "form-control input-sm" %></th>
-  <th><%= f.text_field :latitude,class: "form-control input-sm" %></th>
-  <th><%= f.text_field :longitude,class: "form-control input-sm" %></th>
-  <th><%= f.text_field :elevation,class: "form-control input-sm" %></th>
+  <th><%= f.text_field :name,class: "form-control input-sm", size: 15 %></th>
+  <th><%= f.text_field :latitude,class: "form-control input-sm", size: 10 %></th>
+  <th><%= f.text_field :longitude,class: "form-control input-sm", size: 10 %></th>
+  <th><%= f.text_field :elevation,class: "form-control input-sm", size: 10 %></th>
   <th></th>
   <%= f.fields_for :record_property_attributes do |r| %>
-  <th><%= @current_user.username %><%= r.hidden_field :user_id ,value: @current_user.id %></th>
-  <th><%= r.select :group_id ,Group.pluck(:name, :id),include_blank: true,class: "form-control input-sm" %></th>
+  <%= th_if_expand @current_user.username %>
+  <th>
+    <%= r.select :group_id ,Group.pluck(:name, :id),include_blank: true,class: "form-control input-sm" %>
+    <%= r.hidden_field :user_id ,value: @current_user.id %>
+  </th>
   <% end %>
   <th>
     <%= f.button class: "btn btn-default" do %>
