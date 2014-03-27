@@ -102,16 +102,6 @@ describe PlacesController do
     it{expect(response).to render_template("property") }
   end
 
-  describe "POST upload" do
-    let(:obj){FactoryGirl.create(:place) }
-    let(:data) {fixture_file_upload("/files/test_image.jpg",'image/jpeg') }
-    it { expect {post :upload, id: obj.id  ,data: data}.to change(AttachmentFile, :count).by(1) }
-    context "" do
-      before{post :upload, id: obj.id  ,data: data}
-      it{expect(assigns(:place).attachment_files.last.data_file_name).to eq "test_image.jpg"}
-    end
-  end
-
   describe "DELETE destroy" do
     let(:obj){FactoryGirl.create(:place) }
     before { obj }

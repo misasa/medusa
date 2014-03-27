@@ -1,6 +1,6 @@
 class AnalysesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :new, :create, :upload,:bundle_edit, :bundle_update, :import, :table, :castemls]
+  before_action :find_resource, except: [:index, :new, :create, :bundle_edit, :bundle_update, :import, :table, :castemls]
   before_action :find_resources, only: [:bundle_edit, :bundle_update, :table, :castemls]
   load_and_authorize_resource
 
@@ -49,12 +49,6 @@ class AnalysesController < ApplicationController
 
   def destroy
     @analysis.destroy
-    respond_with @analysis
-  end
-
-  def upload
-    @analysis = Analysis.find(params[:id])
-    @analysis.attachment_files << AttachmentFile.new(data: params[:data])
     respond_with @analysis
   end
 

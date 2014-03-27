@@ -70,16 +70,6 @@ describe AnalysesController do
     end
   end
 
-  describe "POST upload" do
-    let(:obj){FactoryGirl.create(:analysis) }
-    let(:data) {fixture_file_upload("/files/test_image.jpg",'image/jpeg') }
-    it { expect {post :upload, id: obj.id  ,data: data}.to change(AttachmentFile, :count).by(1) }
-    context "" do
-      before{post :upload, id: obj.id, data: data}
-      it{expect(assigns(:analysis).attachment_files.exists?(data_file_name: "test_image.jpg")).to be_truthy }
-    end
-  end
-
   describe "POST bundle_edit" do
     let(:obj1) { FactoryGirl.create(:analysis, name: "obj1") }
     let(:obj2) { FactoryGirl.create(:analysis, name: "obj2") }

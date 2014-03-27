@@ -46,7 +46,6 @@ Medusa::Application.routes.draw do
       get :picture
       get :map
       get :property
-      post 'attachment_files/upload' => 'stones#upload'
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "stone" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "stone" }
@@ -61,7 +60,6 @@ Medusa::Application.routes.draw do
       get :family
       get :picture
       get :property
-      post 'attachment_files/upload' => 'boxes#upload'
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "box" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "box" }
@@ -74,7 +72,6 @@ Medusa::Application.routes.draw do
     member do
       get :map
       get :property
-      post 'attachment_files/upload' => 'places#upload'
     end
     collection do
       post :import
@@ -89,7 +86,6 @@ Medusa::Application.routes.draw do
     member do
       get :picture
       get :property
-      post 'attachment_files/upload' => 'analyses#upload'
     end
     collection do
       post :import
@@ -106,7 +102,6 @@ Medusa::Application.routes.draw do
     member do
       get :picture
       get :property
-      post 'attachment_files/upload' => 'bibs#upload'
     end
     collection do
       get :download_to_tex
