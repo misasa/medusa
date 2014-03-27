@@ -3,27 +3,27 @@
 
   <div>
     <%= f.label :nickname %>
-    <%= f.text_field :nickname %>
+    <%= f.text_field :nickname, class: "form-control input-sm" %>
   </div>
 
   <div>
     <%= f.label :display_in_html %>
-    <%= f.text_field :display_in_html %>
+    <%= f.text_field :display_in_html, class: "form-control input-sm" %>
   </div>
 
   <div>
     <%= f.label :display_in_tex %>
-    <%= f.text_field :display_in_tex %>
+    <%= f.text_field :display_in_tex, class: "form-control input-sm" %>
   </div>
 
   <div>
     <%= f.label :unit_id %>
-    <%= f.select :unit_id ,Unit.all.map{|r|[raw(r.html),r.id]},include_blank: true %>
+    <%= f.select :unit_id, Unit.all.map{|r|[raw(r.html),r.id]}, { include_blank: true }, class: "form-control input-sm" %>
   </div>
 
   <div>
     <%= f.label :description %>
-    <%= f.text_area :description %>
+    <%= f.text_area :description, class: "form-control input-sm" %>
   </div>
 
   <div>

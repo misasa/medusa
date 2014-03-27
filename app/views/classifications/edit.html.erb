@@ -4,7 +4,7 @@
 
   <div class="form-classification form-classification-sm">
     <%= f.label :parent, class: "small" %>
-    <%= f.select :parent_id ,Classification.pluck(:full_name,:id),include_blank: true %>
+    <%= f.select :parent_id, Classification.pluck(:full_name,:id), { include_blank: true }, class: "form-control input-sm" %>
   </div>
   <div class="form-classification form-classification-sm">
     <%= f.label :name, class: "small" %>
