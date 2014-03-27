@@ -1,119 +1,121 @@
-<div>
-<%= form_for(@user,url: account_path) do |f| %>
-  <%= error_notification(@user.errors) %>
+<div class="row">
+  <div class="col-lg-4">
+    <%= form_for(@user,url: account_path) do |f| %>
+    <%= error_notification(@user.errors) %>
 
-  <div>
-    <%= f.label :box_id %><br>
-    <%= f.select :box_id, Box.pluck(:name, :id), include_blank: true %>
+    <div>
+      <%= f.label :box_id %><br>
+      <%= f.select :box_id, Box.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
+    </div>
+
+    <div>
+      <%= f.label :username %><br>
+      <%= f.text_field :username, size: 20, autocomplete: "off", class: "form-control input-sm" %>
+    </div>
+
+    <div>
+      <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+      <%= f.password_field :password, size: 30, autocomplete: "off", class: "form-control input-sm" %>
+    </div>
+
+    <div>
+      <%= f.label :password_confirmation %><br />
+      <%= f.password_field :password_confirmation, size: 30, autocomplete: "off", class: "form-control input-sm" %>
+    </div>
+
+    <div>
+      <%= f.label :family_name %><br />
+      <%= f.text_field :family_name, class: "form-control input-sm" %>
+    </div>
+
+    <div>
+      <%= f.label :first_name %><br />
+      <%= f.text_field :first_name, class: "form-control input-sm" %>
+    </div>
+
+    <div>
+      <%= f.label :email %><br />
+      <%= f.text_field :email, class: "form-control input-sm" %>
+    </div>
+
+    <div>
+      <%= f.label :description %><br />
+      <%= f.text_area :description, class: "form-control input-sm" %>
+    </div>
+
+    <%= f.submit  "Update",class: "btn btn-sm" %>
+
+    <% end %>
   </div>
-
-  <div>
-    <%= f.label :username %><br>
-    <%= f.text_field :username, {size: 20,autocomplete: "off"} %>
-  </div>
-
-  <div>
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
-    <%= f.password_field :password,{size: 30,autocomplete: "off"} %>
-  </div>
-
-  <div>
-    <%= f.label :password_confirmation %><br />
-    <%= f.password_field :password_confirmation,{size: 30,autocomplete: "off"} %>
-  </div>
-
-  <div>
-    <%= f.label :family_name %><br />
-    <%= f.text_field :family_name ,size: 20%>
-  </div>
-
-  <div>
-    <%= f.label :first_name %><br />
-    <%= f.text_field :first_name ,size: 20 %>
-  </div>
-
-  <div>
-    <%= f.label :email %><br />
-    <%= f.text_field :email, size: 30 %>
-  </div>
-
-  <div>
-    <%= f.label :description %><br />
-    <%= f.text_area :description , size: "18x3" %>
-  </div>
-
-  <%= f.submit  "Update",class: "btn btn-sm" %>
-
-<% end %>
 </div>
-<div>
+<div class="row">
   <div>
-  <%= form_tag(find_by_global_id_account_path,method: :get) do %>
-Table of records that you can access: Fill ID <%= text_field_tag("global_id", '',:size => "10") %> to <%=submit_tag 'go' %>.
-  <% end %>
+    <%= form_tag(find_by_global_id_account_path,method: :get) do %>
+    Table of records that you can access: Fill ID <%= text_field_tag("global_id", '',:size => "10") %> to <%=submit_tag 'go' %>.
+    <% end %>
   </div>
   <div>
-   <% class_names = ["Stone","Box","Place","Analysis","Bib","AttachmentFile"] %>
-  
-  <table class="table">
-    <tr>
-      <th></th>
-      <% class_names.each do |class_name| %>
+    <% class_names = ["Stone","Box","Place","Analysis","Bib","AttachmentFile"] %>
+    
+    <table class="table">
+      <tr>
+	<th></th>
+	<% class_names.each do |class_name| %>
         <th>
-        <%= link_to class_name.underscore,send("#{class_name.tableize}_path") %>
+          <%= link_to class_name.underscore,send("#{class_name.tableize}_path") %>
         </th>
-      <% end %>
-    </tr>
-    <!-- searchable -->
-    <tr>
-      <td>searchable</td>
-      <% class_names.each do |class_name| %>
+	<% end %>
+      </tr>
+      <!-- searchable -->
+      <tr>
+	<td>searchable</td>
+	<% class_names.each do |class_name| %>
         <td>
-        <% count = Module.const_get(class_name).readables(@user).count%>
-        <%= count > 0 ? link_to(count.to_s,send("#{class_name.tableize}_path")) : "0" %>
+          <% count = Module.const_get(class_name).readables(@user).count%>
+          <%= count > 0 ? link_to(count.to_s,send("#{class_name.tableize}_path")) : "0" %>
         </td>
-      <% end %>
-    </tr>
-    <!-- yours (ungroup) -->
-    <tr>
-      <td>yours (ungroup)</td>
-      <% class_names.each do |class_name| %>
+	<% end %>
+      </tr>
+      <!-- yours (ungroup) -->
+      <tr>
+	<td>yours (ungroup)</td>
+	<% class_names.each do |class_name| %>
         <td>
-        <% count = Module.const_get(class_name).readables(@user).where(:record_properties => {:user_id => @user.id}).count%>
-        <%= count > 0 ? link_to(count.to_s,send(("#{class_name.tableize}_path").to_sym,{"q[user_username_cont]" => @user.username})) : "0" %>
-        &nbsp;(
-        <% count = Module.const_get(class_name).readables(@user).where(:record_properties => {:user_id => @user.id,:group_id => nil}).count%>
-        <%= count > 0 ? link_to(count.to_s,send(("#{class_name.tableize}_path").to_sym,{"q[user_username_cont]" => @user.username,"q[group_name_null]" => true})) : "0" %>
-        )
+          <% count = Module.const_get(class_name).readables(@user).where(:record_properties => {:user_id => @user.id}).count%>
+          <%= count > 0 ? link_to(count.to_s,send(("#{class_name.tableize}_path").to_sym,{"q[user_username_cont]" => @user.username})) : "0" %>
+          &nbsp;(
+          <% count = Module.const_get(class_name).readables(@user).where(:record_properties => {:user_id => @user.id,:group_id => nil}).count%>
+          <%= count > 0 ? link_to(count.to_s,send(("#{class_name.tableize}_path").to_sym,{"q[user_username_cont]" => @user.username,"q[group_name_null]" => true})) : "0" %>
+          )
         </td>
-      <% end %>
-    </tr>
-    <!-- groups -->
-    <% unless @user.groups.empty? %>
+	<% end %>
+      </tr>
+      <!-- groups -->
+      <% unless @user.groups.empty? %>
       <tr><td colspan=<%= class_names.size + 1%>>group of</td></tr>
       <% @user.groups.each do |group| %>
-        <tr>
+      <tr>
         <td>&nbsp;-&nbsp;<%= group.name %></td>
         <% class_names.each do |class_name| %>
-          <td>
+        <td>
           <% count = Module.const_get(class_name).readables(@user).where(:record_properties => {:group_id => group.id}).count%>
           <%= count > 0 ? link_to(count.to_s,send(("#{class_name.tableize}_path").to_sym,{"q[group_name_cont]" => group.name})) : "0" %>
-          </td>
-        <% end %>
-        </tr>
-      <% end %>
-    <% end %>
-    <!-- ungroup -->
-    <tr>
-      <td>ungroup</td>
-      <% class_names.each do |class_name| %>
-        <td>
-        <% count = Module.const_get(class_name).readables(@user).where(:record_properties => {:group_id => nil}).count%>
-        <%= count > 0 ? link_to(count.to_s,send(("#{class_name.tableize}_path").to_sym,{"q[group_name_null]" => true})) : "0" %>
         </td>
+        <% end %>
+      </tr>
       <% end %>
-    </tr>
-    <tr><td colspan=<%= class_names.size + 1%>></td></tr>
-  </table>
-</div>
+      <% end %>
+      <!-- ungroup -->
+      <tr>
+	<td>ungroup</td>
+	<% class_names.each do |class_name| %>
+        <td>
+          <% count = Module.const_get(class_name).readables(@user).where(:record_properties => {:group_id => nil}).count%>
+          <%= count > 0 ? link_to(count.to_s,send(("#{class_name.tableize}_path").to_sym,{"q[group_name_null]" => true})) : "0" %>
+        </td>
+	<% end %>
+      </tr>
+      <tr><td colspan=<%= class_names.size + 1%>></td></tr>
+    </table>
+  </div>
 </div>
