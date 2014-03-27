@@ -57,7 +57,7 @@
 	  <div class="input-group">
 	    <%= text_field_tag :global_id,nil, id: "attachment-file-global-id", class: "form-control input-sm" %>
 	    <span class="input-group-addon">
-	      <%= link_to attachment_files_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#attachment-file-global-id" do %>
+	      <%= link_to attachment_files_path(per_page: 5, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#attachment-file-global-id" do %>
 	      <span class="glyphicon glyphicon-search"></span>
 	      <% end %>
 	    </span>

@@ -44,7 +44,16 @@
       <% end %>
       <%= form_tag link_by_global_id_bib_boxes_path(@bib), method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
-        <th><%= text_field_tag :global_id, nil, class: "form-control input-sm" %></th>
+        <th>
+	  <div class="input-group">
+	    <%= text_field_tag :global_id, nil, id: "box-global-id", class: "form-control input-sm" %>
+	    <span class="input-group-addon">
+	      <%= link_to boxes_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#box-global-id" do %>
+	      <span class="glyphicon glyphicon-search"></span>
+	      <% end %>
+	    </span>
+	  </div>
+	</th>
         <th>
           <%= button_tag title: "link box by global id", class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>

@@ -53,7 +53,16 @@
       <% end %>
       <%= form_tag link_by_global_id_analysis_attachment_files_path(@analysis),method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
-        <th><%= text_field_tag :global_id,nil, class: "form-control input-sm" %></th>
+        <th>
+	  <div class="input-group">
+	    <%= text_field_tag :global_id,nil, id: "attachment-file-global-id", class: "form-control input-sm" %>
+	    <span class="input-group-addon">
+	      <%= link_to attachment_files_path(per_page: 5, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#attachment-file-global-id" do %>
+	      <span class="glyphicon glyphicon-search"></span>
+	      <% end %>
+	    </span>
+	  </div>
+	</th>
         <th>
           <%= button_tag title: "link attachment file by global id",class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>
