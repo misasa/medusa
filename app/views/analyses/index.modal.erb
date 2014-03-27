@@ -1,19 +1,19 @@
 <%= paginate @analyses, remote: true %>
+<%= search_form_for @search, url: polymorphic_path(@search.klass, format: :modal), remote: true do |f| %>
 <table class="table table-condensed table-striped">
   <thead>
-    <%= search_form_for @search, url: polymorphic_path(@search.klass, format: :modal), remote: true do |f| %>
     <tr>
       <th>
         <%= f.button class: "btn btn-default" do %>
         <span class="glyphicon glyphicon-refresh"></span>
         <% end %>
       </th>
-      <th><%= sort_link @search, :name, "name", "name", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :device_name, "device", "name", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :stone_name, "stone", "name", { format: :modal }, remote: true %></th>
+      <th><%= sort_link @search, :name, "name", { format: :modal }, remote: true %></th>
+      <th><%= sort_link @search, :device_name, "device", { format: :modal }, remote: true %></th>
+      <th><%= sort_link @search, :stone_name, "stone", { format: :modal }, remote: true %></th>
       <th>summary</th>
-      <th><%= sort_link @search, :group_name, "group", "name", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :updated_at, "updated_at", "name", { format: :modal }, remote: true %></th>
+      <th><%= sort_link @search, :group_name, "group", { format: :modal }, remote: true %></th>
+      <th><%= sort_link @search, :updated_at, "updated_at", { format: :modal }, remote: true %></th>
     </tr>
     <tr>
       <th><%= text_field_tag :per_page, (params[:per_page] || Analysis.default_per_page), size: 4, readonly: true %></th>
@@ -37,9 +37,9 @@
         <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]), size: 10 %>
       </th>
     </tr>
-    <% end %>
   </thead>
   <tbody>
     <%= render partial: "analysis.modal", collection: @analyses, locals: { checked: false } %>
   </tbody>
 </table>
+<% end %>
