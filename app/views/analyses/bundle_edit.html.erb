@@ -29,16 +29,25 @@
     <tr>
       <th><%= check_box_tag nil, nil, true, class: "select-row-all" %></th>
       <th></th>
-      <th><%= f.select :device_id, Device.pluck(:name, :id), include_blank: true %></th>
-      <th><%= f.select :stone_id, Stone.pluck(:name, :id), include_blank: true %></th>
+      <th><%= f.select :device_id, Device.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
+      <th>
+	<div class="input-group">
+	  <%= f.text_field :stone_global_id, class: "form-control input-sm" %>
+	  <span class="input-group-addon">
+	    <%= link_to stones_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#analysis_stone_global_id" do %>
+	    <span class="glyphicon glyphicon-search"></span>
+	    <% end %>
+	  </span>
+	</div>
+      </th>
       <th></th>
       <%= th_if_expand do %>
-        <%= f.select :user_id ,User.pluck(:username, :id), include_blank: true %>
+        <%= f.select :user_id ,User.pluck(:username, :id), { include_blank: true }, class: "form-control input-sm" %>
       <% end %>
 
-      <th><%= f.select :group_id ,Group.pluck(:name, :id), include_blank: true %></th>
+      <th><%= f.select :group_id ,Group.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
       <%= th_if_expand do %>
-        <%= f.select :published ,[true, false], include_blank: true %>
+        <%= f.select :published ,[true, false], { include_blank: true }, class: "form-control input-sm" %>
       <% end %>
       <th>
         <%= f.button class: "btn btn-default" do %>

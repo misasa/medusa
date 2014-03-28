@@ -26,11 +26,11 @@
       <th></th>
       <th></th>
       <%= th_if_expand do %>
-        <%= f.select :user_id ,User.pluck(:username, :id), include_blank: true %>
+        <%= f.select :user_id ,User.pluck(:username, :id), { include_blank: true }, class: "form-control input-sm" %>
       <% end %>
-      <th><%= f.select :group_id ,Group.pluck(:name, :id), include_blank: true %></th>
+      <th><%= f.select :group_id ,Group.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
       <%= th_if_expand do %>
-        <%= f.select :published ,[true, false], include_blank: true %>
+        <%= f.select :published ,[true, false], { include_blank: true }, class: "form-control input-sm" %>
       <% end %>
       <th>
         <%= f.button class: "btn btn-default" do %>
