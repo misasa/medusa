@@ -30,6 +30,8 @@ class NestedResources::AnalysesController < ApplicationController
     @analysis = Analysis.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
     @parent.analyses << @analysis
     respond_with @analysis, location: adjust_url_by_requesting_tab(request.referer)
+  rescue
+    duplicate_global_id
   end
 
   private
@@ -64,4 +66,10 @@ class NestedResources::AnalysesController < ApplicationController
     @parent = resource_class.find(params["#{resource_name}_id"])
   end
 
+  def duplicate_global_id
+    respond_to do |format|
+      format.html { render "parts/duplicate_global_id", status: :unprocessable_entity }
+      format.all { render nothing: true, status: :unprocessable_entity }
+    end
+  end
 end
