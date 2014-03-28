@@ -23,5 +23,7 @@
     <%= f.label :description, class: "small" %>
     <%= f.text_area :description, class: "form-control input-sm", row: 3 %>
   </div>
-  <%= f.submit class: "btn btn-sm" %>
+  <%= f.button class: "btn btn-default" do %>
+  <span class="glyphicon glyphicon-save"></span>
+  <% end %>
 <% end %>
