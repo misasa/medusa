@@ -13,6 +13,7 @@
           <% end %>
         <% end %>
       </div>
+      <% if can? :update, @analysis %>
       <div class="btn-group btn-group-sm">
         <%= link_to edit_analysis_path(@analysis), class: "btn btn-default", remote: true do %>
           <span class="glyphicon glyphicon-pencil"></span>
@@ -21,6 +22,7 @@
           <span class="glyphicon glyphicon-cog"></span>
         <% end %>
       </div>
+      <% end %>
     </div>
     <img>
     <div class="row tool-content">

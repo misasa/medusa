@@ -11,6 +11,7 @@
 	  <span class="glyphicon glyphicon-globe"></span>
 	<% end %>
       </div>
+      <% if can? :update, @place %>
       <div class="btn-group btn-group-sm">
 	<%= link_to edit_place_path(@place), class: "btn btn-default", remote: true do %>
 	  <span class="glyphicon glyphicon-pencil"></span>
@@ -19,6 +20,7 @@
 	  <span class="glyphicon glyphicon-cog"></span>
 	<% end %>
       </div>
+      <% end %>
     </div>
     <img>
     <div class="row tool-content">

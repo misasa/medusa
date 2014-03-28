@@ -8,9 +8,10 @@
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
         <%= link_to picture_attachment_file_path(@attachment_file), class: "btn btn-default activate", remote: true do %>
-          <span class="glyphicon glyphicon-globe"></span>
+          <span class="glyphicon glyphicon-picture"></span>
         <% end %>
       </div>
+      <% if can? :update, @attachment_file %>
       <div class="btn-group btn-group-sm">
         <%= link_to edit_attachment_file_path(@attachment_file), class: "btn btn-default", remote: true do %>
           <span class="glyphicon glyphicon-pencil"></span>
@@ -19,6 +20,7 @@
           <span class="glyphicon glyphicon-cog"></span>
         <% end %>
       </div>
+      <% end %>
       <div class="btn-group btn-group-sm">
         <%= link_to @attachment_file.path, class: "btn btn-default " do %>
           <span class="glyphicon glyphicon-picture"></span>
