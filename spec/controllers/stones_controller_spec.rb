@@ -15,11 +15,68 @@ describe StonesController do
     end
     it { expect(assigns(:stones).count).to eq 3 }
   end
+  
+  describe "GET show" do
+    let(:stone) { FactoryGirl.create(:stone) }
+    before { get :show, id: stone.id }
+    it { expect(assigns(:stone)).to eq stone }
+  end
+  
+  describe "GET edit" do
+    let(:stone) { FactoryGirl.create(:stone) }
+    before { get :edit, id: stone.id }
+    it { expect(assigns(:stone)).to eq stone }
+  end
+  
+  describe "POST create" do
+    let(:attributes) { {name: "stone_name"} }
+    it { expect { post :create, stone: attributes }.to change(Stone, :count).by(1) }
+    describe "assigns as @stone" do
+      before { post :create, stone: attributes }
+      it { expect(assigns(:stone)).to be_persisted }
+      it { expect(assigns(:stone).name).to eq attributes[:name]}
+    end
+  end
+  
+  describe "PUT update" do
+    before do
+      stone
+      put :update, id: stone.id, stone: attributes
+    end
+    let(:stone) { FactoryGirl.create(:stone) }
+    let(:attributes) { {name: "update_name"} }
+    it { expect(assigns(:stone)).to eq stone }
+    it { expect(assigns(:stone).name).to eq attributes[:name] }
+  end
 
   describe "DELETE destroy" do
     let(:stone) { FactoryGirl.create(:stone) }
     before { stone }
     it { expect { delete :destroy, id: stone.id }.to change(Stone, :count).by(-1) }
+  end
+  
+  describe "GET family" do
+    let(:stone) { FactoryGirl.create(:stone) }
+    before { get :family, id: stone.id }
+    it { expect(assigns(:stone)).to eq stone }
+  end
+  
+  describe "GET picture" do
+    let(:stone) { FactoryGirl.create(:stone) }
+    before { get :picture, id: stone.id }
+    it { expect(assigns(:stone)).to eq stone }
+  end
+  
+  describe "GET map" do
+    let(:stone) { FactoryGirl.create(:stone) }
+    before { get :map, id: stone.id }
+    it { expect(assigns(:stone)).to eq stone }
+  end
+  
+  describe "GET property" do
+    let(:stone) { FactoryGirl.create(:stone) }
+    before { get :property, id: stone.id }
+    it { expect(assigns(:stone)).to eq stone }
   end
 
   describe "POST bundle_edit" do
@@ -75,5 +132,32 @@ describe StonesController do
   describe "GET download_bundle_card" do
     # send_data
   end
-
+  
+  # send_data test returns unexpected object.
+  pending "GET download_label" do
+    after { get :download_label, id: stone.id }
+    let(:stone) { FactoryGirl.create(:stone) }
+    before do
+      stone
+      allow(stone).to receive(:build_label).and_return(double(:build_label))
+      allow(controller).to receive(:send_data).and_return{controller.render nothing: true}
+    end
+    it { expect(controller).to receive(:send_data).with(double(:build_label), filename: "Stone_#{stone.id}.csv", type: "text/csv") }
+  end
+  
+  describe "download_bundle_label" do
+    after { get :download_bundle_label, ids: params_ids }
+    let(:stone) { FactoryGirl.create(:stone) }
+    let(:params_ids) { [stone.id.to_s] }
+    let(:label) { double(:label) }
+    let(:stones) { Stone.all }
+    before do
+      stone
+      allow(Stone).to receive(:where).with(id: params_ids).and_return(stones)
+      allow(Stone).to receive(:build_bundle_label).with(stones).and_return(label)
+      allow(controller).to receive(:send_data).and_return{controller.render nothing: true}
+    end
+    it { expect(controller).to receive(:send_data).with(label, filename: "stones.csv", type: "text/csv") }
+  end
+  
 end
