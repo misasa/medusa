@@ -16,11 +16,6 @@ class BoxDecorator < Draper::Decorator
     end
   end
   
-  def current_box_hash(children)
-    box_hash = children.group_by(&:parent_id)
-    box_hash[parent_id] = [object]
-    box_hash
-  end
   
   def tree_node(current=false)
     link = current ? h.content_tag(:strong, name) : name
@@ -103,6 +98,12 @@ class BoxDecorator < Draper::Decorator
   
   def icon_with_count(icon, count)
     h.content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}") + h.content_tag(:span, count) if count.nonzero?
+  end
+
+  def current_box_hash(children)
+    box_hash = children.group_by(&:parent_id)
+    box_hash[parent_id] = [object]
+    box_hash
   end
   
 end
