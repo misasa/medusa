@@ -39,7 +39,7 @@ class StoneDecorator < Draper::Decorator
   def tree_node(current=false)
     link = current ? h.content_tag(:strong, name) : name
     icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
-    icon + h.link_to(link, self) + children_count + analyses_count + bibs_count + files_count
+    icon + h.link_to_if(h.can?(:read, self), link, self) + children_count + analyses_count + bibs_count + files_count
   end
 
   def children_count
@@ -87,7 +87,7 @@ class StoneDecorator < Draper::Decorator
   private
 
   def box_node(box)
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + h.link_to(box.name, box)
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + h.link_to_if(h.can?(:read, box), box.name, box)
   end
 
   def icon_with_count(icon, count)

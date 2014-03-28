@@ -19,7 +19,7 @@
             <%= check_box_tag("ids[]", attachment_file.id, checked: false, id: "ids_#{attachment_file.id}", class: "select-row") if can?(:update, attachment_file) %>
           </td>
           <td><%= image_tag(attachment_file.path,width: 70,height: 70) %></td>
-          <td><%= link_to attachment_file.data_file_name,attachment_file %></td>
+          <td><%= link_to_if can?(:read, attachment_file), attachment_file.data_file_name,attachment_file %></td>
           <td><%= attachment_file.try!(:data_content_type) %></td>
           <td><%= attachment_file.try!(:global_id) %></td> 
           <td>

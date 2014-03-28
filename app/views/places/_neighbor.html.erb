@@ -12,7 +12,7 @@
     <% @place.readable_neighbors(@current_user).each do |neighbor| %>
       <tr>
         <td></td>
-        <td><%= link_to neighbor.name,place_path(neighbor) %></td>
+        <td><%= link_to_if can?(:read, neighbor), neighbor.name,place_path(neighbor) %></td>
         <td><%= "[#{neighbor.latitude_to_text},#{neighbor.longitude_to_text}]" %></td>
         <td><%= "%0.3f" % neighbor.distance.to_f %></td>
         <td>

@@ -5,7 +5,7 @@
   <li>longitude: <%= @place.longitude_to_text %></li>
   <li>description: <%= @place.try!(:description) %></li>
   <li>sample: <% @place.stones.each do |stone| %>
-    <%= link_to stone.name, stone_path(stone) %>
+    <%= link_to_if can?(:read, stone), stone.name, stone_path(stone) %>
   <% end %></li>
   <li>modified at <%= difference_from_now(@place.updated_at) -%></li>
 </ul>

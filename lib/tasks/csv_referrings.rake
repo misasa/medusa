@@ -16,7 +16,15 @@ task :referrings_csv => :environment do
         END as referable_type,
         created_at,
         updated_at
-      FROM referrings
+      FROM referrings r1
+      WHERE NOT EXISTS (
+        SELECT *
+        FROM referrings r2
+        WHERE r1.bibliography_id = r2.bibliography_id
+          AND r1.referable_id = r2.referable_id
+          AND r1.referable_type = r2.referable_type
+          AND r1.id > r2.id
+       )
       ORDER BY id
      )
     TO '/tmp/csv/referrings.csv'

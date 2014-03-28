@@ -17,7 +17,15 @@ task :attachings_csv => :environment do
         position,
         created_at,
         updated_at
-      FROM attachings
+      FROM attachings a1
+      WHERE NOT EXISTS (
+        SELECT *
+        FROM attachings a2
+        WHERE a1.attachment_id = a2.attachment_id
+          AND a1.attachable_id = a2.attachable_id
+          AND a1.attachable_type = a2.attachable_type
+          AND a1.id > a2.id
+       )
       ORDER BY id
      )
     TO '/tmp/csv/attachings.csv'
