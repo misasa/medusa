@@ -5,7 +5,7 @@
   <%= li_if_exist 'description: ', @analysis.try!(:description) %>
   <li>modified at <%= difference_from_now(@analysis.updated_at) -%></li>
   <% if @analysis.stone %>
-    <li>sample: <%= link_to @analysis.stone.name,stone_path(@analysis.stone) %></li>
+    <li>sample: <%= link_to_if can?(:read, @analysis.stone), @analysis.stone.name,stone_path(@analysis.stone) %></li>
   <% end %>
   <% unless @analysis.bibs.empty? %>
     <li>references:</li>
@@ -13,9 +13,9 @@
       <% BibDecorator.decorate_collection(@analysis.bibs).each do |bib| %>
         <li>
           <%== bib.to_html %>
-          <%= link_to "more", bib %>
+          <%= link_to_if can?(:read, bib), "more", bib %>
           <% if bib.primary_pdf_attachment_file %>
-            <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(bib.primary_pdf_attachment_file)) %>
+            <%= link_to_if(can?(:read, bib.primary_pdf_attachment_file), image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(bib.primary_pdf_attachment_file)) %>
           <% end %>
         </li>
       <% end %>

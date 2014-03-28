@@ -18,7 +18,7 @@
       <% end %>
     </li>
   <% end %>
-  <%= li_if_exist("", @stone.bibs.map{ |bib| content_tag(:span, nil, class: "glyphicon glyphicon-book") + raw(bib.to_html) + link_to(" more", url_for(bib)) }.join(" ")) %>
+  <%= li_if_exist("", @stone.bibs.map{ |bib| content_tag(:span, nil, class: "glyphicon glyphicon-book") + raw(bib.to_html) + link_to_if(can?(:read, bib), " more", url_for(bib)) }.join(" ")) %>
 </ul>
 
 <% unless @stone.analyses.empty? %>
