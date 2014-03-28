@@ -13,7 +13,6 @@ class ApplicationController < ActionController::Base
     method = "#{resource}_params"
     params[resource] &&= send(method) if respond_to?(method, true)
   end
-  skip_before_filter :verify_authenticity_token # allow CSRF
 
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :remember_me) }
@@ -33,6 +32,13 @@ class ApplicationController < ActionController::Base
     return url if params[:tab].blank?
     work_url = url.sub(/tab=.*&/,"").sub(/\?tab=.*/,"")
     work_url + (work_url.include?("?") ? "&" : "?") + "tab=#{params[:tab]}"
+  end
+
+  protected
+
+  def verified_request?
+    # REST-API対応のため、主要ブラウザ以外はcsrf-tokenをチェックしない
+    super || request.user_agent !~ /^(Mozilla|Opera)/
   end
 
 end
