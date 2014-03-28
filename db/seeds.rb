@@ -22,7 +22,7 @@ end
 users = CSV.table("/tmp/medusa_csv_files/users.csv")
 
 users.each do |row|
-  row << { password: "admin", password_confirmation: "admin" }
+  row << { password: "password", password_confirmation: "password" }
   User.create(row.to_h)
 end
 
