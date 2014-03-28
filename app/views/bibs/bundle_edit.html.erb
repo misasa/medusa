@@ -20,11 +20,12 @@
       <th>author</th>
       <th>year</th>
       <th>type</th>
-      <th>owner</th>
+      <%= th_if_expand "owner" %>
       <th>group</th>
-      <th>published</th>
+      <%= th_if_expand "published" %>
       <th>updated_at</th>
-      <th>created_at</th>
+      <%= th_if_expand "created_at" %>
+      <th><%= toggle_column_link method: "post" %></th>
     </tr>
   </thead>
   <tbody>
@@ -38,9 +39,13 @@
       <th></th>
       <th><%= f.text_field :year %></th>
       <th><%= f.text_field :entry_type %></th>
-      <th><%= f.select :user_id ,User.pluck(:username, :id), include_blank: true %></th>
+      <%= th_if_expand do %>
+        <%= f.select :user_id ,User.pluck(:username, :id), include_blank: true %>
+      <% end %>
       <th><%= f.select :group_id ,Group.pluck(:name, :id), include_blank: true %></th>
-      <th><%= f.select :published ,[true, false], include_blank: true %></th>
+      <%= th_if_expand do %>
+        <%= f.select :published ,[true, false], include_blank: true %>
+      <% end %>
       <th>
         <%= f.button class: "btn btn-default" do %>
           <span class="glyphicon glyphicon-save"></span>
