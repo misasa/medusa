@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140326115748) do
+ActiveRecord::Schema.define(version: 20140328034684) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20140326115748) do
   end
 
   add_index "attachings", ["attachable_id"], name: "index_attachings_on_attachable_id", using: :btree
+  add_index "attachings", ["attachment_file_id", "attachable_id", "attachable_type"], name: "index_on_attachings_attachable_type_and_id_and_file_id", unique: true, using: :btree
   add_index "attachings", ["attachment_file_id"], name: "index_attachings_on_attachment_file_id", using: :btree
 
   create_table "attachment_files", force: true do |t|
@@ -234,6 +235,7 @@ ActiveRecord::Schema.define(version: 20140326115748) do
     t.datetime "updated_at"
   end
 
+  add_index "referrings", ["bib_id", "referable_id", "referable_type"], name: "index_referrings_on_bib_id_and_referable_id_and_referable_type", unique: true, using: :btree
   add_index "referrings", ["bib_id"], name: "index_referrings_on_bib_id", using: :btree
   add_index "referrings", ["referable_id"], name: "index_referrings_on_referable_id", using: :btree
 
