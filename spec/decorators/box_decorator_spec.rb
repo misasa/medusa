@@ -31,7 +31,10 @@ describe BoxDecorator do
   describe ".family_tree" do
     subject{obj.family_tree}
     let(:child){FactoryGirl.create(:box)}
-    before{obj.children << child}
+    before do
+      allow(obj.h).to receive(:can?).and_return(true)
+      obj.children << child
+    end
     it{expect(subject).to match("<div class=\"tree-node\" data-depth=\"1\">.*</div>")}
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-folder-close\"></span>")}
     it{expect(subject).to match("<a href=\"/boxes/#{obj.id}\">.*</a>")}
@@ -52,6 +55,7 @@ describe BoxDecorator do
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-folder-close\"></span>")}
     it{expect(subject).to include("#{obj.name}")}
     before do
+      allow(obj.h).to receive(:can?).and_return(true)
       stone.analyses << analysis
       obj.stones << stone
       obj.children << child
