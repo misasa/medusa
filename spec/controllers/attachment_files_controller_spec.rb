@@ -15,6 +15,24 @@ describe AttachmentFilesController do
     end
     it { expect(assigns(:attachment_files).count).to eq 3 }
   end
+  
+  describe "GET show" do
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    before { get :show, id: attachment_file.id }
+    it { expect(assigns(:attachment_file)).to eq attachment_file }
+  end
+  
+  describe "GET edit" do
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    before { get :edit, id: attachment_file.id }
+    it { expect(assigns(:attachment_file)).to eq attachment_file }
+  end
+  
+  describe "GET create" do
+  end
+  
+  describe "PUT update" do
+  end
 
   describe "GET property" do
     let(:attachment_file) { FactoryGirl.create(:attachment_file,name: "test") }
@@ -32,6 +50,9 @@ describe AttachmentFilesController do
       get :picture,id: attachment_file.id
     end
     it {expect(assigns(:attachment_file)).to eq attachment_file}
+  end
+  
+  describe "DELETE destroy" do
   end
 
   describe "GET download" do

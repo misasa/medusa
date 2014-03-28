@@ -66,6 +66,9 @@ describe PlacesController do
   end
 
   describe "GET edit" do
+    let(:place) { FactoryGirl.create(:place) }
+    before { get :edit, id: place.id }
+    it { expect(assigns(:place)).to eq place }
   end
 
   describe "POST create" do
@@ -143,6 +146,29 @@ describe PlacesController do
     it {expect(obj1.name).to eq attributes[:name]}
     it {expect(obj2.name).to eq attributes[:name]}
     it {expect(obj3.name).to eq obj3name}
+  end
+  
+  describe "GET download_bundle_card" do
+    # send_data
+  end
+  
+  # send_data test returns unexpected object.
+  pending "GET download_label" do
+  end
+  
+  describe "GET download_bundle_label" do
+    after { get :download_bundle_label, ids: params_ids }
+    let(:place) { FactoryGirl.create(:place) }
+    let(:params_ids) { [place.id.to_s] }
+    let(:label) { double(:label) }
+    let(:places) { Place.all }
+    before do
+      place
+      allow(Place).to receive(:where).with(id: params_ids).and_return(places)
+      allow(Place).to receive(:build_bundle_label).with(places).and_return(label)
+      allow(controller).to receive(:send_data).and_return{controller.render nothing: true}
+    end
+    it { expect(controller).to receive(:send_data).with(label, filename: "places.csv", type: "text/csv") }
   end
 
   describe "POST import" do
