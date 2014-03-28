@@ -16,6 +16,7 @@
           <% end %>
         <% end %>
       </div>
+      <% if can? :update, @box %>
       <div class="btn-group btn-group-sm">
         <%= link_to edit_box_path(@box), class: "btn btn-default", remote: true do %>
           <span class="glyphicon glyphicon-pencil"></span>
@@ -24,6 +25,7 @@
           <span class="glyphicon glyphicon-cog"></span>
         <% end %>
       </div>
+      <% end %>
       <div class="btn-group btn-group-sm">
         <%= link_to download_label_box_path(@box), class: "btn btn-default" do %>
           <span class="glyphicon glyphicon-tag"></span>

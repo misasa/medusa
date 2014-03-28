@@ -2,7 +2,7 @@ class Ability
   include CanCan::Ability
 
   def initialize(user)
-    alias_action :family, :picture, :map, :property, to: :read
+    alias_action :family, :picture, :map, :download_label, :download_card, :download, to: :read
 
     if user.admin?
       can :manage, :all

@@ -19,6 +19,7 @@
           <span class="glyphicon glyphicon-globe"></span>
         <% end %>
       </div>
+      <% if can? :update, @stone %>
       <div class="btn-group btn-group-sm">
         <%= link_to edit_stone_path(@stone), class: "btn btn-default", remote: true do %>
           <span class="glyphicon glyphicon-pencil"></span>
@@ -27,6 +28,7 @@
           <span class="glyphicon glyphicon-cog"></span>
         <% end %>
       </div>
+      <% end %>
       <div class="btn-group btn-group-sm">
         <%= link_to download_label_stone_path(@stone), class: "btn btn-default" do %>
           <span class="glyphicon glyphicon-tag"></span>
