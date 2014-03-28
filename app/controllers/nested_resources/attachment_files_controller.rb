@@ -1,5 +1,4 @@
 class NestedResources::AttachmentFilesController < ApplicationController
-
   respond_to :html, :xml, :json
   before_action :find_resource
   load_and_authorize_resource
@@ -31,6 +30,8 @@ class NestedResources::AttachmentFilesController < ApplicationController
     @attachment_file = AttachmentFile.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
     @parent.attachment_files << @attachment_file
     respond_with @attachment_file, methods: :thumbnail_path, location: adjust_url_by_requesting_tab(request.referer)
+  rescue
+    duplicate_global_id
   end
 
   private
@@ -62,8 +63,14 @@ class NestedResources::AttachmentFilesController < ApplicationController
         :published,
         :published_at
       ]
-
     )
+  end
+
+  def duplicate_global_id
+    respond_to do |format|
+      format.html { render "parts/duplicate_global_id", status: :unprocessable_entity }
+      format.all { render nothing: true, status: :unprocessable_entity }
+    end
   end
 
 end

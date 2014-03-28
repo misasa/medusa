@@ -51,5 +51,7 @@
     <%= f.label :author, class: "small" %><br/>
     <%= f.collection_select(:author_ids, Author.all.to_a, :id, :name, {}, multiple: true, class: "form-control input-sm") %>
   </div>
-  <%= f.submit class: "btn btn-sm" %>
+  <%= f.button class: "btn btn-default" do %>
+  <span class="glyphicon glyphicon-save"></span>
+  <% end %>
 <% end %>

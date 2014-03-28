@@ -31,6 +31,8 @@ class NestedResources::PlacesController < ApplicationController
     @place = Place.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
     @parent.places << @place
     respond_with @place, location: adjust_url_by_requesting_tab(request.referer)
+  rescue
+    duplicate_global_id
   end
 
   private
@@ -64,6 +66,13 @@ class NestedResources::PlacesController < ApplicationController
         :published_at
       ]
     )
+  end
+
+  def duplicate_global_id
+    respond_to do |format|
+      format.html { render "parts/duplicate_global_id", status: :unprocessable_entity }
+      format.all { render nothing: true, status: :unprocessable_entity }
+    end
   end
 
 end

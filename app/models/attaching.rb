@@ -4,4 +4,5 @@ class Attaching < ActiveRecord::Base
   acts_as_list scope: [:attachable_id , :attachable_type], column: :position
 
   validates :attachment_file, existence: true
+  validates :attachment_file_id, uniqueness: { scope: [:attachable_id, :attachable_type] }
 end

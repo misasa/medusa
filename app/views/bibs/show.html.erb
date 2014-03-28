@@ -13,6 +13,7 @@
           <% end %>
         <% end %>
       </div>
+      <% if can? :update, @bib %>
       <div class="btn-group btn-group-sm">
         <%= link_to edit_bib_path(@bib), class: "btn btn-default", remote: true do %>
           <span class="glyphicon glyphicon-pencil"></span>
@@ -21,6 +22,7 @@
           <span class="glyphicon glyphicon-cog"></span>
         <% end %>
       </div>
+      <% end %>
       <div class="btn-group btn-group-sm">
         <%= link_to download_label_bib_path(@bib), class: "btn btn-default" do %>
           <span class="glyphicon glyphicon-tag"></span>

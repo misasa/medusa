@@ -15,35 +15,35 @@ class BoxDecorator < Draper::Decorator
       obj.decorate.tree_node(self == obj)
     end
   end
-  
+
   def current_box_hash(children)
     box_hash = children.group_by(&:parent_id)
     box_hash[parent_id] = [object]
     box_hash
   end
-  
+
   def tree_node(current=false)
     link = current ? h.content_tag(:strong, name) : name
     icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close")
-    icon + h.link_to(link, self) + stones_count + boxes_count + analyses_count + bibs_count + files_count
+    icon + h.link_to_if(h.can?(:read, self), link, self) + stones_count + boxes_count + analyses_count + bibs_count + files_count
   end
-  
+
   def stones_count
     icon_with_count("cloud", stones.count)
   end
-  
+
   def boxes_count
     icon_with_count("folder-close", children.count)
   end
-  
+
   def analyses_count
     icon_with_count("stats", stones.inject(0) {|count, stone| count += stone.analyses.size })
   end
-  
+
   def bibs_count
     icon_with_count("book", bibs.count)
   end
-  
+
   def files_count
     icon_with_count("file", attachment_files.count)
   end
@@ -55,11 +55,11 @@ class BoxDecorator < Draper::Decorator
   def boxed_boxes
     Box.includes(:record_property, :user, :group).where(parent_id: self.id)
   end
-  
+
   def to_tex
     lines = []
     lines << '%------------'
-    lines << 'The sample names and ID of each mounted materials are listed in Table \\ref{mount:materials}.' 
+    lines << 'The sample names and ID of each mounted materials are listed in Table \\ref{mount:materials}.'
     lines << '%------------'
     lines << '\begin{footnotesize}'
     lines << '\begin{table}'
@@ -81,7 +81,7 @@ class BoxDecorator < Draper::Decorator
     lines << '%------------'
     return lines.join("\n")
   end
-  
+
   def box_path
     nodes = []
     if box
@@ -90,19 +90,19 @@ class BoxDecorator < Draper::Decorator
     nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + "me"]
     h.raw(nodes.join("／"))
   end
-  
+
   def analysis_name
     object.stones.map{|stone| stone.analyses.pluck(:name)}.join(", ")
   end
-  
+
   private
-  
+
   def box_node(box)
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + h.link_to(box.name, box)
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + h.link_to_if(h.can?(:read, box), box.name, box)
   end
-  
+
   def icon_with_count(icon, count)
     h.content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}") + h.content_tag(:span, count) if count.nonzero?
   end
-  
+
 end

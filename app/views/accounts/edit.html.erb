@@ -49,12 +49,23 @@
   </div>
 </div>
 <div class="row">
-  <div>
+  <div class="col-lg-12">
     <%= form_tag(find_by_global_id_account_path,method: :get) do %>
-    Table of records that you can access: Fill ID <%= text_field_tag("global_id", '',:size => "10") %> to <%=submit_tag 'go' %>.
+    <span class="pull-left">Table of records that you can access: Fill ID</span>
+    <div class="col-lg-4">
+      <div class="input-group">
+	<%= text_field_tag "global_id", '', id: "record-global-id", class: "form-control input-sm" %>
+	<span class="input-group-addon">
+	  <%= link_to records_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#record-global-id" do %>
+	  <span class="glyphicon glyphicon-search"></span>
+	  <% end %>
+	</span>
+      </div>
+    </div>
+    to <%=submit_tag 'go', class: "btn btn-default" %>
     <% end %>
   </div>
-  <div>
+  <div class="col-lg-12">
     <% class_names = ["Stone","Box","Place","Analysis","Bib","AttachmentFile"] %>
     
     <table class="table">

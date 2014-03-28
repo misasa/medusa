@@ -5,7 +5,7 @@
     </div>
   </div>
   <div class="col-lg-8">
-    <%= form_for @spot, html: {class: "col-lg-3"} do |f| %>
+    <%= form_for @spot, html: {class: "col-lg-4"} do |f| %>
     <%= error_notification(@spot.errors) %>
 
     <div class="form-group form-group-sm">
@@ -15,7 +15,14 @@
 
     <div class="form-group form-group-sm">
       <%= f.label "link ID", class: "small" %>
-      <%= f.text_field :target_uid, class: "form-control input-sm" %>
+      <div class="input-group">
+	<%= f.text_field :target_uid, class: "form-control input-sm" %>
+	<span class="input-group-addon">
+	  <%= link_to analyses_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#spot_target_uid" do %>
+	  <span class="glyphicon glyphicon-search"></span>
+	  <% end %>
+	</span>
+      </div>
     </div>
 
     <div class="form-group form-group-sm">
