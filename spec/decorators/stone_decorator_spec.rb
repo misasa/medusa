@@ -17,6 +17,7 @@ describe StoneDecorator do
   describe ".path" do
     let(:me){"<span class=\"glyphicon glyphicon-cloud\"></span>me"}
     subject{obj.path}
+    before { allow(obj.h).to receive(:can?).and_return(true) }
     context "box is nil" do
       before{obj.box = nil}
       it{expect(subject).to eq me} 
@@ -93,6 +94,7 @@ describe StoneDecorator do
 
   describe ".family_tree" do
     subject{obj.family_tree}
+    before { allow(obj.h).to receive(:can?).and_return(true) }
     it{expect(subject).to match("<div class=\"tree-node\" data-depth=\"1\">.*</div>")}
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")} 
     it{expect(subject).to match("<a href=\"/stones/#{obj.id}\">.*</a>")}
@@ -101,6 +103,7 @@ describe StoneDecorator do
 
   describe ".tree_node" do
     subject{obj.tree_node}
+    before { allow(obj.h).to receive(:can?).and_return(true) }
     let(:child){FactoryGirl.create(:stone)}
     let(:analysis){FactoryGirl.create(:analysis)}
     let(:bib){FactoryGirl.create(:bib)}

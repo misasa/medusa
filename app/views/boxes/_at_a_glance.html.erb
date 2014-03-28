@@ -28,7 +28,7 @@
     <% @box.boxed_boxes.each do |child_box| %>
     <tr>
       <td></td>
-      <td><%= link_to(child_box.name, box_path(child_box)) %></td>
+      <td><%= link_to_if(can?(:read, child_box), child_box.name, box_path(child_box)) %></td>
       <td><%= child_box.box_type.try(:name) %></td>
       <td><%= child_box.global_id %></td>
       <td><%= child_box.children.count %></td>
@@ -42,7 +42,7 @@
     <% @box.boxed_stones.each do |stone| %>
     <tr>
       <td></td>
-      <td><%= link_to(stone.name, stone_path(stone)) %></td>
+      <td><%= link_to_if(can?(:read, stone), stone.name, stone_path(stone)) %></td>
       <td><%= stone.physical_form.try(:name) %></td>
       <td><%= stone.global_id %></td>
       <td></td>

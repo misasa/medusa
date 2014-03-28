@@ -20,7 +20,7 @@
               <td>
                 <%= check_box_tag("ids[]", stone.id, false, {id: "ids_#{stone.id}", class: "select-row"}) if can?(:update, stone) %>
               </td>
-              <td><%= link_to stone.name, stone %></td>
+              <td><%= link_to_if can?(:read, stone), stone.name, stone %></td>
               <td><%= stone.physical_form.try!(:name) %></td>
               <td><%= stone.try!(:quantity) %></td>
               <td><%= stone.try!(:quantity_unit) %></td>

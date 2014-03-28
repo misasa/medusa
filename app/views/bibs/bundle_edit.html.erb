@@ -35,16 +35,16 @@
     <tr>
       <th><%= check_box_tag nil, nil, true, class: "select-row-all" %></th>
       <th></th>
-      <th><%= f.text_field :doi %></th>
+      <th><%= f.text_field :doi, class: "form-control input-sm" %></th>
       <th></th>
-      <th><%= f.text_field :year %></th>
-      <th><%= f.text_field :entry_type %></th>
+      <th><%= f.text_field :year, class: "form-control input-sm" %></th>
+      <th><%= f.text_field :entry_type, class: "form-control input-sm" %></th>
       <%= th_if_expand do %>
-        <%= f.select :user_id ,User.pluck(:username, :id), include_blank: true %>
+        <%= f.select :user_id ,User.pluck(:username, :id), { include_blank: true }, class: "form-control input-sm" %>
       <% end %>
-      <th><%= f.select :group_id ,Group.pluck(:name, :id), include_blank: true %></th>
+      <th><%= f.select :group_id ,Group.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
       <%= th_if_expand do %>
-        <%= f.select :published ,[true, false], include_blank: true %>
+        <%= f.select :published ,[true, false], { include_blank: true }, class: "form-control input-sm" %>
       <% end %>
       <th>
         <%= f.button class: "btn btn-default" do %>
