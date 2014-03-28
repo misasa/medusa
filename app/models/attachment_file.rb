@@ -40,7 +40,7 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def save_geometry
-    self.original_geometry = Paperclip::Geometry.from_file(data.queued_for_write[:original]).to_s
+    self.original_geometry = Paperclip::Geometry.from_file(data.queued_for_write[:original]).to_s rescue nil
   end
 
   def pdf?
