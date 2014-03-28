@@ -14,6 +14,8 @@ class ApplicationController < ActionController::Base
     params[resource] &&= send(method) if respond_to?(method, true)
   end
 
+  rescue_from CanCan::AccessDenied, with: :deny_access
+
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :remember_me) }
     devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:username, :password, :remember_me) }
@@ -39,6 +41,15 @@ class ApplicationController < ActionController::Base
   def verified_request?
     # REST-API対応のため、主要ブラウザ以外はcsrf-tokenをチェックしない
     super || request.user_agent !~ /^(Mozilla|Opera)/
+  end
+
+  private
+  
+  def deny_access
+    respond_to do |format|
+      format.html { render "parts/access_denied", status: :forbidden }
+      format.all { render nothing: true, status: :forbidden }
+    end
   end
 
 end
