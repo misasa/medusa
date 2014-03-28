@@ -41,10 +41,10 @@
         <%= f.select :record_property_published_eq, [true, false], { include_blank: true }, class: "form-control input-sm" %>
       <% end %>
       <th>
-        <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]), class: "form-control input-sm", size: 10 %>
+        <%= f.text_field :updated_at_gteq, placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]), class: "form-control input-sm datepicker", size: 10 %>
       </th>
       <%= th_if_expand do %>
-        <%= f.text_field :created_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]), class: "form-control input-sm", size: 10 %>
+        <%= f.text_field :created_at_gteq, placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]), class: "form-control input-sm datepicker", size: 10 %>
       <% end %>
     </tr>
     <tr>
@@ -57,10 +57,10 @@
       <th></th>
       <%= th_if_expand nil %>
       <th>
-        <%= f.text_field :updated_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]), class: "form-control input-sm", size: 10 %>
+        <%= f.text_field :updated_at_lteq_end_of_day, placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]), class: "form-control input-sm datepicker", size: 10 %>
       </th>
       <%= th_if_expand do %>
-        <%= f.text_field :created_at_lteq_end_of_day, class: 'datepicker', placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]), class: "form-control input-sm", size: 10 %>
+        <%= f.text_field :created_at_lteq_end_of_day, placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]), class: "form-control input-sm datepicker", size: 10 %>
       <% end %>
     </tr>
     <% end %>
