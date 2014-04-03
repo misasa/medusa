@@ -1,7 +1,7 @@
 # config valid only for Capistrano 3.1
 lock '3.1.0'
 
-set :application, 'medusa'
+set :application, 'dream'
 set :repo_url, 'git@devel.misasa.okayama-u.ac.jp:orochi/medusa.git'
 
 # Default branch is :master
@@ -9,7 +9,8 @@ set :repo_url, 'git@devel.misasa.okayama-u.ac.jp:orochi/medusa.git'
 
 # Default deploy_to directory is /var/www/my_app
 # set :deploy_to, '/var/www/my_app'
-set :deploy_to, '/srv/medusa/'
+# set :deploy_to, '/srv/medusa/'
+set :deploy_to, '/srv/dream/'
 
 # Default value for :scm is :git
 # set :scm, :git
@@ -25,10 +26,10 @@ set :deploy_to, '/srv/medusa/'
 
 # Default value for :linked_files is []
 # set :linked_files, %w{config/database.yml}
-set :linked_files, %w{config/application.yml}
+set :linked_files, %w{config/application.yml config/database.yml}
 
 # Default value for linked_dirs is []
-set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system}
+set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public/system config/unicorn}
 
 # Default value for default_env is {}
 # set :default_env, { path: "/opt/ruby/bin:$PATH" }
