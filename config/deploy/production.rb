@@ -17,6 +17,8 @@
 #server 'devel.misasa.okayama-u.ac.jp', user: 'medusa', roles: %w{web app db}, ssh_options: { keys: %w{/home/probizmo/.ssh/id_rsa} }
 server 'devel.misasa.okayama-u.ac.jp', user: 'falcon', roles: %w{web app db}, ssh_options: { keys: %w{/home/sisyphus/.ssh/id_rsa} }
 
+set :relative_url_root, "/app"
+
 # you can set custom ssh options
 # it's possible to pass any option but you need to keep in mind that net/ssh understand limited list of options
 # you can see them in [net/ssh documentation](http://net-ssh.github.io/net-ssh/classes/Net/SSH.html#method-c-start)
