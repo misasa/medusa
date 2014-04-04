@@ -19,7 +19,7 @@
 /config/application.yml
 
 # Ignore deproy configration files.
-#/config/deploy/*.rb
+/config/deploy/*.rb
 
 # Ignore test results.
 /coverage
