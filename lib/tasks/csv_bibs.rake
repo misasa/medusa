@@ -7,14 +7,14 @@ task :bibs_csv => :environment do
       SELECT *
       FROM bibliographies
     )
-    TO '/tmp/csv/bibliographies.csv'
+    TO '/tmp/medusa_csv_files/bibliographies.csv'
     (FORMAT 'csv', HEADER);
   ")
   
-  CSV.open("/tmp/csv/author_tests.csv", "w")
+  CSV.open("/tmp/medusa_csv_files/author_tests.csv", "w")
   
-  bibliographies = CSV.table("/tmp/csv/bibliographies.csv")
-  authors = CSV.table("/tmp/csv/author_tests.csv")
+  bibliographies = CSV.table("/tmp/medusa_csv_files/bibliographies.csv")
+  authors = CSV.table("/tmp/medusa_csv_files/author_tests.csv")
   
   bib_auth_array_all = bibliographies.map do |bib|
     bib[:authorlist].split(/, (?![A-Z]\.)/)
@@ -41,14 +41,14 @@ task :bibs_csv => :environment do
   
   authors_csv = authors.to_csv(write_headers: false)
   
-  File.open("/tmp/csv/authors.csv", "w") do |csv_file|
+  File.open("/tmp/medusa_csv_files/authors.csv", "w") do |csv_file|
     csv_file.print("id,name,created_at,updated_at\n")
     csv_file.print(authors_csv)
   end
   
-  FileUtils.rm("/tmp/csv/author_tests.csv")
+  FileUtils.rm("/tmp/medusa_csv_files/author_tests.csv")
   
-  FileUtils.rm("/tmp/csv/bibliographies.csv")
+  FileUtils.rm("/tmp/medusa_csv_files/bibliographies.csv")
   
   ActiveRecord::Base.connection.execute("
     COPY(
@@ -72,40 +72,8 @@ task :bibs_csv => :environment do
       FROM bibliographies
       ORDER BY id
     )
-    TO '/tmp/csv/bibs.csv'
+    TO '/tmp/medusa_csv_files/bibs.csv'
     (FORMAT 'csv', HEADER);
-  ")
-  
-  ActiveRecord::Base.establish_connection :development
-  
-  ActiveRecord::Base.connection.execute("
-    COPY authors
-    FROM '/tmp/csv/authors.csv'
-    WITH CSV HEADER
-  ")
-  
-  ActiveRecord::Base.connection.execute("
-    COPY bibs
-    FROM '/tmp/csv/bibs.csv'
-    WITH CSV HEADER
-  ")
-  
-  max_next_author_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM authors
-  ").to_i
-  
-  max_next_bib_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM bibs
-  ").to_i
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('authors_id_seq', #{max_next_author_id})
-  ")
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('bibs_id_seq', #{max_next_bib_id})
   ")
   
 end

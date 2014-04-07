@@ -15,25 +15,8 @@ task :classifications_csv => :environment do
       FROM sample_classifications
       ORDER BY id
     )
-    TO '/tmp/csv/classifications.csv'
+    TO '/tmp/medusa_csv_files/classifications.csv'
     (FORMAT 'csv', HEADER);
-  ")
-  
-  ActiveRecord::Base.establish_connection :development
-  
-  ActiveRecord::Base.connection.execute("
-    COPY classifications
-    FROM '/tmp/csv/classifications.csv'
-    WITH CSV HEADER
-  ")
-  
-  max_next_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM classifications
-  ").to_i
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('classifications_id_seq', #{max_next_id})
   ")
   
 end

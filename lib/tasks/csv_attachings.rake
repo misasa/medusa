@@ -28,25 +28,8 @@ task :attachings_csv => :environment do
        )
       ORDER BY id
      )
-    TO '/tmp/csv/attachings.csv'
+    TO '/tmp/medusa_csv_files/attachings.csv'
     (FORMAT 'csv', HEADER);
-  ")
-  
-  ActiveRecord::Base.establish_connection :development
-  
-  ActiveRecord::Base.connection.execute("
-    COPY attachings
-    FROM '/tmp/csv/attachings.csv'
-    WITH CSV HEADER
-  ")
-  
-  max_next_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM attachings
-  ").to_i
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('attachings_id_seq', #{max_next_id})
   ")
   
 end

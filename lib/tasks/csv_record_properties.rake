@@ -78,7 +78,7 @@ task :record_properties_csv => :environment do
       FROM data_properties
       ORDER BY id
      )
-    TO '/tmp/csv/record_properties.csv'
+    TO '/tmp/medusa_csv_files/record_properties.csv'
     (FORMAT 'csv', HEADER);
   ")
   
@@ -93,23 +93,6 @@ task :record_properties_csv => :environment do
     DROP name,
     DROP created_at,
     DROP updated_at
-  ")
-  
-  ActiveRecord::Base.establish_connection :development
-  
-  ActiveRecord::Base.connection.execute("
-    COPY record_properties
-    FROM '/tmp/csv/record_properties.csv'
-    WITH CSV HEADER
-  ")
-  
-  max_next_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM record_properties
-  ").to_i
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('record_properties_id_seq', #{max_next_id})
   ")
   
 end

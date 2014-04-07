@@ -17,11 +17,11 @@ task :taggings_csv => :environment do
       FROM taggings
       ORDER BY id
      )
-    TO '/tmp/csv/taggings_test.csv'
+    TO '/tmp/medusa_csv_files/taggings_test.csv'
     (FORMAT 'csv', HEADER);
   ")
   
-  taggings = CSV.table("/tmp/csv/taggings_test.csv")
+  taggings = CSV.table("/tmp/medusa_csv_files/taggings_test.csv")
   
   add_column_taggings = taggings.each do |row|
     row << {
@@ -37,27 +37,10 @@ task :taggings_csv => :environment do
     row.delete(:created_at_1)
   end
   
-  File.open("/tmp/csv/taggings.csv", "w") do |csv_file|
+  File.open("/tmp/medusa_csv_files/taggings.csv", "w") do |csv_file|
     csv_file.puts(add_column_taggings.to_csv)
   end
   
-  ActiveRecord::Base.establish_connection :development
-  
-  ActiveRecord::Base.connection.execute("
-    COPY taggings
-    FROM '/tmp/csv/taggings.csv'
-    WITH CSV HEADER
-  ")
-  
-  max_next_tagging_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM taggings
-  ").to_i
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('taggings_id_seq', #{max_next_tagging_id})
-  ")
-  
-  FileUtils.rm("/tmp/csv/taggings_test.csv")
+  FileUtils.rm("/tmp/medusa_csv_files/taggings_test.csv")
   
 end
