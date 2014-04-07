@@ -1,6 +1,6 @@
 desc "csv files data migrate"
 task data_migrate: :environment do
-  Rake::Task["rake:db:migrate:reset"].invoke
+  Rake::Task["db:migrate:reset"].invoke
   Rake::Task[:create_work_dir].invoke
   Rake::Task[:analyses_csv].invoke
   Rake::Task[:attachings_csv].invoke
