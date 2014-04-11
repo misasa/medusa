@@ -32,29 +32,12 @@ task :units_csv => :environment do
       SELECT *
       FROM units
     )
-    TO '/tmp/csv/units.csv'
+    TO '/tmp/medusa_csv_files/units.csv'
     (FORMAT 'csv', HEADER);
   ")
   
   ActiveRecord::Base.connection.execute("
     DROP TABLE units
-  ")
-  
-  ActiveRecord::Base.establish_connection :development
-  
-  ActiveRecord::Base.connection.execute("
-    COPY units
-    FROM '/tmp/csv/units.csv'
-    WITH CSV HEADER
-  ")
-  
-  max_next_unit_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM units
-  ").to_i
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('units_id_seq', #{max_next_unit_id})
   ")
   
 end

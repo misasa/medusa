@@ -41,7 +41,7 @@ task :analyses_csv => :environment do
       SELECT *
       FROM abundances
     )
-    TO '/tmp/csv/abundances.csv'
+    TO '/tmp/medusa_csv_files/abundances.csv'
     (FORMAT 'csv', HEADER);
   ")
   
@@ -50,7 +50,7 @@ task :analyses_csv => :environment do
       SELECT *
       FROM devices
     )
-    TO '/tmp/csv/devices.csv'
+    TO '/tmp/medusa_csv_files/devices.csv'
     (FORMAT 'csv', HEADER);
   ")
   
@@ -59,7 +59,7 @@ task :analyses_csv => :environment do
       SELECT *
       FROM techniques
     )
-    TO '/tmp/csv/techniques.csv'
+    TO '/tmp/medusa_csv_files/techniques.csv'
     (FORMAT 'csv', HEADER);
   ")
   
@@ -71,9 +71,9 @@ task :analyses_csv => :environment do
     DROP TABLE techniques
   ")
   
-  abundances = CSV.table("/tmp/csv/abundances.csv")
-  devices = CSV.table("/tmp/csv/devices.csv")
-  techniques = CSV.table("/tmp/csv/techniques.csv")
+  abundances = CSV.table("/tmp/medusa_csv_files/abundances.csv")
+  devices = CSV.table("/tmp/medusa_csv_files/devices.csv")
+  techniques = CSV.table("/tmp/medusa_csv_files/techniques.csv")
   
   devices_hash = devices.each_with_object({}) do |device, hash|
     hash[device[:name]] = device[:id]
@@ -116,57 +116,10 @@ task :analyses_csv => :environment do
     row.delete(:instrument_1)
   end
   
-  File.open("/tmp/csv/analyses.csv", "w") do |csv_file|
+  File.open("/tmp/medusa_csv_files/analyses.csv", "w") do |csv_file|
     csv_file.puts(add_column_to_abundance.to_csv)
   end
   
-  ActiveRecord::Base.establish_connection :development
-  
-  ActiveRecord::Base.connection.execute("
-    COPY analyses
-    FROM '/tmp/csv/analyses.csv'
-    WITH CSV HEADER
-  ")
-  
-  ActiveRecord::Base.connection.execute("
-    COPY devices
-    FROM '/tmp/csv/devices.csv'
-    WITH CSV HEADER
-  ")
-  
-  ActiveRecord::Base.connection.execute("
-    COPY techniques
-    FROM '/tmp/csv/techniques.csv'
-    WITH CSV HEADER
-  ")
-  
-  max_next_analyse_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM analyses
-  ").to_i
-  
-  max_next_device_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM devices
-  ").to_i
-  
-  max_next_technique_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM techniques
-  ").to_i
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('analyses_id_seq', #{max_next_analyse_id})
-  ")
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('devices_id_seq', #{max_next_device_id})
-  ")
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('techniques_id_seq', #{max_next_technique_id})
-  ")
-  
-  FileUtils.rm("/tmp/csv/abundances.csv")
+  FileUtils.rm("/tmp/medusa_csv_files/abundances.csv")
   
 end

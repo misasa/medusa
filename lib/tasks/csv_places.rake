@@ -16,25 +16,8 @@ task :places_csv => :environment do
       FROM localities
       ORDER BY id
     )
-    TO '/tmp/csv/places.csv'
+    TO '/tmp/medusa_csv_files/places.csv'
     (FORMAT 'csv', HEADER);
-  ")
-  
-  ActiveRecord::Base.establish_connection :development
-  
-  ActiveRecord::Base.connection.execute("
-    COPY places
-    FROM '/tmp/csv/places.csv'
-    WITH CSV HEADER
-  ")
-  
-  max_next_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM places
-  ").to_i
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('places_id_seq', #{max_next_id})
   ")
   
 end

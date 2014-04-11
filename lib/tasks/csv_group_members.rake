@@ -21,29 +21,12 @@ task :group_members_csv => :environment do
       SELECT *
       FROM groups_members_test
     )
-    TO '/tmp/csv/group_members.csv'
+    TO '/tmp/medusa_csv_files/group_members.csv'
     (FORMAT 'csv', HEADER);
   ")
   
   ActiveRecord::Base.connection.execute("
     DROP TABLE groups_members_test
-  ")
-  
-  ActiveRecord::Base.establish_connection :development
-  
-  ActiveRecord::Base.connection.execute("
-    COPY group_members
-    FROM '/tmp/csv/group_members.csv'
-    WITH CSV HEADER
-  ")
-  
-  max_next_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM group_members
-  ").to_i
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('group_members_id_seq', #{max_next_id})
   ")
   
 end

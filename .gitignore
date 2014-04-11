@@ -17,6 +17,10 @@
 
 # Ignore configration yaml files.
 /config/application.yml
+/config/database.yml
+
+# Ignore deproy configration files.
+/config/deploy/*.rb
 
 # Ignore test results.
 /coverage

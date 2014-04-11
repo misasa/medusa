@@ -27,7 +27,7 @@ task :stones_csv => :environment do
       FROM specimens
       ORDER BY id
     )
-    TO '/tmp/csv/stones.csv'
+    TO '/tmp/medusa_csv_files/stones.csv'
     (FORMAT 'csv', HEADER);
   ")
   
@@ -35,23 +35,6 @@ task :stones_csv => :environment do
     ALTER TABLE specimens
     DROP quantity,
     DROP quantity_unit
-  ")
-  
-  ActiveRecord::Base.establish_connection :development
-  
-  ActiveRecord::Base.connection.execute("
-    COPY stones
-    FROM '/tmp/csv/stones.csv'
-    WITH CSV HEADER
-  ")
-  
-  max_next_stone_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM stones
-  ").to_i
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('stones_id_seq', #{max_next_stone_id})
   ")
   
 end

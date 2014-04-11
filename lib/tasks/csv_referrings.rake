@@ -27,25 +27,8 @@ task :referrings_csv => :environment do
        )
       ORDER BY id
      )
-    TO '/tmp/csv/referrings.csv'
+    TO '/tmp/medusa_csv_files/referrings.csv'
     (FORMAT 'csv', HEADER);
-  ")
-  
-  ActiveRecord::Base.establish_connection :development
-  
-  ActiveRecord::Base.connection.execute("
-    COPY referrings
-    FROM '/tmp/csv/referrings.csv'
-    WITH CSV HEADER
-  ")
-  
-  max_next_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM referrings
-  ").to_i
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('referrings_id_seq', #{max_next_id})
   ")
   
 end

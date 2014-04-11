@@ -19,11 +19,11 @@ task :users_csv => :environment do
     FROM members
     ORDER BY id
   )
-  TO '/tmp/csv/users_1.csv'
+  TO '/tmp/medusa_csv_files/users_1.csv'
   (FORMAT 'csv', HEADER);
   ")
   
-  users_1 = CSV.table("/tmp/csv/users_1.csv")
+  users_1 = CSV.table("/tmp/medusa_csv_files/users_1.csv")
   
   users_csv_1 = users_1.each do |row|
     if row[:username] == "admin"
@@ -70,11 +70,11 @@ task :users_csv => :environment do
     end
   end
   
-  File.open("/tmp/csv/users_2.csv", "w") do |csv_file|
+  File.open("/tmp/medusa_csv_files/users_2.csv", "w") do |csv_file|
     csv_file.puts(users_csv_1.to_csv)
   end
   
-  users_csv_2 = CSV.table("/tmp/csv/users_2.csv")
+  users_csv_2 = CSV.table("/tmp/medusa_csv_files/users_2.csv")
   
   users_csv_3 = users_csv_2.each do |row|
     if row[:email] == ''
@@ -82,11 +82,11 @@ task :users_csv => :environment do
     end
   end
   
-  File.open("/tmp/csv/users.csv", "w") do |csv_file|
+  File.open("/tmp/medusa_csv_files/users.csv", "w") do |csv_file|
     csv_file.puts(users_csv_3.to_csv)
   end
   
-  FileUtils.rm("/tmp/csv/users_1.csv")
-  FileUtils.rm("/tmp/csv/users_2.csv")
+  FileUtils.rm("/tmp/medusa_csv_files/users_1.csv")
+  FileUtils.rm("/tmp/medusa_csv_files/users_2.csv")
   
 end

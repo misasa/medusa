@@ -32,7 +32,7 @@ task :chemistries_csv => :environment do
       SELECT *
       FROM units
     )
-    TO '/tmp/csv/units_1.csv'
+    TO '/tmp/medusa_csv_files/units_1.csv'
     (FORMAT 'csv', HEADER);
   ")
   
@@ -41,7 +41,7 @@ task :chemistries_csv => :environment do
       SELECT *
       FROM abundance_elements
     )
-    TO '/tmp/csv/abundance_elements.csv'
+    TO '/tmp/medusa_csv_files/abundance_elements.csv'
     (FORMAT 'csv', HEADER);
   ")
   
@@ -49,8 +49,8 @@ task :chemistries_csv => :environment do
     DROP TABLE units
   ")
   
-  abundance_elements = CSV.table("/tmp/csv/abundance_elements.csv")
-  units = CSV.table("/tmp/csv/units_1.csv")
+  abundance_elements = CSV.table("/tmp/medusa_csv_files/abundance_elements.csv")
+  units = CSV.table("/tmp/medusa_csv_files/units_1.csv")
   
   units_hash = units.each_with_object({}) do |unit, hash|
     hash[unit[:name]] = unit[:id]
@@ -102,28 +102,11 @@ task :chemistries_csv => :environment do
     row.delete(:unit)
   end
   
-  File.open("/tmp/csv/chemistries.csv", "w") do |csv_file|
+  File.open("/tmp/medusa_csv_files/chemistries.csv", "w") do |csv_file|
     csv_file.puts(add_column_to_abundance_element.to_csv)
   end
   
-  ActiveRecord::Base.establish_connection :development
-  
-  ActiveRecord::Base.connection.execute("
-    COPY chemistries
-    FROM '/tmp/csv/chemistries.csv'
-    WITH CSV HEADER
-  ")
-  
-  max_next_chemistrie_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM chemistries
-  ").to_i
-  
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('chemistries_id_seq', #{max_next_chemistrie_id})
-  ")
-  
-  FileUtils.rm("/tmp/csv/abundance_elements.csv")
-  FileUtils.rm("/tmp/csv/units_1.csv")
+  FileUtils.rm("/tmp/medusa_csv_files/abundance_elements.csv")
+  FileUtils.rm("/tmp/medusa_csv_files/units_1.csv")
   
 end
