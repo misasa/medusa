@@ -12,6 +12,7 @@ task :referrings_csv => :environment do
           WHEN referable_type = 'Abundance' THEN 'Analysis'
           WHEN referable_type = 'Storage' THEN 'Box'
           WHEN referable_type = 'Specimen' THEN 'Stone'
+          WHEN referable_type = 'Locality' THEN 'Place'
           ELSE ''
         END as referable_type,
         created_at,
