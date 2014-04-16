@@ -6,8 +6,12 @@ class AttachmentFileDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-file") + " #{name} < #{global_id} >"
   end
 
-   def picture(width: 250, height: 250)
-    h.image_tag(path, width: width, height: height) if image?
+  def picture(width: 250, height: 250)
+    return unless image?
+    height_rate = original_height.to_f / height
+    width_rate = original_width.to_f / width
+    options = (width_rate >= height_rate) ? { width: width } : { height: height }
+    h.image_tag(path, options)
   end
 
   def to_tex

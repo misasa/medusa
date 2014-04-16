@@ -7,15 +7,28 @@ describe AttachmentFileDecorator do
   before{User.current = user}
 
   describe ".picture" do
-    subject{ attachment_file.picture }
-    let(:attachment_file) { AttachmentFile.new(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')).decorate}
-    before{attachment_file.save}
-    it {expect(subject).to include "<img"}
-    it {expect(subject).to include "/>"}
-    it {expect(subject).to include "width=\"250\""}
-    it {expect(subject).to include "height=\"250\""}
-    it {expect(subject).to include "src=\"#{attachment_file.path}\""}
-    it {expect(subject).to include "alt=\"Test image\""}
+    let(:picture) { attachment_file.picture(width: width, height: height) }
+    let(:capybara) { Capybara.string(picture) }
+    let(:body) { capybara.find("body") }
+    let(:img) { body.find("img") }
+    let(:width) { 250 }
+    let(:height) { 250 }
+    it { expect(body).to have_css("img") }
+    it { expect(img["src"]).to eq attachment_file.path }
+    context "width rate greater than height rate" do
+      let(:width) { 100 }
+      it { expect(img["width"]).to eq width.to_s }
+      it { expect(img["height"]).to be_blank }
+    end
+    context "width rate eq height rate" do
+      it { expect(img["width"]).to eq width.to_s }
+      it { expect(img["height"]).to be_blank }
+    end
+    context "width rate less than height rate" do
+      let(:height) { 100 }
+      it { expect(img["width"]).to be_blank }
+      it { expect(img["height"]).to eq height.to_s }
+    end
   end
 
   describe ".to_tex" do

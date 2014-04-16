@@ -31,35 +31,29 @@ describe StoneDecorator do
   end
 
   describe ".primary_picture" do
-    subject{obj.primary_picture}
-    let(:data) { fixture_file_upload("/files/test_image.jpg",'image/jpeg')}
-    let(:attachment_file){AttachmentFile.new(data: data)}
-    subject{obj.primary_picture}
-    context "attachment_files not present" do
-      before{obj.attachment_files.clear}
-      it{expect(subject).to be_blank}
+    let(:attachment_file){ FactoryGirl.create(:attachment_file) }
+    let(:picture) { obj.primary_picture(width: width, height: height) }
+    let(:capybara) { Capybara.string(picture) }
+    let(:body) { capybara.find("body") }
+    let(:img) { body.find("img") }
+    let(:width) { 250 }
+    let(:height) { 250 }
+    before { obj.attachment_files = [attachment_file] }
+    it { expect(body).to have_css("img") }
+    it { expect(img["src"]).to eq attachment_file.path }
+    context "width rate greater than height rate" do
+      let(:width) { 100 }
+      it { expect(img["width"]).to eq width.to_s }
+      it { expect(img["height"]).to be_blank }
     end
-    context "attachment_files present" do
-      before do
-        attachment_file.save
-        obj.attachment_files << attachment_file
-      end
-      it{expect(subject).to match("<img.* />")}
-      it{expect(subject).to include(("alt=\"#{h.image_alt(attachment_file.data_file_name)}\" "))}
-      it{expect(subject).to include(("src=\"#{attachment_file.path}\""))}
-      it{expect(subject).to include("height=\"250\"")}
-      it{expect(subject).to include("width=\"250\"")}
+    context "width rate eq height rate" do
+      it { expect(img["width"]).to eq width.to_s }
+      it { expect(img["height"]).to be_blank }
     end
-    context "width,height" do
-      subject{obj.primary_picture(width: width,height: height)}
-      let(:width){100}
-      let(:height){200}
-      before do
-        attachment_file.save
-        obj.attachment_files << attachment_file
-      end
-      it{expect(subject).to include("height=\"#{height}\"")}
-      it{expect(subject).to include("width=\"#{width}\"")}
+    context "width rate less than height rate" do
+      let(:height) { 100 }
+      it { expect(img["width"]).to be_blank }
+      it { expect(img["height"]).to eq height.to_s }
     end
   end
 
