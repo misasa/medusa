@@ -57,35 +57,6 @@ describe StoneDecorator do
     end
   end
 
-  describe ".attachment_file_image_link" do
-    subject{obj.attachment_file_image_link(attachment_file)}
-    let(:attachment_file){AttachmentFile.new(data: data)}
-    context "has image" do
-      let(:data) { fixture_file_upload("/files/test_image.jpg",'image/jpeg')}
-      before{attachment_file.save}
-      it{expect(subject).to match("<a href=\"/attachment_files/#{attachment_file.id}\">.*</a>")}
-      it{expect(subject).to match("<img.* />")}
-      it{expect(subject).to include(("alt=\"#{h.image_alt(attachment_file.data_file_name)}\" "))}
-      it{expect(subject).to include("src=\"#{attachment_file.path}\"")}
-      it{expect(subject).to include("height=\"40\"")}
-      it{expect(subject).to include("width=\"40\"")}
-
-    end
-    context "has no image" do
-      let(:data) { fixture_file_upload("/files/test_pdf.pdf",'application/pdf')}
-      before{attachment_file.save}
-      it{expect(subject).to match("<a href=\"/attachment_files/#{attachment_file.id}\">.*</a>")} 
-      it{expect(subject).to include("<span class=\"glyphicon glyphicon-file\"></span>")} 
-    end
-    context "width,height" do
-      let(:data) { fixture_file_upload("/files/test_image.jpg",'image/jpeg')}
-      before{attachment_file.save}
-      subject{obj.attachment_file_image_link(attachment_file,width:10,height:20)}
-      it{expect(subject).to include("width=\"10\"")}
-      it{expect(subject).to include("height=\"20\"")}
-    end
-  end
-
   describe ".family_tree" do
     subject{obj.family_tree}
     before { allow(obj.h).to receive(:can?).and_return(true) }

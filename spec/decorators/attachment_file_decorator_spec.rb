@@ -31,6 +31,25 @@ describe AttachmentFileDecorator do
     end
   end
 
+  describe ".image_link" do
+    let(:image_link) { attachment_file.image_link }
+    let(:capybara) { Capybara.string(image_link) }
+    let(:body) { capybara.find("body") }
+    let(:link) { body.find("a") }
+    let(:img) { body.find("img") }
+    it { expect(body).to have_css("a") }
+    context "file is image" do
+      before { attachment_file.stub(:image?).and_return(true) }
+      it { expect(link).to have_css("img") }
+      it { expect(link).to_not have_css("span.glyphicon") }
+    end
+    context "file is not image" do
+      before { attachment_file.stub(:image?).and_return(false) }
+      it { expect(link).to_not have_css("img") }
+      it { expect(link).to have_css("span.glyphicon") }
+    end
+  end
+
   describe ".to_tex" do
     subject{ attachment_file.to_tex }
     it {expect(subject).to include "\\begin{overpic}"}

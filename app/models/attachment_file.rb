@@ -24,11 +24,11 @@ class AttachmentFile < ActiveRecord::Base
   validates :data, presence: true
 
   def path(style = :original)
-    self.data.url(style)
+    File.exists?(data.path(style)) ? data.url(style) : data.url(:original)
   end
 
   def thumbnail_path
-    File.exists?(data.path(:thumb)) ? path(:thumb) : path
+    path(:thumb)
   end
 
   def data_fingerprint
