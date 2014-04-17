@@ -14,7 +14,7 @@
   <% if @stone.attachment_files.present? %>
     <li>
       <% @stone.attachment_files.each do |attachment_file| %>
-        <%= @stone.attachment_file_image_link(attachment_file) %>
+        <%= attachment_file.decorate.image_link %>
       <% end %>
     </li>
   <% end %>

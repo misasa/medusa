@@ -50,11 +50,6 @@ describe AttachmentFile do
         it { expect(subject).to include("/system/attachment_files/1234/5678/test.jpg") }
       end
     end
-    context "with argument" do
-      subject { attachment_file.path(:thumb) }
-      let(:attachment_file_id) { 12345 }
-      it { expect(subject).to include("/system/attachment_files/0001/2345/test_thumb.jpg") }
-    end
   end
 
   describe ".data_fingerprint" do

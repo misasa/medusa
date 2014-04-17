@@ -134,6 +134,10 @@ Medusa::Application.routes.draw do
   end
 
   resources :spots, only: [:edit, :update] do
+    member do
+      get :property
+      get :picture
+    end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "spot" }
   end
 

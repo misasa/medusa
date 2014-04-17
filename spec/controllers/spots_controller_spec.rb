@@ -28,4 +28,16 @@ describe SpotsController do
     end
   end
   
+  describe "GET property" do
+    let(:spot) { FactoryGirl.create(:spot) }
+    before { get :property, id: spot.id }
+    it { expect(assigns(:spot)).to eq spot }
+  end
+  
+  describe "GET picture" do
+    let(:spot) { FactoryGirl.create(:spot) }
+    before { get :picture, id: spot.id }
+    it { expect(assigns(:spot)).to eq spot }
+  end
+  
 end
