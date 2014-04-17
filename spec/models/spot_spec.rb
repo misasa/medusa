@@ -89,4 +89,40 @@ describe Spot do
     it {expect(subject).to eq 49.0}
   end
 
+  describe "#ref_image_x" do
+    subject { spot.ref_image_x }
+    let(:spot) { FactoryGirl.build(:spot, spot_x: spot_x, attachment_file: attachment_file) }
+    let(:spot_x) { 10.0 }
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    before do
+      allow(attachment_file).to receive(:length).and_return(length)
+    end
+    context "length is nil" do
+      let(:length) { nil }
+      it { expect(subject).to be_nil }
+    end
+    context "length is present" do
+      let(:length) { 100 }
+      it { expect(subject).to eq (spot_x / length * 100) }
+    end
+  end
+
+  describe "#ref_image_y" do
+    subject { spot.ref_image_y }
+    let(:spot) { FactoryGirl.build(:spot, spot_y: spot_y, attachment_file: attachment_file) }
+    let(:spot_y) { 20.0 }
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    before do
+      allow(attachment_file).to receive(:length).and_return(length)
+    end
+    context "length is nil" do
+      let(:length) { nil }
+      it { expect(subject).to be_nil }
+    end
+    context "length is present" do
+      let(:length) { 100 }
+      it { expect(subject).to eq (spot_y / length * 100) }
+    end
+  end
+
 end
