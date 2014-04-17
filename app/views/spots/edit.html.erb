@@ -1,7 +1,16 @@
 <div class="row">
-  <div class="col-lg-4">
-    <div class="spot-viewer">
-      <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300, "data-center-x" => @spot.spot_x, "data-center-y" => @spot.spot_y, "data-scale" => 4, "data-image" => attachment_file_path(@spot.attachment_file, format: :svg) %>
+  <div id="show-tools" class="col-lg-4">
+    <div class="row btn-toolbar tool-selector" role="toolbar">
+      <div class="btn-group btn-group-sm">
+        <%= link_to picture_spot_path(@spot), class: "btn btn-default activate", remote: true do  %>
+          <span class="glyphicon glyphicon-picture"></span>
+        <% end %>
+        <%= link_to property_spot_path(@spot), class: "btn btn-default", remote: true do  %>
+          <span class="glyphicon glyphicon-cog"></span>
+        <% end %>
+      </div>
+    </div>
+    <div class="row tool-content">
     </div>
   </div>
   <div class="col-lg-8">
@@ -61,7 +70,3 @@
     <% end %>
   </div>
 </div>
-
-<%= javascript_tag do %>
-  $("div.spot-viewer").spotViewer();
-<% end %>

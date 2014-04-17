@@ -11,6 +11,14 @@ class SpotsController < ApplicationController
     @spot.update_attributes(spot_params)
     respond_with @spot, location: attachment_file_path(@spot.attachment_file)
   end
+  
+  def property
+    respond_with @spot, layout: !request.xhr?
+  end
+  
+  def picture
+    respond_with @spot, layout: !request.xhr?
+  end
 
   private
 
