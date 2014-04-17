@@ -61,6 +61,14 @@ class Spot < ActiveRecord::Base
     }
   end
 
+  def ref_image_x
+    attachment_file.length ? (spot_x / attachment_file.length * 100) : nil
+  end
+
+  def ref_image_y
+    attachment_file.length ? (spot_y / attachment_file.length * 100) : nil
+  end
+
 private
 
   def spot_center_xy

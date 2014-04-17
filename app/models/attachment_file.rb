@@ -8,7 +8,7 @@ class AttachmentFile < ActiveRecord::Base
                     url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension"
   alias_attribute :name, :data_file_name
 
-  has_many :spots
+  has_many :spots, dependent: :destroy
   has_many :attachings, dependent: :destroy
   has_many :stones, through: :attachings, source: :attachable, source_type: "Stone"
   has_many :places, through: :attachings, source: :attachable, source_type: "Place"
