@@ -1,3 +1,18 @@
-<div>
-  <%= @box.primary_picture %>
+<div class="spot-viewer">
+  <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300 %>
+  <% @box.attachment_files.each_slice(4) do |files| %>
+  <div class="row spot-thumbnails">
+    <% files.each do |file| %>
+    <div class="col-lg-3">
+      <%= link_to attachment_file_path(file, format: :svg), remote: true, class: "thumbnail" do %>
+      <%= image_tag file.path %>
+      <% end %>
+    </div>
+    <% end %>
+  </div>
+  <% end %>
 </div>
+
+<%= javascript_tag do %>
+  $("div.spot-viewer").spotViewer();
+<% end %>
