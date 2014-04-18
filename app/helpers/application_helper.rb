@@ -43,7 +43,7 @@ module ApplicationHelper
 
   def data_count(array)
     return "" if array.nil? || array.empty?
-    "(#{array.size})"
+    " (#{array.size})"
   end
 
   def active_if_current(tabname)

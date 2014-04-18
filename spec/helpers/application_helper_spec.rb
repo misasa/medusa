@@ -105,11 +105,11 @@ describe ApplicationHelper do
     end
     context "array size is 1" do
       let(:array) { [:a] }
-      it { expect(subject).to eq "(1)" }
+      it { expect(subject).to eq " (1)" }
     end
     context "array size is 2" do
       let(:array) { [:a, :b] }
-      it { expect(subject).to eq "(2)" }
+      it { expect(subject).to eq " (2)" }
     end
   end
 
