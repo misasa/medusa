@@ -1,7 +1,5 @@
 <div>
-  <% @stone.attachment_files.each do |attachment_file| %>
-    <%= link_to(@stone.primary_picture, attachment_file_path(attachment_file)) %>
-  <% end %>
+  <%= link_to(@stone.primary_picture, attachment_file_path(@stone.attachment_files.first)) %>
 </div>
 <div id="family-tree">
   <%= @stone.family_tree %>
