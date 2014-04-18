@@ -1,5 +1,7 @@
 <div>
-  <%= @box.primary_picture %>
+  <% @box.attachment_files.each do |attachment_file| %>
+    <%= link_to(@box.primary_picture, attachment_file_path(attachment_file)) %>
+  <% end %>
 </div>
 <div id="family-tree">
   <%= @box.family_tree %>
