@@ -9,11 +9,11 @@
         <% end %>
       </th>
       <th><%= sort_link @records_search, :name, "name" %></th>
-      <th><%= sort_link @records_search, :global_id, "global_id" %></th>
+      <th><%= sort_link @records_search, :global_id, "global-id" %></th>
       <th><%= sort_link @records_search, :user_username, "owner" %></th>
       <th><%= sort_link @records_search, :group_name, "group" %></th>
-      <th><%= sort_link @records_search, :updated_at, "updated_at" %></th>
-      <th><%= sort_link @records_search, :created_at, "created_at" %></th>
+      <th><%= sort_link @records_search, :updated_at, "updated-at" %></th>
+      <th><%= sort_link @records_search, :created_at, "created-at" %></th>
     </tr>
     <tr>
       <th><%= text_field_tag :per_page, (params[:per_page] || RecordProperty.default_per_page), class: "form-control input-sm", size: 4 %></th>
