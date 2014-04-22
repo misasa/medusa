@@ -14,7 +14,7 @@
       <th><%= sort_link @search, :elevation, "elevation", { format: :modal }, remote: true %></th>
       <th>stone</th><!-- don't sort -->
       <th><%= sort_link @search, :group_name, "group", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :updated_at, "updated_at", { format: :modal }, remote: true %></th>
+      <th><%= sort_link @search, :updated_at, "updated-at", { format: :modal }, remote: true %></th>
     </tr>
     <tr>
       <th><%= text_field_tag :per_page, (params[:per_page] || Place.default_per_page), size: 4, readonly: true %></th>

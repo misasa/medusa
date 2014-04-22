@@ -10,7 +10,7 @@
       </th>
       <th><%= sort_link @search, :name, "name" %></th>
       <th><%= sort_link @search, :parent_name, "parent" %></th>
-      <th><%= sort_link @search, :box_type_name, "box_type" %></th>
+      <th><%= sort_link @search, :box_type_name, "box-type" %></th>
       <%= th_if_expand "tags" %>
       <%= th_if_expand do %>
         <%= sort_link @search, :user_username, "owner" %>
@@ -19,9 +19,9 @@
       <%= th_if_expand do %>
         <%= sort_link @search, :record_property_published_at, "published" %>
       <% end %>
-      <th><%= sort_link @search, :updated_at, "updated_at" %></th>
+      <th><%= sort_link @search, :updated_at, "updated-at" %></th>
       <%= th_if_expand do %>
-        <%= sort_link @search, :created_at, "created_at" %>
+        <%= sort_link @search, :created_at, "created-at" %>
       <% end %>
       <th><%= toggle_column_link %></th>
     </tr>

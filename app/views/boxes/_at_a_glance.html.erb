@@ -1,7 +1,7 @@
 <ul>
   <%= li_if_exist("box_type: ", @box.box_type.try!(:name)) %>
   <%= li_if_exist("tag list: ", @box.tag_list) %>
-  <li>updated_at: <%= difference_from_now(@box.updated_at) %></li>
+  <li>updated-at: <%= difference_from_now(@box.updated_at) %></li>
   <% @box.bibs.each do |bib| %>
   <li>
     bib: <%= link_to(bib.abbreviation, bib_path(bib)) %>
@@ -15,13 +15,13 @@
       <th></th>
       <th>name</th>
       <th>form</th>
-      <th>global_id</th>
+      <th>global-id</th>
       <th>boxes</th>
       <th>stones</th>
       <th>owner</th>
       <th>group</th>
-      <th>updated_at</th>
-      <th>created_at</th>
+      <th>updated-at</th>
+      <th>created-at</th>
     </tr>
   </thead>
   <tbody>

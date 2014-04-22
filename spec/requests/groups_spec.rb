@@ -12,14 +12,14 @@ describe "group master" do
   describe "list screen" do
     it "correctly display the label" do
       expect(page).to have_content("name")
-      expect(page).to have_content("updated_at")
-      expect(page).to have_content("created_at")
+      expect(page).to have_content("updated-at")
+      expect(page).to have_content("created-at")
     end
     
     it "label linked display" do
       expect(page).to have_link("name")
-      expect(page).to have_link("updated_at")
-      expect(page).to have_link("created_at")
+      expect(page).to have_link("updated-at")
+      expect(page).to have_link("created-at")
     end
     
     it "other field display" do
@@ -344,7 +344,7 @@ describe "group master" do
         end
       end
       context "descending order" do
-        before { click_link("updated_at") }
+        before { click_link("updated-at") }
         it "descending order display" do
           expect(page).to have_css("tbody tr:eq(1) td:eq(4)", text: group_3.updated_at.strftime("%Y-%m-%d"))
           expect(page).to have_css("tbody tr:eq(2) td:eq(4)", text: group_2.updated_at.strftime("%Y-%m-%d"))
@@ -353,7 +353,7 @@ describe "group master" do
       end
     end
     describe "created_at" do
-      before { click_link("created_at") }
+      before { click_link("created-at") }
       context "ascending order" do
         it "ascending order display" do
           expect(page).to have_css("tbody tr:eq(1) td:eq(5)", text: group_1.created_at.strftime("%Y-%m-%d"))
@@ -362,7 +362,7 @@ describe "group master" do
         end
       end
       context "descending order" do
-        before { click_link("created_at") }
+        before { click_link("created-at") }
         it "descending order display" do
           expect(page).to have_css("tbody tr:eq(1) td:eq(5)", text: group_3.created_at.strftime("%Y-%m-%d"))
           expect(page).to have_css("tbody tr:eq(2) td:eq(5)", text: group_2.created_at.strftime("%Y-%m-%d"))
@@ -436,8 +436,8 @@ describe "group master" do
         let(:name) { "test" }
         it "move to the list screen" do
           expect(page).to have_content("name")
-          expect(page).to have_content("updated_at")
-          expect(page).to have_content("created_at")
+          expect(page).to have_content("updated-at")
+          expect(page).to have_content("created-at")
           expect(page).to have_button("refresh-button")
           expect(page).to have_button("save-button")
           expect(page).not_to have_button("update")
@@ -452,8 +452,8 @@ describe "group master" do
       before { click_link("cancel") }
       it "move to the list screen" do
         expect(page).to have_content("name")
-        expect(page).to have_content("updated_at")
-        expect(page).to have_content("created_at")
+        expect(page).to have_content("updated-at")
+        expect(page).to have_content("created-at")
         expect(page).to have_button("refresh-button")
         expect(page).to have_button("save-button")
         expect(page).not_to have_button("update")
