@@ -1,1 +1,7 @@
 <%= render partial: "parts/property", locals: { record: @attachment_file } %>
+
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#edit_attachment_file_<%= @attachment_file.id %>", function() {
+    location.href="<% attachment_file_path(@attachment_file) %>";
+  });
+<% end %>

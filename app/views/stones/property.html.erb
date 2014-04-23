@@ -1,1 +1,7 @@
 <%= render partial: "parts/property", locals: { record: @stone } %>
+
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#edit_stone_<%= @stone.id %>", function() {
+    location.href="<% stone_path(@stone) %>";
+  });
+<% end %>
