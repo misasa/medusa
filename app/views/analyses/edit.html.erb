@@ -27,3 +27,9 @@
   <span class="glyphicon glyphicon-save"></span>
   <% end %>
 <% end %>
+
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#edit_analysis_<%= @analysis.id %>", function() {
+    location.href="<% analysis_path(@analysis) %>";
+  });
+<% end %>

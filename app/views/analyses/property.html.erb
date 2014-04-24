@@ -1,1 +1,7 @@
 <%= render partial: "parts/property", locals: { record: @analysis } %>
+
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#edit_analysis_<%= @analysis.id %>", function() {
+    location.href="<% analysis_path(@analysis) %>";
+  });
+<% end %>

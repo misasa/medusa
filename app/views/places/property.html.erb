@@ -1,1 +1,7 @@
 <%= render partial: "parts/property", locals: { record: @place } %>
+
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#edit_place_<%= @place.id %>", function() {
+    location.href="<% place_path(@place) %>";
+  });
+<% end %>

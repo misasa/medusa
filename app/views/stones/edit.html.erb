@@ -64,3 +64,9 @@
   <span class="glyphicon glyphicon-save"></span>
   <% end %>
 <% end %>
+
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#edit_stone_<%= @stone.id %>", function() {
+    location.href="<% stone_path(@stone) %>";
+  });
+<% end %>

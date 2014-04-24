@@ -1,1 +1,7 @@
 <%= render partial: "parts/property", locals: { record: @bib } %>
+
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#edit_bib_<%= @bib.id %>", function() {
+    location.href="<% bib_path(@bib) %>";
+  });
+<% end %>
