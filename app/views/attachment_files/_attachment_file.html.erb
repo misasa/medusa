@@ -9,4 +9,12 @@
   <%= td_if_expand difference_from_now(attachment_file.published_at) %>
   <td><%= difference_from_now(attachment_file.updated_at) %></td>
   <%= td_if_expand difference_from_now(attachment_file.created_at) %>
+  <td>
+    <% if attachment_file.pdf? %>
+      <%= link_to download_attachment_file_path(attachment_file.id), class: "btn btn-default", id: "file-#{attachment_file.id}-button" do %>
+        <span class="glyphicon glyphicon-file"></span>
+      <% end %>
+    <% end %>
+  </td>
 </tr>
+

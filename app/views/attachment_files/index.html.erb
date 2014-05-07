@@ -23,6 +23,7 @@
       <%= th_if_expand do %>
         <%= sort_link @search, :created_at, "created-at" %>
       <% end %>
+      <th></th>
       <th><%= toggle_column_link %></th>
     </tr>
     <tr>
@@ -44,6 +45,7 @@
       <%= th_if_expand do %>
         <%= f.text_field :created_at_gteq, placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]), class: "form-control input-sm datepicker", size: 10 %>
       <% end %>
+      <th></th>
     </tr>
     <tr>
       <th></th>
@@ -60,6 +62,7 @@
       <%= th_if_expand do %>
         <%= f.text_field :created_at_lteq_end_of_day, placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]), class: "form-control input-sm datepicker", size: 10 %>
       <% end %>
+      <th></th>
     </tr>
     <% end %>
   </thead>
