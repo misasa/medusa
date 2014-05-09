@@ -2,6 +2,7 @@ class Place < ActiveRecord::Base
   include HasRecordProperty
   include OutputPdf
   include OutputCsv
+  include HasAttachmentFile
 
   TEMPLATE_HEADER = "name,latitude(decimal degree),longitude(decimal degree),elevation(m),description\n"
   PERMIT_IMPORT_TYPES = ["text/plain", "text/csv", "application/csv", "application/vnd.ms-excel"]

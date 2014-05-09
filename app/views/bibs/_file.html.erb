@@ -4,9 +4,9 @@
       <th></th>
       <th></th>
       <th>name</th>
+      <th></th>
       <th>type</th>
       <th>global-id</th>
-      <th></th>
       <th></th>
       <th></th>
     </tr>
@@ -21,6 +21,11 @@
           </td>
           <td><%= attachment_file.decorate.picture(width: 70, height: 70, type: :thumb) %></td>
           <td><%= link_to_if can?(:read, attachment_file), attachment_file.data_file_name,attachment_file %></td>
+          <td>
+            <% if attachment_file.pdf? %>
+              <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_file.id), id: "file-#{attachment_file.id}-button") %>
+            <% end %>
+          </td>
           <td><%= attachment_file.try!(:data_content_type) %></td>
           <td><%= attachment_file.try!(:global_id) %></td> 
           <td>
@@ -31,11 +36,6 @@
           <td>
             <%= link_to  bib_attachment_file_path(@bib, attachment_file) + tab_param(__FILE__) , method: :delete ,title: "unlink attachment file",data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
-            <% end %>
-          </td>
-          <td>
-            <% if attachment_file.pdf? %>
-              <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_file.id), id: "file-#{attachment_file.id}-button") %>
             <% end %>
           </td>
         </tr>

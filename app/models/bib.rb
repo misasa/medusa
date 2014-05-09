@@ -2,6 +2,7 @@ class Bib < ActiveRecord::Base
   include HasRecordProperty
   include HasViewSpot
   include OutputPdf
+  include HasAttachmentFile
 
   LABEL_HEADER = ["Id", "Name", "Authors"]
 

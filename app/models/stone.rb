@@ -3,6 +3,7 @@ class Stone < ActiveRecord::Base
   include HasViewSpot
   include OutputPdf
   include OutputCsv
+  include HasAttachmentFile
 
   acts_as_taggable
   with_recursive

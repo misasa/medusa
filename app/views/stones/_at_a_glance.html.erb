@@ -19,6 +19,14 @@
     </li>
   <% end %>
   <%= li_if_exist("", @stone.bibs.map{ |bib| content_tag(:span, nil, class: "glyphicon glyphicon-book") + raw(bib.to_html) + link_to_if(can?(:read, bib), " more", url_for(bib)) }.join(" ")) %>
+  <% if @stone.attachment_pdf_files.present? %>
+    <li>
+      <% @stone.attachment_pdf_files.each do |attachment_pdf_file| %>
+        <%= attachment_pdf_file.name %>
+        <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_pdf_file.id), id: "file-#{attachment_pdf_file.id}-button") %>
+      <% end %>
+    </li>
+  <% end %>
 </ul>
 
 <% unless @stone.analyses.empty? %>
