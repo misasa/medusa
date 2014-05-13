@@ -1,11 +1,41 @@
 <div class="spot-viewer">
   <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300 %>
+  <%= form_for Spot.new, url: attachment_file_spots_path(@box.attachment_files.first) do |f| %>
+    <table>
+      <tr>
+        <td>new spot with link(ID </td>
+          <td>
+            <div class="input-group">
+              <%= f.text_field :target_uid, class: "form-control input-sm" %>
+              <span class="input-group-addon">
+                <%= link_to records_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#spot_target_uid",  id: "record-property-search" do %>
+                  <span class="glyphicon glyphicon-search"></span>
+                <% end %>
+              </span>
+            </div>
+          </td>
+        <td>)</td>
+        <td>
+          <%= f.hidden_field :spot_x ,value: "0" %>
+          <%= f.hidden_field :spot_y ,value: "0" %>
+          <%= f.hidden_field :radius_in_percent ,value: "2" %>
+          <%= f.hidden_field :stroke_color ,value: "blue" %>
+          <%= f.hidden_field :fill_color ,value: "blue" %>
+          <%= f.hidden_field :opacity ,value: "0" %>
+          <%= f.hidden_field :with_cross ,value: "false" %>
+          <%= f.button title:"add new spot", class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+        </td>
+      </tr>
+    </table>
+  <% end %>
   <% @box.attachment_files.each_slice(4) do |files| %>
   <div class="row spot-thumbnails">
     <% files.each do |file| %>
     <div class="col-lg-3">
       <%= link_to attachment_file_path(file, format: :svg), remote: true, class: "thumbnail" do %>
-      <%= image_tag file.path %>
+        <%= image_tag file.path %>
       <% end %>
     </div>
     <% end %>
@@ -15,4 +45,9 @@
 
 <%= javascript_tag do %>
   $("div.spot-viewer").spotViewer();
+  $(document).on("submit", "#new_spot", function() {
+    var center = $("div.spot-viewer").spotViewer("center");
+    $("#spot_spot_x").val(center.left);
+    $("#spot_spot_y").val(center.top);
+  });
 <% end %>
