@@ -37,7 +37,6 @@ describe "attachment_file" do
         context "data_content_type is pdf" do
           let(:data_content_type) { "application/pdf" }
           it "show pdf icon" do
-            save_page
             expect(page).to have_link("file-#{attachment_file.id}-button")
           end
         end
