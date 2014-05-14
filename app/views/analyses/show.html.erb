@@ -8,17 +8,17 @@
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
         <% if @analysis.has_image? %>
-          <%= link_to picture_analysis_path(@analysis), class: "btn btn-default  activate", remote: true do %>
+          <%= link_to picture_analysis_path(@analysis), class: "btn btn-default  activate", id: "picture-button", remote: true do %>
             <span class="glyphicon glyphicon-picture"></span>
           <% end %>
         <% end %>
       </div>
       <% if can? :update, @analysis %>
       <div class="btn-group btn-group-sm">
-        <%= link_to edit_analysis_path(@analysis), class: "btn btn-default", remote: true do %>
+        <%= link_to edit_analysis_path(@analysis), class: "btn btn-default", id: "pencil-button", remote: true do %>
           <span class="glyphicon glyphicon-pencil"></span>
         <% end %>
-        <%= link_to property_analysis_path(@analysis), class: "btn btn-default", remote: true do %>
+        <%= link_to property_analysis_path(@analysis), class: "btn btn-default", id: "cog-button", remote: true do %>
           <span class="glyphicon glyphicon-cog"></span>
         <% end %>
       </div>

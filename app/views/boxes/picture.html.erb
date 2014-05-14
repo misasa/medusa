@@ -30,7 +30,7 @@
       </tr>
     </table>
   <% end %>
-  <% @box.attachment_files.each_slice(4) do |files| %>
+  <% @box.attachment_image_files.each_slice(4) do |files| %>
   <div class="row spot-thumbnails">
     <% files.each do |file| %>
     <div class="col-lg-3">
