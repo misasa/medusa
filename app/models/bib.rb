@@ -2,14 +2,13 @@ class Bib < ActiveRecord::Base
   include HasRecordProperty
   include HasViewSpot
   include OutputPdf
+  include HasAttachmentFile
 
   LABEL_HEADER = ["Id", "Name", "Authors"]
 
   has_many :bib_authors
   has_many :authors, through: :bib_authors
 
-  has_many :attachings, as: :attachable
-  has_many :attachment_files, through: :attachings
   has_many :referrings, dependent: :destroy
   has_many :stones, through: :referrings, source: :referable, source_type: "Stone"
   has_many :places, through: :referrings, source: :referable, source_type: "Place"

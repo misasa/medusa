@@ -1,7 +1,12 @@
 <tr>
   <td><%= check_box_tag("ids[]", attachment_file.id, checked, id: "ids_#{attachment_file.id}", class: "select-row") if can?(:update, attachment_file) %></td>
   <td><%= attachment_file.decorate.picture(width: 70, height: 70, type: :thumb) %></td>
-  <td><%= link_to attachment_file.data_file_name, attachment_file %></td>
+  <td>
+    <%= link_to attachment_file.data_file_name, attachment_file %>
+    <% if attachment_file.pdf? %>
+      <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_file.id), id: "file-#{attachment_file.id}-button") %>
+    <% end %>
+  </td>
   <td><%= attachment_file.data_content_type %></td>
   <td><%= attachment_file.data_file_size %></td>
   <%= td_if_expand attachment_file.user.try!(:username) %>
@@ -10,3 +15,4 @@
   <td><%= difference_from_now(attachment_file.updated_at) %></td>
   <%= td_if_expand difference_from_now(attachment_file.created_at) %>
 </tr>
+

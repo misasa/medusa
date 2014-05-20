@@ -2,6 +2,7 @@ class Place < ActiveRecord::Base
   include HasRecordProperty
   include OutputPdf
   include OutputCsv
+  include HasAttachmentFile
 
   TEMPLATE_HEADER = "name,latitude(decimal degree),longitude(decimal degree),elevation(m),description\n"
   PERMIT_IMPORT_TYPES = ["text/plain", "text/csv", "application/csv", "application/vnd.ms-excel"]
@@ -9,8 +10,6 @@ class Place < ActiveRecord::Base
   acts_as_mappable
 
   has_many :stones
-  has_many :attachings, as: :attachable, dependent: :destroy
-  has_many :attachment_files, through: :attachings
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
 

@@ -1,6 +1,6 @@
 <div class="spot-viewer">
   <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300 %>
-  <% @bib.attachment_files.each_slice(4) do |files| %>
+  <% @bib.attachment_image_files.each_slice(4) do |files| %>
   <div class="row spot-thumbnails">
     <% files.each do |file| %>
     <div class="col-lg-3">

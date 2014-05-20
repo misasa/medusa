@@ -50,7 +50,7 @@ class SpotsController < ApplicationController
   end
 
   def find_resource
-    @spot = Spot.find(params[:id])
+    @spot = Spot.find(params[:id]).decorate
   end
 
 end

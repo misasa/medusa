@@ -7,33 +7,33 @@
   <div id="show-tools" class="col-lg-4">
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
-        <%= link_to family_stone_path(@stone), class: "btn btn-default activate", remote: true do %>
+        <%= link_to family_stone_path(@stone), class: "btn btn-default activate", id: "tree-conifer-button", remote: true do %>
           <span class="glyphicon glyphicon-tree-conifer"></span>
         <% end %>
         <% if @stone.has_image? %>
-          <%= link_to picture_stone_path(@stone), class: "btn btn-default", remote: true do %>
+          <%= link_to picture_stone_path(@stone), class: "btn btn-default", id: "picture-button", remote: true do %>
             <span class="glyphicon glyphicon-picture"></span>
           <% end %>
         <% end %>
-        <%= link_to map_stone_path(@stone), class: "btn btn-default", remote: true do %>
+        <%= link_to map_stone_path(@stone), class: "btn btn-default", id: "globe-button", remote: true do %>
           <span class="glyphicon glyphicon-globe"></span>
         <% end %>
       </div>
       <% if can? :update, @stone %>
       <div class="btn-group btn-group-sm">
-        <%= link_to edit_stone_path(@stone), class: "btn btn-default", remote: true do %>
+        <%= link_to edit_stone_path(@stone), class: "btn btn-default", id: "pencil-button", remote: true do %>
           <span class="glyphicon glyphicon-pencil"></span>
         <% end %>
-        <%= link_to property_stone_path(@stone), class: "btn btn-default", remote: true do %>
+        <%= link_to property_stone_path(@stone), class: "btn btn-default", id: "cog-button", remote: true do %>
           <span class="glyphicon glyphicon-cog"></span>
         <% end %>
       </div>
       <% end %>
       <div class="btn-group btn-group-sm">
-        <%= link_to download_label_stone_path(@stone), class: "btn btn-default" do %>
+        <%= link_to download_label_stone_path(@stone), class: "btn btn-default", id: "tag-button" do %>
           <span class="glyphicon glyphicon-tag"></span>
         <% end %>
-        <%= link_to download_card_stone_path(@stone), class: "btn btn-default" do %>
+        <%= link_to download_card_stone_path(@stone), class: "btn btn-default", id: "file-button" do %>
           <span class="glyphicon glyphicon-file"></span>
         <% end %>
       </div>
