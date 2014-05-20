@@ -16,6 +16,21 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied, with: :deny_access
 
+  before_filter :basic_authentication, unless: :format_html_or_signed_in?
+
+  def basic_authentication
+    authenticate_or_request_with_http_basic do |name, password|
+      resource = User.find_by(username: name)
+      if resource.valid_password?(password)
+        sign_in :user, resource
+      end
+    end
+  end
+
+  def format_html_or_signed_in?
+    request.format.html? || user_signed_in?
+  end
+
   def configure_permitted_parameters
     devise_parameter_sanitizer.for(:sign_up) { |u| u.permit(:username, :email, :password, :password_confirmation, :remember_me) }
     devise_parameter_sanitizer.for(:sign_in) { |u| u.permit(:username, :password, :remember_me) }
