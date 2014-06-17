@@ -8,6 +8,7 @@ class MeasurementItemsController < ApplicationController
     @search = MeasurementItem.search(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @measurement_items = @search.result.page(params[:page]).per(params[:per_page])
+    respond_with @measurement_items
   end
 
   def show
