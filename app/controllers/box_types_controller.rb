@@ -8,6 +8,7 @@ class BoxTypesController < ApplicationController
     @search = BoxType.search(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @box_types = @search.result.page(params[:page]).per(params[:per_page])
+    respond_with @box_types
   end
 
   def show
