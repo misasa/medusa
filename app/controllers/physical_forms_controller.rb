@@ -8,6 +8,7 @@ class PhysicalFormsController < ApplicationController
     @search = PhysicalForm.search(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @physical_forms = @search.result.page(params[:page]).per(params[:per_page])
+    respond_with @physical_forms
   end
 
   def show
