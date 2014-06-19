@@ -8,7 +8,7 @@ class ClassificationsController < ApplicationController
     @search = Classification.search(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @classifications = @search.result.page(params[:page]).per(params[:per_page])
-    respond_with @classification
+    respond_with @classifications
   end
 
   def show
