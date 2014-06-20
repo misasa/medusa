@@ -86,6 +86,7 @@ Medusa::Application.routes.draw do
     member do
       get :picture
       get :property
+      get :casteml
     end
     collection do
       post :import

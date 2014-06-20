@@ -153,4 +153,12 @@ describe AnalysesController do
     it { expect(controller).to receive(:send_data).with(castemls, filename: "my-great-analysis.pml", type: "application/xml", disposition: "attached").and_return{controller.render nothing: true} }
   end
 
+  describe "GET casteml", :current => true do
+    let(:obj) { FactoryGirl.create(:analysis) }
+    let(:casteml){Analysis.to_castemls([obj])}
+    after{get :casteml, id: obj.id }
+    it { expect(controller).to receive(:send_data).with(casteml, filename: obj.global_id + ".pml", type: "application/xml", disposition: "attached").and_return{controller.render nothing: true} }
+  end
+
+
 end

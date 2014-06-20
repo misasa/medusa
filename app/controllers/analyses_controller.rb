@@ -80,6 +80,13 @@ class AnalysesController < ApplicationController
               :disposition=>'attached')
   end
 
+  def casteml
+    send_data(Analysis.to_castemls([@analysis]),
+              :type => 'application/xml',
+              :filename => @analysis.global_id + '.pml', 
+              :disposition=>'attached')
+  end
+
   private
 
   def analysis_params
