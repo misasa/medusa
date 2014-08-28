@@ -25,6 +25,93 @@ module HasRecordProperty
     super({:methods => :global_id}.merge(options))
   end
 
+  def form_name
+    return self.physical_form.name if self.respond_to?(:physical_form) && self.physical_form
+    return self.box_type.name if self.respond_to?(:box_type) && self.box_type
+    return nil
+  end
+
+  def bib_title
+    items = []
+    #title = ""
+    if self.respond_to?(:form_name) && self.form_name
+      form_name = self.form_name
+      if ['a', 'e', 'i', 'o', 'u'].include? form_name[0..0]
+        items << 'An'
+      else
+        items << 'A'
+      end
+      # items << "#{article_for(self.form_name)}".capitalize
+      items << form_name
+    end
+    items << "``#{self.name}''"
+    if self.box_path.blank?
+      items << "located at unknown"
+    else
+      items << "located at \\nolinkurl{#{self.box_path}}" if self.box_path
+    end
+    items.join(' ')    
+  end
+
+  def to_bibtex(options = {})
+    if self.instance_of?(Bib)
+      to_tex
+    else
+      dream_url = "http://dream.misasa.okayama-u.ac.jp/?q=#{self.global_id}"
+      items = []
+      items << self.global_id
+      my_author = self.name.gsub(/\s/,'-').gsub(/"/,"''") # TK January 22, 2014 (Wed)
+      my_bib_title = self.bib_title.gsub(/"/,"''")
+      items << " author={#{my_author}}"
+      items << " title={#{my_bib_title}}"
+      items << " journal={\\href{#{dream_url}}{DREAM}}"
+      items << ' volume={' + self.created_at.strftime("%y") + '}'
+      items << ' pages={' + self.global_id + '}'
+      items << ' year={' + self.updated_at.strftime("%Y") +'}'
+      items << " url={#{dream_url}}"
+      return "@article{" + items.compact.join(",\n") + ",\n}"    
+    end
+  end
+
+  def box_path
+    return self.blood_path if self.instance_of?(Box)
+    items = []
+    if self.respond_to?(:box) && self.box
+      items << self.box.path
+      items << self.box.name
+    else
+      items << ""
+    end
+    items << self.name
+    items.join("/")
+  end
+
+  def blood_path
+    items = []
+    if self.respond_to?(:parent) && self.parent
+      items << "/#{self.ancestors.map(&:name).join('/')}"
+    else
+      items << ""
+    end
+    items << self.name
+    items.join("/")
+  end
+
+  def latex_mode(type = :blood)
+    if type == :box
+      path = self.box_path
+    else
+      path = self.blood_path
+    end
+    tokens = []
+    tokens << path
+    tokens << "<#{self.class.model_name.human.downcase}: #{global_id}>"
+    tokens << "<last-modified: #{updated_at}>"
+    tokens << "<created: #{created_at}>"        
+    tokens.join(" ")
+  end
+
+
   def user_id=(id)
     record_property && record_property.user_id = id
   end

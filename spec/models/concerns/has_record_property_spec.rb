@@ -30,6 +30,7 @@ describe HasRecordProperty do
     let(:published) { true }
     let(:published_at) { Time.now }
     let(:readable) { true }
+    let(:json) { "json" }
     before do
       allow(record_property).to receive(:readable?).and_return(readable)
     end
@@ -37,6 +38,44 @@ describe HasRecordProperty do
     it { expect(obj.published).to eq published }
     it { expect(obj.published_at).to eq published_at }
     it { expect(obj.readable?).to be_truthy }
+    it { expect(obj.to_json).to include "\"global_id\":\"#{global_id}\"" }
+    it { expect(obj.to_xml).to include "<global-id>#{global_id}</global-id>" }
+    it { expect(obj.latex_mode).to match /<.*: #{global_id}>/}
+    it { expect(obj.latex_mode).to include "<last-modified: #{obj.updated_at}>"}
+    it { expect(obj.latex_mode).to include "<created: #{obj.created_at}>"}        
+  end
+
+  describe "#to_bibtex" do
+    subject { obj.to_bibtex }
+    context "bib" do
+      let(:obj) { FactoryGirl.create(:bib, entry_type: entry_type, abbreviation: abbreviation) }
+      describe "@article" do
+        before do
+          obj
+          allow(obj).to receive(:article_tex).and_return("test")
+        end
+        let(:entry_type) { "article" }
+        context "abbreviation is not nil" do
+          let(:abbreviation) { "abbreviation" }
+          it { expect(subject).to eq "\n@article{abbreviation,\ntest,\n}" }
+        end
+        context "abbreviation is nil" do
+          let(:abbreviation) { "" }
+          it { expect(subject).to eq "\n@article{#{obj.global_id},\ntest,\n}" }
+        end
+      end
+      context "stone" do
+        let(:obj) { FactoryGirl.create(:stone, name: name) }
+        let(:name) { "stone" }
+        describe "@stone" do
+          before do
+            obj
+          end
+          it { expect(subject).to include "@article{#{obj.global_id}" }
+
+        end
+      end
+    end
   end
 
   describe ".readables" do

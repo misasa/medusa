@@ -1,6 +1,27 @@
 require "spec_helper"
 
 describe Stone do
+  describe ".blood_path" do
+      let(:parent_stone) { FactoryGirl.create(:stone) }
+      let(:stone) { FactoryGirl.create(:stone, parent_id: parent_id) }
+      before do
+        parent_stone
+        stone
+      end
+      describe "parent" do
+        context "us not present" do
+          let(:parent_id) { nil }
+           #before { stone.parent_id = parent_stone.id }
+           it { expect(stone.blood_path).to eq "/#{stone.name}" }          
+        end
+        context "is present" do
+          let(:parent_id) { parent_stone.id }
+           before { stone.parent_id = parent_stone.id }
+           it { expect(stone.blood_path).to eq "/#{parent_stone.name}/#{stone.name}" }          
+        end
+      end
+  end
+
   describe "validates" do
     describe "name" do
       let(:obj) { FactoryGirl.build(:stone, name: name) }

@@ -151,6 +151,7 @@ describe Bib do
     it { expect(subject).to eq "\n@misc{略１,\n\tauthor = \"name_1\",\n\tname = \"bib_1\",\n\tnumber = \"1\",\n\tmonth = \"january\",\n\tjournal = \"雑誌名１\",\n\tvolume = \"1\",\n\tpages = \"100\",\n\tyear = \"2014\",\n\tnote = \"注記１\",\n\tdoi = \"doi１\",\n\tkey = \"キー１\",\n}" }
   end
   
+
   describe "#to_tex" do
     subject { bib.to_tex }
     let(:bib) { FactoryGirl.create(:bib, entry_type: entry_type, abbreviation: abbreviation) }
@@ -265,6 +266,7 @@ describe Bib do
       it { expect(subject).to eq "\tauthor = \"name_1\",\n\tname = \"書誌情報１\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tjournal = \"journal\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tyear = \"2014\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
     end
   end
+
   
   describe "#to_html" do
     subject { bib.to_html }

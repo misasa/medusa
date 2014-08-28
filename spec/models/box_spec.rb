@@ -89,6 +89,8 @@ describe Box do
           let(:parent) { FactoryGirl.create(:box, parent_id: grand_parent.id) }
           let(:grand_parent) { FactoryGirl.create(:box) }
           it { expect(box.path).to eq "/#{grand_parent.name}/#{parent.name}" }
+          it { expect(box.box_path).to eq "/#{grand_parent.name}/#{parent.name}/#{box.name}" }
+          it { expect(box.blood_path).to eq "/#{grand_parent.name}/#{parent.name}/#{box.name}" }          
         end
       end
     end
