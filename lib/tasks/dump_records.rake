@@ -10,39 +10,44 @@ namespace :record do
 	namespace :dump do
 		desc "Dump records in latex-mode"
 		task :list => [:environment] do |t|
-			@boxes = Box.find(:all)
-			@stones = Stone.find(:all)
-			@bibs = Bib.find(:all)
-			@physicalitems = @boxes
-			@physicalitems.concat(@stones)
-			@physicalitems.each do |obj|
-				puts "#{obj.latex_mode(:box)}"
+			boxes = Box.find(:all)
+			stones = Stone.find(:all)
+			bibs = Bib.find(:all)
+			physicalitems = boxes
+			physicalitems.concat(stones)
+
+		  	output_path = ENV['output_path'] || "tmp/auto-stone-list"
+			STDERR.puts "writing |#{output_path}|..."
+		  	output = File.open(output_path,"w")
+			physicalitems.each do |obj|
+				output.puts "#{obj.latex_mode(:box)}"
 				#puts "#{obj.full_name(:box)} #{fmt_long(obj)}" 
 			end
 
-			@stones.each do |obj|
+			stones.each do |obj|
 				#puts "#{obj.full_name(:blood).gsub(/\//,"\\")} #{fmt_long(obj)}"
-				puts "#{obj.latex_mode(:blood).gsub(/\//,"\\")}"
+				output.puts "#{obj.latex_mode(:blood).gsub(/\//,"\\")}"
 			end
 
-			@bibs.each do |obj|
-				puts "#{obj.latex_mode(:blood)}"
+			bibs.each do |obj|
+				output.puts "#{obj.latex_mode(:blood)}"
 			end
-
+			output.close
 		end
 
 		desc "Dump records in bib-mode"
 		task :bib => [:environment] do |t|
-			@boxes = Box.find(:all)
-			@stones = Stone.find(:all)
-			@bibs = Bib.find(:all)
-			@physicalitems = @boxes
-			@physicalitems.concat(@stones)
-			@items = @physicalitems
-			@items.concat(@bibs)
-			@items.each do |obj|
-				puts "#{obj.to_bibtex}"
+			items = Box.find(:all)
+			items.concat(Stone.find(:all))
+			items.concat(Bib.find(:all))
+		  	output_path = ENV['output_path'] || "tmp/ref_dream.bib"
+			STDERR.puts "writing |#{output_path}|..."
+		  	output = File.open(output_path,"w")
+
+			items.each do |obj|
+				output.puts "#{obj.to_bibtex}"
 			end
+			output.close
 
 		end
 	end
