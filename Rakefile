@@ -2,6 +2,8 @@
 # for example lib/tasks/capistrano.rake, and they will automatically be available to Rake.
 
 require File.expand_path('../config/application', __FILE__)
-require 'ci/reporter/rake/rspec' if Rails.env.development? || Rails.env.test?
-
+begin
+	require 'ci/reporter/rake/rspec' if Rails.env.development? || Rails.env.test?
+rescue LoadError
+end
 Medusa::Application.load_tasks
