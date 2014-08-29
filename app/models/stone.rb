@@ -10,6 +10,7 @@ class Stone < ActiveRecord::Base
 
   has_many :analyses
   has_many :children, class_name: "Stone", foreign_key: :parent_id, dependent: :nullify
+  has_many :stones, class_name: "Stone", foreign_key: :parent_id, dependent: :nullify  
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
   belongs_to :parent, class_name: "Stone", foreign_key: :parent_id

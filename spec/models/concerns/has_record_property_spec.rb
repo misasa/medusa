@@ -45,6 +45,189 @@ describe HasRecordProperty do
     it { expect(obj.latex_mode).to include "<created: #{obj.created_at}>"}        
   end
 
+  describe "#stone_count" do
+    subject { obj.stone_count }
+    before do
+      obj
+    end
+    context "for Stone" do
+      let(:obj) { FactoryGirl.create(:stone) }
+      context "without stone" do
+        it { expect(subject).to eq(0) }
+      end
+      context "with a stone" do
+        let(:stone1) { FactoryGirl.create(:stone)}
+        before do
+          obj.stones << stone1
+        end
+        it { expect(subject).to eq(1) }
+      end
+      context "with 2 stones" do
+        let(:stone1) { FactoryGirl.create(:stone)}
+        let(:stone2) { FactoryGirl.create(:stone)}
+        before do
+          obj.stones << stone1
+          obj.stones << stone2
+        end
+        it { expect(subject).to eq(2) }
+      end
+    end
+    context "for Box" do
+      let(:obj) { FactoryGirl.create(:box) }
+      context "without stone" do
+        it { expect(subject).to eq(0) }
+      end
+      context "with a stone" do
+        let(:stone1) { FactoryGirl.create(:stone)}
+        before do
+          obj.stones << stone1
+        end
+        it { expect(subject).to eq(1) }
+      end
+      context "with 2 stones" do
+        let(:stone1) { FactoryGirl.create(:stone)}
+        let(:stone2) { FactoryGirl.create(:stone)}
+        before do
+          obj.stones << stone1
+          obj.stones << stone2
+        end
+        it { expect(subject).to eq(2) }
+      end
+    end
+
+    context "for Analysis" do
+      let(:obj) { FactoryGirl.create(:analysis) }
+      context "without stone" do
+        before do
+          obj.stone = nil
+        end
+        it { expect(subject).to eq(0) }
+      end
+      context "with a stone" do
+        let(:stone1) { FactoryGirl.create(:stone)}
+        before do
+          obj.stone = stone1
+        end
+        it { expect(subject).to eq(1) }
+      end
+    end
+  end
+
+  describe "#box_count" do
+    subject { obj.box_count }
+    before do
+      obj
+    end
+    context "for Stone" do
+      let(:obj) { FactoryGirl.create(:stone) }
+      context "without box" do
+        before do
+          obj.box = nil
+        end
+        it { expect(subject).to eq(0) }
+      end
+      context "with a box" do
+        let(:box1) { FactoryGirl.create(:box)}
+        before do
+          obj.box = box1
+        end
+        it { expect(subject).to eq(1) }
+      end
+    end
+    context "for Box" do
+      let(:obj) { FactoryGirl.create(:box) }
+      context "without box" do
+        it { expect(subject).to eq(0) }
+      end
+      context "with a box" do
+        let(:box1) { FactoryGirl.create(:box)}
+        before do
+          obj.boxes << box1
+        end
+        it { expect(subject).to eq(1) }
+      end
+      context "with 2 boxes" do
+        let(:box1) { FactoryGirl.create(:box)}
+        let(:box2) { FactoryGirl.create(:box)}
+        before do
+          obj.boxes << box1
+          obj.boxes << box2
+        end
+        it { expect(subject).to eq(2) }
+      end
+    end
+    context "for Bib" do
+      let(:obj) { FactoryGirl.create(:bib) }
+      context "without box" do
+        it { expect(subject).to eq(0) }
+      end
+      context "with a box" do
+        let(:box1) { FactoryGirl.create(:box)}
+        before do
+          obj.boxes << box1
+        end
+        it { expect(subject).to eq(1) }
+      end
+      context "with 2 boxes" do
+        let(:box1) { FactoryGirl.create(:box)}
+        let(:box2) { FactoryGirl.create(:box)}
+        before do
+          obj.boxes << box1
+          obj.boxes << box2
+        end
+        it { expect(subject).to eq(2) }
+      end
+    end
+  end
+
+  describe "#attachment_file_count" do
+    subject { obj.attachment_file_count }
+    before do
+      obj
+    end
+    context "for Stone" do
+      let(:obj) { FactoryGirl.create(:stone) }
+      context "without file" do
+        it { expect(subject).to eq(0) }
+      end
+      context "with a file" do
+        let(:file1) { FactoryGirl.create(:attachment_file)}
+        before do
+          obj.attachment_files << file1
+        end
+        it { expect(subject).to eq(1) }
+      end
+      context "with 2 files" do
+        let(:file1) { FactoryGirl.create(:attachment_file)}
+        let(:file2) { FactoryGirl.create(:attachment_file)}
+        before do
+          obj.attachment_files << file1
+          obj.attachment_files << file2
+        end
+        it { expect(subject).to eq(2) }
+      end
+    end    
+  end
+
+  describe "#latex_mode" do
+     subject { obj.latex_mode }
+     before do
+        obj
+     end
+     context "for Stone" do
+       let(:obj) { FactoryGirl.create(:stone) }
+       it { expect(subject).to match /\/#{obj.name} <stone: #{obj.global_id}> <link: stone=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
+     end
+     context "for Box" do
+       let(:obj) { FactoryGirl.create(:box) }
+       it { expect(subject).to match /\/#{obj.name} <box: #{obj.global_id}> <link: stone=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
+     end
+     context "for Bib" do
+       let(:obj) { FactoryGirl.create(:bib) }
+       it { expect(subject).to match /\/#{obj.name} <bib: #{obj.global_id}> <link: stone=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
+     end
+  end
+
   describe "#to_bibtex" do
     subject { obj.to_bibtex }
     context "bib" do
@@ -72,7 +255,6 @@ describe HasRecordProperty do
             obj
           end
           it { expect(subject).to include "@article{#{obj.global_id}" }
-
         end
       end
     end

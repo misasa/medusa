@@ -103,14 +103,24 @@ module HasRecordProperty
     else
       path = self.blood_path
     end
+
+    links = []
+    links << "stone=#{self.stone_count}"
+    links << "box=#{self.box_count}"
+    links << "analysis=#{self.analysis_count}"
+    links << "file=#{self.attachment_file_count}"
+    links << "bib=#{self.bib_count}"
+    links << "locality=#{self.place_count}"
+    links << "point=#{self.point_count}"
+
     tokens = []
     tokens << path
     tokens << "<#{self.class.model_name.human.downcase}: #{global_id}>"
+    tokens << "<link: " + links.join(" ") + ">"
     tokens << "<last-modified: #{updated_at}>"
     tokens << "<created: #{created_at}>"        
     tokens.join(" ")
   end
-
 
   def user_id=(id)
     record_property && record_property.user_id = id
@@ -139,4 +149,15 @@ module HasRecordProperty
     record_property.update_attribute(:updated_at, updated_at)
   end
 
+  def method_missing(method_id, *args, &block)
+    if method_id =~ /(.*)_count/
+      count = 0
+      target_method = $1.to_sym
+      count = 1 if self.respond_to?(target_method) && self.send(target_method)
+      target_method = $1.pluralize.to_sym
+      count = self.send(target_method).length if self.respond_to?(target_method) && self.send(target_method)
+      return count
+    end
+    super
+  end
 end

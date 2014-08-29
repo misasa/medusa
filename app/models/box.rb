@@ -10,6 +10,7 @@ class Box < ActiveRecord::Base
 
   has_many :users
   has_many :stones
+  has_many :boxes, class_name: "Box", foreign_key: :parent_id, dependent: :nullify
   has_many :children, class_name: "Box", foreign_key: :parent_id, dependent: :nullify
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
