@@ -56,7 +56,7 @@ gem 'chunky_png'
 gem 'alchemist', github: 'halogenandtoast/alchemist'
 gem 'geonames'
 gem 'rubyzip'
-gem 'oai'
+#gem 'oai'
 gem 'comma'
 gem 'acts_as_taggable_on'
 gem 'exception_notification'
@@ -71,6 +71,7 @@ gem 'whenever', require: false
 gem 'acts_as_list'
 
 group :development, :test do
+  gem 'rak'
   gem 'pry-rails'
   gem 'rspec-rails', '>= 3.0.0.beta1'
   gem 'spring'
