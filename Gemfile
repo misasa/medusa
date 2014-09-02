@@ -69,7 +69,7 @@ gem 'bootstrap-sass'
 gem 'ransack'
 gem 'whenever', require: false
 gem 'acts_as_list'
-
+gem 'builder'
 group :development, :test do
   gem 'rak'
   gem 'pry-rails'

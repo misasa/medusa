@@ -38,7 +38,8 @@ describe HasAttachmentFile do
       let(:data_content_type_2) { "application/pdf" }
       let(:data_content_type_3) { "image/jpeg" }
       it { expect(subject).to be_present }
-      it { expect(subject).to eq [attachment_file_2, attachment_file_1] }
+      it { expect(subject).to include(attachment_file_1) }
+      it { expect(subject).to include(attachment_file_2) }
     end
     context "data_content_type is jpeg" do
       let(:data_content_type_1) { data_content_type_2 }
@@ -64,7 +65,9 @@ describe HasAttachmentFile do
       let(:data_content_type_2) { "image/jpeg" }
       let(:data_content_type_3) { "application/pdf" }
       it { expect(subject).to be_present }
-      it { expect(subject).to eq [attachment_file_2, attachment_file_1] }
+      it { expect(subject).to include(attachment_file_2) }
+      it { expect(subject).to include(attachment_file_1) }
+
     end
     context "data_content_type is pdf" do
       let(:data_content_type_1) { data_content_type_2 }

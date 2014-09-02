@@ -334,6 +334,7 @@ DEPENDENCIES
   alchemist!
   barby
   bootstrap-sass
+  builder
   cancan
   capistrano
   capistrano-bundler
