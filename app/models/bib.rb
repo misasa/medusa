@@ -49,9 +49,11 @@ class Bib < ActiveRecord::Base
   
   def to_tex
     if entry_type == "article"
-      tex = "\n@article{#{abbreviation.presence || global_id},\n#{article_tex},\n}"
+#      tex = "\n@article{#{abbreviation.presence || global_id},\n#{article_tex},\n}"
+      tex = "\n@article{#{global_id},\n#{article_tex},\n}"
     else
-      tex = "\n@misc{#{abbreviation.presence || global_id},\n#{misc_tex},\n}"
+#      tex = "\n@misc{#{abbreviation.presence || global_id},\n#{misc_tex},\n}"
+      tex = "\n@misc{#{global_id},\n#{misc_tex},\n}"      
     end
     return tex
   end

@@ -148,7 +148,7 @@ describe Bib do
     let(:bib_1) { FactoryGirl.create(:bib, name: "bib_1", authors: [author]) }
     let(:author) { FactoryGirl.create(:author, name: "name_1") }
     before { bib_1 }
-    it { expect(subject).to eq "\n@misc{略１,\n\tauthor = \"name_1\",\n\tname = \"bib_1\",\n\tnumber = \"1\",\n\tmonth = \"january\",\n\tjournal = \"雑誌名１\",\n\tvolume = \"1\",\n\tpages = \"100\",\n\tyear = \"2014\",\n\tnote = \"注記１\",\n\tdoi = \"doi１\",\n\tkey = \"キー１\",\n}" }
+    it { expect(subject).to eq "\n@misc{#{bib_1.global_id},\n\tauthor = \"name_1\",\n\tname = \"bib_1\",\n\tnumber = \"1\",\n\tmonth = \"january\",\n\tjournal = \"雑誌名１\",\n\tvolume = \"1\",\n\tpages = \"100\",\n\tyear = \"2014\",\n\tnote = \"注記１\",\n\tdoi = \"doi１\",\n\tkey = \"キー１\",\n}" }
   end
   
 
@@ -163,7 +163,7 @@ describe Bib do
       let(:entry_type) { "article" }
       context "abbreviation is not nil" do
         let(:abbreviation) { "abbreviation" }
-        it { expect(subject).to eq "\n@article{abbreviation,\ntest,\n}" }
+        it { expect(subject).to eq "\n@article{#{bib.global_id},\ntest,\n}" }
       end
       context "abbreviation is nil" do
         let(:abbreviation) { "" }
@@ -178,7 +178,7 @@ describe Bib do
       let(:entry_type) { "entry_type" }
       context "abbreviation is not nil" do
         let(:abbreviation) { "abbreviation" }
-        it { expect(subject).to eq "\n@misc{abbreviation,\ntest,\n}" }
+        it { expect(subject).to eq "\n@misc{#{bib.global_id},\ntest,\n}" }
       end
       context "abbreviation is nil" do
         let(:abbreviation) { "" }
