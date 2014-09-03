@@ -240,7 +240,7 @@ describe HasRecordProperty do
         let(:entry_type) { "article" }
         context "abbreviation is not nil" do
           let(:abbreviation) { "abbreviation" }
-          it { expect(subject).to eq "\n@article{abbreviation,\ntest,\n}" }
+          it { expect(subject).to eq "\n@article{#{obj.global_id},\ntest,\n}" }
         end
         context "abbreviation is nil" do
           let(:abbreviation) { "" }

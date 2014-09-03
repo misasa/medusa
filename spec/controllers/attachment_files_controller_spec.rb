@@ -21,6 +21,13 @@ describe AttachmentFilesController do
     before { get :show, id: attachment_file.id }
     it { expect(assigns(:attachment_file)).to eq attachment_file }
   end
+
+  describe "GET show", :current => true do
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    before { get :show, id: attachment_file.id, format: 'json' }
+    it { expect(assigns(:attachment_file)).to eq attachment_file }
+    it { expect(response.body).to include("\"global_id\":\"#{attachment_file.global_id}\"") }
+  end
   
   describe "GET edit" do
     let(:attachment_file) { FactoryGirl.create(:attachment_file) }
