@@ -83,6 +83,7 @@ class BoxesController < ApplicationController
     params.require(:box).permit(
       :name,
       :parent_global_id,
+      :parent_id,
       :position,
       :path,
       :box_type_id,

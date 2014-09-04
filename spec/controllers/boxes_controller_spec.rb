@@ -39,15 +39,27 @@ describe BoxesController do
     end
   end
 
-  describe "PUT update" do
+  describe "PUT update", :current => true do
     before do
       box
       put :update, id: box.id, box: attributes
     end
     let(:box) { FactoryGirl.create(:box) }
-    let(:attributes) { {name: "update_name"} }
-    it { expect(assigns(:box)).to eq box }
-    it { expect(assigns(:box).name).to eq attributes[:name] }
+
+    context "name" do
+      let(:attributes) { {name: "update_name", parent_id: "11"} }
+      it { expect(assigns(:box)).to eq box }
+      it { expect(assigns(:box).name).to eq attributes[:name] }
+    end
+
+    context "parent_id" do
+      let(:attributes) { {name: "box_1", parent_id: 11} }
+      it { expect(assigns(:box)).to eq box }
+      #it { expect(assigns(:box).name).to eq attributes[:name] }
+      it { expect(assigns(:box).parent_id).to eq attributes[:parent_id] }      
+    end
+
+
   end
 
   describe "DELETE destroy" do
