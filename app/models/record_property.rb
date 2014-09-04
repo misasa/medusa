@@ -24,6 +24,15 @@ class RecordProperty < ActiveRecord::Base
     includes(:user, :group).where(where_clauses)
   }
 
+  def datum_attributes
+    return unless datum
+
+    h = datum.attributes
+    h.merge!("global_id" => datum.global_id) if datum.respond_to?(:global_id)
+    h.merge!("thumbnail_path" => datum.thumbnail_path) if datum.respond_to?(:thumbnail_path)
+    h
+  end
+
   def writable?(user)
     (owner?(user) && owner_writable?) || (group?(user) && group_writable?) || guest_writable?
   end

@@ -4,7 +4,7 @@ describe RecordsController do
   let(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
 
-  describe "GET index" do
+  describe "GET index", :current => true do
     let(:stone) { FactoryGirl.create(:stone) }
     let(:box) { FactoryGirl.create(:box) }
     let(:analysis) { FactoryGirl.create(:analysis) }
@@ -19,10 +19,29 @@ describe RecordsController do
       bib
       place
       attachment_file
-      get :index
+#      get :index
     end
-    it { expect(assigns(:records_search).class).to eq Ransack::Search }
-    it { expect(assigns(:records).size).to eq(allcount) }
+
+    context "without format" do
+      before do
+        get :index
+      end
+      it { expect(assigns(:records_search).class).to eq Ransack::Search }
+      it { expect(assigns(:records).size).to eq(allcount) }
+    end
+
+    context "with format json" do
+      before do
+        get :index, format: 'json'
+      end
+      it { expect(assigns(:records).size).to eq(allcount) }
+      it { expect(response.body).to include("\"global_id\":") }
+      it { expect(response.body).to include("\"datum_id\":") }      
+      it { expect(response.body).to include("\"datum_type\":") }      
+      it { expect(response.body).to include("\"datum_attributes\":") }      
+
+    end
+
   end
 
   describe "GET show" do
@@ -32,7 +51,7 @@ describe RecordsController do
         stone
         get :show, id: stone.record_property.global_id ,format: :json
       end
-      it { expect(response.body).to eq(stone.to_json) }
+      it { expect(response.body).to include(stone.to_json) }
     end
     context "record found html " do
       let(:stone) { FactoryGirl.create(:stone) }

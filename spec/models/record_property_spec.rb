@@ -51,6 +51,12 @@ describe RecordProperty do
     end
   end
 
+  describe ".datum_attributes" do
+    subject { record_property.datum_attributes }
+    let(:record_property) { FactoryGirl.build(:record_property) }
+    it { expect(subject).to include("global_id" => record_property.datum.global_id)}
+  end
+
   describe ".writable?" do
     it_behaves_like "checking user permission", :writable?, :owner_writable?, :group_writable?, :guest_writable?
   end
