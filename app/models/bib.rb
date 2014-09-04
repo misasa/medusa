@@ -91,7 +91,7 @@ class Bib < ActiveRecord::Base
   end
 
   def author_lists
-    authors.pluck(:name).join(" ")
+    authors.pluck(:name).join(" and ")
   end
 
   def to_html

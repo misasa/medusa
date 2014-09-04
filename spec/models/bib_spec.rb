@@ -84,7 +84,7 @@ describe Bib do
     let(:bib) { FactoryGirl.create(:bib, name: "foo", authors: [author_1, author_2]) }
     let(:author_1) { FactoryGirl.create(:author, name: "bar") }
     let(:author_2) { FactoryGirl.create(:author, name: "baz") }
-    it { expect(subject).to eq "Id,Name,Authors\n#{bib.global_id},foo,bar baz\n" }
+    it { expect(subject).to eq "Id,Name,Authors\n#{bib.global_id},foo,bar and baz\n" }
   end
 
   describe ".build_bundle_label" do
@@ -101,7 +101,7 @@ describe Bib do
     end
     it { expect(subject).to start_with "Id,Name,Authors\n" }
     it { expect(subject).to include("#{bib_1.global_id},bib_1,author_1\n") }
-    it { expect(subject).to include("#{bib_2.global_id},bib_2,author_2 author_3\n") }
+    it { expect(subject).to include("#{bib_2.global_id},bib_2,author_2 and author_3\n") }
   end
 
   describe "#author_lists" do
@@ -109,7 +109,7 @@ describe Bib do
     let(:bib) { FactoryGirl.create(:bib, authors: [author_1, author_2]) }
     let(:author_1) { FactoryGirl.create(:author, name: "author_1") }
     let(:author_2) { FactoryGirl.create(:author, name: "author_2") }
-    it { expect(subject).to eq "author_1 author_2" }
+    it { expect(subject).to eq "author_1 and author_2" }
   end
 
   describe "#pdf_files" do
@@ -187,7 +187,7 @@ describe Bib do
     end
   end
   
-  describe "#article_tex" do
+  describe "#article_tex", :current => true do
     subject { bib.article_tex }
     let(:bib) do
       FactoryGirl.create(:bib,
@@ -198,10 +198,14 @@ describe Bib do
         note: note,
         doi: doi,
         key: key,
-        authors: [author]
+        authors: authors
        )
     end
-    let(:author) { FactoryGirl.create(:author, name: "name_1") }
+    let(:authors) { [author, author_1, author_2]}
+    let(:author) { FactoryGirl.create(:author, name: "Kobayashi, K.") }
+    let(:author_1) { FactoryGirl.create(:author, name: "Nakamura, E.") }
+    let(:author_2) { FactoryGirl.create(:author, name: "Ota, T.") }
+
     context "value is nil" do
       let(:number) { "" }
       let(:month) { "" }
@@ -210,7 +214,7 @@ describe Bib do
       let(:note) { "" }
       let(:doi) { "" }
       let(:key) { "" }
-      it { expect(subject).to eq "\tauthor = \"name_1\",\n\tname = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\"" }
+      it { expect(subject).to eq "\tauthor = \"#{authors.map{|author| author.name }.join(' and ')}\",\n\tname = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\"" }
     end
     context "value is not nil" do
       let(:number) { "1" }
@@ -220,7 +224,7 @@ describe Bib do
       let(:note) { "note" }
       let(:doi) { "doi" }
       let(:key) { "key" }
-      it { expect(subject).to eq "\tauthor = \"name_1\",\n\tname = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
+      it { expect(subject).to eq "\tauthor = \"#{authors.map{|author| author.name }.join(' and ')}\",\n\tname = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
     end
   end
   
