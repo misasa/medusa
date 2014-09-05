@@ -61,7 +61,7 @@ class Bib < ActiveRecord::Base
   def article_tex
     bib_array = []
     bib_array << "\tauthor = \"#{author_lists}\""
-    bib_array << "\tname = \"#{name}\""
+    bib_array << "\ttitle = \"#{name}\""
     bib_array << "\tjournal = \"#{journal}\""
     bib_array << "\tyear = \"#{year}\""
     bib_array << "\tnumber = \"#{number}\"" if number.present?
@@ -77,7 +77,7 @@ class Bib < ActiveRecord::Base
   def misc_tex
     bib_array = []
     bib_array << "\tauthor = \"#{author_lists}\""
-    bib_array << "\tname = \"#{name}\""
+    bib_array << "\ttitle = \"#{name}\""
     bib_array << "\tnumber = \"#{number}\"" if number.present?
     bib_array << "\tmonth = \"#{month}\"" if month.present?
     bib_array << "\tjournal = \"#{journal}\"" if journal.present?

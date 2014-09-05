@@ -148,7 +148,7 @@ describe Bib do
     let(:bib_1) { FactoryGirl.create(:bib, name: "bib_1", authors: [author]) }
     let(:author) { FactoryGirl.create(:author, name: "name_1") }
     before { bib_1 }
-    it { expect(subject).to eq "\n@misc{#{bib_1.global_id},\n\tauthor = \"name_1\",\n\tname = \"bib_1\",\n\tnumber = \"1\",\n\tmonth = \"january\",\n\tjournal = \"雑誌名１\",\n\tvolume = \"1\",\n\tpages = \"100\",\n\tyear = \"2014\",\n\tnote = \"注記１\",\n\tdoi = \"doi１\",\n\tkey = \"キー１\",\n}" }
+    it { expect(subject).to eq "\n@misc{#{bib_1.global_id},\n\tauthor = \"name_1\",\n\ttitle = \"bib_1\",\n\tnumber = \"1\",\n\tmonth = \"january\",\n\tjournal = \"雑誌名１\",\n\tvolume = \"1\",\n\tpages = \"100\",\n\tyear = \"2014\",\n\tnote = \"注記１\",\n\tdoi = \"doi１\",\n\tkey = \"キー１\",\n}" }
   end
   
 
@@ -214,7 +214,7 @@ describe Bib do
       let(:note) { "" }
       let(:doi) { "" }
       let(:key) { "" }
-      it { expect(subject).to eq "\tauthor = \"#{authors.map{|author| author.name }.join(' and ')}\",\n\tname = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\"" }
+      it { expect(subject).to eq "\tauthor = \"#{authors.map{|author| author.name }.join(' and ')}\",\n\ttitle = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\"" }
     end
     context "value is not nil" do
       let(:number) { "1" }
@@ -224,11 +224,11 @@ describe Bib do
       let(:note) { "note" }
       let(:doi) { "doi" }
       let(:key) { "key" }
-      it { expect(subject).to eq "\tauthor = \"#{authors.map{|author| author.name }.join(' and ')}\",\n\tname = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
+      it { expect(subject).to eq "\tauthor = \"#{authors.map{|author| author.name }.join(' and ')}\",\n\ttitle = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
     end
   end
   
-  describe "#misc_tex" do
+  describe "#misc_tex", :current => true do
     subject { bib.misc_tex }
     let(:bib) do
       FactoryGirl.create(:bib,
@@ -255,7 +255,7 @@ describe Bib do
       let(:note) { "" }
       let(:doi) { "" }
       let(:key) { "" }
-      it { expect(subject).to eq "\tauthor = \"name_1\",\n\tname = \"書誌情報１\"" }
+      it { expect(subject).to eq "\tauthor = \"name_1\",\n\ttitle = \"書誌情報１\"" }
     end
     context "value is not nil" do
       let(:number) { "1" }
@@ -267,7 +267,7 @@ describe Bib do
       let(:note) { "note" }
       let(:doi) { "doi" }
       let(:key) { "key" }
-      it { expect(subject).to eq "\tauthor = \"name_1\",\n\tname = \"書誌情報１\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tjournal = \"journal\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tyear = \"2014\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
+      it { expect(subject).to eq "\tauthor = \"name_1\",\n\ttitle = \"書誌情報１\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tjournal = \"journal\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tyear = \"2014\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
     end
   end
 
