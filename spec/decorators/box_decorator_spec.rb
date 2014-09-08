@@ -5,6 +5,11 @@ describe BoxDecorator do
   let(:obj){FactoryGirl.create(:box).decorate}
   before{User.current = user}
 
+  describe ".to_json", :current => true do
+    subject{obj.to_json}
+    it{ expect(subject).to include "global_id" }
+  end
+
   describe ".name_with_id" do
     subject{obj.name_with_id}
     it{expect(subject).to include(obj.name)}

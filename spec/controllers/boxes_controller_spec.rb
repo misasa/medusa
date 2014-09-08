@@ -11,16 +11,35 @@ describe BoxesController do
     let(:box_3) { FactoryGirl.create(:box, name: "box_3") }
     before do
       box_1;box_2;box_3
-      get :index
     end
-    it { expect(assigns(:search).class).to eq Ransack::Search }
-    it { expect(assigns(:boxes).count).to eq 3 }
+    context "without format" do
+      before do
+        get :index
+      end
+      it { expect(assigns(:search).class).to eq Ransack::Search }
+      it { expect(assigns(:boxes).count).to eq 3 }
+    end
+
+    context "with format 'json'", :current => true do
+      before do
+        get :index, format: 'json'
+      end
+      it { expect(response.body).to include("global_id")}
+    end
+
   end
 
   describe "GET show" do
     let(:box) { FactoryGirl.create(:box) }
-    before { get :show, id: box.id }
-    it { expect(assigns(:box)).to eq box }
+    context "without format" do
+      before { get :show, id: box.id }
+      it { expect(assigns(:box)).to eq box }
+    end
+    context "with format 'json'", :current => true do
+      before { get :show, id: box.id, format: 'json' }
+      it { expect(response.body).to include("global_id") }
+    end
+
   end
 
   describe "GET edit" do

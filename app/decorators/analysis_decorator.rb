@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 class AnalysisDecorator < Draper::Decorator
   delegate_all
+  delegate :to_json
+  
 
   def primary_picture(width: 250, height: 250)
     attachment_files.first.decorate.picture(width: width, height: height) if attachment_files.present?

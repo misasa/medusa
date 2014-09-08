@@ -15,10 +15,10 @@ module HasRecordProperty
     scope :readables, ->(user) { includes(:record_property).joins(:record_property).merge(RecordProperty.readables(user)) }
   end
 
-  def to_json(options = {})
-    #self.to_json(:methods => :global_id)
+  def as_json(options = {})
     super({:methods => :global_id}.merge(options))
   end
+
 
   def to_xml(options = {})
     #self.to_json(:methods => :global_id)

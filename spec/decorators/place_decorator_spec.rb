@@ -131,8 +131,8 @@ describe PlaceDecorator do
     end
   end
 
-  describe ".nearby_geonames" do
-    subject{ place.nearby_geonames }
+  describe ".nearby_geonames", :current => true do
+   subject{ place.nearby_geonames }
    context "get country name ng" do
       context " latitude is nil" do
         let(:latitude){nil}

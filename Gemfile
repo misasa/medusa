@@ -27,6 +27,7 @@ gem 'jquery-ui-rails'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
+#gem 'active_model_serializers'
 
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
@@ -73,6 +74,9 @@ gem 'builder'
 group :development, :test do
   gem 'rak'
   gem 'pry-rails'
+  gem 'pry-doc'
+  gem 'pry-stack_explorer'
+  gem 'pry-byebug'
   gem 'rspec-rails', '>= 3.0.0.beta1'
   gem 'spring'
   gem 'guard-rspec', require: false

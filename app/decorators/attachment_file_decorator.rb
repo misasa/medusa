@@ -1,6 +1,8 @@
 # -*- coding: utf-8 -*-
 class AttachmentFileDecorator < Draper::Decorator
   delegate_all
+  delegate :to_json
+  
 
   def name_with_id
     h.content_tag(:span, nil, class: "glyphicon glyphicon-file") + " #{name} < #{global_id} >"

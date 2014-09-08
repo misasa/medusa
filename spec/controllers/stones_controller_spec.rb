@@ -14,12 +14,29 @@ describe StonesController do
       get :index
     end
     it { expect(assigns(:stones).count).to eq 3 }
+
+    context "with format 'json'" do
+      before do
+        stone_1;stone_2;stone_3
+        get :index, format: 'json'
+      end
+      it { expect(response.body).to include("\"global_id\":") }    
+    end
+
   end
   
-  describe "GET show" do
+  describe "GET show", :current => true do
     let(:stone) { FactoryGirl.create(:stone) }
-    before { get :show, id: stone.id }
-    it { expect(assigns(:stone)).to eq stone }
+    context "without format" do
+      before { get :show, id: stone.id }
+      it { expect(assigns(:stone)).to eq stone }
+    end
+
+    context "with format 'json'" do
+      before { get :show, id: stone.id, format: 'json' }
+      it { expect(response.body).to include("\"global_id\":") }    
+    end
+
   end
   
   describe "GET edit" do
@@ -41,12 +58,14 @@ describe StonesController do
   describe "PUT update" do
     before do
       stone
-      put :update, id: stone.id, stone: attributes
     end
     let(:stone) { FactoryGirl.create(:stone) }
     let(:attributes) { {name: "update_name"} }
-    it { expect(assigns(:stone)).to eq stone }
-    it { expect(assigns(:stone).name).to eq attributes[:name] }
+    context "witout format" do
+      before { put :update, id: stone.id, stone:attributes }
+      it { expect(assigns(:stone)).to eq stone }
+      it { expect(assigns(:stone).name).to eq attributes[:name] }
+    end
   end
 
   describe "DELETE destroy" do
