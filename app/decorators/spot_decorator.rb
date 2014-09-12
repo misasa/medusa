@@ -2,7 +2,7 @@
 class SpotDecorator < Draper::Decorator
   include Rails.application.routes.url_helpers
   delegate_all
-  delegate :to_json
+  delegate :as_json
   
 
   def target_link

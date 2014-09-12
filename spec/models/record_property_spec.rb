@@ -51,7 +51,7 @@ describe RecordProperty do
     end
   end
 
-  describe ".datum_attributes" do
+  describe ".datum_attributes", :current => true do
     subject { record_property.datum_attributes }
     let(:record_property) { FactoryGirl.build(:record_property) }
     it { expect(subject).to include("global_id" => record_property.datum.global_id)}

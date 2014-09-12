@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 class BoxDecorator < Draper::Decorator
   delegate_all
-  delegate :to_json
+  delegate :as_json
   
   def name_with_id
     h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + " #{name} < #{global_id} >"

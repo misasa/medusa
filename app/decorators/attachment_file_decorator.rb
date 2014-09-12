@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 class AttachmentFileDecorator < Draper::Decorator
   delegate_all
-  delegate :to_json
+  delegate :as_json
   
 
   def name_with_id

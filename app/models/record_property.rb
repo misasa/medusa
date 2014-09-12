@@ -27,10 +27,10 @@ class RecordProperty < ActiveRecord::Base
   def datum_attributes
     return unless datum
 
-    h = datum.attributes
-    h.merge!("global_id" => datum.global_id) if datum.respond_to?(:global_id)
-    h.merge!("thumbnail_path" => datum.thumbnail_path) if datum.respond_to?(:thumbnail_path)
-    h
+#    h = datum.attributes
+#    h.merge!("global_id" => datum.global_id) if datum.respond_to?(:global_id)
+#    h.merge!("thumbnail_path" => datum.thumbnail_path) if datum.respond_to?(:thumbnail_path)
+    datum.decorate.as_json
   end
 
   def writable?(user)

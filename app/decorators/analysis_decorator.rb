@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 class AnalysisDecorator < Draper::Decorator
   delegate_all
-  delegate :to_json
+  delegate :as_json
   
 
   def primary_picture(width: 250, height: 250)
