@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 class BibDecorator < Draper::Decorator
   delegate_all
-  #delegate :as_json
+  delegate :as_json
 
   def primary_picture(width: 250, height: 250)
     attachment_files.first.decorate.picture(width: width, height: height) if attachment_files.present?
@@ -11,9 +11,9 @@ class BibDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + " #{name} < #{global_id} >"
   end
 
-  def as_json(options = {})
-    super({:methods => [:author_ids, :global_id]}.merge(options))
-  end
+  # def as_json(options = {})
+  #   super({:methods => [:author_ids, :global_id]}.merge(options))
+  # end
 
   def to_html
     html = author_short

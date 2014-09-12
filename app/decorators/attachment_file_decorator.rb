@@ -21,6 +21,10 @@ class AttachmentFileDecorator < Draper::Decorator
     h.link_to(content, h.attachment_file_path(self))
   end
 
+  # def as_json(options = {})
+  #   super({:methods => [:thumbnail_path, :global_id]}.merge(options))
+  # end
+
   def to_tex
     basename = File.basename(name,".*")
     lines = []

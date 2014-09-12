@@ -27,6 +27,10 @@ class AttachmentFile < ActiveRecord::Base
     File.exists?(data.path(style)) ? data.url(style) : data.url(:original)
   end
 
+  def as_json(options = {})
+    super({:methods => [:thumbnail_path, :global_id]}.merge(options))
+  end
+
   def thumbnail_path
     path(:thumb)
   end

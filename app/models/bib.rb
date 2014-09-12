@@ -18,6 +18,10 @@ class Bib < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 255 }
   validate :author_valid?, if: Proc.new{|bib| bib.authors.blank?}
   
+  def as_json(options = {})
+    super({:methods => [:author_ids, :global_id]}.merge(options))
+  end
+  
   def doi_link_url
     return unless doi
     "http://dx.doi.org/#{doi}"

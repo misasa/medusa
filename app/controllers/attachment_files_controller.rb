@@ -8,15 +8,15 @@ class AttachmentFilesController < ApplicationController
     @search = AttachmentFile.readables(current_user).search(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @attachment_files = @search.result.page(params[:page]).per(params[:per_page])
-    respond_with @attachment_files, methods: [:thumbnail_path, :global_id]
+    respond_with @attachment_files
   end
 
   def show
-    respond_with @attachment_file, methods: [:thumbnail_path, :global_id]
+    respond_with @attachment_file
   end
 
   def edit
-    respond_with @attachment_file, methods: [:thumbnail_path, :global_id], layout: !request.xhr?
+    respond_with @attachment_file, layout: !request.xhr?
   end
 
   def create
@@ -28,8 +28,8 @@ class AttachmentFilesController < ApplicationController
       else
         format.html { redirect_to ({action: :index}.merge(Marshal.restore(Base64.decode64(params[:page_params]))))}
       end
-      format.json { render json: @attachment_file, methods: [:thumbnail_path, :global_id] }
-      format.xml { render xml: @attachment_file, methods: [:thumbnail_path, :global_id] }
+      format.json { render json: @attachment_file }
+      format.xml { render xml: @attachment_file }
     end
   end
 
@@ -39,16 +39,16 @@ class AttachmentFilesController < ApplicationController
   end
 
   def property
-    respond_with @attachment_file, methods: [:thumbnail_path, :global_id], layout: !request.xhr?
+    respond_with @attachment_file, layout: !request.xhr?
   end
 
   def picture 
-    respond_with @attachment_file, methods: [:thumbnail_path, :global_id], layout: !request.xhr?
+    respond_with @attachment_file, layout: !request.xhr?
   end
 
   def destroy
     @attachment_file.destroy
-    respond_with @attachment_file, methods: [:thumbnail_path, :global_id]
+    respond_with @attachment_file
   end
 
   def download
