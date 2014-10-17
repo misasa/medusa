@@ -2,6 +2,7 @@
 lock '3.1.0'
 
 set :application, 'dream'
+#set :application, 'medusa'
 set :repo_url, 'git@devel.misasa.okayama-u.ac.jp:orochi/medusa.git'
 
 # Default branch is :master
@@ -9,8 +10,11 @@ set :repo_url, 'git@devel.misasa.okayama-u.ac.jp:orochi/medusa.git'
 
 # Default deploy_to directory is /var/www/my_app
 # set :deploy_to, '/var/www/my_app'
-# set :deploy_to, '/srv/medusa/'
-set :deploy_to, '/srv/dream/'
+if ENV['DEMO']
+  set :deploy_to, '/srv/medusa_demo/'
+else
+  set :deploy_to, '/srv/dream/'
+end
 
 # Default value for :scm is :git
 # set :scm, :git
