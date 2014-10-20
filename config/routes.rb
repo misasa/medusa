@@ -37,6 +37,7 @@ Medusa::Application.routes.draw do
   resources :records, { id: /((?!\.(html$|json$|xml$)).)*/ } do
     member do
       get 'record_property' => 'records#property'
+      get 'casteml'     
     end
   end
 

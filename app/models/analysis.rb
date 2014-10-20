@@ -135,12 +135,12 @@ class Analysis < ActiveRecord::Base
     chemistries.joins(:measurement_item).merge(MeasurementItem.where(nickname: nickname)).first
   end
 
-  def self.to_castemls(analyses)
+  def self.to_castemls(objs)
     xml = ::Builder::XmlMarkup.new(indent: 2)
     xml.instruct!
     xml.acquisitions do
-      analyses.each do |analysis|
-        analysis.to_pml(xml)
+      objs.each do |obj|
+        obj.to_pml(xml) if obj.respond_to?(:to_pml)
       end
     end
   end

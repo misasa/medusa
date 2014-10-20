@@ -4,7 +4,7 @@ describe RecordsController do
   let(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
 
-  describe "GET index", :current => true do
+  describe "GET index" do
     let(:stone) { FactoryGirl.create(:stone) }
     let(:box) { FactoryGirl.create(:box) }
     let(:analysis) { FactoryGirl.create(:analysis) }
@@ -110,6 +110,20 @@ describe RecordsController do
     end
   end
   
+  describe "GET casteml", :current => true do
+    let(:obj) { FactoryGirl.create(:stone) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, :stone_id => obj.id )}
+    let(:analysis_2){ FactoryGirl.create(:analysis, :stone_id => obj.id )}
+    let(:casteml){Analysis.to_castemls([analysis_2, analysis_1])}
+    before do
+      obj
+      analysis_1
+      analysis_2      
+    end
+    after{get :casteml, id: obj.global_id }
+    it { expect(controller).to receive(:send_data).with(casteml, filename: obj.global_id + ".pml", type: "application/xml", disposition: "attached").and_return{controller.render nothing: true} }
+  end
+
   describe "DELETE destroy" do
     let(:stone) { FactoryGirl.create(:stone) }
     before { stone }

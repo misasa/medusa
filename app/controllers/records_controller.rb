@@ -23,6 +23,13 @@ class RecordsController < ApplicationController
 
   end
 
+  def casteml
+    send_data(Analysis.to_castemls([@record]),
+              :type => 'application/xml',
+              :filename => @record.global_id + '.pml', 
+              :disposition=>'attached')    
+  end
+
   def property
     respond_with @record.record_property
   end

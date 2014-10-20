@@ -26,6 +26,13 @@ class Stone < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 255 }
   validate :parent_id_cannot_self_children, if: ->(stone) { stone.parent_id }
 
+
+  def to_pml(xml)
+    analyses.each do |analysis|
+      analysis.to_pml(xml)
+    end
+  end
+
   private
 
   def parent_id_cannot_self_children

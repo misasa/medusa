@@ -29,3 +29,4 @@
 # Ignore eclipse files.
 .project
 public/system
+vendor/bundler
