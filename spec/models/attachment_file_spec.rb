@@ -52,9 +52,23 @@ describe AttachmentFile do
     end
   end
 
+  describe ".md5hash", :current => true do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:md5hash){ Digest::MD5.hexdigest(File.open("spec/fixtures/files/test_image.jpg", 'rb').read) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+    before do
+      User.current = user
+      obj
+    end
+    it {expect(obj.md5hash).to eq(md5hash)}
+    after do
+      obj.destroy
+    end
+  end
+
   describe ".data_fingerprint" do
     let(:obj) { FactoryGirl.create(:attachment_file) }
-    before{obj.data_fingerprint = "test"}
+    before{ obj.data_fingerprint = "test" }
     it {expect(obj.data_fingerprint).to eq("test")}
   end
 

@@ -22,7 +22,7 @@ describe AttachmentFilesController do
     it { expect(assigns(:attachment_file)).to eq attachment_file }
   end
 
-  describe "GET show", :current => true do
+  describe "GET show" do
     let(:attachment_file) { FactoryGirl.create(:attachment_file) }
     before { get :show, id: attachment_file.id, format: 'json' }
     it { expect(assigns(:attachment_file)).to eq attachment_file }
@@ -35,8 +35,17 @@ describe AttachmentFilesController do
     it { expect(assigns(:attachment_file)).to eq attachment_file }
   end
   
-  describe "GET create" do
+  describe "POST create", :current => true do
+    let(:md5hash){ Digest::MD5.hexdigest(File.open("spec/fixtures/files/test_image.jpg", 'rb').read) }    
+    let(:attributes) { {data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')} }
+    it { expect { post :create, attachment_file: attributes, format: 'json' }.to change(AttachmentFile, :count).by(1) }
+    describe "assigns as @attachment_file" do
+      before { post :create, attachment_file: attributes, format: 'json' }
+      it { expect(assigns(:attachment_file)).to be_persisted }
+      it { expect(assigns(:attachment_file).md5hash).to eq md5hash}
+    end
   end
+
   
   describe "PUT update" do
   end
