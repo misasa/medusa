@@ -21,7 +21,11 @@
     <span class="glyphicon glyphicon-off"></span>
   <% end %>
   </li>
-  <li><a href="#"><span class="glyphicon glyphicon-question-sign"></span></a></li>
+  <li>
+  <%= link_to Settings.help_url, title: "help" do %>
+    <span class="glyphicon glyphicon-question-sign"></span>
+  <% end %>
+  </li>
 </ul>
 
 <%= search_form_for @records_search, url: records_path, class: "navbar-form navbar-right" do |f| %>
