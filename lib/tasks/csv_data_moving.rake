@@ -10,7 +10,7 @@ task :csv_data_moving => :environment do
       SELECT MAX(id)
       FROM #{path.basename(".csv")}
     ").to_i
-    
+    next if max_next_id == 0    
     ActiveRecord::Base.connection.execute("
       SELECT setval('#{path.basename(".csv")}_id_seq', #{max_next_id})
     ")
@@ -19,7 +19,7 @@ task :csv_data_moving => :environment do
   users = CSV.table("#{work_dir}/users.csv")
   
   users.each do |row|
-    row << { password: "password", password_confirmation: "password" }
+    row << { password: "admin", password_confirmation: "admin" }
     User.create(row.to_h)
   end
   
