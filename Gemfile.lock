@@ -4,24 +4,9 @@ GIT
   specs:
     alchemist (0.1.7)
 
-GIT
-  remote: git@devel.misasa.okayama-u.ac.jp:gems/actsasmappable.git
-  revision: b9f525091e71c90d9e1237e7de11d656e9df30d1
-  specs:
-    acts_as_mappable (0.0.2)
-      actionpack (~> 4.0)
-      activerecord (~> 4.0)
-      railties (~> 4.0)
-
-GIT
-  remote: git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.git
-  revision: 4eee5182a82fc19a160e507e716b328eb56dcd7c
-  specs:
-    with_recursive (0.0.3)
-      activerecord (~> 4.0)
-
 GEM
   remote: https://rubygems.org/
+  remote: http://dream.misasa.okayama-u.ac.jp/rubygems/
   specs:
     Ascii85 (1.0.2)
     actionmailer (4.0.2)
@@ -50,6 +35,10 @@ GEM
       tzinfo (~> 0.3.37)
     acts_as_list (0.4.0)
       activerecord (>= 3.0)
+    acts_as_mappable (0.0.2)
+      actionpack (~> 4.0)
+      activerecord (~> 4.0)
+      railties (~> 4.0)
     acts_as_taggable_on (3.0.0.rc2)
       rails (>= 3, < 5)
     afm (0.2.0)
@@ -338,6 +327,8 @@ GEM
     whenever (0.9.0)
       activesupport (>= 2.3.4)
       chronic (>= 0.6.3)
+    with_recursive (0.0.3)
+      activerecord (~> 4.0)
     xpath (2.0.0)
       nokogiri (~> 1.3)
     yard (0.8.7.4)
@@ -347,7 +338,7 @@ PLATFORMS
 
 DEPENDENCIES
   acts_as_list
-  acts_as_mappable!
+  acts_as_mappable
   acts_as_taggable_on
   alchemist!
   barby
@@ -398,4 +389,4 @@ DEPENDENCIES
   unicorn
   validates_existence
   whenever
-  with_recursive!
+  with_recursive
