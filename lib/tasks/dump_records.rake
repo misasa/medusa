@@ -17,7 +17,8 @@ namespace :record do
 			physicalitems.concat(stones)
 
 		  	output_path = ENV['output_path'] || "tmp/auto-stone-list"
-			STDERR.puts "writing |#{output_path}|..."
+		  	raise "Hello world"
+			#STDERR.puts "writing |#{output_path}|..."
 		  	output = File.open(output_path,"w")
 			physicalitems.each do |obj|
 				output.puts "#{obj.latex_mode(:box)}"
@@ -41,7 +42,7 @@ namespace :record do
 			items.concat(Stone.find(:all))
 			items.concat(Bib.find(:all))
 		  	output_path = ENV['output_path'] || "tmp/ref_dream.bib"
-			STDERR.puts "writing |#{output_path}|..."
+			#STDERR.puts "writing |#{output_path}|..."
 		  	output = File.open(output_path,"w")
 
 			items.each do |obj|
