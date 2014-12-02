@@ -17,7 +17,6 @@ namespace :record do
 			physicalitems.concat(stones)
 
 		  	output_path = ENV['output_path'] || "tmp/auto-stone-list"
-		  	raise "Hello world"
 			#STDERR.puts "writing |#{output_path}|..."
 		  	output = File.open(output_path,"w")
 			physicalitems.each do |obj|
