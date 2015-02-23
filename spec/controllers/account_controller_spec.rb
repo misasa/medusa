@@ -19,6 +19,19 @@ describe AccountsController do
       it { expect(response).to render_template("show") }
     end
   end
+  describe "GET show with format", :current => true do
+    context "with format 'json'" do
+      let(:box){ FactoryGirl.create(:box)}
+      before { 
+        user.box = box
+        user.save
+        get :show, format: 'json'
+      }
+      it { expect(response.body).to include("\"box_id\":#{box.id}") }    
+      it { expect(response.body).to include("\"box_global_id\":\"#{box.global_id}\"") }    
+    end
+  end
+
 
   describe "GET edit" do
     before do

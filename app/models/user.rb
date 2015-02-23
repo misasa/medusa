@@ -24,8 +24,13 @@ class User < ActiveRecord::Base
     Thread.current[:user] = user
   end
   
+  def as_json(options = {})
+    super({:methods => :box_global_id}.merge(options))
+  end
+
   protected
-     
+
+
   def email_required?
     false
   end

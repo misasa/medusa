@@ -7,6 +7,33 @@ describe User do
     it{ expect(User.current.id).to eq user.id }
   end
 
+  describe "box_global_id", :current => true do
+    let(:user){ FactoryGirl.create(:user) }
+    let(:box){ FactoryGirl.create(:box)}
+    context "with box" do
+      before { 
+        user.box = box
+        user.save
+      }
+      it { expect(user.box_global_id).to eq(box.global_id)}
+    end
+    context "without box" do
+      it { expect(user.box_global_id).to be_nil}
+    end
+
+  end
+
+  describe "as_json", :current => true do
+    let(:user){ FactoryGirl.create(:user) }
+    let(:box){ FactoryGirl.create(:box)}
+    before { 
+      user.box = box
+      user.save
+    }
+    it { expect(user.as_json).to include("box_id" => box.id)}
+    it { expect(user.as_json).to include("box_global_id" => box.global_id)}
+  end
+
   describe "validates" do
     describe "name" do
       let(:obj) { FactoryGirl.build(:user, username: username,email: "test1@test.co.jp") }
