@@ -1,5 +1,6 @@
 defaults: &defaults
   site_name: "Medusa"
+  help_url: http://dream.misasa.okayama-u.ac.jp/documentation/  
   barcode:
     prefix:
     type: 2D
