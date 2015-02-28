@@ -18,13 +18,12 @@ class RecordsController < ApplicationController
       format.html { redirect_to @record }
       format.json { render json: @record.record_property, methods: [:datum_attributes] }
       format.xml { render xml: @record.record_property, methods: [:datum_attributes] }
-
     end
 
   end
 
   def casteml
-    send_data(Analysis.to_castemls([@record]),
+    send_data([@record].to_pml,
               :type => 'application/xml',
               :filename => @record.global_id + '.pml', 
               :disposition=>'attached')    

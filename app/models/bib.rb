@@ -22,6 +22,20 @@ class Bib < ActiveRecord::Base
     super({:methods => [:author_ids, :global_id]}.merge(options))
   end
   
+  def referrings_analyses
+    ranalyses = self.analyses
+    stones.each do |stone| 
+      (ranalyses = ranalyses + stone.analyses) unless stone.analyses.empty?
+    end
+    boxes.each do |box| 
+      (ranalyses = ranalyses + box.analyses) unless box.analyses.empty?
+    end
+    places.each do |place| 
+      (ranalyses = ranalyses + place.analyses) unless place.analyses.empty?
+    end
+    ranalyses.uniq
+  end
+
   def doi_link_url
     return unless doi
     "http://dx.doi.org/#{doi}"

@@ -42,6 +42,15 @@ describe RecordsController do
 
     end
 
+    context "with format pml" do
+      before do
+        get :index, format: 'pml'
+      end
+      it { expect(assigns(:records).size).to eq(allcount) }
+      it { expect(response.body).to include("\<global_id\>#{analysis.global_id}") }    
+
+    end
+
   end
 
   describe "GET show" do
@@ -61,6 +70,17 @@ describe RecordsController do
       end
       it { expect(response).to  redirect_to(controller: "stones",action: "show",id:stone.id) }
     end
+    context "record found pml " do
+      let(:stone) { FactoryGirl.create(:stone) }
+      let(:analysis){ FactoryGirl.create(:analysis, stone_id: stone.id ) }
+      before do
+        stone
+        analysis
+        get :show, id: stone.record_property.global_id ,format: :pml
+      end
+      it { expect(response.body).to include("\<sample_global_id\>#{stone.global_id}") }    
+
+    end
     context "record not found json" do
       before do
         get :show, id: "not_found_id" ,format: :json
@@ -75,6 +95,14 @@ describe RecordsController do
       it { expect(response).to render_template("record_not_found") }
       it { expect(response.status).to eq 404 }
     end
+    context "record not found pml" do
+      before do
+        get :show, id: "not_found_id" ,format: :pml
+      end
+      it { expect(response.body).to be_blank }
+      it { expect(response.status).to eq 404 }
+    end
+
   end
 
   describe "GET property" do

@@ -25,6 +25,11 @@ module HasRecordProperty
     super({:methods => :global_id}.merge(options))
   end
 
+  def to_pml
+    [self].to_pml
+  end
+  
+
   def form_name
     return self.physical_form.name if self.respond_to?(:physical_form) && self.physical_form
     return self.box_type.name if self.respond_to?(:box_type) && self.box_type

@@ -299,4 +299,35 @@ describe Bib do
     it { expect(subject).to eq "can't be blank" }
   end
 
+  describe "#referrings_analyses" do
+    let(:bib) { FactoryGirl.create(:bib) }
+
+    let(:box_1){ FactoryGirl.create(:box)}
+    let(:place_1){ FactoryGirl.create(:place)}
+    let(:stone_1) { FactoryGirl.create(:stone, name: "hoge", box_id: box_1.id) }
+    let(:stone_2) { FactoryGirl.create(:stone, name: "stone_2", place_id: place_1.id) }
+    let(:stone_3) { FactoryGirl.create(:stone, name: "stone_3", box_id: box_1.id) }
+    let(:stone_4) { FactoryGirl.create(:stone, name: "stone_3") }
+    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone_1.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone_2.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone_3.id) }
+    let(:analysis_4) { FactoryGirl.create(:analysis) }
+
+    before do
+      bib
+      box_1;place_1;
+      stone_1;stone_2;stone_3;stone_4;
+      analysis_1;analysis_2;analysis_3;analysis_4;
+      bib.boxes << box_1
+      bib.places << place_1      
+      bib.stones << stone_3
+      bib.analyses << analysis_3      
+      bib.analyses << analysis_4
+    end
+    it { expect(bib.analyses).to match_array([analysis_3, analysis_4])}
+    it { expect(bib.referrings_analyses).to match_array([analysis_1, analysis_2, analysis_3, analysis_4])}
+    it { expect(bib.to_pml).to include("\<global_id\>#{analysis_3.global_id}") }    
+    it { expect(bib.to_pml).to include("\<global_id\>#{analysis_4.global_id}") }    
+  end
+
 end

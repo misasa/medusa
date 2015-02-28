@@ -1,5 +1,5 @@
 class AnalysesController < ApplicationController
-  respond_to :html, :xml, :json
+  respond_to :html, :xml, :json, :pml
   before_action :find_resource, except: [:index, :new, :create, :bundle_edit, :bundle_update, :import, :table, :castemls]
   before_action :find_resources, only: [:bundle_edit, :bundle_update, :table, :castemls]
   load_and_authorize_resource

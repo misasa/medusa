@@ -214,6 +214,28 @@ describe Analysis do
     it {expect(subject).to be_present}
   end
 
+  describe "#to_pml", :current => true do
+    let(:box){ FactoryGirl.create(:box)}
+    let(:stone){ FactoryGirl.create(:stone, box_id: box.id)}
+    let(:spot){FactoryGirl.create(:spot)}
+    let(:attachment_file){FactoryGirl.create(:attachment_file)}
+    let(:chemistry){FactoryGirl.create(:chemistry)}
+    let(:obj) { FactoryGirl.create(:analysis) }
+    let(:obj2) { FactoryGirl.create(:analysis) }
+    let(:obj3) { FactoryGirl.create(:analysis, stone_id: stone.id) }
+    let(:objs){ [obj,obj2, stone]}
+    let(:objs2){ [obj,obj2,box]}
+    before do
+      attachment_file.spots << spot
+      obj.attachment_files << attachment_file
+      obj.chemistries << chemistry
+      obj3
+    end
+    it { expect(obj.to_pml).to be_present }
+    it { expect(objs.to_pml).to be_eql([obj, obj2, obj3].to_pml) }
+    it { expect(objs2.to_pml).to be_eql([obj, obj2, obj3].to_pml) }
+  end
+
   describe ".get_spot" do
     subject { obj.get_spot }
     let(:user){FactoryGirl.create(:user)}

@@ -9,8 +9,17 @@ describe BoxesController do
     let(:box_1) { FactoryGirl.create(:box, name: "hoge") }
     let(:box_2) { FactoryGirl.create(:box, name: "box_2") }
     let(:box_3) { FactoryGirl.create(:box, name: "box_3") }
+    let(:stone_1) { FactoryGirl.create(:stone, name: "hoge", box_id: box_1.id) }
+    let(:stone_2) { FactoryGirl.create(:stone, name: "stone_2", box_id: box_2.id) }
+    let(:stone_3) { FactoryGirl.create(:stone, name: "stone_3", box_id: box_3.id) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone_1.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone_2.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone_3.id) }
+
     before do
       box_1;box_2;box_3
+      stone_1;stone_2;stone_3;      
+      analysis_1;analysis_2;analysis_3;
     end
     context "without format" do
       before do
@@ -27,10 +36,29 @@ describe BoxesController do
       it { expect(response.body).to include("global_id")}
     end
 
+    context "with format 'pml'", :current => true do
+      before do
+        get :index, format: 'pml'
+      end
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_1.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_2.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_3.global_id}") }    
+    end
+
   end
 
   describe "GET show" do
     let(:box) { FactoryGirl.create(:box) }
+    let(:stone_1) { FactoryGirl.create(:stone, name: "hoge", box_id: box.id) }
+    let(:stone_2) { FactoryGirl.create(:stone, name: "stone_2", box_id: box.id) }
+    let(:stone_3) { FactoryGirl.create(:stone, name: "stone_3", box_id: box.id) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone_1.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone_2.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone_3.id) }
+    before do
+      stone_1;stone_2;stone_3;      
+      analysis_1;analysis_2;analysis_3;
+    end
     context "without format" do
       before { get :show, id: box.id }
       it { expect(assigns(:box)).to eq box }
@@ -38,6 +66,13 @@ describe BoxesController do
     context "with format 'json'", :current => true do
       before { get :show, id: box.id, format: 'json' }
       it { expect(response.body).to include("global_id") }
+    end
+    context "with format 'pml'", :current => true do
+      before { get :show, id: box.id, format: 'pml' }
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_1.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_2.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_3.global_id}") }    
+
     end
 
   end

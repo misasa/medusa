@@ -1,6 +1,29 @@
 require "spec_helper"
 
 describe Stone do
+  describe ".to_pml", :current => true do
+    let(:stone1) { FactoryGirl.create(:stone) }
+    let(:stone2) { FactoryGirl.create(:stone) }
+    let(:stones) { [stone1] }
+    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone1.id)}
+    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone1.id)}
+    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone2.id)}
+    let(:analysis_4) { FactoryGirl.create(:analysis, stone_id: stone2.id)}
+    before do
+      stone1
+      stone2
+      analysis_1
+      analysis_2
+      analysis_3
+      analysis_4
+    end
+    it { expect(stone1.analyses.count).to eq 2}
+    it { expect(stone1.to_pml).to eql([analysis_2, analysis_1].to_pml)}
+    it { expect(stone2.analyses.count).to eq 2}
+    it { expect(stone2.to_pml).to eql([analysis_4, analysis_3].to_pml)}
+    it { expect(stones.to_pml).to eql([analysis_2, analysis_1].to_pml) }
+
+  end
   describe ".blood_path" do
       let(:parent_stone) { FactoryGirl.create(:stone) }
       let(:stone) { FactoryGirl.create(:stone, parent_id: parent_id) }

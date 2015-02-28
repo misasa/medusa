@@ -9,6 +9,9 @@ describe StonesController do
     let(:stone_1) { FactoryGirl.create(:stone, name: "hoge") }
     let(:stone_2) { FactoryGirl.create(:stone, name: "stone_2") }
     let(:stone_3) { FactoryGirl.create(:stone, name: "stone_3") }
+    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone_1.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone_2.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone_3.id) }
     before do
       stone_1;stone_2;stone_3
       get :index
@@ -18,15 +21,34 @@ describe StonesController do
     context "with format 'json'" do
       before do
         stone_1;stone_2;stone_3
+        analysis_1;analysis_2;analysis_3;
         get :index, format: 'json'
       end
       it { expect(response.body).to include("\"global_id\":") }    
+    end
+
+    context "with format 'pml'" do
+      before do
+        stone_1;stone_2;stone_3
+        analysis_1;analysis_2;analysis_3;
+
+        get :index, format: 'pml'
+      end
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_1.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_2.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_3.global_id}") }    
     end
 
   end
   
   describe "GET show", :current => true do
     let(:stone) { FactoryGirl.create(:stone) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone.id) }
+    before do
+      analysis_1;analysis_2;analysis_3;
+    end
     context "without format" do
       before { get :show, id: stone.id }
       it { expect(assigns(:stone)).to eq stone }
@@ -35,6 +57,11 @@ describe StonesController do
     context "with format 'json'" do
       before { get :show, id: stone.id, format: 'json' }
       it { expect(response.body).to include("\"global_id\":") }    
+    end
+
+    context "with format 'pml'" do
+      before { get :show, id: stone.id, format: 'pml' }
+      it { expect(response.body).to include("\<sample_global_id\>#{stone.global_id}") }    
     end
 
   end

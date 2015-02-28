@@ -9,11 +9,70 @@ describe AnalysesController do
     let(:obj_1) { FactoryGirl.create(:analysis, name: "hoge") }
     let(:obj_2) { FactoryGirl.create(:analysis, name: "analysis_2") }
     let(:obj_3) { FactoryGirl.create(:analysis, name: "analysis_3") }
+
     before do
       obj_1;obj_2;obj_3
-      get :index
+      #get :index
     end
-    it { expect(assigns(:analyses).count).to eq 3 }
+    context "without format" do
+      before { get :index }
+      it { expect(assigns(:analyses).count).to eq 3 }
+    end
+
+    context "with format json" do
+      before do
+        get :index, format: 'json'
+      end
+      it { expect(assigns(:analyses).count).to eq 3 }
+      it { expect(response.body).to include("\"global_id\":") }
+    end
+
+    context "with format xml" do
+      before do
+        get :index, format: 'xml'
+      end
+      it { expect(assigns(:analyses).count).to eq 3 }
+      it { expect(response.body).to eq([obj_3, obj_2, obj_1].to_xml)}
+    end
+
+
+    context "with format pml" do
+      before do
+        get :index, format: 'pml'
+      end
+      it { expect(assigns(:analyses).count).to eq 3 }
+      it { expect(response.body).to eq([obj_3, obj_2, obj_1].to_pml)}
+    end
+
+    describe "with query" do
+      context "without format" do
+        before do
+          get :index, :q => {:name_cont => 'xxx'}
+        end
+        it { expect(assigns(:analyses).count).to eq 0 }
+      end
+      context "with format json" do
+        before do
+          get :index, :q => {:name_cont => 'xxx'}, :format => 'json'
+        end
+        it { expect(response.body).to eq [].to_json }
+      end
+      context "with format xml" do
+        before do
+          get :index, :q => {:name_cont => 'xxx'}, :format => 'xml'
+        end
+        it { expect(response.body).to eq [].to_xml }
+      end
+      context "with format pml" do
+        before do
+          get :index, :q => {:name_cont => 'xxx'}, :format => 'pml'
+        end
+        it { expect(response.body).to eq [].to_pml }
+      end
+
+
+    end
+
   end
 
   describe "GET show" do
@@ -27,6 +86,17 @@ describe AnalysesController do
     context "record not found" do
       let(:id){0}
       it {expect{method}.to raise_error(ActiveRecord::RecordNotFound)}
+    end
+    context "with format pml", :current => true do
+      let(:id){obj.id}
+      before do
+        #get :show, id: id, format: 'pml'
+        get :show, id: id ,format: :pml
+
+      end
+      it{ expect(assigns(:analysis)).to eq obj }
+      it { expect(response.body).to eq(obj.to_pml) }
+
     end
   end
 

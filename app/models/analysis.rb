@@ -145,7 +145,11 @@ class Analysis < ActiveRecord::Base
     end
   end
 
-  def to_pml(xml)
+  def to_pml(xml=nil)
+    unless xml
+      xml = ::Builder::XmlMarkup.new(indent: 2)
+      xml.instruct!
+    end
     xml.acquisition do
       xml.global_id(global_id)
       xml.name(name)
@@ -179,6 +183,7 @@ class Analysis < ActiveRecord::Base
         end
       end
     end
+    
   end
 
   def get_spot

@@ -13,6 +13,21 @@ describe Place do
     end
   end
 
+  describe "#analyses" do
+    let(:obj){FactoryGirl.create(:place) }
+    let(:stone_1) { FactoryGirl.create(:stone, name: "hoge", place_id: obj.id) }
+    let(:stone_2) { FactoryGirl.create(:stone, name: "stone_2", place_id: obj.id) }
+    let(:stone_3) { FactoryGirl.create(:stone, name: "stone_3", place_id: obj.id) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone_1.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone_2.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone_3.id) }
+    before do
+      stone_1;stone_2;stone_3;      
+      analysis_1;analysis_2;analysis_3;
+    end
+    it { expect(obj.analyses).to match_array([analysis_1,analysis_2,analysis_3])}    
+  end
+
   describe ".import_csv" do
     subject { Place.import_csv(file) }
     context "file is nil" do

@@ -18,16 +18,29 @@ describe PlacesController do
     let(:group_2) { FactoryGirl.create(:group, :name => "hoge") }
     let(:group_3) { FactoryGirl.create(:group, :name => "group_3") }
     let(:params) { {q: query} }
+
+    let(:stone_1) { FactoryGirl.create(:stone, name: "hoge", place_id: place_1.id) }
+    let(:stone_2) { FactoryGirl.create(:stone, name: "stone_2", place_id: place_2.id) }
+    let(:stone_3) { FactoryGirl.create(:stone, name: "stone_3", place_id: place_3.id) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone_1.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone_2.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone_3.id) }
+
     before do
       place_1
       place_2
       place_3
+      stone_1;stone_2;stone_3;      
+      analysis_1;analysis_2;analysis_3;      
       record_property_1.update_attribute(:group_id, group_1.id)
       record_property_2.update_attributes(:user_id => user_2.id, :group_id => group_2.id, :guest_readable => true, :guest_writable => true)
       record_property_3.update_attributes(:user_id => user_3.id, :group_id => group_3.id, :guest_readable => true, :guest_writable => true)
-      get :index, params
+#      get :index, params
     end
     describe "search" do
+      before do
+        get :index, params
+      end
       context "name search" do
         let(:query) { {"name_cont" => "place"} }
         it { expect(assigns(:places)).to eq [place_2, place_1] }
@@ -42,6 +55,10 @@ describe PlacesController do
       end
     end
     describe "sort" do
+      before do
+        get :index, params
+      end
+
       let(:params) { {q: query, page: 2, per_page: 1} }
       context "sort condition is present" do
         let(:query) { {"name_cont" => "place", "s" => "updated_at DESC"} }
@@ -52,6 +69,15 @@ describe PlacesController do
         it { expect(assigns(:places)).to eq [place_1] }
       end
     end
+
+    context "with format 'pml'" do
+      before do
+        get :index, format: 'pml'
+      end
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_1.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_2.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_3.global_id}") } 
+    end
   end
 
   # send_data test returns unexpected object.
@@ -60,9 +86,29 @@ describe PlacesController do
 
   describe "GET show" do
     let(:obj){FactoryGirl.create(:place) }
-    before{get :show,id:obj.id}
-    it{expect(assigns(:place)).to eq obj}
-    it{expect(response).to render_template("show") }
+    let(:stone_1) { FactoryGirl.create(:stone, name: "hoge", place_id: obj.id) }
+    let(:stone_2) { FactoryGirl.create(:stone, name: "stone_2", place_id: obj.id) }
+    let(:stone_3) { FactoryGirl.create(:stone, name: "stone_3", place_id: obj.id) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone_1.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone_2.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone_3.id) }
+    before do
+      stone_1;stone_2;stone_3;      
+      analysis_1;analysis_2;analysis_3;
+    end
+    context "without format" do    
+      before{get :show,id:obj.id}
+      it{expect(assigns(:place)).to eq obj}
+      it{expect(response).to render_template("show") }
+    end
+
+    context "with format 'pml'" do
+      before { get :show, id: obj.id, format: 'pml' }
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_1.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_2.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{stone_3.global_id}") }    
+    end
+
   end
 
   describe "GET edit" do
