@@ -54,6 +54,7 @@ describe RecordsController do
   end
 
   describe "GET show" do
+
     context "record found json " do
       let(:stone) { FactoryGirl.create(:stone) }
       before do

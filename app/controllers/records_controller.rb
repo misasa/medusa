@@ -1,5 +1,5 @@
 class RecordsController < ApplicationController
-  respond_to :html, :json, :xml
+  respond_to :html, :json, :xml, :pml
   before_action :find_resource, except: [:index]
 
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
