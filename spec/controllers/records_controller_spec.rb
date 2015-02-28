@@ -106,6 +106,234 @@ describe RecordsController do
 
   end
 
+  describe "GET ancestors" do
+    let(:root) { FactoryGirl.create(:stone, name: "root") }
+    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: root.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    before do
+      root;child_1;child_1_1;
+      analysis_1;analysis_2;analysis_3;
+    end
+    context "with format pml" do
+      before do
+        get :ancestors, id: child_1_1.record_property.global_id, format: :pml
+      end
+      it { expect(response.body).to include("\<sample_global_id\>#{root.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1.global_id}") }    
+    end
+    context "with format json" do
+      before do
+        get :ancestors, id: child_1_1.record_property.global_id, format: :json
+      end
+      it { expect(response.body).to include("\"global_id\":\"#{root.global_id}\"") }
+      it { expect(response.body).to include("\"global_id\":\"#{child_1.global_id}\"") }    
+    end
+  end
+
+  describe "GET descendants" do
+    let(:root) { FactoryGirl.create(:stone, name: "root") }
+    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: root.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    before do
+      root;child_1;child_1_1;
+      analysis_1;analysis_2;analysis_3;
+    end
+    context "with format pml" do
+      before do
+        get :descendants, id: root.record_property.global_id, format: :pml
+      end
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1_1.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1.global_id}") }    
+    end
+    context "with format json" do
+      before do
+        get :descendants, id: root.record_property.global_id, format: :json
+      end
+      it { expect(response.body).to include("\"global_id\":\"#{child_1_1.global_id}\"") }
+      it { expect(response.body).to include("\"global_id\":\"#{child_1.global_id}\"") }    
+    end
+  end
+
+  describe "GET families" do
+    let(:root) { FactoryGirl.create(:stone, name: "root") }
+    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: root.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    before do
+      root;child_1;child_1_1;
+      analysis_1;analysis_2;analysis_3;
+    end
+    context "with format pml" do
+      before do
+        get :families, id: child_1.record_property.global_id, format: :pml
+      end
+      it { expect(response.body).to include("\<sample_global_id\>#{root.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1_1.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1.global_id}") }    
+    end
+    context "with format json" do
+      before do
+        get :families, id: child_1.record_property.global_id, format: :json
+      end
+      it { expect(response.body).to include("\"global_id\":\"#{root.global_id}\"") }      
+      it { expect(response.body).to include("\"global_id\":\"#{child_1_1.global_id}\"") }
+      it { expect(response.body).to include("\"global_id\":\"#{child_1.global_id}\"") }    
+    end
+  end
+
+  describe "GET root" do
+    let(:root) { FactoryGirl.create(:stone, name: "root") }
+    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: root.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    before do
+      root;child_1;child_1_1;
+      analysis_1;analysis_2;analysis_3;
+    end
+    context "with format pml" do
+      before do
+        get :root, id: child_1_1.record_property.global_id, format: :pml
+      end
+      it { expect(response.body).to include("\<sample_global_id\>#{root.global_id}") }    
+    end
+    context "with format json" do
+      before do
+        get :root, id: child_1_1.record_property.global_id, format: :json
+      end
+      it { expect(response.body).to include("\"global_id\":\"#{root.global_id}\"") }
+    end
+  end
+
+  describe "GET parent" do
+    let(:root) { FactoryGirl.create(:stone, name: "root") }
+    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: root.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    before do
+      root;child_1;child_1_1;
+      analysis_1;analysis_2;analysis_3;
+    end
+    context "with format pml" do
+      before do
+        get :parent, id: child_1_1.record_property.global_id, format: :pml
+      end
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1.global_id}") }    
+    end
+    context "with format json" do
+      before do
+        get :parent, id: child_1_1.record_property.global_id, format: :json
+      end
+      it { expect(response.body).to include("\"global_id\":\"#{child_1.global_id}\"") }
+    end
+  end
+
+
+  describe "GET siblings" do
+    let(:root) { FactoryGirl.create(:stone, name: "root") }
+    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:child_1_2){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:child_1_3){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+
+    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1_2.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_3.id ) }
+    before do
+      root;child_1;child_1_1;child_1_2;child_1_3;
+      analysis_1;analysis_2;analysis_3;
+    end
+    context "with format pml" do
+      before do
+        get :siblings, id: child_1_1.record_property.global_id, format: :pml
+      end
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1_2.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1_3.global_id}") }    
+    end
+    context "with format json" do
+      before do
+        get :siblings, id: child_1_1.record_property.global_id, format: :json
+      end
+      it { expect(response.body).to include("\"global_id\":\"#{child_1_2.global_id}\"") }
+      it { expect(response.body).to include("\"global_id\":\"#{child_1_3.global_id}\"") }
+    end
+  end
+
+  describe "GET daughters" do
+    let(:root) { FactoryGirl.create(:stone, name: "root") }
+    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:child_1_2){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:child_1_3){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+
+    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1_2.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_3.id ) }
+    before do
+      root;child_1;child_1_1;child_1_2;child_1_3;
+      analysis_1;analysis_2;analysis_3;
+    end
+    context "with format pml" do
+      before do
+        get :daughters, id: child_1.record_property.global_id, format: :pml
+      end
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1_1.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1_2.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1_3.global_id}") }    
+    end
+    context "with format json" do
+      before do
+        get :daughters, id: child_1.record_property.global_id, format: :json
+      end
+      it { expect(response.body).to include("\"global_id\":\"#{child_1_1.global_id}\"") }      
+      it { expect(response.body).to include("\"global_id\":\"#{child_1_2.global_id}\"") }
+      it { expect(response.body).to include("\"global_id\":\"#{child_1_3.global_id}\"") }
+    end
+  end
+
+  describe "GET self_and_siblings" do
+    let(:root) { FactoryGirl.create(:stone, name: "root") }
+    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:child_1_2){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:child_1_3){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+
+    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1_2.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_3.id ) }
+    before do
+      root;child_1;child_1_1;child_1_2;child_1_3;
+      analysis_1;analysis_2;analysis_3;
+    end
+    context "with format pml" do
+      before do
+        get :self_and_siblings, id: child_1_1.record_property.global_id, format: :pml
+      end
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1_1.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1_2.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{child_1_3.global_id}") }    
+    end
+    context "with format json" do
+      before do
+        get :self_and_siblings, id: child_1_1.record_property.global_id, format: :json
+      end
+      it { expect(response.body).to include("\"global_id\":\"#{child_1_1.global_id}\"") }      
+      it { expect(response.body).to include("\"global_id\":\"#{child_1_2.global_id}\"") }
+      it { expect(response.body).to include("\"global_id\":\"#{child_1_3.global_id}\"") }
+    end
+  end
+
   describe "GET property" do
     context "record found json" do
       let(:stone) { FactoryGirl.create(:stone) }
@@ -139,11 +367,11 @@ describe RecordsController do
     end
   end
   
-  describe "GET casteml", :current => true do
+  describe "GET casteml" do
     let(:obj) { FactoryGirl.create(:stone) }
     let(:analysis_1){ FactoryGirl.create(:analysis, :stone_id => obj.id )}
     let(:analysis_2){ FactoryGirl.create(:analysis, :stone_id => obj.id )}
-    let(:casteml){Analysis.to_castemls([analysis_2, analysis_1])}
+    let(:casteml){[analysis_2, analysis_1].to_pml}
     before do
       obj
       analysis_1

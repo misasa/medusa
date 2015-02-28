@@ -19,7 +19,25 @@ class RecordsController < ApplicationController
       format.json { render json: @record.record_property, methods: [:datum_attributes] }
       format.xml { render xml: @record.record_property, methods: [:datum_attributes] }
     end
+  end
 
+# /records/xxxx-xxx/root
+  def root
+    @root = @record.respond_to?(:root) ? @record.root : []
+    respond_with @root do |format|
+      format.html { redirect_to @root }
+      format.json { render json: @root.record_property, methods: [:datum_attributes] }
+      format.xml { render xml: @root.record_property, methods: [:datum_attributes] }
+    end
+  end
+
+  def parent
+    @parent = @record.respond_to?(:parent) ? @record.parent : []
+    respond_with @parent do |format|
+      format.html { redirect_to @parent }
+      format.json { render json: @parent.record_property, methods: [:datum_attributes] }
+      format.xml { render xml: @parent.record_property, methods: [:datum_attributes] }
+    end
   end
 
   def casteml
@@ -32,6 +50,60 @@ class RecordsController < ApplicationController
   def property
     respond_with @record.record_property
   end
+
+# /records/xxxx-xxx/ancestors
+  def ancestors
+    @records = @record.respond_to?(:ancestors) ? @record.ancestors : []
+    respond_with @records do |format|
+      format.json { render json: @records.map(&:record_property), methods: [:datum_attributes] }
+      format.xml { render xml: @records.map(&:record_property), methods: [:datum_attributes] }
+    end
+  end
+# /records/xxxx-xxx/descendants
+  def descendants
+    @records = @record.respond_to?(:descendants) ? @record.descendants : []
+    respond_with @records do |format|
+      format.json { render json: @records.map(&:record_property), methods: [:datum_attributes] }
+      format.xml { render xml: @records.map(&:record_property), methods: [:datum_attributes] }
+    end
+  end
+
+# /records/xxxx-xxx/daughters
+  def daughters
+    @records = @record.respond_to?(:children) ? @record.children : []
+    respond_with @records do |format|
+      format.json { render json: @records.map(&:record_property), methods: [:datum_attributes] }
+      format.xml { render xml: @records.map(&:record_property), methods: [:datum_attributes] }
+    end
+  end
+
+# /records/xxxx-xxx/siblings
+  def siblings
+    @records = @record.respond_to?(:siblings) ? @record.siblings : []
+    respond_with @records do |format|
+      format.json { render json: @records.map(&:record_property), methods: [:datum_attributes] }
+      format.xml { render xml: @records.map(&:record_property), methods: [:datum_attributes] }
+    end
+  end
+
+# /records/xxxx-xxx/self_and_siblings
+  def self_and_siblings
+    @records = @record.respond_to?(:self_and_siblings) ? @record.self_and_siblings : []
+    respond_with @records do |format|
+      format.json { render json: @records.map(&:record_property), methods: [:datum_attributes] }
+      format.xml { render xml: @records.map(&:record_property), methods: [:datum_attributes] }
+    end
+  end
+
+# /records/xxxx-xxx/families
+  def families
+    @records = @record.respond_to?(:families) ? @record.families : []
+    respond_with @records do |format|
+      format.json { render json: @records.map(&:record_property), methods: [:datum_attributes] }
+      format.xml { render xml: @records.map(&:record_property), methods: [:datum_attributes] }
+    end
+  end
+
   
   def destroy
     @record.destroy

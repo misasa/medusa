@@ -37,7 +37,15 @@ Medusa::Application.routes.draw do
   resources :records, { id: /((?!\.(html$|json$|xml$|pml$)).)*/ } do
     member do
       get 'record_property' => 'records#property'
-      get 'casteml'     
+      get 'casteml'
+      get 'ancestors'
+      get 'descendants'
+      get 'root'
+      get 'parent'      
+      get 'daughters'
+      get 'siblings'
+      get 'self_and_siblings'
+      get 'families'      
     end
   end
 
