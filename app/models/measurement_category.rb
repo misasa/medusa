@@ -11,7 +11,7 @@ class MeasurementCategory < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super({:methods => [:measurement_item_ids, :nicknames]}.merge(options))
+    super({:methods => [:unit_name, :measurement_item_ids, :nicknames]}.merge(options))
   end
 
  # private
@@ -24,4 +24,7 @@ class MeasurementCategory < ActiveRecord::Base
     measurement_items ? measurement_items.pluck(:nickname) : []
   end
 
+  def unit_name
+    unit.name if unit
+  end
 end

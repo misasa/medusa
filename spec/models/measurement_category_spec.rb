@@ -71,9 +71,18 @@ describe MeasurementCategory do
     it { expect(obj.measurement_item_ids).to be_eql([measurement_item_1.id, measurement_item_2.id]) }
     #it { expect(objt.to_json).to include("measurement_item_ids"#{analysis_3.global_id}") }    
     it { expect(subject).to include("\"measurement_item_ids\":") }    
-    it { expect(subject).to include("\"nicknames\":") }    
+    it { expect(subject).to include("\"nicknames\":") }
+    it { expect(subject).to include("\"unit_name\":") }
+  end
 
-
+  describe "#unit_name" do
+    subject { obj.unit_name }
+    let(:obj) { FactoryGirl.create(:measurement_category) }
+    let(:measurement_item_1) { FactoryGirl.create(:measurement_item, nickname: "foo") }
+    let(:measurement_item_2) { FactoryGirl.create(:measurement_item, nickname: "bar") }
+    it {
+      expect(subject).to be_present
+    }
   end
 
   describe "#nicknames" do
