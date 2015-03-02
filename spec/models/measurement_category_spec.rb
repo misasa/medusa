@@ -59,6 +59,22 @@ describe MeasurementCategory do
     end
   end
 
+  describe "#as_json" do
+    subject { obj.to_json }
+    let(:obj) { FactoryGirl.create(:measurement_category) }
+    let(:measurement_item_1) { FactoryGirl.create(:measurement_item, nickname: "foo") }
+    let(:measurement_item_2) { FactoryGirl.create(:measurement_item, nickname: "bar") }
+    before do
+      obj.measurement_items << measurement_item_1
+      obj.measurement_items << measurement_item_2
+    end
+    it { expect(obj.measurement_item_ids).to be_eql([measurement_item_1.id, measurement_item_2.id]) }
+    #it { expect(objt.to_json).to include("measurement_item_ids"#{analysis_3.global_id}") }    
+    it { expect(subject).to include("\"measurement_item_ids\":") }    
+
+
+  end
+
   describe "#nicknames" do
     subject { obj.send(:nicknames) }
     let(:obj) { FactoryGirl.create(:measurement_category) }

@@ -10,6 +10,10 @@ class MeasurementCategory < ActiveRecord::Base
     nicknames_with_unit.concat(nicknames.map { |nickname| "#{nickname}_error" })
   end
 
+  def as_json(options = {})
+    super({:methods => :measurement_item_ids}.merge(options))
+  end
+
   private
 
   def nicknames_with_unit

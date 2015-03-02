@@ -16,14 +16,22 @@ describe MeasurementCategoriesController do
     it { expect(assigns(:measurement_categories).size).to eq measurement_categories.size }
   end
 
+
+
   # This "GET show" has no html.
-  describe "GET show" do
+  describe "GET show", :current => true do
     let(:obj) { FactoryGirl.create(:measurement_category) }
+    let(:measurement_item_1) { FactoryGirl.create(:measurement_item, nickname: "foo") }
+    let(:measurement_item_2) { FactoryGirl.create(:measurement_item, nickname: "bar") }
     before do
       obj 
+      obj.measurement_items << measurement_item_1
+      obj.measurement_items << measurement_item_2
       get :show, id: obj.id, format: :json
     end
     it { expect(response.body).to eq(obj.to_json) }
+    it { expect(response.body).to include("\"measurement_item_ids\":[#{measurement_item_1.id},#{measurement_item_2.id}]") }    
+
   end
 
   describe "GET edit" do
