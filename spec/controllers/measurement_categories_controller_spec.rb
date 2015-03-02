@@ -31,6 +31,7 @@ describe MeasurementCategoriesController do
     end
     it { expect(response.body).to eq(obj.to_json) }
     it { expect(response.body).to include("\"measurement_item_ids\":[#{measurement_item_1.id},#{measurement_item_2.id}]") }    
+    it { expect(response.body).to include("\"nicknames\":[\"#{measurement_item_1.nickname}\",\"#{measurement_item_2.nickname}\"]") }    
 
   end
 

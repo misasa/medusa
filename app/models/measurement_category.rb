@@ -11,11 +11,10 @@ class MeasurementCategory < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super({:methods => :measurement_item_ids}.merge(options))
+    super({:methods => [:measurement_item_ids, :nicknames]}.merge(options))
   end
 
-  private
-
+ # private
   def nicknames_with_unit
     return nicknames unless unit
     nicknames.map { |nickname| "#{nickname}_in_#{unit.name}" }
