@@ -96,6 +96,30 @@ describe Box do
     end
   end
 
+  describe "#descendants" do
+    let(:root) { FactoryGirl.create(:box, name: "root") }
+    let(:child_1){ FactoryGirl.create(:box, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:box, parent_id: child_1.id) }
+    before do
+      root;child_1;child_1_1;
+    end
+    it {
+      expect(root.descendants).to match_array([child_1, child_1_1])
+    }
+  end
+
+  describe "#self_and_descendants" do
+    let(:root) { FactoryGirl.create(:box, name: "root") }
+    let(:child_1){ FactoryGirl.create(:box, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:box, parent_id: child_1.id) }
+    before do
+      root;child_1;child_1_1;
+    end
+    it {
+      expect(root.self_and_descendants).to match_array([root, child_1, child_1_1])
+    }
+  end
+
   describe "analyses" do
     subject{obj.analyses}
     let(:obj){FactoryGirl.create(:box)}

@@ -40,6 +40,7 @@ Medusa::Application.routes.draw do
       get 'casteml'
       get 'ancestors'
       get 'descendants'
+      get 'self_and_descendants'      
       get 'root'
       get 'parent'      
       get 'daughters'

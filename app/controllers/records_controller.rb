@@ -67,6 +67,14 @@ class RecordsController < ApplicationController
       format.xml { render xml: @records.map(&:record_property), methods: [:datum_attributes] }
     end
   end
+# /records/xxxx-xxx/descendants
+  def self_and_descendants
+    @records = @record.respond_to?(:self_and_descendants) ? @record.self_and_descendants : []
+    respond_with @records do |format|
+      format.json { render json: @records.map(&:record_property), methods: [:datum_attributes] }
+      format.xml { render xml: @records.map(&:record_property), methods: [:datum_attributes] }
+    end
+  end
 
 # /records/xxxx-xxx/daughters
   def daughters

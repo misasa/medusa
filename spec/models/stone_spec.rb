@@ -22,8 +22,32 @@ describe Stone do
     it { expect(stone2.analyses.count).to eq 2}
     it { expect(stone2.to_pml).to eql([analysis_4, analysis_3].to_pml)}
     it { expect(stones.to_pml).to eql([analysis_2, analysis_1].to_pml) }
-
   end
+
+  describe ".descendants" do
+    let(:root) { FactoryGirl.create(:stone, name: "root") }
+    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    before do
+      root;child_1;child_1_1;
+    end
+    it {
+      expect(root.descendants).to match_array([child_1, child_1_1])
+    }
+  end
+
+  describe ".self_and_descendants" do
+    let(:root) { FactoryGirl.create(:stone, name: "root") }
+    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    before do
+      root;child_1;child_1_1;
+    end
+    it {
+      expect(root.self_and_descendants).to match_array([root, child_1, child_1_1])
+    }
+  end
+
   describe ".blood_path" do
       let(:parent_stone) { FactoryGirl.create(:stone) }
       let(:stone) { FactoryGirl.create(:stone, parent_id: parent_id) }

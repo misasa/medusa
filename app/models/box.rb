@@ -4,9 +4,10 @@ class Box < ActiveRecord::Base
   include OutputPdf
   include OutputCsv
   include HasAttachmentFile
+  include HasRecursive
 
   acts_as_taggable
-  with_recursive
+  #with_recursive
 
   has_many :users
   has_many :stones

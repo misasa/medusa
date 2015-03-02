@@ -4,9 +4,10 @@ class Stone < ActiveRecord::Base
   include OutputPdf
   include OutputCsv
   include HasAttachmentFile
+  include HasRecursive
 
   acts_as_taggable
-  with_recursive
+ #with_recursive
 
   has_many :analyses
   has_many :children, class_name: "Stone", foreign_key: :parent_id, dependent: :nullify
