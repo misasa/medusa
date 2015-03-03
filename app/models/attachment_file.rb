@@ -28,11 +28,20 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super({:methods => [:thumbnail_path, :global_id]}.merge(options))
+    super({:methods => [:original_path, :thumbnail_path, :tiny_path, :global_id]}.merge(options))
   end
+
+  def original_path
+    path
+  end
+
 
   def thumbnail_path
     path(:thumb)
+  end
+
+  def tiny_path
+    path(:tiny)
   end
 
   def data_fingerprint

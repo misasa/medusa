@@ -15,6 +15,21 @@ describe NestedResources::AttachmentFilesController do
   before { parent }
   before { child }
 
+  describe "GET index", :current => true do
+    subject { method }
+    context "with format json" do
+      let(:method){get :index, parent_resource: parent_name, bib_id: parent, association_name: :attachment_files, format: 'json'}
+      before { 
+        parent.attachment_files << child
+        subject
+      }
+      it { expect(response.body).to include("\"original_path\":") }
+      it { expect(response.body).to include("\"thumbnail_path\":") }
+      it { expect(response.body).to include("\"tiny_path\":") }
+
+    end
+  end
+
   describe "POST create" do
     let(:method){post :create, parent_resource: parent_name, bib_id: parent, attachment_file: attributes}
     before{child}
