@@ -14,7 +14,7 @@ namespace :backup do
     prev = dirs.select { |dir| dir < current_name }.max
     prev = dir_path.join(prev) if prev
 
-    FileUtils.mkdir_p(current) unless Dir.exist?(current)
+    #FileUtils.mkdir_p(current) unless Dir.exist?(current)
 
     command = "rsync -aL -e ssh --delete --exclude=tmp/pids/*"
     command += " --link-dest=#{prev.relative_path_from(current)}/" if prev
