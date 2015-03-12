@@ -12,7 +12,7 @@ namespace :backup do
 
     dirs = `ssh #{Backup.ssh_host} ls #{dir_path}`.split("\n")
     prev = dirs.select { |dir| dir < current_name }.max
-    prev = dir_path.join(prev)
+    prev = dir_path.join(prev) if prev
 
     FileUtils.mkdir_p(current) unless Dir.exist?(current)
 
