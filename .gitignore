@@ -30,3 +30,4 @@
 .project
 public/system
 vendor/bundler
+db_dump

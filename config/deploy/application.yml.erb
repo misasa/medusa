@@ -15,5 +15,5 @@ backup:
   host: localhost
   username: falcon
   dir_path:
-    files: /srv/backup/<%= appname %>/files
-    db: /srv/backup/<%= appname %>/db
+    files: <%= fetch(:backup_to, "/srv/backup/#{appname}") %>/files
+    db: <%= fetch(:backup_to, "/srv/backup/#{appname}") %>/db

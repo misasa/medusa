@@ -1,4 +1,16 @@
 namespace :db do
+  task :dump => [:environment]
+  desc "Execute database load task."
+  task load: :environment do
+    db_config = Rails.application.config.database_configuration[Rails.env]
+    file_path = "#{ENV["DUMP_PATH"]}"
+
+    command = "psql -U #{db_config["username"]} #{db_config["database"]} < #{file_path}"
+
+    Rails.logger.info command
+    success = system command
+    Rails.logger.info "Database load task is #{success ? "succeed" : "failed"}."
+  end
 
   desc "Execute database dump task."
   task dump: :environment do
