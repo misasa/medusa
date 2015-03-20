@@ -1,0 +1,19 @@
+defaults: &defaults
+  site_name: "<%= appname %>"
+  help_url: http://dream.misasa.okayama-u.ac.jp/documentation/
+  barcode:
+    prefix:
+    type: 2D
+
+production:
+  <<: *defaults
+staging:
+  <<: *defaults
+timemachine:
+  <<: *defaults
+backup:
+  host: localhost
+  username: falcon
+  dir_path:
+    files: /srv/backup/<%= appname %>/files
+    db: /srv/backup/<%= appname %>/db

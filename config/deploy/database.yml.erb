@@ -1,0 +1,23 @@
+production: &production
+  adapter: postgresql
+  encoding: unicode
+  database: <%= appname %>
+  pool: 5
+  username: <%= host.user %>
+medusa_original:
+  adapter: postgresql
+  encoding: unicode
+  database: <%= appname %>_original
+  pool: 5
+  username: <%= host.user %>
+
+staging:
+  <<: *production
+
+timemachine:
+  adapter: postgresql
+  encoding: unicode
+  database: <%= appname %>_timemachine
+  pool: 5
+  username: <%= host.user %>
+
