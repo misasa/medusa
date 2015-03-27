@@ -117,6 +117,25 @@ namespace :config do
   		end
   	end
   end
+  namespace :site_init do
+  	relative_path = "site_init.sh"
+  	desc "Create site_init.sh"
+  	task :setup do
+  		default_template = "#overwriteme"
+		on roles(:all) do |host|
+			remote_path = File.join("#{shared_path}/config", relative_path)
+		    upload_config_file appname, relative_path, default_template
+			#contents = generate_contents(relative_path, default_template)
+			#puts contents.read
+		    execute "chmod +x #{remote_path}"
+		end
+  	end
+  	task :clean do
+  		on roles(:all) do |host|
+  			remove_config_file relative_path
+  		end
+  	end  	
+  end
   namespace :environment do
   	relative_path = 'environments/production.rb'
   	desc "Create environments/prodution.rb"
