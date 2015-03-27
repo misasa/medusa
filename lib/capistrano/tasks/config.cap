@@ -16,8 +16,9 @@ namespace :config do
 
 	def upload_config_file(appname, relative_path, default_template)
 		remote_path = File.join("#{shared_path}/config", relative_path)
-		if test "[ -d #{shared_path}/config ]"
-			execute "mkdir -p #{shared_path}/config"
+    remote_dir = File.dirname(remote_path)
+		if test "[ ! -d #{remote_dir} ]"
+			execute "mkdir -p #{remote_dir}"
 		end
 		if test "[ ! -f #{remote_path} ]"
 			contents = generate_contents(relative_path, default_template)

@@ -1,5 +1,8 @@
 defaults: &defaults
   site_name: "<%= appname %>"
+  admin:
+    email: <%= fetch(:admin_email, "admin@example.com") %>
+    initial_password: <%= fetch(:admin_initial_password, [*1..9, *'A'..'Z', *'a'..'z'].sample(8).join) %>
   help_url: http://dream.misasa.okayama-u.ac.jp/documentation/
   barcode:
     prefix:

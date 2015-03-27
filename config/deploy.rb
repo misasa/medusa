@@ -43,7 +43,13 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 
 set :rails_env, fetch(:stage)
 
-
+namespace :site do
+  desc 'Setup site'
+  task :setup do
+    invoke 'config:setup'
+    invoke 'deploy:check'
+  end
+end
 namespace :deploy do
 
   desc 'Restart application'
@@ -60,6 +66,14 @@ namespace :deploy do
       #   execute :rake, 'cache:clear'
       # end
     end
+  end
+
+  desc "Symlink"
+  task :symlink do
+    invoke "deploy:symlink:linked_dirs"
+    invoke "deploy:symlink:linked_files"
+    invoke "deploy:symlink:release"
+    invoke "deploy:symlink:shared"
   end
 
   desc "Recompile assets"

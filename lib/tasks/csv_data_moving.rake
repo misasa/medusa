@@ -16,19 +16,19 @@ task :csv_data_moving => :environment do
     ")
   end
   
-  users = CSV.table("#{work_dir}/users.csv")
+  # users = CSV.table("#{work_dir}/users.csv")
   
-  users.each do |row|
-    row << { password: "admin", password_confirmation: "admin" }
-    User.create(row.to_h)
-  end
+  # users.each do |row|
+  #   row << { password: "admin", password_confirmation: "admin" }
+  #   User.create(row.to_h)
+  # end
   
-  user_max_next_id = ActiveRecord::Base.connection.select_value("
-    SELECT MAX(id)
-    FROM users
-  ").to_i
+  # user_max_next_id = ActiveRecord::Base.connection.select_value("
+  #   SELECT MAX(id)
+  #   FROM users
+  # ").to_i
     
-  ActiveRecord::Base.connection.execute("
-    SELECT setval('users_id_seq', #{user_max_next_id})
-  ")
+  # ActiveRecord::Base.connection.execute("
+  #   SELECT setval('users_id_seq', #{user_max_next_id})
+  # ")
 end
