@@ -4,11 +4,7 @@ development:
   database: medusa_development
   pool: 5
   username: medusa
-  password: medusa@pbz
-  #host: localhost
-  #port: 5432
-  #schema_search_path: myapp,sharedapp,public
-  #min_messages: notice
+  password: my_password
 
 test:
   adapter: postgresql
@@ -16,7 +12,7 @@ test:
   database: medusa_test
   pool: 5
   username: medusa
-  password: medusa@pbz
+  password: my_password
 
 production: &production
   adapter: postgresql
@@ -24,7 +20,7 @@ production: &production
   database: medusa
   pool: 5
   username: medusa
-  password: medusa@pbz
+  password: my_password
 
 staging:
   <<: *production
@@ -35,7 +31,7 @@ timemachine:
   database: medusa_timemachine
   pool: 5
   username: medusa
-  password: medusa@pbz
+  password: my_password
 
 medusa_original:
   adapter: postgresql
@@ -43,4 +39,4 @@ medusa_original:
   database: medusa_original
   pool: 5
   username: medusa
-  password: medusa@pbz
+  password: my_password
