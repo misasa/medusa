@@ -21,7 +21,7 @@ APP_ROOT=/srv/medusa/current
 APP_USER=medusa
 PID=${APP_ROOT}/tmp/pids/unicorn.pid
 OPTIONS="--path /medusa"
-CMD="RBENV_ROOT=~/.rbenv RBENV_VERSION=2.1.0 ~/.rbenv/bin/rbenv bundle exec unicorn_rails -c ${APP_ROOT}/config/unicorn/production.rb -E ${RAILS_ENV} -D ${OPTIONS}"
+CMD="RBENV_ROOT=~/.rbenv RBENV_VERSION=2.1.0 ~/.rbenv/bin/rbenv exec bundle exec unicorn_rails -c ${APP_ROOT}/config/unicorn/production.rb -E ${RAILS_ENV} -D ${OPTIONS}"
 
 action="$1"
 RETVAL=0
