@@ -1,4 +1,4 @@
 == Medusa
 
 Offer full functionality of Medusa to keep track stones and boxes.
-See http://dream.misasa.okayama-u.ac.jp/ for technical details.
+See http://dream.misasa.okayama-u.ac.jp for technical detail.
