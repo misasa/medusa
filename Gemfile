@@ -73,6 +73,8 @@ gem 'ransack'
 gem 'whenever', require: false
 gem 'acts_as_list'
 gem 'builder'
+gem 'activeresource'
+
 group :development, :test do
   gem 'rak'
   gem 'pry-rails'
