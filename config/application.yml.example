@@ -1,9 +1,17 @@
 defaults: &defaults
   site_name: "Medusa"
-  help_url: http://dream.misasa.okayama-u.ac.jp/documentation/  
+  help_url: http://dream.misasa.okayama-u.ac.jp/documentation/
+  admin:
+    email: medusa@example.com
+    initial_password: vQxPIFMZ
   barcode:
     prefix:
     type: 2D
+  backup:
+    files:
+      dir_path: "/tmp/medusa/backup/files"
+    db:
+      dir_path: "/tmp/medusa/backup/db"
 
 development:
   <<: *defaults
@@ -21,7 +29,7 @@ timemachine:
   <<: *defaults
 
 backup:
-  host: devel.misasa.okayama-u.ac.jp
+  host: backup.example.com
   username: medusa
   dir_path:
     files: /tmp/medusa/backup/files
