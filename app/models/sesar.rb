@@ -5,12 +5,21 @@ class Sesar < ActiveResource::Base
   self.prefix = "/sample/"
   self.element_name = "sample"
   self.collection_name = "igsn"
-  self.format = :xml
-  self.headers["Accept"] = "application/xml"
+
+  class Format
+    include ActiveResource::Formats::XmlFormat
+
+    def decode(xml)
+      # レスポンスXMLにエスケープされていないアンパサンドが存在する
+      super(xml.gsub("&", "&amp;"))
+    end
+  end
+  self.format = Format.new
 
   def self.find(*arguments)
     super
   rescue ActiveResource::Redirection => e
-    find(:one, from: e.response["location"])
+    # 旧URLへのリダイレクト対策
+    super(:one, from: e.response["location"])
   end
 end
