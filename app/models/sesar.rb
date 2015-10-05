@@ -60,7 +60,7 @@ class Sesar < ActiveResource::Base
     builder = Builder::XmlMarkup.new(target: xml)
     xml.clear
     builder.instruct!
-    builder.samples("xmlns" => "http://app.geosamples.org", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "http://app.geosamples.org/samplev2.xsd") do |samples|
+    builder.samples(samples_schema) do |samples|
       samples.sample do |sample|
         # TODO: 設定内容はダミー
         sample.user_code Settings.sesar.user_code
@@ -85,6 +85,14 @@ class Sesar < ActiveResource::Base
   def post_headers
     {
       "Content-Type" => "application/x-www-form-urlencoded"
+    }
+  end
+
+  def samples_schema
+    {
+      "xmlns" => "http://app.geosamples.org",
+      "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance",
+      "xsi:schemaLocation" => "http://app.geosamples.org/samplev2.xsd"
     }
   end
 end
