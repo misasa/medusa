@@ -25,12 +25,33 @@ class Sesar < ActiveResource::Base
     super(:one, from: e.response["location"])
   end
 
+  class Errors < ActiveResource::Errors
+    def from_array(messages, save_cache = false)
+      reg = /Element '{http:\/\/app.geosamples.org}(\w*)'(.*)/
+      messages.each do |message|
+        _, attr, msg = *reg.match(message).to_a
+        attr ||= :base
+        msg ||= message
+        add(attr, msg)
+      end
+    end
+
+    def from_xml(xml, save_cache = false)
+      array = Array.wrap(Hash.from_xml(xml)['results']['error']) rescue []
+      from_array(array, save_cache)
+    end
+  end
+
+  def errors
+    @errors ||= Errors.new(self)
+  end
+
   def save
     response = connection.post("/webservices/upload.php", "username=#{self.class.user}&password=#{self.class.password}&content=#{encode}&submit=submit", "Content-Type" => "application/x-www-form-urlencoded")
     self.igsn = Hash.from_xml(response.body)["results"]["sample"]["igsn"]
     true
   rescue ActiveResource::BadRequest => e
-    # TODO: 失敗した理由をレスポンスXMLから取得してユーザに通知すべき
+    errors.from_xml(e.response.body)
     false
   end
 
