@@ -2,9 +2,8 @@ require "active_resource"
 
 class Sesar < ActiveResource::Base
   self.site = "http://app.geosamples.org/"
-  # TODO: ユーザとパスワードは外部ファイルから取得すべき
-  self.user = "m-imaoka@probizmo.co.jp"
-  self.password = "probizmo"
+  self.user = Settings.sesar.user
+  self.password = Settings.sesar.password
   self.prefix = "/sample/"
   self.element_name = "sample"
   self.collection_name = "igsn"
@@ -43,7 +42,7 @@ class Sesar < ActiveResource::Base
     builder.samples("xmlns" => "http://app.geosamples.org", "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance", "xsi:schemaLocation" => "http://app.geosamples.org/samplev2.xsd") do |samples|
       samples.sample do |sample|
         # TODO: 設定内容はダミー
-        sample.user_code "IEIMA"
+        sample.user_code Settings.sesar.user_code
         sample.sample_type "Individual Sample"
         sample.name "test"
         sample.material "Rock"
