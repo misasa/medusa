@@ -47,7 +47,7 @@ class Sesar < ActiveResource::Base
   end
 
   def save
-    response = connection.post("/webservices/upload.php", "username=#{self.class.user}&password=#{self.class.password}&content=#{encode}&submit=submit", "Content-Type" => "application/x-www-form-urlencoded")
+    response = connection.post("/webservices/upload.php", post_params, post_headers)
     self.igsn = Hash.from_xml(response.body)["results"]["sample"]["igsn"]
     true
   rescue ActiveResource::BadRequest => e
@@ -70,5 +70,21 @@ class Sesar < ActiveResource::Base
       end
     end
     xml
+  end
+
+  private
+
+  def post_params
+    {
+      username: self.class.user,
+      password: self.class.password,
+      content:  encode
+    }.to_query
+  end
+
+  def post_headers
+    {
+      "Content-Type" => "application/x-www-form-urlencoded"
+    }
   end
 end
