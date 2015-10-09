@@ -8,6 +8,74 @@ class Sesar < ActiveResource::Base
   self.element_name = "sample"
   self.collection_name = "igsn"
 
+  # TODO: 一旦すべてを列挙。必要ないものは削除する
+  schema do
+    string    :user_code
+    string    :sample_type
+    string    :name
+    string    :material
+    string    :igsn
+    string    :parent_igsn
+    # is_private
+    # publish_date
+    string    :classification
+    string    :classification_comment
+    string    :field_name
+    string    :description
+    decimal   :age_min
+    decimal   :age_max
+    string    :age_unit
+    string    :geological_age
+    string    :geological_unit
+    string    :collection_method
+    string    :collection_method_descr
+    string    :size
+    string    :size_unit
+    string    :sample_comment
+    string    :purpose
+    decimal   :latitude
+    decimal   :longitude
+    decimal   :latitude_end
+    decimal   :longitude_end
+    decimal   :elevation
+    decimal   :elevation_end
+    string    :vartical_datum
+    decimal   :northing
+    decimal   :easting
+    # zone
+    string    :navigation_type
+    string    :primary_location_type
+    string    :primary_location_name
+    string    :location_description
+    string    :locality
+    string    :locality_description
+    string    :country
+    string    :province
+    string    :county
+    string    :city
+    string    :cruise_field_prgrm
+    string    :platform_type
+    string    :platform_name
+    string    :platform_descr
+    string    :launch_platform_name
+    string    :launch_id
+    string    :launch_type_name
+    string    :collector
+    string    :collector_detail
+    timestamp :collection_start_date
+    timestamp :collection_end_date
+    string    :collection_date_precision
+    string    :current_archive
+    string    :current_archive_contact
+    string    :original_archive
+    string    :original_archive_contact
+    decimal   :depth_min
+    decimal   :depth_max
+    string    :depth_scale
+    # sample_other_names
+    # external_url
+  end
+
   class Format
     include ActiveResource::Formats::XmlFormat
 
@@ -64,9 +132,9 @@ class Sesar < ActiveResource::Base
       samples.sample do |sample|
         # TODO: 設定内容はダミー
         sample.user_code Settings.sesar.user_code
-        sample.sample_type "Individual Sample"
-        sample.name "test"
-        sample.material "Rock"
+        sample.sample_type sample_type
+        sample.name name
+        sample.material material
       end
     end
     xml
