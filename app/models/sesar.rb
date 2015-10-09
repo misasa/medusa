@@ -114,6 +114,11 @@ class Sesar < ActiveResource::Base
     @errors ||= Errors.new(self)
   end
 
+  def initialize(attributes = {}, persisted = false)
+    attributes[:user_code] ||= Settings.sesar.user_code
+    super
+  end
+
   def save
     response = connection.post("/webservices/upload.php", post_params, post_headers)
     self.igsn = Hash.from_xml(response.body)["results"]["sample"]["igsn"]
@@ -130,11 +135,9 @@ class Sesar < ActiveResource::Base
     builder.instruct!
     builder.samples(samples_schema) do |samples|
       samples.sample do |sample|
-        # TODO: 設定内容はダミー
-        sample.user_code Settings.sesar.user_code
-        sample.sample_type sample_type
-        sample.name name
-        sample.material material
+        attributes.each do |attr, value|
+          sample.__send__(attr, value)
+        end
       end
     end
     xml
