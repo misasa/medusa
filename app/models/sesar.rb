@@ -86,6 +86,20 @@ class Sesar < ActiveResource::Base
   end
   self.format = Format.new
 
+  def self.from_active_record(model)
+    attributes = {}
+    # TODO: DBとXMLのマッピングを確定させて、実装に反映すること
+    # attributes[:sample_type] = "Core"
+    attributes[:name] = model.name
+    # attributes[:meterial] = "Rock"
+    attributes[:description] = model.description
+    attributes[:latitude] = model.place.try!(:latitude)
+    attributes[:longitude] = model.place.try!(:longitude)
+    attributes[:elevation] = model.place.try!(:elevation)
+    attributes.delete_if { |_, value| value.blank? }
+    new(attributes)
+  end
+
   def self.find(*arguments)
     super
   rescue ActiveResource::Redirection => e
