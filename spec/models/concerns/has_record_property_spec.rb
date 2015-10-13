@@ -40,9 +40,9 @@ describe HasRecordProperty do
     it { expect(obj.readable?).to be_truthy }
     it { expect(obj.to_json).to include "\"global_id\":\"#{global_id}\"" }
     it { expect(obj.to_xml).to include "<global-id>#{global_id}</global-id>" }
-    it { expect(obj.latex_mode).to match /<.*: #{global_id}>/}
-    it { expect(obj.latex_mode).to include "<last-modified: #{obj.updated_at}>"}
-    it { expect(obj.latex_mode).to include "<created: #{obj.created_at}>"}        
+    it { expect(obj.latex_mode).to match /<.* #{global_id}>/}
+    #it { expect(obj.latex_mode).to include "<last-modified: #{obj.updated_at}>"}
+    #it { expect(obj.latex_mode).to include "<created: #{obj.created_at}>"}        
   end
 
   describe "#stone_count" do
@@ -216,15 +216,18 @@ describe HasRecordProperty do
      end
      context "for Stone" do
        let(:obj) { FactoryGirl.create(:stone) }
-       it { expect(subject).to match /\/#{obj.name} <stone: #{obj.global_id}> <link: stone=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
+#       it { expect(subject).to match /\/#{obj.name} <stone: #{obj.global_id}> <link: stone=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
+       it { expect(subject).to match /\/#{obj.name} <stone #{obj.global_id}>/}
      end
      context "for Box" do
        let(:obj) { FactoryGirl.create(:box) }
-       it { expect(subject).to match /\/#{obj.name} <box: #{obj.global_id}> <link: stone=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
+#       it { expect(subject).to match /\/#{obj.name} <box: #{obj.global_id}> <link: stone=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
+       it { expect(subject).to match /\/#{obj.name} <box #{obj.global_id}>/}
      end
      context "for Bib" do
        let(:obj) { FactoryGirl.create(:bib) }
-       it { expect(subject).to match /\/#{obj.name} <bib: #{obj.global_id}> <link: stone=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
+#       it { expect(subject).to match /\/#{obj.name} <bib: #{obj.global_id}> <link: stone=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
+       it { expect(subject).to match /\/#{obj.name} <bib #{obj.global_id}>/}
      end
   end
 
