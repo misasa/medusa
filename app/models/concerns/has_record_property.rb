@@ -120,10 +120,11 @@ module HasRecordProperty
 
     tokens = []
     tokens << path
-    tokens << "<#{self.class.model_name.human.downcase}: #{global_id}>"
-    tokens << "<link: " + links.join(" ") + ">"
-    tokens << "<last-modified: #{updated_at}>"
-    tokens << "<created: #{created_at}>"        
+    # tokens << "<#{self.class.model_name.human.downcase}: #{global_id}>"
+    tokens << "<#{self.class.model_name.human.downcase} #{global_id}>"
+    # tokens << "<link: " + links.join(" ") + ">"
+    # tokens << "<last-modified: #{updated_at}>"
+    # tokens << "<created: #{created_at}>"        
     tokens.join(" ")
   end
 
