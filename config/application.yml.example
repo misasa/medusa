@@ -12,6 +12,10 @@ defaults: &defaults
       dir_path: "/tmp/medusa/backup/files"
     db:
       dir_path: "/tmp/medusa/backup/db"
+  sesar:
+    user: # Set GeoPass ID
+    password: # Set GeoPass password
+    user_code: # Set Sesar user_code (5 digits alphanumeric string)
 
 development:
   <<: *defaults
