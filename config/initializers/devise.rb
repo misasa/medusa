@@ -233,6 +233,17 @@ Devise.setup do |config|
     config.omniauth(:google_oauth2, google_config["app_id"], google_config["secret_key"])
   end
 
+  # Omniauth strategy for shibboleth.
+  # This configuration is premised on following settings of apache.
+  #
+  # <Location path_to_application>
+  #   RequestHeader set Shib-Session-ID %{Shib-Session-ID}e
+  #   RequestHeader set Shib-Application-ID %{Shib-Application-ID}e
+  #   RequestHeader set Eppn %{eppn}e
+  # </Location>
+  #
+  config.omniauth :shibboleth, { :request_type => :header }
+
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
   # change the failure app, you can configure them inside the config.warden block.

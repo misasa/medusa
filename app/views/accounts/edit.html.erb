@@ -50,6 +50,7 @@
       <%= link_to("Make available Google account", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-sm") %>
     </div>
     <% end %>
+    <%= link_to "Sync with shibboleth", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://") %>
 
     <% end %>
   </div>

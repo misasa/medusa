@@ -12,4 +12,5 @@
   <div><%= f.submit "Sign in" %></div>
 <% end %>
 
-<%= link_to_if(File.exists?(Rails.root.join("config/google.yml")), "Sign in with Google", user_omniauth_authorize_path(:google_oauth2)) %>
+<%= link_to_if(File.exists?(Rails.root.join("config/google.yml")), "Sign in with Google", user_omniauth_authorize_path(:google_oauth2)) %><br />
+<%= link_to "Sign in with Shibboleth", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://") %>
