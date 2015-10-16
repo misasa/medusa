@@ -47,6 +47,8 @@ gem 'unicorn'
 # gem 'debugger', group: [:development, :test]
 
 gem 'devise'
+gem 'omniauth'
+gem 'omniauth-google-oauth2'
 gem 'cancan'
 gem 'kaminari'
 gem 'draper'

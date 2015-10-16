@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140328034684) do
+ActiveRecord::Schema.define(version: 20151016001938) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -188,6 +188,16 @@ ActiveRecord::Schema.define(version: 20140328034684) do
     t.string  "display_in_tex"
     t.integer "unit_id"
   end
+
+  create_table "omniauths", force: true do |t|
+    t.integer  "user_id",    null: false
+    t.string   "provider",   null: false
+    t.string   "uid",        null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "omniauths", ["provider", "uid"], name: "index_omniauths_on_provider_and_uid", unique: true, using: :btree
 
   create_table "physical_forms", force: true do |t|
     t.string "name"

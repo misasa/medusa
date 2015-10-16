@@ -1,11 +1,15 @@
 <h2>Sign in</h2>
 
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div><%= f.label :username %><br />
-  <%= f.text_field :username, :autofocus => true %></div>
-
-  <div><%= f.label :password %><br />
-  <%= f.password_field :password %></div>
-
+  <div>
+    <%= f.label :username %><br />
+    <%= f.text_field :username, :autofocus => true %>
+  </div>
+  <div>
+    <%= f.label :password %><br />
+    <%= f.password_field :password %>
+  </div>
   <div><%= f.submit "Sign in" %></div>
 <% end %>
+
+<%= link_to_if(File.exists?(Rails.root.join("config/google.yml")), "Sign in with Google", user_omniauth_authorize_path(:google_oauth2)) %>

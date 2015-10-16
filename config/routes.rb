@@ -1,5 +1,5 @@
 Medusa::Application.routes.draw do
-  devise_for :users, only: :sessions
+  devise_for :users, controllers: { omniauth_callbacks: "users/omniauth_callbacks" }
 
   root 'records#index'
 
