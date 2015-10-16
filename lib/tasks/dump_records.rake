@@ -10,9 +10,10 @@ namespace :record do
 	namespace :dump do
 		desc "Dump records in latex-mode"
 		task :list => [:environment] do |t|
-			boxes = Box.find(:all)
-			stones = Stone.find(:all)
-			bibs = Bib.find(:all)
+			boxes = Box.order(updated_at: :desc)
+			stones = Stone.order(updated_at: :desc)
+			bibs = Bib.order(updated_at: :desc)
+
 			physicalitems = boxes
 			physicalitems.concat(stones)
 
@@ -37,9 +38,9 @@ namespace :record do
 
 		desc "Dump records in bib-mode"
 		task :bib => [:environment] do |t|
-			items = Box.find(:all)
-			items.concat(Stone.find(:all))
-			items.concat(Bib.find(:all))
+			items = Box.order(updated_at: :desc)
+			items.concat(Stone.order(updated_at: :desc))
+			items.concat(Bib.order(updated_at: :desc))
 		  	output_path = ENV['output_path'] || "tmp/ref_dream.bib"
 			#STDERR.puts "writing |#{output_path}|..."
 		  	output = File.open(output_path,"w")
