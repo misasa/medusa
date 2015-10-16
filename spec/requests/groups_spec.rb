@@ -310,9 +310,9 @@ describe "group master" do
     let(:group_1) { FactoryGirl.create(:group, name: "グループ1", created_at: created_at_1, updated_at: updated_at_1) }
     let(:group_2) { FactoryGirl.create(:group, name: "グループ2", created_at: created_at_2, updated_at: updated_at_2) }
     let(:group_3) { FactoryGirl.create(:group, name: "グループ3", created_at: created_at_3, updated_at: updated_at_3) }
-    let(:created_at_1) { (DateTime.now - 3).strftime("%Y-%m-%d") }
-    let(:created_at_2) { (DateTime.now - 2).strftime("%Y-%m-%d") }
-    let(:created_at_3) { (DateTime.now - 1).strftime("%Y-%m-%d") }
+    let(:created_at_1) { (DateTime.now - 13).strftime("%Y-%m-%d") }
+    let(:created_at_2) { (DateTime.now - 12).strftime("%Y-%m-%d") }
+    let(:created_at_3) { (DateTime.now - 11).strftime("%Y-%m-%d") }
     let(:updated_at_1) { created_at_1 }
     let(:updated_at_2) { created_at_2 }
     let(:updated_at_3) { created_at_3 }
