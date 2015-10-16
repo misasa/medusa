@@ -43,11 +43,18 @@
       <%= f.text_area :description, class: "form-control input-sm" %>
     </div>
 
-    <%= f.submit  "Update",class: "btn btn-sm" %>
+    <%= f.submit  "Update", class: "btn btn-sm" %>
+
+    <% if File.exists?(Rails.root.join("config/google.yml")) %>
+    <div>
+      <%= link_to("Make available Google account", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-sm") %>
+    </div>
+    <% end %>
 
     <% end %>
   </div>
 </div>
+<br />
 <div class="row">
   <div class="col-lg-12">
     <%= form_tag(find_by_global_id_account_path,method: :get) do %>

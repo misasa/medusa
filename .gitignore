@@ -18,6 +18,7 @@
 # Ignore configration yaml files.
 /config/application.yml
 /config/database.yml
+/config/google.yml
 
 # Ignore deproy configration files.
 /config/deploy/*.rb
