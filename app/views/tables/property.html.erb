@@ -1,0 +1,7 @@
+<%= render partial: "parts/property", locals: { record: @table } %>
+
+<%= javascript_tag do %>
+$(document).on("succeed.ajaxForm", "#edit_table_<%= @table.id %>", function() {
+	location.href="<% table_path(@table) %>";
+});
+<% end %>

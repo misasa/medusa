@@ -1,4 +1,5 @@
 class Table < ActiveRecord::Base
+  include HasRecordProperty
 
   has_many :table_stones, -> { order :position }, dependent: :destroy
   has_many :stones, through: :table_stones

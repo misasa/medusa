@@ -123,6 +123,15 @@ Medusa::Application.routes.draw do
     resources :places, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/places", defaults: { parent_resource: "bib", association_name: "places" }
     resources :analyses, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "bib", association_name: "analyses" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "bib" }
+    resources :tables, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/tables", defaults: { parent_resource: "bib" }
+  end
+
+  resources :tables, except: [:new] do
+    member do
+      get :property
+    end
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
+    resources :stones, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "table", association_name: "stones" }
   end
 
   resources :attachment_files, concerns: :bundleable , except: [:new] do

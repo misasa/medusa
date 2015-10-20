@@ -1,0 +1,67 @@
+<table class="table table-condensed table-striped">
+  <ul>
+    <%= li_if_exist 'measurement category: ', @table.measurement_category.try!(:name) %>
+    <li>modified at <%= difference_from_now(@table.updated_at) -%></li>
+    <% if @table.bib %>
+      <li>bib: <%= link_to_if can?(:read, @table.bib), @table.bib.name,bib_path(@table.bib) %></li>
+    <% end %>
+  </ul>
+  <caption>
+    <%= @table.description %>
+  </caption>
+  <thead>
+    <tr>
+      <th>measured</th>
+      <th>unit</th>
+      <% @table.stones.each do |stone| %>
+	<th><%= stone.name %></th>
+      <% end %>
+      <% if @table.with_average %>
+	<th>avg(std)</th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% if @table.with_place %>
+      <tr>
+	<th>latitude</th>
+	<th></th>
+	<% @table.stones.each do |stone| %>
+	  <td><%= stone.place.try!(:latitude) || "-" %></td>
+	<% end %>
+	<% if @table.with_average %>
+	  <td>-</td>
+	<% end %>
+      </tr>
+      <tr>
+	<th>longitude</th>
+	<th></th>
+	<% @table.stones.each do |stone| %>
+	  <td><%= stone.place.try!(:longitude) || "-" %></td>
+	<% end %>
+	<% if @table.with_average %>
+	  <td>-</td>
+	<% end %>
+      </tr>
+    <% end %>
+    <%# TODO: 同一の科学組成に複数の分析結果が存在する場合に対応する必要がある %>
+    <%# TODO: そもそも何を持って同一の分析とみなすのか。分析手法[techniques]？ %>
+    <% @table.measurement_items.each do |measurement_item| %>
+      <tr>
+	<th><%== measurement_item.display_in_html %></th>
+	<th><%== measurement_item.unit.try!(:html) %></th>
+	<% values = [] %>
+	<% @table.stones.each do |stone| %>
+	  <% values << stone.chemistries.where(measurement_item_id: measurement_item.id).first.try!(:value) %>
+	  <td><%= stone.chemistries.where(measurement_item_id: measurement_item.id).first.try!(:value) || "-" %></td>
+	<% end %>
+	<% if @table.with_average %>
+	  <% values.compact! %>
+	  <%# TODO: 数値の精度はどうする？一律では決められない… %>
+	  <%# TODO: 標準偏差を求めるには全化学組成の平均値が必要、先に算出しておく必要あり %>
+	  <td><%= values.blank? ? "-" : values.sum / values.size %></td>
+	<% end %>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
