@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151016001938) do
+ActiveRecord::Schema.define(version: 20151020012658) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -286,6 +286,30 @@ ActiveRecord::Schema.define(version: 20151016001938) do
   add_index "stones", ["classification_id"], name: "index_stones_on_classification_id", using: :btree
   add_index "stones", ["parent_id"], name: "index_stones_on_parent_id", using: :btree
   add_index "stones", ["physical_form_id"], name: "index_stones_on_physical_form_id", using: :btree
+
+  create_table "table_stones", force: true do |t|
+    t.integer  "table_id"
+    t.integer  "stone_id"
+    t.integer  "position"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "table_stones", ["stone_id"], name: "index_table_stones_on_stone_id", using: :btree
+  add_index "table_stones", ["table_id"], name: "index_table_stones_on_table_id", using: :btree
+
+  create_table "tables", force: true do |t|
+    t.integer  "bib_id"
+    t.integer  "measurement_category_id"
+    t.text     "description"
+    t.boolean  "with_average"
+    t.boolean  "with_place"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "tables", ["bib_id"], name: "index_tables_on_bib_id", using: :btree
+  add_index "tables", ["measurement_category_id"], name: "index_tables_on_measurement_category_id", using: :btree
 
   create_table "taggings", force: true do |t|
     t.integer  "tag_id"

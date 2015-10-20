@@ -14,6 +14,7 @@ class Bib < ActiveRecord::Base
   has_many :places, through: :referrings, source: :referable, source_type: "Place"
   has_many :boxes, through: :referrings, source: :referable, source_type: "Box"
   has_many :analyses, through: :referrings, source: :referable, source_type: "Analysis"
+  has_many :tables
   
   validates :name, presence: true, length: { maximum: 255 }
   validate :author_valid?, if: Proc.new{|bib| bib.authors.blank?}
