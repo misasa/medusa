@@ -9,7 +9,7 @@ class Path < ActiveRecord::Base
 
   def each
     if ids.present?
-      boxes = Box.find(ids).index_by(&:id)
+      boxes = Box.where(id: ids).includes(:record_property).index_by(&:id)
       ids.each { |id| yield boxes[id] }
     end
     yield datum
