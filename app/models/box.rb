@@ -5,6 +5,9 @@ class Box < ActiveRecord::Base
   include OutputCsv
   include HasAttachmentFile
   include HasRecursive
+  include HasPath
+
+  self.recursive_path_update = true
 
   acts_as_taggable
   #with_recursive
@@ -24,6 +27,7 @@ class Box < ActiveRecord::Base
   validate :parent_id_cannot_self_children, if: ->(box) { box.parent_id }
 
   after_save :reset_path
+
 
   def analyses
     analyses = []
@@ -45,6 +49,14 @@ class Box < ActiveRecord::Base
   def reset_path
     self.path = ""
     self.update_column(:path, "/#{self.ancestors.map(&:name).join('/')}") if self.parent
+  end
+
+  def path_changed?
+    parent_id_changed?
+  end
+
+  def path_ids
+    ancestors.map(&:id)
   end
 
 end

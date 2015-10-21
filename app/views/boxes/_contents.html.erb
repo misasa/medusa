@@ -1,0 +1,20 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th>path</th>
+      <th>type</th>
+      <th>in</th>
+      <th>out</th>
+    </tr>
+  </thead>
+  <tbody>
+      <% Path.contents_of(@box).current.includes(datum: :record_property).each do |path| %>
+        <tr>
+          <td><%= raw (path.map { |content| link_to_if(can?(:read, content), content.name, content) }).join("/") %></td>
+          <td><%= path.datum_type %></td>
+          <td><%= path.brought_in_at.strftime("%Y-%m-%d %H:%M") %></td> 
+          <td><%= path.brought_out_at && path.brought_out_at.strftime("%Y-%m-%d %H:%M") %></td> 
+        </tr>
+      <% end %>
+  </tbody>
+</table>

@@ -46,6 +46,8 @@
         ["at-a-glance",nil],
         ["stone",@box.stones],
         ["daughter",@box.children,"box"],
+        ["contents", Path.contents_of(@box).current],
+        ["histories", @box.paths],
         ["analysis",@box.analyses],
         ["bib",@box.bibs],
         ["file",@box.attachment_files]] %>

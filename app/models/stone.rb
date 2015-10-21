@@ -5,6 +5,7 @@ class Stone < ActiveRecord::Base
   include OutputCsv
   include HasAttachmentFile
   include HasRecursive
+  include HasPath
 
   acts_as_taggable
  #with_recursive
@@ -39,6 +40,14 @@ class Stone < ActiveRecord::Base
     if invalid_ids.include?(self.parent_id)
       errors.add(:parent_id, " make loop.")
     end
+  end
+
+  def path_changed?
+    box_id_changed?
+  end
+
+  def path_ids
+    box.present? ? box.ancestors + [box.id] : []
   end
 
 end
