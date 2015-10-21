@@ -168,6 +168,107 @@ describe Stone do
         end
       end
     end
+    describe "igsn" do
+      let(:obj) { FactoryGirl.build(:stone, name: "samplename", igsn: igsn) }
+      context "9桁の場合" do
+        let(:igsn) { "abcd12345" }
+        it { expect(obj).to be_valid }
+      end
+      context "10桁の場合" do
+        let(:igsn) { "abcd123456" }
+        it { expect(obj).not_to be_valid }
+      end
+      context "uniqueではない場合" do
+        before { FactoryGirl.create(:stone, name: "aiueo", igsn: "123456789") }
+        let(:obj) { FactoryGirl.build(:stone, name: "samplename2", igsn: "123456789") }
+        it { expect(obj).not_to be_valid }
+      end
+    end
+    describe "age_min" do
+      let(:obj) { FactoryGirl.build(:stone, name: "samplename", age_min: age_min) }
+      context "数値の場合" do
+        let(:age_min) { 1 }
+        it { expect(obj).to be_valid }
+      end
+      context "文字列の場合" do
+        let(:age_min) { "あ" }
+        it { expect(obj).not_to be_valid }
+      end
+    end
+    describe "age_max" do
+      let(:obj) { FactoryGirl.build(:stone, name: "samplename", age_max: age_max) }
+      context "数値の場合" do
+        let(:age_max) { 11 }
+        it { expect(obj).to be_valid }
+      end
+      context "文字列の場合" do
+        let(:age_max) { "あ" }
+        it { expect(obj).not_to be_valid }
+      end
+    end
+    describe "age_unit" do
+      let(:obj) { FactoryGirl.build(:stone, age_unit: age_unit) }
+      context "is presence" do
+        let(:age_unit) { "a" }
+        it { expect(obj).to be_valid }
+      end
+      context "is blank" do
+        let(:age_unit) { "" }
+        it { expect(obj).not_to be_valid }
+      end
+      describe "length" do
+        context "is 255 characters" do
+          let(:age_unit) { "a" * 255 }
+          it { expect(obj).to be_valid }
+        end
+        context "is 256 characters" do
+          let(:age_unit) { "a" * 256 }
+          it { expect(obj).not_to be_valid }
+        end
+      end
+    end
+    describe "size" do
+      let(:obj) { FactoryGirl.build(:stone, size: size) }
+      context "is presence" do
+        let(:size) { "111" }
+        it { expect(obj).to be_valid }
+      end
+      context "is blank" do
+        let(:size) { "" }
+        it { expect(obj).not_to be_valid }
+      end
+      describe "length" do
+        context "is 255 characters" do
+          let(:size) { "1" * 255 }
+          it { expect(obj).to be_valid }
+        end
+        context "is 256 characters" do
+          let(:size) { "1" * 256 }
+          it { expect(obj).not_to be_valid }
+        end
+      end
+    end
+    describe "size_unit" do
+      let(:obj) { FactoryGirl.build(:stone, size_unit: size_unit) }
+      context "is presence" do
+        let(:size_unit) { "a" }
+        it { expect(obj).to be_valid }
+      end
+      context "is blank" do
+        let(:size_unit) { "" }
+        it { expect(obj).not_to be_valid }
+      end
+      describe "length" do
+        context "is 255 characters" do
+          let(:size_unit) { "a" * 255 }
+          it { expect(obj).to be_valid }
+        end
+        context "is 256 characters" do
+          let(:size_unit) { "a" * 256 }
+          it { expect(obj).not_to be_valid }
+        end
+      end
+    end
   end
 
 end

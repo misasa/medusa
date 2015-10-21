@@ -184,6 +184,15 @@ ActiveRecord::Schema.define(version: 20151112070136) do
     t.datetime "updated_at"
   end
 
+  create_table "histories", force: true do |t|
+    t.integer  "datum_id"
+    t.string   "datum_type"
+    t.integer  "box_id"
+    t.datetime "moved_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "measurement_categories", force: true do |t|
     t.string  "name"
     t.string  "description"
@@ -314,6 +323,14 @@ ActiveRecord::Schema.define(version: 20151112070136) do
     t.string   "quantity_unit"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "igsn",                      limit: 9
+    t.integer  "age_min"
+    t.integer  "age_max"
+    t.string   "age_unit"
+    t.string   "size"
+    t.string   "size_unit"
+    t.datetime "collected_at"
+    t.string   "collection_date_precision"
   end
 
   add_index "stones", ["classification_id"], name: "index_stones_on_classification_id", using: :btree

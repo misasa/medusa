@@ -32,6 +32,12 @@ class Stone < ActiveRecord::Base
   validates :physical_form, existence: true, allow_nil: true
   validates :name, presence: true, length: { maximum: 255 }
   validate :parent_id_cannot_self_children, if: ->(stone) { stone.parent_id }
+  validates :igsn, uniqueness: true, length: { maximum: 9 }
+  validates :age_min, numericality: true
+  validates :age_max, numericality: true
+  validates :age_unit, presence: true, length: { maximum: 255 }
+  validates :size, presence: true, length: { maximum: 255 }
+  validates :size_unit, presence: true, length: { maximum: 255 }
 
   def set_stone_custom_attributes
     ids = stone_custom_attributes.pluck(:custom_attribute_id)
