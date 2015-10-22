@@ -70,6 +70,7 @@ Medusa::Application.routes.draw do
       get :family
       get :picture
       get :property
+      get :contents
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "box" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "box" }

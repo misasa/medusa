@@ -12,6 +12,9 @@ class BoxesController < ApplicationController
   end
 
   def show
+    @search = Path.search
+    @search.sorts = "path ASC"
+    @contents = Path.none
     respond_with @box
   end
 
@@ -45,6 +48,14 @@ class BoxesController < ApplicationController
 
   def property
     respond_with @box, layout: !request.xhr?
+  end
+
+  def contents
+    @search = Path.contents_of(@box).search(params[:q])
+    @search.sorts = "path ASC" if @search.sorts.empty?
+    @contents = @search.result.includes(datum: :record_property)
+    @contents = @contents.current if @search.conditions.empty?
+    respond_with @contents, layout: !request.xhr?
   end
 
   def bundle_edit

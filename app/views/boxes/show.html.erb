@@ -46,7 +46,7 @@
         ["at-a-glance",nil],
         ["stone",@box.stones],
         ["daughter",@box.children,"box"],
-        ["contents", Path.contents_of(@box).current],
+        ["contents", nil],
         ["histories", @box.paths],
         ["analysis",@box.analyses],
         ["bib",@box.bibs],
@@ -66,3 +66,10 @@
     </div>
   </div>
 </div>
+
+<%= javascript_tag do %>
+$(document).on("ajax:success", "#path_search", function(event, data, status) {
+	$("#contents").html(data);
+	$("#contents").find(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+});
+<% end %>
