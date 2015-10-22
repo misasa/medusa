@@ -22,7 +22,7 @@ module HasPath
 
   def store_new_path
     now = Time.now
-    paths.current.first.update_attribute(:brought_out_at, now) if paths.current
+    paths.current.first.update_attribute(:brought_out_at, now) if paths.current.present?
     paths.create(ids: path_ids, brought_in_at: now)
     if recursive?
       descendants.each(&:store_new_path)
