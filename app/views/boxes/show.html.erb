@@ -47,6 +47,7 @@
         ["stone",@box.stones],
         ["daughter",@box.children,"box"],
         ["contents", nil],
+        ["diff", nil],
         ["histories", @box.paths],
         ["analysis",@box.analyses],
         ["bib",@box.bibs],
@@ -68,8 +69,12 @@
 </div>
 
 <%= javascript_tag do %>
-$(document).on("ajax:success", "#path_search", function(event, data, status) {
+$(document).on("ajax:success", "#contents_search", function(event, data, status) {
 	$("#contents").html(data);
 	$("#contents").find(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
+});
+$(document).on("ajax:success", "#diff_search", function(event, data, status) {
+	$("#diff").html(data);
+	$("#diff").find(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
 });
 <% end %>

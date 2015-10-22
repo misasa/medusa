@@ -12,9 +12,9 @@ class BoxesController < ApplicationController
   end
 
   def show
-    @search = Path.search
-    @search.sorts = "path ASC"
-    @contents = Path.none
+    @contents_search = @diff_search = Path.search
+    @contents_search.sorts = @diff_search.sorts = "path ASC"
+    @contents = @diff = Path.none
     respond_with @box
   end
 
@@ -51,11 +51,18 @@ class BoxesController < ApplicationController
   end
 
   def contents
-    @search = Path.contents_of(@box).search(params[:q])
-    @search.sorts = "path ASC" if @search.sorts.empty?
-    @contents = @search.result.includes(datum: :record_property)
-    @contents = @contents.current if @search.conditions.empty?
+    @contents_search = Path.contents_of(@box).search(params[:q])
+    @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
+    @contents = @contents_search.result.includes(datum: :record_property)
+    @contents = @contents.current if @contents_search.conditions.empty?
     respond_with @contents, layout: !request.xhr?
+  end
+
+  def diff
+    @diff_search = Path.diff(@box, params[:src], params[:dst]).search(params[:q])
+    @diff_search.sorts = "path ASC" if @diff_search.sorts.empty?
+    @diff = @diff_search.result
+    respond_with @diff, layout: !request.xhr?
   end
 
   def bundle_edit
