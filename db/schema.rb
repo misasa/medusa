@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151021013646) do
+ActiveRecord::Schema.define(version: 20151023000711) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -202,9 +202,11 @@ ActiveRecord::Schema.define(version: 20151021013646) do
   create_table "paths", force: true do |t|
     t.integer  "datum_id"
     t.string   "datum_type"
-    t.integer  "ids",            array: true
+    t.integer  "ids",               array: true
     t.datetime "brought_in_at"
     t.datetime "brought_out_at"
+    t.integer  "brought_in_by_id"
+    t.integer  "brought_out_by_id"
   end
 
   add_index "paths", ["datum_id", "datum_type"], name: "index_paths_on_datum_id_and_datum_type", using: :btree

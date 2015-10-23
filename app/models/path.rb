@@ -3,6 +3,8 @@ class Path < ActiveRecord::Base
   include Enumerable
 
   belongs_to :datum, polymorphic: true
+  belongs_to :brought_in_by, foreign_key: :brought_in_by_id, class_name: "User"
+  belongs_to :brought_out_by, foreign_key: :brought_out_by_id, class_name: "User"
 
   scope :contents_of, -> (box_id) { where("? = ANY(ids)", box_id) }
   scope :current, -> { where(brought_out_at: nil) }

@@ -3,15 +3,19 @@
     <tr>
       <th>path</th>
       <th>in</th>
+      <th></th>
       <th>out</th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
-    <% @stone.paths.each do |path| %>
+    <% @stone.paths.includes(:brought_in_by, :brought_out_by).each do |path| %>
       <tr>
         <td><%= raw (path.map { |content| link_to_if(can?(:read, content), content.name, content) }).join("/") %></td>
         <td><%= path.brought_in_at.strftime("%Y-%m-%d %H:%M") %></td> 
+        <td><%= path.brought_in_by.username %></td>
         <td><%= path.brought_out_at && path.brought_out_at.strftime("%Y-%m-%d %H:%M") %></td> 
+        <td><%= path.brought_out_by.try!(:username) %></td>
       </tr>
     <% end %>
   </tbody>

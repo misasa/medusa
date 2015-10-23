@@ -22,8 +22,8 @@ module HasPath
 
   def store_new_path
     now = Time.now
-    paths.current.first.update_attribute(:brought_out_at, now) if paths.current.present?
-    paths.create(ids: path_ids, brought_in_at: now)
+    paths.current.first.update_attributes!(brought_out_at: now, brought_out_by: User.current) if paths.current.present?
+    paths.create!(ids: path_ids, brought_in_at: now, brought_in_by: User.current)
     if recursive?
       descendants.each(&:store_new_path)
       stones.each(&:store_new_path)
