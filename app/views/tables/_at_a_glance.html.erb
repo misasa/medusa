@@ -44,16 +44,14 @@
 	<% end %>
       </tr>
     <% end %>
-    <%# TODO: 同一の科学組成に複数の分析結果が存在する場合に対応する必要がある %>
-    <%# TODO: そもそも何を持って同一の分析とみなすのか。分析手法[techniques]？ %>
-    <% @table.measurement_items.each do |measurement_item| %>
+    <% @table.each do |label, chemistries| %>
       <tr>
-	<th><%== measurement_item.display_in_html %></th>
-	<th><%== measurement_item.unit.try!(:html) %></th>
+	<th><%== label %></th>
+	<th><%#== measurement_item.unit.try!(:html) %></th>
 	<% values = [] %>
 	<% @table.stones.each do |stone| %>
-	  <% values << stone.chemistries.where(measurement_item_id: measurement_item.id).first.try!(:value) %>
-	  <td><%= stone.chemistries.where(measurement_item_id: measurement_item.id).first.try!(:value) || "-" %></td>
+	  <% values << chemistries[stone.id].try!(:value) %>
+	  <td><%= chemistries[stone.id].try!(:value) || "-" %></td>
 	<% end %>
 	<% if @table.with_average %>
 	  <% values.compact! %>
@@ -65,3 +63,8 @@
     <% end %>
   </tbody>
 </table>
+<% @table.method_descriptions.each do |sign, description| %>
+  <div class="row">
+    <%= "#{sign}: #{description}" %>
+  </div>
+<% end %>
