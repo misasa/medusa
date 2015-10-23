@@ -61,10 +61,12 @@ class Table < ActiveRecord::Base
 
   def method_sign(technique, device)
     return if technique.blank? && device.blank?
-    return methods_hash[[technique.id, device.id]][:sign] if methods_hash[[technique.id, device.id]].present?
-    sign = methods_hash[[technique.id, device.id]][:sign] = assign_sign
-    methods_hash[[technique.id, device.id]][:description] = "#{technique.try!(:name)} " if technique.present?
-    methods_hash[[technique.id, device.id]][:description] += "on #{device.name}" if device.present?
+    technique_id = technique.try!(:id)
+    device_id = device.try!(:id)
+    return methods_hash[[technique_id, device_id]][:sign] if methods_hash[[technique_id, device_id]].present?
+    sign = methods_hash[[technique_id, device_id]][:sign] = assign_sign
+    methods_hash[[technique_id, device_id]][:description] = technique.present? ? "#{technique.try!(:name)} " : ""
+    methods_hash[[technique_id, device_id]][:description] += "on #{device.name}" if device.present?
     sign
   end
 
