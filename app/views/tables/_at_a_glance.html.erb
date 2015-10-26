@@ -44,7 +44,7 @@
 	<% end %>
       </tr>
     <% end %>
-    <% @table.each do |label, chemistries| %>
+    <% @table.each(display: :html) do |label, chemistries| %>
       <tr>
 	<th><%== label %></th>
 	<th><%#== measurement_item.unit.try!(:html) %></th>
