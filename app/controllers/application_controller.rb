@@ -8,6 +8,7 @@ class ApplicationController < ActionController::Base
   before_action :configure_permitted_parameters, if: :devise_controller?
   before_action :authenticate_user!, :set_current_user
   before_action :set_searchable_records, if: Proc.new {|controller| controller.current_user }
+  before_action :set_alias_specimen
   before_action do
     resource = controller_name.singularize.to_sym
     method = "#{resource}_params"
@@ -65,6 +66,10 @@ class ApplicationController < ActionController::Base
       format.html { render "parts/access_denied", status: :forbidden }
       format.all { render nothing: true, status: :forbidden }
     end
+  end
+
+  def set_alias_specimen
+    @alias_specimen = Settings.specimen_name
   end
 
 end

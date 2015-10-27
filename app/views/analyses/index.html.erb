@@ -10,7 +10,7 @@
       </th>
       <th><%= sort_link @search, :name, "name" %></th>
       <th><%= sort_link @search, :device_name, "device" %></th>
-      <th><%= sort_link @search, :stone_name, "stone" %></th>
+      <th><%= sort_link @search, :stone_name, @alias_specimen %></th>
       <th>summary</th>
       <%= th_if_expand do %>
         <%= sort_link @search, :user_username, "owner" %>

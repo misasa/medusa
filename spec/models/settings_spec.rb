@@ -65,4 +65,29 @@ describe Settings do
       it {expect(Settings.barcode_prefix).to eq ''}
     end
   end
+
+  describe ".specimen_name" do
+    subject { Settings.specimen_name }
+    let(:path) { Rails.root.join("config", "application.yml").to_path }
+    let(:yaml_data) { YAML.load_file(path) }
+    before do
+      yaml_data["test"]["alias_specimen"] = alias_specimen
+      File.open(path, "w") { |f| f.write yaml_data.to_yaml }
+      Settings.reload!
+    end
+    after do
+      yaml_data["test"]["alias_specimen"] = "stone"
+      File.open(path, "w") { |f| f.write yaml_data.to_yaml }
+      Settings.reload!
+    end
+    context "alias_specimen not nil" do
+      let(:alias_specimen) { "Foo" }
+      it { expect(subject).to eq alias_specimen }
+    end
+    context "alias_specimen is nil" do
+      let(:alias_specimen) { nil }
+      it { expect(subject).to eq "specimen" }
+    end
+  end
+
 end

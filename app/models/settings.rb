@@ -9,4 +9,12 @@ class Settings < Settingslogic
   def self.barcode_prefix
     self.barcode['prefix'] || ''
   end
+
+  def self.specimen_name
+    if has_key?("alias_specimen") && alias_specimen.present?
+      alias_specimen
+    else
+      "specimen"
+    end
+  end
 end

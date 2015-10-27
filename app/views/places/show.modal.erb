@@ -12,7 +12,7 @@
       <dd><%= @place.longitude_to_text %></dd>
       <dt>elevation</dt>
       <dd><%= @place.elevation_to_text %></dd>
-      <dt>stone</dt>
+      <dt><%= @alias_specimen %></dt>
       <dd><%= @place.stones_count %></dd>
       <dt>owner</dt>
       <dd><%= @place.user.try!(:username) %></dd>

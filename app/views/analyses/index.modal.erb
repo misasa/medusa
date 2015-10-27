@@ -10,7 +10,7 @@
       </th>
       <th><%= sort_link @search, :name, "name", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :device_name, "device", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :stone_name, "stone", { format: :modal }, remote: true %></th>
+      <th><%= sort_link @search, :stone_name, @alias_specimen, { format: :modal }, remote: true %></th>
       <th>summary</th>
       <th><%= sort_link @search, :group_name, "group", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :updated_at, "updated-at", { format: :modal }, remote: true %></th>

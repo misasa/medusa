@@ -74,7 +74,7 @@
     <%= link_to_function "edit", "$('#stone-bundle-form').submit();", class: "btn btn-default" %>
   </div>
   <div class="hidden" id="display-type-tex">
-    <pre><code><%= @box.to_tex %></code></pre>
+    <pre><code><%= @box.to_tex(@alias_specimen) %></code></pre>
   </div>
 </div>
 <div class="btn-group">

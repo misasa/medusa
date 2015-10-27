@@ -12,7 +12,7 @@
       <th><%= sort_link @search, :latitude, "latitude", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :longitude, "longitude", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :elevation, "elevation", { format: :modal }, remote: true %></th>
-      <th>stone</th><!-- don't sort -->
+      <th><%= @alias_specimen %></th><!-- don't sort -->
       <th><%= sort_link @search, :group_name, "group", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :updated_at, "updated-at", { format: :modal }, remote: true %></th>
     </tr>

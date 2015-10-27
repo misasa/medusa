@@ -42,21 +42,37 @@
 
   <div id="show-body" class="col-lg-8">
     <%= @box.box_path %>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+      <li class="<%= active_if_current('at-a-glance') %>">
+        <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
+      </li>
+      <li class="<%= active_if_current('stone') %>">
+        <a href="#stone" data-toggle="tab"><%= @alias_specimen + data_count(@box.stones) %></a>
+      </li>
+      <li class="<%= active_if_current('daughter') %>">
+        <a href="#daughter" data-toggle="tab"><%= "box#{data_count(@box.children)}" %></a>
+      </li>
+      <li class="<%= active_if_current('analysis') %>">
+        <a href="#analysis" data-toggle="tab"><%= "analysis#{data_count(@box.analyses)}" %></a>
+      </li>
+      <li class="<%= active_if_current('bib') %>">
+        <a href="#bib" data-toggle="tab"><%= "bib#{data_count(@box.bibs)}" %></a>
+      </li>
+      <li class="<%= active_if_current('file') %>">
+        <a href="#file" data-toggle="tab"><%= "file#{data_count(@box.attachment_files)}" %></a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
     <% tab_info = [
         ["at-a-glance",nil],
         ["stone",@box.stones],
         ["daughter",@box.children,"box"],
         ["analysis",@box.analyses],
         ["bib",@box.bibs],
-        ["file",@box.attachment_files]] %>
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-      <% tab_info.each do |key,array,title| %>
-       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= (title.blank? ? key : title) + data_count(array) %></a></li>
-      <% end %>
-
-    </ul>
-    <!-- Tab panes -->
+        ["file",@box.attachment_files]
+    ] %>
     <div class="tab-content">
       <% tab_info.each do |key,array| %>
         <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>

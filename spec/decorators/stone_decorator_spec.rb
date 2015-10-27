@@ -160,16 +160,18 @@ describe StoneDecorator do
   end
 
   describe ".to_tex" do
-    subject{obj.to_tex}
-    let(:child_name){"child_name"}
-    let(:child){FactoryGirl.create(:stone,name: child_name)}
-    before{obj.children << child}
-    it{expect(subject).to include(obj.name)}
-    it{expect(subject).to include(obj.global_id)}
-    it{expect(subject).to include(child.name)}
-    it{expect(subject).to include(child.physical_form.name)}
-    it{expect(subject).to include(child.quantity.to_s)}
-    it{expect(subject).to include(child.global_id)}
+    subject{ obj.to_tex(alias_specimen) }
+    before{ obj.children << child }
+    let(:alias_specimen) { "specimen" }
+    let(:child) { FactoryGirl.create(:stone, name: child_name) }
+    let(:child_name) { "child_name" }
+    it{ expect(subject).to include(obj.name) }
+    it{ expect(subject).to include(obj.global_id) }
+    it{ expect(subject).to include(child.name) }
+    it{ expect(subject).to include(child.physical_form.name) }
+    it{ expect(subject).to include(child.quantity.to_s) }
+    it{ expect(subject).to include(child.global_id) }
+    it{ expect(subject).to include(alias_specimen) }
   end
   
 end

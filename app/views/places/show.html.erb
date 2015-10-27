@@ -26,21 +26,35 @@
     <div class="row tool-content">
     </div>
   </div>
+
   <div id="show-body" class="col-lg-8">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+      <li class="<%= active_if_current('at-a-glance') %>">
+        <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
+      </li>
+      <li class="<%= active_if_current('stone') %>">
+        <a href="#stone" data-toggle="tab"><%= @alias_specimen + data_count(@place.stones) %></a>
+      </li>
+      <li class="<%= active_if_current('neighbor') %>">
+        <a href="#neighbor" data-toggle="tab">neighbor</a>
+      </li>
+      <li class="<%= active_if_current('file') %>">
+        <a href="#file" data-toggle="tab"><%= "file#{data_count(@place.attachment_files)}" %></a>
+      </li>
+      <li class="<%= active_if_current('geoname') %>">
+        <a href="#geoname" data-toggle="tab">geoname</a>
+      </li>
+    </ul>
+
+    <!-- Tab panes -->
     <% tab_info = [
         ["at-a-glance",nil],
         ["stone",@place.stones],
         ["neighbor",nil],
         ["file",@place.attachment_files],
-        ["geoname",nil]] %>
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-      <% tab_info.each do |key,array| %>
-       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= key + data_count(array) %></a></li>
-      <% end %>
-
-    </ul>
-    <!-- Tab panes -->
+        ["geoname",nil]
+    ] %>
     <div class="tab-content">
       <% tab_info.each do |key,array| %>
         <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>

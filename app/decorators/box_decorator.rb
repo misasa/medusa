@@ -57,18 +57,18 @@ class BoxDecorator < Draper::Decorator
     Box.includes(:record_property, :user, :group).where(parent_id: self.id)
   end
 
-  def to_tex
+  def to_tex(alias_specimen)
     lines = []
     lines << '%------------'
     lines << 'The sample names and ID of each mounted materials are listed in Table \\ref{mount:materials}.'
     lines << '%------------'
     lines << '\begin{footnotesize}'
     lines << '\begin{table}'
-    lines << "\\caption{Stones mounted on #{name} (#{global_id}) as of #{Time.now.to_date}.}"
+    lines << "\\caption{#{alias_specimen.pluralize.capitalize} mounted on #{name} (#{global_id}) as of #{Time.now.to_date}.}"
     lines << '\begin{center}'
     lines << '\begin{tabular}{lll}'
     lines << '\hline'
-    lines << ["stone name", "ID", "remark"].join("\t&\t") + "\\\\"
+    lines << ["#{alias_specimen} name", "ID", "remark"].join("\t&\t") + "\\\\"
     lines << '\hline'
     stones.each do |stone|
       lines << [stone.name, stone.global_id, ""].join("\t&\t") + "\\\\"

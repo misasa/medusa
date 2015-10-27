@@ -78,12 +78,13 @@
     
     <table class="table">
       <tr>
-	<th></th>
-	<% class_names.each do |class_name| %>
-        <th>
-          <%= link_to class_name.underscore,send("#{class_name.tableize}_path") %>
-        </th>
-	<% end %>
+        <th></th>
+        <th><%= link_to @alias_specimen.capitalize, stones_path %></th>
+        <th><%= link_to "Box", boxes_path %></th>
+        <th><%= link_to "Place", places_path %></th>
+        <th><%= link_to "Analysis", analyses_path %></th>
+        <th><%= link_to "Bib", bibs_path %></th>
+        <th><%= link_to "AttachmentFile", attachment_files_path %></th>
       </tr>
       <!-- searchable -->
       <tr>

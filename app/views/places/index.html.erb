@@ -12,7 +12,7 @@
       <th><%= sort_link @search, :latitude, "latitude" %></th>
       <th><%= sort_link @search, :longitude, "longitude" %></th>
       <th><%= sort_link @search, :elevation, "elevation" %></th>
-      <th>stone</th><!-- don't sort -->
+      <th><%= @alias_specimen %></th><!-- don't sort -->
       <%= th_if_expand do %>
         <%= sort_link @search, :user_username, "owner" %>
       <% end %>

@@ -11,7 +11,7 @@
       <% end %>
     </tr>
     <tr>
-      <th>stone</th>
+      <th><%= @alias_specimen %></th>
       <% @analyses.each do |analysis| %>
         <td><%= analysis.stone.try!(:name)%></td>
       <% end %>
