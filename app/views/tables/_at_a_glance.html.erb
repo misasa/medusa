@@ -44,20 +44,19 @@
 	<% end %>
       </tr>
     <% end %>
-    <% @table.each(display: :html) do |label, chemistries| %>
+    <% @table.each(display: :html) do |chemical_species, chemistries| %>
       <tr>
-	<th><%== label %></th>
-	<th><%#== measurement_item.unit.try!(:html) %></th>
+	<th><%== chemical_species.caption(:html) %></th>
+	<th><%== chemical_species.unit.try!(:html) %></th>
 	<% values = [] %>
 	<% @table.stones.each do |stone| %>
-	  <% values << chemistries[stone.id].try!(:value) %>
-	  <td><%= chemistries[stone.id].try!(:value) || "-" %></td>
+	  <% values << chemistries[stone.id].try!(:unit_conversion_value, chemical_species.unit.name) %>
+	  <td><%= chemistries[stone.id].try!(:unit_conversion_value, chemical_species.unit.name, chemical_species.scale) || "-" %></td>
 	<% end %>
 	<% if @table.with_average %>
 	  <% values.compact! %>
-	  <%# TODO: 数値の精度はどうする？一律では決められない… %>
 	  <%# TODO: 標準偏差を求めるには全化学組成の平均値が必要、先に算出しておく必要あり %>
-	  <td><%= values.blank? ? "-" : values.sum / values.size %></td>
+	  <td><%= values.blank? ? "-" : (values.sum / values.size).round(chemical_species.scale) %></td>
 	<% end %>
       </tr>
     <% end %>

@@ -5,14 +5,39 @@ class Table < ActiveRecord::Base
   has_many :stones, through: :table_stones
   has_many :analyses, through: :stones
   has_many :chemistries, through: :stones
+  has_many :category_measurement_items, through: :measurement_category
   has_many :measurement_items, through: :measurement_category
   belongs_to :bib
   belongs_to :measurement_category
 
+  ChemicalSpecies = Struct.new(:category_measurement_item, :sign) do
+
+    delegate :unit, :scale, to: :category_measurement_item
+
+    def caption(type = :nickname)
+      str = name(type)
+      str += "(#{sign})" if sign.present?
+      str
+    end
+
+    def name(type = :nickname)
+      case type
+      when :html
+        category_measurement_item.measurement_item.display_in_html
+      when :tex
+        category_measurement_item.measurement_item.display_in_tex
+      else
+        category_measurement_item.measurement_item.nickname
+      end
+    end
+
+  end
+
   def each(display: :nickname, &block)
-    measurement_items.each do |measurement_item|
-      chemistries_hash[measurement_item.id].each do |methods, chemistries|
-        yield item_label(measurement_item, methods, display: display), chemistries
+    category_measurement_items.includes(:measurement_item).each do |category_measurement_item|
+      chemistries_hash[category_measurement_item.measurement_item_id].each do |methods, chemistries|
+        chemical_species = ChemicalSpecies.new(category_measurement_item, method_sign(*methods))
+        yield chemical_species, chemistries
       end
     end
   end
@@ -27,24 +52,6 @@ class Table < ActiveRecord::Base
     init_hash = Hash.new { |h1, k1| h1[k1] = Hash.new { |h2, k2| h2[k2] = {} } }
     @chemistries_hash ||= chemistries.includes(analysis: [:technique, :device]).each_with_object(init_hash) do |chemistry, hash|
       hash[chemistry.measurement_item_id][[chemistry.analysis.technique, chemistry.analysis.device]][chemistry.analysis.stone_id] = chemistry
-    end
-  end
-
-  def item_label(measurement_item, methods, display: :nickname)
-    str = "#{item_name(measurement_item, display: display)}"
-    sign = method_sign(*methods)
-    str += "(#{sign})" if sign.present?
-    str
-  end
-
-  def item_name(measurement_item, display: :nickname)
-    case display
-    when :html
-      measurement_item.display_in_html
-    when :tex
-      measurement_item.display_in_tex
-    else
-      measurement_item.nickname
     end
   end
 

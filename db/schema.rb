@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151020012658) do
+ActiveRecord::Schema.define(version: 20151027002227) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -112,6 +112,8 @@ ActiveRecord::Schema.define(version: 20151020012658) do
     t.integer "measurement_item_id"
     t.integer "measurement_category_id"
     t.integer "position"
+    t.integer "unit_id"
+    t.integer "scale"
   end
 
   add_index "category_measurement_items", ["measurement_category_id"], name: "index_category_measurement_items_on_measurement_category_id", using: :btree
