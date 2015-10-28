@@ -187,7 +187,7 @@ class Analysis < ActiveRecord::Base
   end
 
   def get_spot
-    spots =  Spot.find_all_by_target_uid(global_id)
+    spots = Spot.where(target_uid: global_id)
     return if spots.empty?
     spots[0]
   end 

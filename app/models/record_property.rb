@@ -21,7 +21,7 @@ class RecordProperty < ActiveRecord::Base
     where_clauses = owner_readables_where_clauses(user)
     where_clauses = where_clauses.or(group_readables_where_clauses(user))
     where_clauses = where_clauses.or(guest_readables_where_clauses)
-    includes(:user, :group).where(where_clauses)
+    includes(:user, :group).where(where_clauses).references(:user)
   }
 
   def datum_attributes
