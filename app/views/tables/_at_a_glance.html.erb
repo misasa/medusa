@@ -55,8 +55,7 @@
 	<% end %>
 	<% if @table.with_average %>
 	  <% values.compact! %>
-	  <%# TODO: 標準偏差を求めるには全化学組成の平均値が必要、先に算出しておく必要あり %>
-	  <td><%= values.blank? ? "-" : (values.sum / values.size).round(chemical_species.scale) %></td>
+	  <td><%= values.blank? ? "-" : "#{(values.sum / values.size).round(chemical_species.scale)} (#{standard_diviation(values, chemical_species.scale)})" %></td>
 	<% end %>
       </tr>
     <% end %>
