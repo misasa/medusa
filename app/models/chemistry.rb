@@ -16,7 +16,7 @@ class Chemistry < ActiveRecord::Base
   end
 
   def unit_conversion_value(unit_name, scale = nil)
-    val = unit.present? ? Alchemist.measure(value, unit.name.to_sym) : value
+    val = unit.present? ? Alchemist.measure(value, unit.name.to_sym) : Alchemist.measure(value, :g)
     val = val.to(unit_name.to_sym).value
     val = val.round(scale) if scale
     val
