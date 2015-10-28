@@ -1,3 +1,3 @@
 == README
 
-Serve as Medusa to keep track stones and boxes.
+Serve as Medusa to keep track specimens and boxes.
