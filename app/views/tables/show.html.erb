@@ -22,17 +22,20 @@
     </div>
   </div>
   <div id="show-body" class="col-lg-8">
-    <% tab_info = [
-            ["at-a-glance",nil],
-            ["stone",@table.stones]] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
-      <% tab_info.each do |key,array| %>
-	<li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= key + data_count(array) %></a></li>
-      <% end %>
-
+      <li class="<%= active_if_current('at-a-glance') %>">
+        <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
+      </li>
+      <li class="<%= active_if_current('stone') %>">
+        <a href="#stone" data-toggle="tab"><%= @alias_specimen + data_count(@table.stones) %></a>
+      </li>
     </ul>
     <!-- Tab panes -->
+    <% tab_info = [
+      ["at-a-glance",nil],
+      ["stone",@table.stones]
+    ] %>
     <div class="tab-content">
       <% tab_info.each do |key,array| %>
         <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>

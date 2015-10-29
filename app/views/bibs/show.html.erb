@@ -55,6 +55,9 @@
       <li class="<%= active_if_current('file') %>">
         <a href="#file" data-toggle="tab"><%= "file#{data_count(@bib.attachment_files)}" %></a>
       </li>
+      <li class="<%= active_if_current('table') %>">
+        <a href="#table" data-toggle="tab"><%= "table#{data_count(@bib.tables)}" %></a>
+      </li>
     </ul>
 
     <!-- Tab panes -->
