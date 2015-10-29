@@ -53,6 +53,15 @@
       <li class="<%= active_if_current('daughter') %>">
         <a href="#daughter" data-toggle="tab"><%= "box#{data_count(@box.children)}" %></a>
       </li>
+      <li class="<%= active_if_current('contents') %>">
+        <a href="#contents" data-toggle="tab">contents</a>
+      </li>
+      <li class="<%= active_if_current('diff') %>">
+        <a href="#diff" data-toggle="tab">diff</a>
+      </li>
+      <li class="<%= active_if_current('histories') %>">
+        <a href="#histories" data-toggle="tab"><%= "histories#{data_count(@box.paths)}" %></a>
+      </li>
       <li class="<%= active_if_current('analysis') %>">
         <a href="#analysis" data-toggle="tab"><%= "analysis#{data_count(@box.analyses)}" %></a>
       </li>
