@@ -62,6 +62,12 @@ module ApplicationHelper
     hidden_field_tag :tab,tabname_from_filename(filename)
   end
 
+  def standard_diviation(array, scale)
+    return "-" if array.size < 2
+    avg = array.sum / array.size
+    Math.sqrt(array.inject(0.0){ |a, i| a + (i - avg) ** 2 } / (array.size - 1)).round(scale)
+  end
+
   private
 
   def tabname_from_filename(filename)

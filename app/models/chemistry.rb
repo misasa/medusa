@@ -14,4 +14,11 @@ class Chemistry < ActiveRecord::Base
   def display_name
     "#{measurement_item.display_name}: #{sprintf("%.2f", self.value)}"
   end
+
+  def unit_conversion_value(unit_name, scale = nil)
+    val = unit.present? ? Alchemist.measure(value, unit.name.to_sym) : Alchemist.measure(value, :g)
+    val = val.to(unit_name.to_sym).value
+    val = val.round(scale) if scale
+    val
+  end
 end

@@ -1,0 +1,49 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>description</th>
+      <th>measurement category</th>
+      <th>with average</th>
+      <th>with place</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @bib.tables.each do |table| %>
+      <tr>
+        <td></td>
+        <td><%= link_to_if can?(:read, table), table.description, table %></td>
+        <td><%= table.measurement_category.try!(:name) %></td>
+        <td><%= table.with_average %></td>
+        <td><%= table.with_place %></td>
+        <td></td>
+        <td>
+          <%= link_to bib_table_path(@bib, table) + tab_param(__FILE__), method: :delete ,title: "delete table",data: {confirm: t("confirm.delete")} do %>
+            <span class="glyphicon glyphicon-remove"></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <%= form_for Table.new, url: bib_tables_path(@bib) do |f|%>
+        <%= hidden_tabname_tag(__FILE__) %>
+        <th></th>
+        <th><%= f.text_field :description, class: "form-control input-sm" %></th>
+        <th><%= f.select :measurement_category_id, MeasurementCategory.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
+	<th><%= f.check_box :with_average, class: "form-control" %></th>
+	<th><%= f.check_box :with_place, class: "form-control" %></th>
+        <th>
+          <%= f.button title:"add table",class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+        </th>
+        <th></th>
+	<th></th>
+      <% end %>
+    </tr>
+  </tfoot>
+</table>

@@ -1,0 +1,40 @@
+<%= form_for @table, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
+  <div class="form-group form-group-sm">
+    <%= f.label :description, class: "small" %>
+    <%= f.text_field :description, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :bib_global_id, class: "small" %>
+    <div class="input-group">
+      <%= f.text_field :bib_global_id, class: "form-control input-sm" %>
+      <span class="input-group-addon">
+	<%= link_to bibs_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#table_bib_global_id" do %>
+	  <span class="glyphicon glyphicon-search"></span>
+	<% end %>
+      </span>
+    </div>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :measurement_category_id, class: "small" %>
+    <%= f.select :measurement_category_id, MeasurementCategory.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :with_average, class: "checkbox-inline" do %>
+      <%= f.check_box :with_average %> with average
+    <% end %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :with_place, class: "checkbox-inline" do %>
+      <%= f.check_box :with_place %> with place
+    <% end %>
+  </div>
+  <%= f.button class: "btn btn-default" do %>
+    <span class="glyphicon glyphicon-save"></span>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+$(document).on("succeed.ajaxForm", "#edit_table_<%= @table.id %>", function() {
+	location.href="<% table_path(@table) %>";
+});
+<% end %>
