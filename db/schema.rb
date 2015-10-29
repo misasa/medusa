@@ -201,6 +201,19 @@ ActiveRecord::Schema.define(version: 20151027002227) do
 
   add_index "omniauths", ["provider", "uid"], name: "index_omniauths_on_provider_and_uid", unique: true, using: :btree
 
+  create_table "paths", force: true do |t|
+    t.integer  "datum_id"
+    t.string   "datum_type"
+    t.integer  "ids",               array: true
+    t.datetime "brought_in_at"
+    t.datetime "brought_out_at"
+    t.integer  "brought_in_by_id"
+    t.integer  "brought_out_by_id"
+  end
+
+  add_index "paths", ["datum_id", "datum_type"], name: "index_paths_on_datum_id_and_datum_type", using: :btree
+  add_index "paths", ["ids"], name: "index_paths_on_ids", using: :gin
+
   create_table "physical_forms", force: true do |t|
     t.string "name"
     t.text   "description"

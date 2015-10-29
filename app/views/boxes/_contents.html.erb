@@ -1,0 +1,35 @@
+<%= search_form_for @contents_search, url: contents_box_path(@box), remote: true, id: "contents_search" do |f| %>
+  <div class="row">
+    <div class="col-lg-1">
+      <%= f.button class: "btn btn-default" do %>
+	<span class="glyphicon glyphicon-refresh"></span>
+      <% end %>
+    </div>
+    <div class="col-lg-2">
+      <%= f.search_field :brought_out_at_gteq, placeholder: "from:", value: format_date(params[:q] && params[:q][:brought_out_at_gteq]), class: "form-control input-sm datepicker", maxlength: 10 %>
+    </div>
+    <div class="col-lg-2">
+      <%= f.search_field :brought_in_at_lteq_end_of_day, placeholder: "to:", value: format_date(params[:q] && params[:q][:brought_in_at_lteq_end_of_day]), class: "form-control input-sm datepicker", maxlength: 10 %>
+    </div>
+  </div>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+	<th><%= sort_link @contents_search, :path, "path", { action: :contents }, remote: true %></th>
+	<th>type</th>
+	<th><%= sort_link @contents_search, :brought_in_at, "in", { action: :contents }, remote: true %></th>
+	<th>out</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @contents.each do |path| %>
+        <tr>
+          <td><%= raw (path.map { |content| link_to_if(can?(:read, content), content.name, content) }).join("/") %></td>
+          <td><%= path.datum_type %></td>
+          <td><%= path.brought_in_at.strftime("%Y-%m-%d %H:%M") %></td> 
+          <td><%= path.brought_out_at && path.brought_out_at.strftime("%Y-%m-%d %H:%M") %></td> 
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>
