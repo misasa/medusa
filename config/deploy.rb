@@ -43,6 +43,9 @@ set :linked_dirs, %w{bin log tmp/pids tmp/cache tmp/sockets vendor/bundle public
 
 set :rails_env, fetch(:stage)
 
+# Setting for shibboleth.
+# set :shib_uid, "eppn"
+
 namespace :site do
   desc 'Setup site'
   task :setup do

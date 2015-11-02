@@ -242,7 +242,7 @@ Devise.setup do |config|
   #   RequestHeader set Eppn %{eppn}e
   # </Location>
   #
-  config.omniauth :shibboleth, { :request_type => :header }
+  config.omniauth :shibboleth, { :request_type => :header, uid_field: "Shib-UID" }
 
   # ==> Warden configuration
   # If you want to use other strategies, that are not supported by Devise, or
