@@ -3,6 +3,8 @@ class MeasurementCategory < ActiveRecord::Base
   has_many :measurement_items, -> { order 'category_measurement_items.position' }, through: :category_measurement_items
   belongs_to :unit
 
+  accepts_nested_attributes_for :category_measurement_items
+
   validates :name, presence: true, length: {maximum: 255}, uniqueness: :name
   validates :unit, existence: true, allow_nil: true
 

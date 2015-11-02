@@ -16,6 +16,7 @@ class MeasurementCategoriesController < ApplicationController
   end
 
   def edit
+    @units = Unit.all
     respond_with @measurement_category
   end
 
@@ -40,6 +41,7 @@ class MeasurementCategoriesController < ApplicationController
 
   def update
     @measurement_category.update_attributes(measurement_category_params)
+    @units = Unit.all
     respond_with(@measurement_category, location: measurement_categories_path)
   end
 
@@ -54,7 +56,13 @@ class MeasurementCategoriesController < ApplicationController
     params.require(:measurement_category).permit(
       :name,
       :description,
-      :unit_id
+      :unit_id,
+      category_measurement_items_attributes: [
+        :id,
+        :unit_id,
+        :scale,
+        :position
+      ]
     )
   end
 

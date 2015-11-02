@@ -1,54 +1,52 @@
-<div>
-<%= form_for @measurement_category, html: {class: "col-lg-3"} do |f| %>
-  <%= error_notification(@measurement_category.errors) %>
+<%= form_for @measurement_category do |f| %>
+  <div class="col-lg-4">
+    <%= error_notification(@measurement_category.errors) %>
 
-  <div>
-    <%= f.label :name %>
-    <%= f.text_field :name, class: "form-control input-sm" %>
+    <div>
+      <%= f.label :name %>
+      <%= f.text_field :name, class: "form-control input-sm" %>
+    </div>
+
+    <div>
+      <%= f.label :unit_id %>
+      <%= f.select :unit_id, @units.map{|r|[raw(r.html),r.id]}, { include_blank: true }, class: "form-control input-sm" %>
+    </div>
+
+    <div>
+      <%= f.label :description %>
+      <%= f.text_area :description, class: "form-control input-sm" %>
+    </div>
+
+    <%= f.submit "update", class: "btn btn-sm" %>
+    <%= link_to "cancel", measurement_categories_path, class: "btn btn-sm" %>
   </div>
-
-  <div>
-    <%= f.label :unit_id %>
-    <%= f.select :unit_id, Unit.all.map{|r|[raw(r.html),r.id]}, { include_blank: true }, class: "form-control input-sm" %>
-  </div>
-
-  <div>
-    <%= f.label :description %>
-    <%= f.text_area :description, class: "form-control input-sm" %>
-  </div>
-
-  <%= f.submit "update", class: "btn btn-sm" %>
-  <%= link_to "cancel", measurement_categories_path, class: "btn btn-sm" %>
+  <ul id="measurement-items" class="col-lg-8">
+    <%= f.fields_for :category_measurement_items do |g| %>
+      <li class="row list-unstyled">
+	<%= g.hidden_field :position, class: "position" %>
+	<div class="col-lg-7"><%= g.object.measurement_item.display_name %></div>
+	<div class="col-lg-2"><%= g.select :unit_id, @units.map { |u| [raw(u.html), u.id] }, {include_blank: true }, class: "form-control input-sm" %></div>
+	<div class="col-lg-2"><%= g.text_field :scale, class: "form-control input-sm" %></div>
+	<div class="col-lg-1">
+	  <%= link_to category_measurement_item_path(g.object), :method => :delete ,:title => "unlink item",data: {confirm: t("confirm.unlink")} do %>
+	    <span class="glyphicon glyphicon-remove"></span>
+	  <% end %>
+	</div>
+      </li>
+    <% end %>
+  </ul>
 <% end %>
-</div>
 
-<div>
-<table>
-  <thead>
-  <th>name</th>
-  <th></th>
-  <th></th>
-  </thead>
-  <tbody>
-    <% @measurement_category.category_measurement_items.order("position ASC").each do |category_measurement_item| %>
-    <% measurement_item = category_measurement_item.measurement_item %>
-    <tr>
-    <% if measurement_item %>
-      <td><%== measurement_item.display_name %></td>
-      <td>
-        <%= link_to move_to_top_category_measurement_item_path(category_measurement_item), :method => :move_to_top ,:title => "move to top" do %>
-          <span class="glyphicon glyphicon-arrow-up"></span>
-        <% end %>
-      </td>
-      <td>
-        <%= link_to category_measurement_item_path(category_measurement_item), :method => :delete ,:title => "unlink item",data: {confirm: t("confirm.unlink")} do %>
-          <span class="glyphicon glyphicon-remove"></span>
-        <% end %>
-      </td>
-    <% end %>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
-</div>
-
+<%= javascript_tag do %>
+(function($) {
+  $("#measurement-items").sortable({
+    placeholder: "ui-state-highlight list-unstyled",
+    forcePlaceholderSize: true,
+    update: function(event, ui) {
+      $(this).find("li").each(function(index, element) {
+        $(this).find("input.position").val(index + 1);
+      });
+    }
+  });
+})(jQuery);
+<% end %>
