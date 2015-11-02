@@ -24,7 +24,7 @@
     <%= f.fields_for :category_measurement_items do |g| %>
       <li class="row list-unstyled">
 	<%= g.hidden_field :position, class: "position" %>
-	<div class="col-lg-7"><%= g.object.measurement_item.display_name %></div>
+	<div class="col-lg-7"><%== g.object.measurement_item.display_name %></div>
 	<div class="col-lg-2"><%= g.select :unit_id, @units.map { |u| [raw(u.html), u.id] }, {include_blank: true }, class: "form-control input-sm" %></div>
 	<div class="col-lg-2"><%= g.text_field :scale, class: "form-control input-sm" %></div>
 	<div class="col-lg-1">
