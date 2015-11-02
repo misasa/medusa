@@ -21,8 +21,14 @@
     <%= link_to "cancel", measurement_categories_path, class: "btn btn-sm" %>
   </div>
   <ul id="measurement-items" class="col-lg-8">
+    <li class="row list-unstyled">
+      <div class="col-lg-7">name</div>
+      <div class="col-lg-2">unit</div>
+      <div class="col-lg-2">scale</div>
+      <div class="col-lg-1"></div>
+    </li>
     <%= f.fields_for :category_measurement_items do |g| %>
-      <li class="row list-unstyled">
+      <li class="row list-unstyled sortable">
 	<%= g.hidden_field :position, class: "position" %>
 	<div class="col-lg-7"><%== g.object.measurement_item.display_name %></div>
 	<div class="col-lg-2"><%= g.select :unit_id, @units.map { |u| [raw(u.html), u.id] }, {include_blank: true }, class: "form-control input-sm" %></div>
@@ -40,6 +46,7 @@
 <%= javascript_tag do %>
 (function($) {
   $("#measurement-items").sortable({
+    items: "li.sortable",
     placeholder: "ui-state-highlight list-unstyled",
     forcePlaceholderSize: true,
     update: function(event, ui) {
