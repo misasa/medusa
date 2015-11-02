@@ -82,6 +82,6 @@ Medusa::Application.configure do
   :email => {
     :email_prefix => "[Medusa exception] ",
     :sender_address => %{"no reply" <medusa@example.com>},
-    :exception_recipients => %w{m-imaoka@probizmo.co.jp}
+    :exception_recipients => %w{} # Set e-mail address.
   }
 end
