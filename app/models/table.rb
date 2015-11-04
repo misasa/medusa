@@ -133,7 +133,7 @@ class Table < ActiveRecord::Base
     end
   end
 
-  def each(display: :nickname, &block)
+  def each(&block)
     category_measurement_items.includes(:measurement_item).each do |category_measurement_item|
       yield Row.new(self, category_measurement_item, chemistries_hash[category_measurement_item.measurement_item_id])
     end

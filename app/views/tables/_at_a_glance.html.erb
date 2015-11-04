@@ -50,7 +50,7 @@
 	  <% end %>
 	</tr>
       <% end %>
-      <% @table.each(display: :html) do |row| %>
+      <% @table.each do |row| %>
 	<tr>
 	  <th><%== row.name(:html) %></th>
 	  <th><%== row.unit.try!(:html) %></th>
