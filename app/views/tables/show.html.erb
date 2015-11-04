@@ -8,7 +8,7 @@
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <% if can? :update, @table %>
 	<div class="btn-group btn-group-sm">
-	  <%= link_to edit_table_path(@table), class: "btn btn-default", remote: true do %>
+	  <%= link_to edit_table_path(@table), class: "btn btn-default activate", remote: true do %>
 	    <span class="glyphicon glyphicon-pencil"></span>
 	  <% end %>
 	  <%= link_to property_table_path(@table), class: "btn btn-default", remote: true do %>
