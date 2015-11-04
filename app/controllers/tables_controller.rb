@@ -1,5 +1,5 @@
 class TablesController < ApplicationController
-  respond_to :html, :xml, :json
+  respond_to :html, :xml, :json, :csv
   before_action :find_resource, except: [:index]
   load_and_authorize_resource
 
@@ -8,7 +8,9 @@ class TablesController < ApplicationController
   end
 
   def show
-    respond_with @table
+    respond_with @table do |format|
+      format.csv { send_data render_to_string, filename: "#{@table.description}.csv", type: :csv }
+    end
   end
 
   def edit

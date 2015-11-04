@@ -16,6 +16,8 @@ class Table < ActiveRecord::Base
 
   class Row
 
+    include Enumerable
+
     DEFAULT_SCALE = 2
 
     attr_reader :table
@@ -46,6 +48,7 @@ class Table < ActiveRecord::Base
     end
 
     def mean(round = true)
+      return if cells.blank?
       mean = (cells.sum(&:raw) / cells.size)
       round ? mean.round(scale) : mean
     end
@@ -130,7 +133,7 @@ class Table < ActiveRecord::Base
     end
   end
 
-  def each(display: :nickname, &block)
+  def each(&block)
     category_measurement_items.includes(:measurement_item).each do |category_measurement_item|
       yield Row.new(self, category_measurement_item, chemistries_hash[category_measurement_item.measurement_item_id])
     end
