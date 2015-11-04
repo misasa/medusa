@@ -16,6 +16,8 @@ class Table < ActiveRecord::Base
 
   class Row
 
+    include Enumerable
+
     DEFAULT_SCALE = 2
 
     attr_reader :table
@@ -46,6 +48,7 @@ class Table < ActiveRecord::Base
     end
 
     def mean(round = true)
+      return if cells.blank?
       mean = (cells.sum(&:raw) / cells.size)
       round ? mean.round(scale) : mean
     end

@@ -15,6 +15,11 @@
 	    <span class="glyphicon glyphicon-cog"></span>
 	  <% end %>
 	</div>
+	<div class="btn-group btn-group-sm">
+	  <%= link_to table_path(@table, format: :csv), class: "btn btn-default" do %>
+	    <span class="glyphicon glyphicon-th-list"></span>
+	  <% end %>
+	</div>
       <% end %>
     </div>
     <img>
