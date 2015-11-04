@@ -10,6 +10,8 @@ class Table < ActiveRecord::Base
   belongs_to :bib
   belongs_to :measurement_category
 
+  accepts_nested_attributes_for :table_stones
+
   ChemicalSpecies = Struct.new(:category_measurement_item, :sign) do
 
     delegate :unit, :scale, to: :category_measurement_item

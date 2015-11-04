@@ -48,6 +48,10 @@ class TablesController < ApplicationController
         :group_writable,
         :guest_readable,
         :guest_writable
+      ],
+      table_stones_attributes: [
+        :id,
+        :position
       ]
     )
   end

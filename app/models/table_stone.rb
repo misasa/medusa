@@ -3,7 +3,7 @@ class TableStone < ActiveRecord::Base
   belongs_to :table
   belongs_to :stone
 
-  before_save :assign_position
+  before_create :assign_position
 
   private
 
