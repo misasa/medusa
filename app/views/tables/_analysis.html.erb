@@ -1,0 +1,49 @@
+<%= form_for @table, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
+  <ul>
+    <li class="row list-unstyled">
+      <div class="col-lg-6">name <span class="glyphicon glyphicon-sort"></span></div>
+      <div class="col-lg-3">technique</div>
+      <div class="col-lg-3">device</div>
+    </li>
+  </ul>
+  <% @table.table_stones.each do |table_stone| %>
+    <b><%= table_stone.stone.name %></b>
+    <ul class="table-analyses">
+      <% @table.table_analyses.where(stone_id: table_stone.stone_id).includes(analysis: [:technique, :device]).each do |table_analysis| %>
+	<li class="row list-unstyled">
+	  <div class="col-lg-6">
+	    <%= f.fields_for :table_analyses, table_analysis do |g| %>
+	      <%= g.object.analysis.name %>
+	      <%= g.hidden_field :priority, class: "priority" %>
+	    <% end %>
+	  </div>
+	  <div class="col-lg-3">
+	    <%= table_analysis.analysis.technique.try!(:name) %>
+	  </div>
+	  <div class="col-lg-3">
+	    <%= table_analysis.analysis.device.try!(:name) %>
+	  </div>
+	</li>
+      <% end %>
+    </ul>
+  <% end %>
+  <div class="pull-right">
+    <%= f.button class: "btn btn-default" do %>
+      <span class="glyphicon glyphicon-save"></span>
+    <% end %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+(function($) {
+  $("ul.table-analyses").sortable({
+    placeholder: "ui-state-highlight list-unstyled",
+    forcePlaceholderSize: true,
+    update: function(event, ui) {
+      $(this).find("li").each(function(index, element) {
+        $(this).find("input.priority").val(index + 1);
+      });
+    }
+  });
+})(jQuery);
+<% end %>

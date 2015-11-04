@@ -30,11 +30,15 @@
       <li class="<%= active_if_current('stone') %>">
         <a href="#stone" data-toggle="tab"><%= @alias_specimen + data_count(@table.stones) %></a>
       </li>
+      <li class="<%= active_if_current('analysis') %>">
+        <a href="#analysis" data-toggle="tab"><%= "analysis" + data_count(@table.table_analyses) %></a>
+      </li>
     </ul>
     <!-- Tab panes -->
     <% tab_info = [
       ["at-a-glance",nil],
-      ["stone",@table.stones]
+      ["stone",@table.stones],
+      ["analysis",@table.table_analyses]
     ] %>
     <div class="tab-content">
       <% tab_info.each do |key,array| %>

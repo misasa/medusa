@@ -50,18 +50,15 @@
 	  <% end %>
 	</tr>
       <% end %>
-      <% @table.each(display: :html) do |chemical_species, chemistries| %>
+      <% @table.each(display: :html) do |row| %>
 	<tr>
-	  <th><%== chemical_species.caption(:html) %></th>
-	  <th><%== chemical_species.unit.try!(:html) %></th>
-	  <% values = [] %>
-	  <% @table.stones.each do |stone| %>
-	    <% values << chemistries[stone.id].try!(:unit_conversion_value, chemical_species.unit.name) %>
-	    <td><%= chemistries[stone.id].try!(:unit_conversion_value, chemical_species.unit.name, chemical_species.scale) || "-" %></td>
+	  <th><%== row.name(:html) %></th>
+	  <th><%== row.unit.try!(:html) %></th>
+	  <% row.each do |cell| %>
+	    <td><%= cell.value || "-" %> <%= "[#{cell.symbol}]" if cell.symbol.present? %></td>
 	  <% end %>
 	  <% if @table.with_average %>
-	    <% values.compact! %>
-	    <td><%= values.blank? ? "-" : "#{(values.sum / values.size).round(chemical_species.scale)} (#{standard_diviation(values, chemical_species.scale)})" %></td>
+	    <td><%= row.present? ? "#{row.mean} (#{row.standard_diviation})" : "-" %></td>
 	  <% end %>
 	</tr>
       <% end %>

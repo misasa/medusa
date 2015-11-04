@@ -17,6 +17,8 @@ class Analysis < ActiveRecord::Base
   validates :technique, existence: true, allow_nil: true
   validates :name, presence: true, length: { maximum: 255 }
 
+  before_update :update_table_analyses
+
   MeasurementCategory.all.each do |mc|
     comma mc.name.to_sym do
       name "name"
@@ -190,6 +192,17 @@ class Analysis < ActiveRecord::Base
     spots = Spot.where(target_uid: global_id)
     return if spots.empty?
     spots[0]
-  end 
+  end
+
+  private
+
+  def update_table_analyses
+    return unless stone_id_changed?
+    TableAnalysis.delete_all(analysis_id: id)
+    TableStone.where(stone_id: stone_id).each do |table_stone|
+      priority = TableAnalysis.where(table_id: table_stone.table_id, stone_id: table_stone.stone_id).maximum(:priority) + 1
+      TableAnalysis.create!(table_id: table_stone.table_id, stone_id: table_stone.stone_id, analysis_id: id, priority: priority)
+    end
+  end
 
 end

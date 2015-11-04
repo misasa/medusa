@@ -52,6 +52,10 @@ class TablesController < ApplicationController
       table_stones_attributes: [
         :id,
         :position
+      ],
+      table_analyses_attributes: [
+        :id,
+        :priority
       ]
     )
   end
