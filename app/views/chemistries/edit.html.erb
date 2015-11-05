@@ -13,7 +13,7 @@
 
   <div class="form-group form-group-sm">
     <%= f.label :unit, class: "small" %>
-    <%= f.select :unit_id ,Unit.all.map{|r|[raw(r.html),r.id]},include_blank: true, class: "form-control input-sm"  %>
+    <%= f.select :unit_id, Unit.all.map { |unit| [raw(unit.html), unit.id] }, class: "form-control input-sm" %>
   </div>
 
   <div class="form-group form-group-sm">

@@ -7,7 +7,7 @@ class Chemistry < ActiveRecord::Base
 
   validates :analysis, existence: true
   validates :measurement_item, existence: true
-  validates :unit, existence: true, allow_nil: true
+  validates :unit, existence: true
   validates :value, numericality: true
   validates :uncertainty, numericality: true, allow_nil: true
 
