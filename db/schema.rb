@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151105020442) do
+ActiveRecord::Schema.define(version: 20151105030645) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -129,7 +129,7 @@ ActiveRecord::Schema.define(version: 20151105020442) do
     t.float    "uncertainty"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "unit_id",             null: false
+    t.integer  "unit_id"
   end
 
   add_index "chemistries", ["analysis_id"], name: "index_chemistries_on_analysis_id", using: :btree
