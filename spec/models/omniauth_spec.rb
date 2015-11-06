@@ -42,4 +42,21 @@ describe Omniauth do
       end
     end
   end
+  
+  describe "find_user_by_auth" do
+    subject { Omniauth.find_user_by_auth(auth) }
+    before { omniauth }
+    let(:auth) { double(:auth, provider: provider, uid: uid) }
+    let(:provider) { "sample_provider" }
+    let(:uid) { "12345" }
+    let(:omniauth) { FactoryGirl.create(:omniauth, provider: provider, uid: uid, user: user) }
+    let(:user) { FactoryGirl.create(:user) }
+    context "auth matches omniauth record" do
+      it { expect(subject).to eq user }
+    end
+    context "auth not matches omniauth record" do
+      let(:auth) { double(:auth, provider: :foo, uid: :bar) }
+      it { expect(subject).to be_nil }
+    end
+  end
 end
