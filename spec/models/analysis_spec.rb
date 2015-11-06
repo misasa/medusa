@@ -195,7 +195,27 @@ describe Analysis do
     it { expect(subject).to eq [object_1, object_2] }
   end
 
-  pending "set_object" do
+  describe ".set_object" do
+    subject { Analysis.set_object(methods, data_array) }
+    let(:methods) { ["id", "name", "description", "stone_id", "technique_id", "device_id", "operator"] }
+    let(:data_array) { [id, name, description, stone_id, technique_id, device_id, operator] }
+    let(:id) { "1" }
+    let(:name) { "分析名" }
+    let(:description) { "説明" }
+    let(:stone_id) { "2" }
+    let(:technique_id) { "3" }
+    let(:device_id) { "4" }
+    let(:operator) { "オペレータ" }
+    it { expect(subject.class).to eq Analysis }
+    it do
+      expect(subject.id).to eq(id.to_i)
+      expect(subject.name).to eq name
+      expect(subject.description).to eq description
+      expect(subject.stone_id).to eq(stone_id.to_i)
+      expect(subject.technique_id).to eq(technique_id.to_i)
+      expect(subject.device_id).to eq(device_id.to_i)
+      expect(subject.operator).to eq operator
+    end
   end
 
   describe "#to_castemls" do
@@ -267,6 +287,43 @@ describe Analysis do
         spot2
       end
       it{expect(subject).to eq spot1}
+    end
+  end
+  
+  describe "#update_table_analyses" do
+    subject { analysis.send(:update_table_analyses) }
+    let(:analysis) { FactoryGirl.create(:analysis, name: "分析１", stone: stone_1) }
+    let(:stone_1) { FactoryGirl.create(:stone, name: "ストーン１") }
+    let(:stone_2) { FactoryGirl.create(:stone, name: "ストーン２") }
+    context "not change associated stone" do
+      it { expect{ subject }.not_to change(TableAnalysis, :count) }
+    end
+    context "change associated stone" do
+      before { analysis.stone_id = stone_2.id }
+      context "analysis not linked table_stone" do
+        it { expect{ subject }.not_to change(TableAnalysis, :count) }
+      end
+      context "analysis linked table_stone" do
+        before do
+          table_stone
+          other_table_stone
+          table_analysis
+        end
+        let(:table_stone) { FactoryGirl.create(:table_stone, stone: stone_2) }
+        let(:other_table_stone) { FactoryGirl.create(:table_stone, stone: stone_3) }
+        let(:stone_3) { FactoryGirl.create(:stone, name: "ストーン３") }
+        let(:table_analysis) { FactoryGirl.create(:table_analysis, table_id: table_stone.table_id, stone_id: table_stone.stone_id, priority: priority) }
+        let(:priority) { 1 }
+        it { expect{ subject }.to change(TableAnalysis, :count).by(1) }
+        it do
+          subject
+          table_analysis = TableAnalysis.last
+          expect(table_analysis.table_id).to eq(table_stone.table_id)
+          expect(table_analysis.stone_id).to eq(table_stone.stone_id)
+          expect(table_analysis.analysis_id).to eq(analysis.id)
+          expect(table_analysis.priority).to eq(priority + 1)
+        end
+      end
     end
   end
     

@@ -12,33 +12,62 @@ describe "Table" do
   let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item) }
   
   describe "#each" do
-    before do
-      table
-      category_measurement_item_1
-      category_measurement_item_2
-      table_stone
-      analysis
-      chemistry
-      allow(Table::Row).to receive(:new).with(table, category_measurement_item_1, [chemistry]).and_return(:row_1)
-      allow(Table::Row).to receive(:new).with(table, category_measurement_item_2, [chemistry]).and_return(:row_2)
+    context "table not link category_measurement_item" do
+      it { expect { |b| table.each(&b) }.not_to yield_control }
     end
-    let(:category_measurement_item_1) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
-    let(:category_measurement_item_2) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
-    it { expect { |b| table.each(&b) }.to yield_control.twice }
-    it { expect { |b| table.each(&b) }.to yield_successive_args(:row_2, :row_1) }
+    context "table linked 1 category_measurement_item" do
+      before do
+        category_measurement_item_1
+        table_stone
+        analysis
+        chemistry
+        allow(Table::Row).to receive(:new).with(table, category_measurement_item_1, [chemistry]).and_return(:row_1)
+      end
+      let(:category_measurement_item_1) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
+      it { expect { |b| table.each(&b) }.to yield_control.once }
+      it { expect { |b| table.each(&b) }.to yield_successive_args(:row_1) }
+    end
+    context "table linked 2 category_measurement_items" do
+      before do
+        category_measurement_item_1
+        category_measurement_item_2
+        table_stone
+        analysis
+        chemistry
+        allow(Table::Row).to receive(:new).with(table, category_measurement_item_1, [chemistry]).and_return(:row_1)
+        allow(Table::Row).to receive(:new).with(table, category_measurement_item_2, [chemistry]).and_return(:row_2)
+      end
+      let(:category_measurement_item_1) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
+      let(:category_measurement_item_2) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
+      it { expect { |b| table.each(&b) }.to yield_control.twice }
+      it { expect { |b| table.each(&b) }.to yield_successive_args(:row_2, :row_1) }
+    end
   end
   
   describe "#method_descriptions" do
     subject { table.method_descriptions }
-    before do
-      table.method_sign(technique_1, device_1)
-      table.method_sign(technique_2, device_2)
+    context "table has 0 description" do
+      it { expect(subject).to be_blank }
     end
-    let(:technique_1) { FactoryGirl.create(:technique, name: "technique_1") }
-    let(:technique_2) { FactoryGirl.create(:technique, name: "technique_2") }
-    let(:device_1) { FactoryGirl.create(:device, name: "device_1") }
-    let(:device_2) { FactoryGirl.create(:device, name: "device_2") }
-    it { expect(subject).to eq({"a" => "#{technique_1.name} on #{device_1.name}", "b" => "#{technique_2.name} on #{device_2.name}"}) }
+    context "table has 1 description" do
+      before do
+        table.method_sign(technique_1, device_1)
+      end
+      let(:technique_1) { FactoryGirl.create(:technique, name: "technique_1") }
+      let(:device_1) { FactoryGirl.create(:device, name: "device_1") }
+      it { expect(subject).to eq({"a" => "#{technique_1.name} on #{device_1.name}"}) }
+    end
+    context "table has 2 descriptions" do
+      before do
+        table.method_sign(technique_1, device_1)
+        table.method_sign(technique_2, device_2)
+      end
+      let(:technique_1) { FactoryGirl.create(:technique, name: "technique_1") }
+      let(:technique_2) { FactoryGirl.create(:technique, name: "technique_2") }
+      let(:device_1) { FactoryGirl.create(:device, name: "device_1") }
+      let(:device_2) { FactoryGirl.create(:device, name: "device_2") }
+      it { expect(subject).to eq({"a" => "#{technique_1.name} on #{device_1.name}", "b" => "#{technique_2.name} on #{device_2.name}"}) }
+    end
   end
   
   describe "#method_sign" do
@@ -141,15 +170,29 @@ describe "Table::Row" do
   end
   
   describe "#each" do
-    before do
-      table_stone_1
-      table_stone_2
-      allow(Table::Cell).to receive(:new).with(row, [chemistry]).and_return(:cell)
+    context "table not link table_stone" do
+      it { expect { |b| table.each(&b) }.not_to yield_control }
     end
-    let(:table_stone_1) { FactoryGirl.create(:table_stone, table: table, stone: stone) }
-    let(:table_stone_2) { FactoryGirl.create(:table_stone, table: table, stone: stone) }
-    it { expect { |b| row.each(&b) }.to yield_control.twice }
-    it { expect { |b| row.each(&b) }.to yield_successive_args(:cell, :cell) }
+    context "table linked 1 table_stone" do
+      before do
+        table_stone_1
+        allow(Table::Cell).to receive(:new).with(row, [chemistry]).and_return(:cell)
+      end
+      let(:table_stone_1) { FactoryGirl.create(:table_stone, table: table, stone: stone) }
+      it { expect { |b| row.each(&b) }.to yield_control.once }
+      it { expect { |b| row.each(&b) }.to yield_successive_args(:cell) }
+    end
+    context "table linked 2 table_stones" do
+      before do
+        table_stone_1
+        table_stone_2
+        allow(Table::Cell).to receive(:new).with(row, [chemistry]).and_return(:cell)
+      end
+      let(:table_stone_1) { FactoryGirl.create(:table_stone, table: table, stone: stone) }
+      let(:table_stone_2) { FactoryGirl.create(:table_stone, table: table, stone: stone) }
+      it { expect { |b| row.each(&b) }.to yield_control.twice }
+      it { expect { |b| row.each(&b) }.to yield_successive_args(:cell, :cell) }
+    end
   end
   
   describe "#mean" do
