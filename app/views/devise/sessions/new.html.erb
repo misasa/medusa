@@ -1,16 +1,13 @@
-<h2>Sign in</h2>
-
+<h2><%= Settings.site_name %></h2>
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
-  <div>
-    <%= f.label :username %><br />
-    <%= f.text_field :username, :autofocus => true %>
-  </div>
-  <div>
-    <%= f.label :password %><br />
-    <%= f.password_field :password %>
-  </div>
-  <div><%= f.submit "Sign in" %></div>
+  <%= f.submit "Sign in", class: "btn btn-mini btn-default" %> with <%= f.text_field :username, :autofocus => true, :placeholder => "Username" %>
+   and <%= f.password_field :password, :placeholder => "Password" %>  
 <% end %>
-
-<%= link_to_if(File.exists?(Rails.root.join("config/google.yml")), "Sign in with Google", user_omniauth_authorize_path(:google_oauth2)) %><br />
-<%= link_to "Sign in with Shibboleth", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://") %>
+<% if File.exists?(Rails.root.join("config/google.yml")) %>
+  <div>
+    <%= link_to "Sign in", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-mini btn-default" %> with Google account
+  </div>
+<% end %>
+<div>
+<%= link_to "Sign in", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://"), class: "btn btn-mini btn-default" %> with Shibboleth
+</div>

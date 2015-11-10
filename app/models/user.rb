@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+  # -*- coding: utf-8 -*-
 class User < ActiveRecord::Base
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
@@ -27,6 +27,12 @@ class User < ActiveRecord::Base
   
   def as_json(options = {})
     super({:methods => :box_global_id}.merge(options))
+  end
+
+  def omniauth_uid(provider)
+    auth = omniauths.find_by_provider(provider)
+    return unless auth
+    autn.uid
   end
 
   protected

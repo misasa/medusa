@@ -43,19 +43,27 @@
       <%= f.text_area :description, class: "form-control input-sm" %>
     </div>
 
-    <%= f.submit  "Update", class: "btn btn-sm" %>
+    <%= f.submit  "Update", class: "btn btn-mini btn-default" %>
+  </div>
+</div>
 
-    <% if File.exists?(Rails.root.join("config/google.yml")) %>
-    <div>
-      <%= link_to("Make available Google account", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-sm") %>
-    </div>
+<div class="row">
+  <div class="col-lg-4">
+
+    <% if true||File.exists?(Rails.root.join("config/google.yml")) %>
+      <div>
+      <b>Google ID</b><br />
+      <%= @user.omniauth_uid(:google_oauth2) %><%= link_to("Link", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-mini btn-default") %>
+      </div>
     <% end %>
-    <%= link_to "Sync with shibboleth", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://") %>
-
+      <div>
+      <b>Shibboleth ID</b><br />
+      <%= @user.omniauth_uid(:shibboleth) %><%= link_to "Link", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://"), class: "btn btn-mini btn-default" %>
+      </div>
     <% end %>
   </div>
 </div>
-<br />
+
 <div class="row">
   <div class="col-lg-12">
     <%= form_tag(find_by_global_id_account_path,method: :get) do %>
