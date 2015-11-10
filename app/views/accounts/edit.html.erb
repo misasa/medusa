@@ -53,12 +53,12 @@
     <% if true||File.exists?(Rails.root.join("config/google.yml")) %>
       <div>
       <b>Google ID</b><br />
-      <%= @user.omniauth_uid(:google_oauth2) %><%= link_to("Link", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-mini btn-default") %>
+      <%= @user.omniauth_uid(:google_oauth2) %> <%= link_to("Link", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-mini btn-default") %>
       </div>
     <% end %>
       <div>
       <b>Shibboleth ID</b><br />
-      <%= @user.omniauth_uid(:shibboleth) %><%= link_to "Link", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://"), class: "btn btn-mini btn-default" %>
+      <%= @user.omniauth_uid(:shibboleth) %> <%= link_to "Link", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://"), class: "btn btn-mini btn-default" %>
       </div>
     <% end %>
   </div>
