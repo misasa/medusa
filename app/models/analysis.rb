@@ -200,8 +200,8 @@ class Analysis < ActiveRecord::Base
     return unless stone_id_changed?
     TableAnalysis.delete_all(analysis_id: id)
     TableStone.where(stone_id: stone_id).each do |table_stone|
-      priority = TableAnalysis.where(table_id: table_stone.table_id, stone_id: table_stone.stone_id).maximum(:priority) + 1
-      TableAnalysis.create!(table_id: table_stone.table_id, stone_id: table_stone.stone_id, analysis_id: id, priority: priority)
+      max_priority = TableAnalysis.where(table_id: table_stone.table_id, stone_id: table_stone.stone_id).maximum(:priority) || 0
+      TableAnalysis.create!(table_id: table_stone.table_id, stone_id: table_stone.stone_id, analysis_id: id, priority: (max_priority + 1))
     end
   end
 

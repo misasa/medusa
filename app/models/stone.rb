@@ -10,7 +10,7 @@ class Stone < ActiveRecord::Base
   acts_as_taggable
  #with_recursive
 
-  has_many :analyses
+  has_many :analyses, before_remove: :delete_table_analysis
   has_many :children, class_name: "Stone", foreign_key: :parent_id, dependent: :nullify
   has_many :stones, class_name: "Stone", foreign_key: :parent_id, dependent: :nullify  
   has_many :referrings, as: :referable, dependent: :destroy
@@ -49,6 +49,10 @@ class Stone < ActiveRecord::Base
 
   def path_ids
     box.present? ? box.ancestors + [box.id] : []
+  end
+
+  def delete_table_analysis(analysis)
+    TableAnalysis.delete_all(analysis_id: analysis.id, stone_id: self.id)
   end
 
 end

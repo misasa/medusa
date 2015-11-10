@@ -69,6 +69,22 @@ describe Stone do
       end
   end
 
+  describe "#delete_table_analysis" do
+    subject { stone.send(:delete_table_analysis, analysis_1) }
+    let(:stone) { FactoryGirl.create(:stone) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone.id) }
+    let(:table_analysis_1) { FactoryGirl.create(:table_analysis, table: table, stone: stone, analysis: analysis_1, priority: 1) }
+    let(:table_analysis_2) { FactoryGirl.create(:table_analysis, table: table, stone: stone, analysis: analysis_2, priority: 2) }
+    let(:table) { FactoryGirl.create(:table) }
+    before do
+      table_analysis_1
+      table_analysis_2
+    end
+    it { expect{ subject }.to change(TableAnalysis, :count).from(2).to(1) }
+    it { subject; expect(TableAnalysis.exists?(analysis_id: analysis_2.id)).to eq true }
+  end
+
   describe "validates" do
     describe "name" do
       let(:obj) { FactoryGirl.build(:stone, name: name) }
