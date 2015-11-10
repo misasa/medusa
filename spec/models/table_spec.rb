@@ -198,6 +198,8 @@ describe "Table::Row" do
   describe "#mean" do
     subject { row.mean(round_flag) }
     let(:round_flag) { false }
+    let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item, scale: scale) }
+    let(:scale) { 1 }
     context "round_flag is false" do
       context "table linked 1 chemistry" do
         it { expect(subject).to eq(chemistry.value) }
@@ -221,24 +223,37 @@ describe "Table::Row" do
     end
     context "round_flag is true" do
       let(:round_flag) { true }
-      context "table linked 1 chemistry" do
-        it { expect(subject).to eq((chemistry.value).round(category_measurement_item.scale)) }
-      end
-      context "table linked 2 chemistries" do
-        let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2]) }
-        let(:table_stone_1) { FactoryGirl.create(:table_stone, table: table, stone: stone_1) }
-        let(:table_stone_2) { FactoryGirl.create(:table_stone, table: table, stone: stone_2) }
-        let(:stone_1) { FactoryGirl.create(:stone) }
-        let(:stone_2) { FactoryGirl.create(:stone) }
-        let(:analysis_1) { FactoryGirl.create(:analysis, stone: stone_1) }
-        let(:analysis_2) { FactoryGirl.create(:analysis, stone: stone_2) }
-        let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
-        let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
-        before do
-          table_stone_1
-          table_stone_2
+      shared_examples_for 'Table::Row 平均値が指定する有効精度で返されること' do |scale|
+        context "table linked 1 chemistry" do
+          it { expect(subject).to eq((chemistry.value).round(scale)) }
         end
-        it { expect(subject).to eq(((chemistry_1.value + chemistry_2.value) / table.chemistries.size).round(category_measurement_item.scale)) }
+        context "table linked 2 chemistries" do
+          let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2]) }
+          let(:table_stone_1) { FactoryGirl.create(:table_stone, table: table, stone: stone_1) }
+          let(:table_stone_2) { FactoryGirl.create(:table_stone, table: table, stone: stone_2) }
+          let(:stone_1) { FactoryGirl.create(:stone) }
+          let(:stone_2) { FactoryGirl.create(:stone) }
+          let(:analysis_1) { FactoryGirl.create(:analysis, stone: stone_1) }
+          let(:analysis_2) { FactoryGirl.create(:analysis, stone: stone_2) }
+          let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
+          let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
+          before do
+            table_stone_1
+            table_stone_2
+          end
+          it { expect(subject).to eq(((chemistry_1.value + chemistry_2.value) / table.chemistries.size).round(scale)) }
+        end
+      end
+      context "category_measurement_item.scale is 1" do
+        it_behaves_like 'Table::Row 平均値が指定する有効精度で返されること', 1
+      end
+      context "category_measurement_item.scale is 2" do
+        let(:scale) { 2 }
+        it_behaves_like 'Table::Row 平均値が指定する有効精度で返されること', 2
+      end
+      context "category_measurement_item.scale is 0" do
+        let(:scale) { 0 }
+        it_behaves_like 'Table::Row 平均値が指定する有効精度で返されること', 0
       end
     end
   end
@@ -264,16 +279,22 @@ describe "Table::Row" do
       table_stone_1
       table_stone_2
     end
-    context "scale is 1" do
-      it { expect(subject).to eq 0.7 }
+    context "row not link chemistry" do
+      let(:row) { Table::Row.new(table, category_measurement_item, []) }
+      it { expect(subject).to eq "-" }
     end
-    context "scale is 2" do
-      let(:scale) { 2 }
-      it { expect(subject).to eq 0.72 }
-    end
-    context "scale is 3" do
-      let(:scale) { 3 }
-      it { expect(subject).to eq 0.721 }
+    context "row linked chemistries" do
+      context "scale is 1" do
+        it { expect(subject).to eq 0.7 }
+      end
+      context "scale is 2" do
+        let(:scale) { 2 }
+        it { expect(subject).to eq 0.72 }
+      end
+      context "scale is 3" do
+        let(:scale) { 3 }
+        it { expect(subject).to eq 0.721 }
+      end
     end
   end
   
