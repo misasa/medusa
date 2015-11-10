@@ -32,7 +32,7 @@ class User < ActiveRecord::Base
   def omniauth_uid(provider)
     auth = omniauths.find_by_provider(provider)
     return unless auth
-    autn.uid
+    auth.uid
   end
 
   protected
