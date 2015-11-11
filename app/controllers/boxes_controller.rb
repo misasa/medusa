@@ -12,12 +12,12 @@ class BoxesController < ApplicationController
   end
 
   def show
-    @contents_search = @diff_search = Path.search
+    @contents_search = Path.search(exists_at: Date.today.strftime("%Y%m%d"))
     @contents_search.sorts = "path ASC"
     @contents = Path.none
     @src_date = Date.yesterday.strftime("%Y%m%d")
     @dst_date = Date.today.strftime("%Y%m%d")
-    @diff_search = Path.diff(@box, @src_date, @dst_date).search(params[:q])
+    @diff_search = Path.diff(@box, @src_date, @dst_date).search
     @diff_search.sorts = "path ASC"
     @diff = @diff_search.result
     respond_with @box

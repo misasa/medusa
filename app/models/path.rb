@@ -8,6 +8,7 @@ class Path < ActiveRecord::Base
 
   scope :contents_of, -> (box_id) { where("? = ANY(ids)", box_id) }
   scope :current, -> { where(brought_out_at: nil) }
+  scope :exists_at, -> (date) { where(arel_table[:brought_in_at].lteq(date.to_date.end_of_day).and(arel_table[:brought_out_at].eq(nil).or(arel_table[:brought_out_at].gteq(date.to_date.beginning_of_day)))) rescue none }
 
   def self.cont_at(date)
     search = search(brought_out_at_gteq: date, brought_in_at_lteq_end_of_day: date)
@@ -33,6 +34,10 @@ class Path < ActiveRecord::Base
       ids.each { |id| yield boxes[id] }
     end
     yield datum
+  end
+
+  def self.ransackable_scopes(auth_object = nil)
+    %i(exists_at)
   end
 
   private

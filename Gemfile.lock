@@ -26,7 +26,7 @@ GEM
       activerecord-deprecated_finders (~> 1.0.2)
       activesupport (= 4.0.2)
       arel (~> 4.0.0)
-    activerecord-deprecated_finders (1.0.3)
+    activerecord-deprecated_finders (1.0.4)
     activeresource (4.0.0)
       activemodel (~> 4.0)
       activesupport (~> 4.0)
@@ -47,8 +47,7 @@ GEM
       rails (>= 3, < 5)
     addressable (2.3.8)
     afm (0.2.0)
-    arel (4.0.1)
-    atomic (1.1.14)
+    arel (4.0.2)
     barby (0.5.1)
     bcrypt-ruby (3.1.2)
     binding_of_caller (0.7.2)
@@ -143,7 +142,7 @@ GEM
     hashery (2.1.1)
     hashie (3.4.2)
     hike (1.2.3)
-    i18n (0.6.9)
+    i18n (0.7.0)
     jbuilder (1.5.3)
       activesupport (>= 3.0.0)
       multi_json (>= 1.2.0)
@@ -171,7 +170,7 @@ GEM
     mime-types (1.25.1)
     mini_portile (0.5.2)
     minitest (4.7.5)
-    multi_json (1.8.4)
+    multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     net-scp (1.1.2)
@@ -217,7 +216,7 @@ GEM
       cliver (~> 0.3.1)
       multi_json (~> 1.0)
       websocket-driver (>= 0.2.0)
-    polyamorous (0.6.4)
+    polyamorous (1.2.0)
       activerecord (>= 3.0)
     polyglot (0.3.3)
     prawn (0.12.0)
@@ -238,8 +237,8 @@ GEM
     pry-stack_explorer (0.4.9.1)
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
-    rack (1.5.2)
-    rack-test (0.6.2)
+    rack (1.5.5)
+    rack-test (0.6.3)
       rack (>= 1.0)
     rails (4.0.2)
       actionmailer (= 4.0.2)
@@ -259,10 +258,12 @@ GEM
     raindrops (0.12.0)
     rak (1.4)
     rake (10.1.1)
-    ransack (1.1.0)
+    ransack (1.7.0)
       actionpack (>= 3.0)
       activerecord (>= 3.0)
-      polyamorous (~> 0.6.0)
+      activesupport (>= 3.0)
+      i18n
+      polyamorous (~> 1.2)
     rb-fsevent (0.9.4)
     rb-inotify (0.9.3)
       ffi (>= 0.5.0)
@@ -335,8 +336,7 @@ GEM
     thinreports (0.7.6)
       prawn (>= 0.12.0, <= 0.12.0)
     thor (0.18.1)
-    thread_safe (0.1.3)
-      atomic
+    thread_safe (0.3.5)
     tilt (1.4.1)
     timers (1.1.0)
     tins (0.13.2)
@@ -344,7 +344,7 @@ GEM
       polyglot
       polyglot (>= 0.3.1)
     ttfunk (1.0.3)
-    tzinfo (0.3.38)
+    tzinfo (0.3.45)
     uglifier (2.4.0)
       execjs (>= 0.3.0)
       json (>= 1.8.0)
@@ -427,3 +427,6 @@ DEPENDENCIES
   validates_existence
   whenever
   with_recursive
+
+BUNDLED WITH
+   1.10.6

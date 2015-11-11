@@ -6,10 +6,7 @@
       <% end %>
     </div>
     <div class="col-lg-2">
-      <%= f.search_field :brought_out_at_gteq, placeholder: "from:", value: format_date(params[:q] && params[:q][:brought_out_at_gteq]), class: "form-control input-sm datepicker", maxlength: 10 %>
-    </div>
-    <div class="col-lg-2">
-      <%= f.search_field :brought_in_at_lteq_end_of_day, placeholder: "to:", value: format_date(params[:q] && params[:q][:brought_in_at_lteq_end_of_day]), class: "form-control input-sm datepicker", maxlength: 10 %>
+      <%= f.search_field :exists_at, placeholder: "at:", value: format_date(f.object.exists_at), class: "form-control input-sm datepicker", maxlength: 10 %>
     </div>
   </div>
   <table class="table table-condensed table-striped">
