@@ -13,8 +13,13 @@ class BoxesController < ApplicationController
 
   def show
     @contents_search = @diff_search = Path.search
-    @contents_search.sorts = @diff_search.sorts = "path ASC"
-    @contents = @diff = Path.none
+    @contents_search.sorts = "path ASC"
+    @contents = Path.none
+    @src_date = Date.yesterday.strftime("%Y%m%d")
+    @dst_date = Date.today.strftime("%Y%m%d")
+    @diff_search = Path.diff(@box, @src_date, @dst_date).search(params[:q])
+    @diff_search.sorts = "path ASC"
+    @diff = @diff_search.result
     respond_with @box
   end
 
@@ -59,7 +64,9 @@ class BoxesController < ApplicationController
   end
 
   def diff
-    @diff_search = Path.diff(@box, params[:src], params[:dst]).search(params[:q])
+    @src_date = params[:src]
+    @dst_date = params[:dst]
+    @diff_search = Path.diff(@box, @src_date, @dst_date).search(params[:q])
     @diff_search.sorts = "path ASC" if @diff_search.sorts.empty?
     @diff = @diff_search.result
     respond_with @diff, layout: !request.xhr?

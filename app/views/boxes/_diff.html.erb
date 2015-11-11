@@ -6,10 +6,10 @@
       <% end %>
     </div>
     <div class="col-lg-2">
-      <%= text_field_tag :src, format_date(params[:src]), placeholder: "source:", class: "form-control input-sm datepicker", maxlength: 10 %>
+      <%= text_field_tag :src, format_date(@src_date), placeholder: "source:", class: "form-control input-sm datepicker", maxlength: 10 %>
     </div>
     <div class="col-lg-2">
-      <%= text_field_tag :dst, format_date(params[:dst]), placeholder: "destination:", class: "form-control input-sm datepicker", maxlength: 10 %>
+      <%= text_field_tag :dst, format_date(@dst_date), placeholder: "destination:", class: "form-control input-sm datepicker", maxlength: 10 %>
     </div>
   </div>
   <table class="table table-condensed table-striped">
