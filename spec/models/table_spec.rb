@@ -281,7 +281,11 @@ describe "Table::Row" do
     end
     context "row not link chemistry" do
       let(:row) { Table::Row.new(table, category_measurement_item, []) }
-      it { expect(subject).to eq "-" }
+      it { expect(subject).to eq nil }
+    end
+    context "row linked 1 chemistry" do
+      let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1]) }
+      it { expect(subject).to eq nil }
     end
     context "row linked chemistries" do
       context "scale is 1" do

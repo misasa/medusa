@@ -12,8 +12,19 @@ describe TablesController do
   end
   
   describe "GET show" do
-    before { get :show, id: table.id }
-    it{ expect(assigns(:table)).to eq table }
+    context "format no specify" do
+      before { get :show, id: table.id }
+      it { expect(assigns(:table)).to eq table }
+    end
+    context "format csv" do
+      before { get :show, id: table.id, format: :csv }
+      it { expect(assigns(:table)).to eq table }
+      it { expect(response.headers.has_value?("text/csv")).to eq true }
+      it do
+        flag = response.headers.values.any? {|val| val.include?("filename=\"#{table.description}.csv\"") }
+        expect(flag).to eq true
+      end
+    end
   end
   
   describe "GET edit" do
