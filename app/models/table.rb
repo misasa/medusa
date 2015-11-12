@@ -54,7 +54,7 @@ class Table < ActiveRecord::Base
     end
 
     def standard_diviation()
-      return "-" if cells.size < 2
+      return if cells.size < 2
       m = mean(false)
       Math.sqrt(cells.inject(0.0){ |acm, cell| acm + (cell.raw - m) ** 2 } / (cells.size - 1)).round(scale)
     end

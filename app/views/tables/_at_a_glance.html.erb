@@ -58,7 +58,10 @@
 	    <td><%= cell.value || "-" %> <%= "[#{cell.symbol}]" if cell.symbol.present? %></td>
 	  <% end %>
 	  <% if @table.with_average %>
-	    <td><%= row.present? ? "#{row.mean} (#{row.standard_diviation})" : "-" %></td>
+	    <td>
+	      <%= row.present? ? "#{row.mean}" : "-" %>
+	      <%= " (#{row.standard_diviation})" if row.standard_diviation.present? %>
+	    </td>
 	  <% end %>
 	</tr>
       <% end %>
