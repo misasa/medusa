@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151105030645) do
+ActiveRecord::Schema.define(version: 20151112070136) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -145,6 +145,13 @@ ActiveRecord::Schema.define(version: 20151105030645) do
   end
 
   add_index "classifications", ["parent_id"], name: "index_classifications_on_parent_id", using: :btree
+
+  create_table "custom_attributes", force: true do |t|
+    t.string   "name"
+    t.string   "sesar_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "devices", force: true do |t|
     t.string   "name"
@@ -282,6 +289,17 @@ ActiveRecord::Schema.define(version: 20151105030645) do
   end
 
   add_index "spots", ["attachment_file_id"], name: "index_spots_on_attachment_file_id", using: :btree
+
+  create_table "stone_custom_attributes", force: true do |t|
+    t.integer  "stone_id"
+    t.integer  "custom_attribute_id"
+    t.string   "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "stone_custom_attributes", ["custom_attribute_id"], name: "index_stone_custom_attributes_on_custom_attribute_id", using: :btree
+  add_index "stone_custom_attributes", ["stone_id"], name: "index_stone_custom_attributes_on_stone_id", using: :btree
 
   create_table "stones", force: true do |t|
     t.string   "name"
