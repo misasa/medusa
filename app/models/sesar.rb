@@ -277,7 +277,7 @@ class Sesar < ActiveResource::Base
 
   def post_headers
     {
-      "Content-Type" => "application/xml"
+      "Content-Type" => "application/x-www-form-urlencoded"
     }
   end
 
