@@ -17,13 +17,14 @@
 	<% @table.table_stones.includes(:stone).each do |table_stone| %>
 	  <th class="sortable">
 	    <%= f.fields_for :table_stones, table_stone do |g| %>
-	      <span class="glyphicon glyphicon-transfer"></span> <%= g.object.stone.name %>
+	      <% stone = g.object.stone %>
+	      <span class="glyphicon glyphicon-transfer"></span> <%= link_to_if can?(:read, stone), stone.name, stone %>
 	      <%= g.hidden_field :position, class: "position" %>
 	    <% end %>
 	  </th>
 	<% end %>
 	<% if @table.with_average %>
-	  <th>avg(std)</th>
+	  <th>mean(1SD)</th>
 	<% end %>
       </tr>
     </thead>
@@ -69,7 +70,7 @@
   </table>
   <% @table.method_descriptions.each do |sign, description| %>
     <div class="row">
-      <%= "#{sign}: #{description}" %>
+      <%= "(#{sign}) determined by #{description}" %>
     </div>
   <% end %>
   <div class="pull-right">
