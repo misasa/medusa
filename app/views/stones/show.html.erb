@@ -24,6 +24,11 @@
         <%= link_to edit_stone_path(@stone), class: "btn btn-default", id: "pencil-button", remote: true do %>
           <span class="glyphicon glyphicon-pencil"></span>
         <% end %>
+        <% if CustomAttribute.exists? %>
+          <%= link_to custom_attribute_stone_path(@stone), class: "btn btn-default", id: "inbox-button", remote: true do %>
+            <span class="glyphicon glyphicon-inbox"></span>
+          <% end %>
+        <% end %>
         <%= link_to property_stone_path(@stone), class: "btn btn-default", id: "cog-button", remote: true do %>
           <span class="glyphicon glyphicon-cog"></span>
         <% end %>

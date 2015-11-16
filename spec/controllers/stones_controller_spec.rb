@@ -124,6 +124,17 @@ describe StonesController do
     before { get :property, id: stone.id }
     it { expect(assigns(:stone)).to eq stone }
   end
+  
+  describe "GET custom_attribute" do
+    let(:stone) { FactoryGirl.create(:stone) }
+    let(:stone_custom_attributes) { double(:stone_custom_attributes) }
+    before do
+      allow_any_instance_of(Stone).to receive(:set_stone_custom_attributes).and_return(stone_custom_attributes)
+      get :custom_attribute, id: stone.id
+    end
+    it { expect(assigns(:stone)).to eq stone }
+    it { expect(assigns(:stone_custom_attributes)).to eq stone_custom_attributes }
+  end
 
   describe "POST bundle_edit" do
     let(:obj1) { FactoryGirl.create(:stone, name: "obj1") }

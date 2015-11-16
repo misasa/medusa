@@ -24,6 +24,8 @@ class Stone < ActiveRecord::Base
   belongs_to :classification
   belongs_to :physical_form
 
+  accepts_nested_attributes_for :stone_custom_attributes
+
   validates :box, existence: true, allow_nil: true
   validates :place, existence: true, allow_nil: true
   validates :classification, existence: true, allow_nil: true
@@ -31,6 +33,13 @@ class Stone < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 255 }
   validate :parent_id_cannot_self_children, if: ->(stone) { stone.parent_id }
 
+  def set_stone_custom_attributes
+    ids = stone_custom_attributes.pluck(:custom_attribute_id)
+    (CustomAttribute.pluck(:id) - ids).each do |custom_attribute_id|
+      stone_custom_attributes.build(custom_attribute_id: custom_attribute_id)
+    end
+    stone_custom_attributes.sort_by {|sca| sca.custom_attribute.name }
+  end
 
   # def to_pml
   #   [self].to_pml

@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :custom_attribute do
-    name "custom_name"
-    sesar_name "sesar_name"
+    sequence(:name) { |n| "name_#{n}" }
+    sequence(:sesar_name) { |n| "sesar_name_#{n}" }
   end
 end

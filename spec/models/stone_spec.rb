@@ -85,6 +85,37 @@ describe Stone do
     it { subject; expect(TableAnalysis.exists?(analysis_id: analysis_2.id)).to eq true }
   end
 
+  describe "#set_stone_custom_attributes" do
+    subject { stone.set_stone_custom_attributes }
+    let(:stone) { FactoryGirl.create(:stone) }
+    let(:custom_attribute_1) { FactoryGirl.create(:custom_attribute, name: "bbb") }
+    let(:custom_attribute_2) { FactoryGirl.create(:custom_attribute, name: "aaa") }
+    context "CustomAttribute not exists" do
+      it { expect(subject.size).to eq 0 }
+    end
+    context "CustomAttribute exists" do
+      before do
+        custom_attribute_1
+        custom_attribute_2
+      end
+      context "stone is not associate custom_attribute" do
+        it { expect(subject.size).to eq(CustomAttribute.count) }
+        it { expect(subject[0].custom_attribute_id).to eq(custom_attribute_2.id) }
+        it { expect(subject[0].persisted?).to eq false }
+        it { expect(subject[1].custom_attribute_id).to eq(custom_attribute_1.id) }
+        it { expect(subject[1].persisted?).to eq false }
+      end
+      context "stone associate custom_attribute" do
+        before { FactoryGirl.create(:stone_custom_attribute, stone_id: stone.id, custom_attribute_id: custom_attribute_1.id) }
+        it { expect(subject.size).to eq (CustomAttribute.count) }
+        it { expect(subject[0].custom_attribute_id).to eq(custom_attribute_2.id) }
+        it { expect(subject[0].persisted?).to eq false }
+        it { expect(subject[1].custom_attribute_id).to eq(custom_attribute_1.id) }
+        it { expect(subject[1].persisted?).to eq true }
+      end
+    end
+  end
+
   describe "validates" do
     describe "name" do
       let(:obj) { FactoryGirl.build(:stone, name: name) }

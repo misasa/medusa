@@ -50,6 +50,11 @@ class StonesController < ApplicationController
   def property
     respond_with @stone, layout: !request.xhr?
   end
+  
+  def custom_attribute
+    @stone_custom_attributes = @stone.set_stone_custom_attributes
+    respond_with @stone, layout: !request.xhr?
+  end
 
   def bundle_edit
     respond_with @stones
@@ -111,6 +116,12 @@ class StonesController < ApplicationController
         :group_writable,
         :guest_readable,
         :guest_writable
+      ],
+      stone_custom_attributes_attributes: [
+        :id,
+        :stone_id,
+        :custom_attribute_id,
+        :value
       ]
     )
   end
