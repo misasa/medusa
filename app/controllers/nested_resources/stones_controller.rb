@@ -49,7 +49,17 @@ class NestedResources::StonesController < ApplicationController
       :box_id,
       :place_id,
       :description,
-      record_property_attributes: [
+      :igsn,
+      :age_min,
+      :age_max,
+      :age_unit,
+      :size,
+      :size_unit,
+      :collector,
+      :collector_detail,
+      :collected_at,
+      :collection_dateprecision,
+    record_property_attributes: [
         :global_id,
         :user_id,
         :group_id,

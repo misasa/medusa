@@ -1,6 +1,7 @@
 class ClassificationsController < ApplicationController
   respond_to :html, :xml, :json
   before_action :find_resource, only: [:show, :edit, :update, :destroy]
+  before_action :read_yml, only: [:index, :edit, :create, :update]
   load_and_authorize_resource
   layout "admin"
 
@@ -26,7 +27,10 @@ class ClassificationsController < ApplicationController
   end
 
   def update
-    @classification.update_attributes(classification_params)
+    update_params = classification_params
+    if @classification.check_classification(update_params["sesar_material"], update_params["sesar_classification"])
+      @classification.update_attributes(update_params)
+    end
     respond_with(@classification, location: classifications_path)
 
   end
@@ -45,12 +49,18 @@ class ClassificationsController < ApplicationController
       :description,
       :parent_id,
       :lft,
-      :rgt
+      :rgt,
+      :sesar_material,
+      :sesar_classification
     )
   end
 
   def find_resource
     @classification = Classification.find(params[:id])
   end
-
+  
+  def read_yml
+    @material = YAML.load(File.read("#{Rails.root}/config/material_classification.yml"))["material"]
+    @sesar_classification = []
+  end
 end

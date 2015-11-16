@@ -6,6 +6,7 @@ FactoryGirl.define do
     parent_id ""
     lft 1
     rgt 1
+    sesar_material "Rock"
   end
   factory :classification_parent,class: Classification do
     name "parent"

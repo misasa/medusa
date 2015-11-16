@@ -16,5 +16,8 @@ FactoryGirl.define do
     age_unit "a"
     size "111"
     size_unit "k"
+    collector ""
+    collector_detail ""
+    collection_date_precision ""
   end
 end

@@ -4,7 +4,7 @@ describe Classification do
 
   describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:classification, name: name) }
+      let(:obj) { FactoryGirl.build(:classification, name: name, sesar_material: "Rock") }
       context "is presence" do
         let(:name) { "sample_classification" }
         it { expect(obj).to be_valid }
@@ -22,12 +22,31 @@ describe Classification do
         it { expect(obj).not_to be_valid }
       end
     end
+    describe "sesar_material" do
+      let(:obj) { FactoryGirl.build(:classification, sesar_material: sesar_material) }
+      context "is presence" do
+        let(:sesar_material) { "sample" }
+        it { expect(obj).to be_valid }
+      end
+      context "is blank" do
+        let(:sesar_material) { "" }
+        it { expect(obj).not_to be_valid }
+      end
+      context "is 255 characters" do
+        let(:sesar_material) { "a" * 255 }
+        it { expect(obj).to be_valid }
+      end
+      context "is 256 characters" do
+        let(:sesar_material) { "a" * 256 }
+        it { expect(obj).not_to be_valid }
+      end
+    end
   end
 
   describe "full_name" do
-    let(:parent){ FactoryGirl.build(:classification_parent)}
-    let(:child){ FactoryGirl.build(:classification_child)}
-    let(:grandchild){ FactoryGirl.build(:classification_grandchild)}
+    let(:parent){ FactoryGirl.build(:classification_parent, sesar_material: "Rock")}
+    let(:child){ FactoryGirl.build(:classification_child, sesar_material: "Rock")}
+    let(:grandchild){ FactoryGirl.build(:classification_grandchild, sesar_material: "Rock")}
     context "new parent full_name" do
       before{parent.save}
       it{expect(parent).to be_persisted}
@@ -68,6 +87,60 @@ describe Classification do
       it{expect(parent.full_name).to eq parent.name}
       it{expect(child.full_name).to eq(parent.full_name + ":" + child.name)}
       it{expect(grandchild.full_name).to eq(child.full_name + ":" + grandchild.name)}
+    end
+  end
+  
+  describe "check_classification(material, classification)" do
+    subject { classification.check_classification(sesar_material, sesar_classification) }
+    let(:classification) { FactoryGirl.create(:classification) }
+    context "sesar_materialがBiology" do
+      let(:sesar_material) { "Biology" }
+      context "対象のsesar_classificationが存在する" do
+        let(:sesar_classification) { "Macrobiology>MacrobiologyType>Coral" }
+        it { expect(subject).to be true }
+      end
+      context "対象のsesar_classificationが存在しない" do
+        let(:sesar_classification) { "MineralType>Acanthite" }
+        it { expect(subject).to be false }
+      end
+    end
+    context "sesar_materialがMineral" do
+      let(:sesar_material) { "Mineral" }
+      context "対象のsesar_classificationが存在する" do
+        let(:sesar_classification) { "MineralType>Bakhchisaraitsevite" }
+        it { expect(subject).to be true }
+      end
+      context "対象のsesar_classificationが存在しない" do
+        let(:sesar_classification) { "Unknown" }
+        it { expect(subject).to be false }
+      end
+    end
+    context "sesar_materialがRock" do
+      let(:sesar_material) { "Rock" }
+      context"対象のsesar_classificationが存在する" do
+        let(:sesar_classification) { "Igneous" }
+        it { expect(subject).to be true }
+      end
+      context "対象のsesar_classificationが存在しない" do
+        let(:sesar_classification) { "Igne" }
+        it { expect(subject).to be false }
+      end
+    end
+    context "materialがBiology,Mineral,Rock以外" do
+      let(:sesar_material) { "Gas" }
+      context"sesar_classificationが入力されている" do
+        let(:sesar_classification) { "aaaa" }
+        it { expect(subject).to be false }
+      end
+      context "sesar_classificationが入力されていない" do
+        let(:sesar_classification) { "" }
+        it { expect(subject).to be true }
+      end
+    end
+    context "sesar_classificationがblank" do
+      let(:sesar_material) {"Rock"}
+      let(:sesar_classification) {""}
+      it { expect(subject).to be true }
     end
   end
 end

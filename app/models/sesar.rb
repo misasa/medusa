@@ -1,4 +1,5 @@
 require "active_resource"
+require "geocoder"
 
 class Sesar < ActiveResource::Base
   self.site = "http://app.geosamples.org/"
@@ -8,7 +9,7 @@ class Sesar < ActiveResource::Base
   self.element_name = "sample"
   self.collection_name = "igsn"
 
-  # TODO: 一旦すべてを列挙。必要ないものは削除する
+
   schema do
     string    :user_code
     string    :sample_type
@@ -16,8 +17,6 @@ class Sesar < ActiveResource::Base
     string    :material
     string    :igsn
     string    :parent_igsn
-    # is_private
-    # publish_date
     string    :classification
     string    :classification_comment
     string    :field_name
@@ -39,10 +38,9 @@ class Sesar < ActiveResource::Base
     decimal   :longitude_end
     decimal   :elevation
     decimal   :elevation_end
-    string    :vartical_datum
-    decimal   :northing
-    decimal   :easting
-    # zone
+    string    :vertical_datum
+    string    :norting
+    string    :easting
     string    :navigation_type
     string    :primary_location_type
     string    :primary_location_name
@@ -57,9 +55,6 @@ class Sesar < ActiveResource::Base
     string    :platform_type
     string    :platform_name
     string    :platform_descr
-    string    :launch_platform_name
-    string    :launch_id
-    string    :launch_type_name
     string    :collector
     string    :collector_detail
     timestamp :collection_start_date
@@ -69,11 +64,10 @@ class Sesar < ActiveResource::Base
     string    :current_archive_contact
     string    :original_archive
     string    :original_archive_contact
-    decimal   :depth_min
-    decimal   :depth_max
+    string    :depth_min
+    string    :depth_max
     string    :depth_scale
-    # sample_other_names
-    # external_url
+    string    :external_url
   end
 
   class Format
@@ -88,14 +82,34 @@ class Sesar < ActiveResource::Base
 
   def self.from_active_record(model)
     attributes = {}
-    # TODO: DBとXMLのマッピングを確定させて、実装に反映すること
-    # attributes[:sample_type] = "Core"
+    attributes[:sample_type] = physical_form_conversion(model.physical_form)
     attributes[:name] = model.name
-    # attributes[:meterial] = "Rock"
-    attributes[:description] = model.description
+    attributes[:material] = model.classification.try!(:sesar_material)
+    attributes[:igsn] = model.igsn
+    attributes[:classification] = array_classification(model.classification)
+    attributes[:age_min] = model.age_min
+    attributes[:age_max] = model.age_max
+    attributes[:age_unit] = model.age_unit
+    attributes[:size] = model.size
+    attributes[:size_unit] = model.size_unit
     attributes[:latitude] = model.place.try!(:latitude)
     attributes[:longitude] = model.place.try!(:longitude)
     attributes[:elevation] = model.place.try!(:elevation)
+    result = Geocoder.search("#{attributes[:latitude]},#{attributes[:longitude]}")
+    attributes[:country] = country_name(result[0])
+    attributes[:province] = province_name(result[0])
+    attributes[:city] = city_name(result[0])
+    attributes[:locality] = model.place.try!(:name)
+    attributes[:locality_description] = model.place.try!(:description)
+    attributes[:collector] = model.collector
+    attributes[:collector_detail] = model.collector_detail
+    attributes[:collection_start_date] = model.collected_at.try!(:strftime, "%Y-%m-%dT%H:%M:%SZ")
+    attributes[:collection_end_date] = model.collected_at.try!(:strftime, "%Y-%m-%dT%H:%M:%SZ")
+    attributes[:collection_date_precision] = model.collection_date_precision
+    attributes[:current_archive] = Settings.sesar.archive_name
+    attributes[:current_archive_contact] = Settings.sesar.archive_contant
+    attributes[:external_urls] =external_url(model)
+    attributes[:description] = model.description
     attributes.delete_if { |_, value| value.blank? }
     new(attributes)
   end
@@ -150,11 +164,105 @@ class Sesar < ActiveResource::Base
     builder.samples(samples_schema) do |samples|
       samples.sample do |sample|
         attributes.each do |attr, value|
-          sample.__send__(attr, value)
+          if attr == "classification"
+            builder.classification(classification_schema) do
+              create_classification_xml(sample, value) do |value|
+                if value[0].end_with?("Type")
+                  sample.__send__(value[0], value[1])
+                else
+                  sample.__send__(value[0]) do
+                    sample.__send__(value[1])
+                  end
+                end
+              end
+            end
+          elsif attr == "external_urls"
+            sample.__send__("external_urls") do
+              value.each do |value|
+                sample.__send__("external_url") do
+                  sample.__send__("url", value.attributes["url"])
+                  sample.__send__("description", value.attributes["description"])
+                  sample.__send__("url_type", value.attributes["url_type"])
+                end
+              end
+            end
+          elsif attr == "material"
+            sample << "<material>#{value}</material>"
+          else
+            sample.__send__(attr, value)
+          end
         end
       end
     end
     xml
+  end
+
+  def self.physical_form_conversion(physical_form)
+    return "" if physical_form.blank?
+    case physical_form.name
+    when "aliquot", "on mount", "grain", "hand specimen", "chunk"
+      "Individual Sample"
+    when "asteroid", "electronics", "tool", "package"
+      "Other"
+    when "powder", "thin section"
+      "Thin Section"
+    when "drill-cored"
+      "Core"
+    when "solution"
+      "Liquid"
+    when "fraction"
+      "Mechanical Fraction"
+    when "thick section"
+      "Slab"
+    end
+  end
+  
+  def self.array_classification(classification)
+    return "" if classification.sesar_classification.blank?
+    if classification.sesar_classification.present?
+      classifications = classification.sesar_classification.split(">")
+      classifications.unshift(classification.sesar_material)
+    else
+       ""
+    end
+  end
+  
+  def self.country_name(result)
+    return "" if result.blank?
+    country = result.data["address_components"].select{ |n| n["types"].include?("country") }
+    country.present? ? country[0]["long_name"] : ""
+  end
+  
+  def self.province_name(result)
+    return "" if result.blank?
+    province = result.data["address_components"].select{ |n| n["types"].include?("administrative_area_level_1") }
+    province.present? ? province[0]["long_name"] : ""
+  end
+  
+  def self.city_name(result)
+    return "" if result.blank?
+    city = result.data["address_components"].select{ |n| n["types"].include?("locality") }
+    if city.present?
+      name = []
+      city.each do |n|
+       name.unshift(n["long_name"])
+      end
+      name.join
+    else
+      ""
+    end
+  end
+  
+  def self.external_url(model)
+    urls = []
+    Settings.sesar.external_urls.store("url", "http://dream.misasa.okayama-u.ac.jp/?igsn=#{model.igsn}")
+    urls.push(Settings.sesar.external_urls)
+    if model.bibs.present?
+      model.bibs.each do |bib|
+        urls.push({url: "http://dx.doi.org/#{bib.doi}", description: bib.name, url_type: "DOI"})
+      end
+    end
+    urls
   end
 
   private
@@ -169,7 +277,7 @@ class Sesar < ActiveResource::Base
 
   def post_headers
     {
-      "Content-Type" => "application/x-www-form-urlencoded"
+      "Content-Type" => "application/xml"
     }
   end
 
@@ -179,5 +287,25 @@ class Sesar < ActiveResource::Base
       "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance",
       "xsi:schemaLocation" => "http://app.geosamples.org/samplev2.xsd"
     }
+  end
+  
+  def classification_schema
+    {
+      "xmlns" => "http://app.geosamples.org",
+      "xmlns:xs" => "http://www.w3.org/2001/XMLSchema",
+      "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance",
+      "xsi:schemaLocation" => "http://app.geosamples.org/samplev2.xsd"
+    }
+  end
+  
+  def create_classification_xml(sample, value, &block)
+    if value.size > 2
+      first = value.shift
+      sample.__send__(first) do
+        create_classification_xml(sample, value, &block)
+      end
+    else
+      block.call value
+    end
   end
 end

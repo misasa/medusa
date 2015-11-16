@@ -18,6 +18,10 @@ class StonesController < ApplicationController
   def edit
     respond_with @stone, layout: !request.xhr?
   end
+  
+  def detail_edit
+    respond_with @stone, layout: !request.xhr?
+  end
 
   def create
     @stone = Stone.new(stone_params)
@@ -27,6 +31,7 @@ class StonesController < ApplicationController
 
   def update
     @stone.update_attributes(stone_params)
+    sesar_upload if params[:sesar_upload] && @stone.errors.blank?
     respond_with @stone
   end
   
@@ -85,6 +90,17 @@ class StonesController < ApplicationController
     label = Stone.build_bundle_label(@stones)
     send_data(label, filename: "stones.csv", type: "text/csv")
   end
+  
+  def sesar_upload
+    @sesar = Sesar.from_active_record(@stone)
+    if @sesar.save
+      @stone.update_attributes(igsn: @sesar.igsn)
+    else
+      @sesar.errors.each do |key, value|
+        @stone.errors.add(key, value)
+      end
+    end
+  end
 
   private
 
@@ -106,6 +122,16 @@ class StonesController < ApplicationController
       :user_id,
       :group_id,
       :published,
+      :igsn,
+      :age_min,
+      :age_max,
+      :age_unit,
+      :size,
+      :size_unit,
+      :collector,
+      :collector_detail,
+      :collected_at,
+      :collection_date_precision,
       record_property_attributes: [
         :global_id,
         :user_id,

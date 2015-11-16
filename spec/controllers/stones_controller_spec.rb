@@ -72,6 +72,12 @@ describe StonesController do
     it { expect(assigns(:stone)).to eq stone }
   end
   
+  describe "GET detail_edit" do
+    let(:stone) { FactoryGirl.create(:stone) }
+    before { get :detail_edit, id: stone.id }
+    it { expect(assigns(:stone)).to eq stone }
+  end
+  
   describe "POST create" do
     let(:attributes) { {name: "stone_name"} }
     it { expect { post :create, stone: attributes }.to change(Stone, :count).by(1) }
@@ -87,13 +93,45 @@ describe StonesController do
       stone
     end
     let(:stone) { FactoryGirl.create(:stone) }
-    let(:attributes) { {name: "update_name"} }
+    let(:attributes) { {name: "update_name", age_min: 10, age_max: 20, age_unit: "Ka"} }
     context "witout format" do
       before { put :update, id: stone.id, stone:attributes }
       it { expect(assigns(:stone)).to eq stone }
       it { expect(assigns(:stone).name).to eq attributes[:name] }
+      it { expect(assigns(:stone).age_min).to eq attributes[:age_min] }
+      it { expect(assigns(:stone).age_max).to eq attributes[:age_max] }
+      it { expect(assigns(:stone).age_unit).to eq attributes[:age_unit] }
     end
   end
+  
+  describe "PUT sesar_upload" do
+    before do
+      stone
+    end
+    let(:stone) { FactoryGirl.create(:stone, igsn: nil) }
+    let(:attributes) { {name: "update_name", age_min: 10, age_max: 20, age_unit: "Ka"} }
+    context "save false" do
+      before do
+        allow_any_instance_of(Sesar).to receive(:save).and_return(false)
+        allow_any_instance_of(Sesar).to receive(:igsn).and_return("IESHO0001")
+      end
+      it "igsnが更新されない" do
+        put :update, id: stone.id, sesar_upload: "", stone:attributes
+        expect(assigns(:stone).igsn).to eq nil
+      end
+    end
+    context "save_true" do
+      before do
+        allow_any_instance_of(Sesar).to receive(:save).and_return(true)
+        allow_any_instance_of(Sesar).to receive(:igsn).and_return("IESHO0001")
+      end
+      it "igsnが更新される" do
+        put :update, id: stone.id, sesar_upload: "", stone:attributes
+        expect(assigns(:stone).igsn).to eq "IESHO0001"
+      end
+    end
+  end
+
 
   describe "DELETE destroy" do
     let(:stone) { FactoryGirl.create(:stone) }

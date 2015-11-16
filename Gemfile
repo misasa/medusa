@@ -77,6 +77,7 @@ gem 'whenever', require: false
 gem 'acts_as_list'
 gem 'builder'
 gem 'activeresource'
+gem 'geocoder'
 
 group :development, :test do
   gem 'rak'

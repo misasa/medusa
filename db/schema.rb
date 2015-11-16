@@ -142,6 +142,8 @@ ActiveRecord::Schema.define(version: 20151112070136) do
     t.integer "parent_id"
     t.integer "lft"
     t.integer "rgt"
+    t.string  "sesar_material"
+    t.string  "sesar_classification"
   end
 
   add_index "classifications", ["parent_id"], name: "index_classifications_on_parent_id", using: :btree
@@ -331,6 +333,8 @@ ActiveRecord::Schema.define(version: 20151112070136) do
     t.string   "size_unit"
     t.datetime "collected_at"
     t.string   "collection_date_precision"
+    t.string   "collector"
+    t.string   "collector_detail"
   end
 
   add_index "stones", ["classification_id"], name: "index_stones_on_classification_id", using: :btree

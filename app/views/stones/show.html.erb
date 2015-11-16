@@ -28,6 +28,8 @@
           <%= link_to custom_attribute_stone_path(@stone), class: "btn btn-default", id: "inbox-button", remote: true do %>
             <span class="glyphicon glyphicon-inbox"></span>
           <% end %>
+        <%= link_to detail_edit_stone_path(@stone), class: "btn btn-default", id: "wrench-button", remote: true do %>
+          <span class="glyphicon glyphicon-wrench"></span>
         <% end %>
         <%= link_to property_stone_path(@stone), class: "btn btn-default", id: "cog-button", remote: true do %>
           <span class="glyphicon glyphicon-cog"></span>

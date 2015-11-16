@@ -1,0 +1,67 @@
+<%= form_for @stone, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
+  <div class="form-group form-group-sm">
+    <%= f.label :igsn, class: "small" %>
+    <%= f.text_field :igsn, class: "form-control input-sm", disabled: true%>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :age_min, class: "small" %>
+    <%= f.text_field :age_min, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :age_max, class: "small" %>
+    <%= f.text_field :age_max, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :age_unit, class: "small" %>
+    <%= f.select :age_unit, ["a","Ka","Ma","Ga"].map{|n| [n,n]}, { include_blank: true }, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :size, class: "small" %>
+    <%= f.text_field :size, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :size_unit, class: "small" %>
+    <%= f.text_field :size_unit, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :collector, class: "small" %>
+    <%= f.text_field :collector, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :collector_detail, class: "small" %>
+    <%= f.text_area :collector_detail, class: "form-control input-sm", row: 3 %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :collected_at, class: "small" %>
+    <%= f.text_field :collected_at, class: "form-control input-sm", placeholder: "yyyy-mm-dd hh:mm:ss" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :collection_date_precision, class: "small" %>
+    <%= f.select :collection_date_precision, ["year","month","day","time"].map{|n| [n,n]}, { include_blank: true }, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :description, class: "small" %>
+    <%= f.text_area :description, class: "form-control input-sm", row: 3 %>
+  </div>
+  <%= f.button class: "btn btn-default" do %>
+  <span class="glyphicon glyphicon-save"></span>
+  <% end %>
+  <%= f.button name: "sesar_upload", class: "btn btn-default" do %>
+    Sesar
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#edit_stone_<%= @stone.id %>", function() {
+    location.href="<% stone_path(@stone) %>";
+  });
+  $(function() {
+    $(document).ready(function() {
+      if ("<%= @stone.igsn %>"){
+        $("button[name='sesar_upload']").attr("disabled", "disabled");
+      }else{
+        $("button[name='sesar_upload']").removeAttr("disabled");
+      }
+    });
+  });
+<% end %>
