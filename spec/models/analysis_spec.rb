@@ -218,6 +218,146 @@ describe Analysis do
     end
   end
 
+  describe "#set_chemistry" do
+    subject { analysis.set_chemistry(nickname, unit_name, data) }
+    let(:analysis) { FactoryGirl.create(:analysis) }
+    let(:nickname) { "nickname" }
+    let(:unit_name) { nil }
+    let(:data) { " 10 " }
+    let(:measurement_item) { FactoryGirl.create(:measurement_item, nickname: nickname, unit_id: unit_1.id) }
+    let(:unit_1) { FactoryGirl.create(:unit, name: "parts_per_gram") }
+    let(:unit_2) { FactoryGirl.create(:unit, name: "parts") }
+    before do
+      measurement_item
+      unit_2
+    end
+    context "data is a String" do
+      context "unit_name is nil" do
+        context "measurement_item.unit is present" do
+          it do
+            expect(subject.class).to eq Chemistry
+            expect(subject.persisted?).to eq false
+            expect(subject.unit_id).to eq(unit_1.id)
+          end
+        end
+        context "measurement_item.unit is blank" do
+          let(:measurement_item) { FactoryGirl.create(:measurement_item, nickname: nickname, unit_id: nil) }
+          it do
+            expect(subject.class).to eq Chemistry
+            expect(subject.persisted?).to eq false
+            expect(subject.unit_id).to eq(unit_2.id)
+          end
+        end
+      end
+      context "unit_name is not nil" do
+        let(:unit_name) { unit_1.name }
+        it do
+          expect(subject.class).to eq Chemistry
+          expect(subject.persisted?).to eq false
+          expect(subject.unit_id).to eq(unit_1.id)
+        end
+      end
+    end
+    context "data is not String" do
+      context "data is nil" do
+        let(:data) { nil }
+        it { expect(subject).to eq nil }
+      end
+      context "data is not nil" do
+        let(:data) { 10 }
+        context "unit_name is nil" do
+          context "measurement_item.unit is present" do
+            it do
+              expect(subject.class).to eq Chemistry
+              expect(subject.persisted?).to eq false
+              expect(subject.unit_id).to eq(unit_1.id)
+            end
+          end
+          context "measurement_item.unit is blank" do
+            let(:measurement_item) { FactoryGirl.create(:measurement_item, nickname: nickname, unit_id: nil) }
+            it do
+              expect(subject.class).to eq Chemistry
+              expect(subject.persisted?).to eq false
+              expect(subject.unit_id).to eq(unit_2.id)
+            end
+          end
+        end
+        context "unit_name is not nil" do
+          let(:unit_name) { unit_1.name }
+          it do
+            expect(subject.class).to eq Chemistry
+            expect(subject.persisted?).to eq false
+            expect(subject.unit_id).to eq(unit_1.id)
+          end
+        end
+      end
+    end
+  end
+
+  describe "#set_uncertainty" do
+    subject { analysis.set_uncertainty(nickname, data) }
+    let(:analysis) { FactoryGirl.create(:analysis) }
+    let(:nickname) { "nickname" }
+    let(:data) { " 10 " }
+    let(:chemistry){ FactoryGirl.create(:chemistry, analysis_id: analysis.id, measurement_item_id: measurement_item.id, uncertainty: nil) }
+    let(:measurement_item) { FactoryGirl.create(:measurement_item, nickname: nickname) }
+    context "analysis associated chemistry" do
+      before { chemistry }
+      context "data is a String" do
+        it { expect(subject).to eq(data.strip) }
+      end
+      context "data is not String" do
+        let(:data) { 10 }
+        it { expect(subject).to eq(data) }
+      end
+    end
+    context "analysis not associate chemistry" do
+      it { expect(subject).to eq nil }
+    end
+  end
+
+  describe "#get_chemistry_value" do
+    subject { analysis.get_chemistry_value(nickname, unit_name) }
+    let(:analysis) { FactoryGirl.create(:analysis) }
+    let(:nickname) { "nickname" }
+    let(:unit_name) { "gram_per_gram" }
+    let(:chemistry){ FactoryGirl.create(:chemistry, analysis_id: analysis.id, measurement_item_id: measurement_item.id, unit_id: unit.id) }
+    let(:measurement_item) { FactoryGirl.create(:measurement_item, nickname: nickname) }
+    let(:unit) { FactoryGirl.create(:unit, name: unit_name, conversion: 1) }
+    before do
+      Alchemist.setup
+      Alchemist.register(:mass, unit.name.to_sym, 1.to_d / unit.conversion)
+    end
+    context "analysis associated chemistry" do
+      before { chemistry }
+      context "chemistry.unit is exist" do
+        it { expect(subject).to eq(chemistry.value) }
+      end
+      context "chemistry.unit is not exist" do
+        # chemistry.unit_id は必須であるためテストできない
+      end
+    end
+    context "analysis not associate chemistry" do
+      it { expect(subject).to eq nil }
+    end
+  end
+
+  describe "#associate_chemistry_by_item_nickname" do
+    subject { analysis.associate_chemistry_by_item_nickname(nickname) }
+    let(:analysis) { FactoryGirl.create(:analysis) }
+    let(:nickname) { "nickname" }
+    let(:chemistry){ FactoryGirl.create(:chemistry, analysis_id: analysis.id, measurement_item_id: measurement_item.id) }
+    let(:measurement_item) { FactoryGirl.create(:measurement_item, nickname: nickname) }
+    before { chemistry }
+    context "nickname equal chemistry.measurement_item.nickname" do
+      it { expect(subject).to eq chemistry }
+    end
+    context "nickname is not equal chemistry.measurement_item.nickname" do
+      let(:measurement_item) { FactoryGirl.create(:measurement_item, nickname: "foo") }
+      it { expect(subject).to eq nil }
+    end
+  end
+
   describe "#to_castemls" do
     subject { Analysis.to_castemls(objs) }
     let(:spot){FactoryGirl.create(:spot)}
@@ -237,7 +377,7 @@ describe Analysis do
   describe "#to_pml", :current => true do
     let(:box){ FactoryGirl.create(:box)}
     let(:stone){ FactoryGirl.create(:stone, box_id: box.id)}
-    let(:spot){FactoryGirl.create(:spot)}
+    let(:spot){FactoryGirl.create(:spot, target_uid: obj.global_id)}
     let(:attachment_file){FactoryGirl.create(:attachment_file)}
     let(:chemistry){FactoryGirl.create(:chemistry)}
     let(:obj) { FactoryGirl.create(:analysis) }
