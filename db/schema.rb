@@ -186,15 +186,6 @@ ActiveRecord::Schema.define(version: 20151112070136) do
     t.datetime "updated_at"
   end
 
-  create_table "histories", force: true do |t|
-    t.integer  "datum_id"
-    t.string   "datum_type"
-    t.integer  "box_id"
-    t.datetime "moved_at"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
   create_table "measurement_categories", force: true do |t|
     t.string  "name"
     t.string  "description"
