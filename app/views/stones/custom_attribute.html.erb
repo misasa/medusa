@@ -3,7 +3,7 @@
   <% @stone_custom_attributes.each do |stone_custom_attribute| %>
     <%= f.fields_for(:stone_custom_attributes, stone_custom_attribute) do |fo| %>
       <div class="form-group form-group-sm">
-        <%= stone_custom_attribute.custom_attribute.name %>
+        <%= label_tag "custom_attribute_name", stone_custom_attribute.custom_attribute.name, class: "small" %>
         <%= fo.hidden_field :custom_attribute_id %>
         <%= fo.text_field :value, class: "form-control input-sm" %>
       </div>

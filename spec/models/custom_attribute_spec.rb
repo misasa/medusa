@@ -47,9 +47,14 @@ describe CustomAttribute do
         it { expect(obj).to be_valid }
       end
       context "is not unique" do
-        let(:sesar_name) { "" }
+        let(:sesar_name) { "sesar_name" }
         before { FactoryGirl.create(:custom_attribute, sesar_name: sesar_name) }
         it { expect(obj).not_to be_valid }
+      end
+      context "is blank" do
+        let(:sesar_name) { "" }
+        before { FactoryGirl.create(:custom_attribute, sesar_name: sesar_name) }
+        it { expect(obj).to be_valid }
       end
     end
   end
