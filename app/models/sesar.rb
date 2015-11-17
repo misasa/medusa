@@ -218,7 +218,7 @@ class Sesar < ActiveResource::Base
   end
   
   def self.array_classification(classification)
-    return "" if classification.sesar_classification.blank?
+    return "" if classification.blank?
     if classification.sesar_classification.present?
       classifications = classification.sesar_classification.split(">")
       classifications.unshift(classification.sesar_material)

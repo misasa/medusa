@@ -69,13 +69,18 @@ describe Sesar do
   end
   
   describe ".array_classification(classification)" do
-    subject { Sesar.array_classification(FactoryGirl.create(:classification, sesar_classification: sesar_classification)) }
+    subject { Sesar.array_classification(classification) }
+    let(:classification) { FactoryGirl.create(:classification, sesar_classification: sesar_classification) }
     context "sesar_classificationに値が設定されている" do
       let(:sesar_classification) {"Igneous>Volcanic>VolcanicType>Felsic"}
       it { expect(subject).to eq ["Rock","Igneous","Volcanic","VolcanicType","Felsic"] }
     end
     context "sesar_classificationがblank" do
       let(:sesar_classification) {""}
+      it { expect(subject).to eq "" }
+    end
+    context "classificationがblank" do
+      let(:classification) {""}
       it { expect(subject).to eq "" }
     end
   end
