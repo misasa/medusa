@@ -45,7 +45,7 @@
         <th></th>
         <th>unit</th>
         <% @stone.analyses.each do |analysis| %>
-          <th <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>><%= analysis.name %></th>
+          <th <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>><%= link_to(analysis.name, analysis_path(analysis)) %></th>
         <% end %>
       </tr>
     </thead>
