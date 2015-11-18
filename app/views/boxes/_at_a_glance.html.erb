@@ -1,5 +1,5 @@
 <ul>
-  <%= li_if_exist("box_type: ", @box.box_type.try!(:name)) %>
+  <%= li_if_exist("box type: ", @box.box_type.try!(:name)) %>
   <%= li_if_exist("tag list: ", @box.tag_list) %>
   <li>updated-at: <%= difference_from_now(@box.updated_at) %></li>
   <% @box.bibs.each do |bib| %>
@@ -17,49 +17,53 @@
     </li>
   <% end %>
 </ul>
-<table  class="table-condensed">
-  <thead>
-    <tr>
-      <th></th>
-      <th>name</th>
-      <th>form</th>
-      <th>global-id</th>
-      <th>boxes</th>
-      <th><%= @alias_specimen %></th>
-      <th>owner</th>
-      <th>group</th>
-      <th>updated-at</th>
-      <th>created-at</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @box.boxed_boxes.each do |child_box| %>
-    <tr>
-      <td></td>
-      <td><%= link_to_if(can?(:read, child_box), child_box.name, box_path(child_box)) %></td>
-      <td><%= child_box.box_type.try(:name) %></td>
-      <td><%= child_box.global_id %></td>
-      <td><%= child_box.children.count %></td>
-      <td><%= child_box.stones.count %></td>
-      <td><%= child_box.user.try(:username) %></td>
-      <td><%= child_box.group.try(:name) %></td>
-      <td><%= child_box.updated_at.to_date %></td>
-      <td><%= child_box.created_at.to_date %></td>
-    </tr>
-    <% end %>
-    <% @box.boxed_stones.each do |stone| %>
-    <tr>
-      <td></td>
-      <td><%= link_to_if(can?(:read, stone), stone.name, stone_path(stone)) %></td>
-      <td><%= stone.physical_form.try(:name) %></td>
-      <td><%= stone.global_id %></td>
-      <td></td>
-      <td></td>
-      <td><%= stone.user.try(:username) %></td>
-      <td><%= stone.group.try(:name) %></td>
-      <td><%= stone.updated_at.to_date %></td>
-      <td><%= stone.created_at.to_date %></td>
-    </tr>
-    <% end %>
-  </tbody>
-</table>
+
+<%= search_form_for @contents_search, url: box_path(@box), id: "contents_search" do |f| %>
+
+  <div class="row">
+    <div class="col-lg-1">
+      <%= f.button class: "btn btn-default" do %>
+  <span class="glyphicon glyphicon-refresh"></span>
+      <% end %>
+    </div>
+
+    <div class="col-lg-4">
+      <%= select_tag 'button_action', options_for_select(["1 day ago", "2 days ago", "1 week ago", "2 weeks ago", "1 year ago", "2 years ago"].map{|t| ["difference from #{t} at", "difference from #{t}"]}, params["button_action"]), :include_blank => true, class: "form-control input-sm" %>
+    </div>
+
+    <div class="col-lg-2">
+      <%= text_field_tag 'dst_date', format_date(@dst_date), class: "form-control input-sm datepicker", maxlength: 10 %>
+    </div>
+
+  </div>
+  <div>
+  <% if @src_date %>
+    difference between <%= @dst_date %> and <%= @src_date %>
+  <% else %>
+    snapshot at <%= @dst_date %>
+  <% end %>
+  </div>
+  <div>
+  <%= paginate @contents %> <%= page_entries_info(@contents) %>
+  </div>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+  <th><%= sort_link @contents_search, :path, "path", remote: true %></th>
+  <th>type</th>
+  <th><%= sort_link @contents_search, :brought_in_at, "in", remote: true %></th>
+  <th>out</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @contents.each do |path| %>
+        <tr>
+          <td><%= path.sign if @src_date -%><%= raw (path.map { |content| link_to_if(can?(:read, content), content.name, content) }).join("/") %></td>
+          <td><%= path.datum_type %></td>
+          <td><%= path.brought_in_at.strftime("%Y-%m-%d %H:%M") %></td> 
+          <td><%= path.brought_out_at && path.brought_out_at.strftime("%Y-%m-%d %H:%M") %></td> 
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

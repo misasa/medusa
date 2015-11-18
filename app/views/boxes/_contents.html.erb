@@ -1,4 +1,5 @@
 <%= search_form_for @contents_search, url: contents_box_path(@box), remote: true, id: "contents_search" do |f| %>
+
   <div class="row">
     <div class="col-lg-1">
       <%= f.button class: "btn btn-default" do %>
@@ -8,7 +9,9 @@
     <div class="col-lg-2">
       <%= f.search_field :exists_at, placeholder: "at:", value: format_date(f.object.exists_at), class: "form-control input-sm datepicker", maxlength: 10 %>
     </div>
+
   </div>
+  <%= paginate @contents %>
   <table class="table table-condensed table-striped">
     <thead>
       <tr>

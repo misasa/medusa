@@ -12,14 +12,46 @@ class BoxesController < ApplicationController
   end
 
   def show
-    @contents_search = Path.search(exists_at: Date.today.strftime("%Y%m%d"))
-    @contents_search.sorts = "path ASC"
-    @contents = Path.none
-    @src_date = Date.yesterday.strftime("%Y%m%d")
-    @dst_date = Date.today.strftime("%Y%m%d")
-    @diff_search = Path.diff(@box, @src_date, @dst_date).search
-    @diff_search.sorts = "path ASC"
-    @diff = @diff_search.result
+    # @contents_search = Path.search(exists_at: Date.today.strftime("%Y%m%d"))
+    # @contents_search.sorts = "path ASC"
+    # @contents = Path.none
+    # @contents = @contents.page(1).per(10)
+    if params[:dst_date]
+      @dst_date = params[:dst_date]
+    else
+      @dst_date = Date.today.strftime("%Y-%m-%d")
+    end
+
+    if m = /difference from (\d*) (.*) ago/.match(params[:button_action])
+      ddate = Date.strptime(@dst_date, "%Y-%m-%d")
+      case m[2]
+      when "day", "days"
+        sdate = ddate.days_ago(m[1].to_i)
+      when "week", "weeks"
+        sdate = ddate.weeks_ago(m[1].to_i)
+      when "month", "months"
+        sdate = ddate.months_ago(m[1].to_i)
+      when "year", "years"
+        sdate = ddate.years_ago(m[1].to_i)
+      else
+        sdate = ddate.days_ago(1)
+      end
+      #@src_date = Date.strptime(@dst_date,'%Y-%m-%d') - mday
+      @src_date = sdate.strftime("%Y-%m-%d")
+      @contents_search = Path.diff(@box, @src_date, @dst_date).search
+      @contents_search.sorts = "path ASC"
+      @contents = @contents_search.result
+      @contents = @contents.page(params[:page]).per(params[:per_page])
+    else
+      params[:q] = {} unless params[:q]
+      params[:q][:exists_at] = @dst_date
+      @contents_search = Path.contents_of(@box).search(params[:q])
+      @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
+      @contents = @contents_search.result.includes(datum: :record_property)
+      @contents = @contents.current if @contents_search.conditions.empty?
+      @contents = @contents.page(params[:page]).per(params[:per_page])
+    end    
+
     respond_with @box
   end
 
@@ -60,6 +92,7 @@ class BoxesController < ApplicationController
     @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
     @contents = @contents_search.result.includes(datum: :record_property)
     @contents = @contents.current if @contents_search.conditions.empty?
+    @contents = @contents.page(1).per(10)
     respond_with @contents, layout: !request.xhr?
   end
 
