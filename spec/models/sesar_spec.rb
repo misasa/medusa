@@ -7,7 +7,13 @@ describe Sesar do
     let(:bib) { FactoryGirl.create(:bib) }
     let(:material) {"Rock"}
     let(:sesar_classification) {"Igneous"}
+    let(:stone_custom_attribute_1) { FactoryGirl.create(:stone_custom_attribute, stone_id: stone.id, custom_attribute_id: custom_attribute_1.id, value: "value") }
+    let(:custom_attribute_1) { FactoryGirl.create(:custom_attribute, sesar_name: "sample_comment") }
+    let(:stone_custom_attribute_2) { FactoryGirl.create(:stone_custom_attribute, stone_id: stone.id, custom_attribute_id: custom_attribute_2.id, value: "name_1,name_2") }
+    let(:custom_attribute_2) { FactoryGirl.create(:custom_attribute, sesar_name: "sample_other_names") }
     before do
+      stone_custom_attribute_1
+      stone_custom_attribute_2
       stone.bibs << bib
       stone.physical_form.name = "asteroid"
       stone.classification.sesar_material = material
@@ -39,6 +45,8 @@ describe Sesar do
       expect(sesar.attributes["current_archive"]).to eq "Institute for Study of the Earth's Interior Okayama University"
       expect(sesar.attributes["current_archive_contact"]).to eq "tkk@misasa.okayama-u.ac.kp"
       expect(sesar.attributes["description"]).to eq stone.description
+      expect(sesar.attributes[custom_attribute_1.sesar_name]).to eq(stone_custom_attribute_1.value)
+      expect(sesar.attributes[custom_attribute_2.sesar_name]).to eq(stone_custom_attribute_2.value.split(","))
     end
     describe "to_xml" do
       before do
@@ -61,6 +69,9 @@ describe Sesar do
       end
       context "classificationがTypeを含まない" do
         it { expect(@xml).to include "<Rock><Igneous/></Rock></classification>" }
+      end
+      context "sample_other_names" do
+        it { expect(@xml).to include "<sample_other_names><sample_other_name>name_1</sample_other_name><sample_other_name>name_2</sample_other_name></sample_other_names>" }
       end
       context "external_urls" do
         it { expect(@xml).to include "<external_urls><external_url><url>http://dream.misasa.okayama-u.ac.jp/?igsn=#{stone.igsn}</url><description/><url_type>regular URL</url_type></external_url><external_url><url>http://dx.doi.org/doi１</url><description>書誌情報１</description><url_type>DOI</url_type></external_url></external_urls>" }
@@ -201,4 +212,103 @@ describe Sesar do
       end
     end
   end
+
+  describe ".associate_stone_custom_attributes" do
+    subject { Sesar.associate_stone_custom_attributes(stone) }
+    let(:stone) { FactoryGirl.create(:stone) }
+    let(:stone_custom_attribute_1) { FactoryGirl.create(:stone_custom_attribute, stone_id: stone.id, custom_attribute_id: custom_attribute_1.id, value: value_1) }
+    let(:stone_custom_attribute_2) { FactoryGirl.create(:stone_custom_attribute, stone_id: stone.id, custom_attribute_id: custom_attribute_2.id, value: value_2) }
+    let(:value_1) { "value_1" }
+    let(:value_2) { "value_2" }
+    let(:custom_attribute_1) { FactoryGirl.create(:custom_attribute, sesar_name: sesar_name_1) }
+    let(:custom_attribute_2) { FactoryGirl.create(:custom_attribute, sesar_name: sesar_name_2) }
+    let(:sesar_name_1) { "sesar_name_1" }
+    let(:sesar_name_2) { "sesar_name_2" }
+    context "stone not associate stone_custom_attribute" do
+      it { expect(subject).to be_blank }
+    end
+    context "stone associate 1 stone_custom_attribute" do
+      before { stone_custom_attribute_1 }
+      context "stone_custom_attribute.value is present" do
+        context "custom_attribute.sesar_name is present" do
+          it { expect(subject.size).to eq 1 }
+          it { expect(subject[0]).to eq(stone_custom_attribute_1) }
+        end
+        context "custom_attribute.sesar_name is blank" do
+          let(:sesar_name_1) { "" }
+          it { expect(subject).to be_blank }
+        end
+      end
+      context "stone_custom_attribute.value is blank" do
+        let(:value_1) { "" }
+        context "custom_attribute.sesar_name is present" do
+          it { expect(subject).to be_blank }
+        end
+        context "custom_attribute.sesar_name is blank" do
+          let(:sesar_name_1) { "" }
+          it { expect(subject).to be_blank }
+        end
+      end
+    end
+    context "stone associate 2 stone_custom_attributes" do
+      before do
+        stone_custom_attribute_1
+        stone_custom_attribute_2
+      end
+      context "both value is present" do
+        context "both sesar_name is present" do
+          it { expect(subject.size).to eq 2 }
+          it { expect(subject).to include(stone_custom_attribute_1, stone_custom_attribute_2) }
+        end
+        context "1 sesar_name is blank" do
+          let(:sesar_name_1) { "" }
+          it { expect(subject.size).to eq 1 }
+          it { expect(subject[0]).to eq(stone_custom_attribute_2) }
+        end
+        context "both sesar_name is blank" do
+          let(:sesar_name_1) { "" }
+          let(:sesar_name_2) { "" }
+          it { expect(subject).to be_blank }
+        end
+      end
+      context "1 value is blank" do
+        let(:value_1) { "" }
+        context "both sesar_name is present" do
+          it { expect(subject.size).to eq 1 }
+          it { expect(subject[0]).to eq(stone_custom_attribute_2) }
+        end
+        context "1 sesar_name is blank" do
+          let(:sesar_name_1) { "" }
+          it { expect(subject.size).to eq 1 }
+          it { expect(subject[0]).to eq(stone_custom_attribute_2) }
+        end
+        context "another sesar_name is blank" do
+          let(:sesar_name_2) { "" }
+          it { expect(subject).to be_blank }
+        end
+        context "both sesar_name is blank" do
+          let(:sesar_name_1) { "" }
+          let(:sesar_name_2) { "" }
+          it { expect(subject).to be_blank }
+        end
+      end
+      context "both value is blank" do
+        let(:value_1) { "" }
+        let(:value_2) { "" }
+        context "both sesar_name is present" do
+          it { expect(subject).to be_blank }
+        end
+        context "1 sesar_name is blank" do
+          let(:sesar_name_1) { "" }
+          it { expect(subject).to be_blank }
+        end
+        context "both sesar_name is blank" do
+          let(:sesar_name_1) { "" }
+          let(:sesar_name_2) { "" }
+          it { expect(subject).to be_blank }
+        end
+      end
+    end
+  end
+
 end

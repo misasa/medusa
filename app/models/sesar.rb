@@ -9,7 +9,6 @@ class Sesar < ActiveResource::Base
   self.element_name = "sample"
   self.collection_name = "igsn"
 
-
   schema do
     string    :user_code
     string    :sample_type
@@ -110,6 +109,13 @@ class Sesar < ActiveResource::Base
     attributes[:current_archive_contact] = Settings.sesar.archive_contant
     attributes[:external_urls] =external_url(model)
     attributes[:description] = model.description
+    associate_stone_custom_attributes(model).each do |sca|
+      if sca.custom_attribute.sesar_name == "sample_other_names"
+        attributes[:sample_other_names] = sca.value.split(",")
+      else
+        attributes[sca.custom_attribute.sesar_name] = sca.value
+      end
+    end
     attributes.delete_if { |_, value| value.blank? }
     new(attributes)
   end
@@ -163,33 +169,18 @@ class Sesar < ActiveResource::Base
     builder.instruct!
     builder.samples(samples_schema) do |samples|
       samples.sample do |sample|
-        attributes.each do |attr, value|
-          if attr == "classification"
-            builder.classification(classification_schema) do
-              create_classification_xml(sample, value) do |value|
-                if value[0].end_with?("Type")
-                  sample.__send__(value[0], value[1])
-                else
-                  sample.__send__(value[0]) do
-                    sample.__send__(value[1])
-                  end
-                end
-              end
-            end
-          elsif attr == "external_urls"
-            sample.__send__("external_urls") do
-              value.each do |value|
-                sample.__send__("external_url") do
-                  sample.__send__("url", value.attributes["url"])
-                  sample.__send__("description", value.attributes["description"])
-                  sample.__send__("url_type", value.attributes["url_type"])
-                end
-              end
-            end
-          elsif attr == "material"
-            sample << "<material>#{value}</material>"
+        attributes.each do |attr, values|
+          case attr
+          when "classification"
+            classification_xml(builder, sample, values)
+          when "material"
+            sample << "<material>#{values}</material>"
+          when "sample_other_names"
+            sample_other_names_xml(sample, values)
+          when "external_urls"
+            external_urls_xml(sample, values)
           else
-            sample.__send__(attr, value)
+            sample.__send__(attr, values)
           end
         end
       end
@@ -265,6 +256,15 @@ class Sesar < ActiveResource::Base
     urls
   end
 
+  def self.associate_stone_custom_attributes(model)
+    StoneCustomAttribute.joins(:custom_attribute).includes(:custom_attribute)\
+      .where(stone_id: model.id)\
+      .where.not(value: nil)\
+      .where.not(value: '')\
+      .where.not(custom_attributes: {sesar_name: nil})\
+      .where.not(custom_attributes: {sesar_name: ''})
+  end
+
   private
 
   def post_params
@@ -298,14 +298,49 @@ class Sesar < ActiveResource::Base
     }
   end
   
-  def create_classification_xml(sample, value, &block)
-    if value.size > 2
-      first = value.shift
-      sample.__send__(first) do
-        create_classification_xml(sample, value, &block)
+  def classification_xml(builder, sample, values)
+    builder.classification(classification_schema) do
+      build_classification_part(sample, values) do |values|
+        if values[0].end_with?("Type")
+          sample.__send__(values[0], values[1])
+        else
+          sample.__send__(values[0]) do
+            sample.__send__(values[1])
+          end
+        end
       end
-    else
-      block.call value
     end
   end
+  
+  def build_classification_part(sample, values, &block)
+    if values.size > 2
+      first = values.shift
+      sample.__send__(first) do
+        build_classification_part(sample, values, &block)
+      end
+    else
+      block.call values
+    end
+  end
+  
+  def sample_other_names_xml(sample, values)
+    sample.__send__("sample_other_names") do
+      values.each do |value|
+        sample.__send__("sample_other_name", value)
+      end
+    end
+  end
+  
+  def external_urls_xml(sample, values)
+    sample.__send__("external_urls") do
+      values.each do |value|
+        sample.__send__("external_url") do
+          sample.__send__("url", value.attributes["url"])
+          sample.__send__("description", value.attributes["description"])
+          sample.__send__("url_type", value.attributes["url_type"])
+        end
+      end
+    end
+  end
+
 end

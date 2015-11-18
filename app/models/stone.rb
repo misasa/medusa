@@ -44,11 +44,15 @@ class Stone < ActiveRecord::Base
   
 
   def set_stone_custom_attributes
-    ids = stone_custom_attributes.pluck(:custom_attribute_id)
-    (CustomAttribute.pluck(:id) - ids).each do |custom_attribute_id|
-      stone_custom_attributes.build(custom_attribute_id: custom_attribute_id)
+    ids = stone_custom_attributes.pluck('DISTINCT custom_attribute_id')
+    if ids.size == CustomAttribute.count
+      stone_custom_attributes.joins(:custom_attribute).includes(:custom_attribute).order("custom_attributes.name")
+    else
+      (CustomAttribute.pluck(:id) - ids).each do |custom_attribute_id|
+        stone_custom_attributes.build(custom_attribute_id: custom_attribute_id)
+      end
+      stone_custom_attributes.sort_by {|sca| sca.custom_attribute.name }
     end
-    stone_custom_attributes.sort_by {|sca| sca.custom_attribute.name }
   end
 
   # def to_pml
