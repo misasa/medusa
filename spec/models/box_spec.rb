@@ -96,6 +96,20 @@ describe Box do
     end
   end
 
+  describe "#paths", :current => true do
+    let(:box) { FactoryGirl.build(:box, path: "path", parent_id: parent_id, name: 'box') }
+    let(:parent_id) { parent.id }
+    let(:parent) { FactoryGirl.create(:box, parent_id: grand_parent.id, name: 'parent') }
+    let(:grand_parent) { FactoryGirl.create(:box, name: 'grand_parent') }
+
+    before { 
+      box.save
+     }
+    it {
+      expect(box.paths).not_to be_empty
+    }
+  end
+
   describe "#descendants" do
     let(:root) { FactoryGirl.create(:box, name: "root") }
     let(:child_1){ FactoryGirl.create(:box, parent_id: root.id) }

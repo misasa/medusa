@@ -36,6 +36,16 @@ class Path < ActiveRecord::Base
     yield datum
   end
 
+  def boxes
+    if ids.present?
+      boxes = Box.where(id: ids).includes(:record_property).index_by(&:id)
+      ids.map {|id| boxes[id] }
+    else
+      []
+    end
+
+  end
+
   def self.ransackable_scopes(auth_object = nil)
     %i(exists_at)
   end
