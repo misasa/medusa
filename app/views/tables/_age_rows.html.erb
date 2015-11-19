@@ -1,0 +1,20 @@
+<tr>
+  <th>age min</th>
+  <th></th>
+  <% table.stones.each do |stone| %>
+    <td><%= stone.try!(:age_min).present? ? "#{stone.age_min}#{stone.age_unit}" : "-" %></td>
+  <% end %>
+  <% if table.with_average %>
+    <td></td>
+  <% end %>
+</tr>
+<tr>
+  <th>age max</th>
+  <th></th>
+  <% table.stones.each do |stone| %>
+    <td><%= stone.try!(:age_max).present? ? "#{stone.age_max}#{stone.age_unit}" : "-" %></td>
+  <% end %>
+  <% if table.with_average %>
+    <td></td>
+  <% end %>
+</tr>

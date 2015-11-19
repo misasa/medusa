@@ -4,7 +4,7 @@
       <%= li_if_exist 'measurement category: ', @table.measurement_category.try!(:name) %>
       <li>modified at <%= difference_from_now(@table.updated_at) -%></li>
       <% if @table.bib %>
-	<li>bib: <%= link_to_if can?(:read, @table.bib), @table.bib.name,bib_path(@table.bib) %></li>
+        <li>bib: <%= link_to_if can?(:read, @table.bib), @table.bib.name,bib_path(@table.bib) %></li>
       <% end %>
     </ul>
     <caption>
@@ -12,59 +12,39 @@
     </caption>
     <thead>
       <tr class="specimens">
-	<th>measured</th>
-	<th>unit</th>
-	<% @table.table_stones.includes(:stone).each do |table_stone| %>
-	  <th class="sortable">
-	    <%= f.fields_for :table_stones, table_stone do |g| %>
-	      <% stone = g.object.stone %>
-	      <span class="glyphicon glyphicon-transfer"></span> <%= link_to_if can?(:read, stone), stone.name, stone %>
-	      <%= g.hidden_field :position, class: "position" %>
-	    <% end %>
-	  </th>
-	<% end %>
-	<% if @table.with_average %>
-	  <th>mean(1SD)</th>
-	<% end %>
+        <th>measured</th>
+        <th>unit</th>
+        <% @table.table_stones.includes(:stone).each do |table_stone| %>
+          <th class="sortable">
+            <%= f.fields_for :table_stones, table_stone do |g| %>
+              <% stone = g.object.stone %>
+              <span class="glyphicon glyphicon-transfer"></span> <%= link_to_if can?(:read, stone), stone.name, stone %>
+              <%= g.hidden_field :position, class: "position" %>
+            <% end %>
+          </th>
+        <% end %>
+        <% if @table.with_average %>
+          <th>mean(1SD)</th>
+        <% end %>
       </tr>
     </thead>
     <tbody>
-      <% if @table.with_place %>
-	<tr>
-	  <th>latitude</th>
-	  <th></th>
-	  <% @table.stones.each do |stone| %>
-	    <td><%= stone.place.try!(:latitude) || "-" %></td>
-	  <% end %>
-	  <% if @table.with_average %>
-	    <td>-</td>
-	  <% end %>
-	</tr>
-	<tr>
-	  <th>longitude</th>
-	  <th></th>
-	  <% @table.stones.each do |stone| %>
-	    <td><%= stone.place.try!(:longitude) || "-" %></td>
-	  <% end %>
-	  <% if @table.with_average %>
-	    <td>-</td>
-	  <% end %>
-	</tr>
-      <% end %>
+      <%= render(partial: "place_rows", locals: {table: @table}) if @table.with_place %>
+      <%= render(partial: "age_rows", locals: {table: @table}) if @table.with_age %>
       <% @table.each do |row| %>
-	<tr>
-	  <th><%== row.name(:html) %></th>
-	  <th><%== row.unit.try!(:html) %></th>
-	  <% row.each do |cell| %>
-	    <td><%= cell.value || "-" %> <%= "[#{cell.symbol}]" if cell.symbol.present? %></td>
-	  <% end %>
-	  <% if @table.with_average %>
-	    <td>
-	      <%= row.present? ? "#{row.mean}" : "-" %>
-	      <%= " (#{row.standard_diviation})" if row.standard_diviation.present? %>
-	    </td>
-	  <% end %>
-	</tr>
+        <tr>
+          <th><%== row.name(:html) %></th>
+          <th><%== row.unit.try!(:html) %></th>
+          <% row.each do |cell| %>
+            <td><%= cell.value || "-" %> <%= "[#{cell.symbol}]" if cell.symbol.present? %></td>
+          <% end %>
+          <% if @table.with_average %>
+            <td>
+              <%= row.present? ? "#{row.mean}" : "-" %>
+              <%= " (#{row.standard_diviation})" if row.standard_diviation.present? %>
+            </td>
+          <% end %>
+        </tr>
       <% end %>
     </tbody>
   </table>

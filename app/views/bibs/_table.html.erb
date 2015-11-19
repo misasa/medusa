@@ -6,6 +6,7 @@
       <th>measurement category</th>
       <th>with average</th>
       <th>with place</th>
+      <th>with age</th>
       <th></th>
       <th></th>
     </tr>
@@ -18,6 +19,7 @@
         <td><%= table.measurement_category.try!(:name) %></td>
         <td><%= table.with_average %></td>
         <td><%= table.with_place %></td>
+        <td><%= table.with_age %></td>
         <td></td>
         <td>
           <%= link_to bib_table_path(@bib, table) + tab_param(__FILE__), method: :delete ,title: "delete table",data: {confirm: t("confirm.delete")} do %>
@@ -36,6 +38,7 @@
         <th><%= f.select :measurement_category_id, MeasurementCategory.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
 	<th><%= f.check_box :with_average, class: "form-control" %></th>
 	<th><%= f.check_box :with_place, class: "form-control" %></th>
+	<th><%= f.check_box :with_age, class: "form-control" %></th>
         <th>
           <%= f.button title:"add table",class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>

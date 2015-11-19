@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151112070136) do
+ActiveRecord::Schema.define(version: 20151119020242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -364,6 +364,7 @@ ActiveRecord::Schema.define(version: 20151112070136) do
     t.boolean  "with_place"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "with_age"
   end
 
   add_index "tables", ["bib_id"], name: "index_tables_on_bib_id", using: :btree

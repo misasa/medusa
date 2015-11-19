@@ -40,6 +40,7 @@ class TablesController < ApplicationController
       :measurement_category_id,
       :with_average,
       :with_place,
+      :with_age,
       record_property_attributes: [
         :global_id,
         :user_id,
