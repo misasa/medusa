@@ -34,9 +34,9 @@
   <table class="table table-condensed table-striped">
     <%
     if params[:measurement_category_id].blank?
-      measurement_items = MeasurementItem.all
+      measurement_items = MeasurementItem.includes(:unit).all
     else
-      measurement_items = MeasurementItem.categorize(params[:measurement_category_id])
+      measurement_items = MeasurementItem.includes(:unit).categorize(params[:measurement_category_id])
     end
     %>
     <thead>

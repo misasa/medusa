@@ -44,7 +44,7 @@ class PlaceDecorator < Draper::Decorator
   end
 
   def stones_count
-    stones.count > 0 ? stones.count.to_s : ""
+    stones.size if stones.present?
   end
 
   def country_name

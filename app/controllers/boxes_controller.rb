@@ -1,11 +1,11 @@
 class BoxesController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update, :download_card, :download_bundle_card, :download_label, :download_bundle_label]
+  before_action :find_resource, except: [:index, :create, :show, :bundle_edit, :bundle_update, :download_card, :download_bundle_card, :download_label, :download_bundle_label]
   before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label]
   load_and_authorize_resource
 
   def index
-    @search = Box.readables(current_user).search(params[:q])
+    @search = Box.includes(:parent).readables(current_user).search(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @boxes = @search.result.includes(:box_type).page(params[:page]).per(params[:per_page])
     respond_with @boxes
@@ -52,6 +52,7 @@ class BoxesController < ApplicationController
       @contents = @contents.page(params[:page]).per(params[:per_page])
     end    
 
+    @box = Box.includes(children: [:record_property, :box_type], stones: [:record_property, :analyses, :physical_form]).find(params[:id]).decorate
     respond_with @box
   end
 

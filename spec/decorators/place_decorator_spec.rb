@@ -90,18 +90,18 @@ describe PlaceDecorator do
   describe ".stones_count" do
     subject{ place.stones_count() }
     context "count 0" do
-      before{place.stones.clear}
-      it {expect(subject).to eq ""}
+      before{ place.stones.clear }
+      it { expect(subject).to eq nil }
     end
     context "count 1" do
-      let(:stones){[Stone.new(name: "123")]}
-      before{place.stones << stones}
-      it {expect(subject).to eq "1"}
+      let(:stones){ [Stone.new(name: "123")] }
+      before{ place.stones << stones }
+      it { expect(subject).to eq stones.size }
     end
     context "count 2" do
-      let(:stones){[Stone.new(name: "123"),Stone.new(name: "456")]}
-      before{place.stones << stones}
-      it {expect(subject).to eq "2"}
+      let(:stones){ [Stone.new(name: "123"), Stone.new(name: "456")] }
+      before{ place.stones << stones }
+      it { expect(subject).to eq stones.size }
     end
   end
 
@@ -189,21 +189,22 @@ describe PlaceDecorator do
         place10
         place11
       end
-      it {expect(place.readable_neighbors(user).count).to eq 10}
-      it {expect(place.readable_neighbors(user).include?(place)).to eq false}
-      it {expect(place.readable_neighbors(user)[0]).to eq place9}
-      it {expect(place.readable_neighbors(user)[1]).to eq place8}
-      it {expect(place.readable_neighbors(user)[2]).to eq place7}
-      it {expect(place.readable_neighbors(user)[3]).to eq place6}
-      it {expect(place.readable_neighbors(user)[4]).to eq place5}
-      it {expect(place.readable_neighbors(user)[5]).to eq place4}
-      it {expect(place.readable_neighbors(user)[6]).to eq place3}
-      it {expect(place.readable_neighbors(user)[7]).to eq place2}
-      it {expect(place.readable_neighbors(user)[8]).to eq place1}
-      it {expect(place.readable_neighbors(user)[9]).to eq place10}
-      it {expect(place.readable_neighbors(user).include?(place11)).to eq false}
+      it do
+        targets = place.readable_neighbors(user)
+        expect(targets.count).to eq 10
+        expect(targets[0]).to eq place9
+        expect(targets[1]).to eq place8
+        expect(targets[2]).to eq place7
+        expect(targets[3]).to eq place6
+        expect(targets[4]).to eq place5
+        expect(targets[5]).to eq place4
+        expect(targets[6]).to eq place3
+        expect(targets[7]).to eq place2
+        expect(targets[8]).to eq place1
+        expect(targets[9]).to eq place10
+      end
+      it { expect(place.readable_neighbors(user)).not_to include(place, place11) }
     end
-
     context "count < 10" do
       before do
         place1
@@ -221,42 +222,40 @@ describe PlaceDecorator do
         place_other.record_property.user_id = user_other.id
         place_other.save
       end
-      it {expect(place.readable_neighbors(user).count).to eq 1}
-      it {expect(place.readable_neighbors(user).include?(place)).to eq false}
-      it {expect(place.readable_neighbors(user).include?(place1)).to eq true}
-      it {expect(place.readable_neighbors(user).include?(place_other)).to eq false}
+      it do
+        targets = place.readable_neighbors(user)
+        expect(targets.count).to eq 1
+        expect(targets).to include(place1)
+      end
+      it { expect(place.readable_neighbors(user)).not_to include(place, place_other) }
     end
   end
-  describe ".deistance_from" do
+
+  describe ".distance_from" do
     context "latitude.blank" do
       let(:latitude){nil}
       let(:longitude){139.76707935333252}
       it{expect(place.distance_from(0,0)).to eq Float::DIG}
     end
-
     context "longitude.blank" do
       let(:latitude){35.68107370561057}
       let(:longitude){nil}
       it{expect(place.distance_from(0,0)).to eq Float::DIG}
     end
-
     context "praram latitude.blank" do
       let(:latitude){35.68107370561057}
       let(:longitude){139.76707935333252}
       it{expect(place.distance_from(nil,132.75656819343567)).to eq Float::DIG}
     end
-
     context "param longitude.blank" do
       let(:latitude){35.68107370561057}
       let(:longitude){139.76707935333252}
       it{expect(place.distance_from(35.36069738459534,nil)).to eq Float::DIG}
     end
-
     context "latitude,longitude all not blank" do
       let(:latitude){35.36068}
       let(:longitude){132.756545}
       it{expect(place.distance_from(35.681309,139.766048).round(3)).to eq 781.098}
-
     end
   end
 
