@@ -62,6 +62,23 @@ module ApplicationHelper
     hidden_field_tag :tab,tabname_from_filename(filename)
   end
 
+  def path_entry_under(path, obj)
+    items = path.to_a
+    index = items.index(obj)
+    if index
+      items = items[(index + 1)..-1]
+    end
+    links = []
+    items.each do |content|
+      if content
+        links << link_to_if(can?(:read, content), content.name, content)
+      else
+        lins << [ "--" ]
+      end
+    end
+    raw links.join("/")
+  end
+
   private
 
   def tabname_from_filename(filename)

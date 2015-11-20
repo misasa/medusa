@@ -36,6 +36,10 @@ class Path < ActiveRecord::Base
     yield datum
   end
 
+  def to_posix_style
+    map(&:name).join("/")
+  end
+
   def boxes
     if ids.present?
       boxes = Box.where(id: ids).includes(:record_property).index_by(&:id)

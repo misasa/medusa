@@ -16,42 +16,55 @@ class BoxesController < ApplicationController
     # @contents_search.sorts = "path ASC"
     # @contents = Path.none
     # @contents = @contents.page(1).per(10)
-    if params[:dst_date]
+    #if params[:q]
+    @button_action_selection_items = ["snapshot"]
+    duration_numbers = [1, 2]
+    ["difference from", "integration from"].each do |prefix|
+      ["day", "week", "month", "year"].each do |str|
+          duration_numbers.each do |num| 
+            @button_action_selection_items << "#{prefix} #{num} #{str.pluralize(num)} ago"
+          end
+      end
+    end
+    @button_action_selection_items = @button_action_selection_items.map{|item| [item, item]}
+
+    if !(params[:dst_date].blank?)
       @dst_date = params[:dst_date]
+      if m = /difference from (\d*) (.*) ago/.match(params[:button_action])
+        ddate = Date.strptime(@dst_date, "%Y-%m-%d")
+        case m[2]
+        when "day", "days"
+          sdate = ddate.days_ago(m[1].to_i)
+        when "week", "weeks"
+          sdate = ddate.weeks_ago(m[1].to_i)
+        when "month", "months"
+          sdate = ddate.months_ago(m[1].to_i)
+        when "year", "years"
+          sdate = ddate.years_ago(m[1].to_i)
+        else
+          sdate = ddate.days_ago(1)
+        end
+        @src_date = sdate.strftime("%Y-%m-%d")
+        @contents_search = Path.diff(@box, @src_date, @dst_date).search
+        @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
+        @contents = @contents_search.result
+        @contents = @contents.page(params[:page]).per(params[:per_page])
+      else
+        params[:q] = {} unless params[:q]
+        params[:q][:exists_at] = @dst_date
+        @contents_search = Path.contents_of(@box).search(params[:q])
+        @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
+        @contents = @contents_search.result.includes(datum: :record_property)
+        @contents = @contents.current if @contents_search.conditions.empty?
+        @contents = @contents.page(params[:page]).per(params[:per_page])
+      end    
     else
       @dst_date = Date.today.strftime("%Y-%m-%d")
-    end
-
-    if m = /difference from (\d*) (.*) ago/.match(params[:button_action])
-      ddate = Date.strptime(@dst_date, "%Y-%m-%d")
-      case m[2]
-      when "day", "days"
-        sdate = ddate.days_ago(m[1].to_i)
-      when "week", "weeks"
-        sdate = ddate.weeks_ago(m[1].to_i)
-      when "month", "months"
-        sdate = ddate.months_ago(m[1].to_i)
-      when "year", "years"
-        sdate = ddate.years_ago(m[1].to_i)
-      else
-        sdate = ddate.days_ago(1)
-      end
-      #@src_date = Date.strptime(@dst_date,'%Y-%m-%d') - mday
-      @src_date = sdate.strftime("%Y-%m-%d")
-      @contents_search = Path.diff(@box, @src_date, @dst_date).search
+      @contents_search = Path.search()
       @contents_search.sorts = "path ASC"
-      @contents = @contents_search.result
+      @contents = Path.none
       @contents = @contents.page(params[:page]).per(params[:per_page])
-    else
-      params[:q] = {} unless params[:q]
-      params[:q][:exists_at] = @dst_date
-      @contents_search = Path.contents_of(@box).search(params[:q])
-      @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
-      @contents = @contents_search.result.includes(datum: :record_property)
-      @contents = @contents.current if @contents_search.conditions.empty?
-      @contents = @contents.page(params[:page]).per(params[:per_page])
-    end    
-
+    end
     @box = Box.includes(children: [:record_property, :box_type], stones: [:record_property, :analyses, :physical_form]).find(params[:id]).decorate
     respond_with @box
   end
