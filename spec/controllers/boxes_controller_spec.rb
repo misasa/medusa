@@ -238,5 +238,32 @@ describe BoxesController do
     it {expect(obj2.path).to eq attributes[:path]}
     it {expect(obj3.path).to eq obj3path}
   end
+  
+  describe "GET contents", :current => true do
+    let!(:box) { FactoryGirl.create(:box) }
+    let!(:stone_1) { FactoryGirl.create(:stone, name: "hoge", box_id: box.id) }
+    let!(:stone_2) { FactoryGirl.create(:stone, name: "stone_2", box_id: box.id) }
+    let!(:stone_3) { FactoryGirl.create(:stone, name: "stone_3", box_id: box.id) }
+    let!(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone_1.id) }
+    let!(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone_2.id) }
+    let!(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone_3.id) }
+    before { get :contents, id: box.id }
+    it { expect(assigns(:box)).to eq box }
+  end
+  
+  describe "GET diff", :current => true do
+    let!(:box) { FactoryGirl.create(:box) }
+    let!(:stone_1) { FactoryGirl.create(:stone, name: "hoge", box_id: box.id) }
+    let!(:stone_2) { FactoryGirl.create(:stone, name: "stone_2", box_id: box.id) }
+    let!(:stone_3) { FactoryGirl.create(:stone, name: "stone_3", box_id: box.id) }
+    let!(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone_1.id) }
+    let!(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone_2.id) }
+    let!(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone_3.id) }
+    let!(:ddate) { Date.today}
+    let!(:dst) { ddate.strftime("%Y-%m-%d")}
+    let!(:src) { ddate.days_ago(1).strftime("%Y-%m-%d")}
+    before { get :diff, id: box.id, src: src, dst: dst}
+    it { expect(assigns(:box)).to eq box }
+  end
 
 end
