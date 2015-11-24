@@ -53,8 +53,8 @@
       <li class="<%= active_if_current('daughter') %>">
         <a href="#daughter" data-toggle="tab"><%= "box#{data_count(@box.children)}" %></a>
       </li>
-      <li class="<%= active_if_current('histories') %>">
-        <a href="#histories" data-toggle="tab"><%= "histories#{data_count(@box.paths)}" %></a>
+      <li class="<%= active_if_current('history') %>">
+        <a href="#history" data-toggle="tab"><%= "history#{data_count(@box.paths)}" %></a>
       </li>
       <li class="<%= active_if_current('analysis') %>">
         <a href="#analysis" data-toggle="tab"><%= "analysis#{data_count(@box.analyses)}" %></a>
@@ -72,7 +72,7 @@
         ["at-a-glance",nil],
         ["stone",@box.stones],
         ["daughter",@box.children,"box"],
-        ["histories", @box.paths],
+        ["history", @box.paths],
         ["analysis",@box.analyses],
         ["bib",@box.bibs],
         ["file",@box.attachment_files]
