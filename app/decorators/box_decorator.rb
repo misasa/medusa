@@ -12,7 +12,13 @@ class BoxDecorator < Draper::Decorator
   end
 
   def family_tree
-    h.tree(current_box_hash(children), parent_id) do |obj|
+    hash = current_box_hash(children)
+    if hash[object.id].present?
+      hash[object.id] += object.stones
+    else
+      hash[object.id] = object.stones if object.stones.present?
+    end
+    h.tree(hash, parent_id) do |obj|
       obj.decorate.tree_node(self == obj)
     end
   end

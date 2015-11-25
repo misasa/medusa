@@ -47,6 +47,7 @@ describe BoxDecorator do
   describe ".family_tree" do
     subject{obj.family_tree}
     let(:child){FactoryGirl.create(:box)}
+    let(:stone){FactoryGirl.create(:stone)}
     before do
       allow(obj.h).to receive(:can?).and_return(true)
       obj.children << child
@@ -59,6 +60,15 @@ describe BoxDecorator do
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-folder-close\"></span>")}
     it{expect(subject).to match("<a href=\"/boxes/#{child.id}\">.*</a>")}
     it{expect(subject).to include("#{child.name}")}
+    context "box linked stone" do
+      before { obj.stones << stone }
+      it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")}
+      it{expect(subject).to match("<a href=\"/stones/#{stone.id}\">.*</a>")}
+      it{expect(subject).to include("#{stone.name}")}
+    end
+    context "box not link stone" do
+      it{expect(subject).not_to include("#{stone.name}")}
+    end
   end
 
   describe ".tree_node" do
