@@ -55,22 +55,20 @@ describe Path do
 
   describe ".cont_at(date)"do
     subject { Path.cont_at(date) }
-    let(:stone) { FactoryGirl.create(:stone) }
-    before do
-      FactoryGirl.create(:path_stone, datum_id: stone.id, ids: [stone.box.id])
-    end
+    let!(:stone) { FactoryGirl.create(:stone) }
+   
     context "date指定あり" do
-      let(:date) { "20151117" }
+      let(:date) { "21151117" }
       it "result" do
-        sample = Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at).last
-        expect(subject[0].attributes).to eql sample.attributes
+        sample = Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at)
+        expect(subject[0].attributes).to eql sample[0].attributes
       end
     end
     context "date指定なし" do
       let(:date) { "" }
       it "result" do
-        sample = Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at).first
-        expect(subject[0].attributes).to eql sample.attributes
+        sample = Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at)
+        expect(subject[0].attributes).to eql sample[0].attributes
       end
     end
     context "該当なし" do
@@ -84,10 +82,7 @@ describe Path do
     let(:stone) { FactoryGirl.create(:stone) }
     let(:box) { stone.box }
     context "該当あり(sign+)" do
-      before do
-        FactoryGirl.create(:path_stone, datum_id: stone.id, ids: [box.id], brought_in_at: "20151118", brought_out_at: "20151118")
-        FactoryGirl.create(:path_stone, datum_id: stone.id, ids: [box.id], brought_in_at: "20151118", brought_out_at: nil)
-      end
+      before { FactoryGirl.create(:path_stone, datum_id: stone.id, ids: [box.id], brought_in_at: "20151118", brought_out_at: nil) }
       let(:src_date) { "20151117" }
       let(:dst_date) { "20151118" }
       it "result" do
@@ -98,14 +93,13 @@ describe Path do
     end
     context "該当あり(sign-)" do
       before do
-        FactoryGirl.create(:path_stone, datum_id: stone.id, ids: [box.id], brought_in_at: "2005-11-20 01:40:12", brought_out_at: "2005-11-20 01:43:12")
-        FactoryGirl.create(:path_stone, datum_id: stone.id, ids: [box.id, box.id+1], brought_in_at: "2005-11-20 01:43:12", brought_out_at: nil)
+        FactoryGirl.create(:path_stone, datum_id: stone.id, ids: [box.id], brought_in_at: "2005-11-20 01:40:12", brought_out_at: "2005-11-23 01:43:12")
       end
-      let(:src_date) { "20051120" }
-      let(:dst_date) { "20051122" }
+      let(:src_date) { "20051121" }
+      let(:dst_date) { "20051124" }
       it "result" do
-        sample = Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at)[1]
-        expect(subject[0].attributes).to include sample.attributes
+        sample = Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at)
+        expect(subject[0].attributes).to include sample[1].attributes
         expect(subject[0].attributes["sign"]).to eq "-"
       end
     end
