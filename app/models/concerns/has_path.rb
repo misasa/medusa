@@ -30,6 +30,14 @@ module HasPath
     end
   end
 
+  def add_histroy(brought_in_at, ids = [], brought_in_by = User.current)
+    if paths.blank?
+      paths.create!(ids: ids, brought_in_at: brought_in_at, brought_in_by: brought_in_by)
+    else
+      paths.create!(ids: ids, brought_in_at: brought_in_at, brought_out_at: paths[-1].brought_in_at, brought_in_by: brought_in_by, brought_out_by: paths[-1].brought_in_by)
+    end
+  end
+
   private
 
   def path_changed?
