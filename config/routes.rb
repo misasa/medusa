@@ -26,6 +26,12 @@ Medusa::Application.routes.draw do
       post :link_by_global_id
     end
   end
+  
+  concern :inventory do
+    member do
+      post :inventory
+    end
+  end
 
   concern :multiple do
     collection do
@@ -78,8 +84,8 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "box" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "box" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "box" }
-    resources :stones, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "box", association_name: "stones" }
-    resources :boxes, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "box", association_name: "children" }
+    resources :stones, concerns: [:link_by_global_id, :inventory], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "box", association_name: "stones" }
+    resources :boxes, concerns: [:link_by_global_id, :inventory], only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "box", association_name: "children" }
   end
 
   resources :places, concerns: [:bundleable, :reportable] do

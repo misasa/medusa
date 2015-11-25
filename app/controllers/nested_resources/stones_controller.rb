@@ -34,6 +34,12 @@ class NestedResources::StonesController < ApplicationController
   rescue
     duplicate_global_id
   end
+  
+  def inventory
+    @stone = Stone.find(params[:id])
+    @stone.update_attributes(box_id: params[:box_id], updated_at: Time.now)
+    respond_with @stone
+  end
 
   private
 

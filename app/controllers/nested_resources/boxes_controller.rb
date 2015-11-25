@@ -34,6 +34,12 @@ class NestedResources::BoxesController < ApplicationController
   rescue
     duplicate_global_id
   end
+  
+  def inventory
+    @box= Box.find(params[:id])
+    @box.update_attributes(parent_id: params[:box_id], updated_at: Time.now)
+    respond_with @box
+  end
 
   private
   

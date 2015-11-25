@@ -124,5 +124,26 @@ describe NestedResources::StonesController do
       end
     end
   end
+  
+  describe "POST inventory" do
+    let!(:stone) { FactoryGirl.create(:stone) }
+    let!(:box) { FactoryGirl.create(:box) }
+    let!(:now) { Time.now }
+    let(:parent_name) { :box }
+    before do
+      allow(Time).to receive(:now).and_return( now )
+      post :inventory, parent_resource: parent_name, box_id: box_id, id: stone.id, association_name: :stones
+    end
+    context "not changed box_id" do
+      let(:box_id) { stone.box_id }
+      it { expect(assigns(:stone).box_id).to eq stone.box_id  }
+      it { expect(assigns(:stone).updated_at).to eq now  }
+    end
+    context "changed box_id" do
+      let(:box_id) { box.id }
+      it { expect(assigns(:stone).box_id).to eq box.id  }
+      it { expect(assigns(:stone).updated_at).to eq now  }
+    end
+  end
 
 end

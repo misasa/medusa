@@ -94,5 +94,27 @@ describe NestedResources::BoxesController do
       end
     end
   end
+  
+  describe "POST inventory" do
+    let!(:box1) { FactoryGirl.create(:box) }
+    let!(:box2) { FactoryGirl.create(:box, parent_id: box1.id) }
+    let!(:box3) { FactoryGirl.create(:box) }
+    let!(:now) { Time.now }
+    let(:parent_name) { :box }
+    before do
+      allow(Time).to receive(:now).and_return( now )
+      post :inventory, parent_resource: parent_name, box_id: box_id, id: box2.id, association_name: :boxes
+    end
+    context "not changed parent_id" do
+      let(:box_id) { box1.id }
+      it { expect(assigns(:box).parent_id).to eq box1.id  }
+      it { expect(assigns(:box).updated_at).to eq now  }
+    end
+    context "changed parent_id" do
+      let(:box_id) { box3.id }
+      it { expect(assigns(:box).parent_id).to eq box3.id  }
+      it { expect(assigns(:box).updated_at).to eq now  }
+    end
+  end
 
 end
