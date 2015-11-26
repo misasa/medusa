@@ -84,14 +84,3 @@
     </div>
   </div>
 </div>
-
-<%= javascript_tag do %>
-$(document).on("ajax:success", "#contents_search", function(event, data, status) {
-	$("#contents").html(data);
-	$("#contents").find(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
-});
-$(document).on("ajax:success", "#diff_search", function(event, data, status) {
-	$("#diff").html(data);
-	$("#diff").find(".datepicker").datepicker({dateFormat: 'yy-mm-dd'});
-});
-<% end %>

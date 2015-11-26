@@ -101,24 +101,6 @@ class BoxesController < ApplicationController
     respond_with @box, layout: !request.xhr?
   end
 
-  def contents
-    @contents_search = Path.contents_of(@box).search(params[:q])
-    @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
-    @contents = @contents_search.result.includes(datum: :record_property)
-    @contents = @contents.current if @contents_search.conditions.empty?
-    @contents = @contents.page(1).per(10)
-    respond_with @contents, layout: !request.xhr?
-  end
-
-  def diff
-    @src_date = params[:src]
-    @dst_date = params[:dst]
-    @diff_search = Path.diff(@box, @src_date, @dst_date).search(params[:q])
-    @diff_search.sorts = "path ASC" if @diff_search.sorts.empty?
-    @diff = @diff_search.result
-    respond_with @diff, layout: !request.xhr?
-  end
-
   def bundle_edit
     respond_with @boxes
   end
