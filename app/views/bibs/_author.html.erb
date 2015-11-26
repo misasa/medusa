@@ -1,0 +1,38 @@
+<%= form_for @bib, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
+  <ul>
+    <li class="row list-unstyled">
+      <div class="col-lg-12">name <span class="glyphicon glyphicon-sort"></span></div>
+    </li>
+  </ul>
+  <ul class="bib-authors">
+    <% @bib.bib_authors.includes(:author).each do |bib_author| %>
+      <li class="row list-unstyled">
+	<div class="col-lg-12">
+	  <%= f.fields_for :bib_authors, bib_author do |g| %>
+	    <%= g.object.author.name %>
+	    <%= g.hidden_field :priority, class: "priority" %>
+	  <% end %>
+	</div>
+      </li>
+    <% end %>
+  </ul>
+  <div class="pull-right">
+    <%= f.button class: "btn btn-default" do %>
+      <span class="glyphicon glyphicon-save"></span>
+    <% end %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+(function($) {
+  $("ul.bib-authors").sortable({
+    placeholder: "ui-state-highlight list-unstyled",
+    forcePlaceholderSize: true,
+    update: function(event, ui) {
+      $(this).find("li").each(function(index, element) {
+        $(this).find("input.priority").val(index + 1);
+      });
+    }
+  });
+})(jQuery);
+<% end %>

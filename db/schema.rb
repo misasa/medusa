@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151119020242) do
+ActiveRecord::Schema.define(version: 20151125084856) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -67,6 +67,7 @@ ActiveRecord::Schema.define(version: 20151119020242) do
   create_table "bib_authors", force: true do |t|
     t.integer "bib_id"
     t.integer "author_id"
+    t.integer "priority"
   end
 
   add_index "bib_authors", ["author_id"], name: "index_bib_authors_on_author_id", using: :btree

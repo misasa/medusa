@@ -6,7 +6,7 @@ class Bib < ActiveRecord::Base
 
   LABEL_HEADER = ["Id", "Name", "Authors"]
 
-  has_many :bib_authors
+  has_many :bib_authors, -> { order(:priority) }, before_add: :set_initial_position
   has_many :authors, through: :bib_authors
 
   has_many :referrings, dependent: :destroy
@@ -15,7 +15,9 @@ class Bib < ActiveRecord::Base
   has_many :boxes, through: :referrings, source: :referable, source_type: "Box"
   has_many :analyses, through: :referrings, source: :referable, source_type: "Analysis"
   has_many :tables
-  
+
+  accepts_nested_attributes_for :bib_authors
+
   validates :name, presence: true, length: { maximum: 255 }
   validate :author_valid?, if: Proc.new{|bib| bib.authors.blank?}
   
@@ -133,5 +135,10 @@ class Bib < ActiveRecord::Base
   
   def author_valid?
     errors[:author] = "can't be blank"
+  end
+
+  def set_initial_position(bib_author)
+    priority = (bib_authors.maximum(:priority) || 0) + 1
+    bib_author.update_attribute(:priority, priority)
   end
 end

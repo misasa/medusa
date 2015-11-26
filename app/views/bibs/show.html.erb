@@ -58,6 +58,9 @@
       <li class="<%= active_if_current('table') %>">
         <a href="#table" data-toggle="tab"><%= "table#{data_count(@bib.tables)}" %></a>
       </li>
+      <li class="<%= active_if_current('author') %>">
+        <a href="#author" data-toggle="tab">author</a>
+      </li>
     </ul>
 
     <!-- Tab panes -->
@@ -68,7 +71,8 @@
         ["place",@bib.places],
         ["analysis",@bib.analyses],
         ["file",@bib.attachment_files],
-        ["table", @bib.tables]
+        ["table", @bib.tables],
+        ["author", nil]
     ] %>
     <div class="tab-content">
       <% tab_info.each do |key,array| %>

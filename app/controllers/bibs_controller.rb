@@ -5,7 +5,7 @@ class BibsController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @search = Bib.includes(:authors).readables(current_user).search(params[:q])
+    @search = Bib.includes(bib_authors: :author).readables(current_user).order("bib_authors.priority").search(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @bibs = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @bibs
@@ -104,6 +104,10 @@ class BibsController < ApplicationController
         :group_writable,
         :guest_readable,
         :guest_writable
+      ],
+      bib_authors_attributes: [
+        :id,
+        :priority
       ]
     )
   end
