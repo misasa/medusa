@@ -1,11 +1,9 @@
 <div class="alert alert-danger">
-<div><%= link_to :back,adjust_url_by_requesting_tab(request.referer) %></div>
+<div><%= link_to :back, adjust_url_by_requesting_tab(request.referer) %></div>
 <ul>
-<% [@stone,@box,@analysis,@place,@bib,@attachment_file,@chemistry,@spot].each do |record| %>
-  <% if record %>
-    <% record.errors.full_messages.each do |msg| %>
-      <li><%= msg %></li>
-    <% end %>
+<% [@stone,@box,@analysis,@place,@bib,@attachment_file,@chemistry,@spot,@record].compact.each do |record| %>
+  <% record.errors.full_messages.each do |msg| %>
+    <li><%= msg %></li>
   <% end %>
 <% end %>
 </ul>
