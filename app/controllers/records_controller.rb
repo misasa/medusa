@@ -115,7 +115,11 @@ class RecordsController < ApplicationController
   
   def destroy
     @record.destroy
-    respond_with @record
+    if @record.errors.messages.present?
+      respond_with @record, location: adjust_url_by_requesting_tab(request.referer), action: "error"
+    else
+      respond_with @record
+    end
   end
 
   private
