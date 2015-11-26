@@ -27,15 +27,19 @@ class MeasurementCategoriesController < ApplicationController
   end
 
   def duplicate
-    measuerement_category_orgin = @measurement_category
-    @measurement_category = measuerement_category_orgin.dup
+    @units = Unit.all
+    measurement_category_orgin = @measurement_category
+    @measurement_category = measurement_category_orgin.dup
     @measurement_category.name += " duplicate"
-    @measurement_category.save
-    measuerement_category_orgin.measurement_items.each do |measurement_item|
-      @measurement_category.measurement_items << measurement_item
-    end
-    respond_with @measurement_category do |format|
-      format.html {render :edit}
+    if @measurement_category.save
+      measurement_category_orgin.measurement_items.each do |measurement_item|
+        @measurement_category.measurement_items << measurement_item
+      end
+      respond_with @measurement_category do |format|
+        format.html {render :edit}
+      end
+    else
+      redirect_to measurement_categories_path, flash: { error: "name has already been taken" }
     end
   end
 

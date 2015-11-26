@@ -109,6 +109,13 @@ describe MeasurementCategoriesController do
       it { expect(assigns(:measurement_category).measurement_items[0]).to eq measurement_item}
       it { expect(response).to render_template("edit") }
     end
+    context "name has already been taken" do
+      before do
+        FactoryGirl.create(:measurement_category, name: "aaa duplicate",description: "description")
+        post :duplicate, id: obj.id
+      end
+      it { expect(flash[:error]).to eq "name has already been taken"}
+    end
   end
 
   describe "DELETE destroy" do

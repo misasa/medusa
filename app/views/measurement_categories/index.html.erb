@@ -1,3 +1,8 @@
+<% if flash[:error] %>
+  <div id="flash" style="color: red; border: red solid">
+    <%= flash[:error] %>
+  </div>
+<% end %>
 <div><%= link_to_unless_current MeasurementItem.model_name.human.downcase,measurement_items_path %>
 <%= link_to_unless_current MeasurementCategory.model_name.human.downcase,measurement_categories_path %></div>
 <%= paginate @measurement_categories %>
