@@ -366,6 +366,7 @@ ActiveRecord::Schema.define(version: 20151126060654) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "with_age"
+    t.string   "age_unit"
   end
 
   add_index "tables", ["bib_id"], name: "index_tables_on_bib_id", using: :btree
