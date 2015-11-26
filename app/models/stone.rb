@@ -35,6 +35,7 @@ class Stone < ActiveRecord::Base
   validates :igsn, uniqueness: true, length: { maximum: 9 }, allow_nil: true
   validates :age_min, numericality: true, allow_nil: true
   validates :age_max, numericality: true, allow_nil: true
+  validates :age_unit, presence: true, if: -> { age_min.present? || age_max.present? }
   validates :age_unit, length: { maximum: 255 }
   validates :size, length: { maximum: 255 }
   validates :size_unit, length: { maximum: 255 }
