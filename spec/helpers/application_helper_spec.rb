@@ -58,8 +58,8 @@ describe ApplicationHelper do
       let(:time) { now - ((60*60*12)+1) }
       it { expect(subject).to eq "yesterday, 23:59" }
     end
-    context "time is 27 hour ago" do
-      let(:time) { now - ((60*60*27)) }
+    context "time is 36 hour ago" do
+      let(:time) { now - ((60*60*36)) }
       it { expect(subject).to eq time.to_date }
     end
   end
