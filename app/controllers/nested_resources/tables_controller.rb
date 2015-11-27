@@ -52,6 +52,7 @@ class NestedResources::TablesController < ApplicationController
       :with_average,
       :with_place,
       :with_age,
+      :age_unit,
       record_property_attributes: [
         :global_id,
         :user_id,

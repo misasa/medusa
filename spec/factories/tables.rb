@@ -5,5 +5,7 @@ FactoryGirl.define do
     description "table_description"
     with_average true
     with_place true
+    with_age true
+    age_unit "a"
   end
 end

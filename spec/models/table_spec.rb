@@ -11,6 +11,34 @@ describe "Table" do
   let(:analysis) { FactoryGirl.create(:analysis, stone: stone) }
   let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item) }
   
+  describe "validates" do
+    describe "age_unit" do
+      subject { table.valid? }
+      let(:table) { FactoryGirl.build(:table, with_age: with_age, age_unit: age_unit) }
+      let(:with_age) { true }
+      let(:age_unit) { "Ka" }
+      context "is present" do
+        context "with_age is true" do
+          it { expect(subject).to eq true }
+        end
+        context "with_age is false" do
+          let(:with_age) { false }
+          it { expect(subject).to eq true }
+        end
+      end
+      context "is blank" do
+        let(:age_unit) { "" }
+        context "with_age is true" do
+        it { expect(subject).to eq false }
+        end
+        context "with_age is false" do
+          let(:with_age) { false }
+          it { expect(subject).to eq true }
+        end
+      end
+    end
+  end
+  
   describe "#each" do
     context "table not link category_measurement_item" do
       it { expect { |b| table.each(&b) }.not_to yield_control }
