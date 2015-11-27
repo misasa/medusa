@@ -5,7 +5,7 @@
   <%= li_if_exist 'description: ', @analysis.try!(:description) %>
   <li>modified at <%= difference_from_now(@analysis.updated_at) -%></li>
   <% if @analysis.stone %>
-    <li>sample: <%= link_to_if can?(:read, @analysis.stone), @analysis.stone.name,stone_path(@analysis.stone) %></li>
+    <li><%= @alias_specimen %>: <%= link_to_if can?(:read, @analysis.stone), @analysis.stone.name,stone_path(@analysis.stone) %></li>
   <% end %>
   <% unless @analysis.bibs.empty? %>
     <li>references:</li>
