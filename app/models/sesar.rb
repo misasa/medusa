@@ -180,7 +180,7 @@ class Sesar < ActiveResource::Base
           when "external_urls"
             external_urls_xml(sample, values)
           else
-            sample.__send__(attr, values)
+            sample.tag!(attr, values)
           end
         end
       end
@@ -302,10 +302,10 @@ class Sesar < ActiveResource::Base
     builder.classification(classification_schema) do
       build_classification_part(sample, values) do |values|
         if values[0].end_with?("Type")
-          sample.__send__(values[0], values[1])
+          sample.tag!(values[0], values[1])
         else
-          sample.__send__(values[0]) do
-            sample.__send__(values[1])
+          sample.tag!(values[0]) do
+            sample.tag!(values[1])
           end
         end
       end
@@ -315,7 +315,7 @@ class Sesar < ActiveResource::Base
   def build_classification_part(sample, values, &block)
     if values.size > 2
       first = values.shift
-      sample.__send__(first) do
+      sample.tag!(first) do
         build_classification_part(sample, values, &block)
       end
     else
@@ -324,20 +324,20 @@ class Sesar < ActiveResource::Base
   end
   
   def sample_other_names_xml(sample, values)
-    sample.__send__("sample_other_names") do
+    sample.sample_other_names do
       values.each do |value|
-        sample.__send__("sample_other_name", value)
+        sample.sample_other_name(value)
       end
     end
   end
   
   def external_urls_xml(sample, values)
-    sample.__send__("external_urls") do
+    sample.external_urls do
       values.each do |value|
-        sample.__send__("external_url") do
-          sample.__send__("url", value.attributes["url"])
-          sample.__send__("description", value.attributes["description"])
-          sample.__send__("url_type", value.attributes["url_type"])
+        sample.external_url do
+          sample.url(value.attributes["url"])
+          sample.description(value.attributes["description"])
+          sample.url_type(value.attributes["url_type"])
         end
       end
     end
