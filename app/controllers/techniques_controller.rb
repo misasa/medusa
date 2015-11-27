@@ -7,7 +7,8 @@ class TechniquesController < ApplicationController
   def index
     @search = Technique.search(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
-    @techniques = @search.result.page(params[:page]).per(params[:per_page])
+#    @techniques = @search.result.page(params[:page]).per(params[:per_page])
+    @techniques = @search.result
     respond_with @techniques
   end
   

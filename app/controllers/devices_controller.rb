@@ -7,7 +7,8 @@ class DevicesController < ApplicationController
   def index
     @search = Device.search(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
-    @devices = @search.result.page(params[:page]).per(params[:per_page])
+    #@devices = @search.result.page(params[:page]).per(params[:per_page])
+    @devices = @search.result
     respond_with @devices
   end
   

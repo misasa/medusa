@@ -14,12 +14,17 @@ describe DevicesController do
       get :index, params
     end
     context "sort condition is present" do
-      let(:query) { {"name_cont" => "device", "s" => "updated_at DESC"} }
-      it { expect(assigns(:devices)).to eq [device_2] }
+      let(:query) { {"name_cont" => "device", "s" => "name DESC"} }
+      it { expect(assigns(:devices).to_a).to eq [device_3, device_2] }
     end
+    context "sort condition is present" do
+      let(:query) { {"name_cont" => "device", "s" => "name"} }
+      it { expect(assigns(:devices).to_a).to eq [device_2, device_3] }
+    end
+
     context "sort condition is nil" do
-      let(:query) { {"name_cont" => "device"} }
-      it { expect(assigns(:devices)).to eq [device_3] }
+      let(:query) { {} }
+      it { expect(assigns(:devices).to_a).to eq [device_1, device_2, device_3] }
     end
   end
   

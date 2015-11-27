@@ -8,18 +8,18 @@ describe TechniquesController do
     let(:technique_1) { FactoryGirl.create(:technique, name: "hoge") }
     let(:technique_2) { FactoryGirl.create(:technique, name: "technique_2") }
     let(:technique_3) { FactoryGirl.create(:technique, name: "technique_3") }
-    let(:params) { {q: query, page: 2, per_page: 1} }
+    let(:params) { {q: query} }
     before do
       technique_1;technique_2;technique_3
       get :index, params
     end
     context "sort condition is present" do
-      let(:query) { {"name_cont" => "technique", "s" => "updated_at DESC"} }
-      it { expect(assigns(:techniques)).to eq [technique_2] }
+      let(:query) { {"name_cont" => "technique", "s" => "name DESC"} }
+      it { expect(assigns(:techniques)).to eq [technique_3, technique_2] }
     end
     context "sort condition is nil" do
       let(:query) { {"name_cont" => "technique"} }
-      it { expect(assigns(:techniques)).to eq [technique_3] }
+      it { expect(assigns(:techniques)).to eq [technique_2, technique_3] }
     end
   end
   
