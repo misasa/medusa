@@ -245,9 +245,10 @@ class Sesar < ActiveResource::Base
   end
   
   def self.external_url(model)
-    urls = []
-    Settings.sesar.external_urls.store("url", "http://dream.misasa.okayama-u.ac.jp/?igsn=#{model.igsn}")
-    urls.push(Settings.sesar.external_urls)
+    urls = Array(Settings.sesar.external_urls.dup)
+    urls.each do |url|
+      url.url.gsub!(/\#{([^{}]+)}/) { model[$1] rescue nil }
+    end
     if model.bibs.present?
       model.bibs.each do |bib|
         urls.push({url: "http://dx.doi.org/#{bib.doi}", description: bib.name, url_type: "DOI"})

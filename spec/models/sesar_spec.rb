@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Sesar do
 
   describe ".from_active_record(model)" do
-    let(:stone) { FactoryGirl.create(:stone, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101") }
+    let(:stone) { FactoryGirl.create(:stone, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101", igsn: "123456789") }
     let(:bib) { FactoryGirl.create(:bib) }
     let(:material) {"Rock"}
     let(:sesar_classification) {"Igneous"}
@@ -192,8 +192,8 @@ describe Sesar do
       let(:data){YAML.load_file(file_yaml)}
       let(:file_yaml){Rails.root.join("config", "application.yml").to_path}
       before do 
-        data["defaults"]["sesar"]["external_urls"]["description"] = nil
-        data["defaults"]["sesar"]["external_urls"]["url_type"] = "regular URL"
+        data["defaults"]["sesar"]["external_urls"][0]["description"] = nil
+        data["defaults"]["sesar"]["external_urls"][0]["url_type"] = "regular URL"
         File.open(file_yaml,"w"){|f| f.write data.to_yaml}
         Settings.reload!
       end
