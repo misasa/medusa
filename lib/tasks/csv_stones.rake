@@ -1,5 +1,5 @@
-desc "stones csv"
-task :stones_csv => :environment do
+desc "specimens csv"
+task :specimens_csv => :environment do
   ActiveRecord::Base.establish_connection :medusa_original
   
   ActiveRecord::Base.connection.execute("
@@ -13,7 +13,7 @@ task :stones_csv => :environment do
       SELECT 
         id,
         name,
-        specimen_type as stone_type,
+        specimen_type as specimen_type,
         description,
         parent_id,
         locality_id as place_id,
@@ -27,7 +27,7 @@ task :stones_csv => :environment do
       FROM specimens
       ORDER BY id
     )
-    TO '/tmp/medusa_csv_files/stones.csv'
+    TO '/tmp/medusa_csv_files/specimens.csv'
     (FORMAT 'csv', HEADER);
   ")
   

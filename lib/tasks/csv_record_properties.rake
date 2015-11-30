@@ -28,7 +28,7 @@ task :record_properties_csv => :environment do
           WHEN datum_type = 'Bibliography' THEN 'Bib'
           WHEN datum_type = 'Storage' THEN 'Box'
           WHEN datum_type = 'Attachment' THEN 'AttachmentFile'
-          WHEN datum_type = 'Specimen' THEN 'Stone'
+          WHEN datum_type = 'Specimen' THEN 'Specimen'
           ELSE ''
         END as datum_type,
         member_id as user_id,
