@@ -56,7 +56,7 @@ Medusa::Application.routes.draw do
     end
   end
 
-  resources :stones, concerns: [:bundleable, :reportable], except: [:new] do
+  resources :specimens, concerns: [:bundleable, :reportable], except: [:new] do
     member do
       get :family
       get :picture
@@ -65,12 +65,12 @@ Medusa::Application.routes.draw do
       get :custom_attribute
       get :detail_edit
     end
-    resource :record_property, only: [:show, :update], defaults: { parent_resource: "stone" }
-    resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "stone" }
-    resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "stone" }
-    resources :daughters, concerns: [:link_by_global_id], only: [:index, :create,:update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
-    resources :stones, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "stone", association_name: "children" }
-    resources :analyses, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "stone" }
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "specimen" }
+    resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "specimen" }
+    resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "specimen" }
+    resources :daughters, concerns: [:link_by_global_id], only: [:index, :create,:update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "specimen", association_name: "children" }
+    resources :specimens, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "specimen", association_name: "children" }
+    resources :analyses, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "specimen" }
   end
 
   resources :boxes, concerns: [:bundleable, :reportable], except: [:new] do
@@ -82,7 +82,7 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "box" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "box" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "box" }
-    resources :stones, concerns: [:link_by_global_id, :inventory], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "box", association_name: "stones" }
+    resources :specimens, concerns: [:link_by_global_id, :inventory], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "box", association_name: "specimens" }
     resources :boxes, concerns: [:link_by_global_id, :inventory], only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "box", association_name: "children" }
   end
 
@@ -97,7 +97,7 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
     resources :attachment_files, concerns: [:link_by_global_id],only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "place" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "place" }
-    resources :stones, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "place", association_name: "stones" }
+    resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "place", association_name: "specimens" }
   end
 
   resources :analyses, concerns: :bundleable do
@@ -126,7 +126,7 @@ Medusa::Application.routes.draw do
       get :download_to_tex
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
-    resources :stones, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "bib", association_name: "stones" }
+    resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "bib", association_name: "specimens" }
     resources :boxes, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "bib", association_name: "boxes" }
     resources :places, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/places", defaults: { parent_resource: "bib", association_name: "places" }
     resources :analyses, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "bib", association_name: "analyses" }
@@ -139,7 +139,7 @@ Medusa::Application.routes.draw do
       get :property
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
-    resources :stones, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "table", association_name: "stones" }
+    resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "table", association_name: "specimens" }
   end
 
   resources :attachment_files, concerns: :bundleable , except: [:new] do
@@ -151,7 +151,7 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "attachment_file" }
     resources :spots, only: [:index, :create, :update, :destroy], controller: "nested_resources/spots"
     resources :places, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/places", defaults: { parent_resource: "attachment_file", association_name: "places" }
-    resources :stones, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/stones", defaults: { parent_resource: "attachment_file", association_name: "stones" }
+    resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "attachment_file", association_name: "specimens" }
     resources :boxes, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "attachment_file", association_name: "boxes" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "attachment_file" }
     resources :analyses, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "attachment_file" }
