@@ -5,7 +5,7 @@ class PlacesController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @search = Place.includes(:stones).readables(current_user).search(params[:q])
+    @search = Place.includes(:specimens).readables(current_user).search(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @places = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @places
@@ -37,11 +37,11 @@ class PlacesController < ApplicationController
   end
 
   def map
-    respond_with @stone, layout: !request.xhr?
+    respond_with @specimen, layout: !request.xhr?
   end
 
   def property
-    respond_with @stone, layout: !request.xhr?
+    respond_with @specimen, layout: !request.xhr?
   end
 
   def destroy

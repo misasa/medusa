@@ -4,7 +4,7 @@
   <td><%= place.latitude_to_text %></td>
   <td><%= place.longitude_to_text %></td>
   <td><%= place.elevation_to_text %></td>
-  <td><%= place.stones_count %></td>
+  <td><%= place.specimens_count %></td>
   <%= td_if_expand place.user.try!(:username) %>
   <td><%= place.group.try!(:name) %></td>
   <%= td_if_expand difference_from_now(place.published_at) %>

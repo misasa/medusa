@@ -12,20 +12,20 @@
     </tr>
   </thead>
   <tbody>
-    <%= form_tag bundle_edit_stones_path, id: "stone-bundle-form" do %>
-      <% @place.stones.each do |stone| %>
+    <%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
+      <% @place.specimens.each do |specimen| %>
         <tr>
           <td>
-            <%= check_box_tag("ids[]", stone.id, false, {id: "ids_#{stone.id}", class: "select-row"}) if can?(:update, stone) %>
+            <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
           </td>
-          <td><%= link_to_if can?(:read, stone), stone.name,stone %></td>
-          <td><%= stone.physical_form.try!(:name) %></td>
-          <td><%= stone.try!(:quantity) %></td>
-          <td><%= stone.try!(:quantity_unit) %></td>
+          <td><%= link_to_if can?(:read, specimen), specimen.name,specimen %></td>
+          <td><%= specimen.physical_form.try!(:name) %></td>
+          <td><%= specimen.try!(:quantity) %></td>
+          <td><%= specimen.try!(:quantity_unit) %></td>
           <td></td>
-          <td><%= stone.try!(:global_id) %></td> 
+          <td><%= specimen.try!(:global_id) %></td> 
           <td>
-            <%= link_to place_stone_path(@place,stone) + tab_param(__FILE__), method: :delete ,title: "unlink stone",data: {confirm: t("confirm.unlink")} do %>
+            <%= link_to place_specimen_path(@place,specimen) + tab_param(__FILE__), method: :delete ,title: "unlink specimen",data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
             <% end %>
           </td>
@@ -35,7 +35,7 @@
   </tbody>
   <tfoot>
     <tr>
-      <%= form_for Stone.new, url: place_stones_path(@place) do |f|%>
+      <%= form_for Specimen.new, url: place_specimens_path(@place) do |f|%>
         <%= hidden_tabname_tag(__FILE__) %>
         <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
         <th><%= f.text_field :name, class: "form-control input-sm" %></th>
@@ -43,25 +43,25 @@
         <th><%= f.text_field :quantity, class: "form-control input-sm" %></th>
         <th><%= f.text_field :quantity_unit, class: "form-control input-sm" %></th>
         <th>
-          <%= f.button title:"add stone file",class: "btn btn-default" do %>
+          <%= f.button title:"add specimen file",class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>
           <% end %>
         </th>
       <% end %>
-      <%= form_tag link_by_global_id_place_stones_path(@place),method: :post do %>
+      <%= form_tag link_by_global_id_place_specimens_path(@place),method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
         <th>
 	  <div class="input-group">
-	    <%= text_field_tag :global_id, nil, id: "stone-global-id" ,class: "form-control input-sm" %>
+	    <%= text_field_tag :global_id, nil, id: "specimen-global-id" ,class: "form-control input-sm" %>
 	    <span class="input-group-addon">
-	      <%= link_to stones_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#stone-global-id" do %>
+	      <%= link_to specimens_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#specimen-global-id" do %>
 	      <span class="glyphicon glyphicon-search"></span>
 	      <% end %>
 	    </span>
 	  </div>
 	</th>
         <th>
-          <%= button_tag title: "link stone by global id",class: "btn btn-default" do %>
+          <%= button_tag title: "link specimen by global id",class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>
           <% end %>
         </th>
@@ -69,5 +69,5 @@
     </tr>
   </tfoot>
 </table>
-<%= link_to_function "edit", "$('#stone-bundle-form').submit();", class: "btn btn-default" %>
+<%= link_to_function "edit", "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
 

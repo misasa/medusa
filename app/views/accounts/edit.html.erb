@@ -82,12 +82,12 @@
     <% end %>
   </div>
   <div class="col-lg-12">
-    <% class_names = ["Stone","Box","Place","Analysis","Bib","AttachmentFile"] %>
+    <% class_names = ["Specimen","Box","Place","Analysis","Bib","AttachmentFile"] %>
     
     <table class="table">
       <tr>
         <th></th>
-        <th><%= link_to @alias_specimen.capitalize, stones_path %></th>
+        <th><%= link_to @alias_specimen.capitalize, specimens_path %></th>
         <th><%= link_to "Box", boxes_path %></th>
         <th><%= link_to "Place", places_path %></th>
         <th><%= link_to "Analysis", analyses_path %></th>

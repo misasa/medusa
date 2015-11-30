@@ -14,9 +14,9 @@ class BoxDecorator < Draper::Decorator
   def family_tree
     hash = current_box_hash(children)
     if hash[object.id].present?
-      hash[object.id] += object.stones
+      hash[object.id] += object.specimens
     else
-      hash[object.id] = object.stones if object.stones.present?
+      hash[object.id] = object.specimens if object.specimens.present?
     end
     h.tree(hash, parent_id) do |obj|
       obj.decorate.tree_node(self == obj)
@@ -32,11 +32,11 @@ class BoxDecorator < Draper::Decorator
   def tree_node(current=false)
     link = current ? h.content_tag(:strong, name) : name
     icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close")
-    icon + h.link_to_if(h.can?(:read, self), link, self) + stones_count + boxes_count + analyses_count + bibs_count + files_count
+    icon + h.link_to_if(h.can?(:read, self), link, self) + specimens_count + boxes_count + analyses_count + bibs_count + files_count
   end
 
-  def stones_count
-    icon_with_count("cloud", stones.count)
+  def specimens_count
+    icon_with_count("cloud", specimens.count)
   end
 
   def boxes_count
@@ -44,7 +44,7 @@ class BoxDecorator < Draper::Decorator
   end
 
   def analyses_count
-    icon_with_count("stats", stones.inject(0) {|count, stone| count += stone.analyses.size })
+    icon_with_count("stats", specimens.inject(0) {|count, specimen| count += specimen.analyses.size })
   end
 
   def bibs_count
@@ -55,8 +55,8 @@ class BoxDecorator < Draper::Decorator
     icon_with_count("file", attachment_files.count)
   end
 
-  def boxed_stones
-    Stone.includes(:record_property, :user, :group, :physical_form).where(box_id: self.id)
+  def boxed_specimens
+    Specimen.includes(:record_property, :user, :group, :physical_form).where(box_id: self.id)
   end
 
   def boxed_boxes
@@ -76,8 +76,8 @@ class BoxDecorator < Draper::Decorator
     lines << '\hline'
     lines << ["#{alias_specimen} name", "ID", "remark"].join("\t&\t") + "\\\\"
     lines << '\hline'
-    stones.each do |stone|
-      lines << [stone.name, stone.global_id, ""].join("\t&\t") + "\\\\"
+    specimens.each do |specimen|
+      lines << [specimen.name, specimen.global_id, ""].join("\t&\t") + "\\\\"
     end
     lines << '\hline'
     lines << '\end{tabular}'
@@ -99,7 +99,7 @@ class BoxDecorator < Draper::Decorator
   end
 
   def analysis_name
-    object.stones.map{|stone| stone.analyses.pluck(:name)}.join(", ")
+    object.specimens.map{|specimen| specimen.analyses.pluck(:name)}.join(", ")
   end
 
   private

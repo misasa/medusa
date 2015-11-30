@@ -50,7 +50,7 @@
         <th><%= text_field_tag :per_page, (params[:per_page] || Box.default_per_page), class: "form-control input-sm", size: 1 %></th>
         <th></th>
         <th>
-          <%= f.select :datum_type_eq, [["stone", "Stone"], ["box", "Box"]], { include_blank: true }, class: "form-control input-sm" %>
+          <%= f.select :datum_type_eq, [["specimen", "Specimen"], ["box", "Box"]], { include_blank: true }, class: "form-control input-sm" %>
         </th>
       </tr>
 

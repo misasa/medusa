@@ -109,7 +109,7 @@ class Sesar < ActiveResource::Base
     attributes[:current_archive_contact] = Settings.sesar.archive_contact
     attributes[:external_urls] =external_url(model)
     attributes[:description] = model.description
-    associate_stone_custom_attributes(model).each do |sca|
+    associate_specimen_custom_attributes(model).each do |sca|
       if sca.custom_attribute.sesar_name == "sample_other_names"
         attributes[:sample_other_names] = sca.value.split(",")
       else
@@ -240,9 +240,9 @@ class Sesar < ActiveResource::Base
     urls
   end
 
-  def self.associate_stone_custom_attributes(model)
-    StoneCustomAttribute.joins(:custom_attribute).includes(:custom_attribute)\
-      .where(stone_id: model.id)\
+  def self.associate_specimen_custom_attributes(model)
+    SpecimenCustomAttribute.joins(:custom_attribute).includes(:custom_attribute)\
+      .where(specimen_id: model.id)\
       .where.not(value: nil)\
       .where.not(value: '')\
       .where.not(custom_attributes: {sesar_name: nil})\

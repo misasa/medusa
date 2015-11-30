@@ -13,7 +13,7 @@
 &<%= @analyses.each_with_index.map{|analysis,i|i +1}.join("&") %>\\
 \hline
 \endhead
-sample&<%= @analyses.map{|analysis| analysis.stone.name if analysis.stone}.join("&") %>\\
+sample&<%= @analyses.map{|analysis| analysis.specimen.name if analysis.specimen}.join("&") %>\\
 name&<%= @analyses.map{|analysis| analysis.name}.join("&") %>\\
 \hline
 <% if params[:measurement_category_id].blank? %>
