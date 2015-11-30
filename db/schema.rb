@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151130020446) do
+ActiveRecord::Schema.define(version: 20151130021511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -274,6 +274,17 @@ ActiveRecord::Schema.define(version: 20151130020446) do
   add_index "referrings", ["bib_id"], name: "index_referrings_on_bib_id", using: :btree
   add_index "referrings", ["referable_id"], name: "index_referrings_on_referable_id", using: :btree
 
+  create_table "specimen_custom_attributes", force: true do |t|
+    t.integer  "specimen_id"
+    t.integer  "custom_attribute_id"
+    t.string   "value"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "specimen_custom_attributes", ["custom_attribute_id"], name: "index_specimen_custom_attributes_on_custom_attribute_id", using: :btree
+  add_index "specimen_custom_attributes", ["specimen_id"], name: "index_specimen_custom_attributes_on_specimen_id", using: :btree
+
   create_table "specimens", force: true do |t|
     t.string   "name"
     t.string   "specimen_type"
@@ -321,17 +332,6 @@ ActiveRecord::Schema.define(version: 20151130020446) do
   end
 
   add_index "spots", ["attachment_file_id"], name: "index_spots_on_attachment_file_id", using: :btree
-
-  create_table "stone_custom_attributes", force: true do |t|
-    t.integer  "specimen_id"
-    t.integer  "custom_attribute_id"
-    t.string   "value"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "stone_custom_attributes", ["custom_attribute_id"], name: "index_stone_custom_attributes_on_custom_attribute_id", using: :btree
-  add_index "stone_custom_attributes", ["specimen_id"], name: "index_stone_custom_attributes_on_specimen_id", using: :btree
 
   create_table "table_analyses", force: true do |t|
     t.integer  "table_id"
