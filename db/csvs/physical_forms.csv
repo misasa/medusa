@@ -1,7 +1,7 @@
 id,name,sesar_sample_type,description
 1,aliquot,Individual Sample,""
 2,powder,Thin Section,""
-3,thin section,Thin Sectino,""
+3,thin section,Thin Section,""
 4,drill-cored,Core,""
 9,on mount,Individual Sample,""
 11,grain,Individual Sample,""
