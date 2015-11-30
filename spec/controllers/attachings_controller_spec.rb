@@ -39,7 +39,7 @@ describe AttachingsController do
   end
 
   describe ".add_tab_param" do
-    let(:tabname){"stone"}
+    let(:tabname){"specimen"}
     let(:base_url){"http://wwww.test.co.jp/"}
     before do
       request.env["HTTP_REFERER"]  = url

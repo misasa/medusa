@@ -2,7 +2,7 @@ FactoryGirl.define do
   factory :analysis do
     name "分析１"
     description "説明１"
-    association :stone, factory: :stone
+    association :specimen, factory: :specimen
     association :technique, factory: :technique
     association :device, factory: :device
     operator "オペレータ１"

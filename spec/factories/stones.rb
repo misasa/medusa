@@ -1,7 +1,7 @@
 FactoryGirl.define do
-  factory :stone do
+  factory :specimen do
     name "ストーン１"
-    stone_type "サンプル１"
+    specimen_type "サンプル１"
     description "説明１"
     parent_id ""
     association :place, factory: :place

@@ -19,18 +19,18 @@ describe PlacesController do
     let(:group_3) { FactoryGirl.create(:group, :name => "group_3") }
     let(:params) { {q: query} }
 
-    let(:stone_1) { FactoryGirl.create(:stone, name: "hoge", place_id: place_1.id) }
-    let(:stone_2) { FactoryGirl.create(:stone, name: "stone_2", place_id: place_2.id) }
-    let(:stone_3) { FactoryGirl.create(:stone, name: "stone_3", place_id: place_3.id) }
-    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone_1.id) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone_2.id) }
-    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone_3.id) }
+    let(:specimen_1) { FactoryGirl.create(:specimen, name: "hoge", place_id: place_1.id) }
+    let(:specimen_2) { FactoryGirl.create(:specimen, name: "specimen_2", place_id: place_2.id) }
+    let(:specimen_3) { FactoryGirl.create(:specimen, name: "specimen_3", place_id: place_3.id) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen_1.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen_2.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, specimen_id: specimen_3.id) }
 
     before do
       place_1
       place_2
       place_3
-      stone_1;stone_2;stone_3;      
+      specimen_1;specimen_2;specimen_3;      
       analysis_1;analysis_2;analysis_3;      
       record_property_1.update_attribute(:group_id, group_1.id)
       record_property_2.update_attributes(:user_id => user_2.id, :group_id => group_2.id, :guest_readable => true, :guest_writable => true)
@@ -74,9 +74,9 @@ describe PlacesController do
       before do
         get :index, format: 'pml'
       end
-      it { expect(response.body).to include("\<sample_global_id\>#{stone_1.global_id}") }    
-      it { expect(response.body).to include("\<sample_global_id\>#{stone_2.global_id}") }    
-      it { expect(response.body).to include("\<sample_global_id\>#{stone_3.global_id}") } 
+      it { expect(response.body).to include("\<sample_global_id\>#{specimen_1.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{specimen_2.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{specimen_3.global_id}") } 
     end
   end
 
@@ -86,14 +86,14 @@ describe PlacesController do
 
   describe "GET show" do
     let(:obj){FactoryGirl.create(:place) }
-    let(:stone_1) { FactoryGirl.create(:stone, name: "hoge", place_id: obj.id) }
-    let(:stone_2) { FactoryGirl.create(:stone, name: "stone_2", place_id: obj.id) }
-    let(:stone_3) { FactoryGirl.create(:stone, name: "stone_3", place_id: obj.id) }
-    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone_1.id) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone_2.id) }
-    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone_3.id) }
+    let(:specimen_1) { FactoryGirl.create(:specimen, name: "hoge", place_id: obj.id) }
+    let(:specimen_2) { FactoryGirl.create(:specimen, name: "specimen_2", place_id: obj.id) }
+    let(:specimen_3) { FactoryGirl.create(:specimen, name: "specimen_3", place_id: obj.id) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen_1.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen_2.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, specimen_id: specimen_3.id) }
     before do
-      stone_1;stone_2;stone_3;      
+      specimen_1;specimen_2;specimen_3;      
       analysis_1;analysis_2;analysis_3;
     end
     context "without format" do    
@@ -104,9 +104,9 @@ describe PlacesController do
 
     context "with format 'pml'" do
       before { get :show, id: obj.id, format: 'pml' }
-      it { expect(response.body).to include("\<sample_global_id\>#{stone_1.global_id}") }    
-      it { expect(response.body).to include("\<sample_global_id\>#{stone_2.global_id}") }    
-      it { expect(response.body).to include("\<sample_global_id\>#{stone_3.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{specimen_1.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{specimen_2.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{specimen_3.global_id}") }    
     end
 
   end
