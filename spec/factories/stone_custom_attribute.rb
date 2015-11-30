@@ -1,7 +1,7 @@
 FactoryGirl.define do
-  factory :stone_custom_attribute do
+  factory :specimen_custom_attribute do
     sequence(:value) { |n| "value_#{n}" }
-    association :stone, factory: :stone
+    association :specimen, factory: :specimen
     association :custom_attribute, factory: :custom_attribute
   end
 end

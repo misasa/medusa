@@ -1,7 +1,7 @@
 FactoryGirl.define do
-  factory :table_stone do
+  factory :table_specimen do
     association :table, factory: :table
-    association :stone, factory: :stone
+    association :specimen, factory: :specimen
     position 1
   end
 end

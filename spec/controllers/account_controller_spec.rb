@@ -50,18 +50,18 @@ describe AccountsController do
   end
 
   describe "GET find_by_global_id" do
-    let(:stone){FactoryGirl.create(:stone)}
+    let(:specimen){FactoryGirl.create(:specimen)}
     before do
-      stone
-      get :find_by_global_id ,global_id: stone.record_property.global_id
+      specimen
+      get :find_by_global_id ,global_id: specimen.record_property.global_id
     end
     context "administrator" do
-      it { expect(response).to redirect_to(record_path(stone.record_property.global_id)) }
+      it { expect(response).to redirect_to(record_path(specimen.record_property.global_id)) }
     end
     context "not administrator" do
       let(:user) { FactoryGirl.create(:user,administrator: false) }
       before { sign_in user }
-      it { expect(response).to redirect_to(record_path(stone.record_property.global_id)) }
+      it { expect(response).to redirect_to(record_path(specimen.record_property.global_id)) }
     end
   end
 

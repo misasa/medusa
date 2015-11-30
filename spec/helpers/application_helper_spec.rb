@@ -122,7 +122,7 @@ describe ApplicationHelper do
         it { expect(subject).to eq " active" }
       end
       context "param[:tab] != tabname" do
-        let(:tabname) { "stone" }
+        let(:tabname) { "specimen" }
         it { expect(subject).to eq nil }
       end
     end
@@ -141,14 +141,14 @@ describe ApplicationHelper do
 
   describe "#tab_param" do
     subject { helper.tab_param(filename) }
-    let(:filename){"_stone.html.erb"}
-    it { expect(subject).to eq "?tab=stone"}
+    let(:filename){"_specimen.html.erb"}
+    it { expect(subject).to eq "?tab=specimen"}
   end
 
   describe "#hidden_tabname_tag" do
     subject { helper.hidden_tabname_tag(filename) }
-    let(:filename){"_stone.html.erb"}
-    it { expect(subject).to eq hidden_field_tag(:tab,"stone")}
+    let(:filename){"_specimen.html.erb"}
+    it { expect(subject).to eq hidden_field_tag(:tab,"specimen")}
   end
 
 end

@@ -52,56 +52,56 @@ describe PlaceDecorator do
     end
   end
 
-  describe ".stones_summary" do
-    subject{ place.stones_summary }
+  describe ".specimens_summary" do
+    subject{ place.specimens_summary }
     context "count 0" do
-      before{place.stones.clear}
+      before{place.specimens.clear}
       it {expect(subject).to eq " [0]"}
     end
     context "count 1" do
-      let(:stones){[Stone.new(name: "123")]}
-      before{place.stones << stones}
+      let(:specimens){[Specimen.new(name: "123")]}
+      before{place.specimens << specimens}
       it {expect(subject).to eq "123 [1]"}
     end
     context "count 2" do
-      let(:stones){[Stone.new(name: "123"),Stone.new(name: "456")]}
-      before{place.stones << stones}
+      let(:specimens){[Specimen.new(name: "123"),Specimen.new(name: "456")]}
+      before{place.specimens << specimens}
       it {expect(subject).to eq "123, 456 [2]"}
     end
     context "length over" do
-      let(:stones){[Stone.new(name: "123"),Stone.new(name: "456"),Stone.new(name: "789")]}
-      before{place.stones << stones}
+      let(:specimens){[Specimen.new(name: "123"),Specimen.new(name: "456"),Specimen.new(name: "789")]}
+      before{place.specimens << specimens}
       it {expect(subject).to eq "123, 456,  ... [3]"}
     end
     context "length 11" do
-      subject{ place.stones_summary(11) }
-      let(:stones){[Stone.new(name: "123"),Stone.new(name: "456"),Stone.new(name: "789")]}
-      before{place.stones << stones}
+      subject{ place.specimens_summary(11) }
+      let(:specimens){[Specimen.new(name: "123"),Specimen.new(name: "456"),Specimen.new(name: "789")]}
+      before{place.specimens << specimens}
       it {expect(subject).to eq "123, 456, 7 ... [3]"}
     end
     context "length no limit" do
-      subject{ place.stones_summary(nil) }
-      let(:stones){[Stone.new(name: "123"),Stone.new(name: "456"),Stone.new(name: "789")]}
-      before{place.stones << stones}
+      subject{ place.specimens_summary(nil) }
+      let(:specimens){[Specimen.new(name: "123"),Specimen.new(name: "456"),Specimen.new(name: "789")]}
+      before{place.specimens << specimens}
       it {expect(subject).to eq "123, 456, 789 [3]"}
     end
   end
 
-  describe ".stones_count" do
-    subject{ place.stones_count() }
+  describe ".specimens_count" do
+    subject{ place.specimens_count() }
     context "count 0" do
-      before{ place.stones.clear }
+      before{ place.specimens.clear }
       it { expect(subject).to eq nil }
     end
     context "count 1" do
-      let(:stones){ [Stone.new(name: "123")] }
-      before{ place.stones << stones }
-      it { expect(subject).to eq stones.size }
+      let(:specimens){ [Specimen.new(name: "123")] }
+      before{ place.specimens << specimens }
+      it { expect(subject).to eq specimens.size }
     end
     context "count 2" do
-      let(:stones){ [Stone.new(name: "123"), Stone.new(name: "456")] }
-      before{ place.stones << stones }
-      it { expect(subject).to eq stones.size }
+      let(:specimens){ [Specimen.new(name: "123"), Specimen.new(name: "456")] }
+      before{ place.specimens << specimens }
+      it { expect(subject).to eq specimens.size }
     end
   end
 

@@ -5,15 +5,15 @@ describe RecordsController do
   before { sign_in user }
 
   describe "GET index" do
-    let(:stone) { FactoryGirl.create(:stone) }
+    let(:specimen) { FactoryGirl.create(:specimen) }
     let(:box) { FactoryGirl.create(:box) }
     let(:analysis) { FactoryGirl.create(:analysis) }
     let(:bib) { FactoryGirl.create(:bib) }
     let(:place) { FactoryGirl.create(:place) }
     let(:attachment_file) { FactoryGirl.create(:attachment_file) }
-    let(:allcount){Stone.count + Box.count + Analysis.count + Bib.count + Place.count + AttachmentFile.count}
+    let(:allcount){Specimen.count + Box.count + Analysis.count + Bib.count + Place.count + AttachmentFile.count}
     before do
-      stone
+      specimen
       box
       analysis
       bib
@@ -56,30 +56,30 @@ describe RecordsController do
   describe "GET show" do
 
     context "record found json " do
-      let(:stone) { FactoryGirl.create(:stone) }
+      let(:specimen) { FactoryGirl.create(:specimen) }
       before do
-        stone
-        get :show, id: stone.record_property.global_id ,format: :json
+        specimen
+        get :show, id: specimen.record_property.global_id ,format: :json
       end
-      it { expect(response.body).to include(stone.to_json) }
+      it { expect(response.body).to include(specimen.to_json) }
     end
     context "record found html " do
-      let(:stone) { FactoryGirl.create(:stone) }
+      let(:specimen) { FactoryGirl.create(:specimen) }
       before do
-        stone
-        get :show, id: stone.record_property.global_id ,format: :html
+        specimen
+        get :show, id: specimen.record_property.global_id ,format: :html
       end
-      it { expect(response).to  redirect_to(controller: "stones",action: "show",id:stone.id) }
+      it { expect(response).to  redirect_to(controller: "specimens",action: "show",id:specimen.id) }
     end
     context "record found pml " do
-      let(:stone) { FactoryGirl.create(:stone) }
-      let(:analysis){ FactoryGirl.create(:analysis, stone_id: stone.id ) }
+      let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:analysis){ FactoryGirl.create(:analysis, specimen_id: specimen.id ) }
       before do
-        stone
+        specimen
         analysis
-        get :show, id: stone.record_property.global_id ,format: :pml
+        get :show, id: specimen.record_property.global_id ,format: :pml
       end
-      it { expect(response.body).to include("\<sample_global_id\>#{stone.global_id}") }    
+      it { expect(response.body).to include("\<sample_global_id\>#{specimen.global_id}") }    
 
     end
     context "record not found json" do
@@ -107,12 +107,12 @@ describe RecordsController do
   end
 
   describe "GET ancestors" do
-    let(:root) { FactoryGirl.create(:stone, name: "root") }
-    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: root.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    let(:root) { FactoryGirl.create(:specimen, name: "root") }
+    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
     before do
       root;child_1;child_1_1;
       analysis_1;analysis_2;analysis_3;
@@ -134,12 +134,12 @@ describe RecordsController do
   end
 
   describe "GET descendants" do
-    let(:root) { FactoryGirl.create(:stone, name: "root") }
-    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: root.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    let(:root) { FactoryGirl.create(:specimen, name: "root") }
+    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
     before do
       root;child_1;child_1_1;
       analysis_1;analysis_2;analysis_3;
@@ -161,12 +161,12 @@ describe RecordsController do
   end
 
   describe "GET self_and_descendants" do
-    let(:root) { FactoryGirl.create(:stone, name: "root") }
-    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: root.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    let(:root) { FactoryGirl.create(:specimen, name: "root") }
+    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
     before do
       root;child_1;child_1_1;
       analysis_1;analysis_2;analysis_3;
@@ -190,12 +190,12 @@ describe RecordsController do
   end
 
   describe "GET families" do
-    let(:root) { FactoryGirl.create(:stone, name: "root") }
-    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: root.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    let(:root) { FactoryGirl.create(:specimen, name: "root") }
+    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
     before do
       root;child_1;child_1_1;
       analysis_1;analysis_2;analysis_3;
@@ -219,12 +219,12 @@ describe RecordsController do
   end
 
   describe "GET root" do
-    let(:root) { FactoryGirl.create(:stone, name: "root") }
-    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: root.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    let(:root) { FactoryGirl.create(:specimen, name: "root") }
+    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
     before do
       root;child_1;child_1_1;
       analysis_1;analysis_2;analysis_3;
@@ -244,12 +244,12 @@ describe RecordsController do
   end
 
   describe "GET parent" do
-    let(:root) { FactoryGirl.create(:stone, name: "root") }
-    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: root.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
+    let(:root) { FactoryGirl.create(:specimen, name: "root") }
+    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
     before do
       root;child_1;child_1_1;
       analysis_1;analysis_2;analysis_3;
@@ -270,15 +270,15 @@ describe RecordsController do
 
 
   describe "GET siblings" do
-    let(:root) { FactoryGirl.create(:stone, name: "root") }
-    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
-    let(:child_1_2){ FactoryGirl.create(:stone, parent_id: child_1.id) }
-    let(:child_1_3){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:root) { FactoryGirl.create(:specimen, name: "root") }
+    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:child_1_2){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:child_1_3){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
 
-    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1_2.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_3.id ) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1_2.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_3.id ) }
     before do
       root;child_1;child_1_1;child_1_2;child_1_3;
       analysis_1;analysis_2;analysis_3;
@@ -300,15 +300,15 @@ describe RecordsController do
   end
 
   describe "GET daughters" do
-    let(:root) { FactoryGirl.create(:stone, name: "root") }
-    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
-    let(:child_1_2){ FactoryGirl.create(:stone, parent_id: child_1.id) }
-    let(:child_1_3){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:root) { FactoryGirl.create(:specimen, name: "root") }
+    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:child_1_2){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:child_1_3){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
 
-    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1_2.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_3.id ) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1_2.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_3.id ) }
     before do
       root;child_1;child_1_1;child_1_2;child_1_3;
       analysis_1;analysis_2;analysis_3;
@@ -332,15 +332,15 @@ describe RecordsController do
   end
 
   describe "GET self_and_siblings" do
-    let(:root) { FactoryGirl.create(:stone, name: "root") }
-    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
-    let(:child_1_2){ FactoryGirl.create(:stone, parent_id: child_1.id) }
-    let(:child_1_3){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:root) { FactoryGirl.create(:specimen, name: "root") }
+    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:child_1_2){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:child_1_3){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
 
-    let(:analysis_1){ FactoryGirl.create(:analysis, stone_id: child_1_1.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, stone_id: child_1_2.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, stone_id: child_1_3.id ) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
+    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1_2.id ) }
+    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_3.id ) }
     before do
       root;child_1;child_1_1;child_1_2;child_1_3;
       analysis_1;analysis_2;analysis_3;
@@ -365,18 +365,18 @@ describe RecordsController do
 
   describe "GET property" do
     context "record found json" do
-      let(:stone) { FactoryGirl.create(:stone) }
+      let(:specimen) { FactoryGirl.create(:specimen) }
       before do
-        stone
-        get :property, id: stone.record_property.global_id ,format: :json
+        specimen
+        get :property, id: specimen.record_property.global_id ,format: :json
       end
-      it { expect(response.body).to eq(stone.record_property.to_json) }
+      it { expect(response.body).to eq(specimen.record_property.to_json) }
     end
     context "record found html" do
-      let(:stone) { FactoryGirl.create(:stone) }
+      let(:specimen) { FactoryGirl.create(:specimen) }
       before do
-        stone
-        get :property, id: stone.record_property.global_id ,format: :html
+        specimen
+        get :property, id: specimen.record_property.global_id ,format: :html
       end
       pending { expect(response).to render_template("") }
     end
@@ -397,9 +397,9 @@ describe RecordsController do
   end
   
   describe "GET casteml" do
-    let(:obj) { FactoryGirl.create(:stone) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, :stone_id => obj.id )}
-    let(:analysis_2){ FactoryGirl.create(:analysis, :stone_id => obj.id )}
+    let(:obj) { FactoryGirl.create(:specimen) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, :specimen_id => obj.id )}
+    let(:analysis_2){ FactoryGirl.create(:analysis, :specimen_id => obj.id )}
     let(:casteml){[analysis_2, analysis_1].to_pml}
     before do
       obj
@@ -412,8 +412,8 @@ describe RecordsController do
   end
 
   describe "DELETE destroy" do
-    let(:stone) { FactoryGirl.create(:stone) }
-    before { stone }
-    it { expect { delete :destroy, id: stone.record_property.global_id }.to change(RecordProperty, :count).by(-1) }
+    let(:specimen) { FactoryGirl.create(:specimen) }
+    before { specimen }
+    it { expect { delete :destroy, id: specimen.record_property.global_id }.to change(RecordProperty, :count).by(-1) }
   end
 end

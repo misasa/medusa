@@ -1,21 +1,21 @@
 require 'spec_helper'
 
-describe "stone" do
+describe "specimen" do
   before do
     login login_user
     create_data
-    visit stones_path
+    visit specimens_path
   end
   let(:login_user) { FactoryGirl.create(:user) }
   let(:create_data) {}
   
-  describe "stone detail screen" do
-    before { click_link(stone.name) }
+  describe "specimen detail screen" do
+    before { click_link(specimen.name) }
     let(:create_data) do
-      stone.attachment_files << attachment_file 
-      stone.create_record_property(user_id: login_user.id)
+      specimen.attachment_files << attachment_file 
+      specimen.create_record_property(user_id: login_user.id)
     end
-    let(:stone) { FactoryGirl.create(:stone) }
+    let(:specimen) { FactoryGirl.create(:specimen) }
     let(:attachment_file) { FactoryGirl.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
     let(:data_type) { "image/jpeg" }
 
@@ -33,8 +33,8 @@ describe "stone" do
       context "picture-button is not display" do
         context "no attachment_file" do
           let(:create_data) do
-            stone
-            stone.create_record_property(user_id: login_user.id)
+            specimen
+            specimen.create_record_property(user_id: login_user.id)
           end
           it "picture-button not display" do
             expect(page).to have_no_link("picture-button")

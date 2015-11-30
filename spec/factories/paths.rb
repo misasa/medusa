@@ -4,8 +4,8 @@ FactoryGirl.define do
     brought_out_at "20151117"
     brought_in_at "20151116"
   end
-  factory :path_stone, class: Path do
-    datum_type "Stone"
+  factory :path_specimen, class: Path do
+    datum_type "Specimen"
     brought_out_at "20151117"
     brought_in_at "20151116"
   end

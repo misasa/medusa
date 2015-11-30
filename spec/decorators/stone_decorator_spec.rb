@@ -1,9 +1,9 @@
 require 'spec_helper'
 include ActionDispatch::TestProcess
 
-describe StoneDecorator do
+describe SpecimenDecorator do
   let(:user){FactoryGirl.create(:user)}
-  let(:obj){FactoryGirl.create(:stone).decorate}
+  let(:obj){FactoryGirl.create(:specimen).decorate}
   let(:box){FactoryGirl.create(:box)}
   before{User.current = user}
 
@@ -62,14 +62,14 @@ describe StoneDecorator do
     before { allow(obj.h).to receive(:can?).and_return(true) }
     it{expect(subject).to match("<div class=\"tree-node\" data-depth=\"1\">.*</div>")}
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")} 
-    it{expect(subject).to match("<a href=\"/stones/#{obj.id}\">.*</a>")}
+    it{expect(subject).to match("<a href=\"/specimens/#{obj.id}\">.*</a>")}
     it{expect(subject).to include("<strong>#{obj.name}</strong>")} 
   end
 
   describe ".tree_node" do
     subject{obj.tree_node}
     before { allow(obj.h).to receive(:can?).and_return(true) }
-    let(:child){FactoryGirl.create(:stone)}
+    let(:child){FactoryGirl.create(:specimen)}
     let(:analysis){FactoryGirl.create(:analysis)}
     let(:bib){FactoryGirl.create(:bib)}
     let(:attachment_file){FactoryGirl.create(:attachment_file)}
@@ -104,7 +104,7 @@ describe StoneDecorator do
       it{expect(subject).to be_blank} 
     end
     context "count zero" do
-      let(:child){FactoryGirl.create(:stone)}
+      let(:child){FactoryGirl.create(:specimen)}
       before{obj.children << child}
       it{expect(subject).to include("<span>#{count}</span>")} 
       it{expect(subject).to include("<span>#{obj.children.count}</span>")} 
@@ -163,7 +163,7 @@ describe StoneDecorator do
     subject{ obj.to_tex(alias_specimen) }
     before{ obj.children << child }
     let(:alias_specimen) { "specimen" }
-    let(:child) { FactoryGirl.create(:stone, name: child_name) }
+    let(:child) { FactoryGirl.create(:specimen, name: child_name) }
     let(:child_name) { "child_name" }
     it{ expect(subject).to include(obj.name) }
     it{ expect(subject).to include(obj.global_id) }
