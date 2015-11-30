@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151130021511) do
+ActiveRecord::Schema.define(version: 20151130022331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -346,7 +346,7 @@ ActiveRecord::Schema.define(version: 20151130021511) do
   add_index "table_analyses", ["specimen_id"], name: "index_table_analyses_on_specimen_id", using: :btree
   add_index "table_analyses", ["table_id"], name: "index_table_analyses_on_table_id", using: :btree
 
-  create_table "table_stones", force: true do |t|
+  create_table "table_specimens", force: true do |t|
     t.integer  "table_id"
     t.integer  "specimen_id"
     t.integer  "position"
@@ -354,8 +354,8 @@ ActiveRecord::Schema.define(version: 20151130021511) do
     t.datetime "updated_at"
   end
 
-  add_index "table_stones", ["specimen_id"], name: "index_table_stones_on_specimen_id", using: :btree
-  add_index "table_stones", ["table_id"], name: "index_table_stones_on_table_id", using: :btree
+  add_index "table_specimens", ["specimen_id"], name: "index_table_specimens_on_specimen_id", using: :btree
+  add_index "table_specimens", ["table_id"], name: "index_table_specimens_on_table_id", using: :btree
 
   create_table "tables", force: true do |t|
     t.integer  "bib_id"
