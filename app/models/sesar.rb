@@ -106,7 +106,7 @@ class Sesar < ActiveResource::Base
     attributes[:collection_end_date] = model.collected_at.try!(:strftime, "%Y-%m-%dT%H:%M:%SZ")
     attributes[:collection_date_precision] = model.collection_date_precision
     attributes[:current_archive] = Settings.sesar.archive_name
-    attributes[:current_archive_contact] = Settings.sesar.archive_contant
+    attributes[:current_archive_contact] = Settings.sesar.archive_contact
     attributes[:external_urls] =external_url(model)
     attributes[:description] = model.description
     associate_stone_custom_attributes(model).each do |sca|
