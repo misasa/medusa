@@ -22,7 +22,7 @@ task data_migrate: :environment do
   Rake::Task[:record_properties_csv].invoke
   Rake::Task[:referrings_csv].invoke
   Rake::Task[:spots_csv].invoke
-  Rake::Task[:stones_csv].invoke
+  Rake::Task[:specimens_csv].invoke
   Rake::Task[:taggings_csv].invoke
   Rake::Task[:tags_csv].invoke
   Rake::Task[:units_csv].invoke

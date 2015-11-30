@@ -10,7 +10,7 @@ task :attachings_csv => :environment do
         attachable_id as attachable_id,
         CASE
           WHEN attachable_type = 'Storage' THEN 'Box'
-          WHEN attachable_type = 'Specimen' THEN 'Stone'
+          WHEN attachable_type = 'Specimen' THEN 'Specimen'
           WHEN attachable_type = 'Abundance' THEN 'Analysis'
           WHEN attachable_type = 'Locality' THEN 'Place'
           WHEN attachable_type = 'Bibliography' THEN 'Bib'

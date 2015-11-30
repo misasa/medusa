@@ -1,4 +1,4 @@
-desc "Build paths records from current stones and boxes."
+desc "Build paths records from current specimens and boxes."
 task build_paths: :environment do
   admin = User.find_by(username: "admin")
   Box.find_each do |box|
@@ -10,11 +10,11 @@ task build_paths: :environment do
     path.brought_in_by_id = admin.id
     path.save
   end
-  Stone.find_each do |stone|
-    box = stone.box
+  Specimen.find_each do |specimen|
+    box = specimen.box
     ancestors = box.try!(:ancestors) || Box.none
     path = Path.new
-    path.datum = stone
+    path.datum = specimen
     path.ids = ancestors.map(&:id)
     path.ids << box.id if box
     path.brought_in_at = Time.now

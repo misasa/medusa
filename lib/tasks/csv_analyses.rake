@@ -101,7 +101,7 @@ task :analyses_csv => :environment do
     row.delete(:instrument)
     row.delete(:analysed_at)
     row << {
-      stone_id: row[:specimen_id_1],
+      specimen_id: row[:specimen_id_1],
       operator: row[:analyst_1],
       created_at: row[:created_at_1],
       updated_at: row[:updated_at_1],

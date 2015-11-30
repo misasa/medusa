@@ -9,7 +9,7 @@ task :taggings_csv => :environment do
         tag_id,
         taggable_id,
         CASE
-          WHEN taggable_type = 'Specimen' THEN 'Stone'
+          WHEN taggable_type = 'Specimen' THEN 'Specimen'
           WHEN taggable_type = 'Storage' THEN 'Box'
           ELSE ''
         END as taggable_type,
