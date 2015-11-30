@@ -45,7 +45,7 @@ class BoxesController < ApplicationController
           sdate = ddate.days_ago(1)
         end
         @src_date = sdate.strftime("%Y-%m-%d")
-        @contents_search = Path.diff(@box, @src_date, @dst_date).search
+        @contents_search = Path.diff(@box, @src_date, @dst_date).search(params[:q])
         @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
         @contents = @contents_search.result
         @contents = @contents.page(params[:page]).per(params[:per_page])
@@ -60,7 +60,7 @@ class BoxesController < ApplicationController
       end    
     else
       @dst_date = Date.today.strftime("%Y-%m-%d")
-      @contents_search = Path.search()
+      @contents_search = Path.search(params[:q])
       @contents_search.sorts = "path ASC"
       @contents = Path.none
       @contents = @contents.page(params[:page]).per(params[:per_page])
