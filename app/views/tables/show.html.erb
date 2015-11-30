@@ -32,8 +32,8 @@
       <li class="<%= active_if_current('at-a-glance') %>">
         <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
       </li>
-      <li class="<%= active_if_current('stone') %>">
-        <a href="#stone" data-toggle="tab"><%= @alias_specimen + data_count(@table.stones) %></a>
+      <li class="<%= active_if_current('specimen') %>">
+        <a href="#specimen" data-toggle="tab"><%= @alias_specimen + data_count(@table.specimens) %></a>
       </li>
       <li class="<%= active_if_current('analysis') %>">
         <a href="#analysis" data-toggle="tab"><%= "analysis" + data_count(@table.table_analyses) %></a>
@@ -42,7 +42,7 @@
     <!-- Tab panes -->
     <% tab_info = [
       ["at-a-glance",nil],
-      ["stone",@table.stones],
+      ["specimen",@table.specimens],
       ["analysis",@table.table_analyses]
     ] %>
     <div class="tab-content">

@@ -6,10 +6,10 @@
       <div class="col-lg-3">device</div>
     </li>
   </ul>
-  <% @table.table_stones.each do |table_stone| %>
-    <b><%= table_stone.stone.name %></b>
+  <% @table.table_specimens.each do |table_specimen| %>
+    <b><%= table_specimen.specimen.name %></b>
     <ul class="table-analyses">
-      <% @table.table_analyses.where(stone_id: table_stone.stone_id).includes(analysis: [:technique, :device]).each do |table_analysis| %>
+      <% @table.table_analyses.where(specimen_id: table_specimen.specimen_id).includes(analysis: [:technique, :device]).each do |table_analysis| %>
 	<li class="row list-unstyled">
 	  <div class="col-lg-6">
 	    <%= f.fields_for :table_analyses, table_analysis do |g| %>

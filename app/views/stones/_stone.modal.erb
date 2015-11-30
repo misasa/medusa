@@ -1,13 +1,13 @@
 <tr>
   <td>
-    <%= button_tag class: "btn btn-default btn-xs determine", "data-id" => stone.global_id do %>
+    <%= button_tag class: "btn btn-default btn-xs determine", "data-id" => specimen.global_id do %>
     <span class="glyphicon glyphicon-link"></span>
     <% end %>
   </td>
-  <td><%= link_to stone.name, stone_path(stone, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal" %></td>
-  <td><%= stone.parent.try!(:name) %></td>
-  <td><%= stone.physical_form.try!(:name) %></td>
-  <td><%= stone.classification.try!(:name) %></td>
-  <td><%= stone.group.try!(:name) %></td>
-  <td><%= difference_from_now(stone.updated_at) %></td>
+  <td><%= link_to specimen.name, specimen_path(specimen, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal" %></td>
+  <td><%= specimen.parent.try!(:name) %></td>
+  <td><%= specimen.physical_form.try!(:name) %></td>
+  <td><%= specimen.classification.try!(:name) %></td>
+  <td><%= specimen.group.try!(:name) %></td>
+  <td><%= difference_from_now(specimen.updated_at) %></td>
 </tr>

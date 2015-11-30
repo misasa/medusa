@@ -14,11 +14,11 @@
       <tr class="specimens">
         <th>measured</th>
         <th>unit</th>
-        <% @table.table_stones.includes(:stone).each do |table_stone| %>
+        <% @table.table_specimens.includes(:specimen).each do |table_specimen| %>
           <th class="sortable">
-            <%= f.fields_for :table_stones, table_stone do |g| %>
-              <% stone = g.object.stone %>
-              <span class="glyphicon glyphicon-transfer"></span> <%= link_to_if can?(:read, stone), stone.name, stone %>
+            <%= f.fields_for :table_specimens, table_specimen do |g| %>
+              <% specimen = g.object.specimen %>
+              <span class="glyphicon glyphicon-transfer"></span> <%= link_to_if can?(:read, specimen), specimen.name, specimen %>
               <%= g.hidden_field :position, class: "position" %>
             <% end %>
           </th>

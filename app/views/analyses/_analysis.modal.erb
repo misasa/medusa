@@ -6,7 +6,7 @@
   </td>
   <td><%= link_to analysis.name, analysis_path(analysis, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal" %></td>
   <td><%= analysis.device.try!(:name) %></td>
-  <td><%= analysis.stone.try!(:name) %></td>
+  <td><%= analysis.specimen.try!(:name) %></td>
   <td><%= raw(analysis.chemistry_summary) %></td>
   <td><%= analysis.group.try!(:name) %></td>
   <td><%= difference_from_now(analysis.updated_at) %></td>

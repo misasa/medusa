@@ -1,8 +1,8 @@
 <div>
-  <% if @stone.attachment_files.present? %>
-    <%= link_to(@stone.primary_picture, attachment_file_path(@stone.attachment_files.first)) %>
+  <% if @specimen.attachment_files.present? %>
+    <%= link_to(@specimen.primary_picture, attachment_file_path(@specimen.attachment_files.first)) %>
   <% end %>
 </div>
 <div id="family-tree">
-  <%= @stone.family_tree %>
+  <%= @specimen.family_tree %>
 </div>

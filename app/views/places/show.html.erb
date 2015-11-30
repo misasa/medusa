@@ -33,8 +33,8 @@
       <li class="<%= active_if_current('at-a-glance') %>">
         <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
       </li>
-      <li class="<%= active_if_current('stone') %>">
-        <a href="#stone" data-toggle="tab"><%= @alias_specimen + data_count(@place.stones) %></a>
+      <li class="<%= active_if_current('specimen') %>">
+        <a href="#specimen" data-toggle="tab"><%= @alias_specimen + data_count(@place.specimens) %></a>
       </li>
       <li class="<%= active_if_current('neighbor') %>">
         <a href="#neighbor" data-toggle="tab">neighbor</a>
@@ -50,7 +50,7 @@
     <!-- Tab panes -->
     <% tab_info = [
         ["at-a-glance",nil],
-        ["stone",@place.stones],
+        ["specimen",@place.specimens],
         ["neighbor",nil],
         ["file",@place.attachment_files],
         ["geoname",nil]

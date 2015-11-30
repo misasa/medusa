@@ -110,7 +110,7 @@ module HasRecordProperty
     end
 
     links = []
-    links << "stone=#{self.stone_count}"
+    links << "specimen=#{self.specimen_count}"
     links << "box=#{self.box_count}"
     links << "analysis=#{self.analysis_count}"
     links << "file=#{self.attachment_file_count}"

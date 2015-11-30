@@ -9,7 +9,7 @@
   </thead>
   <tbody>
     <%= form_tag bundle_edit_bibs_path, id: "bib-bundle-form" do %>
-      <% @stone.bibs.each do |bib| %>
+      <% @specimen.bibs.each do |bib| %>
         <tr>
           <td>
               <%= check_box_tag("ids[]", bib.id, checked: false, id: "ids_#{bib.id}", class: "select-row") if can?(:update, bib) %>
@@ -17,7 +17,7 @@
           <td colspan="2"><%= link_to_if can?(:read, bib), bib.name, bib %></td>
           <td><%= bib.try!(:global_id) %></td>
           <td>
-            <%= link_to stone_bib_path(@stone,bib) + tab_param(__FILE__), method: :delete ,title: "unlink bib",data: {confirm: t("confirm.unlink")} do %>
+            <%= link_to specimen_bib_path(@specimen,bib) + tab_param(__FILE__), method: :delete ,title: "unlink bib",data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
             <% end %>
           </td>
@@ -27,7 +27,7 @@
   </tbody>
   <tfoot>
     <tr>
-     <%= form_for Bib.new, url: stone_bibs_path(@stone) do |f|%>
+     <%= form_for Bib.new, url: specimen_bibs_path(@specimen) do |f|%>
         <%= hidden_tabname_tag(__FILE__) %>
         <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
         <th><%#= f.text_field :name, class: "form-control input-sm" %></th>
@@ -37,7 +37,7 @@
           <%# end %>
         </th>
       <% end %>
-    <%= form_tag link_by_global_id_stone_bibs_path(@stone), method: :post do %>
+    <%= form_tag link_by_global_id_specimen_bibs_path(@specimen), method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
         <th>
 	  <div class="input-group">

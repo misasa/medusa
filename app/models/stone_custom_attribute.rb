@@ -1,6 +1,6 @@
-class StoneCustomAttribute < ActiveRecord::Base
-  belongs_to :stone
+class SpecimenCustomAttribute < ActiveRecord::Base
+  belongs_to :specimen
   belongs_to :custom_attribute
   
-  validates :value, length: { maximum: 255 }, uniqueness: { scope: [:stone_id, :custom_attribute_id] }
+  validates :value, length: { maximum: 255 }, uniqueness: { scope: [:specimen_id, :custom_attribute_id] }
 end

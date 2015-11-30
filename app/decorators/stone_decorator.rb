@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-class StoneDecorator < Draper::Decorator
+class SpecimenDecorator < Draper::Decorator
   delegate_all
   delegate :as_json  
 
@@ -62,8 +62,8 @@ class StoneDecorator < Draper::Decorator
     lines << '\hline'
     lines << ["#{alias_specimen} name", "physical form", "quantity", "ID", "remark"].join("\t&\t") + "\\\\"
     lines << '\hline'
-    children.each do |stone|
-      lines << [stone.name, stone.physical_form.try!(:name), stone.try!(:quantity), stone.global_id].join("\t&\t") + "\\\\"
+    children.each do |specimen|
+      lines << [specimen.name, specimen.physical_form.try!(:name), specimen.try!(:quantity), specimen.global_id].join("\t&\t") + "\\\\"
     end
     lines << '\hline'
     lines << '\end{tabular}'

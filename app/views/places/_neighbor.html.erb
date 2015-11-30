@@ -16,8 +16,8 @@
         <td><%= "[#{neighbor.latitude_to_text},#{neighbor.longitude_to_text}]" %></td>
         <td><%= "%0.3f" % neighbor.distance.to_f %></td>
         <td>
-          <% neighbor.stones.each do |stone| %>
-            <%= link_to stone.name,stone_path(stone) %>
+          <% neighbor.specimens.each do |specimen| %>
+            <%= link_to specimen.name,specimen_path(specimen) %>
           <% end %>
         </td>
       </tr>

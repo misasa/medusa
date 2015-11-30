@@ -8,11 +8,11 @@ class Analysis < ActiveRecord::Base
   has_many :chemistries
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
-  belongs_to :stone
+  belongs_to :specimen
   belongs_to :device
   belongs_to :technique
 
-  validates :stone, existence: true, allow_nil: true
+  validates :specimen, existence: true, allow_nil: true
   validates :device, existence: true, allow_nil: true
   validates :technique, existence: true, allow_nil: true
   validates :name, presence: true, length: { maximum: 255 }
@@ -26,7 +26,7 @@ class Analysis < ActiveRecord::Base
       name "technique_name"
       name "description"
       name "operator"
-      name "stone_global_id"
+      name "specimen_global_id"
       mc.export_headers.map { |header| name header }
     end
   end
@@ -36,12 +36,12 @@ class Analysis < ActiveRecord::Base
     display_names.join(", ").truncate(length)
   end
 
-  def stone_global_id
-    stone.try!(:global_id)
+  def specimen_global_id
+    specimen.try!(:global_id)
   end
 
-  def stone_global_id=(global_id)
-    self.stone = Stone.joins(:record_property).where(record_properties: {global_id: global_id}).first
+  def specimen_global_id=(global_id)
+    self.specimen = Specimen.joins(:record_property).where(record_properties: {global_id: global_id}).first
   end
 
   def device_name=(name)
@@ -158,8 +158,8 @@ class Analysis < ActiveRecord::Base
       xml.device(device.try!(:name))
       xml.technique(technique.try!(:name))
       xml.operator(operator)
-      xml.sample_global_id(stone.try!(:global_id))
-      xml.sample_name(stone.try!(:name))
+      xml.sample_global_id(specimen.try!(:global_id))
+      xml.sample_name(specimen.try!(:name))
       xml.description(description)
       spot = get_spot
       if spot
@@ -197,11 +197,11 @@ class Analysis < ActiveRecord::Base
   private
 
   def update_table_analyses
-    return unless stone_id_changed?
+    return unless specimen_id_changed?
     TableAnalysis.delete_all(analysis_id: id)
-    TableStone.where(stone_id: stone_id).each do |table_stone|
-      max_priority = TableAnalysis.where(table_id: table_stone.table_id, stone_id: table_stone.stone_id).maximum(:priority) || 0
-      TableAnalysis.create!(table_id: table_stone.table_id, stone_id: table_stone.stone_id, analysis_id: id, priority: (max_priority + 1))
+    TableStone.where(specimen_id: specimen_id).each do |table_specimen|
+      max_priority = TableAnalysis.where(table_id: table_specimen.table_id, specimen_id: table_specimen.specimen_id).maximum(:priority) || 0
+      TableAnalysis.create!(table_id: table_specimen.table_id, specimen_id: table_specimen.specimen_id, analysis_id: id, priority: (max_priority + 1))
     end
   end
 

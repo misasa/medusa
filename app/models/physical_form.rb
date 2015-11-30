@@ -1,5 +1,5 @@
 class PhysicalForm < ActiveRecord::Base
-  has_many :stones
+  has_many :specimens
 
   validates :name, presence: true, length: {maximum: 255}
 end

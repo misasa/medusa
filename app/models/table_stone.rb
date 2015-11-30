@@ -1,7 +1,7 @@
-class TableStone < ActiveRecord::Base
+class TableSpecimen < ActiveRecord::Base
 
   belongs_to :table
-  belongs_to :stone
+  belongs_to :specimen
 
   before_create :assign_position, :create_table_analyses
 
@@ -12,8 +12,8 @@ class TableStone < ActiveRecord::Base
   end
 
   def create_table_analyses
-    stone.analyses.each.with_index do |analysis, index|
-      TableAnalysis.create!(table_id: table_id, stone_id: stone_id, analysis_id: analysis.id, priority: index)
+    specimen.analyses.each.with_index do |analysis, index|
+      TableAnalysis.create!(table_id: table_id, specimen_id: specimen_id, analysis_id: analysis.id, priority: index)
     end
   end
 end

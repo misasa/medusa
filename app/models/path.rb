@@ -57,7 +57,7 @@ class Path < ActiveRecord::Base
   private
 
   ransacker :path do
-    Arel.sql("(SELECT string_agg(name, '/') FROM unnest(ids) AS i INNER JOIN boxes ON id = i) || '/' || (CASE datum_type WHEN 'Stone' THEN (SELECT name FROM stones WHERE id = datum_id) WHEN 'Box' THEN (SELECT name FROM boxes WHERE id = datum_id) END)")
+    Arel.sql("(SELECT string_agg(name, '/') FROM unnest(ids) AS i INNER JOIN boxes ON id = i) || '/' || (CASE datum_type WHEN 'Specimen' THEN (SELECT name FROM specimens WHERE id = datum_id) WHEN 'Box' THEN (SELECT name FROM boxes WHERE id = datum_id) END)")
   end
 
   ransacker :brought_out_at do |parent|

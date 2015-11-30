@@ -1,15 +1,15 @@
-<% if @stones.present? %>
-  <% stone_ids = @stones.pluck(:id) %>
+<% if @specimens.present? %>
+  <% specimen_ids = @specimens.pluck(:id) %>
   <div class="text-right">
-    <%= link_to download_bundle_label_stones_path(ids: stone_ids) do %>
+    <%= link_to download_bundle_label_specimens_path(ids: specimen_ids) do %>
       <i class="glyphicon glyphicon-tag"></i>
     <% end %>
-    ,<%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_bundle_card_stones_path(ids: stone_ids)) %>,
-    and <%= link_to("A4", download_bundle_card_stones_path(ids: stone_ids, a4: true)) %>
+    ,<%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_bundle_card_specimens_path(ids: specimen_ids)) %>,
+    and <%= link_to("A4", download_bundle_card_specimens_path(ids: specimen_ids, a4: true)) %>
   </div>
 <% end %>
 
-<%= form_for Stone.new, url: bundle_update_stones_path do |f| %>
+<%= form_for Specimen.new, url: bundle_update_specimens_path do |f| %>
 <table class="table table-condensed table-striped">
   <thead>
     <tr>
@@ -29,7 +29,7 @@
     </tr>
   </thead>
   <tbody>
-    <%= render partial: :stone, collection: @stones, locals: { checked: true } %>
+    <%= render partial: :specimen, collection: @specimens, locals: { checked: true } %>
   </tbody>
   <tfoot>
     <tr>
@@ -39,7 +39,7 @@
 	<div class="input-group">
 	  <%= f.text_field :parent_global_id, class: "form-control input-sm" %>
 	  <span class="input-group-addon">
-	    <%= link_to stones_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#stone_parent_global_id" do %>
+	    <%= link_to specimens_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#specimen_parent_global_id" do %>
 	    <span class="glyphicon glyphicon-search"></span>
 	    <% end %>
 	  </span>
@@ -49,7 +49,7 @@
         <div class="input-group">
           <%= f.text_field :box_global_id, class: "form-control input-sm" %>
 	  <span class="input-group-addon">
-	    <%= link_to boxes_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#stone_box_global_id" do %>
+	    <%= link_to boxes_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#specimen_box_global_id" do %>
 	    <span class="glyphicon glyphicon-search"></span>
 	    <% end %>
 	  </span>

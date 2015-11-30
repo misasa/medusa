@@ -53,7 +53,7 @@ class TablesController < ApplicationController
         :guest_readable,
         :guest_writable
       ],
-      table_stones_attributes: [
+      table_specimens_attributes: [
         :id,
         :position
       ],

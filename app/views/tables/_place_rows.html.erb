@@ -1,8 +1,8 @@
 <tr>
   <th>latitude</th>
   <th></th>
-  <% table.stones.each do |stone| %>
-    <td><%= stone.place.try!(:latitude) || "-" %></td>
+  <% table.specimens.each do |specimen| %>
+    <td><%= specimen.place.try!(:latitude) || "-" %></td>
   <% end %>
   <% if table.with_average %>
     <td></td>
@@ -11,8 +11,8 @@
 <tr>
   <th>longitude</th>
   <th></th>
-  <% table.stones.each do |stone| %>
-    <td><%= stone.place.try!(:longitude) || "-" %></td>
+  <% table.specimens.each do |specimen| %>
+    <td><%= specimen.place.try!(:longitude) || "-" %></td>
   <% end %>
   <% if table.with_average %>
     <td></td>
