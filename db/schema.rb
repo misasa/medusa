@@ -19,7 +19,7 @@ ActiveRecord::Schema.define(version: 20151130072229) do
   create_table "analyses", force: true do |t|
     t.string   "name"
     t.text     "description"
-    t.integer  "stone_id"
+    t.integer  "specimen_id"
     t.string   "operator"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -28,7 +28,7 @@ ActiveRecord::Schema.define(version: 20151130072229) do
   end
 
   add_index "analyses", ["device_id"], name: "index_analyses_on_device_id", using: :btree
-  add_index "analyses", ["stone_id"], name: "index_analyses_on_stone_id", using: :btree
+  add_index "analyses", ["specimen_id"], name: "index_analyses_on_specimen_id", using: :btree
   add_index "analyses", ["technique_id"], name: "index_analyses_on_technique_id", using: :btree
 
   create_table "attachings", force: true do |t|
@@ -295,7 +295,7 @@ ActiveRecord::Schema.define(version: 20151130072229) do
   add_index "spots", ["attachment_file_id"], name: "index_spots_on_attachment_file_id", using: :btree
 
   create_table "stone_custom_attributes", force: true do |t|
-    t.integer  "stone_id"
+    t.integer  "specimen_id"
     t.integer  "custom_attribute_id"
     t.string   "value"
     t.datetime "created_at"
@@ -303,11 +303,11 @@ ActiveRecord::Schema.define(version: 20151130072229) do
   end
 
   add_index "stone_custom_attributes", ["custom_attribute_id"], name: "index_stone_custom_attributes_on_custom_attribute_id", using: :btree
-  add_index "stone_custom_attributes", ["stone_id"], name: "index_stone_custom_attributes_on_stone_id", using: :btree
+  add_index "stone_custom_attributes", ["specimen_id"], name: "index_stone_custom_attributes_on_specimen_id", using: :btree
 
   create_table "stones", force: true do |t|
     t.string   "name"
-    t.string   "stone_type"
+    t.string   "specimen_type"
     t.text     "description"
     t.integer  "parent_id"
     t.integer  "place_id"
@@ -336,7 +336,7 @@ ActiveRecord::Schema.define(version: 20151130072229) do
 
   create_table "table_analyses", force: true do |t|
     t.integer  "table_id"
-    t.integer  "stone_id"
+    t.integer  "specimen_id"
     t.integer  "analysis_id"
     t.integer  "priority"
     t.datetime "created_at"
@@ -344,18 +344,18 @@ ActiveRecord::Schema.define(version: 20151130072229) do
   end
 
   add_index "table_analyses", ["analysis_id"], name: "index_table_analyses_on_analysis_id", using: :btree
-  add_index "table_analyses", ["stone_id"], name: "index_table_analyses_on_stone_id", using: :btree
+  add_index "table_analyses", ["specimen_id"], name: "index_table_analyses_on_specimen_id", using: :btree
   add_index "table_analyses", ["table_id"], name: "index_table_analyses_on_table_id", using: :btree
 
   create_table "table_stones", force: true do |t|
     t.integer  "table_id"
-    t.integer  "stone_id"
+    t.integer  "specimen_id"
     t.integer  "position"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "table_stones", ["stone_id"], name: "index_table_stones_on_stone_id", using: :btree
+  add_index "table_stones", ["specimen_id"], name: "index_table_stones_on_specimen_id", using: :btree
   add_index "table_stones", ["table_id"], name: "index_table_stones_on_table_id", using: :btree
 
   create_table "tables", force: true do |t|
