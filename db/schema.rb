@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151130015652) do
+ActiveRecord::Schema.define(version: 20151130020446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -274,6 +274,35 @@ ActiveRecord::Schema.define(version: 20151130015652) do
   add_index "referrings", ["bib_id"], name: "index_referrings_on_bib_id", using: :btree
   add_index "referrings", ["referable_id"], name: "index_referrings_on_referable_id", using: :btree
 
+  create_table "specimens", force: true do |t|
+    t.string   "name"
+    t.string   "specimen_type"
+    t.text     "description"
+    t.integer  "parent_id"
+    t.integer  "place_id"
+    t.integer  "box_id"
+    t.integer  "physical_form_id"
+    t.integer  "classification_id"
+    t.float    "quantity"
+    t.string   "quantity_unit"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "igsn",                      limit: 9
+    t.integer  "age_min"
+    t.integer  "age_max"
+    t.string   "age_unit"
+    t.string   "size"
+    t.string   "size_unit"
+    t.datetime "collected_at"
+    t.string   "collection_date_precision"
+    t.string   "collector"
+    t.string   "collector_detail"
+  end
+
+  add_index "specimens", ["classification_id"], name: "index_specimens_on_classification_id", using: :btree
+  add_index "specimens", ["parent_id"], name: "index_specimens_on_parent_id", using: :btree
+  add_index "specimens", ["physical_form_id"], name: "index_specimens_on_physical_form_id", using: :btree
+
   create_table "spots", force: true do |t|
     t.integer  "attachment_file_id"
     t.string   "name"
@@ -303,35 +332,6 @@ ActiveRecord::Schema.define(version: 20151130015652) do
 
   add_index "stone_custom_attributes", ["custom_attribute_id"], name: "index_stone_custom_attributes_on_custom_attribute_id", using: :btree
   add_index "stone_custom_attributes", ["specimen_id"], name: "index_stone_custom_attributes_on_specimen_id", using: :btree
-
-  create_table "stones", force: true do |t|
-    t.string   "name"
-    t.string   "specimen_type"
-    t.text     "description"
-    t.integer  "parent_id"
-    t.integer  "place_id"
-    t.integer  "box_id"
-    t.integer  "physical_form_id"
-    t.integer  "classification_id"
-    t.float    "quantity"
-    t.string   "quantity_unit"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.string   "igsn",                      limit: 9
-    t.integer  "age_min"
-    t.integer  "age_max"
-    t.string   "age_unit"
-    t.string   "size"
-    t.string   "size_unit"
-    t.datetime "collected_at"
-    t.string   "collection_date_precision"
-    t.string   "collector"
-    t.string   "collector_detail"
-  end
-
-  add_index "stones", ["classification_id"], name: "index_stones_on_classification_id", using: :btree
-  add_index "stones", ["parent_id"], name: "index_stones_on_parent_id", using: :btree
-  add_index "stones", ["physical_form_id"], name: "index_stones_on_physical_form_id", using: :btree
 
   create_table "table_analyses", force: true do |t|
     t.integer  "table_id"
