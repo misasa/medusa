@@ -225,9 +225,12 @@ class Sesar < ActiveResource::Base
   end
   
   def self.external_url(model)
-    urls = Array(Settings.sesar.external_urls.dup)
-    urls.each do |url|
-      url.url.gsub!(/\#{([^{}]+)}/) { model[$1] rescue nil }
+    urls = Array(Settings.sesar.external_urls).each_with_object([]) do |external_url, array|
+      array << {
+        url: external_url.url.gsub(/\#{([^{}]+)}/) { model[$1] rescue nil },
+        description: external_url.description,
+        url_type: external_url.url_type
+      }
     end
     if model.bibs.present?
       model.bibs.each do |bib|

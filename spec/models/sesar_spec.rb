@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Sesar do
 
   describe ".from_active_record(model)" do
-    let(:stone) { FactoryGirl.create(:stone, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101", igsn: "123456789") }
+    let(:stone) { FactoryGirl.create(:stone, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101") }
     let(:bib) { FactoryGirl.create(:bib) }
     let(:material) {"Rock"}
     let(:sesar_classification) {"Igneous"}
@@ -147,7 +147,7 @@ describe Sesar do
       end
       context "紐づくbibが存在しない場合" do
         let(:model) { FactoryGirl.create(:stone, igsn: "") }
-        it { expect(subject).to include({"description"=>nil,"url_type"=>"regular URL","url"=>"http://dream.misasa.okayama-u.ac.jp/?igsn="}) }
+        it { expect(subject).to include({description: nil, url_type: "regular URL", url: "http://dream.misasa.okayama-u.ac.jp/?igsn="}) }
         it { expect(subject).to_not include({url: "http://dx.doi.org/doi１", description: "書誌情報１", url_type: "DOI"}) }
       end
       context "紐づくbibが存在する場合" do
