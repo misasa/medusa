@@ -1,16 +1,16 @@
-id,name,description
-1,aliquot,""
-2,powder,""
-3,thin section,""
-4,drill-cored,""
-9,on mount,""
-11,grain,""
-13,solution,""
-132,fraction,""
-133,hand specimen,""
-134,chunk,""
-135,thick section,""
-136,asteroid,""
-137,electronics,""
-138,tool,
-139,package,
+id,name,sesar_sample_type,description
+1,aliquot,Individual Sample,""
+2,powder,Thin Section,""
+3,thin section,Thin Sectino,""
+4,drill-cored,Core,""
+9,on mount,Individual Sample,""
+11,grain,Individual Sample,""
+13,solution,Liquid,""
+132,fraction,Mechanical Fraction,""
+133,hand specimen,Individual Sample,""
+134,chunk,Individual Sample,""
+135,thick section,Slab,""
+136,asteroid,Other,""
+137,electronics,Other,""
+138,tool,Other,
+139,package,Other,

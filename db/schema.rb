@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151127054735) do
+ActiveRecord::Schema.define(version: 20151130072229) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -227,6 +227,7 @@ ActiveRecord::Schema.define(version: 20151127054735) do
   create_table "physical_forms", force: true do |t|
     t.string "name"
     t.text   "description"
+    t.string "sesar_sample_type"
   end
 
   create_table "places", force: true do |t|

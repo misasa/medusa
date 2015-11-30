@@ -96,58 +96,6 @@ describe Sesar do
     end
   end
   
-  describe ".physical_form_conversion(physical_form)" do
-    context "physical_formがblank" do
-      it { expect(Sesar.physical_form_conversion("")).to eq "" }
-    end
-    context "physical_formがblankではない" do
-      subject { Sesar.physical_form_conversion(FactoryGirl.create(:physical_form, name: name)) }
-      context "aliquot, on mount, grain, hand specimen, chunk" do
-        let(:name) { "aliquot" }
-        it { expect(subject).to eq "Individual Sample" }
-        let(:name) { "on_mount" }
-        it { expect(subject).to eq "Individual Sample" }
-        let(:name) { "grain" }
-        it { expect(subject).to eq "Individual Sample" } 
-        let(:name) { "hand specimen" }
-        it { expect(subject).to eq "Individual Sample" }
-        let(:name) { "chunk" }
-        it { expect(subject).to eq "Individual Sample" }
-      end
-      context "asteroid, electronics, tool, package" do
-        let(:name) { "asteroid" }
-        it { expect(subject).to eq "Other" }
-        let(:name) { "electronics" }
-        it { expect(subject).to eq "Other" }
-        let(:name) { "tool" }
-        it { expect(subject).to eq "Other" }
-        let(:name) { "package" }
-        it { expect(subject).to eq "Other" }
-      end
-      context "powder, thin section" do
-        let(:name) { "powder" }
-        it { expect(subject).to eq "Thin Section" }
-        let(:name) { "thin section" }
-        it { expect(subject).to eq "Thin Section" }
-      end
-      context "drill-cored" do
-        let(:name) { "drill-cored" }
-        it { expect(subject).to eq "Core" }
-      end
-      context "solution" do
-        let(:name) { "solution" }
-        it { expect(subject).to eq "Liquid" }
-      end
-      context "fraction" do
-        let(:name) { "fraction" }
-        it { expect(subject).to eq "Mechanical Fraction" }
-      end
-      context "thick section" do
-        let(:name) { "thick section" }
-        it { expect(subject).to eq "Slab" }
-      end
-    end
-  end
   describe "緯度経度から場所を特定" do
     let(:result) { Geocoder.search("35,135")[0] }
     describe ".country_name(result)" do

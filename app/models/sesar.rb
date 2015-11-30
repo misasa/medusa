@@ -81,7 +81,7 @@ class Sesar < ActiveResource::Base
 
   def self.from_active_record(model)
     attributes = {}
-    attributes[:sample_type] = physical_form_conversion(model.physical_form)
+    attributes[:sample_type] = model.physical_form.try!(:sesar_sample_type)
     attributes[:name] = model.name
     attributes[:material] = model.classification.try!(:sesar_material)
     attributes[:igsn] = model.igsn
@@ -188,26 +188,6 @@ class Sesar < ActiveResource::Base
     xml
   end
 
-  def self.physical_form_conversion(physical_form)
-    return "" if physical_form.blank?
-    case physical_form.name
-    when "aliquot", "on mount", "grain", "hand specimen", "chunk"
-      "Individual Sample"
-    when "asteroid", "electronics", "tool", "package"
-      "Other"
-    when "powder", "thin section"
-      "Thin Section"
-    when "drill-cored"
-      "Core"
-    when "solution"
-      "Liquid"
-    when "fraction"
-      "Mechanical Fraction"
-    when "thick section"
-      "Slab"
-    end
-  end
-  
   def self.array_classification(classification)
     return "" if classification.blank?
     if classification.sesar_classification.present?
