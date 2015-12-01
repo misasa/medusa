@@ -45,51 +45,51 @@ describe HasRecordProperty do
     #it { expect(obj.latex_mode).to include "<created: #{obj.created_at}>"}        
   end
 
-  describe "#stone_count" do
-    subject { obj.stone_count }
+  describe "#specimen_count" do
+    subject { obj.specimen_count }
     before do
       obj
     end
-    context "for Stone" do
-      let(:obj) { FactoryGirl.create(:stone) }
-      context "without stone" do
+    context "for Specimen" do
+      let(:obj) { FactoryGirl.create(:specimen) }
+      context "without specimen" do
         it { expect(subject).to eq(0) }
       end
-      context "with a stone" do
-        let(:stone1) { FactoryGirl.create(:stone)}
+      context "with a specimen" do
+        let(:specimen1) { FactoryGirl.create(:specimen)}
         before do
-          obj.stones << stone1
+          obj.specimens << specimen1
         end
         it { expect(subject).to eq(1) }
       end
-      context "with 2 stones" do
-        let(:stone1) { FactoryGirl.create(:stone)}
-        let(:stone2) { FactoryGirl.create(:stone)}
+      context "with 2 specimens" do
+        let(:specimen1) { FactoryGirl.create(:specimen)}
+        let(:specimen2) { FactoryGirl.create(:specimen)}
         before do
-          obj.stones << stone1
-          obj.stones << stone2
+          obj.specimens << specimen1
+          obj.specimens << specimen2
         end
         it { expect(subject).to eq(2) }
       end
     end
     context "for Box" do
       let(:obj) { FactoryGirl.create(:box) }
-      context "without stone" do
+      context "without specimen" do
         it { expect(subject).to eq(0) }
       end
-      context "with a stone" do
-        let(:stone1) { FactoryGirl.create(:stone)}
+      context "with a specimen" do
+        let(:specimen1) { FactoryGirl.create(:specimen)}
         before do
-          obj.stones << stone1
+          obj.specimens << specimen1
         end
         it { expect(subject).to eq(1) }
       end
-      context "with 2 stones" do
-        let(:stone1) { FactoryGirl.create(:stone)}
-        let(:stone2) { FactoryGirl.create(:stone)}
+      context "with 2 specimens" do
+        let(:specimen1) { FactoryGirl.create(:specimen)}
+        let(:specimen2) { FactoryGirl.create(:specimen)}
         before do
-          obj.stones << stone1
-          obj.stones << stone2
+          obj.specimens << specimen1
+          obj.specimens << specimen2
         end
         it { expect(subject).to eq(2) }
       end
@@ -97,16 +97,16 @@ describe HasRecordProperty do
 
     context "for Analysis" do
       let(:obj) { FactoryGirl.create(:analysis) }
-      context "without stone" do
+      context "without specimen" do
         before do
-          obj.stone = nil
+          obj.specimen = nil
         end
         it { expect(subject).to eq(0) }
       end
-      context "with a stone" do
-        let(:stone1) { FactoryGirl.create(:stone)}
+      context "with a specimen" do
+        let(:specimen1) { FactoryGirl.create(:specimen)}
         before do
-          obj.stone = stone1
+          obj.specimen = specimen1
         end
         it { expect(subject).to eq(1) }
       end
@@ -118,8 +118,8 @@ describe HasRecordProperty do
     before do
       obj
     end
-    context "for Stone" do
-      let(:obj) { FactoryGirl.create(:stone) }
+    context "for Specimen" do
+      let(:obj) { FactoryGirl.create(:specimen) }
       context "without box" do
         before do
           obj.box = nil
@@ -185,8 +185,8 @@ describe HasRecordProperty do
     before do
       obj
     end
-    context "for Stone" do
-      let(:obj) { FactoryGirl.create(:stone) }
+    context "for Specimen" do
+      let(:obj) { FactoryGirl.create(:specimen) }
       context "without file" do
         it { expect(subject).to eq(0) }
       end
@@ -214,19 +214,19 @@ describe HasRecordProperty do
      before do
         obj
      end
-     context "for Stone" do
-       let(:obj) { FactoryGirl.create(:stone) }
-#       it { expect(subject).to match /\/#{obj.name} <stone: #{obj.global_id}> <link: stone=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
-       it { expect(subject).to match /\/#{obj.name} <stone #{obj.global_id}>/}
+     context "for Specimen" do
+       let(:obj) { FactoryGirl.create(:specimen) }
+#       it { expect(subject).to match /\/#{obj.name} <specimen: #{obj.global_id}> <link: specimen=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
+       it { expect(subject).to match /\/#{obj.name} <specimen #{obj.global_id}>/}
      end
      context "for Box" do
        let(:obj) { FactoryGirl.create(:box) }
-#       it { expect(subject).to match /\/#{obj.name} <box: #{obj.global_id}> <link: stone=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
+#       it { expect(subject).to match /\/#{obj.name} <box: #{obj.global_id}> <link: specimen=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
        it { expect(subject).to match /\/#{obj.name} <box #{obj.global_id}>/}
      end
      context "for Bib" do
        let(:obj) { FactoryGirl.create(:bib) }
-#       it { expect(subject).to match /\/#{obj.name} <bib: #{obj.global_id}> <link: stone=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
+#       it { expect(subject).to match /\/#{obj.name} <bib: #{obj.global_id}> <link: specimen=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
        it { expect(subject).to match /\/#{obj.name} <bib #{obj.global_id}>/}
      end
   end
@@ -250,10 +250,10 @@ describe HasRecordProperty do
           it { expect(subject).to eq "\n@article{#{obj.global_id},\ntest,\n}" }
         end
       end
-      context "stone" do
-        let(:obj) { FactoryGirl.create(:stone, name: name) }
-        let(:name) { "stone" }
-        describe "@stone" do
+      context "specimen" do
+        let(:obj) { FactoryGirl.create(:specimen, name: name) }
+        let(:name) { "specimen" }
+        describe "@specimen" do
           before do
             obj
           end
@@ -351,23 +351,23 @@ describe HasRecordProperty do
     describe "after_create" do
       describe "generate_record_property" do
         let(:user) { FactoryGirl.create(:user) }
-        let(:stone) { FactoryGirl.build(:stone) }
+        let(:specimen) { FactoryGirl.build(:specimen) }
         before do
           User.current = user
-          stone.save
+          specimen.save
         end
-        it{ expect(stone.record_property).to be_present }
-        it{ expect(stone.record_property).to be_persisted }
+        it{ expect(specimen.record_property).to be_present }
+        it{ expect(specimen.record_property).to be_persisted }
       end
     end
     describe "after_save" do
       describe "update_record_property" do
         context "name attribute is exist" do
-          let(:stone) { FactoryGirl.create(:stone, name: name) }
-          let(:name) { "stone" }
-          before { stone }
-          it { expect(stone.record_property).to be_present }
-          it { expect(stone.record_property.name).to eq name }
+          let(:specimen) { FactoryGirl.create(:specimen, name: name) }
+          let(:name) { "specimen" }
+          before { specimen }
+          it { expect(specimen.record_property).to be_present }
+          it { expect(specimen.record_property.name).to eq name }
         end
         context "name attribute isn't exist" do
           let(:chemistry) { FactoryGirl.create(:chemistry) }
@@ -379,17 +379,17 @@ describe HasRecordProperty do
     end
 
     describe ".user_id=" do
-      let(:stone) { FactoryGirl.create(:stone) }
+      let(:specimen) { FactoryGirl.create(:specimen) }
       let(:user_id){999}
-      before{stone.user_id = user_id}
-      it { expect(stone.user_id).to eq user_id}
+      before{specimen.user_id = user_id}
+      it { expect(specimen.user_id).to eq user_id}
     end
 
     describe ".group_id=" do
-      let(:stone) { FactoryGirl.create(:stone) }
+      let(:specimen) { FactoryGirl.create(:specimen) }
       let(:group_id){999}
-      before{stone.group_id = group_id}
-      it { expect(stone.group_id).to eq group_id}
+      before{specimen.group_id = group_id}
+      it { expect(specimen.group_id).to eq group_id}
     end
 
   end

@@ -79,35 +79,35 @@ describe Analysis do
     end
   end
 
-  describe "stone_global_id" do
-    let(:stone){FactoryGirl.create(:stone)}
+  describe "specimen_global_id" do
+    let(:specimen){FactoryGirl.create(:specimen)}
     let(:analysis){FactoryGirl.create(:analysis)}
     context "get" do
-      context "stone_id is nil" do
-        before{analysis.stone_id = nil}
-        it {expect(analysis.stone_global_id).to be_blank}
+      context "specimen_id is nil" do
+        before{analysis.specimen_id = nil}
+        it {expect(analysis.specimen_global_id).to be_blank}
       end
-      context "stone_id is ng" do
-        before{analysis.stone_id = 0}
-        it {expect(analysis.stone_global_id).to be_blank}
+      context "specimen_id is ng" do
+        before{analysis.specimen_id = 0}
+        it {expect(analysis.specimen_global_id).to be_blank}
       end
-      context "stone_id is ok" do
-        before{analysis.stone_id = stone.id}
-        it {expect(analysis.stone_global_id).to eq stone.global_id}
+      context "specimen_id is ok" do
+        before{analysis.specimen_id = specimen.id}
+        it {expect(analysis.specimen_global_id).to eq specimen.global_id}
       end
     end
     context "set" do
-      context "stone_global_id is nil" do
-        before{analysis.stone_global_id = nil}
-        it {expect(analysis.stone).to be_blank}
+      context "specimen_global_id is nil" do
+        before{analysis.specimen_global_id = nil}
+        it {expect(analysis.specimen).to be_blank}
       end
-      context "stone_global_id is ng" do
-        before{analysis.stone_global_id = "xxxxxxxxxxxxxxxxx"}
-        it {expect(analysis.stone).to be_blank}
+      context "specimen_global_id is ng" do
+        before{analysis.specimen_global_id = "xxxxxxxxxxxxxxxxx"}
+        it {expect(analysis.specimen).to be_blank}
       end
-      context "stone_global_id is ok" do
-        before{analysis.stone_global_id = stone.global_id}
-        it {expect(analysis.stone).to eq stone}
+      context "specimen_global_id is ok" do
+        before{analysis.specimen_global_id = specimen.global_id}
+        it {expect(analysis.specimen).to eq specimen}
       end
     end
   end
@@ -197,12 +197,12 @@ describe Analysis do
 
   describe ".set_object" do
     subject { Analysis.set_object(methods, data_array) }
-    let(:methods) { ["id", "name", "description", "stone_id", "technique_id", "device_id", "operator"] }
-    let(:data_array) { [id, name, description, stone_id, technique_id, device_id, operator] }
+    let(:methods) { ["id", "name", "description", "specimen_id", "technique_id", "device_id", "operator"] }
+    let(:data_array) { [id, name, description, specimen_id, technique_id, device_id, operator] }
     let(:id) { "1" }
     let(:name) { "分析名" }
     let(:description) { "説明" }
-    let(:stone_id) { "2" }
+    let(:specimen_id) { "2" }
     let(:technique_id) { "3" }
     let(:device_id) { "4" }
     let(:operator) { "オペレータ" }
@@ -211,7 +211,7 @@ describe Analysis do
       expect(subject.id).to eq(id.to_i)
       expect(subject.name).to eq name
       expect(subject.description).to eq description
-      expect(subject.stone_id).to eq(stone_id.to_i)
+      expect(subject.specimen_id).to eq(specimen_id.to_i)
       expect(subject.technique_id).to eq(technique_id.to_i)
       expect(subject.device_id).to eq(device_id.to_i)
       expect(subject.operator).to eq operator
@@ -376,14 +376,14 @@ describe Analysis do
 
   describe "#to_pml", :current => true do
     let(:box){ FactoryGirl.create(:box)}
-    let(:stone){ FactoryGirl.create(:stone, box_id: box.id)}
+    let(:specimen){ FactoryGirl.create(:specimen, box_id: box.id)}
     let(:spot){FactoryGirl.create(:spot, target_uid: obj.global_id)}
     let(:attachment_file){FactoryGirl.create(:attachment_file)}
     let(:chemistry){FactoryGirl.create(:chemistry)}
     let(:obj) { FactoryGirl.create(:analysis) }
     let(:obj2) { FactoryGirl.create(:analysis) }
-    let(:obj3) { FactoryGirl.create(:analysis, stone_id: stone.id) }
-    let(:objs){ [obj,obj2, stone]}
+    let(:obj3) { FactoryGirl.create(:analysis, specimen_id: specimen.id) }
+    let(:objs){ [obj,obj2, specimen]}
     let(:objs2){ [obj,obj2,box]}
     before do
       attachment_file.spots << spot
@@ -432,34 +432,34 @@ describe Analysis do
   
   describe "#update_table_analyses" do
     subject { analysis.send(:update_table_analyses) }
-    let(:analysis) { FactoryGirl.create(:analysis, name: "分析１", stone: stone_1) }
-    let(:stone_1) { FactoryGirl.create(:stone, name: "ストーン１") }
-    let(:stone_2) { FactoryGirl.create(:stone, name: "ストーン２") }
-    context "not change associated stone" do
+    let(:analysis) { FactoryGirl.create(:analysis, name: "分析１", specimen: specimen_1) }
+    let(:specimen_1) { FactoryGirl.create(:specimen, name: "ストーン１") }
+    let(:specimen_2) { FactoryGirl.create(:specimen, name: "ストーン２") }
+    context "not change associated specimen" do
       it { expect{ subject }.not_to change(TableAnalysis, :count) }
     end
-    context "change associated stone" do
-      before { analysis.stone_id = stone_2.id }
-      context "analysis not linked table_stone" do
+    context "change associated specimen" do
+      before { analysis.specimen_id = specimen_2.id }
+      context "analysis not linked table_specimen" do
         it { expect{ subject }.not_to change(TableAnalysis, :count) }
       end
-      context "analysis linked table_stone" do
+      context "analysis linked table_specimen" do
         before do
-          table_stone
-          other_table_stone
+          table_specimen
+          other_table_specimen
           table_analysis
         end
-        let(:table_stone) { FactoryGirl.create(:table_stone, stone: stone_2) }
-        let(:other_table_stone) { FactoryGirl.create(:table_stone, stone: stone_3) }
-        let(:stone_3) { FactoryGirl.create(:stone, name: "ストーン３") }
-        let(:table_analysis) { FactoryGirl.create(:table_analysis, table_id: table_stone.table_id, stone_id: table_stone.stone_id, priority: priority) }
+        let(:table_specimen) { FactoryGirl.create(:table_specimen, specimen: specimen_2) }
+        let(:other_table_specimen) { FactoryGirl.create(:table_specimen, specimen: specimen_3) }
+        let(:specimen_3) { FactoryGirl.create(:specimen, name: "ストーン３") }
+        let(:table_analysis) { FactoryGirl.create(:table_analysis, table_id: table_specimen.table_id, specimen_id: table_specimen.specimen_id, priority: priority) }
         let(:priority) { 1 }
         it { expect{ subject }.to change(TableAnalysis, :count).by(1) }
         it do
           subject
           table_analysis = TableAnalysis.last
-          expect(table_analysis.table_id).to eq(table_stone.table_id)
-          expect(table_analysis.stone_id).to eq(table_stone.stone_id)
+          expect(table_analysis.table_id).to eq(table_specimen.table_id)
+          expect(table_analysis.specimen_id).to eq(table_specimen.specimen_id)
           expect(table_analysis.analysis_id).to eq(analysis.id)
           expect(table_analysis.priority).to eq(priority + 1)
         end

@@ -3,54 +3,54 @@ require 'spec_helper'
 describe Sesar do
 
   describe ".from_active_record(model)" do
-    let(:stone) { FactoryGirl.create(:stone, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101") }
+    let(:specimen) { FactoryGirl.create(:specimen, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101") }
     let(:bib) { FactoryGirl.create(:bib) }
     let(:material) {"Rock"}
     let(:sesar_classification) {"Igneous"}
-    let(:stone_custom_attribute_1) { FactoryGirl.create(:stone_custom_attribute, stone_id: stone.id, custom_attribute_id: custom_attribute_1.id, value: "value") }
+    let(:specimen_custom_attribute_1) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id, value: "value") }
     let(:custom_attribute_1) { FactoryGirl.create(:custom_attribute, sesar_name: "sample_comment") }
-    let(:stone_custom_attribute_2) { FactoryGirl.create(:stone_custom_attribute, stone_id: stone.id, custom_attribute_id: custom_attribute_2.id, value: "name_1,name_2") }
+    let(:specimen_custom_attribute_2) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_2.id, value: "name_1,name_2") }
     let(:custom_attribute_2) { FactoryGirl.create(:custom_attribute, sesar_name: "sample_other_names") }
     before do
-      stone_custom_attribute_1
-      stone_custom_attribute_2
-      stone.bibs << bib
-      stone.physical_form.name = "asteroid"
-      stone.classification.sesar_material = material
-      stone.classification.sesar_classification = sesar_classification
-      stone.place.latitude = 35
-      stone.place.longitude = 135
+      specimen_custom_attribute_1
+      specimen_custom_attribute_2
+      specimen.bibs << bib
+      specimen.physical_form.name = "asteroid"
+      specimen.classification.sesar_material = material
+      specimen.classification.sesar_classification = sesar_classification
+      specimen.place.latitude = 35
+      specimen.place.longitude = 135
     end
     it "正しく値が設定される" do
-      sesar = Sesar.from_active_record(stone)
+      sesar = Sesar.from_active_record(specimen)
       expect(sesar.attributes["sample_type"]).to eq "Other"
-      expect(sesar.attributes["name"]).to eq stone.name
-      expect(sesar.attributes["material"]).to eq stone.classification.sesar_material
-      expect(sesar.attributes["igsn"]).to eq stone.igsn
-      expect(sesar.attributes["age_min"]).to eq stone.age_min
-      expect(sesar.attributes["age_max"]).to eq stone.age_max
-      expect(sesar.attributes["age_unit"]).to eq stone.age_unit
-      expect(sesar.attributes["size"]).to eq stone.size
-      expect(sesar.attributes["size_unit"]).to eq stone.size_unit
-      expect(sesar.attributes["latitude"]).to eq stone.place.latitude
-      expect(sesar.attributes["longitude"]).to eq stone.place.longitude
-      expect(sesar.attributes["elevation"]).to eq stone.place.elevation
-      expect(sesar.attributes["locality"]).to eq stone.place.name
-      expect(sesar.attributes["locality_description"]).to eq stone.place.description
-      expect(sesar.attributes["collector"]).to eq stone.collector
-      expect(sesar.attributes["collector_detail"]).to eq stone.collector_detail
+      expect(sesar.attributes["name"]).to eq specimen.name
+      expect(sesar.attributes["material"]).to eq specimen.classification.sesar_material
+      expect(sesar.attributes["igsn"]).to eq specimen.igsn
+      expect(sesar.attributes["age_min"]).to eq specimen.age_min
+      expect(sesar.attributes["age_max"]).to eq specimen.age_max
+      expect(sesar.attributes["age_unit"]).to eq specimen.age_unit
+      expect(sesar.attributes["size"]).to eq specimen.size
+      expect(sesar.attributes["size_unit"]).to eq specimen.size_unit
+      expect(sesar.attributes["latitude"]).to eq specimen.place.latitude
+      expect(sesar.attributes["longitude"]).to eq specimen.place.longitude
+      expect(sesar.attributes["elevation"]).to eq specimen.place.elevation
+      expect(sesar.attributes["locality"]).to eq specimen.place.name
+      expect(sesar.attributes["locality_description"]).to eq specimen.place.description
+      expect(sesar.attributes["collector"]).to eq specimen.collector
+      expect(sesar.attributes["collector_detail"]).to eq specimen.collector_detail
       expect(sesar.attributes["collection_start_date"]).to eq "2015-01-01T00:00:00Z"
       expect(sesar.attributes["collection_end_date"]).to eq "2015-01-01T00:00:00Z"
-      expect(sesar.attributes["collection_date_precision"]).to eq stone.collection_date_precision
+      expect(sesar.attributes["collection_date_precision"]).to eq specimen.collection_date_precision
       expect(sesar.attributes["current_archive"]).to eq "Institute for Study of the Earth's Interior Okayama University"
       expect(sesar.attributes["current_archive_contact"]).to eq "tkk@misasa.okayama-u.ac.kp"
-      expect(sesar.attributes["description"]).to eq stone.description
-      expect(sesar.attributes[custom_attribute_1.sesar_name]).to eq(stone_custom_attribute_1.value)
-      expect(sesar.attributes[custom_attribute_2.sesar_name]).to eq(stone_custom_attribute_2.value.split(","))
+      expect(sesar.attributes["description"]).to eq specimen.description
+      expect(sesar.attributes[custom_attribute_1.sesar_name]).to eq(specimen_custom_attribute_1.value)
+      expect(sesar.attributes[custom_attribute_2.sesar_name]).to eq(specimen_custom_attribute_2.value.split(","))
     end
     describe "to_xml" do
       before do
-        sesar = Sesar.from_active_record(stone)
+        sesar = Sesar.from_active_record(specimen)
         @xml = sesar.to_xml
       end
       context "materialが>を含む" do
@@ -74,7 +74,7 @@ describe Sesar do
         it { expect(@xml).to include "<sample_other_names><sample_other_name>name_1</sample_other_name><sample_other_name>name_2</sample_other_name></sample_other_names>" }
       end
       context "external_urls" do
-        it { expect(@xml).to include "<external_urls><external_url><url>http://dream.misasa.okayama-u.ac.jp/?igsn=#{stone.igsn}</url><description/><url_type>regular URL</url_type></external_url><external_url><url>http://dx.doi.org/doi１</url><description>書誌情報１</description><url_type>DOI</url_type></external_url></external_urls>" }
+        it { expect(@xml).to include "<external_urls><external_url><url>http://dream.misasa.okayama-u.ac.jp/?igsn=#{specimen.igsn}</url><description/><url_type>regular URL</url_type></external_url><external_url><url>http://dx.doi.org/doi１</url><description>書誌情報１</description><url_type>DOI</url_type></external_url></external_urls>" }
       end
     end
   end
@@ -146,12 +146,12 @@ describe Sesar do
         Settings.reload!
       end
       context "紐づくbibが存在しない場合" do
-        let(:model) { FactoryGirl.create(:stone, igsn: "") }
+        let(:model) { FactoryGirl.create(:specimen, igsn: "") }
         it { expect(subject).to include({description: nil, url_type: "regular URL", url: "http://dream.misasa.okayama-u.ac.jp/?igsn="}) }
         it { expect(subject).to_not include({url: "http://dx.doi.org/doi１", description: "書誌情報１", url_type: "DOI"}) }
       end
       context "紐づくbibが存在する場合" do
-        let(:model) { FactoryGirl.create(:stone, igsn: "") }
+        let(:model) { FactoryGirl.create(:specimen, igsn: "") }
         let(:bib) { FactoryGirl.create(:bib) }
         before do
           model.bibs << bib
@@ -161,33 +161,33 @@ describe Sesar do
     end
   end
 
-  describe ".associate_stone_custom_attributes" do
-    subject { Sesar.associate_stone_custom_attributes(stone) }
-    let(:stone) { FactoryGirl.create(:stone) }
-    let(:stone_custom_attribute_1) { FactoryGirl.create(:stone_custom_attribute, stone_id: stone.id, custom_attribute_id: custom_attribute_1.id, value: value_1) }
-    let(:stone_custom_attribute_2) { FactoryGirl.create(:stone_custom_attribute, stone_id: stone.id, custom_attribute_id: custom_attribute_2.id, value: value_2) }
+  describe ".associate_specimen_custom_attributes" do
+    subject { Sesar.associate_specimen_custom_attributes(specimen) }
+    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:specimen_custom_attribute_1) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id, value: value_1) }
+    let(:specimen_custom_attribute_2) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_2.id, value: value_2) }
     let(:value_1) { "value_1" }
     let(:value_2) { "value_2" }
     let(:custom_attribute_1) { FactoryGirl.create(:custom_attribute, sesar_name: sesar_name_1) }
     let(:custom_attribute_2) { FactoryGirl.create(:custom_attribute, sesar_name: sesar_name_2) }
     let(:sesar_name_1) { "sesar_name_1" }
     let(:sesar_name_2) { "sesar_name_2" }
-    context "stone not associate stone_custom_attribute" do
+    context "specimen not associate specimen_custom_attribute" do
       it { expect(subject).to be_blank }
     end
-    context "stone associate 1 stone_custom_attribute" do
-      before { stone_custom_attribute_1 }
-      context "stone_custom_attribute.value is present" do
+    context "specimen associate 1 specimen_custom_attribute" do
+      before { specimen_custom_attribute_1 }
+      context "specimen_custom_attribute.value is present" do
         context "custom_attribute.sesar_name is present" do
           it { expect(subject.size).to eq 1 }
-          it { expect(subject[0]).to eq(stone_custom_attribute_1) }
+          it { expect(subject[0]).to eq(specimen_custom_attribute_1) }
         end
         context "custom_attribute.sesar_name is blank" do
           let(:sesar_name_1) { "" }
           it { expect(subject).to be_blank }
         end
       end
-      context "stone_custom_attribute.value is blank" do
+      context "specimen_custom_attribute.value is blank" do
         let(:value_1) { "" }
         context "custom_attribute.sesar_name is present" do
           it { expect(subject).to be_blank }
@@ -198,20 +198,20 @@ describe Sesar do
         end
       end
     end
-    context "stone associate 2 stone_custom_attributes" do
+    context "specimen associate 2 specimen_custom_attributes" do
       before do
-        stone_custom_attribute_1
-        stone_custom_attribute_2
+        specimen_custom_attribute_1
+        specimen_custom_attribute_2
       end
       context "both value is present" do
         context "both sesar_name is present" do
           it { expect(subject.size).to eq 2 }
-          it { expect(subject).to include(stone_custom_attribute_1, stone_custom_attribute_2) }
+          it { expect(subject).to include(specimen_custom_attribute_1, specimen_custom_attribute_2) }
         end
         context "1 sesar_name is blank" do
           let(:sesar_name_1) { "" }
           it { expect(subject.size).to eq 1 }
-          it { expect(subject[0]).to eq(stone_custom_attribute_2) }
+          it { expect(subject[0]).to eq(specimen_custom_attribute_2) }
         end
         context "both sesar_name is blank" do
           let(:sesar_name_1) { "" }
@@ -223,12 +223,12 @@ describe Sesar do
         let(:value_1) { "" }
         context "both sesar_name is present" do
           it { expect(subject.size).to eq 1 }
-          it { expect(subject[0]).to eq(stone_custom_attribute_2) }
+          it { expect(subject[0]).to eq(specimen_custom_attribute_2) }
         end
         context "1 sesar_name is blank" do
           let(:sesar_name_1) { "" }
           it { expect(subject.size).to eq 1 }
-          it { expect(subject[0]).to eq(stone_custom_attribute_2) }
+          it { expect(subject[0]).to eq(specimen_custom_attribute_2) }
         end
         context "another sesar_name is blank" do
           let(:sesar_name_2) { "" }
