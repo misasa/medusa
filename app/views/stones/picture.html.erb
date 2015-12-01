@@ -1,6 +1,6 @@
 <div class="spot-viewer">
   <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300 %>
-  <%= form_for Spot.new, url: attachment_file_spots_path(@stone.attachment_files.first) do |f| %>
+  <%= form_for Spot.new, url: attachment_file_spots_path(@specimen.attachment_files.first) do |f| %>
     <table>
       <tr>
         <td>new spot with link(ID </td>
@@ -30,7 +30,7 @@
       </tr>
     </table>
   <% end %>
-  <% @stone.attachment_image_files.each_slice(4) do |files| %>
+  <% @specimen.attachment_image_files.each_slice(4) do |files| %>
   <div class="row spot-thumbnails">
     <% files.each do |file| %>
     <div class="col-lg-3">

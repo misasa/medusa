@@ -10,7 +10,7 @@
       </th>
       <th><%= sort_link @search, :name, "name", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :device_name, "device", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :stone_name, @alias_specimen, { format: :modal }, remote: true %></th>
+      <th><%= sort_link @search, :specimen_name, @alias_specimen, { format: :modal }, remote: true %></th>
       <th>summary</th>
       <th><%= sort_link @search, :group_name, "group", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :updated_at, "updated-at", { format: :modal }, remote: true %></th>
@@ -19,7 +19,7 @@
       <th><%= text_field_tag :per_page, (params[:per_page] || Analysis.default_per_page), size: 4, readonly: true %></th>
       <th><%= f.text_field :name_cont, size: 15 %></th>
       <th><%= f.text_field :device_name_cont, size: 12 %></th>
-      <th><%= f.text_field :stone_name_cont, size: 15 %></th>
+      <th><%= f.text_field :specimen_name_cont, size: 15 %></th>
       <th></th>
       <th><%= f.text_field :group_name_cont, size: 15 %></th>
       <th>

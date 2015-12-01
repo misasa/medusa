@@ -1,17 +1,17 @@
 class Table < ActiveRecord::Base
   include HasRecordProperty
 
-  has_many :table_stones, -> { order :position }, dependent: :destroy
+  has_many :table_specimens, -> { order :position }, dependent: :destroy
   has_many :table_analyses, -> { order :priority }, dependent: :destroy
-  has_many :stones, through: :table_stones
-  has_many :analyses, through: :stones
-  has_many :chemistries, through: :stones
+  has_many :specimens, through: :table_specimens
+  has_many :analyses, through: :specimens
+  has_many :chemistries, through: :specimens
   has_many :category_measurement_items, through: :measurement_category
   has_many :measurement_items, through: :measurement_category
   belongs_to :bib
   belongs_to :measurement_category
 
-  accepts_nested_attributes_for :table_stones
+  accepts_nested_attributes_for :table_specimens
   accepts_nested_attributes_for :table_analyses
 
   validates :age_unit, presence: true, if: -> { with_age.present? }
@@ -44,8 +44,8 @@ class Table < ActiveRecord::Base
     end
 
     def each(&block)
-      table.table_stones.each do |table_stone|
-        yield Cell.new(self, chemistries_hash[table_stone.stone_id])
+      table.table_specimens.each do |table_specimen|
+        yield Cell.new(self, chemistries_hash[table_specimen.specimen_id])
       end
     end
 
@@ -82,7 +82,7 @@ class Table < ActiveRecord::Base
     def chemistries_hash
       init_hash = Hash.new { |h, k| h[k] = [] }
       @chemistries_hash ||= chemistries.each_with_object(init_hash) do |chemistry, hash|
-        hash[chemistry.analysis.stone_id] << chemistry
+        hash[chemistry.analysis.specimen_id] << chemistry
       end
     end
 

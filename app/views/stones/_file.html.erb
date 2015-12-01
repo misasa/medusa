@@ -13,7 +13,7 @@
   </thead>
   <tbody>
     <%= form_tag bundle_edit_attachment_files_path, id: "attachment-file-bundle-form" do %>
-      <% @stone.attachings.where(attachable_type: "Stone").order("position ASC").each do |attaching| %>
+      <% @specimen.attachings.where(attachable_type: "Specimen").order("position ASC").each do |attaching| %>
         <tr>
           <% attachment_file = attaching.attachment_file %>
           <td>
@@ -34,7 +34,7 @@
             <% end %>
           </td>
           <td>
-            <%= link_to stone_attachment_file_path(@stone, attachment_file) + tab_param(__FILE__), method: :delete, title: "unlink attachment file", data: {confirm: t("confirm.unlink")} do %>
+            <%= link_to specimen_attachment_file_path(@specimen, attachment_file) + tab_param(__FILE__), method: :delete, title: "unlink attachment file", data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
             <% end %>
           </td>
@@ -44,7 +44,7 @@
   </tbody>
   <tfoot>
     <tr>
-      <%= form_for AttachmentFile.new, url: stone_attachment_files_path(@stone), multipart: true do |f|%>
+      <%= form_for AttachmentFile.new, url: specimen_attachment_files_path(@specimen), multipart: true do |f|%>
         <%= hidden_tabname_tag(__FILE__) %>
         <%= f.fields_for :record_property_attributes do |r| %>
           <%= r.hidden_field :user_id ,value: @current_user.id %>
@@ -57,7 +57,7 @@
           <% end %>
         </th>
       <% end %>
-      <%= form_tag link_by_global_id_stone_attachment_files_path(@stone), method: :post do %>
+      <%= form_tag link_by_global_id_specimen_attachment_files_path(@specimen), method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
         <th>
 	  <div class="input-group">

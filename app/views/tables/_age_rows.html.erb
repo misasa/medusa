@@ -1,8 +1,8 @@
 <tr>
   <th>age min</th>
   <th><%= table.age_unit %></th>
-  <% table.stones.each do |stone| %>
-    <td><%= stone.try!(:age_min).present? ? Alchemist.measure(stone.age_min, stone.age_unit.to_sym).to(table.age_unit.to_sym).value : "-" %></td>
+  <% table.specimens.each do |specimen| %>
+    <td><%= specimen.try!(:age_min).present? ? Alchemist.measure(specimen.age_min, specimen.age_unit.to_sym).to(table.age_unit.to_sym).value : "-" %></td>
   <% end %>
   <% if table.with_average %>
     <td></td>
@@ -11,8 +11,8 @@
 <tr>
   <th>age max</th>
   <th><%= table.age_unit %></th>
-  <% table.stones.each do |stone| %>
-    <td><%= stone.try!(:age_max).present? ? Alchemist.measure(stone.age_max, stone.age_unit.to_sym).to(table.age_unit.to_sym).value : "-" %></td>
+  <% table.specimens.each do |specimen| %>
+    <td><%= specimen.try!(:age_max).present? ? Alchemist.measure(specimen.age_max, specimen.age_unit.to_sym).to(table.age_unit.to_sym).value : "-" %></td>
   <% end %>
   <% if table.with_average %>
     <td></td>

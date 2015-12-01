@@ -32,9 +32,9 @@
       <th><%= f.select :device_id, Device.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
       <th>
 	<div class="input-group">
-	  <%= f.text_field :stone_global_id, class: "form-control input-sm" %>
+	  <%= f.text_field :specimen_global_id, class: "form-control input-sm" %>
 	  <span class="input-group-addon">
-	    <%= link_to stones_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#analysis_stone_global_id" do %>
+	    <%= link_to specimens_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#analysis_specimen_global_id" do %>
 	    <span class="glyphicon glyphicon-search"></span>
 	    <% end %>
 	  </span>

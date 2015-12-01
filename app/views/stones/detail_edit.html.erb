@@ -1,4 +1,4 @@
-<%= form_for @stone, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
+<%= form_for @specimen, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
   <div class="form-group form-group-sm">
     <%= f.label :igsn, class: "small" %>
     <%= f.text_field :igsn, class: "form-control input-sm", disabled: true%>
@@ -52,12 +52,12 @@
 <% end %>
 
 <%= javascript_tag do %>
-  $(document).on("succeed.ajaxForm", "#edit_stone_<%= @stone.id %>", function() {
-    location.href="<% stone_path(@stone) %>";
+  $(document).on("succeed.ajaxForm", "#edit_specimen_<%= @specimen.id %>", function() {
+    location.href="<% specimen_path(@specimen) %>";
   });
   $(function() {
     $(document).ready(function() {
-      if ("<%= @stone.igsn %>"){
+      if ("<%= @specimen.igsn %>"){
         $("button[name='sesar_upload']").attr("disabled", "disabled");
       }else{
         $("button[name='sesar_upload']").removeAttr("disabled");

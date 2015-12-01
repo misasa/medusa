@@ -9,7 +9,7 @@ class Place < ActiveRecord::Base
 
   acts_as_mappable
 
-  has_many :stones
+  has_many :specimens
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
 
@@ -31,8 +31,8 @@ class Place < ActiveRecord::Base
 
   def analyses
     analyses = []
-    stones.each do |stone| 
-      (analyses = analyses + stone.analyses) unless stone.analyses.empty?
+    specimens.each do |specimen| 
+      (analyses = analyses + specimen.analyses) unless stone.analyses.empty?
     end
     analyses
   end

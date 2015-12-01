@@ -32,19 +32,19 @@ class PlaceDecorator < Draper::Decorator
     return elevation.to_s
   end
 
-  def stones_summary(length = 10)
-    l = stones.map{|s| s.name }
+  def specimens_summary(length = 10)
+    l = specimens.map{|s| s.name }
     text = l.join(', ')
     if length
       if text.size > length
         text = text.slice(0,length) + ' ...'
       end
     end
-    text + " [#{stones.count}]"
+    text + " [#{specimens.count}]"
   end
 
-  def stones_count
-    stones.size if stones.present?
+  def specimens_count
+    specimens.size if specimens.present?
   end
 
   def country_name

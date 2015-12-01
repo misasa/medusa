@@ -13,7 +13,7 @@ class Box < ActiveRecord::Base
   #with_recursive
 
   has_many :users
-  has_many :stones, dependent: :restrict_with_error
+  has_many :specimens, dependent: :restrict_with_error
   has_many :boxes, class_name: "Box", foreign_key: :parent_id, dependent: :restrict_with_error
   has_many :children, class_name: "Box", foreign_key: :parent_id, dependent: :restrict_with_error
   has_many :referrings, as: :referable, dependent: :destroy
@@ -31,8 +31,8 @@ class Box < ActiveRecord::Base
 
   def analyses
     analyses = []
-    stones.each do |stone| 
-      (analyses = analyses + stone.analyses) unless stone.analyses.empty?
+    specimens.each do |specimen| 
+      (analyses = analyses + specimen.analyses) unless specimen.analyses.empty?
     end
     analyses
   end

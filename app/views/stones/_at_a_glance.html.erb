@@ -1,27 +1,27 @@
 <ul>
-  <% if @stone.place %>
-    <% place = @stone.place.decorate %>
+  <% if @specimen.place %>
+    <% place = @specimen.place.decorate %>
     <li>
       place: <%= place.try!(:latitude_to_text) + ", " + place.try!(:longitude_to_text) %> <%= link_to "more", place_path(place) %>
     </li>
   <% end %>
-  <%= li_if_exist("classification: ", @stone.classification.try!(:name)) %>
-  <%= li_if_exist("physical_form: ", @stone.physical_form.try!(:name)) %>
-  <%= li_if_exist("quantity (#{@stone.quantity_unit}): ", @stone.quantity) %>
-  <%= li_if_exist("tag list: ", @stone.tag_list) %>
-  <%= li_if_exist("description: ", @stone.description) %>
-  <li>modified at <%= difference_from_now(@stone.updated_at) %></li>
-  <% if @stone.attachment_files.present? %>
+  <%= li_if_exist("classification: ", @specimen.classification.try!(:name)) %>
+  <%= li_if_exist("physical_form: ", @specimen.physical_form.try!(:name)) %>
+  <%= li_if_exist("quantity (#{@specimen.quantity_unit}): ", @specimen.quantity) %>
+  <%= li_if_exist("tag list: ", @specimen.tag_list) %>
+  <%= li_if_exist("description: ", @specimen.description) %>
+  <li>modified at <%= difference_from_now(@specimen.updated_at) %></li>
+  <% if @specimen.attachment_files.present? %>
     <li>
-      <% @stone.attachment_files.each do |attachment_file| %>
+      <% @specimen.attachment_files.each do |attachment_file| %>
         <%= attachment_file.decorate.image_link %>
       <% end %>
     </li>
   <% end %>
-  <%= li_if_exist("", @stone.bibs.map{ |bib| content_tag(:span, nil, class: "glyphicon glyphicon-book") + raw(bib.to_html) + link_to_if(can?(:read, bib), " more", url_for(bib)) }.join(" ")) %>
-  <% if @stone.attachment_pdf_files.present? %>
+  <%= li_if_exist("", @specimen.bibs.map{ |bib| content_tag(:span, nil, class: "glyphicon glyphicon-book") + raw(bib.to_html) + link_to_if(can?(:read, bib), " more", url_for(bib)) }.join(" ")) %>
+  <% if @specimen.attachment_pdf_files.present? %>
     <li>
-      <% @stone.attachment_pdf_files.each do |attachment_pdf_file| %>
+      <% @specimen.attachment_pdf_files.each do |attachment_pdf_file| %>
         <%= attachment_pdf_file.name %>
         <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_pdf_file.id), id: "file-#{attachment_pdf_file.id}-button") %>
       <% end %>
@@ -29,8 +29,8 @@
   <% end %>
 </ul>
 
-<% unless @stone.analyses.empty? %>
-  Table of analysis on <%= content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + link_to(@stone.name, stone_path(@stone)) %>
+<% unless @specimen.analyses.empty? %>
+  Table of analysis on <%= content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + link_to(@specimen.name, specimen_path(@specimen)) %>
   <table class="table table-condensed table-striped">
     <%
     if params[:measurement_category_id].blank?
@@ -40,11 +40,11 @@
     end
     %>
     <thead>
-      <tr><th colspan="<%= @stone.analyses.size + 2 %>"></th></tr>
+      <tr><th colspan="<%= @specimen.analyses.size + 2 %>"></th></tr>
       <tr>
         <th></th>
         <th>unit</th>
-        <% @stone.analyses.each do |analysis| %>
+        <% @specimen.analyses.each do |analysis| %>
           <th <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>><%= link_to(analysis.name, analysis_path(analysis)) %></th>
         <% end %>
       </tr>
@@ -55,7 +55,7 @@
           <th align="right"><%== measurement_item.display_name %></th>
           <th> <%== measurement_item.unit.try!(:html) %></th>
           <% value = "ー" %>
-          <% @stone.analyses.each do |analysis| %>
+          <% @specimen.analyses.each do |analysis| %>
             <% analysis.chemistries.each {|chemistry| value = chemistry.value if chemistry.measurement_item_id == measurement_item.id } %>
             <td <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>align="right">
               <%= value %>
@@ -65,9 +65,9 @@
       <% end %>
     </tbody>
   </table>
-  <%= form_tag(stone_path(@stone), method: :get) do %>
+  <%= form_tag(specimen_path(@specimen), method: :get) do %>
     analysis:
-    <%= select_tag :analysis_id, options_for_select(@stone.analyses.map {|analysis| [analysis.name, analysis.id]}, params[:analysis_id]), include_blank: true %>
+    <%= select_tag :analysis_id, options_for_select(@specimen.analyses.map {|analysis| [analysis.name, analysis.id]}, params[:analysis_id]), include_blank: true %>
     measurement_category:
     <%= select_tag :measurement_category_id, options_for_select(MeasurementCategory.pluck(:name, :id), params[:measurement_category_id]), include_blank: true %>
     <%= submit_tag "reload" %>

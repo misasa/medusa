@@ -7,7 +7,7 @@ class AnalysesController < ApplicationController
   def index
     @search = Analysis.readables(current_user).search(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
-    @analyses = @search.result.includes([:stone, :device, chemistries: :measurement_item]).page(params[:page]).per(params[:per_page])
+    @analyses = @search.result.includes([:specimen, :device, chemistries: :measurement_item]).page(params[:page]).per(params[:per_page])
     respond_with @analyses
   end
 
@@ -93,8 +93,8 @@ class AnalysesController < ApplicationController
     params.require(:analysis).permit(
       :name,
       :description,
-      :stone_id,
-      :stone_global_id,
+      :specimen_id,
+      :specimen_global_id,
       :technique_id,
       :device_id,
       :operator,

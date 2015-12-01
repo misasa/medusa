@@ -304,23 +304,23 @@ describe Bib do
 
     let(:box_1){ FactoryGirl.create(:box)}
     let(:place_1){ FactoryGirl.create(:place)}
-    let(:stone_1) { FactoryGirl.create(:stone, name: "hoge", box_id: box_1.id) }
-    let(:stone_2) { FactoryGirl.create(:stone, name: "stone_2", place_id: place_1.id) }
-    let(:stone_3) { FactoryGirl.create(:stone, name: "stone_3", box_id: box_1.id) }
-    let(:stone_4) { FactoryGirl.create(:stone, name: "stone_3") }
-    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone_1.id) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone_2.id) }
-    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone_3.id) }
+    let(:specimen_1) { FactoryGirl.create(:specimen, name: "hoge", box_id: box_1.id) }
+    let(:specimen_2) { FactoryGirl.create(:specimen, name: "specimen_2", place_id: place_1.id) }
+    let(:specimen_3) { FactoryGirl.create(:specimen, name: "specimen_3", box_id: box_1.id) }
+    let(:specimen_4) { FactoryGirl.create(:specimen, name: "specimen_3") }
+    let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen_1.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen_2.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, specimen_id: specimen_3.id) }
     let(:analysis_4) { FactoryGirl.create(:analysis) }
 
     before do
       bib
       box_1;place_1;
-      stone_1;stone_2;stone_3;stone_4;
+      specimen_1;specimen_2;specimen_3;specimen_4;
       analysis_1;analysis_2;analysis_3;analysis_4;
       bib.boxes << box_1
       bib.places << place_1      
-      bib.stones << stone_3
+      bib.specimens << specimen_3
       bib.analyses << analysis_3      
       bib.analyses << analysis_4
     end

@@ -65,7 +65,7 @@ class BoxesController < ApplicationController
       @contents = Path.none
       @contents = @contents.page(params[:page]).per(params[:per_page])
     end
-    @box = Box.includes(children: [:record_property, :box_type], stones: [:record_property, :analyses, :physical_form]).find(params[:id]).decorate
+    @box = Box.includes(children: [:record_property, :box_type], specimens: [:record_property, :analyses, :physical_form]).find(params[:id]).decorate
     respond_with @box
   end
 

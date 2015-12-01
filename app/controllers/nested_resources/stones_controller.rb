@@ -1,50 +1,50 @@
-class NestedResources::StonesController < ApplicationController
+class NestedResources::SpecimensController < ApplicationController
 
   respond_to  :html, :xml, :json
   before_action :find_resource
   load_and_authorize_resource
 
   def index
-    @stones = @parent.send(params[:association_name])
-    respond_with @stones
+    @specimens = @parent.send(params[:association_name])
+    respond_with @specimens
   end
 
   def create
-    @stone = Stone.new(stone_params)
-    @parent.send(params[:association_name]) << @stone if @stone.save
-    respond_with @stone, location: adjust_url_by_requesting_tab(request.referer), action: "error" 
+    @specimen = Specimen.new(specimen_params)
+    @parent.send(params[:association_name]) << @specimen if @specimen.save
+    respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer), action: "error" 
   end
 
   def update
-    @stone = Stone.find(params[:id])
-    @parent.send(params[:association_name]) << @stone
-    respond_with @stone
+    @specimen = Specimen.find(params[:id])
+    @parent.send(params[:association_name]) << @specimen
+    respond_with @specimen
   end
 
   def destroy
-    @stone = Stone.find(params[:id])
-    @parent.send(params[:association_name]).delete(@stone)
-    respond_with @stone, location: adjust_url_by_requesting_tab(request.referer)
+    @specimen = Specimen.find(params[:id])
+    @parent.send(params[:association_name]).delete(@specimen)
+    respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def link_by_global_id
-    @stone = Stone.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
-    @parent.send(params[:association_name]) << @stone
-    respond_with @stone, location: adjust_url_by_requesting_tab(request.referer)
+    @specimen = Specimen.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
+    @parent.send(params[:association_name]) << @specimen
+    respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer)
   rescue
     duplicate_global_id
   end
   
   def inventory
-    @stone = Stone.find(params[:id])
-    @stone.update_attributes(box_id: params[:box_id], updated_at: Time.now)
-    respond_with @stone
+    @specimen = Specimen.find(params[:id])
+    @specimen.update_attributes(box_id: params[:box_id], updated_at: Time.now)
+    respond_with @specimen
   end
 
   private
 
-  def stone_params
-    params.require(:stone).permit(
+  def specimen_params
+    params.require(:specimen).permit(
       :name,
       :physical_form_id,
       :classification_id,

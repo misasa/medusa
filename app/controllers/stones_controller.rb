@@ -1,111 +1,111 @@
-class StonesController < ApplicationController
+class SpecimensController < ApplicationController
   respond_to :html, :xml, :json
   before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update, :download_card, :download_bundle_card, :download_label, :download_bundle_label]
   before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label]
   load_and_authorize_resource
 
   def index
-    @search = Stone.includes(:classification, :physical_form).readables(current_user).search(params[:q])
+    @search = Specimen.includes(:classification, :physical_form).readables(current_user).search(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
-    @stones = @search.result.page(params[:page]).per(params[:per_page])
-    respond_with @stones
+    @specimens = @search.result.page(params[:page]).per(params[:per_page])
+    respond_with @specimens
   end
 
   def show
-    respond_with @stone
+    respond_with @specimen
   end
 
   def edit
-    respond_with @stone, layout: !request.xhr?
+    respond_with @specimen, layout: !request.xhr?
   end
   
   def detail_edit
-    respond_with @stone, layout: !request.xhr?
+    respond_with @specimen, layout: !request.xhr?
   end
 
   def create
-    @stone = Stone.new(stone_params)
-    @stone.save
-    respond_with @stone
+    @specimen = Specimen.new(specimen_params)
+    @specimen.save
+    respond_with @specimen
   end
 
   def update
-    @stone.update_attributes(stone_params)
-    sesar_upload if params[:sesar_upload] && @stone.errors.blank?
-    respond_with @stone
+    @specimen.update_attributes(specimen_params)
+    sesar_upload if params[:sesar_upload] && @specimen.errors.blank?
+    respond_with @specimen
   end
   
   def destroy
-    @stone.destroy
-    respond_with @stone
+    @specimen.destroy
+    respond_with @specimen
   end
 
   def family
-    respond_with @stone, layout: !request.xhr?
+    respond_with @specimen, layout: !request.xhr?
   end
 
   def picture
-    respond_with @stone, layout: !request.xhr?
+    respond_with @specimen, layout: !request.xhr?
   end
 
   def map
-    respond_with @stone, layout: !request.xhr?
+    respond_with @specimen, layout: !request.xhr?
   end
 
   def property
-    respond_with @stone, layout: !request.xhr?
+    respond_with @specimen, layout: !request.xhr?
   end
   
   def custom_attribute
-    @stone_custom_attributes = @stone.set_stone_custom_attributes
-    respond_with @stone, layout: !request.xhr?
+    @specimen_custom_attributes = @specimen.set_specimen_custom_attributes
+    respond_with @specimen, layout: !request.xhr?
   end
 
   def bundle_edit
-    respond_with @stones
+    respond_with @specimens
   end
 
   def bundle_update
-    @stones.each { |stone| stone.update_attributes(stone_params.only_presence) }
+    @specimens.each { |specimen| specimen.update_attributes(specimen_params.only_presence) }
     render :bundle_edit
   end
 
   def download_card
-    report = Stone.find(params[:id]).build_card
-    send_data(report.generate, filename: "stone.pdf", type: "application/pdf")
+    report = Specimen.find(params[:id]).build_card
+    send_data(report.generate, filename: "specimen.pdf", type: "application/pdf")
   end
 
   def download_bundle_card
     method = (params[:a4] == "true") ? :build_a_four : :build_cards
-    report = Stone.send(method, @stones)
-    send_data(report.generate, filename: "stones.pdf", type: "application/pdf")
+    report = Specimen.send(method, @specimens)
+    send_data(report.generate, filename: "specimens.pdf", type: "application/pdf")
   end
 
   def download_label
-    stone = Stone.find(params[:id])
-    send_data(stone.build_label, filename: "stone_#{stone.id}.csv", type: "text/csv")
+    specimen = Specimen.find(params[:id])
+    send_data(specimen.build_label, filename: "specimen_#{stone.id}.csv", type: "text/csv")
   end
 
   def download_bundle_label
-    label = Stone.build_bundle_label(@stones)
-    send_data(label, filename: "stones.csv", type: "text/csv")
+    label = Specimen.build_bundle_label(@specimens)
+    send_data(label, filename: "specimens.csv", type: "text/csv")
   end
   
   def sesar_upload
-    @sesar = Sesar.from_active_record(@stone)
+    @sesar = Sesar.from_active_record(@specimen)
     if @sesar.save
-      @stone.update_attributes(igsn: @sesar.igsn)
+      @specimen.update_attributes(igsn: @sesar.igsn)
     else
       @sesar.errors.each do |key, value|
-        @stone.errors.add(key, value)
+        @specimen.errors.add(key, value)
       end
     end
   end
 
   private
 
-  def stone_params
-    params.require(:stone).permit(
+  def specimen_params
+    params.require(:specimen).permit(
       :name,
       :physical_form_id,
       :classification_id,
@@ -143,9 +143,9 @@ class StonesController < ApplicationController
         :guest_readable,
         :guest_writable
       ],
-      stone_custom_attributes_attributes: [
+      specimen_custom_attributes_attributes: [
         :id,
-        :stone_id,
+        :specimen_id,
         :custom_attribute_id,
         :value
       ]
@@ -153,11 +153,11 @@ class StonesController < ApplicationController
   end
 
   def find_resource
-    @stone = Stone.find(params[:id]).decorate
+    @specimen = Specimen.find(params[:id]).decorate
   end
 
   def find_resources
-    @stones = Stone.where(id: params[:ids])
+    @specimens = Specimen.where(id: params[:ids])
   end
 
 end

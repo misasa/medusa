@@ -40,7 +40,7 @@ class NestedResources::AnalysesController < ApplicationController
     params.require(:analysis).permit(
       :name,
       :description,
-      :stone_id,
+      :specimen_id,
       :technique_id,
       :device_id,
       :operator,

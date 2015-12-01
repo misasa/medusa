@@ -1,33 +1,33 @@
 require "spec_helper"
 
-describe Stone do
+describe Specimen do
   describe ".to_pml", :current => true do
-    let(:stone1) { FactoryGirl.create(:stone) }
-    let(:stone2) { FactoryGirl.create(:stone) }
-    let(:stones) { [stone1] }
-    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone1.id)}
-    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone1.id)}
-    let(:analysis_3) { FactoryGirl.create(:analysis, stone_id: stone2.id)}
-    let(:analysis_4) { FactoryGirl.create(:analysis, stone_id: stone2.id)}
+    let(:specimen1) { FactoryGirl.create(:specimen) }
+    let(:specimen2) { FactoryGirl.create(:specimen) }
+    let(:specimens) { [specimen1] }
+    let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen1.id)}
+    let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen1.id)}
+    let(:analysis_3) { FactoryGirl.create(:analysis, specimen_id: specimen2.id)}
+    let(:analysis_4) { FactoryGirl.create(:analysis, specimen_id: specimen2.id)}
     before do
-      stone1
-      stone2
+      specimen1
+      specimen2
       analysis_1
       analysis_2
       analysis_3
       analysis_4
     end
-    it { expect(stone1.analyses.count).to eq 2}
-#    it { expect(stone1.to_pml).to eql([analysis_2, analysis_1].to_pml)}
-    it { expect(stone2.analyses.count).to eq 2}
-#    it { expect(stone2.to_pml).to eql([analysis_4, analysis_3].to_pml)}
-#    it { expect(stones.to_pml).to eql([analysis_2, analysis_1].to_pml) }
+    it { expect(specimen1.analyses.count).to eq 2}
+#    it { expect(specimen1.to_pml).to eql([analysis_2, analysis_1].to_pml)}
+    it { expect(specimen2.analyses.count).to eq 2}
+#    it { expect(specimen2.to_pml).to eql([analysis_4, analysis_3].to_pml)}
+#    it { expect(specimens.to_pml).to eql([analysis_2, analysis_1].to_pml) }
   end
 
   describe ".descendants" do
-    let(:root) { FactoryGirl.create(:stone, name: "root") }
-    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:root) { FactoryGirl.create(:specimen, name: "root") }
+    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
     before do
       root;child_1;child_1_1;
     end
@@ -37,9 +37,9 @@ describe Stone do
   end
 
   describe ".self_and_descendants" do
-    let(:root) { FactoryGirl.create(:stone, name: "root") }
-    let(:child_1){ FactoryGirl.create(:stone, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:stone, parent_id: child_1.id) }
+    let(:root) { FactoryGirl.create(:specimen, name: "root") }
+    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
     before do
       root;child_1;child_1_1;
     end
@@ -49,33 +49,33 @@ describe Stone do
   end
 
   describe ".blood_path" do
-      let(:parent_stone) { FactoryGirl.create(:stone) }
-      let(:stone) { FactoryGirl.create(:stone, parent_id: parent_id) }
+      let(:parent_specimen) { FactoryGirl.create(:specimen) }
+      let(:specimen) { FactoryGirl.create(:specimen, parent_id: parent_id) }
       before do
-        parent_stone
-        stone
+        parent_specimen
+        specimen
       end
       describe "parent" do
         context "us not present" do
           let(:parent_id) { nil }
-           #before { stone.parent_id = parent_stone.id }
-           it { expect(stone.blood_path).to eq "/#{stone.name}" }          
+           #before { specimen.parent_id = parent_specimen.id }
+           it { expect(specimen.blood_path).to eq "/#{specimen.name}" }          
         end
         context "is present" do
-          let(:parent_id) { parent_stone.id }
-           before { stone.parent_id = parent_stone.id }
-           it { expect(stone.blood_path).to eq "/#{parent_stone.name}/#{stone.name}" }          
+          let(:parent_id) { parent_specimen.id }
+           before { specimen.parent_id = parent_specimen.id }
+           it { expect(specimen.blood_path).to eq "/#{parent_specimen.name}/#{specimen.name}" }          
         end
       end
   end
 
   describe "#delete_table_analysis" do
-    subject { stone.send(:delete_table_analysis, analysis_1) }
-    let(:stone) { FactoryGirl.create(:stone) }
-    let(:analysis_1) { FactoryGirl.create(:analysis, stone_id: stone.id) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, stone_id: stone.id) }
-    let(:table_analysis_1) { FactoryGirl.create(:table_analysis, table: table, stone: stone, analysis: analysis_1, priority: 1) }
-    let(:table_analysis_2) { FactoryGirl.create(:table_analysis, table: table, stone: stone, analysis: analysis_2, priority: 2) }
+    subject { specimen.send(:delete_table_analysis, analysis_1) }
+    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen.id) }
+    let(:table_analysis_1) { FactoryGirl.create(:table_analysis, table: table, specimen: specimen, analysis: analysis_1, priority: 1) }
+    let(:table_analysis_2) { FactoryGirl.create(:table_analysis, table: table, specimen: specimen, analysis: analysis_2, priority: 2) }
     let(:table) { FactoryGirl.create(:table) }
     before do
       table_analysis_1
@@ -85,9 +85,9 @@ describe Stone do
     it { subject; expect(TableAnalysis.exists?(analysis_id: analysis_2.id)).to eq true }
   end
 
-  describe "#set_stone_custom_attributes" do
-    subject { stone.set_stone_custom_attributes }
-    let(:stone) { FactoryGirl.create(:stone) }
+  describe "#set_specimen_custom_attributes" do
+    subject { specimen.set_specimen_custom_attributes }
+    let(:specimen) { FactoryGirl.create(:specimen) }
     let(:custom_attribute_1) { FactoryGirl.create(:custom_attribute, name: "bbb") }
     let(:custom_attribute_2) { FactoryGirl.create(:custom_attribute, name: "aaa") }
     context "CustomAttribute not exists" do
@@ -98,15 +98,15 @@ describe Stone do
         custom_attribute_1
         custom_attribute_2
       end
-      context "stone is not associate custom_attribute" do
+      context "specimen is not associate custom_attribute" do
         it { expect(subject.size).to eq(CustomAttribute.count) }
         it { expect(subject[0].custom_attribute_id).to eq(custom_attribute_2.id) }
         it { expect(subject[0].persisted?).to eq false }
         it { expect(subject[1].custom_attribute_id).to eq(custom_attribute_1.id) }
         it { expect(subject[1].persisted?).to eq false }
       end
-      context "stone associate custom_attribute" do
-        before { FactoryGirl.create(:stone_custom_attribute, stone_id: stone.id, custom_attribute_id: custom_attribute_1.id) }
+      context "specimen associate custom_attribute" do
+        before { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id) }
         it { expect(subject.size).to eq (CustomAttribute.count) }
         it { expect(subject[0].custom_attribute_id).to eq(custom_attribute_2.id) }
         it { expect(subject[0].persisted?).to eq false }
@@ -130,7 +130,7 @@ describe Stone do
     end
     
     describe "name" do
-      let(:obj) { FactoryGirl.build(:stone, name: value) }
+      let(:obj) { FactoryGirl.build(:specimen, name: value) }
       it_should_behave_like "length_check"
       context "is presence" do
         let(:value) { "sample_obj_name" }
@@ -143,38 +143,38 @@ describe Stone do
     end
     
     describe "parent_id" do
-      let(:parent_stone) { FactoryGirl.create(:stone) }
-      let(:stone) { FactoryGirl.create(:stone, parent_id: parent_id) }
-      let(:child_stone) { FactoryGirl.create(:stone, parent_id: stone.id) }
+      let(:parent_specimen) { FactoryGirl.create(:specimen) }
+      let(:specimen) { FactoryGirl.create(:specimen, parent_id: parent_id) }
+      let(:child_specimen) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
       let(:user) { FactoryGirl.create(:user) }
       before do
         User.current = user
-        parent_stone
-        stone
-        child_stone
+        parent_specimen
+        specimen
+        child_specimen
       end
       context "is nil" do
         let(:parent_id) { nil }
-        it { expect(stone).to be_valid }
+        it { expect(specimen).to be_valid }
       end
       context "is present" do
-        let(:parent_id) { parent_stone.id }
+        let(:parent_id) { parent_specimen.id }
         context "and parent_id equal self.id" do
-          before { stone.parent_id = stone.id }
-          it { expect(stone).not_to be_valid }
+          before { specimen.parent_id = specimen.id }
+          it { expect(specimen).not_to be_valid }
         end
         context "and parent_id equal child_box.id" do
-          before { stone.parent_id = child_stone.id }
-          it { expect(stone).not_to be_valid }
+          before { specimen.parent_id = child_specimen.id }
+          it { expect(specimen).not_to be_valid }
         end
         context "and valid id" do
-          it { expect(stone).to be_valid }
+          it { expect(specimen).to be_valid }
         end
       end
     end
     
     describe "igsn" do
-      let(:obj) { FactoryGirl.build(:stone, igsn: igsn) }
+      let(:obj) { FactoryGirl.build(:specimen, igsn: igsn) }
       context "9桁の場合" do
         let(:igsn) { "abcd12345" }
         it { expect(obj).to be_valid }
@@ -184,8 +184,8 @@ describe Stone do
         it { expect(obj).not_to be_valid }
       end
       context "uniqueではない場合" do
-        before { FactoryGirl.create(:stone, igsn: "123456789") }
-        let(:obj) { FactoryGirl.build(:stone, name: "samplename2", igsn: "123456789") }
+        before { FactoryGirl.create(:specimen, igsn: "123456789") }
+        let(:obj) { FactoryGirl.build(:specimen, name: "samplename2", igsn: "123456789") }
         it { expect(obj).not_to be_valid }
       end
       context "allow_nil" do
@@ -195,7 +195,7 @@ describe Stone do
     end
     
     describe "age_min" do
-      let(:obj) { FactoryGirl.build(:stone, age_min: age_min) }
+      let(:obj) { FactoryGirl.build(:specimen, age_min: age_min) }
       context "数値の場合" do
         let(:age_min) { 1 }
         it { expect(obj).to be_valid }
@@ -211,7 +211,7 @@ describe Stone do
     end
     
     describe "age_max" do
-      let(:obj) { FactoryGirl.build(:stone, age_max: age_max) }
+      let(:obj) { FactoryGirl.build(:specimen, age_max: age_max) }
       context "数値の場合" do
         let(:age_max) { 11 }
         it { expect(obj).to be_valid }
@@ -221,38 +221,38 @@ describe Stone do
         it { expect(obj).not_to be_valid }
       end
       context "allow_nil" do
-        let(:obj) { FactoryGirl.build(:stone, age_max: nil) }
+        let(:obj) { FactoryGirl.build(:specimen, age_max: nil) }
         it { expect(obj).to be_valid }
       end
     end
     
     describe "age_unit" do
-      let(:obj) { FactoryGirl.build(:stone, age_unit: value) }
+      let(:obj) { FactoryGirl.build(:specimen, age_unit: value) }
       it_should_behave_like "length_check"
     end
     
     describe "size" do
-      let(:obj) { FactoryGirl.build(:stone, size: value) }
+      let(:obj) { FactoryGirl.build(:specimen, size: value) }
       it_should_behave_like "length_check"
     end
     
     describe "size_unit" do
-      let(:obj) { FactoryGirl.build(:stone, size_unit: value) }
+      let(:obj) { FactoryGirl.build(:specimen, size_unit: value) }
       it_should_behave_like "length_check"
     end
     
     describe "collector" do
-      let(:obj) { FactoryGirl.build(:stone, collector: value) }
+      let(:obj) { FactoryGirl.build(:specimen, collector: value) }
       it_should_behave_like "length_check"
     end
     
     describe "collector_detail" do
-      let(:obj) { FactoryGirl.build(:stone, collector_detail: value) }
+      let(:obj) { FactoryGirl.build(:specimen, collector_detail: value) }
       it_should_behave_like "length_check"
     end
     
     describe "collection_date_precision" do
-      let(:obj) { FactoryGirl.build(:stone, collection_date_precision: value) }
+      let(:obj) { FactoryGirl.build(:specimen, collection_date_precision: value) }
       it_should_behave_like "length_check"
     end
   end

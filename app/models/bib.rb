@@ -10,7 +10,7 @@ class Bib < ActiveRecord::Base
   has_many :authors, through: :bib_authors
 
   has_many :referrings, dependent: :destroy
-  has_many :stones, through: :referrings, source: :referable, source_type: "Stone"
+  has_many :specimens, through: :referrings, source: :referable, source_type: "Specimen"
   has_many :places, through: :referrings, source: :referable, source_type: "Place"
   has_many :boxes, through: :referrings, source: :referable, source_type: "Box"
   has_many :analyses, through: :referrings, source: :referable, source_type: "Analysis"
@@ -27,8 +27,8 @@ class Bib < ActiveRecord::Base
   
   def referrings_analyses
     ranalyses = self.analyses
-    stones.each do |stone| 
-      (ranalyses = ranalyses + stone.analyses) unless stone.analyses.empty?
+    specimens.each do |specimen| 
+      (ranalyses = ranalyses + specimen.analyses) unless specimen.analyses.empty?
     end
     boxes.each do |box| 
       (ranalyses = ranalyses + box.analyses) unless box.analyses.empty?

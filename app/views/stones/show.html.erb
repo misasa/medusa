@@ -1,47 +1,47 @@
 <div class="row">
   <div id="show-caption" class="col-lg-12">
-    <%= @stone.name_with_id %>
+    <%= @specimen.name_with_id %>
   </div>
 </div>
 <div class="row">
   <div id="show-tools" class="col-lg-4">
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
-        <%= link_to family_stone_path(@stone), class: "btn btn-default activate", id: "tree-conifer-button", remote: true do %>
+        <%= link_to family_specimen_path(@specimen), class: "btn btn-default activate", id: "tree-conifer-button", remote: true do %>
           <span class="glyphicon glyphicon-tree-conifer"></span>
         <% end %>
-        <% if @stone.has_image? %>
-          <%= link_to picture_stone_path(@stone), class: "btn btn-default", id: "picture-button", remote: true do %>
+        <% if @specimen.has_image? %>
+          <%= link_to picture_specimen_path(@specimen), class: "btn btn-default", id: "picture-button", remote: true do %>
             <span class="glyphicon glyphicon-picture"></span>
           <% end %>
         <% end %>
-        <%= link_to map_stone_path(@stone), class: "btn btn-default", id: "globe-button", remote: true do %>
+        <%= link_to map_specimen_path(@specimen), class: "btn btn-default", id: "globe-button", remote: true do %>
           <span class="glyphicon glyphicon-globe"></span>
         <% end %>
       </div>
-      <% if can? :update, @stone %>
+      <% if can? :update, @specimen %>
       <div class="btn-group btn-group-sm">
-        <%= link_to edit_stone_path(@stone), class: "btn btn-default", id: "pencil-button", remote: true do %>
+        <%= link_to edit_specimen_path(@specimen), class: "btn btn-default", id: "pencil-button", remote: true do %>
           <span class="glyphicon glyphicon-pencil"></span>
         <% end %>
-        <%= link_to detail_edit_stone_path(@stone), class: "btn btn-default", id: "wrench-button", remote: true do %>
+        <%= link_to detail_edit_specimen_path(@specimen), class: "btn btn-default", id: "wrench-button", remote: true do %>
           <span class="glyphicon glyphicon-wrench"></span>
         <% end %>
         <% if CustomAttribute.exists? %>
-          <%= link_to custom_attribute_stone_path(@stone), class: "btn btn-default", id: "inbox-button", remote: true do %>
+          <%= link_to custom_attribute_specimen_path(@specimen), class: "btn btn-default", id: "inbox-button", remote: true do %>
             <span class="glyphicon glyphicon-inbox"></span>
           <% end %>
         <% end %>
-        <%= link_to property_stone_path(@stone), class: "btn btn-default", id: "cog-button", remote: true do %>
+        <%= link_to property_specimen_path(@specimen), class: "btn btn-default", id: "cog-button", remote: true do %>
           <span class="glyphicon glyphicon-cog"></span>
         <% end %>
       </div>
       <% end %>
       <div class="btn-group btn-group-sm">
-        <%= link_to download_label_stone_path(@stone), class: "btn btn-default", id: "tag-button" do %>
+        <%= link_to download_label_specimen_path(@specimen), class: "btn btn-default", id: "tag-button" do %>
           <span class="glyphicon glyphicon-tag"></span>
         <% end %>
-        <%= link_to download_card_stone_path(@stone), class: "btn btn-default", id: "file-button" do %>
+        <%= link_to download_card_specimen_path(@specimen), class: "btn btn-default", id: "file-button" do %>
           <span class="glyphicon glyphicon-file"></span>
         <% end %>
       </div>
@@ -51,14 +51,14 @@
     </div>
   </div>
   <div id="show-body" class="col-lg-8">
-    <%= @stone.path %>
+    <%= @specimen.path %>
     <% tab_info = [
         ["at-a-glance",nil],
-        ["daughter",@stone.children],
-        ["history", @stone.paths],
-        ["analysis",@stone.analyses],
-        ["bib",@stone.bibs],
-        ["file",@stone.attachment_files]] %>
+        ["daughter",@specimen.children],
+        ["history", @specimen.paths],
+        ["analysis",@specimen.analyses],
+        ["bib",@specimen.bibs],
+        ["file",@specimen.attachment_files]] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <% tab_info.each do |key,array| %>

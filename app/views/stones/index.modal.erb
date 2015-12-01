@@ -1,4 +1,4 @@
-<%= paginate @stones, remote: true %>
+<%= paginate @specimens, remote: true %>
 <%= search_form_for @search, url: polymorphic_path(@search.klass, format: :modal), remote: true do |f| %>
 <table class="table table-condensed table-striped">
   <thead>
@@ -16,7 +16,7 @@
       <th><%= sort_link @search, :updated_at, "updated-at", { format: :modal }, remote: true %></th>
     </tr>
     <tr>
-      <th><%= text_field_tag :per_page, (params[:per_page] || Stone.default_per_page), size: 4, readonly: true %></th>
+      <th><%= text_field_tag :per_page, (params[:per_page] || Specimen.default_per_page), size: 4, readonly: true %></th>
       <th><%= f.text_field :name_cont, size: 15 %></th>
       <th><%= f.text_field :parent_name_cont, size: 15 %></th>
       <th><%= f.text_field :physical_form_name_cont, size: 12 %></th>
@@ -39,7 +39,7 @@
     </tr>
   </thead>
   <tbody>
-    <%= render partial: "stone.modal", collection: @stones, locals: { checked: false } %>
+    <%= render partial: "specimen.modal", collection: @specimens, locals: { checked: false } %>
   </tbody>
 </table>
 <% end %>
