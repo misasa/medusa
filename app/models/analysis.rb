@@ -199,7 +199,7 @@ class Analysis < ActiveRecord::Base
   def update_table_analyses
     return unless specimen_id_changed?
     TableAnalysis.delete_all(analysis_id: id)
-    TableStone.where(specimen_id: specimen_id).each do |table_specimen|
+    TableSpecimen.where(specimen_id: specimen_id).each do |table_specimen|
       max_priority = TableAnalysis.where(table_id: table_specimen.table_id, specimen_id: table_specimen.specimen_id).maximum(:priority) || 0
       TableAnalysis.create!(table_id: table_specimen.table_id, specimen_id: table_specimen.specimen_id, analysis_id: id, priority: (max_priority + 1))
     end
