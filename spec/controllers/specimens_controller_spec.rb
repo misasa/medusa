@@ -217,7 +217,7 @@ describe SpecimensController do
     let(:specimen) { FactoryGirl.create(:specimen) }
     before do
       specimen
-      allow(specimen).to receive(:build_card).and_return(double(:report))
+      allow(Specimen).to receive(:build_card).and_return(double(:report))
       allow(double(:report)).to receive(:generate).and_return(double(:generate))
       allow(controller).to receive(:send_data).and_return{controller.render nothing: true}
     end
@@ -234,7 +234,7 @@ describe SpecimensController do
     let(:specimen) { FactoryGirl.create(:specimen) }
     before do
       specimen
-      allow(specimen).to receive(:build_label).and_return(double(:build_label))
+      allow(Specimen).to receive(:build_label).and_return(double(:build_label))
       allow(controller).to receive(:send_data).and_return{controller.render nothing: true}
     end
     it { expect(controller).to receive(:send_data).with(double(:build_label), filename: "Specimen_#{specimen.id}.csv", type: "text/csv") }
@@ -248,8 +248,8 @@ describe SpecimensController do
     let(:specimens) { Specimen.all }
     before do
       specimen
-      allow(specimen).to receive(:where).with(id: params_ids).and_return(specimens)
-      allow(specimen).to receive(:build_bundle_label).with(specimens).and_return(label)
+      allow(Specimen).to receive(:where).with(id: params_ids).and_return(specimens)
+      allow(Specimen).to receive(:build_bundle_label).with(specimens).and_return(label)
       allow(controller).to receive(:send_data).and_return{controller.render nothing: true}
     end
     it { expect(controller).to receive(:send_data).with(label, filename: "specimens.csv", type: "text/csv") }
