@@ -6,9 +6,9 @@ describe "Table" do
   let(:unit) { FactoryGirl.create(:unit) }
   let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
   let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit) }
-  let(:table_stone) { FactoryGirl.create(:table_stone, table: table, stone: stone) }
-  let(:stone) { FactoryGirl.create(:stone) }
-  let(:analysis) { FactoryGirl.create(:analysis, stone: stone) }
+  let(:table_specimen) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen) }
+  let(:specimen) { FactoryGirl.create(:specimen) }
+  let(:analysis) { FactoryGirl.create(:analysis, specimen: specimen) }
   let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item) }
   
   describe "validates" do
@@ -46,7 +46,7 @@ describe "Table" do
     context "table linked 1 category_measurement_item" do
       before do
         category_measurement_item_1
-        table_stone
+        table_specimen
         analysis
         chemistry
         allow(Table::Row).to receive(:new).with(table, category_measurement_item_1, [chemistry]).and_return(:row_1)
@@ -59,7 +59,7 @@ describe "Table" do
       before do
         category_measurement_item_1
         category_measurement_item_2
-        table_stone
+        table_specimen
         analysis
         chemistry
         allow(Table::Row).to receive(:new).with(table, category_measurement_item_1, [chemistry]).and_return(:row_1)
@@ -147,10 +147,10 @@ describe "Table" do
   describe "#priority" do
     subject { table.priority(analysis_id) }
     let(:analysis_id) { analysis_2.id }
-    let(:analysis_1) { FactoryGirl.create(:analysis, stone: stone) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, stone: stone) }
-    let(:table_analysis_1) { FactoryGirl.create(:table_analysis, table: table, stone: stone, analysis: analysis_1, priority: 1) }
-    let(:table_analysis_2) { FactoryGirl.create(:table_analysis, table: table, stone: stone, analysis: analysis_2, priority: 2) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen) }
+    let(:table_analysis_1) { FactoryGirl.create(:table_analysis, table: table, specimen: specimen, analysis: analysis_1, priority: 1) }
+    let(:table_analysis_2) { FactoryGirl.create(:table_analysis, table: table, specimen: specimen, analysis: analysis_2, priority: 2) }
     before do
       table_analysis_1
       table_analysis_2
@@ -173,8 +173,8 @@ describe "Table::Row" do
   let(:unit) { FactoryGirl.create(:unit, name: "gram_per_gram", conversion: 1) }
   let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
   let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit, nickname: "測定１", display_in_html: "[A]", display_in_tex: "\abundance{A}") }
-  let(:stone) { FactoryGirl.create(:stone) }
-  let(:analysis) { FactoryGirl.create(:analysis, stone: stone) }
+  let(:specimen) { FactoryGirl.create(:specimen) }
+  let(:analysis) { FactoryGirl.create(:analysis, specimen: specimen) }
   let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item) }
   before do
     Alchemist.setup
@@ -198,26 +198,26 @@ describe "Table::Row" do
   end
   
   describe "#each" do
-    context "table not link table_stone" do
+    context "table not link table_specimen" do
       it { expect { |b| table.each(&b) }.not_to yield_control }
     end
-    context "table linked 1 table_stone" do
+    context "table linked 1 table_specimen" do
       before do
-        table_stone_1
+        table_specimen_1
         allow(Table::Cell).to receive(:new).with(row, [chemistry]).and_return(:cell)
       end
-      let(:table_stone_1) { FactoryGirl.create(:table_stone, table: table, stone: stone) }
+      let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen) }
       it { expect { |b| row.each(&b) }.to yield_control.once }
       it { expect { |b| row.each(&b) }.to yield_successive_args(:cell) }
     end
-    context "table linked 2 table_stones" do
+    context "table linked 2 table_specimens" do
       before do
-        table_stone_1
-        table_stone_2
+        table_specimen_1
+        table_specimen_2
         allow(Table::Cell).to receive(:new).with(row, [chemistry]).and_return(:cell)
       end
-      let(:table_stone_1) { FactoryGirl.create(:table_stone, table: table, stone: stone) }
-      let(:table_stone_2) { FactoryGirl.create(:table_stone, table: table, stone: stone) }
+      let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen) }
+      let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen) }
       it { expect { |b| row.each(&b) }.to yield_control.twice }
       it { expect { |b| row.each(&b) }.to yield_successive_args(:cell, :cell) }
     end
@@ -234,17 +234,17 @@ describe "Table::Row" do
       end
       context "table linked 2 chemistries" do
         let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2]) }
-        let(:table_stone_1) { FactoryGirl.create(:table_stone, table: table, stone: stone_1) }
-        let(:table_stone_2) { FactoryGirl.create(:table_stone, table: table, stone: stone_2) }
-        let(:stone_1) { FactoryGirl.create(:stone) }
-        let(:stone_2) { FactoryGirl.create(:stone) }
-        let(:analysis_1) { FactoryGirl.create(:analysis, stone: stone_1) }
-        let(:analysis_2) { FactoryGirl.create(:analysis, stone: stone_2) }
+        let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
+        let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
+        let(:specimen_1) { FactoryGirl.create(:specimen) }
+        let(:specimen_2) { FactoryGirl.create(:specimen) }
+        let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1) }
+        let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2) }
         let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
         let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
         before do
-          table_stone_1
-          table_stone_2
+          table_specimen_1
+          table_specimen_2
         end
         it { expect(subject).to eq((chemistry_1.value + chemistry_2.value) / table.chemistries.size) }
       end
@@ -257,17 +257,17 @@ describe "Table::Row" do
         end
         context "table linked 2 chemistries" do
           let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2]) }
-          let(:table_stone_1) { FactoryGirl.create(:table_stone, table: table, stone: stone_1) }
-          let(:table_stone_2) { FactoryGirl.create(:table_stone, table: table, stone: stone_2) }
-          let(:stone_1) { FactoryGirl.create(:stone) }
-          let(:stone_2) { FactoryGirl.create(:stone) }
-          let(:analysis_1) { FactoryGirl.create(:analysis, stone: stone_1) }
-          let(:analysis_2) { FactoryGirl.create(:analysis, stone: stone_2) }
+          let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
+          let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
+          let(:specimen_1) { FactoryGirl.create(:specimen) }
+          let(:specimen_2) { FactoryGirl.create(:specimen) }
+          let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1) }
+          let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2) }
           let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
           let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
           before do
-            table_stone_1
-            table_stone_2
+            table_specimen_1
+            table_specimen_2
           end
           it { expect(subject).to eq(((chemistry_1.value + chemistry_2.value) / table.chemistries.size).round(scale)) }
         end
@@ -291,21 +291,21 @@ describe "Table::Row" do
     let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2, chemistry_3]) }
     let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item, scale: scale) }
     let(:scale) { 1 }
-    let(:table_stone_1) { FactoryGirl.create(:table_stone, table: table, stone: stone_1) }
-    let(:table_stone_2) { FactoryGirl.create(:table_stone, table: table, stone: stone_2) }
-    let(:table_stone_3) { FactoryGirl.create(:table_stone, table: table, stone: stone_3) }
-    let(:stone_1) { FactoryGirl.create(:stone) }
-    let(:stone_2) { FactoryGirl.create(:stone) }
-    let(:stone_3) { FactoryGirl.create(:stone) }
-    let(:analysis_1) { FactoryGirl.create(:analysis, stone: stone_1) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, stone: stone_2) }
-    let(:analysis_3) { FactoryGirl.create(:analysis, stone: stone_3) }
+    let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
+    let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
+    let(:table_specimen_3) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_3) }
+    let(:specimen_1) { FactoryGirl.create(:specimen) }
+    let(:specimen_2) { FactoryGirl.create(:specimen) }
+    let(:specimen_3) { FactoryGirl.create(:specimen) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_3) }
     let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1.0) }
     let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2.0) }
     let(:chemistry_3) { FactoryGirl.create(:chemistry, analysis: analysis_3, unit: unit, measurement_item: measurement_item, value: 0.6) }
     before do
-      table_stone_1
-      table_stone_2
+      table_specimen_1
+      table_specimen_2
     end
     context "row not link chemistry" do
       let(:row) { Table::Row.new(table, category_measurement_item, []) }
@@ -372,9 +372,9 @@ describe "Table::Cell" do
   let(:unit) { FactoryGirl.create(:unit, name: "gram_per_gram", conversion: 1) }
   let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
   let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit) }
-  let(:table_stone) { FactoryGirl.create(:table_stone, table: table, stone: stone) }
-  let(:stone) { FactoryGirl.create(:stone) }
-  let(:analysis) { FactoryGirl.create(:analysis, stone: stone) }
+  let(:table_specimen) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen) }
+  let(:specimen) { FactoryGirl.create(:specimen) }
+  let(:analysis) { FactoryGirl.create(:analysis, specimen: specimen) }
   let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item, value: 1) }
   before do
     Alchemist.setup
@@ -390,7 +390,7 @@ describe "Table::Cell" do
     end
     context "table linked chemistry" do
       before do
-        table_stone
+        table_specimen
         chemistry
       end
       it { expect(subject).to eq value }
@@ -404,7 +404,7 @@ describe "Table::Cell" do
     end
     context "table linked chemistry" do
       before do
-        table_stone
+        table_specimen
         chemistry
         allow(cell).to receive(:raw).and_return(1)
       end
@@ -419,7 +419,7 @@ describe "Table::Cell" do
     end
     context "table linked chemistry" do
       before do
-        table_stone
+        table_specimen
         chemistry
         allow(table).to receive(:method_sign).with(analysis.technique, analysis.device).and_return(:method_sign)
       end
@@ -434,7 +434,7 @@ describe "Table::Cell" do
     end
     context "table linked chemistry" do
       before do
-        table_stone
+        table_specimen
         chemistry
       end
       it { expect(subject).to eq true }

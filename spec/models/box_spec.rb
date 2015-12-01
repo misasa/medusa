@@ -138,30 +138,30 @@ describe Box do
     subject{obj.analyses}
     let(:obj){FactoryGirl.create(:box)}
     context "no analysis" do
-      before{obj.stones.clear}
+      before{obj.specimens.clear}
       it { expect(subject.count).to eq 0}
       it { expect(subject).to eq []}
     end
 
     context "many analysis" do
       let(:analysis){FactoryGirl.create(:analysis)}
-      let(:stone1){FactoryGirl.create(:stone)}
-      let(:stone2){FactoryGirl.create(:stone)}
+      let(:specimen1){FactoryGirl.create(:specimen)}
+      let(:specimen2){FactoryGirl.create(:specimen)}
       before do
-        obj.stones.clear
-        obj.stones << stone1
-        obj.stones << stone2
-        stone1.analyses << analysis
-        stone1.analyses << analysis
-        stone1.analyses << analysis
-        stone1.analyses << analysis
-        stone1.analyses << analysis
-        stone2.analyses << analysis
-        stone2.analyses << analysis
-        stone2.analyses << analysis
+        obj.specimens.clear
+        obj.specimens << specimen1
+        obj.specimens << specimen2
+        specimen1.analyses << analysis
+        specimen1.analyses << analysis
+        specimen1.analyses << analysis
+        specimen1.analyses << analysis
+        specimen1.analyses << analysis
+        specimen2.analyses << analysis
+        specimen2.analyses << analysis
+        specimen2.analyses << analysis
       end
-      it { expect(subject.count).to eq (stone1.analyses.size + stone2.analyses.size)}
-      it { expect(subject).to eq (stone1.analyses + stone2.analyses)}
+      it { expect(subject.count).to eq (specimen1.analyses.size + specimen2.analyses.size)}
+      it { expect(subject).to eq (specimen1.analyses + specimen2.analyses)}
     end
   end
 end
