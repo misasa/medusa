@@ -47,7 +47,7 @@ describe BoxDecorator do
   describe ".family_tree" do
     subject{obj.family_tree}
     let(:child){FactoryGirl.create(:box)}
-    let(:stone){FactoryGirl.create(:stone)}
+    let(:specimen){FactoryGirl.create(:specimen)}
     before do
       allow(obj.h).to receive(:can?).and_return(true)
       obj.children << child
@@ -60,20 +60,20 @@ describe BoxDecorator do
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-folder-close\"></span>")}
     it{expect(subject).to match("<a href=\"/boxes/#{child.id}\">.*</a>")}
     it{expect(subject).to include("#{child.name}")}
-    context "box linked stone" do
-      before { obj.stones << stone }
+    context "box linked specimen" do
+      before { obj.specimens << specimen }
       it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")}
-      it{expect(subject).to match("<a href=\"/stones/#{stone.id}\">.*</a>")}
-      it{expect(subject).to include("#{stone.name}")}
+      it{expect(subject).to match("<a href=\"/specimens/#{specimen.id}\">.*</a>")}
+      it{expect(subject).to include("#{specimen.name}")}
     end
-    context "box not link stone" do
-      it{expect(subject).not_to include("#{stone.name}")}
+    context "box not link specimen" do
+      it{expect(subject).not_to include("#{specimen.name}")}
     end
   end
 
   describe ".tree_node" do
     subject{obj.tree_node}
-    let(:stone){FactoryGirl.create(:stone)}
+    let(:specimen){FactoryGirl.create(:specimen)}
     let(:child){FactoryGirl.create(:box)}
     let(:analysis){FactoryGirl.create(:analysis)}
     let(:bib){FactoryGirl.create(:bib)}
@@ -82,14 +82,14 @@ describe BoxDecorator do
     it{expect(subject).to include("#{obj.name}")}
     before do
       allow(obj.h).to receive(:can?).and_return(true)
-      stone.analyses << analysis
-      obj.stones << stone
+      specimen.analyses << analysis
+      obj.specimens << specimen
       obj.children << child
       obj.bibs << bib
       obj.attachment_files << attachment_file
     end
-    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span><span>#{obj.stones.count}</span>")}
-    it{expect(subject).to include("<span class=\"glyphicon glyphicon-folder-close\"></span><span>#{obj.stones.count}</span>")}
+    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span><span>#{obj.specimens.count}</span>")}
+    it{expect(subject).to include("<span class=\"glyphicon glyphicon-folder-close\"></span><span>#{obj.specimens.count}</span>")}
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-stats\"></span><span>#{obj.analyses.count}</span>")}
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-book\"></span><span>#{obj.bibs.count}</span>")}
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-file\"></span><span>#{obj.attachment_files.count}</span>")}
@@ -103,17 +103,17 @@ describe BoxDecorator do
     end
   end
 
-  describe "stones_count" do
-    subject{obj.stones_count}
+  describe "specimens_count" do
+    subject{obj.specimens_count}
     let(:icon){"cloud"}
-    let(:count){obj.stones.count}
+    let(:count){obj.specimens.count}
     context "count zero" do
-      before{obj.stones.clear}
+      before{obj.specimens.clear}
       it{expect(subject).to be_blank}
     end
     context "count zero" do
-      let(:stone){FactoryGirl.create(:stone)}
-      before{obj.stones << stone}
+      let(:specimen){FactoryGirl.create(:specimen)}
+      before{obj.specimens << specimen}
       it{expect(subject).to include("<span>#{count}</span>")}
       it{expect(subject).to include("<span class=\"glyphicon glyphicon-#{icon}\"></span>")}
     end
@@ -144,10 +144,10 @@ describe BoxDecorator do
       it{expect(subject).to be_blank}
     end
     context "count not zero" do
-      let(:stone){FactoryGirl.create(:stone)}
+      let(:specimen){FactoryGirl.create(:specimen)}
       let(:analysis){FactoryGirl.create(:analysis)}
-      before{stone.analyses  << analysis}
-      before{obj.stones << stone}
+      before{specimen.analyses  << analysis}
+      before{obj.specimens << specimen}
       it{expect(subject).to include("<span>#{count}</span>")}
       it{expect(subject).to include("<span class=\"glyphicon glyphicon-#{icon}\"></span>")}
     end
@@ -185,9 +185,9 @@ describe BoxDecorator do
     end
   end
 
-  describe ".boxed_stones" do
-    subject{obj.boxed_stones}
-    it{expect(subject).to eq(Stone.includes(:record_property, :user, :group, :physical_form).where(box_id: obj.id))} 
+  describe ".boxed_specimens" do
+    subject{obj.boxed_specimens}
+    it{expect(subject).to eq(Specimen.includes(:record_property, :user, :group, :physical_form).where(box_id: obj.id))} 
   end
 
   describe ".boxed_boxes" do
@@ -197,11 +197,11 @@ describe BoxDecorator do
 
   describe ".to_tex" do
     subject { obj.to_tex(alias_specimen) }
-    before { obj.stones << stone }
+    before { obj.specimens << specimen }
     let(:alias_specimen) { "specimen" }
-    let(:stone) { FactoryGirl.create(:stone, name: "name_1", box_id: obj.id) }
+    let(:specimen) { FactoryGirl.create(:specimen, name: "name_1", box_id: obj.id) }
     let(:time_now) { Time.now.to_date }
-    it { expect(subject).to eq "%------------\nThe sample names and ID of each mounted materials are listed in Table \\ref{mount:materials}.\n%------------\n\\begin{footnotesize}\n\\begin{table}\n\\caption{#{alias_specimen.pluralize.capitalize} mounted on #{obj.name} (#{obj.global_id}) as of #{time_now}.}\n\\begin{center}\n\\begin{tabular}{lll}\n\\hline\n#{alias_specimen} name\t&\tID\t&\tremark\\\\\n\\hline\nname_1\t&\t#{stone.global_id}\t&\t\\\\\n\\hline\n\\end{tabular}\n\\end{center}\n\\label{mount:materials}\n\\end{table}\n\\end{footnotesize}\n%------------" }
+    it { expect(subject).to eq "%------------\nThe sample names and ID of each mounted materials are listed in Table \\ref{mount:materials}.\n%------------\n\\begin{footnotesize}\n\\begin{table}\n\\caption{#{alias_specimen.pluralize.capitalize} mounted on #{obj.name} (#{obj.global_id}) as of #{time_now}.}\n\\begin{center}\n\\begin{tabular}{lll}\n\\hline\n#{alias_specimen} name\t&\tID\t&\tremark\\\\\n\\hline\nname_1\t&\t#{specimen.global_id}\t&\t\\\\\n\\hline\n\\end{tabular}\n\\end{center}\n\\label{mount:materials}\n\\end{table}\n\\end{footnotesize}\n%------------" }
   end
 
 end
