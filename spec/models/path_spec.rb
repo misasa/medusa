@@ -55,7 +55,7 @@ describe Path do
 
   describe ".cont_at(date)"do
     subject { Path.cont_at(date) }
-    let!(:stone) { FactoryGirl.create(:stone) }
+    let!(:specimen) { FactoryGirl.create(:specimen) }
    
     context "date指定あり" do
       let(:date) { "21151117" }
@@ -79,10 +79,10 @@ describe Path do
   
   describe ".diff(box, src_date, dst_date)"do
     subject { Path.diff(box, src_date, dst_date) }
-    let(:stone) { FactoryGirl.create(:stone) }
-    let(:box) { stone.box }
+    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:box) { specimen.box }
     context "該当あり(sign+)" do
-      before { FactoryGirl.create(:path_stone, datum_id: stone.id, ids: [box.id], brought_in_at: "20151118", brought_out_at: nil) }
+      before { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: "20151118", brought_out_at: nil) }
       let(:src_date) { "20151117" }
       let(:dst_date) { "20151118" }
       it "result" do
@@ -93,7 +93,7 @@ describe Path do
     end
     context "該当あり(sign-)" do
       before do
-        FactoryGirl.create(:path_stone, datum_id: stone.id, ids: [box.id], brought_in_at: "2005-11-20 01:40:12", brought_out_at: "2005-11-23 01:43:12")
+        FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: "2005-11-20 01:40:12", brought_out_at: "2005-11-23 01:43:12")
       end
       let(:src_date) { "20051121" }
       let(:dst_date) { "20051124" }
@@ -111,14 +111,14 @@ describe Path do
   end
   
   describe "each"do
-    let(:stone) { FactoryGirl.create(:stone) }
+    let(:specimen) { FactoryGirl.create(:specimen) }
     context "idsがpresent" do
-      let(:path) { FactoryGirl.create(:path_stone, datum_id: stone.id, ids: [stone.box.id]) }
+      let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [specimen.box.id]) }
       it "result" do
         proc = Proc.new do |sample|
           sample
         end
-        expect(path.each(&proc)).to eq stone
+        expect(path.each(&proc)).to eq specimen
       end
       it "yieldが2回呼ばれる" do
         count = 0
@@ -130,14 +130,14 @@ describe Path do
       end
     end
     context "idsがblank" do
-      let(:path) { FactoryGirl.create(:path_stone, datum_id: stone.id, ids: nil) }
+      let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: nil) }
       it "result" do
         count = 0
         proc = Proc.new do |sample|
           count += 1
           sample
         end
-        expect(path.each(&proc)).to eq stone
+        expect(path.each(&proc)).to eq specimen
       end
       it "yieldが1回呼ばれる" do
         count = 0
@@ -151,13 +151,13 @@ describe Path do
   end
   
   describe "boxes"do
-    let(:stone) { FactoryGirl.create(:stone) }
+    let(:specimen) { FactoryGirl.create(:specimen) }
     context "idsがpresent" do
-      let(:path) { FactoryGirl.create(:path_stone, datum_id: stone.id, ids: [stone.box.id]) }
-      it { expect(path.boxes).to eq [stone.box] }
+      let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [specimen.box.id]) }
+      it { expect(path.boxes).to eq [specimen.box] }
     end
     context "idsがblank" do
-      let(:path) { FactoryGirl.create(:path_stone, datum_id: stone.id, ids: nil) }
+      let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: nil) }
       it { expect(path.boxes).to eq [] }
     end
   end
