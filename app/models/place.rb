@@ -32,7 +32,7 @@ class Place < ActiveRecord::Base
   def analyses
     analyses = []
     specimens.each do |specimen| 
-      (analyses = analyses + specimen.analyses) unless stone.analyses.empty?
+      (analyses = analyses + specimen.analyses) unless specimen.analyses.empty?
     end
     analyses
   end
