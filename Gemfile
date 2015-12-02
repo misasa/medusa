@@ -78,6 +78,7 @@ gem 'acts_as_list'
 gem 'builder'
 gem 'activeresource'
 gem 'geocoder'
+gem 'migration_comments'
 
 group :development, :test do
   gem 'rak'

@@ -168,6 +168,8 @@ GEM
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     method_source (0.8.2)
+    migration_comments (0.3.2)
+      activerecord (>= 2.3.2)
     mime-types (1.25.1)
     mini_portile (0.5.2)
     minitest (4.7.5)
@@ -400,6 +402,7 @@ DEPENDENCIES
   jquery-rails
   jquery-ui-rails
   kaminari
+  migration_comments
   omniauth
   omniauth-google-oauth2
   omniauth-shibboleth
