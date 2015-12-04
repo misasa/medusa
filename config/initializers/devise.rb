@@ -239,7 +239,7 @@ Devise.setup do |config|
   # <Location path_to_application>
   #   RequestHeader set Shib-Session-ID %{Shib-Session-ID}e
   #   RequestHeader set Shib-Application-ID %{Shib-Application-ID}e
-  #   RequestHeader set Eppn %{eppn}e
+  #   RequestHeader set Shib-UID %{eppn}e
   # </Location>
   #
   config.omniauth :shibboleth, { :request_type => :header, uid_field: "Shib-UID" }
