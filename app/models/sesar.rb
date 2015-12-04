@@ -139,7 +139,9 @@ class Sesar < ActiveResource::Base
     end
 
     def from_xml(xml, save_cache = false)
-      array = Array.wrap(Hash.from_xml(xml)['results']['error']) rescue []
+      results = Hash.from_xml(xml)['results']
+      error = results.has_key?('sample') ? results['sample']['error'] : results['error']
+      array = Array.wrap(error) rescue []
       from_array(array, save_cache)
     end
   end
