@@ -7,6 +7,11 @@
   </div>
 
   <div class="form-physical_form form-physical_form-sm">
+    <%= f.label :sesar_sample_type, class: "small" %>
+    <%= f.select :sesar_sample_type, @sample_types.map { |s| [s, s] }, {include_blank: true }, class: "form-control input-sm" %>
+  </div>
+
+  <div class="form-physical_form form-physical_form-sm">
     <%= f.label :description, class: "small" %>
     <%= f.text_area :description, class: "form-control input-sm" %>
   </div>

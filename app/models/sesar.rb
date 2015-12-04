@@ -81,7 +81,7 @@ class Sesar < ActiveResource::Base
 
   def self.from_active_record(model)
     attributes = {}
-    attributes[:sample_type] = physical_form_conversion(model.physical_form)
+    attributes[:sample_type] = model.physical_form.try!(:sesar_sample_type)
     attributes[:name] = model.name
     attributes[:material] = model.classification.try!(:sesar_material)
     attributes[:igsn] = model.igsn
@@ -106,7 +106,7 @@ class Sesar < ActiveResource::Base
     attributes[:collection_end_date] = model.collected_at.try!(:strftime, "%Y-%m-%dT%H:%M:%SZ")
     attributes[:collection_date_precision] = model.collection_date_precision
     attributes[:current_archive] = Settings.sesar.archive_name
-    attributes[:current_archive_contact] = Settings.sesar.archive_contant
+    attributes[:current_archive_contact] = Settings.sesar.archive_contact
     attributes[:external_urls] =external_url(model)
     attributes[:description] = model.description
     associate_specimen_custom_attributes(model).each do |sca|
@@ -188,26 +188,6 @@ class Sesar < ActiveResource::Base
     xml
   end
 
-  def self.physical_form_conversion(physical_form)
-    return "" if physical_form.blank?
-    case physical_form.name
-    when "aliquot", "on mount", "grain", "hand specimen", "chunk"
-      "Individual Sample"
-    when "asteroid", "electronics", "tool", "package"
-      "Other"
-    when "powder", "thin section"
-      "Thin Section"
-    when "drill-cored"
-      "Core"
-    when "solution"
-      "Liquid"
-    when "fraction"
-      "Mechanical Fraction"
-    when "thick section"
-      "Slab"
-    end
-  end
-  
   def self.array_classification(classification)
     return "" if classification.blank?
     if classification.sesar_classification.present?
@@ -245,9 +225,13 @@ class Sesar < ActiveResource::Base
   end
   
   def self.external_url(model)
-    urls = []
-    Settings.sesar.external_urls.store("url", "http://dream.misasa.okayama-u.ac.jp/?igsn=#{model.igsn}")
-    urls.push(Settings.sesar.external_urls)
+    urls = Array(Settings.sesar.external_urls).each_with_object([]) do |external_url, array|
+      array << {
+        url: external_url.url.gsub(/\#{([^{}]+)}/) { model[$1] rescue nil },
+        description: external_url.description,
+        url_type: external_url.url_type
+      }
+    end
     if model.bibs.present?
       model.bibs.each do |bib|
         urls.push({url: "http://dx.doi.org/#{bib.doi}", description: bib.name, url_type: "DOI"})

@@ -6,6 +6,7 @@
     <tr>
       <th></th>
       <th>name</th>
+      <th>sesar sample type</th>
     </tr>
   </thead>
   <tbody>
@@ -17,6 +18,7 @@
         <% end %>
       </td>
       <td><%= physical_form.name %></td>
+      <td><%= physical_form.sesar_sample_type %></td>
       <td></td>
       <td>
         <%= link_to physical_form_path(physical_form), method: :delete, data: {confirm: t("confirm.delete")} do %>
@@ -31,6 +33,7 @@
     <tr>
       <td></td>
       <td><%= f.text_field :name, class: "form-control input-sm" %></td>
+      <td><%= f.select :sesar_sample_type, @sample_types.map { |s| [s, s] }, {include_blank: true }, class: "form-control input-sm" %></td>
       <td>
         <%= f.button class: "btn btn-default" do %>
         <span class="glyphicon glyphicon-save"></span>

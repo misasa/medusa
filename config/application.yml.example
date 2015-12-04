@@ -17,10 +17,11 @@ defaults: &defaults
     password: # Set GeoPass password
     user_code: # Set Sesar user_code (5 digits alphanumeric string)
     archive_name: "Institute for Study of the Earth's Interior Okayama University"
-    archive_contant: tkk@misasa.okayama-u.ac.kp
+    archive_contact: tkk@misasa.okayama-u.ac.kp
     external_urls:
-      description:
-      url_type: regular URL
+      - url: http://dream.misasa.okayama-u.ac.jp/?igsn=#{igsn}
+        description: 
+        url_type: regular URL
 
 development:
   <<: *defaults

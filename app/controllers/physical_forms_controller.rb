@@ -1,6 +1,7 @@
 class PhysicalFormsController < ApplicationController
   respond_to :html, :xml, :json
   before_action :find_resource, only: [:show, :edit, :update, :destroy]
+  before_action :read_yml, only: [:index, :edit]
   load_and_authorize_resource
   layout "admin"
 
@@ -40,6 +41,7 @@ class PhysicalFormsController < ApplicationController
   def physical_form_params
     params.require(:physical_form).permit(
       :name,
+      :sesar_sample_type,
       :description
     )
   end
@@ -48,4 +50,7 @@ class PhysicalFormsController < ApplicationController
     @physical_form = PhysicalForm.find(params[:id])
   end
 
+  def read_yml
+    @sample_types = YAML.load(File.read("#{Rails.root}/config/sample_type.yml"))["sample_type"]
+  end
 end
