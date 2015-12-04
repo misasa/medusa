@@ -20,7 +20,7 @@ module ApplicationHelper
         "#{(sec / (60*60)).floor} h ago"
       end
     elsif (today_in_sec < sec) && (sec < yesterday_in_sec)
-      "yesterday, #{time.hour}:#{time.min}"
+      "yesterday, #{time.strftime("%H:%M")}"
     else
       time.to_date
     end
