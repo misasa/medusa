@@ -56,6 +56,10 @@ class Specimen < ActiveRecord::Base
     end
   end
 
+  def ghost?
+    quantity && quantity < 0
+  end
+
   # def to_pml
   #   [self].to_pml
   # end

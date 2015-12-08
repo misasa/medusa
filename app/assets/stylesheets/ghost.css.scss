@@ -1,0 +1,14 @@
+.ghost {
+  .glyphicon {
+    opacity: 0.5;
+  }
+  a {
+    text-decoration: line-through;
+  }
+}
+.ghost.glyphicon {
+  opacity: 0.5;
+}
+a.ghost {
+  text-decoration: line-through;
+}

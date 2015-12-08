@@ -116,6 +116,26 @@ describe Specimen do
     end
   end
 
+  describe "#ghost" do
+    let(:specimen) { FactoryGirl.build(:specimen, quantity: quantity) }
+    context "quantity is null" do
+      let(:quantity) { nil }
+      it { expect(specimen).to_not be_ghost }
+    end
+    context "quantity greater than zero" do
+      let(:quantity) { 1 }
+      it { expect(specimen).to_not be_ghost }
+    end
+    context "quantity equals zero" do
+      let(:quantity) { 0 }
+      it { expect(specimen).to_not be_ghost }
+    end
+    context "quantity less than zero" do
+      let(:quantity) { -1 }
+      it { expect(specimen).to be_ghost }
+    end
+  end
+
   describe "validates" do
   
     shared_examples_for "length_check" do
