@@ -54,7 +54,7 @@
         <tr>
           <th align="right"><%== measurement_item.display_name %></th>
           <th> <%== measurement_item.unit.try!(:html) %></th>
-          <% value = "ー" %>
+          <% value = "-" %>
           <% @specimen.analyses.each do |analysis| %>
             <% analysis.chemistries.each {|chemistry| value = chemistry.value if chemistry.measurement_item_id == measurement_item.id } %>
             <td <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>align="right">
