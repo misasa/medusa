@@ -35,7 +35,7 @@ class TablesController < ApplicationController
 
   def table_params
     params.require(:table).permit(
-      :bib_id,
+      :bib_global_id,
       :description,
       :measurement_category_id,
       :with_average,
