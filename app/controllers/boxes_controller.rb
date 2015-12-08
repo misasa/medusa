@@ -143,6 +143,7 @@ class BoxesController < ApplicationController
       :box_type_id,
       :tag_list,
       :user_id,
+      :description,
       :group_id,
       :published,
       record_property_attributes: [

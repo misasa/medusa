@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151202003030) do
+ActiveRecord::Schema.define(version: 20151208075113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,7 @@ ActiveRecord::Schema.define(version: 20151202003030) do
     t.integer  "box_type_id", comment: "保管場所種別ID"
     t.datetime "created_at",  comment: "作成日時"
     t.datetime "updated_at",  comment: "更新日時"
+    t.string   "description"
   end
 
   add_index "boxes", ["box_type_id"], name: "index_boxes_on_box_type_id", using: :btree
