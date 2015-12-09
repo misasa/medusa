@@ -22,5 +22,5 @@
 en:
   confirm:
     logout: "Are you sure you want to logout?"
-    delete: "Are you sure you want to delete %{RECORD_NAME} ?"
+    delete: "Are you sure you want to delete %{recordname} ?"
     unlink: "Are you sure you want to unlink?"
