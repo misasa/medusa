@@ -6,7 +6,7 @@
     <%= link_to specimen.box.name,specimen.box if specimen.box %>
   <% end %>
   <td><%= specimen.physical_form.try!(:name) %></td>
-  <td><%= specimen.classification.try!(:name) %></td>
+  <td><%= specimen.classification.try!(:full_name) %></td>
   <%= td_if_expand specimen.tag_list %>
   <%= td_if_expand specimen.user.try!(:username) %>
   <td><%= specimen.group.try!(:name) %></td>

@@ -11,7 +11,7 @@
       <th><%= sort_link @search, :name, "name", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :parent_name, "parent", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :physical_form_name, "physical form", { format: :modal }, remote: true %></th>
-      <th><%= sort_link @search, :classification_name, "classification", { format: :modal }, remote: true %></th>
+      <th><%= sort_link @search, :classification_full_name, "classification", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :group_name, "group", { format: :modal }, remote: true %></th>
       <th><%= sort_link @search, :updated_at, "updated-at", { format: :modal }, remote: true %></th>
     </tr>
@@ -20,7 +20,7 @@
       <th><%= f.text_field :name_cont, size: 15 %></th>
       <th><%= f.text_field :parent_name_cont, size: 15 %></th>
       <th><%= f.text_field :physical_form_name_cont, size: 12 %></th>
-      <th><%= f.text_field :classification_name_cont, size: 12 %></th>
+      <th><%= f.text_field :classification_full_name_cont, size: 12 %></th>
       <th><%= f.text_field :group_name_cont, size: 15 %></th>
       <th>
         <%= f.text_field :updated_at_gteq, class: 'datepicker', placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]), size: 10 %>

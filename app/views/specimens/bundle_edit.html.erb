@@ -56,7 +56,7 @@
 	</div>
       <% end %>
       <th><%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
-      <th><%= f.select :classification_id, Classification.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
+      <th><%= f.select :classification_id, Classification.pluck(:full_name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
       <%= th_if_expand do %>
         <%= f.text_field :tag_list, class: "form-control input-sm" %>
       <% end %>

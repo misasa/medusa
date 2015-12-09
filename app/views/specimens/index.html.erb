@@ -14,7 +14,7 @@
         <%= sort_link @search, :box_name, "box" %>
       <% end %>
       <th><%= sort_link @search, :physical_form_name, "physical form" %></th>
-      <th><%= sort_link @search, :classification_name, "classification" %></th>
+      <th><%= sort_link @search, :classification_full_name, "classification" %></th>
       <%= th_if_expand "tags" %><!-- don't sort -->
       <%= th_if_expand do %>
         <%= sort_link @search, :user_username, "owner" %>
@@ -37,7 +37,7 @@
         <%= f.text_field :box_name_cont, class: "form-control input-sm", size: 15 %>
       <% end %>
       <th><%= f.text_field :physical_form_name_cont, class: "form-control input-sm", size: 12 %></th>
-      <th><%= f.text_field :classification_name_cont, class: "form-control input-sm", size: 12 %></th>
+      <th><%= f.text_field :classification_full_name_cont, class: "form-control input-sm", size: 12 %></th>
       <%= th_if_expand do %>
         <%= f.select :tags_name_eq, ActsAsTaggableOn::Tag.pluck(:name), { include_blank: true }, class: "form-control input-sm" %>
       <% end %>

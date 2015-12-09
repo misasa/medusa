@@ -13,7 +13,7 @@
       <dt>physical form</dt>
       <dd><%= @specimen.physical_form.try!(:name) %></dd>
       <dt>classification</dt>
-      <dd><%= @specimen.classification.try!(:name) %></dd>
+      <dd><%= @specimen.classification.try!(:full_name) %></dd>
       <dt>tags</dt>
       <dd><%= @specimen.tag_list %></dd>
       <dt>owner</dt>

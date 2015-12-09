@@ -5,7 +5,7 @@
       place: <%= place.try!(:latitude_to_text) + ", " + place.try!(:longitude_to_text) %> <%= link_to "more", place_path(place) %>
     </li>
   <% end %>
-  <%= li_if_exist("classification: ", @specimen.classification.try!(:name)) %>
+  <%= li_if_exist("classification: ", @specimen.classification.try!(:full_name)) %>
   <%= li_if_exist("physical_form: ", @specimen.physical_form.try!(:name)) %>
   <%= li_if_exist("quantity (#{@specimen.quantity_unit}): ", @specimen.quantity) %>
   <%= li_if_exist("tag list: ", @specimen.tag_list) %>
