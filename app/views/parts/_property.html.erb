@@ -62,7 +62,7 @@
   <%= form.button class: "btn btn-default" do %>
   <span class="glyphicon glyphicon-save"></span>
   <% end %>
-  <%= link_to record_path(record.global_id), class: "btn btn-default", method: :delete , data: {confirm: t("confirm.delete",:RECORD_NAME => record.name)} do %>
+  <%= link_to record_path(record.global_id), class: "btn btn-default", method: :delete , data: {confirm: t("confirm.delete",:recordname => record.name)} do %>
   <span class="glyphicon glyphicon-remove"></span>
   <% end %>
 <% end %>
