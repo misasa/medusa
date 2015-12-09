@@ -1,6 +1,8 @@
 class Table < ActiveRecord::Base
   include HasRecordProperty
 
+  alias_attribute :name, :description
+
   has_many :table_specimens, -> { order :position }, dependent: :destroy
   has_many :table_analyses, -> { order :priority }, dependent: :destroy
   has_many :specimens, through: :table_specimens
