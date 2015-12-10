@@ -49,7 +49,7 @@
       <td><%= difference_from_now(technique.updated_at) %></td>
       <td><%= difference_from_now(technique.created_at) %></td>
       <td>
-        <%= link_to technique_path(technique), method: :delete , data: {confirm: t("confirm.delete")} do %>
+        <%= link_to technique_path(technique), method: :delete , data: {confirm: t("confirm.delete",:recordname => technique.name)} do %>
         <span class="glyphicon glyphicon-remove"></span>
         <% end %>
       </td>

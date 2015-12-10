@@ -50,7 +50,7 @@
       <td><%= difference_from_now(author.updated_at) %></td>
       <td><%= difference_from_now(author.created_at) %></td>
       <td>
-        <%= link_to author_path(author), method: :delete , data: {confirm: t("confirm.delete")} do %>
+        <%= link_to author_path(author), method: :delete , data: {confirm: t("confirm.delete",:recordname => author.name)} do %>
         <span class="glyphicon glyphicon-remove"></span>
         <% end %>
       </td>

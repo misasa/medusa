@@ -50,7 +50,7 @@
       <td><%= difference_from_now(group.updated_at) %></td>
       <td><%= difference_from_now(group.created_at) %></td>
       <td>
-        <%= link_to group_path(group), method: :delete , data: {confirm: t("confirm.delete")} do %>
+        <%= link_to group_path(group), method: :delete , data: {confirm: t("confirm.delete",:recordname => group.name)} do %>
         <span class="glyphicon glyphicon-remove"></span>
         <% end %>
       </td>

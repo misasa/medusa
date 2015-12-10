@@ -49,7 +49,7 @@
       <td><%= difference_from_now(device.updated_at) %></td>
       <td><%= difference_from_now(device.created_at) %></td>
       <td>
-        <%= link_to device_path(device), method: :delete , data: {confirm: t("confirm.delete")} do %>
+        <%= link_to device_path(device), method: :delete , data: {confirm: t("confirm.delete",:recordname => device.name)} do %>
         <span class="glyphicon glyphicon-remove"></span>
         <% end %>
       </td>

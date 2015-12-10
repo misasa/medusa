@@ -22,7 +22,7 @@
       <td></td>
       <td><%= classification.sesar_material %></td>
       <td>
-        <%= link_to classification_path(classification), method: :delete, data: {confirm: t("confirm.delete")} do %>
+        <%= link_to classification_path(classification), method: :delete, data: {confirm: t("confirm.delete",:recordname => classification.full_name)} do %>
         <span class="glyphicon glyphicon-remove"></span>
         <% end %>
       </td>
