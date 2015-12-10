@@ -5,7 +5,7 @@
   <li>longitude: <%= @place.longitude_to_text %></li>
   <li>description: <%= @place.try!(:description) %></li>
   <li><%= @alias_specimen %>: <% @place.specimens.each do |specimen| %>
-    <%= link_to_if can?(:read, specimen), specimen.name, specimen_path(specimen) %>
+    <%= link_to_if can?(:read, specimen), specimen.name, specimen_path(specimen), class: specimen_ghost(specimen) %>
   <% end %></li>
   <li>modified at <%= difference_from_now(@place.updated_at) -%></li>
   <% if @place.attachment_pdf_files.present? %>

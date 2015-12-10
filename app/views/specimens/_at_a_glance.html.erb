@@ -30,7 +30,7 @@
 </ul>
 
 <% unless @specimen.analyses.empty? %>
-  Table of analysis on <%= content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + link_to(@specimen.name, specimen_path(@specimen)) %>
+  Table of analysis on <%= content_tag(:span, nil, class: specimen_ghost(@specimen, "glyphicon glyphicon-cloud")) + link_to(@specimen.name, specimen_path(@specimen), class: specimen_ghost(@specimen)) %>
   <table class="table table-condensed table-striped">
     <%
     if params[:measurement_category_id].blank?

@@ -18,7 +18,7 @@
           <th class="sortable">
             <%= f.fields_for :table_specimens, table_specimen do |g| %>
               <% specimen = g.object.specimen %>
-              <span class="glyphicon glyphicon-transfer"></span> <%= link_to_if can?(:read, specimen), specimen.name, specimen %>
+              <span class="glyphicon glyphicon-transfer"></span> <%= link_to_if can?(:read, specimen), specimen.name, specimen, class: specimen_ghost(specimen) %>
               <%= g.hidden_field :position, class: "position" %>
             <% end %>
           </th>

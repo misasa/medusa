@@ -3,6 +3,7 @@ class RecordProperty < ActiveRecord::Base
   belongs_to :group
   belongs_to :datum, polymorphic: true
   has_one :global_qr
+  delegate :ghost?, to: :datum, allow_nil: true
 
   before_save :generate_global_id, if: "global_id.blank?"
   before_save :adjust_published_at
