@@ -150,5 +150,29 @@ describe ApplicationHelper do
     let(:filename){"_specimen.html.erb"}
     it { expect(subject).to eq hidden_field_tag(:tab,"specimen")}
   end
+  
+  describe "#specimen_ghost" do
+    subject { helper.specimen_ghost(obj, html_class) }
+    let(:html_class) { "test" }
+    context "obj is Specimen" do
+      let(:obj) { FactoryGirl.create(:specimen, quantity: quantity) }
+      context "quantity < 0" do
+        let(:quantity) { -1 }
+        it { expect(subject).to eq "test ghost" }
+      end
+      context "quantity = 0" do
+        let(:quantity) { 0 }
+        it { expect(subject).to eq "test" }
+      end
+      context "quantity > 0" do
+        let(:quantity) { 1 }
+        it { expect(subject).to eq "test" }
+      end
+    end
+    context "obj is not Specimen" do
+      let(:obj) { FactoryGirl.create(:box) }
+      it { expect(subject).to eq "test" }
+    end
+  end
 
 end

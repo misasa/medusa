@@ -4,7 +4,7 @@
     <span class="glyphicon glyphicon-link"></span>
     <% end %>
   </td>
-  <td><%= link_to specimen.name, specimen_path(specimen, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal" %></td>
+  <td><%= link_to specimen.name, specimen_path(specimen, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: specimen_ghost(specimen)  %></td>
   <td><%= specimen.parent.try!(:name) %></td>
   <td><%= specimen.physical_form.try!(:name) %></td>
   <td><%= specimen.classification.try!(:full_name) %></td>

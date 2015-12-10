@@ -2,7 +2,7 @@
   <td><%= check_box_tag("ids[]", analysis.id, checked, id: "ids_#{analysis.id}", class: "select-row") if can?(:update, analysis) %></td>
   <td><%= link_to analysis.name,analysis %></td>
   <td><%= analysis.device.try!(:name) %></td>
-  <td><%= link_to analysis.specimen.name,analysis.specimen if analysis.specimen %></td>
+  <td><%= link_to analysis.specimen.name,analysis.specimen, class: specimen_ghost(analysis.specimen) if analysis.specimen %></td>
   <td><%= raw(analysis.chemistry_summary) %></td>
   <%= td_if_expand analysis.user.try!(:username) %>
   <td><%= analysis.group.try!(:name) %></td>

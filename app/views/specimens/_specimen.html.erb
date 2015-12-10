@@ -1,7 +1,7 @@
 <tr>
   <td><%= check_box_tag("ids[]", specimen.id, checked, id: "ids_#{specimen.id}", class: "select-row") if can?(:update, specimen) %></td>
-  <td><%= link_to specimen.name, specimen %></td>
-  <td><%= link_to specimen.parent.name,specimen.parent if specimen.parent %></td>
+  <td><%= link_to specimen.name, specimen, class: specimen_ghost(specimen) %></td>
+  <td><%= link_to specimen.parent.name,specimen.parent, class: specimen_ghost(specimen.parent) if specimen.parent %></td>
   <%= td_if_expand do %>
     <%= link_to specimen.box.name,specimen.box if specimen.box %>
   <% end %>

@@ -71,12 +71,19 @@ module ApplicationHelper
     links = []
     items.each do |content|
       if content
-        links << link_to_if(can?(:read, content), content.name, content)
+        links << link_to_if(can?(:read, content), content.name, content, class: specimen_ghost(content))
       else
         lins << [ "--" ]
       end
     end
     raw links.join("/")
+  end
+  
+  def specimen_ghost(obj, html_class="")
+    if obj.instance_of?(Specimen)
+      html_class += " ghost" if obj.ghost?
+    end
+    html_class
   end
 
   private

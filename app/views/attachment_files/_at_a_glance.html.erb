@@ -5,7 +5,7 @@
        <% attachable = attaching.attachable %>
        <% if attachable %>
          <% controller = attaching.attachable.class.to_s.downcase.pluralize %>
-         <%=link_to_if can?(:read, attachable), attachable.name, controller: controller, action: :show , id: attachable.id %>
+         <%=link_to_if can?(:read, attachable), attachable.name, {controller: controller, action: :show , id: attachable.id}, class: specimen_ghost(attachable) %>
       <% end %>
     <% end %>
     </li>
