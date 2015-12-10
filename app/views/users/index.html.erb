@@ -51,7 +51,7 @@
       <td><%= difference_from_now(user.updated_at) %></td>
       <td><%= difference_from_now(user.created_at) %></td>
       <td>
-        <%= link_to user_path(user), method: :delete , data: {confirm: t("confirm.delete")} do %>
+        <%= link_to user_path(user), method: :delete , data: {confirm: t("confirm.delete",:recordname =>user.username)} do %>
         <span class="glyphicon glyphicon-remove"></span>
         <% end %>
       </td>

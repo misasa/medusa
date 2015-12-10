@@ -21,7 +21,7 @@
       <td><%= physical_form.sesar_sample_type %></td>
       <td></td>
       <td>
-        <%= link_to physical_form_path(physical_form), method: :delete, data: {confirm: t("confirm.delete")} do %>
+        <%= link_to physical_form_path(physical_form), method: :delete, data: {confirm: t("confirm.delete",:recordname => physical_form.name)} do %>
         <span class="glyphicon glyphicon-remove"></span>
         <% end %>
       </td>

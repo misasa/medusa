@@ -24,7 +24,7 @@
         <td><%= table.age_unit %></td>
         <td></td>
         <td>
-          <%= link_to bib_table_path(@bib, table) + tab_param(__FILE__), method: :delete ,title: "delete table",data: {confirm: t("confirm.delete")} do %>
+          <%= link_to bib_table_path(@bib, table) + tab_param(__FILE__), method: :delete ,title: "delete table",data: {confirm: t("confirm.delete",:recordname => table.description)} do %>
             <span class="glyphicon glyphicon-remove"></span>
           <% end %>
         </td>

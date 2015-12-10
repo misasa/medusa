@@ -48,7 +48,7 @@
         <td><%= chemistry.uncertainty %></td>
         <td><%== chemistry.unit.try!(:html) %></td>
         <td>
-          <%= link_to analysis_chemistry_path(@analysis,chemistry), method: :delete ,title: "delete chemistory",data: {confirm: t("confirm.delete")} do %>
+          <%= link_to analysis_chemistry_path(@analysis,chemistry), method: :delete ,title: "delete chemistory",data: {confirm: t("confirm.delete",:recordname => chemistry.measurement_item.nickname)} do %>
               <span class="glyphicon glyphicon-remove"></span>
             <% end %>
         </td>

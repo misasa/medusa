@@ -54,7 +54,7 @@
       <td><%= difference_from_now(custom_attribute.updated_at) %></td>
       <td><%= difference_from_now(custom_attribute.created_at) %></td>
       <td>
-        <%= link_to custom_attribute_path(custom_attribute), method: :delete , data: {confirm: t("confirm.delete")} do %>
+        <%= link_to custom_attribute_path(custom_attribute), method: :delete , data: {confirm: t("confirm.delete",:recordname => custom_attribute.name)} do %>
         <span class="glyphicon glyphicon-remove"></span>
         <% end %>
       </td>
