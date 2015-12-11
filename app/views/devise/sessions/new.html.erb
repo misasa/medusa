@@ -1,13 +1,17 @@
 <h2><%= Settings.site_name %></h2>
 <%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+<% if Settings.sign_in.enable_password %>
   <%= f.submit "Sign in", class: "btn btn-mini btn-default" %> with <%= f.text_field :username, :autofocus => true, :placeholder => "Username" %>
    and <%= f.password_field :password, :placeholder => "Password" %>  
 <% end %>
-<% if File.exists?(Rails.root.join("config/google.yml")) %>
+<% end %>
+<% if Settings.sign_in.enable_google %>
   <div>
     <%= link_to "Sign in", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-mini btn-default" %> with Google account
   </div>
 <% end %>
+<% if Settings.sign_in.enable_shibboleth %>
 <div>
 <%= link_to "Sign in", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://"), class: "btn btn-mini btn-default" %> with Shibboleth
 </div>
+<% end %>
