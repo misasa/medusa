@@ -52,13 +52,23 @@
 
     <% if true||File.exists?(Rails.root.join("config/google.yml")) %>
       <div>
-      <b>Google ID</b><br />
-      <%= @user.omniauth_uid(:google_oauth2) %> <%= link_to("Link", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-mini btn-default") %>
+	<b>Google ID</b><br />
+	<%= @user.omniauth_uid(:google_oauth2) %>
+	<% if @user.omniauth_uid(:google_oauth2).present? %>
+	  <%= link_to("Unlink", unlink_account_path(provider: :google_oauth2), method: :post, class: "btn btn-mini btn-default") %>
+	<% else %>
+	  <%= link_to("Link", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-mini btn-default") %>
+	<% end %>
       </div>
     <% end %>
       <div>
-      <b>Shibboleth ID</b><br />
-      <%= @user.omniauth_uid(:shibboleth) %> <%= link_to "Link", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://"), class: "btn btn-mini btn-default" %>
+	<b>Shibboleth ID</b><br />
+	<%= @user.omniauth_uid(:shibboleth) %>
+	<% if @user.omniauth_uid(:shibboleth).present? %>
+	  <%= link_to("Unlink", unlink_account_path(provider: :shibboleth), method: :post, class: "btn btn-mini btn-default") %>
+	<% else %>
+	  <%= link_to "Link", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://"), class: "btn btn-mini btn-default" %>
+	<% end %>
       </div>
     <% end %>
   </div>

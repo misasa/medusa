@@ -176,6 +176,7 @@ Medusa::Application.routes.draw do
   resource  :account, only: [:show, :edit, :update] do
     member do
       get 'find_by_global_id'
+      post 'unlink'
     end
   end
   resources :users

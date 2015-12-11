@@ -22,6 +22,11 @@ class AccountsController < ApplicationController
     respond_with(@user,location: account_path)
   end
 
+  def unlink
+    @user.omniauths.find_by(provider: params[:provider]).destroy
+    respond_with(@user,location: edit_account_path)
+  end
+
   private
 
   def user_params
