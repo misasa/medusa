@@ -157,6 +157,39 @@ describe SpecimensController do
     it { expect(assigns(:specimen)).to eq specimen }
   end
   
+  describe "GET show_place", :current => true do
+    let(:specimen) { FactoryGirl.create(:specimen, place_id: place.id) }
+    let(:place) { FactoryGirl.create(:place) }
+    before { get :show_place, id: specimen.id, format: 'html'  }
+    it { expect(assigns(:specimen)).to eq specimen }
+    it { expect(assigns(:place)).to eq place }
+
+  end
+
+  describe "POST create_place", :current => true do
+    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:attributes) { {name: 'test-place', latitude: 123.4, longitude: 56.78, elevation: 120} }
+    #it { expect { post :create_place, id: specimen.id, place: attributes }.to change(Place, :count).by(1) }
+    describe "assigns as @specimen" do
+      before { post :create_place, id: specimen.id, place: attributes }
+      it { expect(assigns(:specimen).place).not_to be_nil }
+      it { expect(assigns(:place)).to be_persisted }
+      it { expect(assigns(:place).name).to eq attributes[:name]}
+      it { expect(assigns(:place).latitude).to eq attributes[:latitude]}
+      it { expect(assigns(:place).longitude).to eq attributes[:longitude]}
+      it { expect(assigns(:place).elevation).to eq attributes[:elevation]}
+    end
+
+    context "without place name" do
+      let(:attributes) { {latitude: 123.4, longitude: 56.78, elevation: 120} }
+      before { post :create_place, id: specimen.id, place: attributes }
+      it { expect(assigns(:specimen).place).not_to be_nil }
+      it { expect(assigns(:place)).to be_persisted }
+      it { expect(assigns(:place).name).to eq "locality of #{specimen[:name]}" }
+    end
+  end
+
+
   describe "GET property" do
     let(:specimen) { FactoryGirl.create(:specimen) }
     before { get :property, id: specimen.id }

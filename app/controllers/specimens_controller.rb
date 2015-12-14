@@ -52,6 +52,31 @@ class SpecimensController < ApplicationController
     respond_with @specimen, layout: !request.xhr?
   end
 
+  def show_place
+    @place = @specimen.place
+    #respond_with @place, layout: false
+    respond_to do |format|
+      format.html { redirect_to @place }
+      format.xml { render :xml => @place }
+      format.json { render :json => @place }
+    end
+  end
+
+  def create_place
+    @place = Place.new(place_params)
+    @place.name = "locality of #{@specimen.name}" unless @place.name
+    if @place.save
+      @specimen.place = @place
+      @specimen.save
+    end
+#    respond_with @place
+    respond_to do |format|
+      format.html { redirect_to @specimen }
+      format.xml { render :xml => @place }
+      format.json { render :json => @place }
+    end
+  end
+
   def property
     respond_with @specimen, layout: !request.xhr?
   end
@@ -149,6 +174,34 @@ class SpecimensController < ApplicationController
         :custom_attribute_id,
         :value
       ]
+    )
+  end
+
+
+  def place_params
+    params.require(:place).permit(
+      :name,
+      :description,
+      :latitude,
+      :longitude,
+      :elevation,
+      :link_url,
+      :doi,
+      :user_id,
+      :group_id,
+      :published,
+      record_property_attributes: [
+        :global_id,
+        :user_id,
+        :group_id,
+        :owner_readable,
+        :owner_writable,
+        :group_readable,
+        :group_writable,
+        :guest_readable,
+        :guest_writable
+      ]
+
     )
   end
 

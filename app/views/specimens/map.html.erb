@@ -1,2 +1,22 @@
-<%= @specimen.place.try(:to_map) %>
-<%= javascript_tag "actsAsMappable.initToMap();" %>
+<% if @specimen.place %>
+ <%= @specimen.place.try(:to_map) %>
+ <%= javascript_tag "actsAsMappable.initToMap();" %>
+<% else %>
+ <%= form_for Place.new, url: place_specimen_path(@specimen) do |f| %>
+     <div class="form-group form-group-sm">
+       <%= f.label :latitude, class: "small" %>
+       <%= f.text_field :latitude, class: "form-control input-sm" %>
+     </div>
+     <div class="form-group form-group-sm">
+       <%= f.label :longitude, class: "small" %>
+       <%= f.text_field :longitude, class: "form-control input-sm" %>
+     </div>
+     <div class="form-group form-group-sm">
+       <%= f.label :elevation, class: "small" %>
+       <%= f.text_field :elevation, class: "form-control input-sm" %>
+     </div>
+   <%= f.button class: "btn btn-default" do %>
+   <span class="glyphicon glyphicon-save"></span>
+   <% end %>
+ <% end %>
+<% end %>
