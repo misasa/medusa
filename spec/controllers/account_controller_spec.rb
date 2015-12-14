@@ -19,6 +19,7 @@ describe AccountsController do
       it { expect(response).to render_template("show") }
     end
   end
+
   describe "GET show with format", :current => true do
     context "with format 'json'" do
       let(:box){ FactoryGirl.create(:box)}
@@ -46,6 +47,31 @@ describe AccountsController do
       before { sign_in user }
       it { expect(assigns(:user)).to eq User.current }
       it { expect(response).to render_template("edit") }
+    end
+  end
+
+  describe "GET groups", :current => true do
+    let(:group_1){ FactoryGirl.create(:group)}
+    let(:group_2){ FactoryGirl.create(:group)}
+    let(:group_3){ FactoryGirl.create(:group)}
+    let(:group_4){ FactoryGirl.create(:group)}
+
+    before do
+      group_1.users << user
+      group_2.users << user
+      group_3
+      group_4
+      get :groups, format: 'json'
+    end
+    context "administrator" do
+#      it { expect(assigns(:user)).to eq User.current }
+      it { expect(assigns(:groups).count).to eq 4 }
+    end
+    context "not administrator" do
+      let(:user) { FactoryGirl.create(:user,administrator: false) }
+      before { sign_in user }
+#      it { expect(assigns(:user)).to eq User.current }
+      it { expect(assigns(:groups).count).to eq 2 }
     end
   end
 

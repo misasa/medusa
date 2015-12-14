@@ -179,6 +179,7 @@ Medusa::Application.routes.draw do
     member do
       get 'find_by_global_id'
       post 'unlink'
+      get 'groups'
     end
   end
   resources :users
