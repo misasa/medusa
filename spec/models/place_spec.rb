@@ -82,4 +82,79 @@ describe Place do
       end
     end
   end
+
+  describe ".to_dms", :current => true do
+    subject {Place.to_dms(degree) }
+    let(:degree){ 5.625 }
+    it { expect(subject[:deg]).to be_eql(5) }
+    it { expect(subject[:min]).to be_eql(37) }
+    it { expect(subject[:sec]).to be_eql(30.0) }
+  end
+
+  describe ".from_dms", :current => true do
+    subject {Place.from_dms(deg, min, sec) }
+    let(:dms){ {deg: 5, min: min, sec: sec} }
+    let(:deg){ 5 }
+    let(:min){ 37 }
+    let(:sec){ 30.0 }
+    context "with sec" do 
+      it { expect(format("%.3f", subject)).to be_eql("5.625") }
+    end
+
+    context "without sec" do 
+      let(:sec){ nil }
+      it { expect(format("%.3f", subject)).to be_eql("5.617") }
+    end
+
+  end
+
+
+  describe "before_save", :current => true do
+    subject { obj.save }
+    let(:obj){ FactoryGirl.build(:place, attributes)}
+    let(:attributes){ {name: "test", latitude: nil, longitude: nil, latitude_direction: latitude_direction, latitude_deg: deg, latitude_min: min, latitude_sec: sec, longitude_direction: longitude_direction, longitude_deg: deg, longitude_min: min, longitude_sec: sec} }
+    let(:latitude_direction){ "N" }
+    let(:longitude_direction){ "S" }
+    let(:deg){ "5" }
+    let(:min){ "37" }
+    let(:sec){ "30.0" }
+    before do
+      subject
+    end
+    it { expect(obj.latitude).not_to be_nil }
+    it { expect(obj.longitude).not_to be_nil }
+
+  end
+
+  describe "latitude_in_text", :current => true do
+    subject { obj.latitude_in_text }
+    let(:obj){ FactoryGirl.create(:place, name: "test", latitude: degree, longitude: 5.625) }
+    context "degree > 0" do
+      let(:degree) { 5.625 }
+      it { expect(subject).to be_eql("N 5 deg. 37 min. 30.0 sec.") }
+    end
+
+    context "degree < 0" do
+      let(:degree) { -5.625 }
+      it { expect(subject).to be_eql("S 5 deg. 37 min. 30.0 sec.") }
+    end
+
+  end
+
+  describe "longitude_in_text", :current => true do
+    subject { obj.longitude_in_text }
+    let(:obj){ FactoryGirl.create(:place, name: "test", latitude: degree, longitude: degree) }
+    context "degree > 0" do
+      let(:degree) { 5.625 }
+      it { expect(subject).to be_eql("E 5 deg. 37 min. 30.0 sec.") }
+    end
+
+    context "degree < 0" do
+      let(:degree) { -5.625 }
+      it { expect(subject).to be_eql("W 5 deg. 37 min. 30.0 sec.") }
+    end
+
+  end
+
 end
+ 
