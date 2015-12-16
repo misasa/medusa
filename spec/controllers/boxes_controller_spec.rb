@@ -88,49 +88,49 @@ describe BoxesController do
       let(:two_years_ago) { ddate.years_ago(2).strftime("%Y-%m-%d")}
 
       context "1 day ago" do
-        before { get :show, id: box.id, button_action: 'difference from 1 day ago', dst_date: dst_date }
+        before { get :show, id: box.id, button_action: 'diff from 1 day ago', dst_date: dst_date }
         it { expect(assigns(:dst_date)).to eq dst_date }
         it { expect(assigns(:src_date)).to eq a_day_ago }
       end
 
       context "2 days ago" do
-        before { get :show, id: box.id, button_action: 'difference from 2 days ago', dst_date: dst_date }
+        before { get :show, id: box.id, button_action: 'diff from 2 days ago', dst_date: dst_date }
         it { expect(assigns(:dst_date)).to eq dst_date }
         it { expect(assigns(:src_date)).to eq two_days_ago }
       end
 
       context "1 week ago" do
-        before { get :show, id: box.id, button_action: 'difference from 1 week ago', dst_date: dst_date }
+        before { get :show, id: box.id, button_action: 'diff from 1 week ago', dst_date: dst_date }
         it { expect(assigns(:dst_date)).to eq dst_date }
         it { expect(assigns(:src_date)).to eq one_week_ago }
       end
 
       context "2 weeks ago" do
-        before { get :show, id: box.id, button_action: 'difference from 2 weeks ago', dst_date: dst_date }
+        before { get :show, id: box.id, button_action: 'diff from 2 weeks ago', dst_date: dst_date }
         it { expect(assigns(:dst_date)).to eq dst_date }
         it { expect(assigns(:src_date)).to eq two_weeks_ago }
       end
 
       context "1 month ago" do
-        before { get :show, id: box.id, button_action: 'difference from 1 month ago', dst_date: dst_date }
+        before { get :show, id: box.id, button_action: 'diff from 1 month ago', dst_date: dst_date }
         it { expect(assigns(:dst_date)).to eq dst_date }
         it { expect(assigns(:src_date)).to eq one_month_ago }
       end
 
       context "2 months ago" do
-        before { get :show, id: box.id, button_action: 'difference from 2 months ago', dst_date: dst_date }
+        before { get :show, id: box.id, button_action: 'diff from 2 months ago', dst_date: dst_date }
         it { expect(assigns(:dst_date)).to eq dst_date }
         it { expect(assigns(:src_date)).to eq two_months_ago }
       end
 
       context "1 year ago" do
-        before { get :show, id: box.id, button_action: 'difference from 1 year ago', dst_date: dst_date }
+        before { get :show, id: box.id, button_action: 'diff from 1 year ago', dst_date: dst_date }
         it { expect(assigns(:dst_date)).to eq dst_date }
         it { expect(assigns(:src_date)).to eq one_year_ago }
       end
 
       context "2 years ago" do
-        before { get :show, id: box.id, button_action: 'difference from 2 years ago', dst_date: dst_date }
+        before { get :show, id: box.id, button_action: 'diff from 2 years ago', dst_date: dst_date }
         it { expect(assigns(:dst_date)).to eq dst_date }
         it { expect(assigns(:src_date)).to eq two_years_ago }
       end

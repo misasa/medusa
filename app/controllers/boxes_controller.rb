@@ -19,7 +19,7 @@ class BoxesController < ApplicationController
     #if params[:q]
     @button_action_selection_items = ["snapshot"]
     duration_numbers = [1, 2]
-    ["difference from", "integration from"].each do |prefix|
+    ["diff from", "integ from"].each do |prefix|
       ["day", "week", "month", "year"].each do |str|
           duration_numbers.each do |num| 
             @button_action_selection_items << "#{prefix} #{num} #{str.pluralize(num)} ago"
@@ -30,7 +30,7 @@ class BoxesController < ApplicationController
 
     if !(params[:dst_date].blank?)
       @dst_date = params[:dst_date]
-      if m = /difference from (\d*) (.*) ago/.match(params[:button_action])
+      if m = /diff from (\d*) (.*) ago/.match(params[:button_action])
         ddate = Date.strptime(@dst_date, "%Y-%m-%d")
         case m[2]
         when "day", "days"
@@ -51,7 +51,7 @@ class BoxesController < ApplicationController
         @contents = @contents.page(params[:page]).per(params[:per_page])
       else
         params[:q] = {} unless params[:q]
-        if m = /integration from (\d*) (.*) ago/.match(params[:button_action])
+        if m = /integ from (\d*) (.*) ago/.match(params[:button_action])
           ddate = Date.strptime(@dst_date, "%Y-%m-%d")
           case m[2]
           when "day", "days"
