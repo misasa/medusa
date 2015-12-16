@@ -45,3 +45,8 @@
     <% end %>
   </tfoot>
 </table>
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#new_physical_form", function() {
+    window.location.href = '/physical_forms'
+  });
+<% end %>

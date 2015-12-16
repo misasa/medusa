@@ -72,3 +72,8 @@
     <% end %>
   </tfoot>
 </table>
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#new_device", function() {
+    $("#device_search").submit();
+  });
+<% end %>

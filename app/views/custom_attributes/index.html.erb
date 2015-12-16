@@ -78,3 +78,8 @@
     <% end %>
   </tfoot>
 </table>
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#new_custom_attribute", function() {
+    $("#custom_attribute_search").submit();
+  });
+<% end %>
