@@ -54,3 +54,8 @@
     <% end %>
   </tfoot>
 </table>
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#new_measurement_item", function() {
+    window.location.href = '/measurement_items'
+  });
+<% end %>

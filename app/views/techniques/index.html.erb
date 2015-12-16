@@ -72,3 +72,8 @@
     <% end %>
   </tfoot>
 </table>
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#new_technique", function() {
+    $("#technique_search").submit();
+  });
+<% end %>
