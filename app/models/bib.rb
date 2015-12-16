@@ -12,7 +12,7 @@ class Bib < ActiveRecord::Base
   has_many :referrings, dependent: :destroy
   has_many :specimens, through: :referrings, source: :referable, source_type: "Specimen"
   has_many :places, through: :referrings, source: :referable, source_type: "Place"
-  has_many :boxes, through: :referrings, source: :referable, source_type: "Box"
+  has_many :boxes, -> { order(:name) }, through: :referrings, source: :referable, source_type: "Box"
   has_many :analyses, through: :referrings, source: :referable, source_type: "Analysis"
   has_many :tables
 

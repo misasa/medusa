@@ -1,7 +1,7 @@
 module HasRecursive
   extend ActiveSupport::Concern
   included do
-  	with_recursive
+    with_recursive(order: :name)
   end
 
   def self_and_descendants

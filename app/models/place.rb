@@ -10,7 +10,7 @@ class Place < ActiveRecord::Base
 
   acts_as_mappable
 
-  has_many :specimens
+  has_many :specimens, -> { order(:name) }
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
 
