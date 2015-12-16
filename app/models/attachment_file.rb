@@ -10,9 +10,9 @@ class AttachmentFile < ActiveRecord::Base
 
   has_many :spots, dependent: :destroy
   has_many :attachings, dependent: :destroy
-  has_many :specimens, through: :attachings, source: :attachable, source_type: "Specimen"
+  has_many :specimens, -> { order(:name) }, through: :attachings, source: :attachable, source_type: "Specimen"
   has_many :places, through: :attachings, source: :attachable, source_type: "Place"
-  has_many :boxes, through: :attachings, source: :attachable, source_type: "Box"
+  has_many :boxes, -> { order(:name) }, through: :attachings, source: :attachable, source_type: "Box"
   has_many :bibs, through: :attachings, source: :attachable, source_type: "Bib"
   has_many :analyses, through: :attachings, source: :attachable, source_type: "Analysis"
 

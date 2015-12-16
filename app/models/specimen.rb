@@ -11,7 +11,7 @@ class Specimen < ActiveRecord::Base
  #with_recursive
 
   has_many :analyses, before_remove: :delete_table_analysis
-  has_many :children, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify
+  has_many :children, -> { order(:name) }, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify
   has_many :specimens, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify  
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
