@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151209000824) do
+ActiveRecord::Schema.define(version: 20151216060057) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -220,6 +220,7 @@ ActiveRecord::Schema.define(version: 20151209000824) do
     t.datetime "brought_out_at",                 comment: "持出日時"
     t.integer  "brought_in_by_id",               comment: "持込者ID"
     t.integer  "brought_out_by_id",              comment: "持出者ID"
+    t.datetime "checked_at",                     comment: "棚卸日時"
   end
 
   add_index "paths", ["datum_id", "datum_type"], name: "index_paths_on_datum_id_and_datum_type", using: :btree
