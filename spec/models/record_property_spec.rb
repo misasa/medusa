@@ -4,7 +4,8 @@ describe RecordProperty do
   shared_examples "checking user permission" do |method, owner_permission_attribute, group_permission_attribute, guest_permission_attribute|
     subject { record_property.send(method, user) }
     let(:record_property) { FactoryGirl.build(:record_property, user_id: user_id, group_id: group_id, owner_permission_attribute => owner_permission, group_permission_attribute => group_permission, guest_permission_attribute => guest_permission) }
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryGirl.create(:user, administrator: admin) }
+    let(:admin) { false }
     let(:group) { FactoryGirl.create(:group) }
     before { GroupMember.create(user: user, group: group) }
     context "when user is owner." do
@@ -19,6 +20,10 @@ describe RecordProperty do
       context "when owner is not permitted." do
         let(:owner_permission) { false }
         it { expect(subject).to be_falsey }
+        context "when user is administrator." do
+          let(:admin) { true }
+          it { expect(subject).to be_truthy }
+        end
       end
     end
     context "when user is not owner." do
@@ -34,6 +39,10 @@ describe RecordProperty do
         context "when group is not permitted." do
           let(:group_permission) { false }
           it { expect(subject).to be_falsey }
+          context "when user is administrator." do
+            let(:admin) { true }
+            it { expect(subject).to be_truthy }
+          end
         end
       end
       context "when user does not belongs to group." do
@@ -46,6 +55,10 @@ describe RecordProperty do
         context "when guest is not permitted." do
           let(:guest_permission) { false }
           it { expect(subject).to be_falsey }
+          context "when user is administrator." do
+            let(:admin) { true }
+            it { expect(subject).to be_truthy }
+          end
         end
       end
     end
@@ -157,7 +170,8 @@ describe RecordProperty do
   describe ".readables" do
     subject { RecordProperty.readables(user) }
     let(:record_property) { FactoryGirl.create(:record_property, owner_readable: owner_readable, group_readable: group_readable, guest_readable: guest_readable, user_id: user_id, group_id: group_id) }
-    let(:user) { FactoryGirl.create(:user_foo) }
+    let(:user) { FactoryGirl.create(:user_foo, administrator: admin) }
+    let(:admin) { false }
     let(:group) { FactoryGirl.create(:group) }
     let(:another_user) { FactoryGirl.create(:user_baa) }
     let(:another_group) { FactoryGirl.create(:group) }
@@ -177,6 +191,10 @@ describe RecordProperty do
       context "when owner is not permitted to read." do
         let(:owner_readable) { false }
         it { expect(subject).to be_blank }
+        context "when user is administrator." do
+          let(:admin) { true }
+          it { expect(subject).to be_present }
+        end
       end
     end
     context "when user is not record owner." do
@@ -192,6 +210,10 @@ describe RecordProperty do
         context "when group member is not permitted to read." do
           let(:group_readable) { false }
           it { expect(subject).to be_blank }
+          context "when user is administrator." do
+            let(:admin) { true }
+            it { expect(subject).to be_present }
+          end
         end
       end
       context "when user does not belongs to record group." do
@@ -204,6 +226,10 @@ describe RecordProperty do
         context "when guest is not permitted to read." do
           let(:guest_readable) { false }
           it { expect(subject).to be_blank }
+          context "when user is administrator." do
+            let(:admin) { true }
+            it { expect(subject).to be_present }
+          end
         end
       end
     end

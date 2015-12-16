@@ -266,7 +266,8 @@ describe HasRecordProperty do
   describe ".readables" do
     subject { HasRecordPropertySpec.readables(user) }
     let(:obj) { klass.create(name: "foo") }
-    let(:user) { FactoryGirl.create(:user_foo) }
+    let(:user) { FactoryGirl.create(:user_foo, administrator: admin) }
+    let(:admin) { false }
     let(:group) { FactoryGirl.create(:group) }
     let(:another_user) { FactoryGirl.create(:user_baa) }
     let(:another_group) { FactoryGirl.create(:group) }
@@ -286,6 +287,10 @@ describe HasRecordProperty do
       context "when owner is not permitted to read." do
         let(:owner_readable) { false }
         it { expect(subject).to be_blank }
+        context "when user is administrator." do
+          let(:admin) { true }
+          it { expect(subject).to be_present }
+        end
       end
     end
     context "when user is not record owner." do
@@ -301,6 +306,10 @@ describe HasRecordProperty do
         context "when group member is not permitted to read." do
           let(:group_readable) { false }
           it { expect(subject).to be_blank }
+          context "when user is administrator." do
+            let(:admin) { true }
+            it { expect(subject).to be_present }
+          end
         end
       end
       context "when user does not belongs to record group." do
@@ -313,6 +322,10 @@ describe HasRecordProperty do
         context "when guest is not permitted to read." do
           let(:guest_readable) { false }
           it { expect(subject).to be_blank }
+          context "when user is administrator." do
+            let(:admin) { true }
+            it { expect(subject).to be_present }
+          end
         end
       end
     end
