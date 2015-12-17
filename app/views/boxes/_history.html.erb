@@ -11,7 +11,7 @@
   <tbody>
     <% @box.paths.includes(:brought_in_by, :brought_out_by).each do |path| %>
       <tr>
-        <td><%= raw (path.boxes.map { |content| link_to_if(can?(:read, content), content.name, content) }).join("/") %></td>
+        <td><%= raw (path.boxes.map { |content| content ? link_to_if(can?(:read, content), content.name, content) : "--" }).join("/") %></td>
         <td><%= path.brought_in_at.strftime("%Y-%m-%d %H:%M") %></td> 
         <td><%= path.brought_in_by.username %></td>
         <td><%= path.checked_at && path.checked_at.strftime("%Y-%m-%d %H:%M") %></td> 
