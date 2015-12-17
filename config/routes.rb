@@ -67,6 +67,8 @@ Medusa::Application.routes.draw do
       get :property
       get :custom_attribute
       get :detail_edit
+      get :place, to: :show_place
+      post :place, to: :create_place
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "specimen" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "specimen" }
@@ -176,6 +178,8 @@ Medusa::Application.routes.draw do
   resource  :account, only: [:show, :edit, :update] do
     member do
       get 'find_by_global_id'
+      post 'unlink'
+      get 'groups'
     end
   end
   resources :users

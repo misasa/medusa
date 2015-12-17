@@ -22,7 +22,10 @@ defaults: &defaults
       - url: http://dream.misasa.okayama-u.ac.jp/?igsn=#{igsn}
         description: 
         url_type: regular URL
-
+  sign_in: &3
+    enable_password: true
+    enable_google: true
+    enable_shibboleth: false
 development:
   <<: *defaults
 

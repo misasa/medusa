@@ -53,3 +53,8 @@
     <% end %>
   </tfoot>
 </table>
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#new_measurement_category", function() {
+    window.location.href = '/measurement_categories'
+  });
+<% end %>

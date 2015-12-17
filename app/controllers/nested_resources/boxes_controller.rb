@@ -38,6 +38,7 @@ class NestedResources::BoxesController < ApplicationController
   def inventory
     @box= Box.find(params[:id])
     @box.update_attributes(parent_id: params[:box_id], updated_at: Time.now)
+    @box.paths.current.first.update_attribute(:checked_at, @box.updated_at) if @box.paths.current.first
     respond_with @box
   end
 

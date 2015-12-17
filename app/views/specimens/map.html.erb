@@ -1,2 +1,46 @@
-<%= @specimen.place.try(:to_map) %>
-<%= javascript_tag "actsAsMappable.initToMap();" %>
+<% if @specimen.place %>
+ <%= @specimen.place.try(:to_map) %>
+ <%= javascript_tag "actsAsMappable.initToMap();" %>
+<% else %>
+ <%= form_for Place.new(:latitude_direction => 'N', :longitude_direction => 'E'), url: place_specimen_path(@specimen) do |f| %>
+     <div class="form-group form-group-sm">
+      <%= f.label :latitude, class: "small" %>
+      <%= f.label :latitude, class: "radiobox-inline" do %>
+        <%= f.radio_button :latitude_direction, 'N' %> N
+      <% end %>
+      <%= f.label :latitude, class: "radiobox-inline" do %>
+        <%= f.radio_button :latitude_direction, 'S' %> S
+      <% end %>
+      <br/>
+      <label class="small">Deg.</label>
+       <%= f.text_field :latitude_deg, class: "form-control input-sm" %>
+      <label class="small">Min.</label>
+       <%= f.text_field :latitude_min, class: "form-control input-sm" %>
+      <label class="small">Sec.</label>
+       <%= f.text_field :latitude_sec, class: "form-control input-sm" %>
+     </div>
+     <div class="form-group form-group-sm">
+       <%= f.label :longitude, class: "small" %>
+      <%= f.label :longitude, class: "radiobox-inline" do %>
+        <%= f.radio_button :longitude_direction, 'E' %> E
+      <% end %>
+      <%= f.label :longitude, class: "radiobox-inline" do %>
+        <%= f.radio_button :longitude_direction, 'W' %> W
+      <% end %>
+      <br/>
+      <label class="small">Deg.</label>
+       <%= f.text_field :longitude_deg, class: "form-control input-sm" %>
+      <label class="small">Min.</label>
+       <%= f.text_field :longitude_min, class: "form-control input-sm" %>
+      <label class="small">Sec.</label>
+       <%= f.text_field :longitude_sec, class: "form-control input-sm" %>
+     </div>
+     <div class="form-group form-group-sm">
+       <%= f.label :elevation, class: "small" %>
+       <%= f.text_field :elevation, class: "form-control input-sm" %>
+     </div>
+   <%= f.button class: "btn btn-default" do %>
+   <span class="glyphicon glyphicon-save"></span>
+   <% end %>
+ <% end %>
+<% end %>

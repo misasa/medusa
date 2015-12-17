@@ -17,4 +17,5 @@ class Settings < Settingslogic
       "specimen"
     end
   end
+
 end

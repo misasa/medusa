@@ -73,3 +73,8 @@
     <% end %>
   </tfoot>
 </table>
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#new_group", function() {
+    $("#group_search").submit();
+  });
+<% end %>

@@ -13,9 +13,9 @@ class Box < ActiveRecord::Base
   #with_recursive
 
   has_many :users
-  has_many :specimens, dependent: :restrict_with_error
+  has_many :specimens, -> { order(:name) }, dependent: :restrict_with_error
   has_many :boxes, class_name: "Box", foreign_key: :parent_id, dependent: :restrict_with_error
-  has_many :children, class_name: "Box", foreign_key: :parent_id, dependent: :restrict_with_error
+  has_many :children, -> { order(:name) }, class_name: "Box", foreign_key: :parent_id, dependent: :restrict_with_error
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
   belongs_to :parent, class_name: "Box", foreign_key: :parent_id

@@ -44,6 +44,7 @@
   <th><%= sort_link @contents_search, :path, "path" %></th>
   <th>type</th>
   <th><%= sort_link @contents_search, :brought_in_at, "moved-in-at" %></th>
+  <th><%= sort_link @contents_search, :checked_at, "checked-at" %></th>
   <th><%= sort_link @contents_search, :brought_out_at, "moved-out-at" %></th>
       </tr>
       <tr>
@@ -62,6 +63,7 @@
           <td><%= path_entry_under(path, @box) %>
           <td><%= path.datum_type.downcase %></td>
           <td><%= path.brought_in_at.strftime("%Y-%m-%d %H:%M") %></td> 
+          <td><%= path.checked_at && path.checked_at.strftime("%Y-%m-%d %H:%M") %></td> 
           <td><%= path.brought_out_at && path.brought_out_at.strftime("%Y-%m-%d %H:%M") %></td> 
         </tr>
       <% end %>

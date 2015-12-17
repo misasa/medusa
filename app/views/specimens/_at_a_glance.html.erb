@@ -2,7 +2,7 @@
   <% if @specimen.place %>
     <% place = @specimen.place.decorate %>
     <li>
-      place: <%= place.try!(:latitude_to_text) + ", " + place.try!(:longitude_to_text) %> <%= link_to "more", place_path(place) %>
+      place: <%= raw(place.try!(:latitude_to_html)) + ", " + raw(place.try!(:longitude_to_html)) %> <%= link_to "more", place_path(place) %>
     </li>
   <% end %>
   <%= li_if_exist("classification: ", @specimen.classification.try!(:full_name)) %>
@@ -54,9 +54,8 @@
         <tr>
           <th align="right"><%== measurement_item.display_name %></th>
           <th> <%== measurement_item.unit.try!(:html) %></th>
-          <% value = "-" %>
           <% @specimen.analyses.each do |analysis| %>
-            <% analysis.chemistries.each {|chemistry| value = chemistry.value if chemistry.measurement_item_id == measurement_item.id } %>
+            <% value = analysis.chemistries.detect {|chemistry| chemistry.measurement_item_id == measurement_item.id }.try(:value) || "-" %>
             <td <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>align="right">
               <%= value %>
             </td>

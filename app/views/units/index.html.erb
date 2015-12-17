@@ -88,3 +88,8 @@
     <% end %>
   </tfoot>
 </table>
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#new_unit", function() {
+    $("#unit_search").submit();
+  });
+<% end %>

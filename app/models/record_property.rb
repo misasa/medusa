@@ -19,6 +19,7 @@ class RecordProperty < ActiveRecord::Base
   alias_attribute :guest_writable?, :guest_writable
 
   scope :readables, ->(user) {
+    return all if user.admin?
     where_clauses = owner_readables_where_clauses(user)
     where_clauses = where_clauses.or(group_readables_where_clauses(user))
     where_clauses = where_clauses.or(guest_readables_where_clauses)
@@ -35,11 +36,11 @@ class RecordProperty < ActiveRecord::Base
   end
 
   def writable?(user)
-    (owner?(user) && owner_writable?) || (group?(user) && group_writable?) || guest_writable?
+    user.admin? || (owner?(user) && owner_writable?) || (group?(user) && group_writable?) || guest_writable?
   end
 
   def readable?(user)
-    (owner?(user) && owner_readable?) || (group?(user) && group_readable?) || guest_readable?
+    user.admin? || (owner?(user) && owner_readable?) || (group?(user) && group_readable?) || guest_readable?
   end
 
   def owner?(user)
@@ -49,7 +50,7 @@ class RecordProperty < ActiveRecord::Base
   def group?(user)
     user.group_ids.include?(group_id)
   end
-  
+
   def generate_global_id
     time = Time.now
     self.global_id =  time.strftime("%Y%m%d%H%M%S") + '-' + sprintf('%06d',time.usec)[-3..-1] + sprintf('%03d',rand(1000))

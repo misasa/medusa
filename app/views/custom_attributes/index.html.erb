@@ -9,7 +9,7 @@
         <% end %>
       </th>
       <th><%= sort_link @search, :name, "name" %></th>
-      <th><%= sort_link @search, :sesar_name, "sesar_name" %></th>
+      <th><%= sort_link @search, :sesar_name, "sesar-name" %></th>
       <th></th>
       <th><%= sort_link @search, :updated_at, "updated-at" %></th>
       <th><%= sort_link @search, :created_at, "created-at" %></th>
@@ -78,3 +78,8 @@
     <% end %>
   </tfoot>
 </table>
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#new_custom_attribute", function() {
+    $("#custom_attribute_search").submit();
+  });
+<% end %>

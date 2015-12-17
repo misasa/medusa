@@ -7,6 +7,8 @@ class PlaceDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-globe") + " #{name} < #{global_id} >"
   end
 
+
+
   def latitude_to_text
     return "" if latitude.blank?
     if latitude < 0

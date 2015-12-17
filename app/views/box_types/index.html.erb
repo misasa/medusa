@@ -40,3 +40,8 @@
     <% end %>
   </tfoot>
 </table>
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#new_box_type", function() {
+    window.location.href = '/box_types'
+  });
+<% end %>
