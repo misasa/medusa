@@ -29,9 +29,9 @@ class NestedResources::TablesController < ApplicationController
   end
 
   def link_by_global_id
-    @table = Table.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
-    @parent.tables << @table
-    respond_with @table, location: adjust_url_by_requesting_tab(request.referer)
+    @table = Table.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false).first
+    @parent.tables << @table if @table
+    respond_with @table, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   rescue
     duplicate_global_id
   end

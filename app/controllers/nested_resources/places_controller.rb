@@ -28,9 +28,9 @@ class NestedResources::PlacesController < ApplicationController
   end
 
   def link_by_global_id
-    @place = Place.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
-    @parent.places << @place
-    respond_with @place, location: adjust_url_by_requesting_tab(request.referer)
+    @place = Place.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false).first
+    @parent.places << @place if @place
+    respond_with @place, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   rescue
     duplicate_global_id
   end

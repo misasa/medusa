@@ -28,9 +28,9 @@ class NestedResources::BoxesController < ApplicationController
   end
 
   def link_by_global_id
-    @box = Box.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
-    @parent.send(params[:association_name]) << @box
-    respond_with @box, location: adjust_url_by_requesting_tab(request.referer)
+    @box = Box.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false).first
+    @parent.send(params[:association_name]) << @box if @box
+    respond_with @box, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   rescue
     duplicate_global_id
   end

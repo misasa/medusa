@@ -11,7 +11,10 @@ class NestedResources::SpecimensController < ApplicationController
 
   def create
     @specimen = Specimen.new(specimen_params)
-    @parent.send(params[:association_name]) << @specimen if @specimen.save
+    ActiveRecord::Base.transaction do
+    	 succeed = @parent.send(params[:association_name]) << @specimen if @specimen.save
+      raise ActiveRecord::Rollback unless succeed
+    end
     respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer), action: "error" 
   end
 
@@ -28,9 +31,9 @@ class NestedResources::SpecimensController < ApplicationController
   end
 
   def link_by_global_id
-    @specimen = Specimen.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
-    @parent.send(params[:association_name]) << @specimen
-    respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer)
+    @specimen = Specimen.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false).first
+    @parent.send(params[:association_name]) << @specimen if @specimen
+    respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   rescue
     duplicate_global_id
   end

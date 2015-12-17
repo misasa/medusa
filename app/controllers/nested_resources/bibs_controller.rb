@@ -28,9 +28,9 @@ class NestedResources::BibsController < ApplicationController
   end
 
   def link_by_global_id
-    @bib = Bib.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
-    @parent.bibs << @bib
-    respond_with @bib, location: adjust_url_by_requesting_tab(request.referer)
+    @bib = Bib.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false).first
+    @parent.bibs << @bib if @bib
+    respond_with @bib, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   rescue
     duplicate_global_id
   end

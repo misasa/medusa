@@ -27,9 +27,9 @@ class NestedResources::AnalysesController < ApplicationController
   end
 
   def link_by_global_id
-    @analysis = Analysis.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
-    @parent.analyses << @analysis
-    respond_with @analysis, location: adjust_url_by_requesting_tab(request.referer)
+    @analysis = Analysis.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false).first
+    @parent.analyses << @analysis if @analysis
+    respond_with @analysis, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   rescue
     duplicate_global_id
   end

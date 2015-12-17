@@ -160,6 +160,32 @@ describe Specimen do
         let(:value) { "" }
         it { expect(obj).not_to be_valid }
       end
+      context "uniqueness" do
+        before { FactoryGirl.create(:specimen, name: "ユニークストーン", box_id: box.id) }
+        let(:box) { FactoryGirl.create(:box) }
+        let(:specimen) { FactoryGirl.build(:specimen, name: name, box_id: id) }
+        let(:box2) { FactoryGirl.create(:box, name: "box2" ) }
+        context "specimenのnameとbox_idが違う" do
+          let(:name) { "aaaaaaaa" }
+          let(:id) { box2.id }
+          it { expect(specimen).to be_valid }
+        end
+        context "specimenのnameが同じでbox_idが違う" do
+          let(:name) { "ユニークストーン" }
+          let(:id) { box2.id }
+          it { expect(specimen).to be_valid }
+        end
+        context "specimenのbox_idが同じでnameが違う" do
+          let(:name) { "aaaaaaaa" }
+          let(:id) { box.id }
+          it { expect(specimen).to be_valid }
+        end
+        context "specimenのnameとbox_idが同じ" do
+          let(:name) { "ユニークストーン" }
+          let(:id) { box.id }
+          it { expect(specimen).not_to be_valid }
+        end
+      end
     end
     
     describe "parent_id" do

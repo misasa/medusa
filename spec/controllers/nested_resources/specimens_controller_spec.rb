@@ -24,11 +24,19 @@ describe NestedResources::SpecimensController do
       it { expect(response).to redirect_to request.env["HTTP_REFERER"]}
     end
     context "invalidate" do
-      let(:name){""}
-      before { method }
-      it { expect {method}.to change(Analysis, :count).by(0) }
-      it { expect(parent.specimens.exists?(name: name)).to eq false}
-      it { expect(response).to render_template("error")}
+      context "nameなし" do
+        let(:name){""}
+        before { method }
+        it { expect {method}.to change(Analysis, :count).by(0) }
+        it { expect(parent.specimens.exists?(name: name)).to eq false}
+        it { expect(response).to render_template("error")}
+      end
+      context "name同じ" do
+        let(:attributes) {{name: name, box_id: id}}
+        let(:name) {child.name}
+        let(:id) {child.box_id}
+        it { expect{method}.to change(Specimen, :count).by(0) }
+      end
     end
   end
 

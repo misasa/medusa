@@ -28,9 +28,9 @@ class NestedResources::AttachmentFilesController < ApplicationController
   end
 
   def link_by_global_id
-    @attachment_file = AttachmentFile.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false)
-    @parent.attachment_files << @attachment_file
-    respond_with @attachment_file, location: adjust_url_by_requesting_tab(request.referer)
+    @attachment_file = AttachmentFile.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false).first
+    @parent.attachment_files << @attachment_file if @attachment_file
+    respond_with @attachment_file, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   rescue
     duplicate_global_id
   end
