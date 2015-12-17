@@ -40,7 +40,7 @@ class NestedResources::SpecimensController < ApplicationController
   
   def inventory
     @specimen = Specimen.find(params[:id])
-    @specimen.update_attributes(box_id: params[:box_id], updated_at: Time.now)
+    @specimen.update_attributes(box_id: params[:box_id])
     @specimen.paths.current.first.update_attribute(:checked_at, @specimen.updated_at) if @specimen.paths.current.first
     respond_with @specimen
   end

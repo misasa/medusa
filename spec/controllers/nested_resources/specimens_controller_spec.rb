@@ -145,7 +145,7 @@ describe NestedResources::SpecimensController do
     context "not changed box_id" do
       let(:box_id) { specimen.box_id }
       it { expect(assigns(:specimen).box_id).to eq specimen.box_id  }
-      it { expect(assigns(:specimen).updated_at).to eq now  }
+      it { expect(assigns(:specimen).updated_at).not_to eq now  }
     end
     context "changed box_id" do
       let(:box_id) { box.id }

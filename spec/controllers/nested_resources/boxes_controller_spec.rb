@@ -108,7 +108,7 @@ describe NestedResources::BoxesController do
     context "not changed parent_id" do
       let(:box_id) { box1.id }
       it { expect(assigns(:box).parent_id).to eq box1.id  }
-      it { expect(assigns(:box).updated_at).to eq now  }
+      it { expect(assigns(:box).updated_at).not_to eq now  }
     end
     context "changed parent_id" do
       let(:box_id) { box3.id }
