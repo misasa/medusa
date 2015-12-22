@@ -45,6 +45,16 @@ class Table < ActiveRecord::Base
       end
     end
 
+    def symbol
+      return if cells.blank?
+      symbols = cells.map(&:symbol)
+      return if symbols.blank?
+
+      symbols.uniq!
+      return unless symbols.size == 1
+      symbols[0]
+    end
+
     def each(&block)
       table.table_specimens.each do |table_specimen|
         yield Cell.new(self, chemistries_hash[table_specimen.specimen_id])

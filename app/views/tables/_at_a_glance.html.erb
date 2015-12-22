@@ -33,10 +33,10 @@
       <%= render(partial: "age_rows", locals: {table: @table}) if @table.with_age %>
       <% @table.each do |row| %>
         <tr>
-          <th><%== row.name(:html) %></th>
+          <th><%== row.name(:html) %>  <%= "[#{row.symbol}]" if row.symbol.present? %></th>
           <th><%== row.unit.try!(:html) %></th>
           <% row.each do |cell| %>
-            <td><%= cell.value || "-" %> <%= "[#{cell.symbol}]" if cell.symbol.present? %></td>
+            <td><%= cell.value || "-" %> <%= "[#{cell.symbol}]" if !row.symbol.present? && cell.symbol.present? %></td>
           <% end %>
           <% if @table.with_average %>
             <td>
