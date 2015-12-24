@@ -59,7 +59,7 @@ describe Chemistry do
         let(:unit_name) { "ounce" }
         it { expect(subject).to eq 0.353 }
       end
-      context "unit_name is 'gram_per_gram'" do
+      context "unit_name is 'centi_gram_per_gram'" do
         let(:unit) { FactoryGirl.create(:unit, name: "centi_gram_per_gram", conversion: 100) }
         let(:value) { 51.23 }
         let(:unit_name) { "centi_gram_per_gram" }
