@@ -197,7 +197,7 @@ describe "Table::Row" do
     end
   end
   
-  describe "#symbol", :current => true do
+  describe "#symbol" do
     subject { row.symbol }
 
     context "table linked 2 chemistries without device & technique pair" do
