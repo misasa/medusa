@@ -3,9 +3,6 @@
     <ul>
       <%= li_if_exist 'measurement category: ', @table.measurement_category.try!(:name) %>
       <li>modified at <%= difference_from_now(@table.updated_at) -%></li>
-      <% if @table.bib %>
-        <li>bib: <%= link_to_if can?(:read, @table.bib), @table.bib.name,bib_path(@table.bib) %></li>
-      <% end %>
     </ul>
     <caption>
       <%= @table.description %>
@@ -33,10 +30,10 @@
       <%= render(partial: "age_rows", locals: {table: @table}) if @table.with_age %>
       <% @table.each do |row| %>
         <tr>
-          <th><%== row.name(:html) %>  <%= "[#{row.symbol}]" if row.symbol.present? %></th>
+          <th><%== row.name(:html) %>  <%= raw "<sup>[#{row.symbol}]</sup>" if row.symbol.present? %></th>
           <th><%== row.unit.try!(:html) %></th>
           <% row.each do |cell| %>
-            <td><%= cell.value || "-" %> <%= "[#{cell.symbol}]" if !row.symbol.present? && cell.symbol.present? %></td>
+            <td><%= cell.value || "-" %> <%= raw "<sup>[#{cell.symbol}]</sup>" if !row.symbol.present? && cell.symbol.present? %></td>
           <% end %>
           <% if @table.with_average %>
             <td>
