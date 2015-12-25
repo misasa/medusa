@@ -46,8 +46,11 @@
   <%= f.button class: "btn btn-default" do %>
   <span class="glyphicon glyphicon-save"></span>
   <% end %>
-  <%= f.button name: "sesar_upload", class: "btn btn-default" do %>
-    Sesar
+  <%= f.button name: "sesar_upload", id: "sesar_upload", class: "btn btn-default", disabled: true do %>
+    Sesar upload
+  <% end %>
+  <%= f.button id: "sesar_unlink", class: "btn btn-default", disabled: true, data: {confirm: t("confirm.unlink")} do %>
+    Sesar unlink
   <% end %>
 <% end %>
 
@@ -55,12 +58,16 @@
   $(document).on("succeed.ajaxForm", "#edit_specimen_<%= @specimen.id %>", function() {
     location.href="<% specimen_path(@specimen) %>";
   });
+  $(document).on("click", "#sesar_unlink", function() {
+    $(this).closest("form").find(":input").filter(":not(:hidden)").prop("disabled", true);
+    $("#specimen_igsn").prop("disabled", false).val("");
+  });
   $(function() {
     $(document).ready(function() {
       if ("<%= @specimen.igsn %>"){
-        $("button[name='sesar_upload']").attr("disabled", "disabled");
+        $("#sesar_unlink").prop("disabled", false);
       }else{
-        $("button[name='sesar_upload']").removeAttr("disabled");
+        $("#sesar_upload").prop("disabled", false);
       }
     });
   });
