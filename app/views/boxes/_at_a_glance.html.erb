@@ -51,7 +51,7 @@
         <th><%= text_field_tag :per_page, (params[:per_page] || Box.default_per_page), class: "form-control input-sm", size: 1 %></th>
         <th></th>
         <th>
-          <%= f.select :datum_type_eq, [["specimen", "Specimen"], ["box", "Box"]], { include_blank: true }, class: "form-control input-sm" %>
+          <%= f.select :datum_type_eq, [[@alias_specimen, "Specimen"], ["box", "Box"]], { include_blank: true }, class: "form-control input-sm" %>
         </th>
       </tr>
 
@@ -61,7 +61,7 @@
         <tr>
           <td><%= path.sign if @src_date -%></td>
           <td><%= path_entry_under(path, @box) %>
-          <td><%= path.datum_type.downcase %></td>
+          <td><%= path.datum.is_a?(Specimen) ? @alias_specimen : path.datum_type.downcase %></td>
           <td><%= path.brought_in_at.strftime("%Y-%m-%d %H:%M") %></td> 
           <td><%= path.checked_at && path.checked_at.strftime("%Y-%m-%d %H:%M") %></td> 
           <td><%= path.brought_out_at && path.brought_out_at.strftime("%Y-%m-%d %H:%M") %></td> 
