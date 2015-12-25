@@ -5,7 +5,7 @@ class Table < ActiveRecord::Base
 
   has_many :table_specimens, -> { order :position }, dependent: :destroy
   has_many :table_analyses, -> { order :priority }, dependent: :destroy
-  has_many :specimens, through: :table_specimens, after_add: :take_over_specimen, after_remove: :remove_specimen
+  has_many :specimens, through: :table_specimens, after_add: :take_over_specimen
   has_many :analyses, through: :specimens
   has_many :chemistries, through: :specimens
   has_many :category_measurement_items, through: :measurement_category

@@ -7,6 +7,23 @@ class SpecimenDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + " #{name} < #{global_id} >"
   end
 
+  def bibs_with_link
+    contents = []
+    bibs.each do |bib| 
+      content = h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + "" + h.link_to_if(h.can?(:read, bib), h.raw(bib.to_html), bib)
+      table_links = []
+      bib.tables.each do |table|
+         table_links << h.link_to_if(table.specimens && table.specimens.include?(self), h.raw(table.description), table )
+         #table_links << h.link_to_if(true, h.raw(table.description), table )
+      end
+      unless table_links.empty?
+        content += h.raw " (" + table_links.join(", ") + ")"
+      end
+      contents << content
+    end
+    contents.join(" ")
+  end
+
   def path
     nodes = []
     if box

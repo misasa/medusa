@@ -18,6 +18,7 @@
       <% end %>
     </li>
   <% end %>
+  <%= li_if_exist("", @specimen.bibs_with_link) %>
   <%= li_if_exist("", @specimen.bibs.map{ |bib| content_tag(:span, nil, class: "glyphicon glyphicon-book") + raw(bib.to_html) + link_to_if(can?(:read, bib), " more", url_for(bib)) }.join(" ")) %>
   <% if @specimen.attachment_pdf_files.present? %>
     <li>

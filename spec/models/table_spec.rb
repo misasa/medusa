@@ -166,6 +166,40 @@ describe "Table" do
 
 end
 
+describe "after_remove specimens" do
+  let(:bib) { FactoryGirl.create(:bib) }
+  let(:table) { FactoryGirl.create(:table, measurement_category: measurement_category) }
+  let(:table_2) { FactoryGirl.create(:table, measurement_category: measurement_category) }
+  let(:measurement_category) { FactoryGirl.create(:measurement_category, unit: unit) }
+  let(:unit) { FactoryGirl.create(:unit, name: "gram_per_gram", conversion: 1) }
+  let(:specimen_1) { FactoryGirl.create(:specimen) }
+  let(:specimen_2) { FactoryGirl.create(:specimen) }
+  subject { table.specimens.destroy(specimen_2) }
+  context "does not remove specimen from bib" do
+    before do
+      bib.tables << table
+      table.specimens << specimen_1
+      table.specimens << specimen_2
+      subject
+    end
+    it { expect(bib.specimens.count).to be_eql(2) }
+  end
+
+  context "does not remove specimen from bib" do
+    before do
+      bib.tables << table
+      bib.tables << table_2
+      table.specimens << specimen_1
+      table.specimens << specimen_2
+      table_2.specimens << specimen_1
+      table_2.specimens << specimen_2
+      subject
+    end
+    it { expect(bib.specimens.count).to be_eql(2) }
+  end
+
+end
+
 describe "Table::Row" do
   let(:row) { Table::Row.new(table, category_measurement_item, [chemistry]) }
   let(:table) { FactoryGirl.create(:table, measurement_category: measurement_category) }
