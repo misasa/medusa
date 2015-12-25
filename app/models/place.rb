@@ -36,6 +36,10 @@ class Place < ActiveRecord::Base
     "#{dms[:deg]}&deg; #{dms[:min]}&prime; #{format('%.2f', dms[:sec])}&Prime;"
   end
 
+  def to_html
+    return latitude_to_html + ", " + longitude_to_html if latitiude && longitude
+  end
+
   def latitude_to_html
     return "" if latitude.blank?
     degree = latitude
