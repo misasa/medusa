@@ -3,7 +3,7 @@ class TableDecorator < Draper::Decorator
 
   def bib_name_with_id
   	return unless bib
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + " #{bib.name} < #{bib.global_id} >"
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + h.link_to_if(h.can?(:read, bib), " #{bib.name} < #{bib.global_id} >", bib)
   end
 
 
