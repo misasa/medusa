@@ -5,7 +5,7 @@ class Table < ActiveRecord::Base
 
   has_many :table_specimens, -> { order :position }, dependent: :destroy
   has_many :table_analyses, -> { order :priority }, dependent: :destroy
-  has_many :specimens, through: :table_specimens
+  has_many :specimens, through: :table_specimens, after_add: :take_over_specimen, after_remove: :remove_specimen
   has_many :analyses, through: :specimens
   has_many :chemistries, through: :specimens
   has_many :category_measurement_items, through: :measurement_category
@@ -190,6 +190,16 @@ class Table < ActiveRecord::Base
 
   def methods_hash
     @methods_hash ||= Hash.new { |h, k| h[k] = {} }
+  end
+
+  def take_over_specimen(specimen)
+    return unless bib
+    bib.specimens << specimen if bib.specimens.exclude?(specimen)
+  end
+
+  def remove_specimen(specimen)
+    return unless bib
+    bib.specimens -= [specimen] if specimens.exclude?(specimen)
   end
 
 end

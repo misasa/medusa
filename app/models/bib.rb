@@ -14,7 +14,7 @@ class Bib < ActiveRecord::Base
   has_many :places, through: :referrings, source: :referable, source_type: "Place"
   has_many :boxes, -> { order(:name) }, through: :referrings, source: :referable, source_type: "Box"
   has_many :analyses, through: :referrings, source: :referable, source_type: "Analysis"
-  has_many :tables
+  has_many :tables, before_add: :take_over_specimens
 
   accepts_nested_attributes_for :bib_authors
 
@@ -140,5 +140,9 @@ class Bib < ActiveRecord::Base
   def set_initial_position(bib_author)
     priority = (bib_authors.maximum(:priority) || 0) + 1
     bib_author.update_attribute(:priority, priority)
+  end
+
+  def take_over_specimens(table)
+    table.specimens = specimens
   end
 end
