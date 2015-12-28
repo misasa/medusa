@@ -47,12 +47,13 @@ class NestedResources::TablesController < ApplicationController
   def table_params
     params.require(:table).permit(
       :bib_id,
-      :description,
+      :caption,
       :measurement_category_id,
       :with_average,
       :with_place,
       :with_age,
       :age_unit,
+      :description,
       record_property_attributes: [
         :global_id,
         :user_id,
