@@ -33,7 +33,7 @@
   </tbody>
   <tfoot>
     <tr>
-      <%= form_for Table.new, url: bib_tables_path(@bib, format: :json), remote: true, html: { class: "create", role: "form" } do |f|%>
+      <%= form_for Table.new, url: bib_tables_path(@bib, format: :json), remote: true, html: { class: "dinamic-message", role: "form" } do |f|%>
         <%= hidden_tabname_tag(__FILE__) %>
         <th></th>
         <th><%= f.text_field :caption, class: "form-control input-sm" %></th>
