@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151216060057) do
+ActiveRecord::Schema.define(version: 20151228041428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -363,13 +363,14 @@ ActiveRecord::Schema.define(version: 20151216060057) do
   create_table "tables", force: true, comment: "表" do |t|
     t.integer  "bib_id",                  comment: "参考文献ID"
     t.integer  "measurement_category_id", comment: "測定種別ID"
-    t.text     "description",             comment: "説明"
+    t.text     "caption",                 comment: "表題"
     t.boolean  "with_average",            comment: "平均値表示フラグ"
     t.boolean  "with_place",              comment: "場所表示フラグ"
     t.datetime "created_at",              comment: "作成日時"
     t.datetime "updated_at",              comment: "更新日時"
     t.boolean  "with_age",                comment: "年代表示フラグ"
     t.string   "age_unit",                comment: "年代単位"
+    t.text     "description",             comment: "説明"
   end
 
   add_index "tables", ["bib_id"], name: "index_tables_on_bib_id", using: :btree

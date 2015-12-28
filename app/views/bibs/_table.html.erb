@@ -2,7 +2,7 @@
   <thead>
     <tr>
       <th></th>
-      <th>description</th>
+      <th>caption</th>
       <th>measurement category</th>
       <th>with average</th>
       <th>with place</th>
@@ -16,7 +16,7 @@
     <% @bib.tables.each do |table| %>
       <tr>
         <td></td>
-        <td><%= link_to_if can?(:read, table), table.description, table %></td>
+        <td><%= link_to_if can?(:read, table), table.caption, table %></td>
         <td><%= table.measurement_category.try!(:name) %></td>
         <td><%= table.with_average %></td>
         <td><%= table.with_place %></td>
@@ -24,7 +24,7 @@
         <td><%= table.age_unit %></td>
         <td></td>
         <td>
-          <%= link_to bib_table_path(@bib, table) + tab_param(__FILE__), method: :delete ,title: "delete table",data: {confirm: t("confirm.delete",:recordname => table.description)} do %>
+          <%= link_to bib_table_path(@bib, table) + tab_param(__FILE__), method: :delete ,title: "delete table",data: {confirm: t("confirm.delete",:recordname => table.caption)} do %>
             <span class="glyphicon glyphicon-remove"></span>
           <% end %>
         </td>
@@ -36,7 +36,7 @@
       <%= form_for Table.new, url: bib_tables_path(@bib) do |f|%>
         <%= hidden_tabname_tag(__FILE__) %>
         <th></th>
-        <th><%= f.text_field :description, class: "form-control input-sm" %></th>
+        <th><%= f.text_field :caption, class: "form-control input-sm" %></th>
         <th><%= f.select :measurement_category_id, MeasurementCategory.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
 	<th><%= f.check_box :with_average, class: "form-control" %></th>
 	<th><%= f.check_box :with_place, class: "form-control" %></th>

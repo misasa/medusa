@@ -9,7 +9,7 @@ class TablesController < ApplicationController
 
   def show
     respond_with @table do |format|
-      format.csv { send_data render_to_string, filename: "#{@table.description}.csv", type: :csv }
+      format.csv { send_data render_to_string, filename: "#{@table.caption}.csv", type: :csv }
     end
   end
 
@@ -36,12 +36,13 @@ class TablesController < ApplicationController
   def table_params
     params.require(:table).permit(
       :bib_global_id,
-      :description,
+      :caption,
       :measurement_category_id,
       :with_average,
       :with_place,
       :with_age,
       :age_unit,
+      :description,
       record_property_attributes: [
         :global_id,
         :user_id,

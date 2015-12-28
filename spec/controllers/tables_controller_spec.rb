@@ -21,7 +21,7 @@ describe TablesController do
       it { expect(assigns(:table)).to eq table }
       it { expect(response.headers.has_value?("text/csv")).to eq true }
       it do
-        flag = response.headers.values.any? {|val| val.include?("filename=\"#{table.description}.csv\"") }
+        flag = response.headers.values.any? {|val| val.include?("filename=\"#{table.caption}.csv\"") }
         expect(flag).to eq true
       end
     end
