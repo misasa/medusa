@@ -12,7 +12,9 @@ class NestedResources::TablesController < ApplicationController
   def create
     @table = Table.new(table_params)
     @parent.tables << @table if @table.save
-    respond_with @table, location: adjust_url_by_requesting_tab(request.referer), action: "error"
+    respond_with @table, location: adjust_url_by_requesting_tab(request.referer), action: "error" do |format|
+      format.json { render json: @table.attributes.merge(message: "Succeed to create table with #{@table.specimens.length} #{@alias_specimen}.") }
+    end
   end
 
   def update
