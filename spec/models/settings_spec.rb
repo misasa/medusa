@@ -90,4 +90,20 @@ describe Settings do
     end
   end
 
+  describe ".sesar_url" do
+    subject { Settings.sesar_url(opts) }
+    let(:opts){ {:igsn => igsn, :edit => edit_flag } }
+    let(:igsn){ "IEDRM0001"}
+    let(:edit_flag){ nil }
+    it { expect(subject).to be_eql("http://app.geosamples.org/samples/igsn/#{igsn}") }
+    context "without igsn" do
+      let(:igsn){ nil }
+      it { expect(subject).to be_eql("http://app.geosamples.org/views/my_sample_browser.php") } 
+    end
+    context "with edit flag" do
+      let(:edit_flag){ true }
+      it { expect(subject).to be_eql("http://app.geosamples.org/samples/edit.php?igsn=#{igsn}") }
+    end
+  end
+
 end

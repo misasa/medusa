@@ -1,4 +1,13 @@
 <ul>
+  <% if @specimen.igsn%>
+    <li>
+      IGSN: <%= link_to @specimen.igsn, Settings.sesar_url(igsn: @specimen.igsn) %>
+  <%= link_to Settings.sesar_url(igsn: @specimen.igsn, edit: true), title: "edit on SESAR" do %>
+    <span class="glyphicon glyphicon-pencil"></span>
+  <% end %>
+
+    </li>
+  <% end %>
   <% if @specimen.place %>
     <% place = @specimen.place.decorate %>
     <li>

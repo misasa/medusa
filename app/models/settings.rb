@@ -18,4 +18,26 @@ class Settings < Settingslogic
     end
   end
 
+
+  def self.sesar_host
+    "app.geosamples.org"
+  end
+
+  def self.sesar_url(opts = {})
+    igsn = opts[:igsn]
+    flag_edit = opts[:edit]
+    url = "http://#{self.sesar_host}/"
+    if igsn
+      url += "samples/"
+      if flag_edit
+        url += "edit.php?igsn=#{igsn}"
+      else
+        url += "igsn/#{igsn}"
+      end
+    else
+      url += "views/my_sample_browser.php"
+    end
+    return url
+  end
+
 end

@@ -174,4 +174,5 @@ describe SpecimenDecorator do
     it{ expect(subject).to include(alias_specimen) }
   end
   
+
 end
