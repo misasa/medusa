@@ -11,17 +11,21 @@ class SpecimenDecorator < Draper::Decorator
     contents = []
     bibs.each do |bib| 
       content = h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + "" + h.link_to_if(h.can?(:read, bib), h.raw(bib.to_html), bib)
+      #content = h.content_tag(:li, content)
       table_links = []
       bib.tables.each do |table|
-         table_links << h.link_to_if(table.specimens && table.specimens.include?(self), h.raw(table.description), table )
+         table_links << h.link_to_if(table.specimens && table.specimens.include?(self), h.raw(table.caption), table )
          #table_links << h.link_to_if(true, h.raw(table.description), table )
       end
       unless table_links.empty?
         content += h.raw " (" + table_links.join(", ") + ")"
       end
+      content = h.content_tag(:li, content)
       contents << content
     end
-    contents.join(" ")
+    unless contents.empty?
+      h.content_tag(:ul, h.raw(contents.join(" ")) )
+    end
   end
 
   def path
