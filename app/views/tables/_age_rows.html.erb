@@ -1,20 +1,10 @@
 <tr>
-  <th>age min</th>
+  <th>age</th>
   <th><%= table.age_unit %></th>
   <% table.specimens.each do |specimen| %>
-    <td><%= specimen.try!(:age_min).present? ? Alchemist.measure(specimen.age_min, specimen.age_unit.to_sym).to(table.age_unit.to_sym).value : "-" %></td>
+    <td><%= raw(specimen.age_in_text(:unit => table.age_unit, :scale => 0) || "-") %></td>
   <% end %>
   <% if table.with_average %>
     <td></td>
-  <% end %>
-</tr>
-<tr>
-  <th>age max</th>
-  <th><%= table.age_unit %></th>
-  <% table.specimens.each do |specimen| %>
-    <td><%= specimen.try!(:age_max).present? ? Alchemist.measure(specimen.age_max, specimen.age_unit.to_sym).to(table.age_unit.to_sym).value : "-" %></td>
-  <% end %>
-  <% if table.with_average %>
-    <td></td>
-  <% end %>
+  <% end %>  
 </tr>

@@ -64,6 +64,32 @@ class Specimen < ActiveRecord::Base
   #   [self].to_pml
   # end
 
+  def age_mean
+    return unless ( age_min && age_max )
+    (age_min + age_max) / 2.0
+  end
+
+  def age_error
+    return unless ( age_min && age_max )
+    (age_max - age_min) / 2.0
+  end
+
+  def age_in_text(opts = {})
+    unit = opts[:unit] || self.age_unit
+    scale = opts[:scale] || 0
+    text = nil
+    if age_mean && age_error
+      #text = "#{age_mean}(#{age_error(opts)})"
+      text = Alchemist.measure(self.age_mean, self.age_unit.to_sym).to(unit.to_sym).value.round(scale).to_s
+      text += " (" + Alchemist.measure(self.age_error, self.age_unit.to_sym).to(unit.to_sym).value.round(scale).to_s + ")"
+    elsif age_min
+      text = ">" + Alchemist.measure(self.age_min, self.age_unit.to_sym).to(unit.to_sym).value.round(scale).to_s
+    elsif age_max
+      text = "<" + Alchemist.measure(self.age_max, self.age_unit.to_sym).to(unit.to_sym).value.round(scale).to_s      
+    end
+    return text
+  end
+
   private
 
   def parent_id_cannot_self_children

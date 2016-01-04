@@ -69,6 +69,104 @@ describe Specimen do
       end
   end
 
+  describe "#age_mean" do
+    subject {specimen.age_mean }
+    let(:specimen){ FactoryGirl.create(:specimen, age_min: age_min, age_max: age_max, age_unit: age_unit)}
+    let(:age_unit){ "ka" }
+    let(:age_min){ 45 }
+    let(:age_max){ 55 }
+    context "with min and max" do
+      let(:age_mean){ 50 }
+      let(:age_error){ 5 } 
+      let(:age_min){ age_mean - age_error }
+      let(:age_max){ age_mean + age_error }
+      it { expect(subject).to be_eql(50.0) }
+    end
+
+    context "without min" do
+      let(:age_min){ nil }
+      it { expect(subject).to be_nil}
+    end
+
+    context "without max" do
+      let(:age_max){ nil }
+      it { expect(subject).to be_nil}
+    end
+
+    context "without min and max" do
+      let(:age_min){ nil }
+      let(:age_max){ nil }
+      it { expect(subject).to be_nil}
+    end
+  end
+
+  describe "#age_error" do
+    subject {specimen.age_error }
+    let(:specimen){ FactoryGirl.create(:specimen, age_min: age_min, age_max: age_max, age_unit: age_unit)}
+    let(:age_unit){ "ka" }
+    let(:age_min){ 45 }
+    let(:age_max){ 55 }
+    context "with min and max" do
+      let(:age_mean){ 50 }
+      let(:age_error){ 5 } 
+      let(:age_min){ age_mean - age_error }
+      let(:age_max){ age_mean + age_error }
+      it { expect(subject).to be_eql(5.0) }
+    end
+
+    context "without min" do
+      let(:age_min){ nil }
+      it { expect(subject).to be_nil}
+    end
+
+    context "without max" do
+      let(:age_max){ nil }
+      it { expect(subject).to be_nil}
+    end
+
+    context "without min and max" do
+      let(:age_min){ nil }
+      let(:age_max){ nil }
+      it { expect(subject).to be_nil}
+    end
+  end
+
+  describe "#age_in_text" do
+    subject {specimen.age_in_text }
+    let(:specimen){ FactoryGirl.create(:specimen, age_min: age_min, age_max: age_max, age_unit: age_unit)}
+    let(:age_unit){ "ka" }
+    let(:age_min){ 45 }
+    let(:age_max){ 55 }
+    context "with min and max" do
+      let(:age_mean){ 50 }
+      let(:age_error){ 5 } 
+      let(:age_min){ age_mean - age_error }
+      let(:age_max){ age_mean + age_error }
+      it { expect(subject).to be_eql("50 (5)") }
+      context "with specified unit" do
+        let(:unit){ "a" }
+        let(:scale){ 1 }
+        it { expect(specimen.age_in_text(:unit => unit, :scale => scale)).to be_eql("50000.0 (5000.0)") }
+      end
+    end
+
+    context "without min" do
+      let(:age_min){ nil }
+      it { expect(subject).to be_eql("<55")}
+    end
+
+    context "without max" do
+      let(:age_max){ nil }
+      it { expect(subject).to be_eql(">45")}
+    end
+
+    context "without min and max" do
+      let(:age_min){ nil }
+      let(:age_max){ nil }
+      it { expect(subject).to be_nil}
+    end
+  end
+
   describe "#delete_table_analysis" do
     subject { specimen.send(:delete_table_analysis, analysis_1) }
     let(:specimen) { FactoryGirl.create(:specimen) }
