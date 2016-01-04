@@ -28,11 +28,10 @@ class Settings < Settingslogic
     flag_edit = opts[:edit]
     url = "http://#{self.sesar_host}/"
     if igsn
-      url += "samples/"
       if flag_edit
-        url += "edit.php?igsn=#{igsn}"
+        url += "samples/edit.php?igsn=#{igsn}"
       else
-        url += "igsn/#{igsn}"
+        url += "sample/igsn/#{igsn}"
       end
     else
       url += "views/my_sample_browser.php"
