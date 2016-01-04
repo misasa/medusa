@@ -7,6 +7,6 @@ if Unit.attribute_method?(:name) && Unit.attribute_method?(:conversion)
 end
 
 Alchemist.register(:time, [:annum, :annums, :a], 1.year)
-Alchemist.register(:time, [:kiloannum, :kiloannums, :Ka], 1000.year)
+Alchemist.register(:time, [:kiloannum, :kiloannums, :ka], 1000.year)
 Alchemist.register(:time, [:megaannum, :megaannums, :Ma], (1000**2).year)
 Alchemist.register(:time, [:gigaannum, :gigaannums, :Ga], (1000**3).year)
