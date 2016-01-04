@@ -20,22 +20,24 @@
   </div>
   <div class="form-group form-group-sm">
     <%= f.label :with_average, class: "checkbox-inline" do %>
-      <%= f.check_box :with_average %> with average
+      <%= f.check_box :with_average %> show average
     <% end %>
   </div>
   <div class="form-group form-group-sm">
+    <label class="small">Place</label>
     <%= f.label :with_place, class: "checkbox-inline" do %>
-      <%= f.check_box :with_place %> with place
+      <%= f.check_box :with_place %>
     <% end %>
   </div>
   <div class="form-group form-group-sm">
+    <div class="form-inline">
+    <label class="small">Age</label>    
     <%= f.label :with_age, class: "checkbox-inline" do %>
-      <%= f.check_box :with_age %> with age
+      <%= f.check_box :with_age %>
     <% end %>
-  </div>
-  <div class="form-group form-group-sm">
-    <%= f.label :age_unit, class: "small" %>
-    <%= f.select :age_unit, ["a","Ka","Ma","Ga"].map{|n| [n,n]}, { include_blank: true }, class: "form-control input-sm" %>
+    with unit
+    <%= f.select :age_unit, ["a","Ka","Ma","Ga"].map{|n| [n,n]}, { include_blank: true }, class: "form-control input-sm" %>    
+    </div>
   </div>
   <div class="form-group form-group-sm">
     <%= f.label :description, class: "small" %>
