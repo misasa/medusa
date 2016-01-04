@@ -20,6 +20,9 @@
   <%= li_if_exist("age (#{@specimen.age_unit}): ", @specimen.age_in_text) %>
   <%= li_if_exist("tag list: ", @specimen.tag_list) %>
   <%= li_if_exist("description: ", @specimen.description) %>
+  <% @specimen.specimen_custom_attributes.each do |specimen_custom_attribute| %>
+    <%= li_if_exist("#{specimen_custom_attribute.custom_attribute.name}: ", specimen_custom_attribute.value ) %>
+  <% end %> 
   <li>modified at <%= difference_from_now(@specimen.updated_at) %></li>
   <% if @specimen.attachment_files.present? %>
     <li>
@@ -36,7 +39,7 @@
         <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_pdf_file.id), id: "file-#{attachment_pdf_file.id}-button") %>
       <% end %>
     </li>
-  <% end %>
+  <% end %>  
 </ul>
 
 <% unless @specimen.analyses.empty? %>
