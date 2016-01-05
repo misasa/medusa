@@ -3,8 +3,8 @@
     <tr>
       <th></th>
       <th>name</th>
-      <th>[latitude, longitude]</th>
-      <th>distance [km]</th >
+      <th></th>
+      <th>distance (km)</th >
       <th>sample</th>
     </tr>
   </thead>
@@ -13,7 +13,7 @@
       <tr>
         <td></td>
         <td><%= link_to_if can?(:read, neighbor), neighbor.name,place_path(neighbor) %></td>
-        <td><%= "[#{neighbor.latitude_to_text},#{neighbor.longitude_to_text}]" %></td>
+        <td><%= raw neighbor.to_html %></td>
         <td><%= "%0.3f" % neighbor.distance.to_f %></td>
         <td>
           <% neighbor.specimens.each do |specimen| %>

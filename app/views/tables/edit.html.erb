@@ -15,7 +15,7 @@
     </div>
   </div>
   <div class="form-group form-group-sm">
-    <%= f.label :measurement_category_id, class: "small" %>
+    <%= f.label "measurement-category", class: "small" %>
     <%= f.select :measurement_category_id, MeasurementCategory.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">

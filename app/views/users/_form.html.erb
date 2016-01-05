@@ -1,52 +1,58 @@
 <%= form_for @user, html: { class: "col-lg-4" } do |f| %>
   <%= error_notification(@user.errors) %>
 
-  <div>
-    <%= f.label :username %><br>
+
+  <div class="form-group form-group-sm">
+    <%= f.label :username, class: "small" %><br>
     <%= f.text_field :username, autocomplete: "off", class: "form-control input-sm" %>
   </div>
 
-  <div>
-    <%= f.label :password %> <i>(leave blank if you don't want to change it)</i><br />
+  <div class="form-group form-group-sm">
+    <%= f.label :password, class: "small" %> <i>(leave blank if you don't want to change it)</i><br />
     <%= f.password_field :password, autocomplete: "off", class: "form-control input-sm" %>
   </div>
 
-  <div>
-    <%= f.label :password_confirmation %><br />
+  <div class="form-group form-group-sm">
+    <%= f.label :password_confirmation, class: "small" %><br />
     <%= f.password_field :password_confirmation, autocomplete: "off", class: "form-control input-sm" %>
   </div>
 
-  <div>
-    <%= f.label :family_name %><br />
+  <div class="form-group form-group-sm">
+    <%= f.label :family_name, class: "small" %><br />
     <%= f.text_field :family_name, class: "form-control input-sm" %>
   </div>
 
-  <div>
-    <%= f.label :first_name %><br />
+  <div class="form-group form-group-sm">
+    <%= f.label :first_name, class: "small" %><br />
     <%= f.text_field :first_name, class: "form-control input-sm" %>
   </div>
 
-  <div>
-    <%= f.label :email %><br />
+  <div class="form-group form-group-sm">
+    <%= f.label :email, class: "small" %><br />
     <%= f.text_field :email, class: "form-control input-sm" %>
   </div>
 
-  <div>
-    <%= f.label :description %><br />
+  <div class="form-group form-group-sm">
+    <%= f.label :description, class: "small" %><br />
     <%= f.text_area :description, class: "form-control input-sm" %>
   </div>
 
-  <div>
-    <%= f.check_box :administrator %>
-    <%= f.label :administrator %><br />
+  <div class="form-group form-group-sm">
+    <label class="small">Administrator</label>
+    <%= f.label :administrator, class: "checkbox-inline" do %>
+      <%= f.check_box :administrator %>
+    <% end %>
   </div>
 
-  <div>
-    <%= f.label "Group" %><br/>
-    <%= f.collection_check_boxes :group_ids,Group.all,:id,:name %>
+  <div class="form-group form-group-sm">
+    <%= f.label "Group", class: "small" %><br/>
+    <%= f.collection_check_boxes :group_ids, Group.all,:id,:name %>
   </div>
 
-  <%= f.submit  class: "btn btn-sm" %>
-  <%= link_to "cancel", users_path, class: "btn btn-sm" %>
+  <%= f.button class: "btn btn-default" do %>
+    <span class="glyphicon glyphicon-save"></span>
+  <% end %>
+
+  <%= link_to "cancel", users_path, class: "btn btn-default" %>
 
 <% end %>

@@ -37,7 +37,7 @@ class Place < ActiveRecord::Base
   end
 
   def to_html
-    return latitude_to_html + ", " + longitude_to_html if latitiude && longitude
+    return latitude_to_html + ", " + longitude_to_html if latitude && longitude
   end
 
   def latitude_to_html

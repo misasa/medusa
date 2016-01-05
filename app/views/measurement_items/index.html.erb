@@ -1,5 +1,5 @@
-<div><%= link_to_unless_current MeasurementItem.model_name.human.downcase,measurement_items_path %>
-<%= link_to_unless_current MeasurementCategory.model_name.human.downcase,measurement_categories_path %></div>
+<div><%= link_to_unless_current "measurement-item",measurement_items_path %>
+<%= link_to_unless_current "measurement-category",measurement_categories_path %></div>
 <%= paginate @measurement_items %>
 <table class="table table-condensed table-striped">
   <thead>
