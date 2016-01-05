@@ -1,5 +1,5 @@
 <ul>
-  <% if @specimen.igsn%>
+  <% unless @specimen.igsn.blank? %>
     <li>
       IGSN: <%= link_to @specimen.igsn, Settings.sesar_url(igsn: @specimen.igsn) %>
   <%= link_to Settings.sesar_url(igsn: @specimen.igsn, edit: true), title: "edit on SESAR" do %>
