@@ -47,6 +47,18 @@ class BoxDecorator < Draper::Decorator
     icon_with_count("stats", specimens.inject(0) {|count, specimen| count += specimen.analyses.size })
   end
 
+  def bibs_with_link
+    contents = []
+    bibs.each do |bib| 
+      content = h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + "" + h.link_to_if(h.can?(:read, bib), h.raw(bib.to_html), bib)
+      content = h.content_tag(:li, content)
+      contents << content
+    end
+    unless contents.empty?
+      h.content_tag(:ul, h.raw(contents.join(" ")) )
+    end
+  end
+
   def bibs_count
     icon_with_count("book", bibs.count)
   end
