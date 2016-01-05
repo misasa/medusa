@@ -14,7 +14,7 @@ class SpecimenDecorator < Draper::Decorator
       #content = h.content_tag(:li, content)
       table_links = []
       bib.tables.each do |table|
-         table_links << h.link_to_if(table.specimens && table.specimens.include?(self), h.raw(table.caption), table )
+         table_links << h.link_to(h.raw(table.caption), table ) if table.specimens && table.specimens.include?(self)
          #table_links << h.link_to_if(true, h.raw(table.description), table )
       end
       unless table_links.empty?
