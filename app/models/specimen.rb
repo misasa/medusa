@@ -32,7 +32,7 @@ class Specimen < ActiveRecord::Base
   validates :physical_form, existence: true, allow_nil: true
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :box_id }
   validate :parent_id_cannot_self_children, if: ->(specimen) { specimen.parent_id }
-  validates :igsn, uniqueness: true, length: { maximum: 9 }, allow_nil: true
+  validates :igsn, uniqueness: true, length: { maximum: 9 }, allow_nil: true, allow_blank: true
   validates :age_min, numericality: true, allow_nil: true
   validates :age_max, numericality: true, allow_nil: true
   validates :age_unit, presence: true, if: -> { age_min.present? || age_max.present? }

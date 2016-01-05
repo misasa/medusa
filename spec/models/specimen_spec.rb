@@ -317,7 +317,7 @@ describe Specimen do
       end
     end
     
-    describe "igsn" do
+    describe "igsn", :current => true do
       let(:obj) { FactoryGirl.build(:specimen, igsn: igsn) }
       context "9桁の場合" do
         let(:igsn) { "abcd12345" }
@@ -332,10 +332,22 @@ describe Specimen do
         let(:obj) { FactoryGirl.build(:specimen, name: "samplename2", igsn: "123456789") }
         it { expect(obj).not_to be_valid }
       end
+
+      context "Unlinked" do
+        before { FactoryGirl.create(:specimen, igsn: "") }
+        let(:obj) { FactoryGirl.build(:specimen, name: "samplename2", igsn: "") }
+        it { expect(obj).to be_valid }
+      end
+
       context "allow_nil" do
         let(:igsn) { nil }
         it { expect(obj).to be_valid }
       end
+      context "allow_blank" do
+        let(:igsn) { "" }
+        it { expect(obj).to be_valid }
+      end
+
     end
     
     describe "age_min" do
