@@ -49,7 +49,7 @@
   <%= f.button name: "sesar_upload", id: "sesar_upload", class: "btn btn-default", disabled: true do %>
     Sesar upload
   <% end %>
-  <%= f.button id: "sesar_unlink", class: "btn btn-default", disabled: true, data: {confirm: t("confirm.unlink")} do %>
+  <%= f.button id: "sesar_unlink", class: "btn btn-default", disabled: true, data: {confirm: "Are you sure you want to unlink an IGSN '#{@specimen.igsn}'."} do %>
     Sesar unlink
   <% end %>
 <% end %>
