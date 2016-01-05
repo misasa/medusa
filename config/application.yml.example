@@ -19,7 +19,7 @@ defaults: &defaults
     archive_name: "Institute for Study of the Earth's Interior Okayama University"
     archive_contact: tkk@misasa.okayama-u.ac.kp
     external_urls:
-      - url: http://dream.misasa.okayama-u.ac.jp/?igsn=#{igsn}
+      - url: http://dream.misasa.okayama-u.ac.jp/?q=#{global_id}
         description: 
         url_type: regular URL
   sign_in: &3
