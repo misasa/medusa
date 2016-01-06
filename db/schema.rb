@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151228041428) do
+ActiveRecord::Schema.define(version: 20160106002010) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -192,6 +192,7 @@ ActiveRecord::Schema.define(version: 20151228041428) do
     t.string  "name",        comment: "名称"
     t.string  "description", comment: "説明"
     t.integer "unit_id",     comment: "単位ID"
+    t.integer "scale",       comment: "有効精度"
   end
 
   create_table "measurement_items", force: true, comment: "測定項目" do |t|
@@ -200,6 +201,7 @@ ActiveRecord::Schema.define(version: 20151228041428) do
     t.string  "display_in_html", comment: "HTML表記"
     t.string  "display_in_tex",  comment: "TEX表記"
     t.integer "unit_id",         comment: "単位ID"
+    t.integer "scale",           comment: "有効精度"
   end
 
   create_table "omniauths", force: true, comment: "シングルサインオン情報" do |t|
