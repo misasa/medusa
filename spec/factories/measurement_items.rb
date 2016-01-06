@@ -5,5 +5,6 @@ FactoryGirl.define do
     display_in_html "[A]"
     association :unit, factory: :unit
     display_in_tex "\text{A}"
+    scale 2
   end
 end
