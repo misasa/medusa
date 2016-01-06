@@ -3,7 +3,7 @@ module HasAttachmentFile
   
   included do
     has_many :attachings, as: :attachable, dependent: :destroy
-    has_many :attachment_files, through: :attachings
+    has_many :attachment_files, through: :attachings, :order => 'attachings.position asc'
   end
 
   def attachment_pdf_files
