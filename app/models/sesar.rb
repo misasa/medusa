@@ -83,6 +83,7 @@ class Sesar < ActiveResource::Base
     attributes = {}
     attributes[:sample_type] = model.physical_form.try!(:sesar_sample_type)
     attributes[:name] = model.name
+    attributes[:sample_other_names] = [model.global_id]
     attributes[:material] = model.classification.try!(:sesar_material)
     attributes[:igsn] = model.igsn
     attributes[:classification] = array_classification(model.classification)
@@ -111,7 +112,7 @@ class Sesar < ActiveResource::Base
     attributes[:description] = model.description
     associate_specimen_custom_attributes(model).each do |sca|
       if sca.custom_attribute.sesar_name == "sample_other_names"
-        attributes[:sample_other_names] = sca.value.split(",")
+        attributes[:sample_other_names].concat( sca.value.split(",") )
       else
         attributes[sca.custom_attribute.sesar_name] = sca.value
       end

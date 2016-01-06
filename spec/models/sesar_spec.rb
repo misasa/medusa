@@ -7,20 +7,16 @@ describe Sesar do
     let(:bib) { FactoryGirl.create(:bib) }
     let(:material) {"Rock"}
     let(:sesar_classification) {"Igneous"}
-    let(:specimen_custom_attribute_1) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id, value: "value") }
-    let(:custom_attribute_1) { FactoryGirl.create(:custom_attribute, sesar_name: "sample_comment") }
-    let(:specimen_custom_attribute_2) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_2.id, value: "name_1,name_2") }
-    let(:custom_attribute_2) { FactoryGirl.create(:custom_attribute, sesar_name: "sample_other_names") }
+
     before do
-      specimen_custom_attribute_1
-      specimen_custom_attribute_2
-      specimen.bibs << bib
-      specimen.physical_form.name = "asteroid"
-      specimen.classification.sesar_material = material
-      specimen.classification.sesar_classification = sesar_classification
-      specimen.place.latitude = 35
-      specimen.place.longitude = 135
+        specimen.bibs << bib
+        specimen.physical_form.name = "asteroid"
+        specimen.classification.sesar_material = material
+        specimen.classification.sesar_classification = sesar_classification
+        specimen.place.latitude = 35
+        specimen.place.longitude = 135      
     end
+
     it "正しく値が設定される" do
       sesar = Sesar.from_active_record(specimen)
       expect(sesar.attributes["sample_type"]).to eq "Other"
@@ -45,8 +41,7 @@ describe Sesar do
       expect(sesar.attributes["current_archive"]).to eq "Institute for Study of the Earth's Interior Okayama University"
       expect(sesar.attributes["current_archive_contact"]).to eq "tkk@misasa.okayama-u.ac.kp"
       expect(sesar.attributes["description"]).to eq specimen.description
-      expect(sesar.attributes[custom_attribute_1.sesar_name]).to eq(specimen_custom_attribute_1.value)
-      expect(sesar.attributes[custom_attribute_2.sesar_name]).to eq(specimen_custom_attribute_2.value.split(","))
+      expect(sesar.attributes["sample_other_names"]).to eq [specimen.global_id]
     end
     describe "to_xml" do
       before do
@@ -71,10 +66,35 @@ describe Sesar do
         it { expect(@xml).to include "<Rock><Igneous/></Rock></classification>" }
       end
       context "sample_other_names" do
-        it { expect(@xml).to include "<sample_other_names><sample_other_name>name_1</sample_other_name><sample_other_name>name_2</sample_other_name></sample_other_names>" }
+        it { expect(@xml).to include "<sample_other_names><sample_other_name>#{specimen.global_id}</sample_other_name></sample_other_names>" }
       end
       context "external_urls" do
         it { expect(@xml).to include "<external_urls><external_url><url>http://dream.misasa.okayama-u.ac.jp/?q=#{specimen.global_id}</url><description/><url_type>regular URL</url_type></external_url><external_url><url>http://dx.doi.org/doi１</url><description>書誌情報１</description><url_type>DOI</url_type></external_url></external_urls>" }
+      end
+    end
+
+    context "with custom_attribute" do
+      let(:specimen_custom_attribute_1) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id, value: "value") }
+      let(:custom_attribute_1) { FactoryGirl.create(:custom_attribute, sesar_name: "sample_comment") }
+      let(:specimen_custom_attribute_2) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_2.id, value: "name_1,name_2") }
+      let(:custom_attribute_2) { FactoryGirl.create(:custom_attribute, sesar_name: "sample_other_names") }
+      before do
+        specimen_custom_attribute_1
+        specimen_custom_attribute_2
+      end
+      it "正しく値が設定される" do
+        sesar = Sesar.from_active_record(specimen)
+        expect(sesar.attributes[custom_attribute_1.sesar_name]).to eq(specimen_custom_attribute_1.value)
+        expect(sesar.attributes[custom_attribute_2.sesar_name]).to eq([specimen.global_id].concat(specimen_custom_attribute_2.value.split(",")))
+      end
+      describe "to_xml" do
+        before do
+          sesar = Sesar.from_active_record(specimen)
+          @xml = sesar.to_xml
+        end
+        context "sample_other_names" do
+          it { expect(@xml).to include "<sample_other_names><sample_other_name>#{specimen.global_id}</sample_other_name><sample_other_name>name_1</sample_other_name><sample_other_name>name_2</sample_other_name></sample_other_names>" }
+        end
       end
     end
   end
@@ -150,7 +170,7 @@ describe Sesar do
         it { expect(subject).to include({description: nil, url_type: "regular URL", url: "http://dream.misasa.okayama-u.ac.jp/?q=#{model.global_id}"}) }
         it { expect(subject).to_not include({url: "http://dx.doi.org/doi１", description: "書誌情報１", url_type: "DOI"}) }
       end
-      context "紐づくbibが存在する場合", :current => true do
+      context "紐づくbibが存在する場合" do
         let(:model) { FactoryGirl.create(:specimen, igsn: "") }
         let(:bib) { FactoryGirl.create(:bib) }
         before do
