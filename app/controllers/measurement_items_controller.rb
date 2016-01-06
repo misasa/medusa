@@ -45,6 +45,7 @@ class MeasurementItemsController < ApplicationController
       :display_in_html,
       :display_in_tex,
       :unit_id,
+      :scale,
       measurement_category_ids: []
     )
   end

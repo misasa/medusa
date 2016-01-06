@@ -444,21 +444,93 @@ describe "Table::Row" do
   describe "#scale" do
     subject { row.scale }
     let(:row) { Table::Row.new(table, category_measurement_item, [chemistry]) }
-    let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item, scale: scale) }
-    let(:scale) { 1 }
-    context "scale is 1" do
-      it { expect(subject).to eq scale }
-    end
-    context "scale is 0" do
-      let(:scale) { 0 }
-      it { expect(subject).to eq scale }
-    end
-    context "scale is nil" do
-      let(:scale) { nil }
+    let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item, scale: scale1) }
+    let(:measurement_category) { FactoryGirl.create(:measurement_category, unit: unit, scale: scale2) }
+    let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit, scale: scale3) }
+    let(:scale1) { 1 }
+    let(:scale1) { nil }
+    let(:scale2) { nil }
+    let(:scale3) { nil }
+    context "scaleが設定されていない" do
       it { expect(subject).to eq(Table::Row::DEFAULT_SCALE) }
     end
+    context "measurement_itemのscaleが設定されている" do
+      let(:scale3) { 3 }
+      it { expect(subject).to eq scale3 }
+      context "measurement_categoryのscaleが設定されている" do
+        let(:scale2) { 2 }
+        it { expect(subject).to eq scale2 }
+        context "category_measurement_itemのscaleが設定されている" do
+          let(:scale1) { 1 }
+          it { expect(subject).to eq scale1 }
+        end
+      end
+    end
+    context "category_measurement_itemのscaleが設定されている" do
+      let(:scale1) { 1 }
+      it { expect(subject).to eq scale1 }
+      context "measurement_categoryのscaleが設定されている" do
+        let(:scale2) { 2 }
+        it { expect(subject).to eq scale1 }
+      end
+    end
+    context "category_measurement_itemのscaleが設定されている" do
+      let(:scale1) { 1 }
+      context "measurement_itemのscaleが設定されている" do
+        let(:scale3) { 3 }
+        it { expect(subject).to eq scale1 }
+      end
+    end
+    context "measurement_categoryのscaleが設定されている" do
+      let(:scale2) { 2 }
+      it { expect(subject).to eq scale2 }
+    end
   end
-  
+
+  describe "#unit" do
+    subject { row.unit }
+    let(:row) { Table::Row.new(table, category_measurement_item, [chemistry]) }
+    let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit1, measurement_item: measurement_item) }
+    let(:measurement_category) { FactoryGirl.create(:measurement_category, unit: unit2) }
+    let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit3) }
+    let(:unit1) { nil }
+    let(:unit2) { nil }
+    let(:unit3) { nil }
+    context "unitが設定されていない" do
+      it { expect(subject).to eq unit }
+    end
+    context "measurement_itemにunitが設定されている" do
+      let(:unit3) { FactoryGirl.create(:unit, name: "unit_name3", conversion: 1, html: "html3", text: "text3") }
+      it { expect(subject).to eq unit3 }
+      context "measurement_categoryにunitが設定されている" do
+        let(:unit2) { FactoryGirl.create(:unit, name: "unit_name2", conversion: 1, html: "html2", text: "text2") }
+        it { expect(subject).to eq unit2 }
+        context "category_measurement_itemにunitが設定されている" do
+          let(:unit1) { FactoryGirl.create(:unit, name: "unit_name1", conversion: 1, html: "html1", text: "text1") }
+          it { expect(subject).to eq unit1 }
+        end
+      end
+    end
+    context "category_measurement_itemにunitが設定されている" do
+      let(:unit1) { FactoryGirl.create(:unit, name: "unit_name1", conversion: 1, html: "html1", text: "text1") }
+      it { expect(subject).to eq unit1 }
+      context "measurement_categoryにunitが設定されている" do
+        let(:unit2) { FactoryGirl.create(:unit, name: "unit_name2", conversion: 1, html: "html2", text: "text2") }
+        it { expect(subject).to eq unit1 }
+      end
+    end
+    context "category_measurement_itemにunitが設定されている" do
+      let(:unit1) { FactoryGirl.create(:unit, name: "unit_name1", conversion: 1, html: "html1", text: "text1") }
+      context "measurement_itemにunitが設定されている" do
+        let(:unit3) { FactoryGirl.create(:unit, name: "unit_name3", conversion: 1, html: "html3", text: "text3") }
+        it { expect(subject).to eq unit1 }
+      end
+    end
+    context "measurement_categoryにunitが設定されている" do
+      let(:unit2) { FactoryGirl.create(:unit, name: "unit_name2", conversion: 1, html: "html2", text: "text2") }
+      it { expect(subject).to eq unit2 }
+    end
+  end
 end
 
 describe "Table::Cell" do

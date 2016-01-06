@@ -61,6 +61,7 @@ class MeasurementCategoriesController < ApplicationController
       :name,
       :description,
       :unit_id,
+      :scale,
       category_measurement_items_attributes: [
         :id,
         :unit_id,

@@ -26,8 +26,6 @@ class Table < ActiveRecord::Base
 
     attr_reader :table
 
-    delegate :unit, to: :category_measurement_item
-
     def initialize(table, category_measurement_item, chemistries)
       @table = table
       @category_measurement_item = category_measurement_item
@@ -78,7 +76,11 @@ class Table < ActiveRecord::Base
     end
 
     def scale
-      category_measurement_item.scale || DEFAULT_SCALE
+      category_measurement_item.scale || table.measurement_category.scale || category_measurement_item.measurement_item.scale || DEFAULT_SCALE
+    end
+
+    def unit
+      category_measurement_item.unit || table.measurement_category.unit || category_measurement_item.measurement_item.unit || Unit.first
     end
 
     private
