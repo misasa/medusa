@@ -236,6 +236,7 @@ class Sesar < ActiveResource::Base
     end
     if model.bibs.present?
       model.bibs.each do |bib|
+        next if bib.doi.blank?
         urls.push({url: "http://dx.doi.org/#{bib.doi}", description: bib.name, url_type: "DOI"})
       end
     end

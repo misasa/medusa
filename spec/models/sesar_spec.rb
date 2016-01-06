@@ -145,18 +145,28 @@ describe Sesar do
         File.open(file_yaml,"w"){|f| f.write data.to_yaml}
         Settings.reload!
       end
-      context "紐づくbibが存在しない場合", :current => true do
+      context "紐づくbibが存在しない場合" do
         let(:model) { FactoryGirl.create(:specimen, igsn: "") }
         it { expect(subject).to include({description: nil, url_type: "regular URL", url: "http://dream.misasa.okayama-u.ac.jp/?q=#{model.global_id}"}) }
         it { expect(subject).to_not include({url: "http://dx.doi.org/doi１", description: "書誌情報１", url_type: "DOI"}) }
       end
-      context "紐づくbibが存在する場合" do
+      context "紐づくbibが存在する場合", :current => true do
         let(:model) { FactoryGirl.create(:specimen, igsn: "") }
         let(:bib) { FactoryGirl.create(:bib) }
         before do
           model.bibs << bib
-        end
+        end        
         it { expect(subject).to include({url: "http://dx.doi.org/doi１", description: "書誌情報１", url_type: "DOI"}) }
+        context "doi is nil" do
+          let(:bib) { FactoryGirl.create(:bib, doi: nil)}
+          it { expect(subject).not_to include({url: "http://dx.doi.org/", description: "書誌情報１", url_type: "DOI"}) }
+        end
+
+        context "doi is ''" do
+          let(:bib) { FactoryGirl.create(:bib, doi: "")}
+          it { expect(subject).not_to include({url: "http://dx.doi.org/", description: "書誌情報１", url_type: "DOI"}) }
+        end
+
       end
     end
   end
