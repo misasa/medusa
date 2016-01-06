@@ -42,6 +42,7 @@ class TablesController < ApplicationController
       :with_place,
       :with_age,
       :age_unit,
+      :age_scale,
       :description,
       record_property_attributes: [
         :global_id,

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160106002010) do
+ActiveRecord::Schema.define(version: 20160106074040) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -373,6 +373,7 @@ ActiveRecord::Schema.define(version: 20160106002010) do
     t.boolean  "with_age",                comment: "年代表示フラグ"
     t.string   "age_unit",                comment: "年代単位"
     t.text     "description",             comment: "説明"
+    t.integer  "age_scale",               comment: "有効精度"
   end
 
   add_index "tables", ["bib_id"], name: "index_tables_on_bib_id", using: :btree

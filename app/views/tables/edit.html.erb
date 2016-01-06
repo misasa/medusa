@@ -31,12 +31,14 @@
   </div>
   <div class="form-group form-group-sm">
     <div class="form-inline">
-    <label class="small">Age</label>    
-    <%= f.label :with_age, class: "checkbox-inline" do %>
-      <%= f.check_box :with_age %>
-    <% end %>
-    with unit
-    <%= f.select :age_unit, ["a","ka","Ma","Ga"].map{|n| [n,n]}, { include_blank: true }, class: "form-control input-sm" %>    
+      <label class="small">Age</label>
+      <%= f.label :with_age, class: "checkbox-inline" do %>
+        <%= f.check_box :with_age %>
+      <% end %>
+      with unit
+      <%= f.select :age_unit, ["a","ka","Ma","Ga"].map{|n| [n,n]}, { include_blank: true }, class: "form-control input-sm" %>
+      &nbsp;scale
+      <%= f.text_field :age_scale, class: "form-control input-sm", size: 10  %>
     </div>
   </div>
   <div class="form-group form-group-sm">
