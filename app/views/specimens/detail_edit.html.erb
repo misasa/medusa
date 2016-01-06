@@ -39,6 +39,15 @@
     <%= f.label :collection_date_precision, class: "small" %>
     <%= f.select :collection_date_precision, ["year","month","day","time"].map{|n| [n,n]}, { include_blank: true }, class: "form-control input-sm" %>
   </div>
+  <% @specimen_custom_attributes.each do |specimen_custom_attribute| %>
+    <%= f.fields_for(:specimen_custom_attributes, specimen_custom_attribute) do |fo| %>
+      <div class="form-group form-group-sm">
+        <%= label_tag "custom_attribute_name", specimen_custom_attribute.custom_attribute.name, class: "small" %>
+        <%= fo.hidden_field :custom_attribute_id %>
+        <%= fo.text_field :value, class: "form-control input-sm" %>
+      </div>
+    <% end %>
+  <% end %>
   <div class="form-group form-group-sm">
     <%= f.label :description, class: "small" %>
     <%= f.text_area :description, class: "form-control input-sm", row: 3 %>

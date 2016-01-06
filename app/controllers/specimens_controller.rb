@@ -20,6 +20,7 @@ class SpecimensController < ApplicationController
   end
   
   def detail_edit
+    @specimen_custom_attributes = @specimen.set_specimen_custom_attributes
     respond_with @specimen, layout: !request.xhr?
   end
 
@@ -78,11 +79,6 @@ class SpecimensController < ApplicationController
   end
 
   def property
-    respond_with @specimen, layout: !request.xhr?
-  end
-  
-  def custom_attribute
-    @specimen_custom_attributes = @specimen.set_specimen_custom_attributes
     respond_with @specimen, layout: !request.xhr?
   end
 

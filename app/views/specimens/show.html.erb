@@ -27,11 +27,6 @@
         <%= link_to detail_edit_specimen_path(@specimen), class: "btn btn-default", id: "wrench-button", remote: true do %>
           <span class="glyphicon glyphicon-wrench"></span>
         <% end %>
-        <% if CustomAttribute.exists? %>
-          <%= link_to custom_attribute_specimen_path(@specimen), class: "btn btn-default", id: "inbox-button", remote: true do %>
-            <span class="glyphicon glyphicon-inbox"></span>
-          <% end %>
-        <% end %>
         <%= link_to property_specimen_path(@specimen), class: "btn btn-default", id: "cog-button", remote: true do %>
           <span class="glyphicon glyphicon-cog"></span>
         <% end %>

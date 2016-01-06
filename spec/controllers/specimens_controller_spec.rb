@@ -74,8 +74,13 @@ describe SpecimensController do
   
   describe "GET detail_edit" do
     let(:specimen) { FactoryGirl.create(:specimen) }
-    before { get :detail_edit, id: specimen.id }
+    let(:specimen_custom_attributes) { double(:specimen_custom_attributes) }
+    before do
+      allow_any_instance_of(Specimen).to receive(:set_specimen_custom_attributes).and_return(specimen_custom_attributes)
+      get :detail_edit, id: specimen.id
+    end
     it { expect(assigns(:specimen)).to eq specimen }
+    it { expect(assigns(:specimen_custom_attributes)).to eq specimen_custom_attributes }
   end
   
   describe "POST create", :current => true do
@@ -196,17 +201,6 @@ describe SpecimensController do
     let(:specimen) { FactoryGirl.create(:specimen) }
     before { get :property, id: specimen.id }
     it { expect(assigns(:specimen)).to eq specimen }
-  end
-  
-  describe "GET custom_attribute" do
-    let(:specimen) { FactoryGirl.create(:specimen) }
-    let(:specimen_custom_attributes) { double(:specimen_custom_attributes) }
-    before do
-      allow_any_instance_of(Specimen).to receive(:set_specimen_custom_attributes).and_return(specimen_custom_attributes)
-      get :custom_attribute, id: specimen.id
-    end
-    it { expect(assigns(:specimen)).to eq specimen }
-    it { expect(assigns(:specimen_custom_attributes)).to eq specimen_custom_attributes }
   end
 
   describe "POST bundle_edit" do
