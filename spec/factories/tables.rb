@@ -7,6 +7,7 @@ FactoryGirl.define do
     with_place true
     with_age true
     age_unit "a"
+    age_scale 0
     description "table description"
   end
 end

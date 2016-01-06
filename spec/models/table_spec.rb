@@ -37,6 +37,31 @@ describe "Table" do
         end
       end
     end
+    describe "age_scale" do
+      subject { table.valid? }
+      let(:table) { FactoryGirl.build(:table, with_age: with_age, age_scale: age_scale) }
+      let(:with_age) { true }
+      let(:age_scale) { 0 }
+      context "is present" do
+        context "with_age is true" do
+          it { expect(subject).to eq true }
+        end
+        context "with_age is false" do
+          let(:with_age) { false }
+          it { expect(subject).to eq true }
+        end
+      end
+      context "is blank" do
+        let(:age_scale) { nil }
+        context "with_age is true" do
+        it { expect(subject).to eq false }
+        end
+        context "with_age is false" do
+          let(:with_age) { false }
+          it { expect(subject).to eq true }
+        end
+      end
+    end
   end
   
   describe "#each" do

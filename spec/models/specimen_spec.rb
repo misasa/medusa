@@ -148,6 +148,11 @@ describe Specimen do
         let(:scale){ 1 }
         it { expect(specimen.age_in_text(:unit => unit, :scale => scale)).to be_eql("50000.0 (5000.0)") }
       end
+      context "scale blank" do
+        let(:unit){ "a" }
+        let(:scale){ nil }
+        it { expect(specimen.age_in_text(:unit => unit, :scale => scale)).to be_eql("50000 (5000)") }
+      end
     end
 
     context "without min" do

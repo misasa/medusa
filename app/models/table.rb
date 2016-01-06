@@ -17,6 +17,7 @@ class Table < ActiveRecord::Base
   accepts_nested_attributes_for :table_analyses
 
   validates :age_unit, presence: true, if: -> { with_age.present? }
+  validates :age_scale, presence: true, if: -> { with_age.present? }
 
   class Row
 
