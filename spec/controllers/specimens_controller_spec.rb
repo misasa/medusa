@@ -173,7 +173,7 @@ describe SpecimensController do
 
   describe "POST create_place", :current => true do
     let(:specimen) { FactoryGirl.create(:specimen) }
-    let(:attributes) { {name: 'test-place', latitude_direction: 'N', latitude_deg: 5, latitude_min: 37, latitude_deg: 30.0, lonigtude_direction: 'E', longitude_deg: 5, elevation: 120} }
+    let(:attributes) { {name: 'test-place', latitude_dms_direction: 'N', latitude_dms_deg: 5, latitude_dms_min: 37, latitude_dms_deg: 30.0, lonigtude_dms_direction: 'E', longitude_dms_deg: 5, elevation: 120} }
     #it { expect { post :create_place, id: specimen.id, place: attributes }.to change(Place, :count).by(1) }
     describe "assigns as @specimen" do
       before { post :create_place, id: specimen.id, place: attributes }

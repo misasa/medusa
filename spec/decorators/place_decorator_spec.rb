@@ -255,7 +255,7 @@ describe PlaceDecorator do
     context "latitude,longitude all not blank" do
       let(:latitude){35.36068}
       let(:longitude){132.756545}
-      it{expect(place.distance_from(35.681309,139.766048).round(3)).to eq 781.098}
+      it{expect(place.distance_from(35.681309,139.766048).round(3)).to eq 781.097}
     end
   end
 

@@ -2,52 +2,52 @@
  <%= @specimen.place.try(:to_map) %>
  <%= javascript_tag "actsAsMappable.initToMap();" %>
 <% else %>
- <%= form_for Place.new(:latitude_direction => 'N', :longitude_direction => 'E'), url: place_specimen_path(@specimen) do |f| %>
+ <%= form_for Place.new(:latitude_dms_direction => 'N', :longitude_dms_direction => 'E'), url: place_specimen_path(@specimen) do |f| %>
      <div class="form-group form-group-sm">
       <%= f.label :latitude, class: "small" %>
       <%= f.label :latitude, class: "radiobox-inline" do %>
-        <%= f.radio_button :latitude_direction, 'N' %> N
+        <%= f.radio_button :latitude_dms_direction, 'N' %> N
       <% end %>
       <%= f.label :latitude, class: "radiobox-inline" do %>
-        <%= f.radio_button :latitude_direction, 'S' %> S
+        <%= f.radio_button :latitude_dms_direction, 'S' %> S
       <% end %>
       <div class="row">
         <div class="col-xs-4">
           <label class="small">Degree</label>
-          <%= f.text_field :latitude_deg, class: "form-control input-sm" %>
+          <%= f.text_field :latitude_dms_deg, class: "form-control input-sm" %>
         </div>
         <div class="col-xs-4">
           <label class="small">Minute</label>
-          <%= f.text_field :latitude_min, class: "form-control input-sm" %>
+          <%= f.text_field :latitude_dms_min, class: "form-control input-sm" %>
         </div>
         <div class="col-xs-4">
           <label class="small">Second</label>
-          <%= f.text_field :latitude_sec, class: "form-control input-sm" %>
+          <%= f.text_field :latitude_dms_sec, class: "form-control input-sm" %>
         </div>
        </div>
      </div>
      <div class="form-group form-group-sm">
       <%= f.label :longitude, class: "small" %>
       <%= f.label :longitude, class: "radiobox-inline" do %>
-        <%= f.radio_button :longitude_direction, 'E' %> E
+        <%= f.radio_button :longitude_dms_direction, 'E' %> E
       <% end %>
       <%= f.label :longitude, class: "radiobox-inline" do %>
-        <%= f.radio_button :longitude_direction, 'W' %> W
+        <%= f.radio_button :longitude_dms_direction, 'W' %> W
       <% end %>
       <div class="row">
         <div class="col-xs-4">
           <label class="small">Degree</label>
-          <%= f.text_field :longitude_deg, class: "form-control input-sm" %>
+          <%= f.text_field :longitude_dms_deg, class: "form-control input-sm" %>
         </div>
 
         <div class="col-xs-4">
           <label class="small">Minute</label>
-          <%= f.text_field :longitude_min, class: "form-control input-sm" %>
+          <%= f.text_field :longitude_dms_min, class: "form-control input-sm" %>
         </div>
 
         <div class="col-xs-4">
           <label class="small">Second</label>
-          <%= f.text_field :longitude_sec, class: "form-control input-sm" %>
+          <%= f.text_field :longitude_dms_sec, class: "form-control input-sm" %>
         </div>
       </div>
      </div>

@@ -3,16 +3,57 @@
     <%= f.label :name, class: "small" %>
     <%= f.text_field :name, class: "form-control input-sm" %>
   </div>
+
+      <%= f.label :latitude, class: "small" %>
+      <%= f.label :latitude, class: "radiobox-inline" do %>
+        <%= f.radio_button :latitude_dms_direction, 'N' %> N
+      <% end %>
+      <%= f.label :latitude, class: "radiobox-inline" do %>
+        <%= f.radio_button :latitude_dms_direction, 'S' %> S
+      <% end %>
+      <div class="row">
+        <div class="col-xs-4">
+          <label class="small">Degree</label>
+          <%= f.text_field :latitude_dms_deg, class: "form-control input-sm" %>
+        </div>
+        <div class="col-xs-4">
+          <label class="small">Minute</label>
+          <%= f.text_field :latitude_dms_min, class: "form-control input-sm" %>
+        </div>
+        <div class="col-xs-4">
+          <label class="small">Second</label>
+          <%= f.text_field :latitude_dms_sec, class: "form-control input-sm" %>
+        </div>
+       </div>
+     </div>
+     <div class="form-group form-group-sm">
+      <%= f.label :longitude, class: "small" %>
+      <%= f.label :longitude, class: "radiobox-inline" do %>
+        <%= f.radio_button :longitude_dms_direction, 'E' %> E
+      <% end %>
+      <%= f.label :longitude, class: "radiobox-inline" do %>
+        <%= f.radio_button :longitude_dms_direction, 'W' %> W
+      <% end %>
+      <div class="row">
+        <div class="col-xs-4">
+          <label class="small">Degree</label>
+          <%= f.text_field :longitude_dms_deg, class: "form-control input-sm" %>
+        </div>
+
+        <div class="col-xs-4">
+          <label class="small">Minute</label>
+          <%= f.text_field :longitude_dms_min, class: "form-control input-sm" %>
+        </div>
+
+        <div class="col-xs-4">
+          <label class="small">Second</label>
+          <%= f.text_field :longitude_dms_sec, class: "form-control input-sm" %>
+        </div>
+      </div>
+     </div>
+
   <div class="form-group form-group-sm">
-    <%= f.label :latitude, class: "small" %>
-    <%= f.text_field :latitude, class: "form-control input-sm" %>
-  </div>
-  <div class="form-group form-group-sm">
-    <%= f.label :longitude, class: "small" %>
-    <%= f.text_field :longitude, class: "form-control input-sm" %>
-  </div>
-  <div class="form-group form-group-sm">
-    <%= f.label :elevation, class: "small" %>
+    <%= f.label "Elevation (m)", class: "small" %>
     <%= f.text_field :elevation, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
