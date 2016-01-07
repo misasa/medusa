@@ -2,7 +2,7 @@
   <th>latitude</th>
   <th></th>
   <% table.specimens.each do |specimen| %>
-    <td><%= specimen.place.try!(:latitude) || "-" %></td>
+    <td><%= raw specimen.place.try!(:latitude_to_html) || "-" %></td>
   <% end %>
   <% if table.with_average %>
     <td></td>
@@ -12,7 +12,7 @@
   <th>longitude</th>
   <th></th>
   <% table.specimens.each do |specimen| %>
-    <td><%= specimen.place.try!(:longitude) || "-" %></td>
+    <td><%= raw specimen.place.try!(:longitude_to_html) || "-" %></td>
   <% end %>
   <% if table.with_average %>
     <td></td>
