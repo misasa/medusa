@@ -48,7 +48,7 @@ class Place < ActiveRecord::Base
     items << "#{dms[:deg]}&deg;" if dms[:deg]
     items << "#{dms[:min]}&prime;" if dms[:min]
     items << "#{sprintf('%.1f', dms[:sec])}&Prime;" if dms[:sec]
-    items.join(" ")
+    items.join("")
   end
 
   def self.import_csv(file)

@@ -355,12 +355,12 @@ describe Place do
     let(:obj){ FactoryGirl.create(:place, name: "test", latitude: degree) }
     context "degree > 0" do
       let(:degree) { 5.625 }
-      it { expect(subject).to be_eql("N 5&deg; 37&prime; 30.0&Prime;") }
+      it { expect(subject).to be_eql("N5&deg;37&prime;30.0&Prime;") }
     end
 
     context "degree < 0" do
       let(:degree) { -5.625 }
-      it { expect(subject).to be_eql("S 5&deg; 37&prime; 30.0&Prime;") }
+      it { expect(subject).to be_eql("S5&deg;37&prime;30.0&Prime;") }
     end
 
   end
@@ -370,12 +370,12 @@ describe Place do
     let(:obj){ FactoryGirl.create(:place, name: "test", longitude: degree) }
     context "degree > 0" do
       let(:degree) { 5.625 }
-      it { expect(subject).to be_eql("E 5&deg; 37&prime; 30.0&Prime;") }
+      it { expect(subject).to be_eql("E5&deg;37&prime;30.0&Prime;") }
     end
 
     context "degree < 0" do
       let(:degree) { -5.625 }
-      it { expect(subject).to be_eql("W 5&deg; 37&prime; 30.0&Prime;") }
+      it { expect(subject).to be_eql("W5&deg;37&prime;30.0&Prime;") }
     end
 
   end
