@@ -8,6 +8,7 @@
   <td><%= specimen.physical_form.try!(:name) %></td>
   <td><%= specimen.classification.try!(:full_name) %></td>
   <%= td_if_expand specimen.tag_list %>
+  <%= td_if_expand raw(specimen.age_in_text(:unit => specimen.age_unit, :with_unit => true) || "-") %>
   <%= td_if_expand specimen.user.try!(:username) %>
   <td><%= specimen.group.try!(:name) %></td>
   <%= td_if_expand difference_from_now(specimen.published_at) %>

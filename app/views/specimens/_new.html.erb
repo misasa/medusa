@@ -27,6 +27,7 @@
   <%= th_if_expand do %>
     <%= f.text_field :tag_list, class: "form-control input-sm", size: 15 %>
   <% end %>
+  <%= th_if_expand nil %> <!-- age -->
   <%= f.fields_for :record_property_attributes do |r| %>
   <%= th_if_expand @current_user.username %>
   <th>

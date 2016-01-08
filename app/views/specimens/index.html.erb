@@ -16,6 +16,7 @@
       <th><%= sort_link @search, :physical_form_name, "physical-form" %></th>
       <th><%= sort_link @search, :classification_full_name, "classification" %></th>
       <%= th_if_expand "tags" %><!-- don't sort -->
+      <%= th_if_expand "age" %><!-- don't sort -->
       <%= th_if_expand do %>
         <%= sort_link @search, :user_username, "owner" %>
       <% end %>
@@ -41,6 +42,7 @@
       <%= th_if_expand do %>
         <%= f.select :tags_name_eq, ActsAsTaggableOn::Tag.pluck(:name), { include_blank: true }, class: "form-control input-sm" %>
       <% end %>
+      <%= th_if_expand nil %> <!-- age -->
       <%= th_if_expand do %>
         <%= f.text_field :user_username_cont, class: "form-control input-sm", size: 15 %>
       <% end %>
@@ -63,6 +65,7 @@
       <th></th>
       <th></th>
       <%= th_if_expand nil %>
+      <%= th_if_expand nil %> <!-- age -->      
       <%= th_if_expand nil %>
       <th></th>
       <%= th_if_expand nil %>

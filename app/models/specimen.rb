@@ -87,6 +87,7 @@ class Specimen < ActiveRecord::Base
     elsif age_max
       text = "<" + Alchemist.measure(self.age_max, self.age_unit.to_sym).to(unit.to_sym).value.round(scale).to_s      
     end
+    text += " #{unit}" if text && opts[:with_unit]
     return text
   end
 
