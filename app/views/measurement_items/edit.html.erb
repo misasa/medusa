@@ -18,11 +18,11 @@
 
   <div>
     <%= f.label :unit_id %>
-    <%= f.select :unit_id, Unit.all.map{|r|[raw(r.html),r.id]}, { include_blank: true }, class: "form-control input-sm" %>
+    <%= f.select :unit_id, Unit.all.map{|r|[raw(r.html),r.id]}, { include_blank: false }, class: "form-control input-sm" %>
   </div>
 
   <div>
-    <%= f.label :scale %>
+    <%= f.label "Ndigit" %>
     <%= f.text_field :scale, class: "form-control input-sm" %>
   </div>
 

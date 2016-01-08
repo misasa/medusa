@@ -9,11 +9,11 @@
 
     <div>
       <%= f.label :unit_id %>
-      <%= f.select :unit_id, @units.map{|r|[raw(r.html),r.id]}, { include_blank: true }, class: "form-control input-sm" %>
+      <%= f.select :unit_id, @units.map{|r|[raw(r.html),r.id]}, { include_blank: "null" }, class: "form-control input-sm" %>
     </div>
 
     <div>
-      <%= f.label :scale %>
+      <%= f.label "ndigit" %>
       <%= f.text_field :scale, class: "form-control input-sm" %>
     </div>
 
@@ -29,14 +29,14 @@
     <li class="row list-unstyled">
       <div class="col-lg-7">name <span class="glyphicon glyphicon-sort"></span></div>
       <div class="col-lg-2">unit</div>
-      <div class="col-lg-2">scale</div>
+      <div class="col-lg-2">ndigit</div>
       <div class="col-lg-1"></div>
     </li>
     <%= f.fields_for :category_measurement_items do |g| %>
       <li class="row list-unstyled sortable">
 	<%= g.hidden_field :position, class: "position" %>
 	<div class="col-lg-7"><%== g.object.measurement_item.display_name %></div>
-	<div class="col-lg-2"><%= g.select :unit_id, @units.map { |u| [raw(u.html), u.id] }, {include_blank: true }, class: "form-control input-sm" %></div>
+	<div class="col-lg-2"><%= g.select :unit_id, @units.map { |u| [raw(u.html), u.id] }, {include_blank: "null" }, class: "form-control input-sm" %></div>
 	<div class="col-lg-2"><%= g.text_field :scale, class: "form-control input-sm" %></div>
 	<div class="col-lg-1">
 	  <%= link_to category_measurement_item_path(g.object), :method => :delete ,:title => "unlink item",data: {confirm: t("confirm.unlink")} do %>
