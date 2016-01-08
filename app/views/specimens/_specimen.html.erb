@@ -2,7 +2,7 @@
   <td><%= check_box_tag("ids[]", specimen.id, checked, id: "ids_#{specimen.id}", class: "select-row") if can?(:update, specimen) %></td>
   <td><%= link_to specimen.name, specimen, class: specimen_ghost(specimen) %></td>
   <td>
-  <% if specimen.igsn.blank? %>
+  <% if !specimen.igsn.blank? %>
    <%= link_to specimen.igsn, Settings.sesar_url(igsn: specimen.igsn) %>
    <%= link_to Settings.sesar_url(igsn: specimen.igsn, edit: true), title: "edit on SESAR" do %><span class="glyphicon glyphicon-pencil"></span><% end %>
   <% end %>
