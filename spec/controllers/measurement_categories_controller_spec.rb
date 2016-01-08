@@ -101,12 +101,17 @@ describe MeasurementCategoriesController do
     it { expect { post :duplicate, id: obj.id }.to change(MeasurementCategory, :count).by(1) }
     describe "with invalid attributes" do
       before do
+        obj.category_measurement_items[0].unit_id = measurement_item.unit_id
+        obj.category_measurement_items[0].scale = 2
+        obj.save
         post :duplicate, id: obj.id
       end
       it { expect(assigns(:measurement_category).name).to eq "aaa duplicate"}
       it { expect(assigns(:measurement_category).description).to eq "description"}
       it { expect(assigns(:measurement_category).measurement_items.count).to eq 1}
       it { expect(assigns(:measurement_category).measurement_items[0]).to eq measurement_item}
+      it { expect(assigns(:measurement_category).category_measurement_items[0].unit_id).to eq measurement_item.unit_id}
+      it { expect(assigns(:measurement_category).category_measurement_items[0].scale).to eq 2}
       it { expect(response).to render_template("edit") }
     end
     context "name has already been taken" do

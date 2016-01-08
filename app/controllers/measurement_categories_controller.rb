@@ -35,6 +35,11 @@ class MeasurementCategoriesController < ApplicationController
       measurement_category_orgin.measurement_items.each do |measurement_item|
         @measurement_category.measurement_items << measurement_item
       end
+      measurement_category_orgin.category_measurement_items.each.with_index do |category_measurement_item, index|
+        @measurement_category.category_measurement_items[index].unit_id = category_measurement_item.unit_id
+        @measurement_category.category_measurement_items[index].scale = category_measurement_item.scale
+      end
+      @measurement_category.save
       respond_with @measurement_category do |format|
         format.html {render :edit}
       end
