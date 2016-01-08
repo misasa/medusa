@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160106074040) do
+ActiveRecord::Schema.define(version: 20160108072716) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -304,8 +304,8 @@ ActiveRecord::Schema.define(version: 20160106074040) do
     t.datetime "created_at",                          comment: "作成日時"
     t.datetime "updated_at",                          comment: "更新日時"
     t.string   "igsn",                      limit: 9, comment: "IGSN"
-    t.integer  "age_min",                             comment: "年代（最小）"
-    t.integer  "age_max",                             comment: "年代（最大）"
+    t.float    "age_min",                             comment: "年代（最小）"
+    t.float    "age_max",                             comment: "年代（最大）"
     t.string   "age_unit",                            comment: "年代単位"
     t.string   "size",                                comment: "サイズ"
     t.string   "size_unit",                           comment: "サイズ単位"
