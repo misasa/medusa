@@ -9,6 +9,7 @@
         <% end %>
       </th>
       <th><%= sort_link @search, :name, "name" %></th>
+      <th><%= sort_link @search, :igsn, "IGSN" %></th>      
       <th><%= sort_link @search, :parent_name, "parent" %></th>
       <%= th_if_expand do %>
         <%= sort_link @search, :box_name, "box" %>
@@ -33,6 +34,7 @@
     <tr>
       <th><%= text_field_tag :per_page, (params[:per_page] || Specimen.default_per_page), class: "form-control input-sm", size: 4 %></th>
       <th><%= f.text_field :name_cont, class: "form-control input-sm", size: 15 %></th>
+      <th><%= f.text_field :igsn_cont, class: "form-control input-sm", size: 5 %></th>
       <th><%= f.text_field :parent_name_cont, class: "form-control input-sm", size: 15 %></th>
       <%= th_if_expand do %>
         <%= f.text_field :box_name_cont, class: "form-control input-sm", size: 15 %>
@@ -60,6 +62,7 @@
     <tr>
       <th></th>
       <th></th>
+      <th></th>      
       <th></th>
       <%= th_if_expand nil %>
       <th></th>
