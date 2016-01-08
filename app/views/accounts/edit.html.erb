@@ -46,29 +46,31 @@
     <%= f.submit  "Update", class: "btn btn-mini btn-default" %>
   </div>
 </div>
+<% end %>
 
 <div class="row">
   <div class="col-lg-4">
-
-    <% if true||File.exists?(Rails.root.join("config/google.yml")) %>
+    <% if Settings.sign_in.enable_google %>
       <div>
-	<b>Google ID</b><br />
-	<%= @user.omniauth_uid(:google_oauth2) %>
-	<% if @user.omniauth_uid(:google_oauth2).present? %>
-	  <%= link_to("Unlink", unlink_account_path(provider: :google_oauth2), method: :post, class: "btn btn-mini btn-default") %>
-	<% else %>
-	  <%= link_to("Link", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-mini btn-default") %>
-	<% end %>
+      	<b>Google ID</b><br />
+      	<%= @user.omniauth_uid(:google_oauth2) %>
+      	<% if @user.omniauth_uid(:google_oauth2).present? %>
+      	  <%= link_to("Unlink", unlink_account_path(provider: :google_oauth2), method: :post, class: "btn btn-mini btn-default") %>
+      	<% else %>
+      	  <%= link_to("Link", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-mini btn-default") %>
+      	<% end %>
       </div>
     <% end %>
+
+    <% if Settings.sign_in.enable_shibboleth %>
       <div>
-	<b>Shibboleth ID</b><br />
-	<%= @user.omniauth_uid(:shibboleth) %>
-	<% if @user.omniauth_uid(:shibboleth).present? %>
-	  <%= link_to("Unlink", unlink_account_path(provider: :shibboleth), method: :post, class: "btn btn-mini btn-default") %>
-	<% else %>
-	  <%= link_to "Link", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://"), class: "btn btn-mini btn-default" %>
-	<% end %>
+      	<b><%= Settings.sign_in.try(:alias_shibboleth) || "Shibboleth" %> ID</b><br />
+      	<%= @user.omniauth_uid(:shibboleth) %>
+      	<% if @user.omniauth_uid(:shibboleth).present? %>
+      	  <%= link_to("Unlink", unlink_account_path(provider: :shibboleth), method: :post, class: "btn btn-mini btn-default") %>
+      	<% else %>
+      	  <%= link_to "Link", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://"), class: "btn btn-mini btn-default" %>
+      	<% end %>
       </div>
     <% end %>
   </div>

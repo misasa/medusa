@@ -26,6 +26,7 @@ defaults: &defaults
     enable_password: true
     enable_google: true
     enable_shibboleth: false
+    alias_shibboleth: "okayama-u"    
 development:
   <<: *defaults
 
