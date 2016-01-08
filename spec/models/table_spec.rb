@@ -54,7 +54,7 @@ describe "Table" do
       context "is blank" do
         let(:age_scale) { nil }
         context "with_age is true" do
-        it { expect(subject).to eq false }
+        it { expect(subject).to eq true }
         end
         context "with_age is false" do
           let(:with_age) { false }
