@@ -1,5 +1,11 @@
 module ApplicationHelper
 
+  def content_tag_if(boolean, name, content_or_options_with_block = nil, options = nil, escape = true, &block)
+    if boolean
+      content_tag(name, content_or_options_with_block, options, escape, &block)
+    end
+  end
+
   def format_date(date)
     date.present? ? Date.parse(date).strftime("%Y-%m-%d") : ""
   end

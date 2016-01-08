@@ -1,4 +1,3 @@
-<%= paginate @users %>
 <%= link_to "new...",new_user_path %>
 <table class="table table-condensed table-striped">
   <thead>
@@ -11,6 +10,8 @@
       </th>
       <th><%= sort_link @search, :username, "name" %></th>
       <th><%= sort_link @search, :email, "email" %></th>
+      <%= content_tag_if(Settings.sign_in.enable_shibboleth, :th, (Settings.sign_in.try(:alias_shibboleth) || "Shibboleth") + "-ID") %>
+      <%= content_tag_if(Settings.sign_in.enable_google, :th, "Google-ID") %>
       <th><%= sort_link @search, :updated_at, "updated-at" %></th>
       <th><%= sort_link @search, :created_at, "created-at" %></th>
     </tr>
@@ -18,6 +19,8 @@
       <th></th>
       <th><%= f.text_field :username_cont, class: "form-control input-sm" %></th>
       <th></th>
+      <%= content_tag_if(Settings.sign_in.enable_shibboleth, :th) %>
+      <%= content_tag_if(Settings.sign_in.enable_google, :th) %>          
       <th>
         <%= f.text_field :updated_at_gteq, placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]), class: "form-control input-sm datepicker" %>
       </th>
@@ -29,6 +32,8 @@
       <th></th>
       <th></th>
       <th></th>
+      <%= content_tag_if(Settings.sign_in.enable_shibboleth, :th) %>
+      <%= content_tag_if(Settings.sign_in.enable_google, :th) %>
       <th>
         <%= f.text_field :updated_at_lteq_end_of_day, placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]), class: "form-control input-sm datepicker" %>
       </th>
@@ -48,6 +53,8 @@
       </td>
       <td><%= user.username %></td>
       <td><%= user.email %></td>
+      <%= content_tag_if(Settings.sign_in.enable_shibboleth, :td, user.omniauth_uid(:shibboleth) ) %>
+      <%= content_tag_if(Settings.sign_in.enable_shibboleth, :td, user.omniauth_uid(:google) ) %>
       <td><%= difference_from_now(user.updated_at) %></td>
       <td><%= difference_from_now(user.created_at) %></td>
       <td>

@@ -7,7 +7,8 @@ class UsersController < ApplicationController
   def index
     @search = User.search(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
-    @users = @search.result.page(params[:page]).per(params[:per_page])
+#    @users = @search.result.page(params[:page]).per(params[:per_page])
+    @users = @search.result
     respond_with @users
   end
 
