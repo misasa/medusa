@@ -358,8 +358,14 @@ describe Specimen do
     describe "age_min" do
       let(:obj) { FactoryGirl.build(:specimen, age_min: age_min) }
       context "数値の場合" do
-        let(:age_min) { 1 }
-        it { expect(obj).to be_valid }
+        context "整数" do
+          let(:age_min) { 1 }
+          it { expect(obj).to be_valid }
+        end
+        context "小数点以下を含む" do
+          let(:age_min) { 3.5 }
+          it {expect(obj).to be_valid}
+        end
       end
       context "文字列の場合" do
         let(:age_min) { "あいうえお" }
@@ -374,8 +380,14 @@ describe Specimen do
     describe "age_max" do
       let(:obj) { FactoryGirl.build(:specimen, age_max: age_max) }
       context "数値の場合" do
-        let(:age_max) { 11 }
-        it { expect(obj).to be_valid }
+        context "整数" do
+          let(:age_max) { 11 }
+          it { expect(obj).to be_valid }
+        end
+        context "小数点以下を含む" do
+          let(:age_max) { 3.5 }
+          it {expect(obj).to be_valid}
+        end
       end
       context "文字列の場合" do
         let(:age_max) { "あいうえお" }
