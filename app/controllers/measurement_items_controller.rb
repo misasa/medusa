@@ -6,8 +6,9 @@ class MeasurementItemsController < ApplicationController
 
   def index
     @search = MeasurementItem.includes(:measurement_categories, :chemistries).search(params[:q])
-    @search.sorts = "updated_at ASC" if @search.sorts.empty?
-    @measurement_items = @search.result.page(params[:page]).per(params[:per_page])
+    @search.sorts = "nickname ASC" if @search.sorts.empty?
+#    @measurement_items = @search.result.page(params[:page]).per(params[:per_page])
+    @measurement_items = @search.result
     respond_with @measurement_items
   end
 
