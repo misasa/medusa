@@ -24,7 +24,6 @@ describe Path do
 	end
 
 
-
   describe "add_histroy" do
     let(:time_now){ Time.now }
     let(:time_1_day_ago){ time_now.days_ago(1) }
@@ -76,15 +75,267 @@ describe Path do
       it { expect(subject).to eq [] }
     end
   end
+
+
+  describe ".integ", :current => true do
+    #subject { contents_search.result }
+    subject { Path.integ(box, src_date, dst_date).result }
+#    let(:contents_search) { Path.contents_of(box).search(params[:q]) }
+    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:box) { specimen.box }
+#    let(:params){ {:q => {:brought_out_at_gteq => src_date, :brought_in_at_lteq_end_of_day => dst_date}} }
+    let(:src_date) { "2005-11-17" }
+    let(:dst_date) { "2005-11-19" }
+    let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: brought_in_at, brought_out_at: brought_out_at) } 
+    let(:paths) { Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at) }
+
+    context "brought-in before src_date" do
+      let(:brought_in_at){ "20051114" }
+      before do
+        path
+      end
+
+      context "brought-out before src_date" do
+        let(:brought_out_at){ "20051115" }
+        it "returns empty" do
+          paths
+          expect(subject).to eq []      
+        end
+      end
+
+      context "brought-out before dst_date" do
+        let(:brought_out_at){ "20051118" }
+        it "returns path" do
+          paths
+          expect(subject[0].datum).to eq(specimen)
+        #  expect(subject[0].attributes["sign"]).to eq "-"
+        end
+      end
+
+      context "brought-out after dst_date" do
+        let(:brought_out_at){ "20051120" }
+        it "returns empty" do
+          paths
+          expect(subject[0].datum).to eq(specimen)
+        end
+      end
+
+      context "brought-out nil" do
+        let(:brought_out_at){ nil }
+        it "returns empty" do
+          paths
+          expect(subject[0].datum).to eq(specimen)
+        end
+      end
+    end
+
+
+    context "brought-in after src_date" do
+      let(:brought_in_at){ "20051118" }
+      before do
+        path
+      end
+
+      context "brought-out before dst_date" do
+        let(:brought_out_at){ "20051118" }
+        it "returns empty" do
+          paths
+          expect(subject[0].datum).to eq(specimen)
+        end
+      end
+
+      context "brought-out after dst_date" do
+        let(:brought_out_at){ "20051120" }
+        it "returns path" do
+          paths
+          expect(subject[0].datum).to eq(specimen)
+        end
+      end
+
+      context "brought-out nil" do
+        let(:brought_out_at){ nil }
+        it "returns path" do
+          paths
+          expect(subject[0].datum).to eq(specimen)
+        end
+      end
+    end
+
+
+    context "brought-in after dst_date" do
+      let(:brought_in_at){ "20051121" }
+      let(:brought_out_at){ nil }
+      before do
+        path
+      end
+      it "returns []" do
+        paths
+        expect(subject).to eq []        
+      end
+    end
+
+    context "brought-in after dst_date" do
+      let(:brought_in_at){ "20051121" }
+      before do
+        path
+      end
+
+      context "brought-out after dst_date" do
+        let(:brought_out_at){ "20051122" }
+        it "returns empty" do
+          paths
+          expect(subject).to eq []      
+        end
+      end
+
+      context "brought-out nil" do
+        let(:brought_out_at){ nil }
+        it "returns empty" do
+          paths
+          expect(subject).to eq []      
+        end
+      end
+
+    end
+
+  end
   
-  describe ".diff(box, src_date, dst_date)"do
+  describe ".diff(box, src_date, dst_date)" do
     subject { Path.diff(box, src_date, dst_date) }
     let(:specimen) { FactoryGirl.create(:specimen) }
     let(:box) { specimen.box }
+    let(:src_date) { "20051117" }
+    let(:dst_date) { "20051119" }
+    let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: brought_in_at, brought_out_at: brought_out_at) } 
+    let(:paths) { Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at) }
+
+    context "brought-in before src_date" do
+      let(:brought_in_at){ "20051114" }
+      before do
+        path
+      end
+
+      context "brought-out before src_date" do
+        let(:brought_out_at){ "20051115" }
+        it "returns empty" do
+          paths
+          expect(subject).to eq []      
+        end
+      end
+
+      context "brought-out before dst_date", :current => true do
+        let(:brought_out_at){ "20051118" }
+        it "returns path" do
+          paths
+          expect(subject[0].attributes).to include paths[1].attributes
+          expect(subject[0].attributes["sign"]).to eq "-"
+          expect(subject[0].sign).to eq "-"
+          expect(subject[0].checked_at).to be_nil
+        end
+      end
+
+      context "brought-out after dst_date" do
+        let(:brought_out_at){ "20051120" }
+        it "returns empty" do
+          paths
+          expect(subject).to eq []      
+        end
+      end
+
+      context "brought-out nil" do
+        let(:brought_out_at){ nil }
+        it "returns empty" do
+          paths
+          expect(subject).to eq []      
+        end
+      end
+    end
+
+    context "brought-in after src_date" do
+      let(:brought_in_at){ "20051118" }
+      before do
+        path
+      end
+
+      context "brought-out before dst_date" do
+        let(:brought_out_at){ "20051118" }
+        it "returns empty" do
+          paths
+          expect(subject).to eq []      
+        end
+      end
+
+      context "brought-out after dst_date" do
+        let(:brought_out_at){ "20051120" }
+        it "returns +path" do
+          paths
+          expect(subject[0].attributes).to include paths[1].attributes
+          expect(subject[0].attributes["sign"]).to eq "+"
+        end
+      end
+
+      context "brought-out nil" do
+        let(:brought_out_at){ nil }
+        it "returns +path" do
+          paths
+          expect(subject[0].attributes).to include paths[1].attributes
+          expect(subject[0].attributes["sign"]).to eq "+"
+        end
+      end
+    end
+
+    context "brought-in during src_date and dst_date" do
+      let(:brought_in_at){ "20051118" }
+      let(:brought_out_at){ nil }
+      before do
+        path
+      end
+      it "returns path" do
+        paths
+        expect(subject[0].attributes).to include paths[1].attributes
+        expect(subject[0].attributes["sign"]).to eq "+"
+      end
+    end
+
+    context "brought-in after dst_date" do
+      let(:brought_in_at){ "20051121" }
+      let(:brought_out_at){ nil }
+      before do
+        path
+      end
+      it "returns []" do
+        paths
+        expect(subject).to eq []        
+      end
+    end
+
+    context "brought-in after dst_date" do
+      let(:brought_in_at){ "20051121" }
+      before do
+        path
+      end
+
+      context "brought-out after dst_date" do
+        let(:brought_out_at){ "20051122" }
+        it "returns empty" do
+          paths
+          expect(subject).to eq []      
+        end
+      end
+
+      context "brought-out nil" do
+        let(:brought_out_at){ nil }
+        it "returns empty" do
+          paths
+          expect(subject).to eq []      
+        end
+      end
+
+    end
     context "該当あり(sign+)" do
-      before { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: "20151118", brought_out_at: nil) }
+      before { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: "20151118", brought_out_at: "20151120") }
       let(:src_date) { "20151117" }
-      let(:dst_date) { "20151118" }
+      let(:dst_date) { "20151119" }
       it "result" do
         sample = Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at)[1]
         expect(subject[0].attributes).to include sample.attributes
@@ -104,8 +355,8 @@ describe Path do
       end
     end
     context "該当なし" do
-      let(:src_date) { "20151112" }
-      let(:dst_date) { "20151113" }
+      let(:src_date) { "20051117" }
+      let(:dst_date) { "20051119" }
       it { expect(subject).to eq [] }
     end
   end

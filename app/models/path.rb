@@ -19,6 +19,10 @@ class Path < ActiveRecord::Base
     records
   end
 
+  def self.integ(box, src_date, dst_date)
+    search = contents_of(box).search(:brought_out_at_gteq => src_date, :brought_in_at_lteq_end_of_day => dst_date)
+  end
+
   def self.diff(box, src_date, dst_date)
     src = contents_of(box).cont_at(src_date).as("src")
     dst = contents_of(box).cont_at(dst_date).as("dst")
