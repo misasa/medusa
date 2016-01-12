@@ -558,7 +558,7 @@ describe "Table::Row" do
   end
 end
 
-describe "Table::Cell" do
+describe "Table::Cell", :current => true do
   let(:cell) { Table::Cell.new(row, table.chemistries) }
   let(:row) { Table::Row.new(table, category_measurement_item, table.chemistries) }
   let(:table) { FactoryGirl.create(:table, measurement_category: measurement_category) }
@@ -570,6 +570,9 @@ describe "Table::Cell" do
   let(:specimen) { FactoryGirl.create(:specimen) }
   let(:analysis) { FactoryGirl.create(:analysis, specimen: specimen) }
   let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item, value: 1) }
+  let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen) }
+  let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 1) }
+
   before do
     Alchemist.setup
     Alchemist.register(:mass, unit.name.to_sym, 1.to_d / unit.conversion)
@@ -589,6 +592,16 @@ describe "Table::Cell" do
       end
       it { expect(subject).to eq value }
     end
+
+    context "table linked 2 chemistry" do
+      before do
+        table_specimen
+        chemistry
+        chemistry_2
+      end
+      it { expect(subject).to eq value }
+    end
+
   end
   
   describe "value" do

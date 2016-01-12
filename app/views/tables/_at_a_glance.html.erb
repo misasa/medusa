@@ -14,7 +14,11 @@
               <% specimen = g.object.specimen %>
               <span class="glyphicon glyphicon-transfer"></span> <%= link_to_if can?(:read, specimen), specimen.name, specimen, class: specimen_ghost(specimen) %>
               <%= g.hidden_field :position, class: "position" %>
+              <%= link_to table_specimen_path(@table,specimen), method: :delete ,title: "unlink specimen",data: {confirm: "Are you sure you want to unlink #{specimen.name}?"} do %>
+                <span class="glyphicon glyphicon-remove"></span>
+              <% end %>
             <% end %>
+
           </th>
         <% end %>
         <% if @table.with_average %>
