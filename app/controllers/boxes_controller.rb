@@ -19,7 +19,7 @@ class BoxesController < ApplicationController
     #if params[:q]
     @button_action_selection_items = ["snapshot"]
     duration_numbers = [1, 2]
-    ["diff from", "integ from"].each do |prefix|
+    ["diff from", "integ from", "change from"].each do |prefix|
       ["day", "week", "month", "year"].each do |str|
           duration_numbers.each do |num| 
             @button_action_selection_items << "#{prefix} #{num} #{str.pluralize(num)} ago"
@@ -47,6 +47,25 @@ class BoxesController < ApplicationController
         @src_date = sdate.strftime("%Y-%m-%d")
         @contents_search = Path.diff(@box, @src_date, @dst_date).search(params[:q])
         @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
+        @contents = @contents_search.result
+        @contents = @contents.page(params[:page]).per(params[:per_page])
+      elsif m = /change from (\d*) (.*) ago/.match(params[:button_action])
+        ddate = Date.strptime(@dst_date, "%Y-%m-%d")
+        case m[2]
+        when "day", "days"
+          sdate = ddate.days_ago(m[1].to_i)
+        when "week", "weeks"
+          sdate = ddate.weeks_ago(m[1].to_i)
+        when "month", "months"
+          sdate = ddate.months_ago(m[1].to_i)
+        when "year", "years"
+          sdate = ddate.years_ago(m[1].to_i)
+        else
+          sdate = ddate.days_ago(1)
+        end
+        @src_date = sdate.strftime("%Y-%m-%d")
+        @contents_search = Path.change(@box, @src_date, @dst_date).search(params[:q])
+        @contents_search.sorts = "brought_at DESC" if @contents_search.sorts.empty?
         @contents = @contents_search.result
         @contents = @contents.page(params[:page]).per(params[:per_page])
       else
