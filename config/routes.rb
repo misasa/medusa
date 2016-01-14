@@ -42,6 +42,12 @@ Medusa::Application.routes.draw do
       post :multiple_create
     end
   end
+  
+  concern :sesar_upload do
+    member do
+      post :sesar_upload
+    end
+  end
 
   resources :records, { id: /((?!\.(html$|json$|xml$|pml$)).)*/ } do
     member do
@@ -59,7 +65,7 @@ Medusa::Application.routes.draw do
     end
   end
 
-  resources :specimens, concerns: [:bundleable, :reportable], except: [:new] do
+  resources :specimens, concerns: [:bundleable, :reportable, :sesar_upload], except: [:new] do
     member do
       get :family
       get :picture
