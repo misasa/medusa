@@ -32,8 +32,11 @@ class SpecimensController < ApplicationController
 
   def update
     @specimen.update_attributes(specimen_params)
-    sesar_upload if params[:sesar_upload] && @specimen.errors.blank?
-    respond_with @specimen
+    if params[:sesar_upload] && @specimen.errors.blank?
+      sesar_upload
+    else
+      respond_with @specimen
+    end
   end
   
   def destroy
@@ -121,6 +124,7 @@ class SpecimensController < ApplicationController
         @specimen.errors.add(key, value)
       end
     end
+    respond_with @specimen
   end
 
   private
