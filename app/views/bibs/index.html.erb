@@ -27,7 +27,7 @@
       <th><%= toggle_column_link %></th>
     </tr>
     <tr>
-      <th><%= text_field_tag :per_page, (params[:per_page] || Bib.default_per_page), size: 4 %></th>
+      <th><%= text_field_tag :per_page, (params[:per_page] || Bib.default_per_page), class: "form-control input-sm", size: 4 %></th>
       <th><%= f.text_field :name_cont, class: "form-control input-sm", size: 15 %></th>
       <th><%= f.text_field :doi_cont, class: "form-control input-sm", size: 10 %></th>
       <th><%= f.text_field :authors_name_cont, class: "form-control input-sm", size: 12 %></th>
