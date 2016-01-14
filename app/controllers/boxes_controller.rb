@@ -32,18 +32,7 @@ class BoxesController < ApplicationController
       @dst_date = params[:dst_date]
       if m = /diff from (\d*) (.*) ago/.match(params[:button_action])
         ddate = Date.strptime(@dst_date, "%Y-%m-%d")
-        case m[2]
-        when "day", "days"
-          sdate = ddate.days_ago(m[1].to_i)
-        when "week", "weeks"
-          sdate = ddate.weeks_ago(m[1].to_i)
-        when "month", "months"
-          sdate = ddate.months_ago(m[1].to_i)
-        when "year", "years"
-          sdate = ddate.years_ago(m[1].to_i)
-        else
-          sdate = ddate.days_ago(1)
-        end
+        sdate = convert_date(ddate, m[1], m[2])
         @src_date = sdate.strftime("%Y-%m-%d")
         @contents_search = Path.diff(@box, @src_date, @dst_date).search(params[:q])
         @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
@@ -51,18 +40,7 @@ class BoxesController < ApplicationController
         @contents = @contents.page(params[:page]).per(params[:per_page])
       elsif m = /change from (\d*) (.*) ago/.match(params[:button_action])
         ddate = Date.strptime(@dst_date, "%Y-%m-%d")
-        case m[2]
-        when "day", "days"
-          sdate = ddate.days_ago(m[1].to_i)
-        when "week", "weeks"
-          sdate = ddate.weeks_ago(m[1].to_i)
-        when "month", "months"
-          sdate = ddate.months_ago(m[1].to_i)
-        when "year", "years"
-          sdate = ddate.years_ago(m[1].to_i)
-        else
-          sdate = ddate.days_ago(1)
-        end
+        sdate = convert_date(ddate, m[1], m[2])
         @src_date = sdate.strftime("%Y-%m-%d")
         @contents_search = Path.change(@box, @src_date, @dst_date).search(params[:q])
         @contents_search.sorts = "brought_at DESC" if @contents_search.sorts.empty?
@@ -72,18 +50,7 @@ class BoxesController < ApplicationController
         params[:q] = {} unless params[:q]
         if m = /integ from (\d*) (.*) ago/.match(params[:button_action])
           ddate = Date.strptime(@dst_date, "%Y-%m-%d")
-          case m[2]
-          when "day", "days"
-            sdate = ddate.days_ago(m[1].to_i)
-          when "week", "weeks"
-            sdate = ddate.weeks_ago(m[1].to_i)
-          when "month", "months"
-            sdate = ddate.months_ago(m[1].to_i)
-          when "year", "years"
-            sdate = ddate.years_ago(m[1].to_i)
-          else
-            sdate = ddate.days_ago(1)
-          end
+          sdate = convert_date(ddate, m[1], m[2])
           params[:q][:brought_out_at_gteq] = sdate.strftime("%Y-%m-%d")
           params[:q][:brought_in_at_lteq_end_of_day] = @dst_date
         else
@@ -203,6 +170,21 @@ class BoxesController < ApplicationController
 
   def find_resources
     @boxes = Box.where(id: params[:ids])
+  end
+
+  def convert_date(date, value, unit)
+    case unit
+    when "day", "days"
+      date.days_ago(value.to_i)
+    when "week", "weeks"
+      date.weeks_ago(value.to_i)
+    when "month", "months"
+      date.months_ago(value.to_i)
+    when "year", "years"
+      date.years_ago(value.to_i)
+    else
+      date.days_ago(1)
+    end
   end
 
 end
