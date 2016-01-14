@@ -32,6 +32,14 @@ class Path < ActiveRecord::Base
     select("*").from(join.as("paths"))
   end
 
+  def self.change(box, src_date, dst_date)
+    paths = arel_table
+    records = contents_of(box)
+    records = records.select("CASE WHEN brought_out_at IS NOT NULL THEN '-' ELSE '+' END AS sign, datum_id, datum_type, ids, brought_in_at, brought_out_at")
+    records = records.where(paths[:brought_in_at].gteq(src_date).and(paths[:brought_in_at].lteq(dst_date)).or(paths[:brought_out_at].gteq(src_date).and(paths[:brought_out_at].lteq(dst_date))))
+    records
+  end
+
   def each
     if ids.present?
       boxes = Box.where(id: ids).includes(:record_property).index_by(&:id)
@@ -66,6 +74,10 @@ class Path < ActiveRecord::Base
 
   ransacker :brought_out_at do |parent|
     Arel.sql("coalesce(brought_out_at, '9999-12-31 23:59:59')")
+  end
+
+  ransacker :brought_at do |parent|
+    Arel.sql("coalesce(brought_out_at, brought_in_at)")
   end
 
 end
