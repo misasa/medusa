@@ -58,7 +58,7 @@
           <td><%= path_entry_under(path, @box) %>
           <td><%= path.datum.is_a?(Specimen) ? @alias_specimen : path.datum_type.downcase %></td>
           <td><%= path.brought_in_at.strftime("%Y-%m-%d %H:%M") %></td> 
-          <td><%= path.checked_at && path.checked_at.strftime("%Y-%m-%d %H:%M") if path.try(:checked_at) %></td> 
+          <td><%= path.checked_at && path.checked_at.strftime("%Y-%m-%d %H:%M") %></td> 
           <td><%= path.brought_out_at && path.brought_out_at.strftime("%Y-%m-%d %H:%M") %></td> 
         </tr>
       <% end %>
