@@ -51,6 +51,15 @@ class Place < ActiveRecord::Base
     items.join("")
   end
 
+  def self.to_csv(dms)
+    items = []
+    items << dms[:direction] if dms[:direction]
+    items << "#{dms[:deg]}°" if dms[:deg]
+    items << "#{dms[:min]}’" if dms[:min]
+    items << "#{sprintf('%.1f', dms[:sec])}”" if dms[:sec]
+    items.join("")
+  end
+
   def self.import_csv(file)
     if file && PERMIT_IMPORT_TYPES.include?(file.content_type)
       table = CSV.parse(file.read, headers: [:name, :latitude, :longitude, :elevation, :description])
@@ -98,6 +107,14 @@ class Place < ActiveRecord::Base
 
   def to_html
     return latitude_to_html + ", " + longitude_to_html if latitude && longitude
+  end
+
+  def latitude_for_csv
+    self.class.to_csv(latitude_dms)
+  end
+
+  def longitude_for_csv
+    self.class.to_csv(longitude_dms)
   end
 
   def latitude_to_html
