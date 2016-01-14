@@ -59,14 +59,14 @@ describe Path do
     context "date指定あり" do
       let(:date) { "21151117" }
       it "result" do
-        sample = Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at)
+        sample = Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at, :checked_at)
         expect(subject[0].attributes).to eql sample[0].attributes
       end
     end
     context "date指定なし" do
       let(:date) { "" }
       it "result" do
-        sample = Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at)
+        sample = Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at, :checked_at)
         expect(subject[0].attributes).to eql sample[0].attributes
       end
     end
