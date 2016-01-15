@@ -20,7 +20,7 @@ class Path < ActiveRecord::Base
   end
 
   def self.integ(box, src_date, dst_date)
-    search = contents_of(box).search(:brought_out_at_gteq => src_date, :brought_in_at_lteq_end_of_day => dst_date)
+    records = contents_of(box).select("CASE WHEN brought_in_at < '#{src_date}' AND brought_out_at > '#{dst_date}' THEN '' WHEN brought_out_at IS NOT NULL AND brought_out_at < '#{dst_date}' THEN '-' ELSE '+' END AS sign, datum_id, datum_type, ids, brought_in_at, brought_out_at, checked_at")
   end
 
   def self.diff(box, src_date, dst_date)

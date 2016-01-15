@@ -53,10 +53,12 @@ class BoxesController < ApplicationController
           sdate = convert_date(ddate, m[1], m[2])
           params[:q][:brought_out_at_gteq] = sdate.strftime("%Y-%m-%d")
           params[:q][:brought_in_at_lteq_end_of_day] = @dst_date
+          @src_date = params[:q][:brought_out_at_gteq]
+          @contents_search = Path.integ(@box, @src_date, @dst_date).search(params[:q])
         else
           params[:q][:exists_at] = @dst_date
+          @contents_search = Path.contents_of(@box).search(params[:q])
         end
-        @contents_search = Path.contents_of(@box).search(params[:q])
         @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
         @contents = @contents_search.result.includes(datum: :record_property)
         @contents = @contents.current if @contents_search.conditions.empty?
