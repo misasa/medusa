@@ -80,8 +80,8 @@
   <%= form_tag(specimen_path(@specimen), method: :get) do %>
     analysis:
     <%= select_tag :analysis_id, options_for_select(@specimen.analyses.map {|analysis| [analysis.name, analysis.id]}, params[:analysis_id]), include_blank: true %>
-    measurement_category:
+    measurement-category:
     <%= select_tag :measurement_category_id, options_for_select(MeasurementCategory.pluck(:name, :id), params[:measurement_category_id]), include_blank: true %>
-    <%= submit_tag "reload" %>
+        <%= button_tag class: "btn btn-default" do %><span class="glyphicon glyphicon-refresh"></span><% end %>
   <% end %>
 <% end %>
