@@ -50,7 +50,7 @@
           <%= r.hidden_field :user_id ,value: @current_user.id %>
         <% end %>
         <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
-        <th colspan= "2"><%= f.file_field :data %></th>
+        <th colspan= "3"><%= f.file_field :data %></th>
         <th>
           <%= f.button title:"add attachment file",class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>
@@ -59,7 +59,6 @@
       <% end %>
       <%= form_tag link_by_global_id_bib_attachment_files_path(@bib),method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
-        <th></th>
         <th>
 	  <div class="input-group">
 	    <%= text_field_tag :global_id, nil, id: "attachment-file-global-id", class: "form-control input-sm" %>
