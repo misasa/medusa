@@ -2,11 +2,13 @@
   <thead>
     <tr>
       <th></th>
+      <th></th>
       <th>name</th>
       <th>physical-form</th>
       <th>quantity</th>
       <th>unit</th>
       <th></th>
+      <th>box</th>
       <th>global-id</th>
       <th></th>
     </tr>
@@ -18,11 +20,16 @@
           <td>
             <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
           </td>
+          <td>
+            <%= specimen.attachment_files.first.decorate.picture(width: 100, height: 100) if specimen.attachment_files.present? %>
+          </td>
           <td><%= link_to_if can?(:read, specimen), specimen.name,specimen, class: specimen_ghost(specimen) %></td>
           <td><%= specimen.physical_form.try!(:name) %></td>
           <td><%= specimen.try!(:quantity) %></td>
           <td><%= specimen.try!(:quantity_unit) %></td>
           <td></td>
+
+          <td><%= [specimen.box.try!(:path), specimen.box.try!(:name)].join("/") %></td>
           <td><%= specimen.try!(:global_id) %></td> 
           <td>
             <%= link_to bib_specimen_path(@bib,specimen) + tab_param(__FILE__), method: :delete ,title: "unlink specimen",data: {confirm: t("confirm.unlink")} do %>
@@ -38,6 +45,7 @@
       <%= form_for Specimen.new, url: bib_specimens_path(@bib) do |f|%>
         <%= hidden_tabname_tag(__FILE__) %>
         <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
+        <th></th>
         <th><%= f.text_field :name, class: "form-control input-sm" %></th>
         <th><%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
         <th><%= f.text_field :quantity, class: "form-control input-sm" %></th>
@@ -48,6 +56,7 @@
           <% end %>
         </th>
       <% end %>
+      <th></th>
       <%= form_tag link_by_global_id_bib_specimens_path(@bib),method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
         <th>
