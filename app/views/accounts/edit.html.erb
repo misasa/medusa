@@ -76,6 +76,8 @@
   </div>
 </div>
 
+Number of IGSN assinged records: <%= Specimen.readables(@user).count("igsn is not null or igsn != ''") %>
+
 <div class="row">
   <div class="col-lg-12">
     <%= form_tag(find_by_global_id_account_path,method: :get) do %>
@@ -94,7 +96,7 @@
     <% end %>
   </div>
   <div class="col-lg-12">
-    <% class_names = ["Specimen","Box","Place","Analysis","Bib","AttachmentFile"] %>
+    <% class_names = ["Specimen","Box","Place","Analysis","Bib","Table", "AttachmentFile"] %>
     
     <table class="table">
       <tr>
@@ -104,6 +106,7 @@
         <th><%= link_to "Place", places_path %></th>
         <th><%= link_to "Analysis", analyses_path %></th>
         <th><%= link_to "Bib", bibs_path %></th>
+        <th><%= link_to "Table", tables_path %></th>        
         <th><%= link_to "AttachmentFile", attachment_files_path %></th>
       </tr>
       <!-- searchable -->
