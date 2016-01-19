@@ -83,7 +83,11 @@ class Bib < ActiveRecord::Base
     bib_array = []
     bib_array << "\tauthor = \"#{author_lists}\""
     bib_array << "\ttitle = \"#{name}\""
-    bib_array << "\tjournal = \"#{journal}\""
+    if journal == "DREAM Digital Document"
+      bib_array << "\tjournal = {\\href{#{dream_url}}{#{journal}}}"
+    else
+      bib_array << "\tjournal = \"#{journal}\""
+    end
     bib_array << "\tyear = \"#{year}\""
     bib_array << "\tnumber = \"#{number}\"" if number.present?
     bib_array << "\tmonth = \"#{month}\"" if month.present?

@@ -58,6 +58,10 @@ module HasRecordProperty
     items.join(' ')    
   end
 
+  def dream_url
+    "http://dream.misasa.okayama-u.ac.jp/?q=#{self.global_id}"
+  end
+
   def to_bibtex(options = {})
     if self.instance_of?(Bib)
       to_tex

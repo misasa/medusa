@@ -226,6 +226,31 @@ describe Bib do
       let(:key) { "key" }
       it { expect(subject).to eq "\tauthor = \"#{authors.map{|author| author.name }.join(' and ')}\",\n\ttitle = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
     end
+
+    context "journal is 'DREAM Digital Document'", :current => true do
+      let(:bib) do
+        FactoryGirl.create(:bib,
+          journal: journal,
+          number: number,
+          month: month,
+          volume: volume,
+          pages: pages,
+          note: note,
+          doi: doi,
+          key: key,
+          authors: authors
+         )
+      end
+      let(:journal) {"DREAM Digital Document"}
+      let(:number) { "1" }
+      let(:month) { "month" }
+      let(:volume) { "1" }
+      let(:pages) { "1" }
+      let(:note) { "note" }
+      let(:doi) { "doi" }
+      let(:key) { "key" }
+      it { expect(subject).to eq "\tauthor = \"#{authors.map{|author| author.name }.join(' and ')}\",\n\ttitle = \"書誌情報１\",\n\tjournal = {\\href{http://dream.misasa.okayama-u.ac.jp/?q=#{bib.global_id}}{DREAM Digital Document}},\n\tyear = \"2014\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
+    end
   end
   
   describe "#misc_tex", :current => true do
