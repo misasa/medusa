@@ -80,4 +80,8 @@ class Path < ActiveRecord::Base
     Arel.sql("coalesce(brought_out_at, brought_in_at)")
   end
 
+  ransacker :sign do |parent|
+    Arel.sql("CASE WHEN brought_out_at IS NULL THEN 1 ELSE 2 END")
+  end
+
 end

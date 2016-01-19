@@ -43,7 +43,7 @@ class BoxesController < ApplicationController
         sdate = convert_date(ddate, m[1], m[2])
         @src_date = sdate.strftime("%Y-%m-%d")
         @contents_search = Path.change(@box, @src_date, @dst_date).search(params[:q])
-        @contents_search.sorts = "brought_at DESC" if @contents_search.sorts.empty?
+        @contents_search.sorts = ["brought_at DESC", "sign ASC"] if @contents_search.sorts.empty?
         @contents = @contents_search.result
         @contents = @contents.page(params[:page]).per(params[:per_page])
       else
