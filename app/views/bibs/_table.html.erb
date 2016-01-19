@@ -12,7 +12,7 @@
       <tr>
         <td></td>
         <td><%= link_to_if can?(:read, table), table.caption, table %></td>
-        <td><%= table.measurement_category.try!(:name) %></td>
+        <td><%= link_to_if table.measurement_category, table.measurement_category.try!(:name), edit_measurement_category_path(table.measurement_category)%></td>
         <td>
           <%= link_to bib_table_path(@bib, table) + tab_param(__FILE__), method: :delete ,title: "delete table",data: {confirm: t("confirm.delete",:recordname => table.caption)} do %>
             <span class="glyphicon glyphicon-remove"></span>
