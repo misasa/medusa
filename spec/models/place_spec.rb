@@ -379,34 +379,4 @@ describe Place do
     end
 
   end
-
-  describe "latitude_for_csv" do
-    subject { obj.latitude_for_csv }
-    let(:obj){ FactoryGirl.create(:place, name: "test", latitude: degree) }
-    context "degree > 0" do
-      let(:degree) { 5.625 }
-      it { expect(subject).to be_eql("N5°37’30.0”") }
-    end
-
-    context "degree < 0" do
-      let(:degree) { -5.625 }
-      it { expect(subject).to be_eql("S5°37’30.0”") }
-    end
-
-  end
-
-  describe "longitude_for_csv" do
-    subject { obj.longitude_for_csv }
-    let(:obj){ FactoryGirl.create(:place, name: "test", longitude: degree) }
-    context "degree > 0" do
-      let(:degree) { 5.625 }
-      it { expect(subject).to be_eql("E5°37’30.0”") }
-    end
-
-    context "degree < 0" do
-      let(:degree) { -5.625 }
-      it { expect(subject).to be_eql("W5°37’30.0”") }
-    end
-
-  end
 end
