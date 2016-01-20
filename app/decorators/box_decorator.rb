@@ -114,6 +114,12 @@ class BoxDecorator < Draper::Decorator
     object.specimens.map{|specimen| specimen.analyses.pluck(:name)}.join(", ")
   end
 
+
+  def icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close")
+  end
+
+
   private
 
   def box_node(box)

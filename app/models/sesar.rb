@@ -128,6 +128,20 @@ class Sesar < ActiveResource::Base
     super(:one, from: e.response["location"])
   end
 
+  def self.sync(model)
+    return if model.igsn.blank?
+    sesar_obj = self.find(model.igsn)
+    sesar_sample = sesar_obj.sample
+    model.name = sesar_sample.name
+
+    sample_type = sesar_sample.sample_type
+    if sample_type
+      model.physical_form = PhysicalForm.find_or_create_by_sesar_sample_type(sample_type) do |physical_form|
+        physical_form.name = sample_type
+      end
+    end
+  end
+
   class Errors < ActiveResource::Errors
     def from_array(messages, save_cache = false)
       reg = /Element '{http:\/\/app.geosamples.org}(\w*)'(.*)/

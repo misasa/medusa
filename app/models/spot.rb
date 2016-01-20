@@ -16,9 +16,9 @@ class Spot < ActiveRecord::Base
     else
       record_property = RecordProperty.find_by_global_id(target_uid)
       if record_property.blank? || record_property.datum.blank?
-        self.name = target_uid
+        self.name = "#{target_uid}"
       else
-        self.name = record_property.datum.name
+        self.name = "#{record_property.datum.name}"
       end
     end
   end
@@ -54,6 +54,7 @@ class Spot < ActiveRecord::Base
       cy: spot_y,
       r: [attachment_file.original_width, attachment_file.original_height].max * radius_in_percent / 100,
       fill: fill_color,
+      title: name,
       "fill-opacity" => opacity,
       stroke: stroke_color,
       "stroke-width" => stroke_width,
@@ -68,6 +69,13 @@ class Spot < ActiveRecord::Base
   def ref_image_y
     attachment_file.length ? (spot_y / attachment_file.length * 100) : nil
   end
+
+  def target
+    record_property = RecordProperty.find_by_global_id(target_uid)
+    return if record_property.blank? || record_property.datum.blank?
+    record_property.datum
+  end
+
 
 private
 

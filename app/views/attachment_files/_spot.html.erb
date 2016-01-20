@@ -2,8 +2,8 @@
   <thead>
     <tr>
       <th></th>
-      <th>name</th>
-      <th>link</th>
+      <th>spot</th>
+      <th>location</th>
       <th></th>
     </tr>
   </thead>
@@ -11,10 +11,13 @@
       <% SpotDecorator.decorate_collection(@attachment_file.spots).each do |spot| %>
         <tr>
           <td></td>
-          <td><%= link_to spot.try!(:name),edit_spot_path(spot) %></td>
-          <td><%= spot.target_link %></td>
+          <td><%= spot.target_link %></td> 
+          <td><%= spot.xy_to_text %></td>
           <td>
-            <%= link_to attachment_file_spot_path(@attachment_file,spot)+ tab_param(__FILE__), method: :delete ,title: "delete spot",data: {confirm: t("confirm.delete",:recordname => spot.name)} do %>
+            <%= link_to edit_spot_path(spot) ,title: "edit spot of #{spot.name}" do %>
+              <span class="glyphicon glyphicon-edit"></span>
+            <% end %>          
+            <%= link_to attachment_file_spot_path(@attachment_file,spot)+ tab_param(__FILE__), method: :delete ,title: "delete spot of #{spot.name}",data: {confirm: t("confirm.delete",:recordname => spot.name)} do %>
               <span class="glyphicon glyphicon-remove"></span>
             <% end %>
           </td>

@@ -1,6 +1,41 @@
 require 'spec_helper'
 
 describe Sesar do
+  before do
+    Sesar.logger = Logger.new($stderr)
+  end
+
+  describe ".sync", :current => true do
+    subject { Sesar.sync(specimen) }
+    let(:specimen) { FactoryGirl.create(:specimen, igsn: igsn, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101") }
+    let(:bib) { FactoryGirl.create(:bib) }
+    let(:material) {"Rock"}
+    let(:sesar_classification) {"Igneous"}
+    let(:igsn) { "JEDRM001X" }
+    let(:sesar_obj) { double("sesar_obj") }
+    let(:sesar_sample) { double("sesar_sample", name: sample_name, sample_type: sample_type) }
+    let(:sample_name) {"IM0001"}
+    let(:sample_type) {"Core"}
+
+
+    before do
+        specimen.bibs << bib
+        specimen.physical_form.name = "asteroid"
+        specimen.classification.sesar_material = material
+        specimen.classification.sesar_classification = sesar_classification
+        specimen.place.latitude = 35
+        specimen.place.longitude = 135
+        allow(sesar_obj).to receive(:sample).and_return(sesar_sample)
+        allow(Sesar).to receive(:find).with(igsn).and_return(sesar_obj)
+        subject
+        p specimen.physical_form
+    end
+
+    it {
+      expect(specimen.name).to be_eql(sample_name)
+      expect(specimen.physical_form.sesar_sample_type).to be_eql(sample_type)
+    }
+  end
 
   describe ".from_active_record(model)" do
     let(:specimen) { FactoryGirl.create(:specimen, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101") }

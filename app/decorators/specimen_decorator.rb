@@ -96,11 +96,16 @@ class SpecimenDecorator < Draper::Decorator
     return lines.join("\n")
   end
 
+  def icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
+  end
+
   private
 
   def box_node(box)
     h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + h.link_to_if(h.can?(:read, box), box.name, box)
   end
+
 
   def icon_with_count(icon, count)
     h.content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}") + h.content_tag(:span, count) if count.nonzero?
