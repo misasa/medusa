@@ -12,4 +12,8 @@ class AnalysisDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-stats") + " #{name} < #{global_id} >"
   end
 
+
+  def icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-stats")
+  end
 end

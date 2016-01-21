@@ -3,6 +3,7 @@
   <%= li_if_exist("tag list: ", @box.tag_list) %>
   <li>updated-at: <%= difference_from_now(@box.updated_at) %></li>
   <%= li_if_exist("bib:", @box.bibs_with_link) %>
+
   <% if @box.attachment_pdf_files.present? %>
     <li>
       <% @box.attachment_pdf_files.each do |attachment_pdf_file| %>
@@ -12,6 +13,19 @@
     </li>
   <% end %>
 </ul>
+
+  <% @box.attachment_image_files.each_slice(4) do |files| %>
+  <div class="row spot-thumbnails">
+    <% files.each do |file| %>
+    <div class="col-lg-3">
+      <%= link_to attachment_file_path(file), class: "thumbnail" do %>
+        <%= image_tag file.path %>
+        <%= file.spots.size %> spots
+      <% end %>
+    </div>
+    <% end %>
+  </div>
+  <% end %>
 
 <%= search_form_for @contents_search, url: box_path(@box), id: "contents_search" do |f| %>
 

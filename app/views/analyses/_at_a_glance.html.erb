@@ -30,6 +30,20 @@
     </li>
   <% end %>
 </ul>
+  <% @analysis.attachment_image_files.each_slice(4) do |files| %>
+  <div class="row spot-thumbnails">
+    <% files.each do |file| %>
+    <div class="col-lg-3">
+      <%= link_to attachment_file_path(file), class: "thumbnail" do %>
+        <%= image_tag file.path %>
+        <%= file.spots.size %> spots
+      <% end %>
+    </div>
+    <% end %>
+  </div>
+  <% end %>
+
+
 <table class="table table-condensed table-striped">
   <thead>
     <tr>
