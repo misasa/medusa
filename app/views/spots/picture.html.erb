@@ -1,5 +1,6 @@
 <div class="spot-viewer">
-  <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300, "data-center-x" => @spot.spot_x, "data-center-y" => @spot.spot_y, "data-scale" => 4, "data-image" => attachment_file_path(@spot.attachment_file, format: :svg) %>
+  <%= hidden_field_tag nil, @spot.target_uid, class: "target-uid" %>
+  <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300, "data-scale" => 4, "data-image" => attachment_file_path(@spot.attachment_file, format: :svg) %>
 </div>
 
 <%= li_if_exist("", @spot.target_link) %>

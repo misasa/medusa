@@ -1,4 +1,5 @@
 <div class="spot-viewer">
+  <%= hidden_field_tag nil, @analysis.global_id, class: "target-uid" %>
   <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300 %>
   <% @analysis.attachment_image_files.each_slice(4) do |files| %>
   <div class="row spot-thumbnails">
