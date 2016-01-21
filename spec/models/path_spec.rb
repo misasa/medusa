@@ -76,8 +76,46 @@ describe Path do
     end
   end
 
+  describe ".snapshot" do
+    subject { Path.snapshot(box, dst_date) }
+    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:box) { specimen.box }
+    let(:dst_date) { "2005-11-19" }
+    let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: brought_in_at, brought_out_at: brought_out_at) } 
+    let(:paths) { Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at, :checked_at) }
+    let(:brought_out_at) { "20051120" }
+    let(:brought_in_at) { "20051117" }
+    before do
+      path
+    end
+    context "brought_in_at before dst_date and brought-out_at after dst_date" do
+      it {
+        expect(subject[0]).to eql(path) 
+      }
+    end
 
-  describe ".integ", :current => true do
+    context "brought_in_at before dst_date and brought-out_at before dst_date" do
+      let(:brought_out_at) { "20051117" }
+      let(:brought_in_at) { "20051117" }
+
+      it {
+        expect(subject).to be_empty 
+      }
+    end
+
+
+    context "brought_in_at after dst_date and brought-out_at after dst_date" do
+      let(:brought_out_at) { "20051125" }
+      let(:brought_in_at) { "20051125" }
+
+      it {
+        expect(subject).to be_empty 
+      }
+    end
+
+  end
+
+  describe ".integ" do
     subject { Path.integ(box, src_date, dst_date) }
     let(:specimen) { FactoryGirl.create(:specimen) }
     let(:box) { specimen.box }
@@ -91,20 +129,23 @@ describe Path do
       path
       paths
     end
-    context "brought_in_at after src_date and brought-out_at after dst_date" do
-      it { expect(subject[0].attributes).to include paths[0].attributes }
-      it { expect(subject[0].attributes["sign"]).to eq "+" }
+    context "brought_in_at after src_date and brought-out_at after dst_date", :current => true do
+      #it { expect(subject[0].attributes).to include paths[0].attributes }
+      it {
+        expect(subject[0].attributes).to include paths[1].attributes 
+        expect(subject[0].attributes["sign"]).to eq "+" 
+      }
     end
     context "brought_in_at before src_date and brought-out_at after dst_date" do
       let(:brought_out_at) { "20051120" }
       let(:brought_in_at) { "20051115" }
-      it { expect(subject[1].attributes).to include paths[1].attributes }
-      it { expect(subject[1].attributes["sign"]).to eq "" }
+      it { expect(subject[0].attributes).to include paths[1].attributes }
+      it { expect(subject[0].attributes["sign"]).to eq "" }
     end
     context "brought-out_at before dst_date" do
       let(:brought_out_at) { "20051118" }
-      it { expect(subject[1].attributes).to include paths[1].attributes }
-      it { expect(subject[1].attributes["sign"]).to eq "-"}
+      it { expect(subject[0].attributes).to include paths[1].attributes }
+      it { expect(subject[0].attributes["sign"]).to eq "-"}
     end
 
   end
@@ -132,7 +173,7 @@ describe Path do
         end
       end
 
-      context "brought-out before dst_date", :current => true do
+      context "brought-out before dst_date", :current => false do
         let(:brought_out_at){ "20051118" }
         it "returns path" do
           paths

@@ -54,7 +54,7 @@
     <tbody>
       <% @contents.each do |path| %>
         <tr>
-          <td><%= path.sign if @src_date -%></td>
+          <td><%= path.try(:sign) %></td>
           <td><%= path_entry_under(path, @box) %>
           <td><%= path.datum.is_a?(Specimen) ? @alias_specimen : path.datum_type.downcase %></td>
           <td><%= path.brought_in_at.strftime("%Y-%m-%d %H:%M") %></td> 
