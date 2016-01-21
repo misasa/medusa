@@ -171,7 +171,7 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def to_svg
-    image = %Q|<image xlink:href="#{path}" x="0" y="0" width="#{original_width}" height="#{original_height}"/>|
+    image = %Q|<image xlink:href="#{path}" x="0" y="0" width="#{original_width}" height="#{original_height}" data-id="#{id}"/>|
     spots.inject(image) { |svg, spot| svg + spot.to_svg }
   end
 

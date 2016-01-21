@@ -1,4 +1,5 @@
 <div class="spot-viewer">
+  <%= hidden_field_tag nil, @specimen.global_id, class: "target-uid" %>
   <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300 %>
   <%= form_for Spot.new, url: attachment_file_spots_path(@specimen.attachment_files.first) do |f| %>
     <table>

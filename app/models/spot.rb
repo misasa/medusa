@@ -9,6 +9,7 @@ class Spot < ActiveRecord::Base
 
   before_validation :generate_name, if: "name.blank?"
   before_validation :generate_stroke_width, if: "stroke_width.blank?"
+  after_create :attachment_to_target
 
   def generate_name
     if target_uid.blank? 
@@ -58,7 +59,8 @@ class Spot < ActiveRecord::Base
       "fill-opacity" => opacity,
       stroke: stroke_color,
       "stroke-width" => stroke_width,
-      "data-spot" => Rails.application.routes.url_helpers.edit_spot_path(self, script_name: Rails.application.config.relative_url_root)
+      "data-spot" => Rails.application.routes.url_helpers.edit_spot_path(self, script_name: Rails.application.config.relative_url_root),
+      "data-target-uid" => target_uid
     }
   end
 
@@ -81,6 +83,11 @@ private
 
   def spot_center_xy
     [attachment_file.width.to_f / attachment_file.length / 2 * 100, attachment_file.height.to_f / attachment_file.length / 2 * 100]
+  end
+
+  def attachment_to_target
+    return unless target.respond_to? :attachment_files
+    target.attachment_files << attachment_file
   end
 
 end

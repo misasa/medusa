@@ -5,26 +5,25 @@
     scroll: false,
     _create: function() {
       var self = this;
+      this.targetUid = this.element.find("input.target-uid").val();
       this.canvas = this.element.find("svg.spot-canvas");
+      this.form = this.element.find("form");
       this.thumbnails = this.element.find("div.spot-thumbnails");
       this.options = $.extend({
         width: this.canvas.attr("width"),
         height: this.canvas.attr("height"),
         scale: this.canvas.data("scale"),
-        center: {
-          x: this.canvas.data("center-x"),
-          y: this.canvas.data("center-y")
-        }
       }, this.options);
       this._initCanvas();
       this._initThumbnails();
     },
     loadImage: function(svg) {
-      var self = this;
+      var self = this, spot;
       $(this.group).empty();
       this.image = $(svg).find("image");
       this.spots = $(svg).find("circle");
-      this._initTransform(this.image.attr("width"), this.image.attr("height"));
+      spot = this.spots.filter("[data-target-uid='" + this.targetUid + "']");
+      this._initTransform(this.image.attr("width"), this.image.attr("height"), spot.attr("cx"), spot.attr("cy"));
       svg.setAttribute("width", this.image.attr("width"));
       svg.setAttribute("height", this.image.attr("height"));
       this.group.appendChild(svg);
@@ -76,7 +75,7 @@
         });
       }
     },
-    _initTransform: function(width, height) {
+    _initTransform: function(width, height, cx, cy) {
       var scaleX, scaleY, left, top;
       scaleX = this.options.width / width;
       scaleY = this.options.height / height;
@@ -84,9 +83,9 @@
       if (this.options.scale) {
         scale = scale * this.options.scale;
       }
-      if (this.options.center.x && this.options.center.y) {
-        left = (this.options.width / 2) - this.options.center.x * scale;
-        top = (this.options.height / 2) - this.options.center.y * scale;
+      if (cx && cy) {
+        left = (this.options.width / 2) - cx * scale;
+        top = (this.options.height / 2) - cy * scale;
       } else {
         left = (this.options.width - width * scale) / 2;
         top = (this.options.height - height * scale) / 2;
@@ -185,6 +184,10 @@
       var self = this;
       $(self.thumbnails).on("ajax:success", "a.thumbnail", function(event, data, status) {
         self.loadImage(data.documentElement);
+        if (self.form.length > 0) {
+          var action = self.form.attr("action");
+          self.form.attr("action", action.replace(/(.*attachment_files\/)\d+(\/spots)/, "$1" + self.image.data("id") + "$2"));
+        }
       });
       self.thumbnails.find("a.thumbnail").first().click();
     }
