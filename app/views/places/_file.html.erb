@@ -5,7 +5,7 @@
       <th></th>
       <th>name</th>
       <th></th>
-      <th>type</th>
+      <th>spots</th>
       <th>global-id</th>
       <th></th>
       <th></th>
@@ -26,7 +26,7 @@
               <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_file.id), id: "file-#{attachment_file.id}-button") %>
             <% end %>
           </td>
-          <td><%= attachment_file.try!(:data_content_type) %></td>
+          <td><%= attachment_file.spots.try!(:size) %></td>
           <td><%= attachment_file.try!(:global_id) %></td> 
           <td>
             <%= link_to move_to_top_attaching_path(attaching) + tab_param(__FILE__), method: :move_to_top ,title: "move to top" do %>

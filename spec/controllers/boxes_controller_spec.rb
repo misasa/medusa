@@ -29,14 +29,14 @@ describe BoxesController do
       it { expect(assigns(:boxes).count).to eq 3 }
     end
 
-    context "with format 'json'", :current => true do
+    context "with format 'json'" do
       before do
         get :index, format: 'json'
       end
       it { expect(response.body).to include("global_id")}
     end
 
-    context "with format 'pml'", :current => true do
+    context "with format 'pml'" do
       before do
         get :index, format: 'pml'
       end
@@ -47,7 +47,7 @@ describe BoxesController do
 
   end
 
-  describe "GET show", :current => true do
+  describe "GET show" do
     let(:box) { FactoryGirl.create(:box) }
     let(:specimen_1) { FactoryGirl.create(:specimen, name: "hoge", box_id: box.id) }
     let(:specimen_2) { FactoryGirl.create(:specimen, name: "specimen_2", box_id: box.id) }
@@ -63,15 +63,166 @@ describe BoxesController do
       before { get :show, id: box.id }
       it { expect(assigns(:box)).to eq box }
     end
-    context "with format 'json'", :current => true do
+    context "with format 'json'" do
       before { get :show, id: box.id, format: 'json' }
       it { expect(response.body).to include("global_id") }
     end
-    context "with format 'pml'", :current => true do
+    context "with format 'pml'" do
       before { get :show, id: box.id, format: 'pml' }
       it { expect(response.body).to include("\<sample_global_id\>#{specimen_1.global_id}") }    
       it { expect(response.body).to include("\<sample_global_id\>#{specimen_2.global_id}") }    
       it { expect(response.body).to include("\<sample_global_id\>#{specimen_3.global_id}") }    
+
+    end
+
+    context "without dst_date" do
+      let(:ddate) { Date.today}
+      let(:dst_date) { ddate.strftime("%Y-%m-%d")}
+      it {
+        expect(Date).to receive(:today).and_return(ddate)
+        get :show, id: box.id, button_action: 'change from 1 day ago'
+        expect(assigns(:dst_date)).to eq dst_date
+      }      
+    end
+
+    context "with dst_date" do
+      let(:dst_date) { "2014-12-25"}
+      it {
+        expect(Date).not_to receive(:today)
+        get :show, id: box.id, button_action: 'change from 1 day ago', dst_date: dst_date
+        expect(assigns(:dst_date)).to eq dst_date
+      }
+    end
+
+    context "with dst_date and src_date" do
+      let(:dst_date) { "2014-12-25"}
+      let(:src_date) { "2013-12-25"}
+      it {
+        get :show, id: box.id, button_action: 'change from 1 day ago', dst_date: dst_date, src_date: src_date
+        expect(assigns(:dst_date)).to eq dst_date
+        expect(assigns(:src_date)).to eq src_date        
+      }
+    end
+
+    context "with dst_date and from without src_date", :current => true do
+      let(:dst_date) { "2014-12-25"}
+      let(:src_date) { "2014-12-24"}
+      it {
+        get :show, id: box.id, button_action: 'xxxx from 1 day ago', dst_date: dst_date
+        expect(assigns(:dst_date)).to eq dst_date
+        expect(assigns(:src_date)).to eq src_date        
+      }
+    end
+
+    context "without dst_date and src_date", :current => true do
+      let(:ddate) { Date.today }
+      let(:dst_date) { ddate.strftime("%Y-%m-%d")}
+      let(:src_date) { ddate.years_ago(10).strftime("%Y-%m-%d") }
+      it {
+        expect(Date).to receive(:today).and_return(ddate)
+        Path.stub_chain(:order, :first).and_return(double("path", brought_in_at: ddate.years_ago(10) ))
+        #allow(Path).to receive(:first).and_return(double("path"))        
+        get :show, id: box.id
+        expect(assigns(:dst_date)).to eq dst_date
+        expect(assigns(:src_date)).to eq src_date        
+      }
+    end
+
+    context "with button_action change from" do
+      let(:ddate) { Date.today}
+      let(:dst_date) { ddate.strftime("%Y-%m-%d")}
+      let(:a_day_ago) { ddate.days_ago(1).strftime("%Y-%m-%d")}
+      let(:relation) { double("activerecord-relation")}
+      let(:contents_search) { double("ransack") } 
+
+      context "without sorts" do
+
+        before {
+          allow(relation).to receive(:search).and_return(contents_search.as_null_object)
+          allow(Path).to receive(:change).and_return(relation)
+        }
+        it {
+          expect(contents_search).to receive(:sorts=).with(['brought_at DESC', 'sign ASC']) 
+          get :show, id: box.id, button_action: 'change from 1 day ago', dst_date: dst_date
+        }
+      end
+
+      context "with sorts" do
+        before {
+          allow(Path).to receive(:change).and_return(relation)
+        }
+        it {
+          expect(relation).to receive(:search).with({"s" => "brought_in_at+asc"}).and_return(contents_search.as_null_object)
+          expect(contents_search).to receive(:sorts).and_return("brought_in_at ASC")
+          expect(contents_search).not_to receive(:sorts=)
+          get :show, id: box.id, button_action: 'change from 1 day ago', dst_date: dst_date, q: {s: 'brought_in_at+asc'}
+        }
+      end
+
+    end
+
+    context "with button_action integ from" do
+      let(:ddate) { Date.today}
+      let(:dst_date) { ddate.strftime("%Y-%m-%d")}
+      let(:a_day_ago) { ddate.days_ago(1).strftime("%Y-%m-%d")}
+      let(:relation) { double("activerecord-relation")}
+      let(:contents_search) { double("ransack") } 
+
+      context "without sorts" do
+
+        before {
+          allow(relation).to receive(:search).and_return(contents_search.as_null_object)
+          allow(Path).to receive(:integ).and_return(relation)
+        }
+        it {
+          expect(contents_search).to receive(:sorts=).with('path ASC') 
+          get :show, id: box.id, button_action: 'integ from 1 day ago', dst_date: dst_date
+        }
+      end
+
+      context "with sorts" do
+        before {
+          allow(Path).to receive(:integ).and_return(relation)
+        }
+        it {
+          expect(relation).to receive(:search).with({"s" => "brought_in_at+asc"}).and_return(contents_search.as_null_object)
+          expect(contents_search).to receive(:sorts).and_return("brought_in_at ASC")
+          expect(contents_search).not_to receive(:sorts=)
+          get :show, id: box.id, button_action: 'integ from 1 day ago', dst_date: dst_date, q: {s: 'brought_in_at+asc'}
+        }
+      end
+
+    end
+
+
+    context "with button_action snapshot" do
+      let(:ddate) { Date.today}
+      let(:dst_date) { ddate.strftime("%Y-%m-%d")}
+      let(:a_day_ago) { ddate.days_ago(1).strftime("%Y-%m-%d")}
+      let(:relation) { double("activerecord-relation")}
+      let(:contents_search) { double("ransack") } 
+
+      context "without sorts" do
+
+        before {
+          allow(relation).to receive(:search).and_return(contents_search.as_null_object)
+        }
+        it {
+          expect(Path).to receive(:snapshot).with(box, dst_date).and_return(relation)
+          expect(contents_search).to receive(:sorts=).with('path ASC') 
+          get :show, id: box.id, button_action: 'snapshot', dst_date: dst_date
+        }
+      end
+
+      context "with sorts" do
+        it {
+          expect(Path).to receive(:snapshot).with(box, dst_date).and_return(relation)
+          expect(relation).to receive(:search).with({"s" => "brought_in_at+asc"}).and_return(contents_search.as_null_object)
+          expect(contents_search).to receive(:sorts).and_return("brought_in_at ASC")
+          expect(contents_search).not_to receive(:sorts=)
+          get :show, id: box.id, button_action: 'snapshot', dst_date: dst_date, q: {s: 'brought_in_at+asc'}
+        }
+      end
 
     end
 
@@ -86,9 +237,42 @@ describe BoxesController do
       let(:two_months_ago) { ddate.months_ago(2).strftime("%Y-%m-%d")}
       let(:one_year_ago) { ddate.years_ago(1).strftime("%Y-%m-%d")}
       let(:two_years_ago) { ddate.years_ago(2).strftime("%Y-%m-%d")}
+      let(:relation) { double("activerecord-relation")}
+      let(:relation_2) { double("activerecord-relation")}      
+      let(:contents_search) { double("ransack") } 
+
+      # before do
+      #     allow(relation).to receive(:search).and_return(contents_search)
+      #     allow(Path).to receive(:diff).and_return(relation)
+      # end
+
+      context "without sorts" do
+        before {
+          allow(relation).to receive(:search).and_return(contents_search.as_null_object)
+          allow(Path).to receive(:diff).and_return(relation)
+        }
+        it {
+          expect(contents_search).to receive(:sorts=).with('path ASC') 
+          get :show, id: box.id, button_action: 'diff from 1 day ago', dst_date: dst_date
+        }
+      end
+
+      context "with sorts" do
+        before {
+          allow(Path).to receive(:diff).and_return(relation)
+        }
+        it {
+          expect(relation).to receive(:search).with({"s" => "brought_in_at+asc"}).and_return(contents_search.as_null_object)
+          expect(contents_search).to receive(:sorts).and_return("brought_in_at ASC")
+          expect(contents_search).not_to receive(:sorts=)
+          get :show, id: box.id, button_action: 'diff from 1 day ago', dst_date: dst_date, q: {s: 'brought_in_at+asc'}
+        }
+      end
 
       context "1 day ago" do
-        before { get :show, id: box.id, button_action: 'diff from 1 day ago', dst_date: dst_date }
+        before { 
+          get :show, id: box.id, button_action: 'diff from 1 day ago', dst_date: dst_date 
+        }
         it { expect(assigns(:dst_date)).to eq dst_date }
         it { expect(assigns(:src_date)).to eq a_day_ago }
       end
@@ -155,7 +339,7 @@ describe BoxesController do
     end
   end
 
-  describe "PUT update", :current => true do
+  describe "PUT update" do
     before do
       box
       put :update, id: box.id, box: attributes

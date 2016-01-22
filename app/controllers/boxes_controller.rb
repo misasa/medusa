@@ -17,9 +17,9 @@ class BoxesController < ApplicationController
     # @contents = Path.none
     # @contents = @contents.page(1).per(10)
     #if params[:q]
-    @button_action_selection_items = ["snapshot"]
+    @button_action_selection_items = ["recent", "snapshot"]
     duration_numbers = [1, 2]
-    ["diff from", "integ from", "change from"].each do |prefix|
+    ["in/out from", "integ from", "diff from" ].each do |prefix|
       ["day", "week", "month", "year"].each do |str|
           duration_numbers.each do |num| 
             @button_action_selection_items << "#{prefix} #{num} #{str.pluralize(num)} ago"
@@ -28,49 +28,49 @@ class BoxesController < ApplicationController
     end
     @button_action_selection_items = @button_action_selection_items.map{|item| [item, item]}
 
+    params[:q] = {} unless params[:q]
+
     if !(params[:dst_date].blank?)
       @dst_date = params[:dst_date]
-      if m = /diff from (\d*) (.*) ago/.match(params[:button_action])
-        ddate = Date.strptime(@dst_date, "%Y-%m-%d")
-        sdate = convert_date(ddate, m[1], m[2])
-        @src_date = sdate.strftime("%Y-%m-%d")
-        @contents_search = Path.diff(@box, @src_date, @dst_date).search(params[:q])
-        @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
-        @contents = @contents_search.result
-        @contents = @contents.page(params[:page]).per(params[:per_page])
-      elsif m = /change from (\d*) (.*) ago/.match(params[:button_action])
-        ddate = Date.strptime(@dst_date, "%Y-%m-%d")
-        sdate = convert_date(ddate, m[1], m[2])
-        @src_date = sdate.strftime("%Y-%m-%d")
-        @contents_search = Path.change(@box, @src_date, @dst_date).search(params[:q])
-        @contents_search.sorts = ["brought_at DESC", "sign ASC"] if @contents_search.sorts.empty?
-        @contents = @contents_search.result
-        @contents = @contents.page(params[:page]).per(params[:per_page])
-      else
-        params[:q] = {} unless params[:q]
-        if m = /integ from (\d*) (.*) ago/.match(params[:button_action])
-          ddate = Date.strptime(@dst_date, "%Y-%m-%d")
-          sdate = convert_date(ddate, m[1], m[2])
-          params[:q][:brought_out_at_gteq] = sdate.strftime("%Y-%m-%d")
-          params[:q][:brought_in_at_lteq_end_of_day] = @dst_date
-          @src_date = params[:q][:brought_out_at_gteq]
-          @contents_search = Path.integ(@box, @src_date, @dst_date).search(params[:q])
-        else
-          params[:q][:exists_at] = @dst_date
-          @contents_search = Path.contents_of(@box).search(params[:q])
-        end
-        @contents_search.sorts = "path ASC" if @contents_search.sorts.empty?
-        @contents = @contents_search.result.includes(datum: :record_property)
-        @contents = @contents.current if @contents_search.conditions.empty?
-        @contents = @contents.page(params[:page]).per(params[:per_page])
-      end
     else
       @dst_date = Date.today.strftime("%Y-%m-%d")
-      @contents_search = Path.search(params[:q])
-      @contents_search.sorts = "path ASC"
-      @contents = Path.none
-      @contents = @contents.page(params[:page]).per(params[:per_page])
     end
+
+    if !(params[:src_date].blank?)
+      @src_date = params[:src_date]
+    else
+      ddate = Date.strptime(@dst_date, "%Y-%m-%d")
+      if m = /from (\d*) (.*) ago/.match(params[:button_action])
+        sdate = convert_date(ddate, m[1], m[2])
+      else
+        oldest = Path.order(brought_in_at: :asc).first
+        if oldest
+          sdate = oldest.brought_in_at
+        else
+          sdate = convert_date(ddate, "10", "years")
+        end
+      end
+      @src_date = sdate.strftime("%Y-%m-%d")
+    end
+
+    default_sorts = "path ASC"
+    case params[:button_action]
+    when /diff/
+      @contents_search = Path.diff(@box, @src_date, @dst_date).search(params[:q])
+    when /integ/
+      @contents_search = Path.integ(@box, @src_date, @dst_date).search(params[:q])
+    when /snapshot/
+      @contents_search = Path.snapshot(@box, @dst_date).search(params[:q])
+    else
+      # in/out
+      @contents_search = Path.change(@box, @src_date, @dst_date).search(params[:q])
+      default_sorts = ["brought_at DESC", "sign ASC"]
+    end
+    @contents_search.sorts = default_sorts if @contents_search.sorts.empty?
+    @contents = @contents_search.result
+    @contents = @contents.current if @contents_search.conditions.empty?
+    @contents = @contents.page(params[:page]).per(params[:per_page])
+
     @box = Box.includes(children: [:record_property, :box_type], specimens: [:record_property, :analyses, :physical_form]).find(params[:id]).decorate
     respond_with @box
   end

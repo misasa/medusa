@@ -8,6 +8,11 @@ class AttachmentFileDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-file") + " #{name} < #{global_id} >"
   end
 
+
+  def icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-file")
+  end
+
   def picture(width: 250, height: 250, type: nil)
     return unless image?
     height_rate = original_height.to_f / height

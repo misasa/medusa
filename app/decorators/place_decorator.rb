@@ -8,6 +8,9 @@ class PlaceDecorator < Draper::Decorator
   end
 
 
+  def icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+  end
 
   def latitude_to_text
     return "" if latitude.blank?

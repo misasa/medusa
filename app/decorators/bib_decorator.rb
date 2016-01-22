@@ -11,6 +11,10 @@ class BibDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + " #{name} < #{global_id} >"
   end
 
+
+  def icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+  end
   # def as_json(options = {})
   #   super({:methods => [:author_ids, :global_id]}.merge(options))
   # end
