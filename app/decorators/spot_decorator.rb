@@ -22,4 +22,8 @@ class SpotDecorator < Draper::Decorator
     h.raw( contents.compact.join(' ') )
 
   end
+
+  def target_path
+    polymorphic_path(target, script_name: Rails.application.config.relative_url_root) if target
+  end
 end
