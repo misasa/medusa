@@ -2,27 +2,57 @@
   <thead>
     <tr>
       <th></th>
+      <th>link</th>
       <th>spot</th>
-      <th>location</th>
       <th></th>
     </tr>
   </thead>
   <tbody>
-      <% SpotDecorator.decorate_collection(@attachment_file.spots).each do |spot| %>
+    <% @attachment_file.attachings.each do |attaching| %>
+       <% attachable = attaching.attachable %>
+       <% if attachable %>
+         <% controller = attaching.attachable.class.to_s.downcase.pluralize %>
+         <% spots = @attachment_file.spots.find_all_by_target_uid(attachable.global_id) %>
+         <% if spots.empty? %>
+        <tr>
+          <td></td>
+          <td>
+          <%= attachable.decorate.try(:icon) %>
+          <%=link_to_if can?(:read, attachable), attachable.name, {controller: controller, action: :show , id: attachable.id}, class: specimen_ghost(attachable) %>
+          </td>
+          <td></td>
+        </tr>
+        <% else %>
+      <% SpotDecorator.decorate_collection(spots).each do |spot| %>
         <tr>
           <td></td>
           <td><%= spot.target_link %></td> 
-          <td><%= spot.xy_to_text %></td>
-          <td>
-            <%= link_to edit_spot_path(spot) ,title: "edit spot of #{spot.name}" do %>
+          <td><%= icon_tag("screenshot") %> <%= spot.xy_to_text %>
+            <%= link_to edit_spot_path(spot) ,title: "edit spot of \"#{spot.name}\"" do %>
               <span class="glyphicon glyphicon-edit"></span>
             <% end %>          
-            <%= link_to attachment_file_spot_path(@attachment_file,spot)+ tab_param(__FILE__), method: :delete ,title: "delete spot of #{spot.name}",data: {confirm: t("confirm.delete",:recordname => spot.name)} do %>
+            <%= link_to attachment_file_spot_path(@attachment_file,spot)+ tab_param(__FILE__), method: :delete ,title: "delete spot of \"#{spot.name}\"",data: {confirm: t("confirm.delete",:recordname => spot.name)} do %>
               <span class="glyphicon glyphicon-remove"></span>
             <% end %>
           </td>
         </tr>
+      <% end %>        
+        <% end %>
       <% end %>
+    <% end %>
+    <% SpotDecorator.decorate_collection(@attachment_file.spots.where("target_uid is null or target_uid = ''")).each do |spot| %>
+        <tr>
+          <td></td>
+          <td></td> 
+          <td><%= icon_tag("screenshot") %> <%= spot.xy_to_text %>
+            <%= link_to edit_spot_path(spot) ,title: "edit spot of \"#{spot.name}\"" do %>
+              <span class="glyphicon glyphicon-edit"></span>
+            <% end %>          
+            <%= link_to attachment_file_spot_path(@attachment_file,spot)+ tab_param(__FILE__), method: :delete ,title: "delete spot of \"#{spot.name}\"",data: {confirm: t("confirm.delete",:recordname => spot.name)} do %>
+              <span class="glyphicon glyphicon-remove"></span>
+            <% end %>
+          </td>
+        </tr>
+    <% end %>
   </tbody>
 </table>
-

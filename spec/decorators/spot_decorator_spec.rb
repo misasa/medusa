@@ -23,7 +23,7 @@ describe SpotDecorator do
         it { expect(subject).to eq spot.name }
       end
       context "exists datum" do
-        it { expect(subject).to eq "<a href=\"/bibs/#{bib.id}\">test bib</a>" }
+        it { expect(subject).to eq "<span class=\"glyphicon glyphicon-book\"></span> <a href=\"/bibs/#{bib.id}\">test bib</a>" }
       end
     end
   end

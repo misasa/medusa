@@ -41,12 +41,12 @@ describe "attachment_file" do
           let(:spot) { FactoryGirl.create(:spot, attachment_file_id: attachment_file.id, target_uid: target_uid) }
           let(:attachment_file) { FactoryGirl.create(:attachment_file) }
           let(:obj) { FactoryGirl.create(:specimen, name: "obj_name") }
-          context "link exists" do
-            let(:target_uid) { obj.record_property.global_id }
-            it "link name is displayed" do
-              expect(page).to have_link(obj.name)
-            end
-          end
+          # context "link exists" do
+          #   let(:target_uid) { obj.record_property.global_id }
+          #   it "link name is displayed" do
+          #     expect(page).to have_link(obj.name)
+          #   end
+          # end
           context "link not exists" do
             let(:target_uid) { "" }
             it "link name is not displayed" do

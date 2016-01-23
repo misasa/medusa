@@ -92,6 +92,11 @@ module ApplicationHelper
     html_class
   end
 
+
+  def icon_tag(icon)
+    content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}")
+  end
+
   private
 
   def tabname_from_filename(filename)

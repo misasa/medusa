@@ -1,15 +1,4 @@
 <ul>
-  <% unless @attachment_file.attachings.empty? %>
-    <li>linked to
-    <% @attachment_file.attachings.each do |attaching| %>
-       <% attachable = attaching.attachable %>
-       <% if attachable %>
-         <% controller = attaching.attachable.class.to_s.downcase.pluralize %>
-         <%=link_to_if can?(:read, attachable), attachable.name, {controller: controller, action: :show , id: attachable.id}, class: specimen_ghost(attachable) %>
-      <% end %>
-    <% end %>
-    </li>
-  <% end %>
   <%= li_if_exist("name: ", @attachment_file.name) %>
   <%= li_if_exist("description: ", @attachment_file.description) %>
   <li>content-type: <%= @attachment_file.data_content_type %></li>
@@ -31,7 +20,6 @@
 <div class="display-type">
   <div id="display-type-html">
     <% if @attachment_file.image? && @attachment_file.spots.size > 0  %>
-      <%= "#{@attachment_file.spots.size}" + " spot".pluralize %>
       <%= render partial: "spot" %>
     <% end %>
 </div>

@@ -10,7 +10,7 @@ class SpotDecorator < Draper::Decorator
 
   def file_with_id
     return unless attachment_file
-    attachment_file.decorate.icon + h.link_to_if(h.can?(:read, attachment_file), " #{attachment_file.name} < #{attachment_file.global_id} >", attachment_file)
+    attachment_file.decorate.icon + h.link_to_if(h.can?(:read, attachment_file), " #{attachment_file.name}", attachment_file)
   end
 
   def name_with_id
