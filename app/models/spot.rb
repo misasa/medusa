@@ -59,7 +59,8 @@ class Spot < ActiveRecord::Base
       "fill-opacity" => opacity,
       stroke: stroke_color,
       "stroke-width" => stroke_width,
-      "data-spot" => decorate.target_path,
+      "data-spot" => Rails.application.routes.url_helpers.spot_path(self, script_name: Rails.application.config.relative_url_root),
+      #"data-spot" => decorate.target_path,
       "data-target-uid" => target_uid
     }
   end
