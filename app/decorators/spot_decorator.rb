@@ -62,10 +62,11 @@ class SpotDecorator < Draper::Decorator
            end        
           end
        end
-       SpotDecorator.decorate_collection(attachment_file.spots.where("target_uid is null or target_uid = ''")).each do |spot|
-          links << h.icon_tag("screenshot") + " " + (spot == self ? spot.xy_to_text : h.link_to(spot.xy_to_text, spot_path(spot, script_name: Rails.application.config.relative_url_root)) )
-       end
     end
+    SpotDecorator.decorate_collection(attachment_file.spots.where("target_uid is null or target_uid = ''")).each do |spot|
+       links << h.icon_tag("screenshot") + " " + (spot == self ? spot.xy_to_text : h.link_to(spot.xy_to_text, spot_path(spot, script_name: Rails.application.config.relative_url_root)) )
+    end
+
     lis = links.map{|link| h.content_tag(:li, link)}
 
     list = h.raw lis.join
