@@ -1,0 +1,6 @@
+<div>
+  <%= link_to(@spot.attachment_file.decorate.picture(width: 250, height: 250), attachment_file_path(@spot.attachment_file)) %>
+</div>
+<div id="family-tree">
+  <%= @spot.family_tree %>
+</div>

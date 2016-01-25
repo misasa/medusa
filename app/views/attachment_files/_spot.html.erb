@@ -27,13 +27,7 @@
         <tr>
           <td></td>
           <td><%= spot.target_link %></td> 
-          <td><%= icon_tag("screenshot") %> <%= spot.xy_to_text %>
-            <%= link_to edit_spot_path(spot) ,title: "edit spot of \"#{spot.name}\"" do %>
-              <span class="glyphicon glyphicon-edit"></span>
-            <% end %>          
-            <%= link_to attachment_file_spot_path(@attachment_file,spot)+ tab_param(__FILE__), method: :delete ,title: "delete spot of \"#{spot.name}\"",data: {confirm: t("confirm.delete",:recordname => spot.name)} do %>
-              <span class="glyphicon glyphicon-remove"></span>
-            <% end %>
+          <td><%= icon_tag("screenshot") %> <%= link_to spot.xy_to_text, spot_path(spot) %>
           </td>
         </tr>
       <% end %>        
@@ -44,13 +38,7 @@
         <tr>
           <td></td>
           <td></td> 
-          <td><%= icon_tag("screenshot") %> <%= spot.xy_to_text %>
-            <%= link_to edit_spot_path(spot) ,title: "edit spot of \"#{spot.name}\"" do %>
-              <span class="glyphicon glyphicon-edit"></span>
-            <% end %>          
-            <%= link_to attachment_file_spot_path(@attachment_file,spot)+ tab_param(__FILE__), method: :delete ,title: "delete spot of \"#{spot.name}\"",data: {confirm: t("confirm.delete",:recordname => spot.name)} do %>
-              <span class="glyphicon glyphicon-remove"></span>
-            <% end %>
+          <td><%= icon_tag("screenshot") %> <%= link_to spot.xy_to_text, spot_path(spot) %>
           </td>
         </tr>
     <% end %>

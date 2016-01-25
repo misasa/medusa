@@ -25,18 +25,71 @@ class SpotDecorator < Draper::Decorator
     record_property = RecordProperty.find_by_global_id(target_uid)
     return name if record_property.blank? || record_property.datum.blank?
     datum = record_property.datum.try(:decorate)
-	contents = []
-	if datum
+	  contents = []
+	  if datum
     	contents << datum.try(:icon)
     	contents << h.link_to( datum.name, datum)
-	else
-		contents << h.link_to(record_property.datum.name, record_property.datum)
-	end
+	  else
+		  contents << h.link_to(record_property.datum.name, record_property.datum)
+	  end
     h.raw( contents.compact.join(' ') )
+  end
 
+  def target_link_modal
+    record_property = RecordProperty.find_by_global_id(target_uid)
+    return name if record_property.blank? || record_property.datum.blank?
+    datum = record_property.datum.try(:decorate)
+    contents = []
+    if datum
+      contents << datum.try(:icon)
+      contents << h.link_to( datum.name, datum)
+    else
+      contents << h.link_to(record_property.datum.name, record_property.datum)
+    end
+    h.raw( contents.compact.join(' ') )
+  end
+
+  def primary_picture(width: 250, height: 250)
+    attachment_file if attachment_files.present?
+  end
+
+  def family_tree
+    tree = ""
+    tree += file_with_id
+    lis = []
+    links = []
+    attachment_file.attachings.each do |attaching|
+       attachable = attaching.attachable
+       if attachable
+          spots = attachment_file.spots.find_all_by_target_uid(attachable.global_id)
+          if spots.empty?
+           link = attachable.decorate.try(:icon) + " "
+           link += h.link_to_if(h.can?(:read, attachable), attachable.name, polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
+           links << link
+          else
+           SpotDecorator.decorate_collection(spots).each do |spot|
+            link = h.raw( (spot == self ? spot.xy_to_text : h.link_to(spot.xy_to_text, spot_path(spot)) ) )
+            link += spot.target.decorate.try(:icon) + " " + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))
+            links << h.icon_tag("screenshot") + " " + link
+           end        
+          end
+       end
+       SpotDecorator.decorate_collection(attachment_file.spots.where("target_uid is null or target_uid = ''")).each do |spot|
+          links << h.icon_tag("screenshot") + " " + (spot == self ? spot.xy_to_text : h.link_to(spot.xy_to_text, spot_path(spot)) )
+       end
+    end
+    lis = links.map{|link| h.content_tag(:li, link)}
+
+    list = h.raw lis.join
+    tree += h.content_tag(:ul, list)
+    h.raw tree
   end
 
   def target_path
-    polymorphic_path(target, script_name: Rails.application.config.relative_url_root) if target
+     # if target
+     #   polymorphic_path(target, script_name: Rails.application.config.relative_url_root, format: :modal)
+     # else
+       spot_path(self)
+     # end
   end
 end

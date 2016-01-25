@@ -7,6 +7,14 @@ class SpotsController < ApplicationController
     respond_with @spot, layout: !request.xhr?
   end
 
+  def show
+    respond_with @spot, layout: !request.xhr?
+  end
+
+  def family
+    respond_with @spot, layout: !request.xhr?
+  end
+
   def update
     @spot.update_attributes(spot_params)
     respond_with @spot, location: attachment_file_path(@spot.attachment_file)

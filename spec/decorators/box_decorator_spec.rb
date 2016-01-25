@@ -71,7 +71,7 @@ describe BoxDecorator do
     end
   end
 
-  describe ".tree_node" do
+  describe ".tree_node", :current => true do
     subject{obj.tree_node}
     let(:specimen){FactoryGirl.create(:specimen)}
     let(:child){FactoryGirl.create(:box)}
