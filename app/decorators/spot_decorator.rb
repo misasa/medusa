@@ -35,20 +35,6 @@ class SpotDecorator < Draper::Decorator
     h.raw( contents.compact.join(' ') )
   end
 
-  def target_link_modal
-    record_property = RecordProperty.find_by_global_id(target_uid)
-    return name if record_property.blank? || record_property.datum.blank?
-    datum = record_property.datum.try(:decorate)
-    contents = []
-    if datum
-      contents << datum.try(:icon)
-      contents << h.link_to( datum.name, datum)
-    else
-      contents << h.link_to(record_property.datum.name, record_property.datum)
-    end
-    h.raw( contents.compact.join(' ') )
-  end
-
   def primary_picture(width: 250, height: 250)
     attachment_file if attachment_files.present?
   end
@@ -89,7 +75,7 @@ class SpotDecorator < Draper::Decorator
      # if target
      #   polymorphic_path(target, script_name: Rails.application.config.relative_url_root, format: :modal)
      # else
-       spot_path(self)
+       edit_spot_path(self)
      # end
   end
 end
