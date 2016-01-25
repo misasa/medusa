@@ -50,14 +50,14 @@ class SpotDecorator < Draper::Decorator
           spots = attachment_file.spots.find_all_by_target_uid(attachable.global_id)
           if spots.empty?
            link = attachable.decorate.try(:icon) + " "
-#           link += h.link_to_if(h.can?(:read, attachable), attachable.name, polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
-           link += h.link_to_if(h.can?(:read, attachable), attachable.name, polymorphic_path(attachable, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
+           link += h.link_to_if(h.can?(:read, attachable), attachable.name, polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
+#           link += h.link_to_if(h.can?(:read, attachable), attachable.name, polymorphic_path(attachable, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
            links << link
           else
            SpotDecorator.decorate_collection(spots).each do |spot|
             link = h.raw( (spot == self ? spot.xy_to_text : h.link_to(spot.xy_to_text, spot_path(spot, script_name: Rails.application.config.relative_url_root)) ) )
-#            link += spot.target.decorate.try(:icon) + " " + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))            
-            link += spot.target.decorate.try(:icon) + " " + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))
+            link += spot.target.decorate.try(:icon) + " " + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))            
+#            link += spot.target.decorate.try(:icon) + " " + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))
             links << h.icon_tag("screenshot") + " " + link
            end        
           end
