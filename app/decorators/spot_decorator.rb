@@ -55,7 +55,7 @@ class SpotDecorator < Draper::Decorator
            links << link
           else
            SpotDecorator.decorate_collection(spots).each do |spot|
-            link = h.raw( (spot == self ? spot.xy_to_text : h.link_to(spot.xy_to_text, spot_path(spot)) ) )
+            link = h.raw( (spot == self ? spot.xy_to_text : h.link_to(spot.xy_to_text, spot_path(spot, script_name: Rails.application.config.relative_url_root)) ) )
 #            link += spot.target.decorate.try(:icon) + " " + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))            
             link += spot.target.decorate.try(:icon) + " " + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))
             links << h.icon_tag("screenshot") + " " + link
@@ -63,7 +63,7 @@ class SpotDecorator < Draper::Decorator
           end
        end
        SpotDecorator.decorate_collection(attachment_file.spots.where("target_uid is null or target_uid = ''")).each do |spot|
-          links << h.icon_tag("screenshot") + " " + (spot == self ? spot.xy_to_text : h.link_to(spot.xy_to_text, spot_path(spot)) )
+          links << h.icon_tag("screenshot") + " " + (spot == self ? spot.xy_to_text : h.link_to(spot.xy_to_text, spot_path(spot, script_name: Rails.application.config.relative_url_root)) )
        end
     end
     lis = links.map{|link| h.content_tag(:li, link)}
