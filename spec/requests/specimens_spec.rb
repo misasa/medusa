@@ -24,7 +24,7 @@ describe "specimen" do
         before { click_link("picture-button") }
         let(:data_type) { "image/jpeg" }
         it "new spot label is properly displayed" do
-          expect(page).to have_content("(Link ID")
+          expect(page).to have_content("(link ID")
           #new spot with link(ID) feildのvalueオプションが存在しないため空であることの検証は行っていない
           expect(page).to have_link("record-property-search")
           expect(page).to have_button("add new spot")

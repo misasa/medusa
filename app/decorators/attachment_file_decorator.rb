@@ -21,6 +21,45 @@ class AttachmentFileDecorator < Draper::Decorator
     h.image_tag(path(type), options)
   end
 
+  def family_tree(current_spot = nil)
+    html_class = "tree-node"
+    html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
+      tree_node(true)
+    end
+    spots.each do |spot|
+      html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+        h.route_icon(2) + spot.decorate.tree_node(false)
+      end
+    end
+    html
+  end
+
+  def tree_node(current=false)
+    link = current ? h.content_tag(:strong, name) : name
+    icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-file")
+    icon + h.link_to_if(h.can?(:read, self), link, self) + specimens_count + boxes_count + analyses_count + bibs_count
+  end
+
+  def specimens_count
+    icon_with_count("cloud", specimens.count)
+  end
+
+  def boxes_count
+    icon_with_count("folder-close", boxes.count)
+  end
+
+  def analyses_count
+    icon_with_count("stats", analyses.size)
+  end
+
+  def bibs_count
+    icon_with_count("book", bibs.count)
+  end
+
+  def files_count
+    icon_with_count("file", attachment_files.count)
+  end
+
   def image_link(width: 40, height: 40)
     content = image? ? decorate.picture(width: width, height: height, type: :thumb) : h.content_tag(:span, nil, class: "glyphicon glyphicon-file")
     h.link_to(content, h.attachment_file_path(self))
@@ -63,4 +102,10 @@ class AttachmentFileDecorator < Draper::Decorator
     lines.join("\n")
   end
 
+
+  private
+
+  def icon_with_count(icon, count)
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}") + h.content_tag(:span, count) if count.nonzero?
+  end
 end

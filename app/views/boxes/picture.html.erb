@@ -1,10 +1,14 @@
 <div class="spot-viewer">
   <%= hidden_field_tag nil, @box.global_id, class: "target-uid" %>
   <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300 %>
+  <div id="family-tree">
+    <%= @box.attachment_files.first.decorate.family_tree %>
+  </div>
+
   <%= form_for Spot.new, url: attachment_file_spots_path(@box.attachment_files.first) do |f| %>
     <table>
       <tr>
-        <td><%=icon_tag("screenshot") %> (Link ID </td>
+        <td><%=icon_tag("screenshot") %> (link ID </td>
           <td>
             <div class="input-group">
               <%= f.text_field :target_uid, class: "form-control input-sm" %>

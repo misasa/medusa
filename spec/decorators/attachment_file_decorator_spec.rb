@@ -91,6 +91,15 @@ describe AttachmentFileDecorator do
     end
   end
 
+  describe ".family_tree", :current => true do
+    subject { attachment_file.family_tree }
+    let(:spot){ FactoryGirl.create(:spot, target_uid: specimen.global_id) }
+    let(:specimen){ FactoryGirl.create(:specimen) }
+    before do
+      attachment_file.spots << spot
+    end
+    it { expect(subject).to include("") }
+  end
 
 
 

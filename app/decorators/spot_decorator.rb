@@ -74,6 +74,35 @@ class SpotDecorator < Draper::Decorator
     h.raw tree
   end
 
+  def family_tree
+    attachment_file = self.attachment_file
+    return unless attachment_file
+    html_class = "tree-node"
+    html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
+      attachment_file.decorate.tree_node(false)
+    end
+    attachment_file.spots.each do |spot|
+      html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+        h.route_icon(2) + spot.decorate.tree_node(self == spot)
+      end
+    end
+    html
+  end
+
+
+  def tree_node(current=false)
+    icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-screenshot")
+    link = current ? icon : h.link_to_if(h.can?(:read, self), icon, self, :title => spot.name )
+    link += spot.name
+    #node = icon + h.link_to_if(h.can?(:read, self), link, self)
+    node = link
+    if spot.target
+      node += spot.target.decorate.try(:icon) + " " + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root), class: h.specimen_ghost(spot.target))
+      node += h.link_to_if(h.can?(:read, spot.target), h.icon_tag('info-sign'), polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))
+    end
+    node
+  end
+
   def target_path
      # if target
      #   polymorphic_path(target, script_name: Rails.application.config.relative_url_root, format: :modal)
