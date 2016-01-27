@@ -93,7 +93,7 @@ class SpotDecorator < Draper::Decorator
         else
           spots.each do |spot|
             html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-              h.route_icon(2) + spot.decorate.tree_node(false)
+              h.route_icon(2) + spot.decorate.tree_node(self == spot)
             end
           end
         end
@@ -102,7 +102,7 @@ class SpotDecorator < Draper::Decorator
     spots_without_link = attachment_file.spots.where("target_uid is null or target_uid = ''")
     spots_without_link.each do |spot|
       html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-        h.route_icon(2) + spot.decorate.tree_node(false)
+        h.route_icon(2) + spot.decorate.tree_node(self == spot)
       end
     end
 
