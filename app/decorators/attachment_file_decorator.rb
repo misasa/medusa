@@ -26,7 +26,25 @@ class AttachmentFileDecorator < Draper::Decorator
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
       tree_node(true)
     end
-    spots.each do |spot|
+    attachings.each do |attaching|
+      attachable = attaching.attachable
+      if attachable
+        spots = self.spots.find_all_by_target_uid(attachable.global_id)
+        if spots.empty?
+          html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+            h.route_icon(2) + attachable.decorate.tree_node(false)
+          end
+        else
+          spots.each do |spot|
+            html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+              h.route_icon(2) + spot.decorate.tree_node(false)
+            end
+          end
+        end
+      end
+    end
+    spots_without_link = self.spots.where("target_uid is null or target_uid = ''")
+    spots_without_link.each do |spot|
       html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
         h.route_icon(2) + spot.decorate.tree_node(false)
       end

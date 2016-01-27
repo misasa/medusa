@@ -36,45 +36,12 @@
   </div>
 
   <div id="show-body" class="col-lg-8">
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-      <li class="<%= active_if_current('at-a-glance') %>">
-        <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
-      </li>
-      <li class="<%= active_if_current('specimen') %>">
-        <a href="#specimen" data-toggle="tab"><%= @alias_specimen + data_count(@attachment_file.specimens) %></a>
-      </li>
-      <li class="<%= active_if_current('box') %>">
-        <a href="#box" data-toggle="tab"><%= "box#{data_count(@attachment_file.boxes)}" %></a>
-      </li>
-      <li class="<%= active_if_current('place') %>">
-        <a href="#place" data-toggle="tab"><%= "place#{data_count(@attachment_file.places)}" %></a>
-      </li>
-      <li class="<%= active_if_current('analysis') %>">
-        <a href="#analysis" data-toggle="tab"><%= "analysis#{data_count(@attachment_file.analyses)}" %></a>
-      </li>
-      <li class="<%= active_if_current('bib') %>">
-        <a href="#bib" data-toggle="tab"><%= "bib#{data_count(@attachment_file.bibs)}" %></a>
-      </li>
-      <li class="<%= active_if_current('spot') %>">
-        <a href="#spot" data-toggle="tab"><%= "spot#{data_count(@attachment_file.spots)}" %></a>
-      </li>
-    </ul>
-
-    <!-- Tab panes -->
-    <% tab_info = [
-        ["at-a-glance",nil],
-        ["specimen",@attachment_file.specimens],
-        ["box",@attachment_file.boxes],
-        ["place",@attachment_file.places],
-        ["analysis",@attachment_file.analyses],
-        ["bib",@attachment_file.bibs],
-        ["spot",@attachment_file.spots]
-    ] %>
-    <div class="tab-content">
-      <% tab_info.each do |key,array| %>
-        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
-      <% end %>
+    <div class="spot-viewer">
+      <%= content_tag :svg, nil, class: "spot-canvas", width: 600, height: 600, "data-image" => attachment_file_path(@attachment_file, format: :svg) %>
     </div>
+
+    <%= javascript_tag do %>
+      $("div.spot-viewer").spotViewer();
+    <% end %>
   </div>
 </div>

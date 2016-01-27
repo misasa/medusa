@@ -1,6 +1,6 @@
 <div class="spot-viewer">
   <%= hidden_field_tag nil, @specimen.global_id, class: "target-uid" %>
-  <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300 %>
+  <%= content_tag :svg, nil, class: "spot-canvas", width: 250, height: 250 %>
   <div id="family-tree">
   <%#= @spot.family_tree %>
     <%= @specimen.attachment_files.first.decorate.family_tree %>

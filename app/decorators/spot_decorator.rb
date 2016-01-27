@@ -81,11 +81,31 @@ class SpotDecorator < Draper::Decorator
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
       attachment_file.decorate.tree_node(false)
     end
-    attachment_file.spots.each do |spot|
-      html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-        h.route_icon(2) + spot.decorate.tree_node(self == spot)
+
+    attachment_file.attachings.each do |attaching|
+      attachable = attaching.attachable
+      if attachable
+        spots = attachment_file.spots.find_all_by_target_uid(attachable.global_id)
+        if spots.empty?
+          html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+            h.route_icon(2) + attachable.decorate.tree_node(false)
+          end
+        else
+          spots.each do |spot|
+            html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+              h.route_icon(2) + spot.decorate.tree_node(false)
+            end
+          end
+        end
       end
     end
+    spots_without_link = attachment_file.spots.where("target_uid is null or target_uid = ''")
+    spots_without_link.each do |spot|
+      html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+        h.route_icon(2) + spot.decorate.tree_node(false)
+      end
+    end
+
     html
   end
 
@@ -97,7 +117,7 @@ class SpotDecorator < Draper::Decorator
     #node = icon + h.link_to_if(h.can?(:read, self), link, self)
     node = link
     if spot.target
-      node += spot.target.decorate.try(:icon) + " " + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root), class: h.specimen_ghost(spot.target))
+      node += spot.target.decorate.try(:icon) + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root), class: h.specimen_ghost(spot.target))
       node += h.link_to_if(h.can?(:read, spot.target), h.icon_tag('info-sign'), polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))
     end
     node

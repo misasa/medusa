@@ -1,6 +1,8 @@
-<div class="spot-viewer">
-  <%= content_tag :svg, nil, class: "spot-canvas", width: 300, height: 300, "data-image" => attachment_file_path(@attachment_file, format: :svg) %>
+
+<div>
+  <%= link_to(@attachment_file.picture(width: 250, height: 250), attachment_file_path(@attachment_file)) %>
 </div>
+
 
 <div id="family-tree">
   <%= @attachment_file.family_tree %>

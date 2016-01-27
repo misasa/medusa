@@ -17,6 +17,12 @@
     </li>
   <% end %>
 </ul>
+
+<div class="spot-viewer">
+  <%= content_tag :svg, nil, class: "spot-canvas", width: 250, height: 250, "data-image" => attachment_file_path(@attachment_file, format: :svg) %>
+</div>
+
+
 <div class="display-type">
   <div id="display-type-html">
     <% if @attachment_file.image? && @attachment_file.spots.size > 0  %>

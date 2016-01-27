@@ -17,8 +17,8 @@ class BoxesController < ApplicationController
     # @contents = Path.none
     # @contents = @contents.page(1).per(10)
     #if params[:q]
-    @button_action_selection_items = ["recent", "snapshot"]
-    duration_numbers = [1, 2]
+    @button_action_selection_items = ["", "snapshot"]
+    duration_numbers = [1]
     ["in/out from", "integ from", "diff from" ].each do |prefix|
       ["day", "week", "month", "year"].each do |str|
           duration_numbers.each do |num| 
@@ -54,23 +54,29 @@ class BoxesController < ApplicationController
     end
 
     default_sorts = "path ASC"
-    case params[:button_action]
-    when /diff/
-      @contents_search = Path.diff(@box, @src_date, @dst_date).search(params[:q])
-    when /integ/
-      @contents_search = Path.integ(@box, @src_date, @dst_date).search(params[:q])
-    when /snapshot/
-      @contents_search = Path.snapshot(@box, @dst_date).search(params[:q])
+    if params[:button_action].blank?
+      @contents_search = Path.search(params[:q])
+      @contents_search.sorts = "path ASC"
+      @contents = Path.none
+      @contents = @contents.page(params[:page]).per(params[:per_page])
     else
-      # in/out
-      @contents_search = Path.change(@box, @src_date, @dst_date).search(params[:q])
-      default_sorts = ["brought_at DESC", "sign ASC"]
+      case params[:button_action]
+      when /diff/
+        @contents_search = Path.diff(@box, @src_date, @dst_date).search(params[:q])
+      when /integ/
+        @contents_search = Path.integ(@box, @src_date, @dst_date).search(params[:q])
+      when /snapshot/
+        @contents_search = Path.snapshot(@box, @dst_date).search(params[:q])
+      else
+        # in/out
+        @contents_search = Path.change(@box, @src_date, @dst_date).search(params[:q])
+        default_sorts = ["brought_at DESC", "sign ASC"]
+      end
+      @contents_search.sorts = default_sorts if @contents_search.sorts.empty?
+      @contents = @contents_search.result
+      @contents = @contents.current if @contents_search.conditions.empty?
+      @contents = @contents.page(params[:page]).per(params[:per_page])
     end
-    @contents_search.sorts = default_sorts if @contents_search.sorts.empty?
-    @contents = @contents_search.result
-    @contents = @contents.current if @contents_search.conditions.empty?
-    @contents = @contents.page(params[:page]).per(params[:per_page])
-
     @box = Box.includes(children: [:record_property, :box_type], specimens: [:record_property, :analyses, :physical_form]).find(params[:id]).decorate
     respond_with @box
   end
