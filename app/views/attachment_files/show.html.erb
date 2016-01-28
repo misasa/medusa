@@ -8,7 +8,7 @@
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
         <%= link_to picture_attachment_file_path(@attachment_file), class: "btn btn-default activate", remote: true do %>
-          <span class="glyphicon glyphicon-picture"></span>
+          <span class="glyphicon glyphicon-tree-conifer"></span>
         <% end %>
       </div>
       <% if can? :update, @attachment_file %>
@@ -36,12 +36,47 @@
   </div>
 
   <div id="show-body" class="col-lg-8">
+
+  <% if @attachment_file.image? %>
     <div class="spot-viewer">
       <%= content_tag :svg, nil, class: "spot-canvas", width: 600, height: 600, "data-image" => attachment_file_path(@attachment_file, format: :svg) %>
     </div>
+
+<%= form_for Spot.new, url: attachment_file_spots_path(@attachment_file) do |f|%>
+  <%= hidden_field_tag :tab,"" %>
+  <table>
+    <tr>
+      <td><%=icon_tag("screenshot") %> (link ID </td>
+      <td>
+  <div class="input-group">
+    <%= f.text_field :target_uid, class: "form-control input-sm" %>
+    <span class="input-group-addon">
+      <%= link_to records_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#spot_target_uid" do %>
+      <span class="glyphicon glyphicon-search"></span>
+      <% end %>
+    </span>
+  </div>
+      </td>
+      <td>)</td>
+      <td>
+        <%= f.hidden_field :spot_x ,value: "0" %>
+        <%= f.hidden_field :spot_y ,value: "0" %>
+        <%= f.hidden_field :radius_in_percent ,value: "2" %>
+        <%= f.hidden_field :stroke_color ,value: "blue" %>
+        <%= f.hidden_field :fill_color ,value: "blue" %>
+        <%= f.hidden_field :opacity ,value: "0" %>
+        <%= f.hidden_field :with_cross ,value: "false" %>
+        <%= f.button title:"add new spot", class: "btn btn-default" do %>
+          <span class="glyphicon glyphicon-save"></span>
+        <% end %>
+      </td>
+    </tr>
+  </table>
+<% end %>
 
     <%= javascript_tag do %>
       $("div.spot-viewer").spotViewer();
     <% end %>
   </div>
+<% end %>  
 </div>

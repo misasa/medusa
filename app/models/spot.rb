@@ -19,7 +19,7 @@ class Spot < ActiveRecord::Base
       if record_property.blank? || record_property.datum.blank?
         self.name = "#{target_uid}"
       else
-        self.name = "#{record_property.datum.name}"
+        self.name = "spot of #{record_property.datum.name}"
       end
     end
   end
@@ -55,7 +55,8 @@ class Spot < ActiveRecord::Base
       cy: spot_y,
       r: [attachment_file.original_width, attachment_file.original_height].max * radius_in_percent / 100,
       fill: fill_color,
-      title: name,
+      #title: "spot of '#{name}'",
+      title: title,
       "fill-opacity" => opacity,
       stroke: stroke_color,
       "stroke-width" => stroke_width,
@@ -63,6 +64,12 @@ class Spot < ActiveRecord::Base
       #"data-spot" => decorate.target_path,
       "data-target-uid" => target_uid
     }
+  end
+
+  def title
+    t = "spot of '#{name}'"
+    t += " for #{target.class} '#{target.name}'" if target
+    t
   end
 
   def ref_image_x

@@ -1,45 +1,9 @@
-
-<div>
-  <%= link_to(@attachment_file.picture(width: 250, height: 250), attachment_file_path(@attachment_file)) %>
-</div>
+<%= content_tag(:div, link_to(@attachment_file.picture(width: 250, height: 250), attachment_file_path(@attachment_file)) ) if @attachment_file.image? %>
 
 
 <div id="family-tree">
   <%= @attachment_file.family_tree %>
 </div>
-
-<%= form_for Spot.new, url: attachment_file_spots_path(@attachment_file) do |f|%>
-  <%= hidden_field_tag :tab,"" %>
-  <table>
-    <tr>
-      <td><%=icon_tag("screenshot") %> (link ID </td>
-      <td>
-  <div class="input-group">
-    <%= f.text_field :target_uid, class: "form-control input-sm" %>
-    <span class="input-group-addon">
-      <%= link_to records_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#spot_target_uid" do %>
-      <span class="glyphicon glyphicon-search"></span>
-      <% end %>
-    </span>
-  </div>
-      </td>
-      <td>)</td>
-      <td>
-        <%= f.hidden_field :spot_x ,value: "0" %>
-        <%= f.hidden_field :spot_y ,value: "0" %>
-        <%= f.hidden_field :radius_in_percent ,value: "2" %>
-        <%= f.hidden_field :stroke_color ,value: "blue" %>
-        <%= f.hidden_field :fill_color ,value: "blue" %>
-        <%= f.hidden_field :opacity ,value: "0" %>
-        <%= f.hidden_field :with_cross ,value: "false" %>
-        <%= f.button title:"add new spot", class: "btn btn-default" do %>
-          <span class="glyphicon glyphicon-save"></span>
-        <% end %>
-      </td>
-    </tr>
-  </table>
-<% end %>
-
 
 <%= javascript_tag do %>
   $("div.spot-viewer").spotViewer();

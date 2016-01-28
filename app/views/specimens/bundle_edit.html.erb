@@ -15,6 +15,7 @@
     <tr>
       <th></th>
       <th>name</th>
+      <th>IGSN</th>
       <th>parent</th>
       <%= th_if_expand "box" %>
       <th>physical-form</th>
@@ -35,6 +36,7 @@
     <tr>
       <th><%= check_box_tag nil, nil, true, class: "select-row-all" %></th>
       <th></th>
+      <th></th>     
       <th>
 	<div class="input-group">
 	  <%= f.text_field :parent_global_id, class: "form-control input-sm" %>

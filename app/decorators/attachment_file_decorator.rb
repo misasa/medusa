@@ -55,7 +55,7 @@ class AttachmentFileDecorator < Draper::Decorator
   def tree_node(current=false)
     link = current ? h.content_tag(:strong, name) : name
     icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-file")
-    icon + h.link_to_if(h.can?(:read, self), link, self) + specimens_count + boxes_count + analyses_count + bibs_count
+    icon + h.link_to_if(h.can?(:read, self), link, self)
   end
 
   def specimens_count

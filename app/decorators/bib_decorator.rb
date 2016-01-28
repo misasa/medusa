@@ -11,6 +11,31 @@ class BibDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + " #{name} < #{global_id} >"
   end
 
+  def tree_node(current=false)
+    link = current ? h.content_tag(:strong, name) : name
+    icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+    icon + h.link_to_if(h.can?(:read, self), link, self) + specimens_count + boxes_count + analyses_count + places_count + files_count
+  end
+
+  def specimens_count
+    h.icon_with_count("cloud", specimens.count)
+  end
+
+  def boxes_count
+    h.icon_with_count("folder-close", boxes.count)
+  end
+
+  def analyses_count
+    h.icon_with_count("stats", specimens.inject(0) {|count, specimen| count += specimen.analyses.size })
+  end
+
+  def places_count
+    h.icon_with_count("stats", places.count )
+  end
+
+  def files_count
+    h.icon_with_count("stats", attachment_files.count )
+  end
 
   def icon
     h.content_tag(:span, nil, class: "glyphicon glyphicon-book")

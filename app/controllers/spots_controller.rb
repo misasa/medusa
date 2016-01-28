@@ -28,6 +28,13 @@ class SpotsController < ApplicationController
     respond_with @spot, layout: !request.xhr?
   end
 
+  def destroy
+    attachment_file = @spot.attachment_file
+    @spot.destroy
+    respond_with attachment_file
+  end
+
+
   private
 
   def spot_params

@@ -21,4 +21,9 @@ module TreeViewHelper
   def route_icon(depth)
     content_tag(:span, nil, class: "glyphicon glyphicon-arrow-right")
   end
+
+  def icon_with_count(icon, count)
+    content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}") + content_tag(:span, count) if count.nonzero?
+  end
+
 end
