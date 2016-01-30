@@ -37,6 +37,10 @@ class Box < ActiveRecord::Base
     analyses
   end
 
+  def related_spots
+    ancestors.map{|box| box.spot_links }.flatten
+  end
+
   private
 
   def parent_id_cannot_self_children

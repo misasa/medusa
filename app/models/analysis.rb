@@ -31,6 +31,12 @@ class Analysis < ActiveRecord::Base
     end
   end
 
+
+  def related_spots
+    return [] unless specimen
+    specimen.related_spots
+  end
+
   def chemistry_summary(length=100)
     display_names = chemistries.map { |ch| ch.display_name if ch.measurement_item }.compact
     display_names.join(", ").truncate(length)

@@ -60,6 +60,11 @@ class Specimen < ActiveRecord::Base
     quantity && quantity < 0
   end
 
+  def related_spots
+    sps = ancestors.map{|box| box.spot_links }.flatten || []
+    sps.concat(box.related_spots) if box
+  end
+
   # def to_pml
   #   [self].to_pml
   # end
