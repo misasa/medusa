@@ -159,6 +159,10 @@ module HasRecordProperty
     record_property.update_attribute(:updated_at, updated_at)
   end
 
+  def spot_links
+    Spot.find_all_by_target_uid(global_id)
+  end
+
   def method_missing(method_id, *args, &block)
     if method_id =~ /(.*)_count/
       count = 0

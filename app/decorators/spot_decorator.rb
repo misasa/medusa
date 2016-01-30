@@ -110,6 +110,36 @@ class SpotDecorator < Draper::Decorator
   end
 
 
+  def family_tree(current_spot = nil)
+    attachment_file = self.attachment_file
+
+    html_class = "tree-node"
+    html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
+      picture = h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file)
+      attachment_file.attachings.each do |attaching|
+        attachable = attaching.attachable
+        if attachable
+          link = attachable.name
+          icon = attachable.decorate.icon
+          if h.can?(:read, attachable)
+            icon += h.link_to(link, attachable) + h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
+          else
+            icon += link
+          end
+          picture += icon
+        end
+      end
+      picture
+    end
+
+    attachment_file.spots.each do |spot|
+      html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+        spot.decorate.tree_node(self == spot)
+      end
+    end
+    html
+  end
+
   def tree_node(current=false)
     icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-screenshot")
     link = current ? icon : h.link_to_if(h.can?(:read, self), icon, self, :title => spot.name )

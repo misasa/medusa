@@ -24,29 +24,26 @@ class AttachmentFileDecorator < Draper::Decorator
   def family_tree(current_spot = nil)
     html_class = "tree-node"
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
-      tree_node(true)
-    end
-    attachings.each do |attaching|
-      attachable = attaching.attachable
-      if attachable
-        spots = self.spots.find_all_by_target_uid(attachable.global_id)
-        if spots.empty?
-          html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-            h.route_icon(2) + attachable.decorate.tree_node(false)
+      picture = h.content_tag(:span, nil, class: "glyphicon glyphicon-picture")
+      attachings.each do |attaching|
+        attachable = attaching.attachable
+        if attachable
+          link = attachable.name
+          icon = attachable.decorate.icon
+          if h.can?(:read, attachable)
+            icon += h.link_to(link, attachable) + h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
+          else
+            icon += link
           end
-        else
-          spots.each do |spot|
-            html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-              h.route_icon(2) + spot.decorate.tree_node(false)
-            end
-          end
+          picture += icon
         end
       end
+      picture
     end
-    spots_without_link = self.spots.where("target_uid is null or target_uid = ''")
-    spots_without_link.each do |spot|
+
+    spots.each do |spot|
       html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-        h.route_icon(2) + spot.decorate.tree_node(false)
+        spot.decorate.tree_node(false)
       end
     end
     html

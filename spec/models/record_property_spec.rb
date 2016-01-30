@@ -234,5 +234,4 @@ describe RecordProperty do
       end
     end
   end
-
 end

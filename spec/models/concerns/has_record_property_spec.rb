@@ -45,6 +45,24 @@ describe HasRecordProperty do
     #it { expect(obj.latex_mode).to include "<created: #{obj.created_at}>"}        
   end
 
+  describe "#spot_links" do
+    let(:file) { FactoryGirl.create(:attachment_file)}
+    let(:spot) { FactoryGirl.create(:spot, attachment_file: file)}
+
+    subject { obj.spot_links }
+    before do
+      obj
+    end
+    context "for Specimen" do
+      let(:obj) { FactoryGirl.create(:specimen)}
+      let(:spot) { FactoryGirl.create(:spot, attachment_file: file, target_uid: obj.global_id) }
+      before do
+        spot
+      end
+      it { expect(subject).to eq([spot]) }
+    end
+  end
+
   describe "#specimen_count" do
     subject { obj.specimen_count }
     before do

@@ -9,11 +9,11 @@ class Spot < ActiveRecord::Base
 
   before_validation :generate_name, if: "name.blank?"
   before_validation :generate_stroke_width, if: "stroke_width.blank?"
-  after_create :attachment_to_target
+#  after_create :attachment_to_target
 
   def generate_name
     if target_uid.blank? 
-      self.name = "untitled point #{attachment_file.spots.size + 1}"
+      self.name = "untitled spot #{attachment_file.spots.size + 1}"
     else
       record_property = RecordProperty.find_by_global_id(target_uid)
       if record_property.blank? || record_property.datum.blank?

@@ -38,7 +38,7 @@ describe Spot do
     end
     context "targe_uid is blank" do
       let(:spot){FactoryGirl.create(:spot,name: nil,target_uid: nil)}
-      it {expect(subject).to eq "untitled point 1"}
+      it {expect(subject).to eq "untitled spot 1"}
     end
     context "target_uid is error global_id" do
       let(:spot){FactoryGirl.create(:spot,name: nil,target_uid: "aaa")}
@@ -57,7 +57,7 @@ describe Spot do
     context "target_uid is OK global_id" do
       let(:bib){FactoryGirl.create(:bib,name: "test bib")}
       let(:spot){FactoryGirl.create(:spot,name: nil,target_uid: bib.record_property.global_id)}
-      it {expect(subject).to eq bib.name}
+      it {expect(subject).to eq "spot of " + bib.name}
     end
   end
 
