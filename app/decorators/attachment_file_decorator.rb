@@ -55,9 +55,9 @@ class AttachmentFileDecorator < Draper::Decorator
 #      im += h.icon_tag("screenshot") + "#{spots.size}" if !spots.empty?
       attachings.each do |attaching|
         attachable = attaching.attachable
-        im += attachable.decorate.try(:icon) + " " + attachable.name if attachable
+        im += attachable.decorate.try(:icon) + attachable.name if attachable
       end
-      im += h.raw ("/" + h.icon_tag("screenshot") + " #{spots.size}") if spots.size > 0
+      im += h.raw ("/" + h.icon_tag("screenshot") + "#{spots.size}") if spots.size > 0
       im
     end
     link

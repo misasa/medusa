@@ -76,7 +76,7 @@ class SpecimenDecorator < Draper::Decorator
       links << h.content_tag(:div, spot.decorate.thumblink_with_spot_info , class: "col-lg-2")
     end
     spot_links.each do |spot|
-      links << h.content_tag(:div, spot.decorate.thumblink_with_spot_info , class: "col-lg-2")
+      links << h.content_tag(:div, spot.decorate.thumblink_with_spot_info(true) , class: "col-lg-2")
     end
     attachment_image_files.each do |file|
       links << h.content_tag(:div, file.decorate.thumblink_with_spot_info , class: "col-lg-2")
