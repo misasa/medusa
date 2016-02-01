@@ -58,7 +58,9 @@ class AttachmentFileDecorator < Draper::Decorator
         im += attachable.decorate.try(:icon) + " " + attachable.name if attachable
       end
       im += h.raw ("/" + h.icon_tag("screenshot") + " #{spots.size}") if spots.size > 0
+      im
     end
+    link
   end
 
   def tree_node(current=false)
