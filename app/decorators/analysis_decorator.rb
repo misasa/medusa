@@ -13,6 +13,20 @@ class AnalysisDecorator < Draper::Decorator
   end
 
 
+  def related_pictures
+    links = []
+    related_spots.each do |spot|
+      links << h.content_tag(:div, spot.decorate.thumblink_with_spot_info , class: "col-lg-2")
+    end
+    spot_links.each do |spot|
+      links << h.content_tag(:div, spot.decorate.thumblink_with_spot_info , class: "col-lg-2")
+    end
+    attachment_image_files.each do |file|
+      links << h.content_tag(:div, file.decorate.thumblink_with_spot_info , class: "col-lg-2")
+    end
+    h.content_tag(:div, h.raw( links.join ), class: "row spot-thumbnails")
+  end
+
   def icon
     h.content_tag(:span, nil, class: "glyphicon glyphicon-stats")
   end

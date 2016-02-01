@@ -49,6 +49,18 @@ class AttachmentFileDecorator < Draper::Decorator
     html
   end
 
+  def thumblink_with_spot_info
+    link = h.link_to(h.attachment_file_path(self), class: "thumbnail") do
+      im = h.image_tag path
+#      im += h.icon_tag("screenshot") + "#{spots.size}" if !spots.empty?
+      attachings.each do |attaching|
+        attachable = attaching.attachable
+        im += attachable.decorate.try(:icon) + " " + attachable.name if attachable
+      end
+      im += h.raw ("/" + h.icon_tag("screenshot") + " #{spots.size}") if spots.size > 0
+    end
+  end
+
   def tree_node(current=false)
     link = current ? h.content_tag(:strong, name) : name
     icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-file")

@@ -1,3 +1,4 @@
+
 <ul>
   <% unless @specimen.igsn.blank? %>
     <li>
@@ -34,44 +35,13 @@
     </li>
   <% end %>  
 </ul>
-  <% @specimen.attachment_image_files.each_slice(4) do |files| %>
-  <div class="row spot-thumbnails">
-    <% files.each do |file| %>
-    <div class="col-lg-2">
-      <%= link_to attachment_file_path(file), class: "thumbnail" do %>
-        <%= image_tag file.path %>
-        <%= icon_tag("screenshot") + "#{file.spots.size}" if !file.spots.empty? %>
-      <% end %>
-    </div>
-    <% end %>
-  </div>
-  <% end %>
 
-  <% @specimen.spot_links.each_slice(4) do |spots| %>
-  <div class="row spot-thumbnails">
-    <% spots.each do |spot| %>
-    <div class="col-lg-2">
-      <%= link_to spot_path(spot), class: "thumbnail" do %>
-        <%= image_tag spot.attachment_file.path %>
-        <%= icon_tag("screenshot") + "me" %>
-      <% end %>
-    </div>
-    <% end %>
-  </div>
-  <% end %>
 
-  <% @specimen.related_spots.each_slice(4) do |spots| %>
-  <div class="row spot-thumbnails">
-    <% spots.each do |spot| %>
-    <div class="col-lg-2">
-      <%= link_to spot_path(spot), class: "thumbnail" do %>
-        <%= image_tag spot.attachment_file.path %>
-        <%= icon_tag("screenshot") + " " + spot.target.decorate.icon + " " + spot.target.name %>
-      <% end %>
-    </div>
-    <% end %>
-  </div>
-  <% end %>
+<div class="row spot-thumbnails">
+  <%= @specimen.decorate.related_pictures %>
+</div>
+
+
 
 <% unless @specimen.analyses.empty? %>
   Table of analysis on <%= content_tag(:span, nil, class: specimen_ghost(@specimen, "glyphicon glyphicon-cloud")) + link_to(@specimen.name, specimen_path(@specimen), class: specimen_ghost(@specimen)) %>

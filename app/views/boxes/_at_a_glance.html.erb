@@ -14,45 +14,9 @@
   <% end %>
 </ul>
 
-
-  <% @box.attachment_image_files.each_slice(4) do |files| %>
-  <div class="row spot-thumbnails">
-    <% files.each do |file| %>
-    <div class="col-lg-2">
-      <%= link_to attachment_file_path(file), class: "thumbnail" do %>
-        <%= image_tag file.path %>
-        <%= icon_tag("screenshot") + "#{file.spots.size}" if !file.spots.empty? %>
-      <% end %>
-    </div>
-    <% end %>
-  </div>
-  <% end %>
-
-  <% @box.spot_links.each_slice(4) do |spots| %>
-  <div class="row spot-thumbnails">
-    <% spots.each do |spot| %>
-    <div class="col-lg-2">
-      <%= link_to spot_path(spot), class: "thumbnail" do %>
-        <%= image_tag spot.attachment_file.path %>
-        <%= icon_tag("screenshot") + "me" %>
-      <% end %>
-    </div>
-    <% end %>
-  </div>
-  <% end %>
-
-  <% @box.related_spots.each_slice(4) do |spots| %>
-  <div class="row spot-thumbnails">
-    <% spots.each do |spot| %>
-    <div class="col-lg-2">
-      <%= link_to spot_path(spot), class: "thumbnail" do %>
-        <%= image_tag spot.attachment_file.path %>
-        <%= icon_tag("screenshot") + " " + spot.target.decorate.icon + " " + spot.target.name %>
-      <% end %>
-    </div>
-    <% end %>
-  </div>
-  <% end %>
+<div class="row spot-thumbnails">
+  <%= @box.decorate.related_pictures %>
+</div>
 
 <%= search_form_for @contents_search, url: box_path(@box), id: "contents_search" do |f| %>
 

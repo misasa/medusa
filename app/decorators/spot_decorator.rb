@@ -35,6 +35,19 @@ class SpotDecorator < Draper::Decorator
     h.raw( contents.compact.join(' ') )
   end
 
+
+  def thumblink_with_spot_info
+    file = spot.attachment_file
+    link = h.link_to(h.spot_path(self), class: "thumbnail") do
+      im = h.image_tag file.path
+      file.attachings.each do |attaching|
+        attachable = attaching.attachable
+        im += attachable.decorate.try(:icon) + " " + attachable.name if attachable
+      end
+      im += h.raw ("/" + h.icon_tag("screenshot") + " #{file.spots.size} (" + spot.target.decorate.try(:icon) + " #{spot.target.name})")
+    end
+  end
+
   def primary_picture(width: 250, height: 250)
     attachment_file if attachment_files.present?
   end
