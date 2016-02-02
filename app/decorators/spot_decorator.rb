@@ -40,12 +40,14 @@ class SpotDecorator < Draper::Decorator
     file = spot.attachment_file
     link = h.link_to(h.spot_path(self), class: "thumbnail") do
       im = h.image_tag file.path
+      #im += h.content_tag(:span, nil, class: "glyphicon glyphicon-picture") + " "      
       file.attachings.each do |attaching|
         attachable = attaching.attachable
         im += attachable.decorate.try(:icon) + attachable.name if attachable
       end
-
-      im += h.raw ("/" + h.icon_tag("screenshot") + "#{file.spots.size}(#{spot.target.decorate.try(:icon)}" + (current_spot ? "me" : "#{spot.target.name}") + ")" )
+      #im += h.raw (h.icon_tag("screenshot") + "#{file.spots.size}" )
+      im += h.raw ("/" + h.icon_tag("screenshot"))
+      im += h.raw ("#{spot.target.decorate.try(:icon)}" + (current_spot ? "me" : "#{spot.target.name}") )
       im
     end
     link
@@ -170,10 +172,10 @@ class SpotDecorator < Draper::Decorator
   end
 
   def target_path
-     # if target
-     #   polymorphic_path(target, script_name: Rails.application.config.relative_url_root, format: :modal)
-     # else
+     if target
+        polymorphic_path(target, script_name: Rails.application.config.relative_url_root)
+     else
        spot_path(self)
-     # end
+     end
   end
 end

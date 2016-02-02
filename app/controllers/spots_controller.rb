@@ -1,7 +1,11 @@
 class SpotsController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource
+  before_action :find_resource, except: [:index]
   load_and_authorize_resource
+
+  def index
+    redirect_to attachment_files_path
+  end
 
   def edit
     respond_with @spot, layout: !request.xhr?

@@ -171,7 +171,7 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "chemistry" }
   end
 
-  resources :spots, only: [:show, :edit, :update] do
+  resources :spots, only: [:index, :show, :edit, :update] do
     member do
       get :family
       get :property

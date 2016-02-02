@@ -14,7 +14,8 @@ module TreeViewHelper
     html_class = "tree-node"
     html_class += " ghost" if obj.try(:ghost?)
     content_tag(:div, class: html_class, "data-depth" => depth) do
-      depth < 2 ? block.call(obj) : route_icon(depth) + block.call(obj)
+      block.call(obj)
+#      depth < 2 ? block.call(obj) : route_icon(depth) + block.call(obj)
     end
   end
 

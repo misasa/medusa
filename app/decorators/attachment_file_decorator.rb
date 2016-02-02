@@ -53,11 +53,12 @@ class AttachmentFileDecorator < Draper::Decorator
     link = h.link_to(h.attachment_file_path(self), class: "thumbnail") do
       im = h.image_tag path
 #      im += h.icon_tag("screenshot") + "#{spots.size}" if !spots.empty?
+#      im += h.content_tag(:span, nil, class: "glyphicon glyphicon-picture") + " "
       attachings.each do |attaching|
         attachable = attaching.attachable
         im += attachable.decorate.try(:icon) + attachable.name if attachable
       end
-      im += h.raw ("/" + h.icon_tag("screenshot") + "#{spots.size}") if spots.size > 0
+      im += h.raw (h.icon_tag("screenshot") + "#{spots.size}") if spots.size > 0
       im
     end
     link
