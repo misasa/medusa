@@ -107,7 +107,7 @@ class BoxDecorator < Draper::Decorator
       nodes += box.ancestors.map { |b| box_node(b) }
     end
     nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + "me"]
-    h.raw(nodes.join("／"))
+    h.raw(nodes.join("/"))
   end
 
   def analysis_name

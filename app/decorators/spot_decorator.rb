@@ -47,7 +47,8 @@ class SpotDecorator < Draper::Decorator
       end
       #im += h.raw (h.icon_tag("screenshot") + "#{file.spots.size}" )
       im += h.raw ("/" + h.icon_tag("screenshot"))
-      im += h.raw ("#{spot.target.decorate.try(:icon)}" + (current_spot ? "me" : "#{spot.target.name}") )
+      #im += h.raw ("#{spot.target.decorate.try(:icon)}" + (current_spot ? "me" : "#{spot.target.name}") )
+      im += h.raw ("#{spot.target.decorate.try(:icon)}#{spot.target.name}" )
       im
     end
     link
@@ -161,12 +162,14 @@ class SpotDecorator < Draper::Decorator
   def tree_node(current=false)
     icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-screenshot")
     link = current ? icon : h.link_to_if(h.can?(:read, self), icon, self, :title => spot.name )
-    link += spot.name
+#    link += spot.name
     #node = icon + h.link_to_if(h.can?(:read, self), link, self)
     node = link
     if spot.target
       node += spot.target.decorate.try(:icon) + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root), class: h.specimen_ghost(spot.target))
       node += h.link_to_if(h.can?(:read, spot.target), h.icon_tag('info-sign'), polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))
+    else
+      node += spot.name
     end
     node
   end

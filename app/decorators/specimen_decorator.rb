@@ -35,7 +35,7 @@ class SpecimenDecorator < Draper::Decorator
       nodes += [box_node(box)]
     end
     nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + "me"]
-    h.raw(nodes.join("／"))
+    h.raw(nodes.join("/"))
   end
 
   def primary_picture(width: 250, height: 250)
