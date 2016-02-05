@@ -7,6 +7,10 @@ class BoxDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + " #{name} < #{global_id} >"
   end
 
+  def box_path_with_id
+    box_path + " < #{global_id} >"
+  end
+
   def primary_picture(width: 250, height: 250)
     attachment_files.first.decorate.picture(width: width, height: height) if attachment_files.present?
   end
@@ -106,7 +110,7 @@ class BoxDecorator < Draper::Decorator
     if box
       nodes += box.ancestors.map { |b| box_node(b) }
     end
-    nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + "me"]
+    nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + name]
     h.raw(nodes.join("/"))
   end
 

@@ -28,13 +28,17 @@ class SpecimenDecorator < Draper::Decorator
     end
   end
 
+  def path_with_id
+    path + " < #{global_id} >"
+  end
+
   def path
     nodes = []
     if box
       nodes += box.ancestors.map { |b| box_node(b) }
       nodes += [box_node(box)]
     end
-    nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + "me"]
+    nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + name]
     h.raw(nodes.join("/"))
   end
 

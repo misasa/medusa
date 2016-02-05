@@ -45,7 +45,7 @@ class SpotDecorator < Draper::Decorator
         attachable = attaching.attachable
         im += attachable.decorate.try(:icon) + attachable.name if attachable
       end
-      #im += h.raw (h.icon_tag("screenshot") + "#{file.spots.size}" )
+      im += h.raw (h.icon_tag("screenshot") + "#{file.spots.size}" )
       im += h.raw ("/" + h.icon_tag("screenshot"))
       #im += h.raw ("#{spot.target.decorate.try(:icon)}" + (current_spot ? "me" : "#{spot.target.name}") )
       im += h.raw ("#{spot.target.decorate.try(:icon)}#{spot.target.name}" )

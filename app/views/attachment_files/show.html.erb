@@ -73,6 +73,9 @@
     </tr>
   </table>
 <% end %>
+  <div id="display-type-tex">
+    <pre><code><%= @attachment_file.to_tex %></code></pre>
+  </div>
 
     <%= javascript_tag do %>
       $("div.spot-viewer").spotViewer();

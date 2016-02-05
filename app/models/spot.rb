@@ -67,7 +67,7 @@ class Spot < ActiveRecord::Base
   end
 
   def title
-    t = "spot of '#{name}'"
+    t = "Spot of '#{name}'"
     t += " for #{target.class} '#{target.name}'" if target
     t
   end

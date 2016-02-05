@@ -1,6 +1,6 @@
 <div class="row">
   <div id="show-caption" class="col-lg-12">
-    <%= @box.name_with_id %>
+    <%= @box.box_path_with_id %>
   </div>
 </div>
 <div class="row">
@@ -41,7 +41,6 @@
   </div>
 
   <div id="show-body" class="col-lg-8">
-    <%= @box.box_path %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <li class="<%= active_if_current('at-a-glance') %>">
