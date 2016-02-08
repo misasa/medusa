@@ -27,17 +27,26 @@
     </div>
   </div>
   <div class="col-lg-8">
+<div class="display-type">
+  <div id="display-type-html">
+
     <div class="spot-viewer">
       <%= hidden_field_tag nil, @spot.target_uid, class: "target-uid" %>
       <%= content_tag :svg, nil, class: "spot-canvas", width: 800, height: 600, "data-scale" => 2, "data-image" => attachment_file_path(@spot.attachment_file, format: :svg) %>
     </div>
+  </div>
 
-  <div id="display-type-tex">
+  <div class="hidden" id="display-type-tex">
     <pre><code><%= @spot.attachment_file.decorate.to_tex %></code></pre>
   </div>
+</div>
+
+<div class="btn-group">
+  <a href="#display-type-html" class="btn radio-button-group">html</a>
+  <a href="#display-type-tex" class="btn radio-button-group">tex</a>
+</div>
 
     <%= javascript_tag do %>
       $("div.spot-viewer").spotViewer();
     <% end %>
-  </div>
  </div>

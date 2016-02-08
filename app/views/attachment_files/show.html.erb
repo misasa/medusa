@@ -36,10 +36,6 @@
   </div>
 
   <div id="show-body" class="col-lg-8">
-<div class="btn-group">
-  <a href="#display-type-html" class="btn radio-button-group">html</a>
-  <a href="#display-type-tex" class="btn radio-button-group">tex</a>
-</div>
 
 <div class="display-type">
   <div id="display-type-html">
@@ -85,6 +81,10 @@
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @attachment_file.to_tex %></code></pre>
   </div>
+</div>
+<div class="btn-group">
+  <a href="#display-type-html" class="btn radio-button-group">html</a>
+  <a href="#display-type-tex" class="btn radio-button-group">tex</a>
 </div>
 
 
