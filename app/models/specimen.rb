@@ -63,6 +63,7 @@ class Specimen < ActiveRecord::Base
   def related_spots
     sps = ancestors.map{|box| box.spot_links }.flatten || []
     sps.concat(box.related_spots) if box
+    sps
   end
 
   # def to_pml
