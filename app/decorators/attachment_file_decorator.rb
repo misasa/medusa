@@ -105,8 +105,8 @@ class AttachmentFileDecorator < Draper::Decorator
     lines << "\\color{red}"
 
     spots.each do |spot|
-      x = "%.1f" % spot.spot_x
-      y = "%.1f" % (height.to_f / length * 100 - spot.spot_y)
+      x = "%.1f" % spot.ref_image_x
+      y = "%.1f" % (height.to_f / length * 100 - spot.ref_image_y)
 
       xy_image = spot.spot_xy_from_center
       xy_world = affine_transform(xy_image[0], xy_image[1])
