@@ -61,7 +61,7 @@ describe AttachmentFileDecorator do
     context "spots is not empty " do
       let(:spot){FactoryGirl.create(:spot)}
       before{attachment_file.spots << spot }
-      it {expect(subject).to include "{\\footnotesize \\circle{0.7} \\url{"}
+      it {expect(subject).to include "{\\footnotesize \\circle{0.7} \\href{"}
       context "target_uid is empty" do
         before{attachment_file.spots[0].target_uid = ""}
         it {expect(subject).not_to include " % target_uid"}
@@ -96,6 +96,7 @@ describe AttachmentFileDecorator do
     let(:spot){ FactoryGirl.create(:spot, target_uid: specimen.global_id) }
     let(:specimen){ FactoryGirl.create(:specimen) }
     before do
+      allow(spot.decorate.h).to receive(:can?).and_return(true)
       attachment_file.spots << spot
     end
     it { expect(subject).to include("") }

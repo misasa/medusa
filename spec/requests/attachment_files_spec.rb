@@ -57,25 +57,25 @@ describe "attachment_file" do
       end
     end
 
-    describe "at-a-glance tab" do
-      let(:create_data) { attachment_file.create_record_property(user_id: login_user.id) }
-      let(:attachment_file) { FactoryGirl.create(:attachment_file, data_file_name: "file_name", data_content_type: data_content_type, original_geometry: "", affine_matrix: []) }
-      before { click_link("at-a-glance") }
-      describe "pdf icon" do
-        context "data_content_type is pdf" do
-          let(:data_content_type) { "application/pdf" }
-          it "show pdf icon" do
-            expect(page).to have_link("file-#{attachment_file.id}-button")
-          end
-        end
-        context "data_content_type is jpeg" do
-          let(:data_content_type) { "image/jpeg" }
-          it "do not show pdf icon" do
-            expect(page).to have_no_link("file-#{attachment_file.id}-button")
-          end
-        end
-      end
-    end
+    # describe "at-a-glance tab" do
+    #   let(:create_data) { attachment_file.create_record_property(user_id: login_user.id) }
+    #   let(:attachment_file) { FactoryGirl.create(:attachment_file, data_file_name: "file_name", data_content_type: data_content_type, original_geometry: "", affine_matrix: []) }
+    #   before { click_link("at-a-glance") }
+    #   describe "pdf icon" do
+    #     context "data_content_type is pdf" do
+    #       let(:data_content_type) { "application/pdf" }
+    #       it "show pdf icon" do
+    #         expect(page).to have_link("file-#{attachment_file.id}-button")
+    #       end
+    #     end
+    #     context "data_content_type is jpeg" do
+    #       let(:data_content_type) { "image/jpeg" }
+    #       it "do not show pdf icon" do
+    #         expect(page).to have_no_link("file-#{attachment_file.id}-button")
+    #       end
+    #     end
+    #   end
+    # end
   end
   
 end

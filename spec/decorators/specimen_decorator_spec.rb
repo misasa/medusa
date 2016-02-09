@@ -15,7 +15,7 @@ describe SpecimenDecorator do
   end
 
   describe ".path" do
-    let(:me){"<span class=\"glyphicon glyphicon-cloud\"></span>me"}
+    let(:me){"<span class=\"glyphicon glyphicon-cloud\"></span>#{obj.name}"}
     subject{obj.path}
     before { allow(obj.h).to receive(:can?).and_return(true) }
     context "box is nil" do

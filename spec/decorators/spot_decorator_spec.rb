@@ -46,7 +46,7 @@ describe SpotDecorator do
         it { expect(subject).to eq "/spots/#{spot.id}" }
       end
       context "exists datum" do
-        it { expect(subject).to eq "/spots/#{spot.id}" }
+        it { expect(subject).to eq "/bibs/#{bib.id}" }
       end
     end
   end

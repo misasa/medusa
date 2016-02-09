@@ -17,7 +17,6 @@ describe SpotsController do
       let(:attributes) { {name: "update_name"} }
       it { expect(assigns(:spot)).to eq obj }
       it { expect(assigns(:spot).name).to eq attributes[:name] }
-      it { expect(response).to redirect_to(attachment_file_path(obj.attachment_file)) }
     end
     describe "with invalid attributes" do
       let(:attributes) { {spot_x: nil} }
