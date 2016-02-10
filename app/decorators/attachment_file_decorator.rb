@@ -13,12 +13,76 @@ class AttachmentFileDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-file")
   end
 
+  def picture_with_spots(width: 250, height: 250, spots: [])
+    return unless image?
+    height_rate = original_height.to_f / height
+    width_rate = original_width.to_f / width
+    scale = (width_rate >= height_rate) ? 1.to_f/width_rate : 1.to_f/height_rate
+
+    #options = (width_rate >= height_rate) ? { width: width, height: original_height * scale } : { width: original_width * scale, height: height }
+    options = { width: width, height: height}
+    svg_options = {xmlns: "http://www.w3.org/2000/svg", 'xmlns:xlink' => "http://www.w3.org/1999/xlink", version: "1.1"}.merge(options)
+    image_tag = %Q|<image xlink:href="#{attachment_file.path}" x="0" y="0" width="#{attachment_file.original_width}" height="#{attachment_file.original_height}" data-id="#attachment_file.id}"/>|
+    spots.each do |spot|
+      spot_options = spot.svg_attributes
+      spot_tag = %Q|<circle #{spot_options.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/>|
+      image_tag += spot_tag
+    end
+    h.content_tag(:svg, h.content_tag(:g, h.raw(image_tag), transform: "scale(#{scale})"), svg_options)
+    #h.image_tag(path, options)
+  end
+
+
+  def spots_panel(width: 80, height:80, spots:[])
+    file = self
+    svg = file.decorate.picture_with_spots(width:width, height:height, spots:spots)
+    svg_link = h.link_to(h.attachment_file_path(file)) do
+      svg
+    end
+    tag = h.content_tag(:div, svg_link, class: "thumbnail")
+    left = h.content_tag(:div, svg_link, class: "col-md-3")
+    right = h.content_tag(:div, my_tree(spots), class: "col-md-9")
+    row = h.content_tag(:div, left + right, class: "row")
+    tag = h.content_tag(:div, h.content_tag(:div, row, class: "panel-body"), class: "panel panel-default")
+    tag
+  end
+
   def picture(width: 250, height: 250, type: nil)
     return unless image?
     height_rate = original_height.to_f / height
     width_rate = original_width.to_f / width
     options = (width_rate >= height_rate) ? { width: width } : { height: height }
     h.image_tag(path(type), options)
+  end
+
+  def my_tree(spots = [])
+    html_class = "tree-node"
+    html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
+#      picture = h.content_tag(:span, nil, class: "glyphicon glyphicon-picture")
+      picture = h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file)
+      attachings.each do |attaching|
+        attachable = attaching.attachable
+        if attachable
+          link = attachable.name
+          icon = attachable.decorate.icon
+          if h.can?(:read, attachable)
+            icon += h.link_to(link, attachable) + h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
+          else
+            icon += link
+          end
+          picture += icon
+        end
+      end
+      picture += h.raw (h.icon_tag("screenshot") + "#{spots.size}") if attachment_file.spots.size > 0
+      picture
+    end
+
+    spots.each do |spot|
+      html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+        spot.decorate.tree_node(false)
+      end
+    end
+    html
   end
 
   def family_tree(current_spot = nil)
@@ -38,6 +102,7 @@ class AttachmentFileDecorator < Draper::Decorator
           picture += icon
         end
       end
+      picture += h.raw (h.icon_tag("screenshot") + "#{spots.size}") if attachment_file.spots.size > 0
       picture
     end
 

@@ -1,5 +1,5 @@
 class SpotsController < ApplicationController
-  respond_to :html, :xml, :json
+  respond_to :html, :xml, :json, :svg
   before_action :find_resource, except: [:index]
   load_and_authorize_resource
 

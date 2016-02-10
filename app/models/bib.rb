@@ -21,6 +21,17 @@ class Bib < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 255 }
   validate :author_valid?, if: Proc.new{|bib| bib.authors.blank?}
   
+
+  def related_spots
+    sps = []
+    # specimens.each do |specimen|
+    #   sps.concat(specimen.related_spots)
+    # end
+#    sps = ancestors.map{|box| box.spot_links }.flatten || []
+#    sps.concat(box.related_spots) if box
+    sps
+  end
+
   def as_json(options = {})
     super({:methods => [:author_ids, :global_id]}.merge(options))
   end

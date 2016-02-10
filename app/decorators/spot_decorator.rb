@@ -35,96 +35,76 @@ class SpotDecorator < Draper::Decorator
     h.raw( contents.compact.join(' ') )
   end
 
+  def spots_panel
+    file = spot.attachment_file
+    svg = file.decorate.picture_with_spots(width:80, height:80, spots:[spot])
+    svg_link = h.link_to(h.spot_path(self)) do
+      svg
+    end
+    tag = h.content_tag(:div, svg_link, class: "thumbnail")
+    left = h.content_tag(:div, svg_link, class: "col-md-3")
+    right = h.content_tag(:div, my_tree, class: "col-md-9")
+    row = h.content_tag(:div, left + right, class: "row")
+    tag = h.content_tag(:div, h.content_tag(:div, row, class: "panel-body"), class: "panel panel-default")
+    tag
+  end
 
   def thumblink_with_spot_info(current_spot = nil)
     file = spot.attachment_file
-    link = h.link_to(h.spot_path(self), class: "thumbnail") do
-      im = h.image_tag file.path
-      #im += h.content_tag(:span, nil, class: "glyphicon glyphicon-picture") + " "      
+    svg = file.decorate.picture_with_spots(width:150, height:150, spots:[spot])
+    svg_link = h.link_to(h.spot_path(self)) do
+      svg
+    end
+
+    links = []
+    links << h.link_to(h.icon_tag("picture"), h.attachment_file_path(file))
+    link = h.link_to(h.spot_path(self)) do
+      im = h.raw("")
       file.attachings.each do |attaching|
-        attachable = attaching.attachable
-        im += attachable.decorate.try(:icon) + attachable.name if attachable
+         attachable = attaching.attachable
+         im += attachable.decorate.try(:icon) + attachable.name if attachable
       end
       im += h.raw (h.icon_tag("screenshot") + "#{file.spots.size}" )
       im += h.raw ("/" + h.icon_tag("screenshot"))
-      #im += h.raw ("#{spot.target.decorate.try(:icon)}" + (current_spot ? "me" : "#{spot.target.name}") )
       im += h.raw ("#{spot.target.decorate.try(:icon)}#{spot.target.name}" )
       im
     end
-    link
+    links << link
+    caption = h.content_tag(:div, h.raw(my_tree), class: "caption")
+    tag = h.content_tag(:div, svg_link + caption, class: "thumbnail")
+    tag
+#    link
   end
 
   def primary_picture(width: 250, height: 250)
     attachment_file if attachment_files.present?
   end
 
-  def family_tree
-    tree = ""
-    tree += file_with_id
-    lis = []
-    links = []
-    attachment_file.attachings.each do |attaching|
-       attachable = attaching.attachable
-       if attachable
-          spots = attachment_file.spots.find_all_by_target_uid(attachable.global_id)
-          if spots.empty?
-           link = attachable.decorate.try(:icon) + " "
-           link += h.link_to_if(h.can?(:read, attachable), attachable.name, polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
-#           link += h.link_to_if(h.can?(:read, attachable), attachable.name, polymorphic_path(attachable, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
-           links << link
-          else
-           SpotDecorator.decorate_collection(spots).each do |spot|
-            link = h.raw( (spot == self ? spot.xy_to_text : h.link_to(spot.xy_to_text, spot_path(spot, script_name: Rails.application.config.relative_url_root)) ) )
-            link += spot.target.decorate.try(:icon) + " " + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))            
-#            link += spot.target.decorate.try(:icon) + " " + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))
-            links << h.icon_tag("screenshot") + " " + link
-           end        
-          end
-       end
-    end
-    SpotDecorator.decorate_collection(attachment_file.spots.where("target_uid is null or target_uid = ''")).each do |spot|
-       links << h.icon_tag("screenshot") + " " + (spot == self ? spot.xy_to_text : h.link_to(spot.xy_to_text, spot_path(spot, script_name: Rails.application.config.relative_url_root)) )
-    end
-
-    lis = links.map{|link| h.content_tag(:li, link)}
-
-    list = h.raw lis.join
-    tree += h.content_tag(:ul, list)
-    h.raw tree
-  end
-
-  def family_tree
+  def my_tree(current_spot = nil)
     attachment_file = self.attachment_file
-    return unless attachment_file
+
     html_class = "tree-node"
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
-      attachment_file.decorate.tree_node(false)
-    end
-
-    attachment_file.attachings.each do |attaching|
-      attachable = attaching.attachable
-      if attachable
-        spots = attachment_file.spots.find_all_by_target_uid(attachable.global_id)
-        if spots.empty?
-          html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-            h.route_icon(2) + attachable.decorate.tree_node(false)
+      picture = h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file)
+      attachment_file.attachings.each do |attaching|
+        attachable = attaching.attachable
+        if attachable
+          link = attachable.name
+          icon = attachable.decorate.icon
+          if h.can?(:read, attachable)
+            icon += h.link_to(link, attachable) + h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
+          else
+            icon += link
           end
-        else
-          spots.each do |spot|
-            html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-              h.route_icon(2) + spot.decorate.tree_node(self == spot)
-            end
-          end
+          picture += icon
         end
       end
+      picture += h.raw (h.icon_tag("screenshot") + "#{attachment_file.spots.size}") if attachment_file.spots.size > 0      
+      picture
     end
-    spots_without_link = attachment_file.spots.where("target_uid is null or target_uid = ''")
-    spots_without_link.each do |spot|
-      html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-        h.route_icon(2) + spot.decorate.tree_node(self == spot)
-      end
+    html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+        self.decorate.tree_node(false)
     end
-
     html
   end
 
@@ -148,6 +128,7 @@ class SpotDecorator < Draper::Decorator
           picture += icon
         end
       end
+      picture += h.raw (h.icon_tag("screenshot") + "#{attachment_file.spots.size}") if attachment_file.spots.size > 0      
       picture
     end
 

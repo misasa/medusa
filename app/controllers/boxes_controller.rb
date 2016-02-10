@@ -17,7 +17,8 @@ class BoxesController < ApplicationController
     # @contents = Path.none
     # @contents = @contents.page(1).per(10)
     #if params[:q]
-    @button_action_selection_items = ["", "snapshot"]
+    separator = "-----"
+    @button_action_selection_items = ["", "recent", "snapshot", separator]
     duration_numbers = [1]
     ["in/out from", "integ from", "diff from" ].each do |prefix|
       ["day", "week", "month", "year"].each do |str|
@@ -55,7 +56,7 @@ class BoxesController < ApplicationController
     dst_date_end_of_day = Time.parse(@dst_date).end_of_day
 
     default_sorts = "path ASC"
-    if params[:button_action].blank?
+    if params[:button_action].blank? || params[:button_action] == separator
       @contents_search = Path.search(params[:q])
       @contents_search.sorts = "path ASC"
       @contents = Path.none

@@ -86,7 +86,6 @@ class Spot < ActiveRecord::Base
     record_property.datum
   end
 
-
 private
 
   def spot_center_xy
