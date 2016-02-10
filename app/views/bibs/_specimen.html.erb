@@ -10,10 +10,10 @@
     </div>
     <div class="panel-body">
     <div class="row">
-      <div class="col-md-3">
+      <div class="col-md-4">
             <%= specimen.attachment_files.first.decorate.picture(width: 200, height: 200, type: :thumb) if specimen.attachment_files.present? %>
       </div>
-      <div class="col-md-6"> 
+      <div class="col-md-4"> 
         <ul>
           <% unless specimen.igsn.blank? %>
             <li>
@@ -42,7 +42,7 @@
           <li>modified at <%= difference_from_now(specimen.updated_at) %></li>
         </ul>
       </div>
-      <div class="col-md-3">
+      <div class="col-md-4">
         <% links = [] %>
         <% specimen.related_spots.each do |spot| %>
         <% svg_link = link_to(spot_path(self)) do %>
