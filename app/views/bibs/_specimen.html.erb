@@ -10,22 +10,10 @@
     </div>
     <div class="panel-body">
     <div class="row">
-      <div class="col-lg-12 col-md-12">
-
-        <% links = [] %>
-        <% specimen.related_spots.each do |spot| %>
-        <% svg_link = link_to(spot_path(spot)) do %>
-          <% spot.attachment_file.decorate.picture_with_spots(width:80, height:80, spots:[spot]) %>
-        <% end %>
-          <% links << content_tag(:div, svg_link, class: "col-lg-2 col-md-2") %>
-        <% end %>
-        <%= content_tag(:div, raw( links.join ), class: "row spot-thumbnails") %>      
-      </div>
-      <div class="col-md-4">
+      <div class="col-sm-4 col-md-4 col-lg-4">
             <%= specimen.attachment_files.first.decorate.picture(width: 160, height: 160, type: :thumb) if specimen.attachment_files.present? %>
-
       </div>
-      <div class="col-md-8"> 
+      <div class="col-sm-4 col-md-4 col-lg-4"> 
         <ul>
           <% unless specimen.igsn.blank? %>
             <li>
@@ -54,8 +42,16 @@
           <li>modified at <%= difference_from_now(specimen.updated_at) %></li>
         </ul>
       </div>
-
-
+      <div class="col-sm-4 col-md-4 col-lg-4"> 
+        <% links = [] %>
+        <% specimen.related_spots.each do |spot| %>
+        <% svg_link = link_to(spot_path(spot)) do %>
+          <% spot.attachment_file.decorate.picture_with_spots(width:80, height:80, spots:[spot]) %>
+        <% end %>
+          <% links << content_tag(:div, svg_link, class: "col-sm-4 col-md-4 col-lg-4") %>
+        <% end %>
+        <%= content_tag(:div, raw( links.join ), class: "row spot-thumbnails") %>      
+      </div>
       </div>
     </div>
   </div>
