@@ -27,7 +27,13 @@ class AttachmentFileDecorator < Draper::Decorator
       spot_options = spot.svg_attributes
       spot_tag = %Q|<circle #{spot_options.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/>|
       image_tag += spot_tag
+      #hline_tag = %Q|<circle cx="60" cy="60" r="40" style="fill:skyblue;"/>|
+      hline_tag = %Q|<line x1="0" y1="#{spot.spot_y}" x2="#{original_width}" y2="#{spot.spot_y}" style="stroke:#{spot.stroke_color};stroke-width:#{spot.stroke_width};"/>|
+      vline_tag = %Q|<line x1="#{spot.spot_x}" y1="0" x2="#{spot.spot_x}" y2="#{original_height}" style="stroke:#{spot.stroke_color};stroke-width:#{spot.stroke_width};"/>|
+      #path_tag = %Q|<path d="M0,0 100,0 50,100 z" stroke="red" stroke-width="3" fill="none" />|
+      image_tag += hline_tag + vline_tag
     end
+
     h.content_tag(:svg, h.content_tag(:g, h.raw(image_tag), transform: "scale(#{scale})"), svg_options)
     #h.image_tag(path, options)
   end
