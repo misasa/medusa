@@ -54,7 +54,7 @@
       <td><%= user.username %></td>
       <td><%= user.email %></td>
       <%= content_tag_if(Settings.sign_in.enable_shibboleth, :td, user.omniauth_uid(:shibboleth) ) %>
-      <%= content_tag_if(Settings.sign_in.enable_shibboleth, :td, user.omniauth_uid(:google) ) %>
+      <%= content_tag_if(Settings.sign_in.enable_google, :td, user.omniauth_uid(:google) ) %>
       <td><%= difference_from_now(user.updated_at) %></td>
       <td><%= difference_from_now(user.created_at) %></td>
       <td>
