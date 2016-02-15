@@ -48,7 +48,7 @@
         <% svg_link = link_to(spot_path(spot)) do %>
           <% spot.attachment_file.decorate.picture_with_spots(width:80, height:80, spots:[spot]) %>
         <% end %>
-          <% links << content_tag(:div, svg_link, class: "col-sm-4 col-md-4 col-lg-4") %>
+          <% links << content_tag(:div, svg_link, class: "col-xs-4 col-sm-4 col-md-4 col-lg-4") %>
         <% end %>
         <%= content_tag(:div, raw( links.join ), class: "row spot-thumbnails") %>      
       </div>
