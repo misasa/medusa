@@ -7,7 +7,7 @@ class BoxDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + " #{name} < #{global_id} >"
   end
 
-  def box_path_with_id
+  def box_path_with_id(link_flag = false)
     box_path + " < #{global_id} >"
   end
 
@@ -110,7 +110,8 @@ class BoxDecorator < Draper::Decorator
     if box
       nodes += box.ancestors.map { |b| box_node(b) }
     end
-    nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + name]
+    #nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + name]
+    nodes << box_node(self)
     h.raw(nodes.join("/"))
   end
 

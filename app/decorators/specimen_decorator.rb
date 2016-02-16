@@ -3,8 +3,15 @@ class SpecimenDecorator < Draper::Decorator
   delegate_all
   delegate :as_json  
 
-  def name_with_id
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + " #{name} < #{global_id} >"
+  def name_with_id(flag_link = false)
+    tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
+    if flag_link
+      tag += h.raw(" ") + h.link_to(name, specimen)
+    else
+      tag += " #{name}"
+    end
+    tag += " < #{global_id} >"
+    tag
   end
 
   def bibs_with_link

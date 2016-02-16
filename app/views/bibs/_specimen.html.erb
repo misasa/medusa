@@ -1,19 +1,31 @@
 
-
 <div class="row">
-<div class="col-md-12">
-  <% @bib.specimens.each do |specimen| %>
-  <% specimen = specimen.decorate %>
-  <div class="panel pabel-default">
+<% specimen_groups = @bib.specimens.group_by{|specimen| specimen.box} %>
+<% specimen_groups.each do |box, specimens| %>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="panel panel-default">
     <div class="panel-heading">
-        <%= specimen.path_with_id %>
+      <%= box.decorate.box_path_with_id %>
     </div>
     <div class="panel-body">
-    <div class="row">
-      <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-            <%= specimen.attachment_files.first.decorate.picture(width: 160, height: 160, type: :thumb) if specimen.attachment_files.present? %>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6"> 
+        <% links = [] %>
+        <% box.related_spots.each do |spot| %>
+        <% svg_link = link_to(spot_path(spot)) do %>
+          <% spot.attachment_file.decorate.picture_with_spots(width:80, height:80, spots:[spot]) %>
+        <% end %>
+          <% links << content_tag(:div, svg_link, class: "col-xs-2 col-sm-2 col-md-2 col-lg-2") %>
+        <% end %>
+        <%= content_tag(:div, raw( links.join ), class: "row spot-thumbnails") %>
+    </div>
+    <table class="table table-condensed table-striped">
+      <% specimens.each do |specimen| %>
+      <% specimen = specimen.decorate %>
+      <tr>
+      <td class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+          <%= link_to specimen.attachment_files.first.decorate.picture(width: 160, height: 160, type: :thumb), specimen if specimen.attachment_files.present? %>
+      </td>
+      <td class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+        <%= specimen.name_with_id(true) %>
         <ul>
           <% unless specimen.igsn.blank? %>
             <li>
@@ -40,22 +52,12 @@
             <%= li_if_exist("#{specimen_custom_attribute.custom_attribute.name}: ", specimen_custom_attribute.value ) %>
           <% end %> 
           <li>modified at <%= difference_from_now(specimen.updated_at) %></li>
-        </ul>
-      </div>
-      <div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"> 
-        <% links = [] %>
-        <% specimen.related_spots.each do |spot| %>
-        <% svg_link = link_to(spot_path(spot)) do %>
-          <% spot.attachment_file.decorate.picture_with_spots(width:80, height:80, spots:[spot]) %>
-        <% end %>
-          <% links << content_tag(:div, svg_link, class: "col-xs-12 col-sm-12 col-md-12 col-lg-12") %>
-        <% end %>
-        <%= content_tag(:div, raw( links.join ), class: "row spot-thumbnails") %>      
-      </div>
-      </div>
-    </div>
+        </ul>      
+      </td>
+      </tr>
+      <% end %>
+    </table>
   </div>
-  <% end %>
 </div>
-
+<% end %>
 </div>
