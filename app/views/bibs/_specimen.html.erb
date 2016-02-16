@@ -6,8 +6,6 @@
   <div class="panel panel-default">
     <div class="panel-heading">
       <%= box.decorate.box_path_with_id %>
-    </div>
-    <div class="panel-body">
         <% links = [] %>
         <% box.related_spots.each do |spot| %>
         <% svg_link = link_to(spot_path(spot)) do %>
@@ -17,7 +15,7 @@
         <% end %>
         <%= content_tag(:div, raw( links.join ), class: "row spot-thumbnails") %>
     </div>
-    <table class="table table-condensed table-striped">
+    <table class="table table-condensed">
       <% specimens.each do |specimen| %>
       <% specimen = specimen.decorate %>
       <tr>
