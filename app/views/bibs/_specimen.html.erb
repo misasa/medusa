@@ -21,10 +21,14 @@
       <% specimens.each do |specimen| %>
       <% specimen = specimen.decorate %>
       <tr>
+      <td class="col-xs-1 col-sm-1 col-md-1 col-lg-1">
+          <%= qrcode specimen.global_id %>
+      </td>
       <td class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
           <%= link_to specimen.attachment_files.first.decorate.picture(width: 160, height: 160, type: :thumb), specimen if specimen.attachment_files.present? %>
       </td>
-      <td class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+
+      <td class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
         <%= check_box_tag("ids[]", specimen.id, true, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
         <%= specimen.name_with_id(true) %>
         <ul>
