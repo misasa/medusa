@@ -1,5 +1,7 @@
 
 <div class="row">
+
+<%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
 <% specimen_groups = @bib.specimens.group_by{|specimen| specimen.box} %>
 <% specimen_groups.each do |box, specimens| %>
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -23,6 +25,7 @@
           <%= link_to specimen.attachment_files.first.decorate.picture(width: 160, height: 160, type: :thumb), specimen if specimen.attachment_files.present? %>
       </td>
       <td class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+        <%= check_box_tag("ids[]", specimen.id, true, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
         <%= specimen.name_with_id(true) %>
         <ul>
           <% unless specimen.igsn.blank? %>
@@ -58,4 +61,8 @@
   </div>
 </div>
 <% end %>
+<% end %>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<%= link_to_function "edit", "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
+</div>
 </div>
