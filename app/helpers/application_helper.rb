@@ -37,9 +37,9 @@ module ApplicationHelper
     render partial: "parts/error_notification", locals: {errors: errors}
   end
 
-  def qrcode(value, alt: nil)
+  def qrcode(value, alt: nil, size: nil)
     alt ||= value
-    image_tag(qrcode_path(value), alt: alt)
+    image_tag(qrcode_path(value), alt: alt, size: size)
   end
   
   def li_if_exist(prefix, value)
