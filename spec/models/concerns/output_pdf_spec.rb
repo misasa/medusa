@@ -107,7 +107,7 @@ describe OutputPdf do
       let(:file) { FactoryGirl.create(:attachment_file) }
       context "file.data.path is exist" do
         before { allow(File).to receive(:exist?).and_return(true) }
-        it { expect(subject).to eq file.data.path }
+        it { expect(subject).to eq file.data.path(:thumb) }
       end
       context "file.data.path isn't exist" do
         before { allow(File).to receive(:exist?).and_return(false) }

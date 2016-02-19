@@ -286,7 +286,7 @@ describe Specimen do
         context "specimenのnameとbox_idが同じ" do
           let(:name) { "ユニークストーン" }
           let(:id) { box.id }
-          it { expect(specimen).not_to be_valid }
+          it { expect(specimen).to be_valid }
         end
       end
     end
