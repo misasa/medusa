@@ -298,6 +298,7 @@ GEM
       rspec-expectations (= 3.0.0.beta1)
       rspec-mocks (= 3.0.0.beta1)
     rspec-support (3.0.0.beta1)
+    ruby-ole (1.2.12)
     ruby-rc4 (0.1.5)
     rubyzip (1.1.0)
     sass (3.2.14)
@@ -317,6 +318,8 @@ GEM
     simplecov-rcov (0.2.3)
       simplecov (>= 0.4.1)
     slop (3.4.7)
+    spreadsheet (1.1.1)
+      ruby-ole (>= 1.0)
     spring (1.0.0)
     sprockets (2.10.1)
       hike (~> 1.2)
@@ -424,6 +427,7 @@ DEPENDENCIES
   settingslogic
   simplecov
   simplecov-rcov
+  spreadsheet
   spring
   therubyracer
   thinreports
