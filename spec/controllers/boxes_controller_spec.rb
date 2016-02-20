@@ -195,9 +195,10 @@ describe BoxesController do
     end
 
 
-    context "with button_action snapshot" do
+    context "with button_action snapshot", :current => true do
       let(:ddate) { Date.today}
       let(:dst_date) { ddate.strftime("%Y-%m-%d")}
+      let(:dst_date_time){ Time.zone.now }
       let(:a_day_ago) { ddate.days_ago(1).strftime("%Y-%m-%d")}
       let(:relation) { double("activerecord-relation")}
       let(:contents_search) { double("ransack") } 
@@ -205,18 +206,26 @@ describe BoxesController do
       context "without sorts" do
 
         before {
+          #allow(Time).to receive_message_chain(:zone, :now).and_return(dst_date_time)
           allow(relation).to receive(:search).and_return(contents_search.as_null_object)
+          allow(Path).to receive(:snapshot).and_return(relation)
         }
         it {
-          expect(Path).to receive(:snapshot).with(box, dst_date).and_return(relation)
           expect(contents_search).to receive(:sorts=).with('path ASC') 
           get :show, id: box.id, button_action: 'snapshot', dst_date: dst_date
         }
       end
 
       context "with sorts" do
+        before {
+          #allow(Time).to receive_message_chain(:zone, :now).and_return(dst_date_time)
+          allow(relation).to receive(:search).and_return(contents_search.as_null_object)
+          allow(Path).to receive(:snapshot).and_return(relation)
+        }
+
+
         it {
-          expect(Path).to receive(:snapshot).with(box, dst_date).and_return(relation)
+          #expect(Path).to receive(:snapshot).with(box, dst_date).and_return(relation)
           expect(relation).to receive(:search).with({"s" => "brought_in_at+asc"}).and_return(contents_search.as_null_object)
           expect(contents_search).to receive(:sorts).and_return("brought_in_at ASC")
           expect(contents_search).not_to receive(:sorts=)

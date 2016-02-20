@@ -53,7 +53,12 @@ class BoxesController < ApplicationController
       end
       @src_date = sdate.strftime("%Y-%m-%d")
     end
-    dst_date_end_of_day = Time.parse(@dst_date).end_of_day
+
+    if Time.zone.parse(@dst_date).today?
+      dst_date_time = Time.zone.now
+    else
+      dst_date_time = Time.zone.parse(@dst_date).end_of_day
+    end
 
     default_sorts = "path ASC"
     if params[:button_action].blank? || params[:button_action] == separator
@@ -64,14 +69,14 @@ class BoxesController < ApplicationController
     else
       case params[:button_action]
       when /diff/
-        @contents_search = Path.diff(@box, @src_date, dst_date_end_of_day).search(params[:q])
+        @contents_search = Path.diff(@box, @src_date, dst_date_time).search(params[:q])
       when /integ/
-        @contents_search = Path.integ(@box, @src_date, dst_date_end_of_day).search(params[:q])
+        @contents_search = Path.integ(@box, @src_date, dst_date_time).search(params[:q])
       when /snapshot/
-        @contents_search = Path.snapshot(@box, @dst_date).search(params[:q])
+        @contents_search = Path.snapshot(@box, dst_date_time).search(params[:q])
       else
         # in/out
-        @contents_search = Path.change(@box, @src_date, dst_date_end_of_day).search(params[:q])
+        @contents_search = Path.change(@box, @src_date, dst_date_time).search(params[:q])
         default_sorts = ["brought_at DESC", "sign ASC"]
       end
       @contents_search.sorts = default_sorts if @contents_search.sorts.empty?

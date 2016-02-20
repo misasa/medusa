@@ -35,7 +35,7 @@ describe NestedResources::SpecimensController do
         let(:attributes) {{name: name, box_id: id}}
         let(:name) {child.name}
         let(:id) {child.box_id}
-        it { expect{method}.to change(Specimen, :count).by(0) }
+        it { expect{method}.to change(Specimen, :count).by(1) }
       end
     end
   end
