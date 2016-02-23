@@ -31,19 +31,6 @@ class TablesController < ApplicationController
     respond_with @table
   end
 
-  def download_excel
-    #report = Specimen.find(params[:id]).build_card
-    #file = Tempfile.new('template.xls', "#{Rails.root.to_s}/tmp/")
-    file_path = "#{Rails.root.to_s}/tmp/template.xls"
-    #file_path = "#{Rails.root.to_s}/tmp/"
-    book = Spreadsheet::Workbook.new
-    sheet = book.create_worksheet(name: 'test')
-    sheet[1,0] = "hello"
-    book.write(file_path)
-
-    send_data(file_path, filename: "template.xls", type: "application/vnd.ms-excel")
-  end
-
 
   private
 

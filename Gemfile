@@ -79,7 +79,6 @@ gem 'builder'
 gem 'activeresource'
 gem 'geocoder'
 gem 'migration_comments'
-gem 'spreadsheet'
 group :development, :test do
   gem 'rak'
   gem 'pry-rails'
