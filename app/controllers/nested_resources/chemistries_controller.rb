@@ -15,6 +15,7 @@ class NestedResources::ChemistriesController < ApplicationController
     MeasurementItem.joins(:category_measurement_items,:measurement_categories).where(measurement_categories: {id: params[:measurement_category_id]}).order("category_measurement_items.position").each do |measurement_item|
       @chemistries << Chemistry.new(analysis_id: @parent.id, measurement_item_id: measurement_item.id,unit_id: measurement_item.unit_id)
     end
+    @chemistries.uniq!
     respond_with @chemistries
   end
 
