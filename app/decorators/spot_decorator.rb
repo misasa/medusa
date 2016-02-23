@@ -159,7 +159,7 @@ class SpotDecorator < Draper::Decorator
      if target
         polymorphic_path(target, script_name: Rails.application.config.relative_url_root)
      else
-       spot_path(self)
+       spot_path(self, script_name: Rails.application.config.relative_url_root)
      end
   end
 end
