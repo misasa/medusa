@@ -98,6 +98,24 @@ class Specimen < ActiveRecord::Base
     return text
   end
 
+  def relatives_for_tree
+    list = [self].concat(children)
+    #list = [root].concat(root.children)
+    ans = ancestors
+    depth = ans.size
+    if depth > 0
+      list.concat(siblings)
+      list.concat(ans)
+      ans.each do |an|
+        list.concat(an.siblings)
+      end
+    # elsif depth > 1
+    #   list.concat(ans[1].descendants)
+    end
+    list.uniq!
+    families.select{|e| list.include?(e) }    
+  end
+
   private
 
   def parent_id_cannot_self_children
