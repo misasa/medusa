@@ -54,15 +54,20 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def family_tree
-    list = [root].concat(root.children)
+    list = [self].concat(children)
+    #list = [root].concat(root.children)
     ans = ancestors
     depth = ans.size
-    if depth == 1
-      list.concat(self_and_descendants)
-    elsif depth > 1
-      list.concat(ans[1].descendants)
+    if depth > 0
+      list.concat(siblings)
+      list.concat(ans)
+      ans.each do |an|
+        list.concat(an.siblings)
+      end
+    # elsif depth > 1
+    #   list.concat(ans[1].descendants)
     end
-    
+    list.uniq!
     h.tree(families.group_by(&:parent_id)) do |obj|
       if list.include?(obj)
         obj.decorate.tree_node(self == obj)
