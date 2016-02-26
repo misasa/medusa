@@ -60,7 +60,7 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def tree_node(current=false)
-    link = current ? h.content_tag(:strong, name) : name
+    link = current ? h.content_tag(:strong, name, class: "text-primary bg-primary") : name
     icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
     icon + h.link_to_if(h.can?(:read, self), link, self) + children_count + analyses_count + bibs_count + files_count
   end
