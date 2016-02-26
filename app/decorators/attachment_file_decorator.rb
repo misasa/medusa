@@ -22,11 +22,12 @@ class AttachmentFileDecorator < Draper::Decorator
     #options = (width_rate >= height_rate) ? { width: width, height: original_height * scale } : { width: original_width * scale, height: height }
     options = { width: width, height: height}
     svg_options = {xmlns: "http://www.w3.org/2000/svg", 'xmlns:xlink' => "http://www.w3.org/1999/xlink", version: "1.1"}.merge(options)
-    image_tag = %Q|<image xlink:href="#{attachment_file.path}" x="0" y="0" width="#{attachment_file.original_width}" height="#{attachment_file.original_height}" data-id="#attachment_file.id}"/>|
+    image_path = attachment_file.path(:thumb)
+    image_tag = %Q|<image xlink:href="#{image_path}" x="0" y="0" width="#{attachment_file.original_width}" height="#{attachment_file.original_height}" data-id="#attachment_file.id}"/>|
     spots.each do |spot|
       spot_options = spot.svg_attributes
-      spot_tag = %Q|<circle #{spot_options.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/>|
-      image_tag += spot_tag
+      #spot_tag = %Q|<circle #{spot_options.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/>|
+      #image_tag += spot_tag
       #hline_tag = %Q|<circle cx="60" cy="60" r="40" style="fill:skyblue;"/>|
       hline_tag = %Q|<line x1="0" y1="#{spot.spot_y}" x2="#{original_width}" y2="#{spot.spot_y}" style="stroke:#{spot.stroke_color};stroke-width:#{spot.stroke_width};"/>|
       vline_tag = %Q|<line x1="#{spot.spot_x}" y1="0" x2="#{spot.spot_x}" y2="#{original_height}" style="stroke:#{spot.stroke_color};stroke-width:#{spot.stroke_width};"/>|
