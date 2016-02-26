@@ -69,12 +69,9 @@ class SpecimenDecorator < Draper::Decorator
     # end
     # list.uniq!
     # relatives = families.select{|e| list.include?(e) }
-    h.tree(relatives_for_tree.group_by(&:parent_id)) do |obj|
-#      if list.include?(obj)
+#    h.tree(relatives_for_tree.group_by(&:parent_id)) do |obj|
+    h.tree(families.group_by(&:parent_id)) do |obj|
         obj.decorate.tree_node(self == obj)
-#      else
-#        ""
-#      end
     end
   end
 
