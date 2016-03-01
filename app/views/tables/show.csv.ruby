@@ -2,6 +2,8 @@ require 'csv'
 
 CSV.generate do |csv|
   csv << ["measured", "unit"] + @table.specimens.map(&:name) + ["mean", "1SD"]
+  csv << ["igsn", ""] + @table.specimens.map(&:igsn) + ["", ""]
+
   if @table.with_place
     csv << ["latitude", ""] + @table.specimens.map{|specimen| specimen.place.try!(:latitude)} + ["", ""]
     csv << ["longitude", ""] + @table.specimens.map{|specimen| specimen.place.try!(:longitude)} + ["", ""]
