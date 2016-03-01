@@ -174,6 +174,8 @@ class Analysis < ActiveRecord::Base
           xml.attachment_file_global_id(spot.attachment_file.try!(:global_id))
           xml.x_image(spot.spot_x_from_center)
           xml.y_image(spot.spot_y_from_center)
+          xml.x_overpic(spot.spot_overpic_x)
+          xml.y_overpic(spot.spot_overpic_y)          
         end
       end
       unless chemistries.empty?

@@ -34,7 +34,7 @@ class Spot < ActiveRecord::Base
     return unless spot_y
 
     cpt = spot_center_xy
-    [spot_x - cpt[0], cpt[1] - spot_y]
+    [spot_x/attachment_file.length * 100 - cpt[0], cpt[1] - spot_y/attachment_file.length * 100]
   end
 
   def spot_x_from_center
@@ -44,6 +44,15 @@ class Spot < ActiveRecord::Base
   def spot_y_from_center
     spot_xy_from_center[1] if spot_xy_from_center
   end
+
+  def spot_overpic_x
+    spot_x/attachment_file.length * 100 if attachment_file.length
+  end
+
+  def spot_overpic_y
+    (attachment_file.height.to_f/attachment_file.length - spot_y/attachment_file.length) * 100 if attachment_file.length
+  end
+
 
   def to_svg
     "<circle #{svg_attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/>"
@@ -79,6 +88,7 @@ class Spot < ActiveRecord::Base
   def ref_image_y
     attachment_file.length ? (spot_y / attachment_file.length * 100) : nil
   end
+
 
   def target
     record_property = RecordProperty.find_by_global_id(target_uid)

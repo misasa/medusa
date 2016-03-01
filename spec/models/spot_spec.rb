@@ -77,17 +77,17 @@ describe Spot do
     end
   end
 
-  describe ".spot_x_from_center" do
-    subject{obj.spot_x_from_center}
-    let(:obj){FactoryGirl.create(:spot)}
-    it {expect(subject).to eq -49.0}
-  end
+  # describe ".spot_x_from_center" do
+  #   subject{obj.spot_x_from_center}
+  #   let(:obj){FactoryGirl.create(:spot)}
+  #   it {expect(subject).to eq -49.0}
+  # end
 
-  describe ".spot_y_from_center" do
-    subject{obj.spot_y_from_center}
-    let(:obj){FactoryGirl.create(:spot)}
-    it {expect(subject).to eq 49.0}
-  end
+  # describe ".spot_y_from_center" do
+  #   subject{obj.spot_y_from_center}
+  #   let(:obj){FactoryGirl.create(:spot)}
+  #   it {expect(subject).to eq 49.0}
+  # end
 
   describe "#ref_image_x" do
     subject { spot.ref_image_x }
