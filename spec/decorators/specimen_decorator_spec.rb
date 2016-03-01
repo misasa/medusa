@@ -63,7 +63,7 @@ describe SpecimenDecorator do
     it{expect(subject).to match("<div class=\"tree-node\" data-depth=\"1\">.*</div>")}
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")} 
     it{expect(subject).to match("<a href=\"/specimens/#{obj.id}\">.*</a>")}
-    it{expect(subject).to include("<strong>#{obj.name}</strong>")} 
+    it{expect(subject).to include("<strong class=\"text-primary bg-primary\">#{obj.name}</strong>")} 
   end
 
   describe ".tree_node" do
@@ -87,7 +87,7 @@ describe SpecimenDecorator do
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-file\"></span><span>#{obj.attachment_files.count}</span>")} 
     context "current" do
       subject{obj.tree_node(true)}
-      it{expect(subject).to match("<strong>.*</strong>")} 
+      it{expect(subject).to match("<strong class=\"text-primary bg-primary\">.*</strong>")} 
     end
     context "not current" do
       subject{obj.tree_node(false)}
