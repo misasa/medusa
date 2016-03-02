@@ -77,11 +77,12 @@ class SpecimenDecorator < Draper::Decorator
     item_counts = Chemistry.where(analysis_id: analyses.map(&:id)).group(:measurement_item).size
     measurement_items = MeasurementItem.includes(:unit).all
     content = icon + (link_flag ? h.link_to(name, specimen) : name)
-    content += h.content_tag(:span, nil, class: "glyphicon glyphicon-stats") + h.raw(analyses.size)
+    content += h.content_tag(:span, nil, class: "glyphicon glyphicon-stats") + h.content_tag(:span, analyses.size, class: "badge")
+    lis = [] 
     measurement_items.each do |item|
-      content += h.raw(item.display_name) + h.content_tag(:span, item_counts[item], class:"badge") if item_counts[item]
+      lis << h.raw(item.display_name) + h.content_tag(:span, item_counts[item], class:"badge") if item_counts[item]
     end
-    content
+    content += h.content_tag(:ul, h.content_tag(:li, h.raw(lis.join)))
   end
 
   def family_tree
