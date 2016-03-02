@@ -53,6 +53,37 @@ class SpecimenDecorator < Draper::Decorator
     attachment_files.first.decorate.picture(width: width, height: height) if attachment_files.present?
   end
 
+  def list_of_summary_of_analysis
+    root = specimen.root
+    children = specimen.children
+    lis = []
+    children.each do |child|
+      child = child.decorate
+      lis << h.content_tag(:li, child.summary_of_analysis) if child.summary_of_analysis
+    end
+    children_list = h.content_tag(:ul, h.raw( lis.join) )
+    if summary_of_analysis
+      content = h.content_tag(:ul, h.content_tag(:li, summary_of_analysis(false)) + children_list )
+    end
+    unless root == specimen
+      content = h.content_tag(:ul, h.content_tag(:li, root.decorate.summary_of_analysis) + content )      
+    end
+    content
+  end
+
+  def summary_of_analysis(link_flag = true)
+    analyses = Analysis.where(specimen_id: self_and_descendants)
+    return if analyses.count == 0
+    item_counts = Chemistry.where(analysis_id: analyses.map(&:id)).group(:measurement_item).size
+    measurement_items = MeasurementItem.includes(:unit).all
+    content = icon + (link_flag ? h.link_to(name, specimen) : name)
+    content += h.content_tag(:span, nil, class: "glyphicon glyphicon-stats") + h.raw(analyses.size)
+    measurement_items.each do |item|
+      content += h.raw(item.display_name) + h.content_tag(:span, item_counts[item], class:"badge") if item_counts[item]
+    end
+    content
+  end
+
   def family_tree
     # list = [self].concat(children)
     # #list = [root].concat(root.children)

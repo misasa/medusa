@@ -12,6 +12,9 @@ class SpecimensController < ApplicationController
   end
 
   def show
+    unless params[:measurement_category_id]
+      params[:measurement_category_id] = MeasurementCategory.first.id if MeasurementCategory.first
+    end
     respond_with @specimen
   end
 

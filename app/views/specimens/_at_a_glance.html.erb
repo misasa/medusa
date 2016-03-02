@@ -34,14 +34,13 @@
       <% end %>
     </li>
   <% end %>  
+  <li>analysis:<%= @specimen.list_of_summary_of_analysis %></li>
 </ul>
 
 
 <div class="row spot-thumbnails">
   <%= @specimen.decorate.related_pictures %>
 </div>
-
-
 
 <% unless @specimen.analyses.empty? %>
   Table of analysis on <%= content_tag(:span, nil, class: specimen_ghost(@specimen, "glyphicon glyphicon-cloud")) + link_to(@specimen.name, specimen_path(@specimen), class: specimen_ghost(@specimen)) %>
@@ -50,7 +49,7 @@
     if params[:measurement_category_id].blank?
       measurement_items = MeasurementItem.includes(:unit).all
     else
-      measurement_items = MeasurementItem.includes(:unit).categorize(params[:measurement_category_id])
+      measurement_items = MeasurementCategory.find(params[:measurement_category_id]).measurement_items
     end
     %>
     <thead>
