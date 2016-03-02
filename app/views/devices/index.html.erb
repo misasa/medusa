@@ -44,13 +44,15 @@
         <span class="glyphicon glyphicon-edit"></span>
         <% end %>
       </td>
-      <td><%= device.name %></td>
+      <td><%= device.name %> <span class="badge"><%= device.analyses.size %></span></td>
       <td></td>
       <td><%= difference_from_now(device.updated_at) %></td>
       <td><%= difference_from_now(device.created_at) %></td>
       <td>
+        <% if device.analyses.empty? %>
         <%= link_to device_path(device), method: :delete , data: {confirm: t("confirm.delete",:recordname => device.name)} do %>
         <span class="glyphicon glyphicon-remove"></span>
+        <% end %>
         <% end %>
       </td>
     </tr>

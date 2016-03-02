@@ -44,13 +44,15 @@
         <span class="glyphicon glyphicon-edit"></span>
         <% end %>
       </td>
-      <td><%= technique.name %></td>
+      <td><%= technique.name %> <span class="badge"><%= technique.analyses.size %></span></td>
       <td></td>
       <td><%= difference_from_now(technique.updated_at) %></td>
       <td><%= difference_from_now(technique.created_at) %></td>
       <td>
+        <% if technique.analyses.empty? %>
         <%= link_to technique_path(technique), method: :delete , data: {confirm: t("confirm.delete",:recordname => technique.name)} do %>
         <span class="glyphicon glyphicon-remove"></span>
+        <% end %>
         <% end %>
       </td>
     </tr>
