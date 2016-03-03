@@ -134,15 +134,15 @@ class SpecimenDecorator < Draper::Decorator
     related_spots.each do |spot|
 #      links << h.content_tag(:div, h.content_tag(:div, spot.decorate.thumblink_with_spot_info, class: "panel-body"), class: "panel panel-default col-lg-4")
 #      links << h.content_tag(:div, spot.decorate.thumblink_with_spot_info, class: "col-lg-3")
-      links << h.content_tag(:div, spot.decorate.spots_panel, class: "col-lg-6")
+      links << h.content_tag(:div, spot.decorate.spots_panel, class: "col-lg-4")
 #      links << h.content_tag(:div, spot.attachment_file.decorate.picture_with_spots(width:100, height:100, :spots => [spot]) , class: "col-lg-2")
     end
     spot_links.each do |spot|
-      links << h.content_tag(:div, spot.decorate.spots_panel , class: "col-lg-6")
+      links << h.content_tag(:div, spot.decorate.spots_panel , class: "col-lg-4")
 #      links << h.content_tag(:div, spot.attachment_file.decorate.picture_with_spots(width:100, height:100, :spots => [spot]) , class: "col-lg-2")
     end
     attachment_image_files.each do |file|
-      links << h.content_tag(:div, file.decorate.spots_panel(spots: file.spots) , class: "col-lg-6") if file.image?
+      links << h.content_tag(:div, file.decorate.spots_panel(spots: file.spots) , class: "col-lg-4") if file.image?
     end
     h.content_tag(:div, h.raw( links.join ), class: "row spot-thumbnails")
   end

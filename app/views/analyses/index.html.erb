@@ -79,7 +79,7 @@
   <% MeasurementCategory.pluck(:name, :id).each do |name, id| %>
     <%= link_to name, new_analysis_path(format: :csv, measurement_category_id: id) %>
   <% end %>
-  ),and modify, then upload.
+  ) and modify, then upload.
   <%= form_tag(import_analyses_path, method: :post, multipart: true) do %>
     <%= file_field_tag :data %>
     <%= submit_tag :upload %>

@@ -37,13 +37,13 @@ class SpotDecorator < Draper::Decorator
 
   def spots_panel
     file = spot.attachment_file
-    svg = file.decorate.picture_with_spots(width:80, height:80, spots:[spot])
+    svg = file.decorate.picture_with_spots(width:100, height:100, spots:[spot])
     svg_link = h.link_to(h.spot_path(self)) do
       svg
     end
     tag = h.content_tag(:div, svg_link, class: "thumbnail")
-    left = h.content_tag(:div, svg_link, class: "col-md-3")
-    right = h.content_tag(:div, my_tree, class: "col-md-9")
+    left = h.content_tag(:div, svg_link, class: "col-md-12")
+    right = h.content_tag(:div, my_tree, class: "col-md-12")
     row = h.content_tag(:div, left + right, class: "row")
     tag = h.content_tag(:div, h.content_tag(:div, row, class: "panel-body"), class: "panel panel-default")
     tag
