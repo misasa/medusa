@@ -82,7 +82,9 @@ class SpecimenDecorator < Draper::Decorator
     measurement_items.each do |item|
       lis << h.raw(item.display_name) + h.content_tag(:span, item_counts[item], class:"badge") if item_counts[item]
     end
-    content += h.content_tag(:ul, h.content_tag(:li, h.raw(lis.join)))
+    #content += h.content_tag(:ul, h.content_tag(:li, h.raw(lis.join)))
+    content += h.content_tag(:div, h.raw(lis.join))
+
   end
 
   def family_tree
