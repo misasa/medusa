@@ -50,7 +50,13 @@ class AttachmentFileDecorator < Draper::Decorator
     left = h.content_tag(:div, svg_link, class: "col-md-12")
     right = h.content_tag(:div, my_tree(spots), class: "col-md-12")
     row = h.content_tag(:div, left + right, class: "row")
-    tag = h.content_tag(:div, h.content_tag(:div, row, class: "panel-body"), class: "panel panel-default")
+    header = h.content_tag(:div, class: "panel-heading") do
+      #tag = h.content_tag(:h3, picture_link, class: "panel-title")
+      #tag += h.content_tag(:span, h.content_tag(:i, nil, class: "glyphicon glyphicon-chevron-down"), class: "pull-right clickable")
+    end
+
+    body = h.content_tag(:div, row, class: "panel-body")
+    tag = h.content_tag(:div, body, class: "panel panel-default")
     tag
   end
 
@@ -65,32 +71,41 @@ class AttachmentFileDecorator < Draper::Decorator
   def my_tree(spots = [])
     html_class = "tree-node"
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
-#      picture = h.content_tag(:span, nil, class: "glyphicon glyphicon-picture")
-      picture = h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file)
-      attachings.each do |attaching|
-        attachable = attaching.attachable
-        if attachable
-          link = attachable.name
-          icon = attachable.decorate.icon
-          if h.can?(:read, attachable)
-            icon += h.link_to(link, attachable) + h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
-          else
-            icon += link
-          end
-          picture += icon
-        end
-      end
-      picture += h.raw (h.icon_tag("screenshot") + "#{spots.size}") if attachment_file.spots.size > 0
-      picture
+      picture_link
     end
 
-    spots.each do |spot|
-      html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-        spot.decorate.tree_node(false)
+    html += h.content_tag(:div, id: "spots-#{attachment_file.id}", class: "collapse") do
+      spots_tag = h.raw("")
+      spots.each do |spot|
+        spots_tag += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+          spot.decorate.tree_node(false)
+        end
       end
+      spots_tag
     end
     html
   end
+
+  def picture_link
+    picture = h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file)
+    attachings.each do |attaching|
+      attachable = attaching.attachable
+      if attachable
+        link = attachable.name
+        icon = attachable.decorate.icon
+        if h.can?(:read, attachable)
+          icon += h.link_to(link, attachable) + h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
+        else
+          icon += link
+        end
+        picture += icon
+      end
+    end
+    picture += h.icon_tag("screenshot") + h.content_tag(:a, h.content_tag(:span, spots.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if attachment_file.spots.size > 0
+    picture
+  end
+
+
 
   def family_tree(current_spot = nil)
     html_class = "tree-node"

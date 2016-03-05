@@ -41,7 +41,7 @@ class SpotDecorator < Draper::Decorator
     svg_link = h.link_to(h.spot_path(self)) do
       svg
     end
-    tag = h.content_tag(:div, svg_link, class: "thumbnail")
+    #tag = h.content_tag(:div, svg_link, class: "thumbnail")
     left = h.content_tag(:div, svg_link, class: "col-md-12")
     right = h.content_tag(:div, my_tree, class: "col-md-12")
     row = h.content_tag(:div, left + right, class: "row")
@@ -85,26 +85,22 @@ class SpotDecorator < Draper::Decorator
 
     html_class = "tree-node"
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
-      picture = h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file)
-      attachment_file.attachings.each do |attaching|
-        attachable = attaching.attachable
-        if attachable
-          link = attachable.name
-          icon = attachable.decorate.icon
-          if h.can?(:read, attachable)
-            icon += h.link_to(link, attachable) + h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
-          else
-            icon += link
-          end
-          picture += icon
+      attachment_file.decorate.picture_link
+    end
+
+    html += h.content_tag(:div, id: "spots-#{attachment_file.id}", class: "collapse") do
+      spots_tag = h.raw("")
+      attachment_file.spots.each do |spot|
+        spots_tag += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+          spot.decorate.tree_node(false)
         end
       end
-      picture += h.raw (h.icon_tag("screenshot") + "#{attachment_file.spots.size}") if attachment_file.spots.size > 0      
-      picture
+      spots_tag
     end
-    html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-        self.decorate.tree_node(false)
-    end
+
+    # html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+    #     self.decorate.tree_node(false)
+    # end
     html
   end
 
