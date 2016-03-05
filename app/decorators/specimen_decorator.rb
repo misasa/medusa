@@ -63,7 +63,7 @@ class SpecimenDecorator < Draper::Decorator
     end
     children_list = h.content_tag(:ul, h.raw( lis.join) )
     if summary_of_analysis
-      content = h.content_tag(:ul, h.content_tag(:li, summary_of_analysis(false)) + children_list )
+      content = h.content_tag(:ul, h.content_tag(:li, summary_of_analysis(true)) + children_list )
     end
     unless root == specimen
       content = h.content_tag(:ul, h.content_tag(:li, root.decorate.summary_of_analysis) + content )      
@@ -71,19 +71,21 @@ class SpecimenDecorator < Draper::Decorator
     content
   end
 
-  def summary_of_analysis(link_flag = true)
+  def summary_of_analysis(current = false)
     analyses = Analysis.where(specimen_id: self_and_descendants)
     return if analyses.count == 0
     item_counts = Chemistry.where(analysis_id: analyses.map(&:id)).group(:measurement_item).size
     measurement_items = MeasurementItem.includes(:unit).all
-    content = icon + (link_flag ? h.link_to(name, specimen) : name)
+    #content = icon + (current ? h.link_to(name, specimen) : name)
+    content = icon + ( current ? h.content_tag(:strong, name, class: "text-primary bg-primary") : h.link_to(name, specimen) )
+
     content += h.content_tag(:span, nil, class: "glyphicon glyphicon-stats") + h.content_tag(:a, h.content_tag(:span, analyses.size, class: "badge"), href: "#specimen-analyses-#{self.id}", :"data-toggle" => "collapse" )
     lis = [] 
     measurement_items.each do |item|
       lis << h.raw(item.display_name) + h.content_tag(:span, item_counts[item], class:"badge") if item_counts[item]
     end
     #content += h.content_tag(:ul, h.content_tag(:li, h.raw(lis.join)))
-    content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: ( link_flag ? "collapse" : "collapse in" ) )
+    content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: ( current ? "collapse in" : "collapse" ) )
   end
 
   def family_tree
