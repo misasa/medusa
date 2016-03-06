@@ -15,7 +15,7 @@
         <% links = [] %>
         <% box.related_spots.each do |spot| %>
         <% svg_link = link_to(spot_path(spot)) do %>
-          <% spot.attachment_file.decorate.picture_with_spots(width:80, height:80, spots:[spot]) %>
+          <% spot.attachment_file.decorate.picture_with_spots(width:120, height:90, spots:[spot]) %>
         <% end %>
           <% links << content_tag(:div, svg_link, class: "col-xs-2 col-sm-2 col-md-2 col-lg-2") %>
         <% end %>

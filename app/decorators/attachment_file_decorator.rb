@@ -19,8 +19,8 @@ class AttachmentFileDecorator < Draper::Decorator
     width_rate = original_width.to_f / width
     scale = (width_rate >= height_rate) ? 1.to_f/width_rate : 1.to_f/height_rate
 
-    options = (width_rate >= height_rate) ? { width: width, height: original_height * scale } : { width: original_width * scale, height: height }
-    #options = { width: width, height: height}
+    #options = (width_rate >= height_rate) ? { width: width, height: original_height * scale } : { width: original_width * scale, height: height }
+    options = { width: width, height: height}
     svg_options = {xmlns: "http://www.w3.org/2000/svg", 'xmlns:xlink' => "http://www.w3.org/1999/xlink", version: "1.1"}.merge(options)
     image_path = attachment_file.path(:thumb)
     image_tag = %Q|<image xlink:href="#{image_path}" x="0" y="0" width="#{attachment_file.original_width}" height="#{attachment_file.original_height}" data-id="#attachment_file.id}"/>|
@@ -40,7 +40,7 @@ class AttachmentFileDecorator < Draper::Decorator
   end
 
 
-  def spots_panel(width: 100, height:100, spots:[])
+  def spots_panel(width: 160, height:120, spots:[])
     file = self
     svg = file.decorate.picture_with_spots(width:width, height:height, spots:spots)
     svg_link = h.link_to(h.attachment_file_path(file)) do

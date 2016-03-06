@@ -37,7 +37,7 @@ class SpotDecorator < Draper::Decorator
 
   def spots_panel
     file = spot.attachment_file
-    svg = file.decorate.picture_with_spots(width:100, height:100, spots:[spot])
+    svg = file.decorate.picture_with_spots(width:160, height:120, spots:[spot])
     svg_link = h.link_to(h.spot_path(self)) do
       svg
     end
