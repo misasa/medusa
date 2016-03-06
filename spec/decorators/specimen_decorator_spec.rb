@@ -81,7 +81,7 @@ describe SpecimenDecorator do
       obj.bibs << bib 
       obj.attachment_files << attachment_file 
     end
-    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span><span>#{obj.children.count}</span>")} 
+    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span><a data-toggle=\"collapse\" href=\"#tree-#{obj.id}\"><span class=\"badge\">#{obj.children.count}</span></a>")} 
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-stats\"></span><span>#{obj.analyses.count}</span>")} 
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-book\"></span><span>#{obj.bibs.count}</span>")} 
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-file\"></span><span>#{obj.attachment_files.count}</span>")} 

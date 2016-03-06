@@ -1,10 +1,13 @@
 # -*- coding: utf-8 -*-
 module TreeViewHelper
-  def tree(hash, key=nil, depth=1, &block)
+  def tree(hash, key=nil, depth=1, in_list = [], &block)
     blank = capture { "" }
     return blank unless hash[key]
     hash[key].inject(blank) do |str, obj|
-      str + tree_node(obj, depth, &block) + tree(hash, obj.id, depth + 1, &block)
+      tree_nodes = tree(hash, obj.id, depth + 1, in_list, &block)
+      html = str + tree_node(obj, depth, &block) 
+      html += content_tag(:div, tree_nodes, class: (in_list.include?(obj) ? "collapse in" : "collapse"), id: "tree-#{obj.id}")
+      html
     end
   end
 

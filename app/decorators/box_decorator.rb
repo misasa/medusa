@@ -22,7 +22,7 @@ class BoxDecorator < Draper::Decorator
     else
       hash[object.id] = object.specimens if object.specimens.present?
     end
-    h.tree(hash, parent_id) do |obj|
+    h.tree(hash, parent_id, 1, [self]) do |obj|
       obj.decorate.tree_node(self == obj)
     end
   end

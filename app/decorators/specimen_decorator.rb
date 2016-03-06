@@ -76,9 +76,9 @@ class SpecimenDecorator < Draper::Decorator
     return if analyses.count == 0
     item_counts = Chemistry.where(analysis_id: analyses.map(&:id)).group(:measurement_item).size
     measurement_items = MeasurementItem.includes(:unit).all
-    #content = icon + (current ? h.link_to(name, specimen) : name)
-    content = icon + ( current ? h.content_tag(:strong, name, class: "text-primary bg-primary") : h.link_to(name, specimen) )
-
+    specimen_tag = icon + h.link_to_if( h.can?(:read, self), ( current ? h.content_tag(:strong, name, class: "text-primary bg-primary") : name ), self)
+    specimen_tag = h.content_tag(:span, specimen_tag, class: "ghost") if specimen.ghost?
+    content = specimen_tag
     content += h.content_tag(:span, nil, class: "glyphicon glyphicon-stats") + h.content_tag(:a, h.content_tag(:span, analyses.size, class: "badge"), href: "#specimen-analyses-#{self.id}", :"data-toggle" => "collapse" )
     lis = [] 
     measurement_items.each do |item|
@@ -105,15 +105,20 @@ class SpecimenDecorator < Draper::Decorator
     # list.uniq!
     # relatives = families.select{|e| list.include?(e) }
 #    h.tree(relatives_for_tree.group_by(&:parent_id)) do |obj|
-    h.tree(families.group_by(&:parent_id)) do |obj|
-        obj.decorate.tree_node(self == obj)
+    h.tree(families.group_by(&:parent_id), nil, 1, [self].concat(ancestors)) do |obj|
+      obj.decorate.tree_node(self == obj)
     end
   end
 
   def tree_node(current=false)
     link = current ? h.content_tag(:strong, name, class: "text-primary bg-primary") : name
     icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
-    icon + h.link_to_if(h.can?(:read, self), link, self) + children_count + analyses_count + bibs_count + files_count
+    html = icon + h.link_to_if(h.can?(:read, self), link, self)
+    html += h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + h.content_tag(:a, h.content_tag(:span, children.size, class: "badge"), href: "#tree-#{self.id}", :"data-toggle" => "collapse" ) if children.size > 0
+    html += analyses_count
+    html += bibs_count
+    html += files_count
+    html
   end
 
   def children_count
