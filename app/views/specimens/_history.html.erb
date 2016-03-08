@@ -3,8 +3,7 @@
   <% box = path.boxes.last %>
   <div class="panel panel-default">
     <div class="panel-heading">
-
-      <%= content_tag(:h3, box.decorate.box_path + " " + content_tag(:span, distance_of_time_in_words(path.duration), class:"label label-default"), class: "panel-title" ) if box %>
+      <%= content_tag(:h3, history_title(path), class: "panel-title" ) %> 
     </div>
     <div class="panel-body">
       <%= timeline(path.brought_in_at, path.brought_out_at) %>

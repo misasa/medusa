@@ -10,6 +10,12 @@ module ApplicationHelper
     date.present? ? Date.parse(date).strftime("%Y-%m-%d") : ""
   end
 
+  def history_title(path)
+    html = path.boxes.map { |content| content_tag(:span, nil, class:"glyphicon glyphicon-folder-close") + ( content ? link_to_if(can?(:read, content), content.name, content) : "--" ) }.join("/") 
+    html += " " + content_tag(:span, distance_of_time_in_words(path.duration), class:"label label-default")
+    raw html
+  end
+
   def timeline(in_at, out_at)
     flag_more_than = false
     if in_at
