@@ -1,21 +1,26 @@
-<table class="table table-condensed table-striped">
-  <thead>
-    <tr>
-      <th>located-at</th>
-      <th>moved-at</th>
-      <th>moved-by</th>
-      <th>checked-at</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @specimen.paths.includes(:brought_in_by, :brought_out_by).each do |path| %>
-      <tr>
-        <td><%= raw (path.boxes.map { |content| content ? link_to_if(can?(:read, content), content.name, content) : "--" }).join("/") %></td>
-        <td><%= path.brought_in_at.strftime("%Y-%m-%d %H:%M") %></td> 
-        <td><%= path.brought_in_by.try(:username) %></td>
-        <td><%= path.checked_at && path.checked_at.strftime("%Y-%m-%d %H:%M") %></td> 
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <% @specimen.paths.includes(:brought_in_by, :brought_out_by).each do |path| %>
+  <% box = path.boxes.last %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+
+      <%= content_tag(:h3, box.decorate.box_path + " " + content_tag(:span, distance_of_time_in_words(path.duration), class:"label label-default"), class: "panel-title" ) if box %>
+    </div>
+    <div class="panel-body">
+      <%= timeline(path.brought_in_at, path.brought_out_at) %>
+
+      <% if box %>
+          <% links = [] %>
+          <% path.related_spots.each do |spot| %>
+          <% svg_link = link_to(spot_path(spot)) do %>
+            <% spot.attachment_file.decorate.picture_with_spots(width:120, height:90, spots:[spot], with_cross: true) %>
+          <% end %>
+            <% links << content_tag(:div, svg_link, class: "col-xs-3 col-sm-3 col-md-3 col-lg-3") %>
+          <% end %>
+          <%= content_tag(:div, raw( links.join ), class: "row spot-thumbnails") %>
+      <% end %>
+
+    </div>
+  </div>
+  <% end %>
+</div>

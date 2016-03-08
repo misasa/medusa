@@ -9,6 +9,9 @@ class Path < ActiveRecord::Base
   scope :contents_of, -> (box_id) { where("? = ANY(ids)", box_id) }
   scope :current, -> { where(brought_out_at: nil) }
   scope :exists_at, -> (date) { where(arel_table[:brought_in_at].lteq(date.to_date.end_of_day).and(arel_table[:brought_out_at].eq(nil).or(arel_table[:brought_out_at].gteq(date.to_date.beginning_of_day)))) rescue none }
+  def self.oldest
+    order(brought_in_at: :asc).first
+  end
 #  scope :exists_at, -> (datetime) { where(arel_table[:brought_in_at].lteq(datetime).and(arel_table[:brought_out_at].eq(nil).or(arel_table[:brought_out_at].gteq(datetime)))) rescue none }
 
   def self.cont_at(date)
@@ -68,6 +71,32 @@ class Path < ActiveRecord::Base
     map(&:name).join("/")
   end
 
+  def timeline
+    html = ""
+    html += "#{brought_in_at.strftime('%Y-%m-%d %H:%M')} - " if brought_in_at
+    html += "#{brought_out_at.strftime('%Y-%m-%d %H:%M')}" if brought_out_at
+    html 
+  end
+
+  def duration
+    if brought_in_at
+      t1 = brought_in_at
+    else
+      oldest = Path.oldest
+      if oldest
+        t1 = oldest.brought_in_at
+      end
+    end
+
+    if brought_out_at
+      t2 = brought_out_at
+    else
+      t2 = Time.zone.now
+      flag_more_than = true
+    end
+    t2 - t1 if t2 && t1
+  end
+
   def boxes
     if ids.present?
       boxes = Box.where(id: ids).includes(:record_property).index_by(&:id)
@@ -76,6 +105,10 @@ class Path < ActiveRecord::Base
       []
     end
 
+  end
+
+  def related_spots
+    boxes.map{|box| box.spot_links }.flatten
   end
 
   def self.ransackable_scopes(auth_object = nil)

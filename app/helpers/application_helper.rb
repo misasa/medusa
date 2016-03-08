@@ -10,6 +10,46 @@ module ApplicationHelper
     date.present? ? Date.parse(date).strftime("%Y-%m-%d") : ""
   end
 
+  def timeline(in_at, out_at)
+    flag_more_than = false
+    if in_at
+      t1 = in_at
+    else
+      oldest = Path.oldest
+      if oldest
+        t1 = oldest.brought_in_at
+        flag_more_than = true
+      end
+    end
+
+    if out_at
+      t2 = out_at
+    else
+      t2 = Time.zone.now
+      out_at = t2
+      flag_more_than = true
+    end
+
+    words = []
+    html = ""
+    # if t2 && t1
+    #   #words << "more than " if flag_more_than
+    #   #words << t2 - t1
+    #   words << content_tag(:span, distance_of_time_in_words(t2 - t1), class:"label label-default")
+    # end
+    stamps = []
+    if in_at
+      stamps << in_at.strftime("%Y-%m-%d %H:%M")
+    end
+    stamps << content_tag(:span, nil, class: "glyphicon glyphicon-arrow-right")
+
+    if out_at
+      stamps << out_at.strftime("%Y-%m-%d %H:%M")
+    end
+    words << stamps.join(" ")
+    raw words.join(" ")
+  end
+
   def difference_from_now(time)
     return unless time
     now = Time.now
