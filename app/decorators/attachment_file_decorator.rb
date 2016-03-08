@@ -96,7 +96,7 @@ class AttachmentFileDecorator < Draper::Decorator
         icon = attachable.decorate.icon
         if h.can?(:read, attachable)
           icon += h.link_to(link, attachable)
-          #icon += h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
+          icon += h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
         else
           icon += link
         end
