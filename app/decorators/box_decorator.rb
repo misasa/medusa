@@ -128,13 +128,13 @@ class BoxDecorator < Draper::Decorator
   def related_pictures
     links = []
     related_spots.each do |spot|
-      links << h.content_tag(:div, spot.decorate.spots_panel , class: "col-lg-4")
+      links << h.content_tag(:div, spot.decorate.spots_panel , class: "col-lg-3")
     end
     spot_links.each do |spot|
-      links << h.content_tag(:div, spot.decorate.spots_panel , class: "col-lg-4")
+      links << h.content_tag(:div, spot.decorate.spots_panel , class: "col-lg-3")
     end
     attachment_image_files.each do |file|
-      links << h.content_tag(:div, file.decorate.spots_panel(spots: file.spots) , class: "col-lg-4")
+      links << h.content_tag(:div, file.decorate.spots_panel(spots: file.spots) , class: "col-lg-3")
     end
     h.content_tag(:div, h.raw( links.join ), class: "row spot-thumbnails")
   end

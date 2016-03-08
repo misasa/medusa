@@ -7,7 +7,7 @@ class Bib < ActiveRecord::Base
   LABEL_HEADER = ["Id", "Name", "Authors"]
 
   has_many :bib_authors, -> { order(:priority) }, before_add: :set_initial_position
-  has_many :authors, through: :bib_authors
+  has_many :authors, through: :bib_authors, order: 'bib_authors.priority'
 
   has_many :referrings, dependent: :destroy
   has_many :specimens, through: :referrings, source: :referable, source_type: "Specimen"
@@ -132,6 +132,11 @@ class Bib < ActiveRecord::Base
 
   def to_html
     html = authors.first.name
+    #if authors.size > 2
+    #  html = authors[0].name + " et al."
+    #else
+    #  html = authors.pluck(:name).join(" and ")
+    #end
     html += " (#{year})" if year.present?
     html += " #{name}" if name.present?
     html += ", <i>#{journal}</i>" if journal.present?

@@ -306,7 +306,7 @@ describe Bib do
         volume: volume,
         pages: pages,
         year: year,
-        authors: [author_1, author_2]
+        authors: authors
        )
     end
     let(:journal) { "journal" }
@@ -315,7 +315,28 @@ describe Bib do
     let(:year) { "2014" }
     let(:author_1) { FactoryGirl.create(:author, name: "author_1") }
     let(:author_2) { FactoryGirl.create(:author, name: "author_2") }
-    it { expect(subject).to eq "author_1 (#{year}) bib_name, <i>#{journal}</i>, <b>#{volume}</b>, #{pages}." }
+    let(:author_3) { FactoryGirl.create(:author, name: "author_3") }
+    let(:author_4) { FactoryGirl.create(:author, name: "author_4") }
+    context "1 author" do
+      let(:authors){ [author_1] }
+      it { expect(subject).to eq "author_1 (#{year}) bib_name, <i>#{journal}</i>, <b>#{volume}</b>, #{pages}." }
+    end
+
+    context "2 authors" do
+      let(:authors){ [author_1, author_2] }
+      it { expect(subject).to eq "author_1 (#{year}) bib_name, <i>#{journal}</i>, <b>#{volume}</b>, #{pages}." }
+    end
+
+    context "3 author" do
+      let(:authors){ [author_1, author_2, author_3] }
+      it { expect(subject).to eq "author_1 (#{year}) bib_name, <i>#{journal}</i>, <b>#{volume}</b>, #{pages}." }
+    end
+
+    context "4 author" do
+      let(:authors){ [author_1, author_2, author_3, author_4] }
+      it { expect(subject).to eq "author_1 (#{year}) bib_name, <i>#{journal}</i>, <b>#{volume}</b>, #{pages}." }
+    end
+
   end
 
   describe "#author_valid?" do

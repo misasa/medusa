@@ -13,12 +13,12 @@ class AttachmentFileDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-file")
   end
 
-  def picture_with_spots(width: 250, height: 250, spots: [])
+  def picture_with_spots(width: 250, height: 250, spots: [], with_cross: false)
     return unless image?
     height_rate = original_height.to_f / height
     width_rate = original_width.to_f / width
     scale = (width_rate >= height_rate) ? 1.to_f/width_rate : 1.to_f/height_rate
-
+    length = (original_width >= original_height) ? original_width : original_height
     #options = (width_rate >= height_rate) ? { width: width, height: original_height * scale } : { width: original_width * scale, height: height }
     options = { width: width, height: height}
     svg_options = {xmlns: "http://www.w3.org/2000/svg", 'xmlns:xlink' => "http://www.w3.org/1999/xlink", version: "1.1"}.merge(options)
@@ -26,6 +26,7 @@ class AttachmentFileDecorator < Draper::Decorator
     image_tag = %Q|<image xlink:href="#{image_path}" x="0" y="0" width="#{attachment_file.original_width}" height="#{attachment_file.original_height}" data-id="#attachment_file.id}"/>|
     spots.each do |spot|
       spot_options = spot.svg_attributes
+      image_tag += spot.decorate.cross_tag(length: length/10) if with_cross
       spot_tag = %Q|<circle #{spot_options.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/>|
       image_tag += spot_tag
       #hline_tag = %Q|<circle cx="60" cy="60" r="40" style="fill:skyblue;"/>|
@@ -40,13 +41,13 @@ class AttachmentFileDecorator < Draper::Decorator
   end
 
 
-  def spots_panel(width: 160, height:120, spots:[])
+  def spots_panel(width: 140, height:120, spots:[])
     file = self
     svg = file.decorate.picture_with_spots(width:width, height:height, spots:spots)
     svg_link = h.link_to(h.attachment_file_path(file)) do
       svg
     end
-    tag = h.content_tag(:div, svg_link, class: "thumbnail")
+    #tag = h.content_tag(:div, svg_link, class: "thumbnail")
     left = h.content_tag(:div, svg_link, class: "col-md-12")
     right = h.content_tag(:div, my_tree(spots), class: "col-md-12")
     row = h.content_tag(:div, left + right, class: "row")

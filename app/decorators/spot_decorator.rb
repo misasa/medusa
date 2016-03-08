@@ -35,9 +35,15 @@ class SpotDecorator < Draper::Decorator
     h.raw( contents.compact.join(' ') )
   end
 
-  def spots_panel
+  def cross_tag(length: 100)
+    hline_tag = %Q|<line x1="#{spot.spot_x - length}" y1="#{spot.spot_y}" x2="#{spot.spot_x + length}" y2="#{spot.spot_y}" style="stroke:#{spot.stroke_color};stroke-width:#{spot.stroke_width};"/>|
+    vline_tag = %Q|<line x1="#{spot.spot_x}" y1="#{spot.spot_y - length}" x2="#{spot.spot_x}" y2="#{spot.spot_y + length}" style="stroke:#{spot.stroke_color};stroke-width:#{spot.stroke_width};"/>|
+    hline_tag + vline_tag
+  end
+
+  def spots_panel(width: 140, height:120)
     file = spot.attachment_file
-    svg = file.decorate.picture_with_spots(width:160, height:120, spots:[spot])
+    svg = file.decorate.picture_with_spots(width:width, height:height, spots:[spot], with_cross: true)
     svg_link = h.link_to(h.spot_path(self)) do
       svg
     end
