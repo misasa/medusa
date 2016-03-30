@@ -53,7 +53,7 @@ module HasRecordProperty
     if self.box_path.blank?
       items << "located at unknown"
     else
-      items << "located at \\verb{#{self.current_location}}" if self.current_location
+      items << "located at \\nolinkurl{#{self.current_location}}" if self.current_location
     end
     items.join(' ')    
   end
