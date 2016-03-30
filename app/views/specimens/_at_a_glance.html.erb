@@ -1,87 +1,99 @@
+<div class="display-type">
+  <div id="display-type-html">
 
-<ul>
-  <% unless @specimen.igsn.blank? %>
-    <li>
-      IGSN: <%= link_to @specimen.igsn, Settings.sesar_url(igsn: @specimen.igsn) %>
-  <%= link_to Settings.sesar_url(igsn: @specimen.igsn, edit: true), title: "edit on SESAR" do %>
-    <span class="glyphicon glyphicon-pencil"></span>
-  <% end %>
-
-    </li>
-  <% end %>
-  <% if @specimen.place %>
-    <% place = @specimen.place.decorate %>
-    <li>
-      place: <%= raw(place.try!(:latitude_to_html)) + ", " + raw(place.try!(:longitude_to_html)) %> <%= link_to "more", place_path(place) %>
-    </li>
-  <% end %>
-  <%= li_if_exist("classification: ", @specimen.classification.try!(:full_name)) %>
-  <%= li_if_exist("physical-form: ", @specimen.physical_form.try!(:name)) %>
-  <%= li_if_exist("quantity (#{@specimen.quantity_unit}): ", @specimen.quantity) %>
-  <%= li_if_exist("age (#{@specimen.age_unit}): ", @specimen.age_in_text) %>
-  <%= li_if_exist("tag list: ", @specimen.tag_list) %>
-  <%= li_if_exist("description: ", @specimen.description) %>
-  <% @specimen.specimen_custom_attributes.each do |specimen_custom_attribute| %>
-    <%= li_if_exist("#{specimen_custom_attribute.custom_attribute.name}: ", specimen_custom_attribute.value ) %>
-  <% end %> 
-  <li>modified at <%= difference_from_now(@specimen.updated_at) %></li>
-  <%= li_if_exist("bib:", @specimen.bibs_with_link) %>
-  <% if @specimen.attachment_pdf_files.present? %>
-    <li>
-      <% @specimen.attachment_pdf_files.each do |attachment_pdf_file| %>
-        <%= attachment_pdf_file.name %>
-        <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_pdf_file.id), id: "file-#{attachment_pdf_file.id}-button") %>
+    <ul>
+      <% unless @specimen.igsn.blank? %>
+        <li>
+          IGSN: <%= link_to @specimen.igsn, Settings.sesar_url(igsn: @specimen.igsn) %>
+      <%= link_to Settings.sesar_url(igsn: @specimen.igsn, edit: true), title: "edit on SESAR" do %>
+        <span class="glyphicon glyphicon-pencil"></span>
       <% end %>
-    </li>
-  <% end %>  
-  <li>analysis:<%= @specimen.list_of_summary_of_analysis %></li>
-</ul>
 
-
-<div class="row spot-thumbnails">
-  <%= @specimen.decorate.related_pictures %>
-</div>
-
-<% unless @specimen.analyses.empty? %>
-  Table of analysis on <%= content_tag(:span, nil, class: specimen_ghost(@specimen, "glyphicon glyphicon-cloud")) + link_to(@specimen.name, specimen_path(@specimen), class: specimen_ghost(@specimen)) %>
-  <table class="table table-condensed table-striped">
-    <%
-    if params[:measurement_category_id].blank?
-      measurement_items = MeasurementItem.includes(:unit).all
-    else
-      measurement_items = MeasurementCategory.find(params[:measurement_category_id]).measurement_items
-    end
-    %>
-    <thead>
-      <tr><th colspan="<%= @specimen.analyses.size + 2 %>"></th></tr>
-      <tr>
-        <th></th>
-        <th>unit</th>
-        <% @specimen.analyses.each do |analysis| %>
-          <th <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>><%= link_to(analysis.name, analysis_path(analysis)) %></th>
-        <% end %>
-      </tr>
-    </thead>
-    <tbody>
-      <% measurement_items.each do |measurement_item| %>
-        <tr>
-          <th align="right"><%== measurement_item.display_name %></th>
-          <th> <%== measurement_item.unit.try!(:html) %></th>
-          <% @specimen.analyses.each do |analysis| %>
-            <% value = analysis.chemistries.detect {|chemistry| chemistry.measurement_item_id == measurement_item.id }.try(:value) || "-" %>
-            <td <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>align="right">
-              <%= value %>
-            </td>
+        </li>
+      <% end %>
+      <% if @specimen.place %>
+        <% place = @specimen.place.decorate %>
+        <li>
+          place: <%= raw(place.try!(:latitude_to_html)) + ", " + raw(place.try!(:longitude_to_html)) %> <%= link_to "more", place_path(place) %>
+        </li>
+      <% end %>
+      <%= li_if_exist("classification: ", @specimen.classification.try!(:full_name)) %>
+      <%= li_if_exist("physical-form: ", @specimen.physical_form.try!(:name)) %>
+      <%= li_if_exist("quantity (#{@specimen.quantity_unit}): ", @specimen.quantity) %>
+      <%= li_if_exist("age (#{@specimen.age_unit}): ", @specimen.age_in_text) %>
+      <%= li_if_exist("tag list: ", @specimen.tag_list) %>
+      <%= li_if_exist("description: ", @specimen.description) %>
+      <% @specimen.specimen_custom_attributes.each do |specimen_custom_attribute| %>
+        <%= li_if_exist("#{specimen_custom_attribute.custom_attribute.name}: ", specimen_custom_attribute.value ) %>
+      <% end %> 
+      <li>modified at <%= difference_from_now(@specimen.updated_at) %></li>
+      <%= li_if_exist("bib:", @specimen.bibs_with_link) %>
+      <% if @specimen.attachment_pdf_files.present? %>
+        <li>
+          <% @specimen.attachment_pdf_files.each do |attachment_pdf_file| %>
+            <%= attachment_pdf_file.name %>
+            <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_pdf_file.id), id: "file-#{attachment_pdf_file.id}-button") %>
           <% end %>
-        </tr>
+        </li>
+      <% end %>  
+      <li>analysis:<%= @specimen.list_of_summary_of_analysis %></li>
+    </ul>
+
+
+    <div class="row spot-thumbnails">
+      <%= @specimen.decorate.related_pictures %>
+    </div>
+
+    <% unless @specimen.analyses.empty? %>
+      Table of analysis on <%= content_tag(:span, nil, class: specimen_ghost(@specimen, "glyphicon glyphicon-cloud")) + link_to(@specimen.name, specimen_path(@specimen), class: specimen_ghost(@specimen)) %>
+      <table class="table table-condensed table-striped">
+        <%
+        if params[:measurement_category_id].blank?
+          measurement_items = MeasurementItem.includes(:unit).all
+        else
+          measurement_items = MeasurementCategory.find(params[:measurement_category_id]).measurement_items
+        end
+        %>
+        <thead>
+          <tr><th colspan="<%= @specimen.analyses.size + 2 %>"></th></tr>
+          <tr>
+            <th></th>
+            <th>unit</th>
+            <% @specimen.analyses.each do |analysis| %>
+              <th <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>><%= link_to(analysis.name, analysis_path(analysis)) %></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% measurement_items.each do |measurement_item| %>
+            <tr>
+              <th align="right"><%== measurement_item.display_name %></th>
+              <th> <%== measurement_item.unit.try!(:html) %></th>
+              <% @specimen.analyses.each do |analysis| %>
+                <% value = analysis.chemistries.detect {|chemistry| chemistry.measurement_item_id == measurement_item.id }.try(:value) || "-" %>
+                <td <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>align="right">
+                  <%= value %>
+                </td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <%= form_tag(specimen_path(@specimen), method: :get) do %>
+        analysis:
+        <%= select_tag :analysis_id, options_for_select(@specimen.analyses.map {|analysis| [analysis.name, analysis.id]}, params[:analysis_id]), include_blank: true %>
+        measurement-category:
+        <%= select_tag :measurement_category_id, options_for_select(MeasurementCategory.pluck(:name, :id), params[:measurement_category_id]), include_blank: true %>
+            <%= button_tag class: "btn btn-default" do %><span class="glyphicon glyphicon-refresh"></span><% end %>
       <% end %>
-    </tbody>
-  </table>
-  <%= form_tag(specimen_path(@specimen), method: :get) do %>
-    analysis:
-    <%= select_tag :analysis_id, options_for_select(@specimen.analyses.map {|analysis| [analysis.name, analysis.id]}, params[:analysis_id]), include_blank: true %>
-    measurement-category:
-    <%= select_tag :measurement_category_id, options_for_select(MeasurementCategory.pluck(:name, :id), params[:measurement_category_id]), include_blank: true %>
-        <%= button_tag class: "btn btn-default" do %><span class="glyphicon glyphicon-refresh"></span><% end %>
-  <% end %>
-<% end %>
+    <% end %>
+
+  </div>
+  <div class="hidden" id="display-type-tex">
+    <pre><code><%= @specimen.to_bibtex %></code></pre>
+  </div>
+</div>
+<div class="btn-group">
+  <a href="#display-type-html" class="btn radio-button-group">html</a>
+  <a href="#display-type-tex" class="btn radio-button-group">bibtex</a>
+</div>

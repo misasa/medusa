@@ -49,14 +49,15 @@ module HasRecordProperty
       # items << "#{article_for(self.form_name)}".capitalize
       items << form_name
     end
-    items << "``#{self.name}''"
+    items << "``{#{self.name}}''"
     if self.box_path.blank?
       items << "located at unknown"
     else
-      items << "located at \\nolinkurl{#{self.box_path}}" if self.box_path
+      items << "located at \\verb{#{self.current_location}}" if self.current_location
     end
     items.join(' ')    
   end
+
 
   def dream_url
     "http://dream.misasa.okayama-u.ac.jp/?q=#{self.global_id}"
@@ -69,9 +70,9 @@ module HasRecordProperty
       dream_url = "http://dream.misasa.okayama-u.ac.jp/?q=#{self.global_id}"
       items = []
       items << self.global_id
-      my_author = self.name.gsub(/\s/,'-').gsub(/"/,"''") # TK January 22, 2014 (Wed)
+      my_author = self.name.gsub(/"/,"''") # TK January 22, 2014 (Wed)
       my_bib_title = self.bib_title.gsub(/"/,"''")
-      items << " author={#{my_author}}"
+      items << " author={{#{my_author}}}"
       items << " title={#{my_bib_title}}"
       items << " journal={\\href{#{dream_url}}{DREAM}}"
       items << ' volume={' + self.created_at.strftime("%y") + '}'
@@ -80,6 +81,20 @@ module HasRecordProperty
       items << " url={#{dream_url}}"
       return "@article{" + items.compact.join(",\n") + ",\n}"    
     end
+  end
+
+  def current_location
+    items = []
+    if self.instance_of?(Box)
+      items << self.path
+    elsif self.respond_to?(:box) && self.box
+      items << self.box.path
+      items << self.box.name
+    else
+      items << ""
+    end
+    #items << self.name
+    items.join("/") + '/'
   end
 
   def box_path
