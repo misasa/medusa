@@ -321,6 +321,12 @@ describe Specimen do
         end
       end
     end
+
+    describe "to_bibtex", :current => true do
+      subject {obj.to_bibtex}
+      let(:obj) { FactoryGirl.create(:specimen) }
+      it { expect(subject).to match(/^\@article/) }
+    end
     
     describe "igsn", :current => true do
       let(:obj) { FactoryGirl.build(:specimen, igsn: igsn) }

@@ -41,19 +41,28 @@ module HasRecordProperty
     #title = ""
     if self.respond_to?(:form_name) && self.form_name
       form_name = self.form_name
-      if ['a', 'e', 'i', 'o', 'u'].include? form_name[0..0]
-        items << 'An'
-      else
-        items << 'A'
-      end
-      # items << "#{article_for(self.form_name)}".capitalize
-      items << form_name
-    end
-    items << "``{#{self.name}}''"
-    if self.box_path.blank?
-      items << "located at unknown"
+      # if ['a', 'e', 'i', 'o', 'u'].include? form_name[0..0]
+      #   items << 'An'
+      # else
+      #   items << 'A'
+      # end
+      items << form_name.capitalize
     else
-      items << "located at \\nolinkurl{#{self.current_location}}" if self.current_location
+      items << self.class.to_s
+    end
+    #items << "``{#{self.name}}''"
+    # if self.respond_to?(:classification) && self.classification
+    #     items << "of #{self.classification.full_name}"
+    # end
+    if self.respond_to?(:quantity) && self.quantity && self.quantity > 0
+      items << "with quantity #{self.quantity}"
+      items << self.quantity_unit if self.quantity_unit
+    end
+
+    if self.box_path.blank?
+      items << "at unknown"
+    else
+      items << "at \\nolinkurl{#{self.current_location}}" if self.current_location
     end
     items.join(' ')    
   end
@@ -75,9 +84,9 @@ module HasRecordProperty
       items << " author={{#{my_author}}}"
       items << " title={#{my_bib_title}}"
       items << " journal={\\href{#{dream_url}}{DREAM}}"
-      items << ' volume={' + self.created_at.strftime("%y") + '}'
+      items << ' volume={' + self.updated_at.strftime("%y") + '}'
       items << ' pages={' + self.global_id + '}'
-      items << ' year={' + self.updated_at.strftime("%Y") +'}'
+      items << ' year={' + self.created_at.strftime("%Y") +'}'
       items << " url={#{dream_url}}"
       return "@article{" + items.compact.join(",\n") + ",\n}"    
     end

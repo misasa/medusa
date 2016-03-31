@@ -96,6 +96,12 @@ describe Box do
     end
   end
 
+
+  describe "to_bibtex", :current => true do
+    subject {obj.to_bibtex}
+    let(:obj) { FactoryGirl.create(:box) }
+    it { expect(subject).to match(/^\@article/) }
+  end
   describe "#paths", :current => true do
     let(:box) { FactoryGirl.build(:box, path: "path", parent_id: parent_id, name: 'box') }
     let(:parent_id) { parent.id }
