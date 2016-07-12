@@ -59,6 +59,13 @@ class SpecimensController < ApplicationController
     respond_with @specimen, layout: !request.xhr?
   end
 
+  def chemistries
+    analyses = Analysis.where(specimen_id: @specimen.self_and_descendants)
+    return if analyses.count == 0
+    @measurement_item = MeasurementItem.find(params[:measurement_item_id])
+    @chemistries = Chemistry.where(analysis_id: analyses.map(&:id), measurement_item_id: @measurement_item.id).order(:value)
+  end
+
   def show_place
     @place = @specimen.place
     #respond_with @place, layout: false

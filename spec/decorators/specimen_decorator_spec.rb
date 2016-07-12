@@ -7,6 +7,20 @@ describe SpecimenDecorator do
   let(:box){FactoryGirl.create(:box)}
   before{User.current = user}
 
+  describe ".summary_of_analysis" do
+    subject { obj.summary_of_analysis }
+    let(:analysis_1){FactoryGirl.create(:analysis)}
+    let(:item_1){FactoryGirl.create(:measurement_item)}
+    let(:chemistry_1){FactoryGirl.create(:chemistry, :analysis_id => analysis_1.id, :measurement_item_id => item_1.id)}
+    before {
+      allow(obj.h).to receive(:can?).and_return(true)
+      analysis_1.specimen = obj
+      analysis_1.save
+    }
+
+    it { expect(subject).to include("<a data-toggle=\"collapse\" href=\"#specimen-analyses-#{obj.id}\"><span class=\"badge\">1</span></a>") }
+  end
+
   describe ".name_with_id" do
     subject{obj.name_with_id}
     it{expect(subject).to include(obj.name)}

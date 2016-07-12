@@ -2,6 +2,22 @@ require 'spec_helper'
 
 describe Chemistry do
 
+  describe "#specimen", :current => true do
+    subject { chemistry.specimen }
+    let(:specimen_1) { FactoryGirl.create(:specimen) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1) }
+    let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis_1, measurement_item: measurement_item, unit: unit, value: value) }
+    let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit, display_in_html: display_in_html, nickname: nickname) }
+    let(:unit) { FactoryGirl.create(:unit) }
+    let(:value) { 1 }
+    let(:display_in_html) { "HTML" }
+    let(:nickname) { "nickname" }
+    it {
+      expect(subject).to be_eql(specimen_1)
+    }
+
+  end
+
   describe "#display_name" do
     subject { chemistry.display_name }
     let(:chemistry) { FactoryGirl.build(:chemistry, measurement_item: measurement_item, unit: unit, value: value) }

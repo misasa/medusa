@@ -3,7 +3,8 @@ lock '3.1.0'
 
 set :application, 'medusa'
 #set :application, 'medusa'
-set :repo_url, 'git@devel.misasa.okayama-u.ac.jp:rails/medusa.git'
+#set :repo_url, 'git@devel.misasa.okayama-u.ac.jp:rails/medusa.git'
+set :repo_url, 'https://github.com/misasa/medusa.git'
 
 # Default branch is :master
 # ask :branch, proc { `git rev-parse --abbrev-ref HEAD`.chomp }
@@ -15,7 +16,7 @@ set :repo_url, 'git@devel.misasa.okayama-u.ac.jp:rails/medusa.git'
 # else
 #   set :deploy_to, '/srv/dream/'
 # end
-set :deployt_to, '/srv/app/medusa'
+set :deploy_to, '/srv/app/medusa'
 # Default value for :scm is :git
 # set :scm, :git
 

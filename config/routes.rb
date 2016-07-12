@@ -72,6 +72,7 @@ Medusa::Application.routes.draw do
       get :map
       get :property
       get :detail_edit
+      get :chemistries
       get :place, to: :show_place
       post :place, to: :create_place
     end

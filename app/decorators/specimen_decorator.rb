@@ -82,7 +82,8 @@ class SpecimenDecorator < Draper::Decorator
     content += h.content_tag(:span, nil, class: "glyphicon glyphicon-stats") + h.content_tag(:a, h.content_tag(:span, analyses.size, class: "badge"), href: "#specimen-analyses-#{self.id}", :"data-toggle" => "collapse" )
     lis = [] 
     measurement_items.each do |item|
-      lis << h.raw(item.display_name) + h.content_tag(:span, item_counts[item], class:"badge") if item_counts[item]
+      lis << h.raw(item.display_name) + h.link_to(h.content_tag(:span, item_counts[item], class:"badge"), h.chemistries_specimen_path(self, measurement_item_id: item.id, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal" ) if item_counts[item]
+# + h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
     end
     #content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: ( current ? "collapse in" : "collapse" ) )
     content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: "collapse" )
