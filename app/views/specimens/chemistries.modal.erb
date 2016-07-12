@@ -1,0 +1,20 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th></th>            
+    </tr>
+  </thead>
+  <tbody>
+    <h3><%=raw @measurement_item.display_in_html %></h3>
+    <% @chemistries.each do |chemistry| %>
+    <tr>
+      <td><%=link_to(chemistry.specimen.name, specimen_path(chemistry.specimen)) if chemistry.specimen %></td>
+      <td><%=link_to(chemistry.analysis.name, analysis_path(chemistry.analysis)) %></td>
+      <td><%=chemistry.value %><%=" (#{chemistry.uncertainty})" if chemistry.uncertainty %></td>
+      <td><%=raw chemistry.unit.html if chemistry.unit %></td>      
+    </tr>
+    <% end %>
+  </tbody>
+</table>
