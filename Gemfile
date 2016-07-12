@@ -29,6 +29,9 @@ gem 'jquery-ui-rails'
 gem 'jbuilder', '~> 1.2'
 #gem 'active_model_serializers'
 
+gem 'lazy_high_charts'
+gem 'histogram'
+
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false

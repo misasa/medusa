@@ -1,3 +1,4 @@
+require 'histogram/array'
 class SpecimensController < ApplicationController
   respond_to :html, :xml, :json
   before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update, :download_card, :download_bundle_card, :download_label, :download_bundle_label]
@@ -15,6 +16,7 @@ class SpecimensController < ApplicationController
     unless params[:measurement_category_id]
       params[:measurement_category_id] = MeasurementCategory.first.id if MeasurementCategory.first
     end
+
     respond_with @specimen
   end
 
@@ -64,6 +66,16 @@ class SpecimensController < ApplicationController
     return if analyses.count == 0
     @measurement_item = MeasurementItem.find(params[:measurement_item_id])
     @chemistries = Chemistry.where(analysis_id: analyses.map(&:id), measurement_item_id: @measurement_item.id).order(:value)
+    (bins, freqs) = @chemistries.pluck(:value).histogram(10)
+    min = @chemistries.first.value
+    max = @chemistries.last.value
+
+    @graph = LazyHighCharts::HighChart.new('graph') do |f|
+      f.title(text: "#{@measurement_item.display_in_html} min:#{min} max:#{max}")
+      f.xAxis(categories: bins)
+      f.series(name:  @measurement_item.display_in_html, data: freqs, type: 'column')
+    end
+
   end
 
   def show_place
