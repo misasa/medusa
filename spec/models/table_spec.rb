@@ -337,7 +337,7 @@ describe "Table::Row" do
     end
 
 
-    context "table linked 2 chemistries with different device & technique pair" do
+    context "table linked 2 chemistries with different device & technique pair", :current => true do
       let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2]) }
       let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
       let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }

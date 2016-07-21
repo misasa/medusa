@@ -21,27 +21,7 @@ class Table < ActiveRecord::Base
   validates :age_unit, presence: true, if: -> { with_age.present? }
   #validates :age_scale, presence: true, if: -> { with_age.present? }
 
-  def full_specimens
-    Specimen.where(id: specimens.map{|sp| sp.self_and_descendants}.flatten.map(&:id) )
-  end
 
-#  def full_analyses
-#    Analysis.where(specimen_id: specimens.map{|sp| sp.self_and_descendants }.flatten.map(&:id))
-#  end
-
-#  def full_chemistries
-#    Chemistry.where(analysis_id: full_analyses.map(&:id))
-#  end
-
-  def specimens_hash
-    h = Hash.new
-    specimens.each do |sp|
-      sp.self_and_descendants.each do |sub|
-        h[sub.id] = sp.id
-      end
-    end
-    h
-  end
 
   class Row
 
@@ -202,6 +182,7 @@ class Table < ActiveRecord::Base
   end
 
   def refresh
+    @specimens_hash = nil
     specimens.each do |specimen|
       specimen.full_analyses.each do |analysis|
         unless table_analyses.find_by_analysis_id(analysis.id)
@@ -211,6 +192,38 @@ class Table < ActiveRecord::Base
       end
     end
 
+  end
+
+  def full_specimens
+    Specimen.where(id: specimens.map{|sp| sp.self_and_descendants}.flatten.map(&:id) )
+  end
+
+#  def full_analyses
+#    Analysis.where(specimen_id: specimens.map{|sp| sp.self_and_descendants }.flatten.map(&:id))
+#  end
+
+#  def full_chemistries
+#    Chemistry.where(analysis_id: full_analyses.map(&:id))
+#  end
+
+  # def specimens_hash
+  #   h = Hash.new
+  #   @specimens_hash ||= specimens.each do |sp|
+  #     sp.self_and_descendants.each do |sub|
+  #       h[sub.id] = sp.id
+  #     end
+  #     h
+  #   end
+  # end
+  def specimens_hash
+    return @specimens_hash if @specimens_hash
+    @specimens_hash = Hash.new
+    specimens.each do |sp|
+      sp.self_and_descendants.each do |sub|
+        @specimens_hash[sub.id] = sp.id
+      end
+    end
+    @specimens_hash
   end
 
   private
