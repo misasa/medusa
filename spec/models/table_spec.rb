@@ -67,7 +67,7 @@ describe "Table" do
     end
   end
   
-  describe "recursive", :current => true do
+  describe "recursive" do
     before do
       specimen
       analysis
@@ -79,11 +79,12 @@ describe "Table" do
       table_specimen
     end
     it { expect(table.full_specimens.count).to be_eql 2}
-    it { expect(table.full_analyses.count).to be_eql 2}
-    it { expect(table.full_chemistries.count).to be_eql 2}
+    it { expect(table.analyses.count).to be_eql 2}
+    it { expect(table.analyses.count).to be_eql 2}    
+    it { expect(table.chemistries.count).to be_eql 2}
   end
 
-  describe "refresh", :current => true do
+  describe "refresh" do
     before do
       specimen
       analysis
@@ -94,24 +95,24 @@ describe "Table" do
       sub_analysis
       sub_chemistry
       table.refresh
-      p table.table_analyses
     end
     it { expect(table.full_specimens.count).to be_eql 2}
-    it { expect(table.full_analyses.count).to be_eql 2}
-    it { expect(table.full_chemistries.count).to be_eql 2}
+    it { expect(table.analyses.count).to be_eql 2}
+    it { expect(table.chemistries.count).to be_eql 2}
     it { expect(table.table_analyses.count).to be_eql 2}
   end
 
-  describe "#each" do
+  describe "#each", :current => true do
     context "table not link category_measurement_item" do
       it { expect { |b| table.each(&b) }.not_to yield_control }
     end
     context "table linked 1 category_measurement_item" do
       before do
         category_measurement_item_1
-        table_specimen
         analysis
         chemistry
+        table
+        table_specimen
         allow(Table::Row).to receive(:new).with(table, category_measurement_item_1, [chemistry]).and_return(:row_1)
       end
       let(:category_measurement_item_1) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
@@ -122,9 +123,10 @@ describe "Table" do
       before do
         category_measurement_item_1
         category_measurement_item_2
-        table_specimen
         analysis
         chemistry
+        table
+        table_specimen
         allow(Table::Row).to receive(:new).with(table, category_measurement_item_1, [chemistry]).and_return(:row_1)
         allow(Table::Row).to receive(:new).with(table, category_measurement_item_2, [chemistry]).and_return(:row_2)
       end
@@ -403,6 +405,11 @@ describe "Table::Row" do
         let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
         let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
         before do
+          specimen_1
+          analysis_1
+          specimen_2
+          analysis_2
+          table
           table_specimen_1
           table_specimen_2
         end
@@ -426,6 +433,11 @@ describe "Table::Row" do
           let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
           let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
           before do
+            specimen_1
+            analysis_1
+            specimen_2
+            analysis_2
+            table
             table_specimen_1
             table_specimen_2
           end
@@ -625,6 +637,9 @@ describe "Table::Cell" do
     end
     context "table linked chemistry" do
       before do
+        specimen
+        analysis
+        table
         table_specimen
         chemistry
       end
@@ -633,6 +648,9 @@ describe "Table::Cell" do
 
     context "table linked 2 chemistry" do
       before do
+        specimen
+        analysis
+        table
         table_specimen
         chemistry
         chemistry_2
@@ -649,6 +667,9 @@ describe "Table::Cell" do
     end
     context "table linked chemistry" do
       before do
+        specimen
+        analysis
+        table
         table_specimen
         chemistry
         allow(cell).to receive(:raw).and_return(1)
@@ -664,6 +685,9 @@ describe "Table::Cell" do
     end
     context "table linked chemistry" do
       before do
+        specimen
+        analysis
+        table        
         table_specimen
         chemistry
         allow(table).to receive(:method_sign).with(analysis.technique, analysis.device).and_return(:method_sign)
@@ -679,6 +703,9 @@ describe "Table::Cell" do
     end
     context "table linked chemistry" do
       before do
+        specimen
+        analysis
+        table        
         table_specimen
         chemistry
       end

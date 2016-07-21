@@ -6,8 +6,10 @@ class Table < ActiveRecord::Base
   has_many :table_specimens, -> { order :position }, dependent: :destroy
   has_many :table_analyses, -> { order :priority }, dependent: :destroy
   has_many :specimens, through: :table_specimens, after_add: :take_over_specimen
-  has_many :analyses, through: :specimens
-  has_many :chemistries, through: :specimens
+  #has_many :analyses, through: :specimens
+  has_many :analyses, through: :table_analyses
+  #has_many :chemistries, through: :specimens
+  has_many :chemistries, through: :analyses
   has_many :category_measurement_items, through: :measurement_category
   has_many :measurement_items, through: :measurement_category
   belongs_to :bib
@@ -23,13 +25,13 @@ class Table < ActiveRecord::Base
     Specimen.where(id: specimens.map{|sp| sp.self_and_descendants}.flatten.map(&:id) )
   end
 
-  def full_analyses
-    Analysis.where(specimen_id: specimens.map{|sp| sp.self_and_descendants }.flatten.map(&:id))
-  end
+#  def full_analyses
+#    Analysis.where(specimen_id: specimens.map{|sp| sp.self_and_descendants }.flatten.map(&:id))
+#  end
 
-  def full_chemistries
-    Chemistry.where(analysis_id: full_analyses.map(&:id))
-  end
+#  def full_chemistries
+#    Chemistry.where(analysis_id: full_analyses.map(&:id))
+#  end
 
   def specimens_hash
     h = Hash.new
@@ -215,7 +217,7 @@ class Table < ActiveRecord::Base
 
   def chemistries_hash
     init_hash = Hash.new { |h, k| h[k] = [] }
-    @chemistries_hash ||= full_chemistries.includes(:analysis).each_with_object(init_hash) do |chemistry, hash|
+    @chemistries_hash ||= chemistries.includes(:analysis).each_with_object(init_hash) do |chemistry, hash|
       hash[chemistry.measurement_item_id] << chemistry
     end
   end
