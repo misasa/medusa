@@ -57,6 +57,10 @@ class Specimen < ActiveRecord::Base
     end
   end
 
+  def full_analyses
+    Analysis.where(specimen_id: self_and_descendants)
+  end
+
   def ghost?
     quantity && quantity < 0
   end

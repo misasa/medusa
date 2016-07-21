@@ -10,7 +10,10 @@ describe "Table" do
   let(:specimen) { FactoryGirl.create(:specimen) }
   let(:analysis) { FactoryGirl.create(:analysis, specimen: specimen) }
   let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item) }
-  
+  let(:sub_specimen) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
+  let(:sub_analysis) { FactoryGirl.create(:analysis, specimen: sub_specimen) }
+  let(:sub_chemistry) { FactoryGirl.create(:chemistry, analysis: sub_analysis, unit: unit, measurement_item: measurement_item) }
+
   describe "validates" do
     describe "age_unit" do
       subject { table.valid? }
@@ -64,6 +67,41 @@ describe "Table" do
     end
   end
   
+  describe "recursive", :current => true do
+    before do
+      specimen
+      analysis
+      chemistry
+      sub_specimen
+      sub_analysis
+      sub_chemistry
+      table
+      table_specimen
+    end
+    it { expect(table.full_specimens.count).to be_eql 2}
+    it { expect(table.full_analyses.count).to be_eql 2}
+    it { expect(table.full_chemistries.count).to be_eql 2}
+  end
+
+  describe "refresh", :current => true do
+    before do
+      specimen
+      analysis
+      chemistry
+      table
+      table_specimen
+      sub_specimen
+      sub_analysis
+      sub_chemistry
+      table.refresh
+      p table.table_analyses
+    end
+    it { expect(table.full_specimens.count).to be_eql 2}
+    it { expect(table.full_analyses.count).to be_eql 2}
+    it { expect(table.full_chemistries.count).to be_eql 2}
+    it { expect(table.table_analyses.count).to be_eql 2}
+  end
+
   describe "#each" do
     context "table not link category_measurement_item" do
       it { expect { |b| table.each(&b) }.not_to yield_control }
@@ -558,7 +596,7 @@ describe "Table::Row" do
   end
 end
 
-describe "Table::Cell", :current => true do
+describe "Table::Cell" do
   let(:cell) { Table::Cell.new(row, table.chemistries) }
   let(:row) { Table::Row.new(table, category_measurement_item, table.chemistries) }
   let(:table) { FactoryGirl.create(:table, measurement_category: measurement_category) }

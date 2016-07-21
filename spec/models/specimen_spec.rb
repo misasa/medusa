@@ -1,7 +1,29 @@
 require "spec_helper"
 
 describe Specimen do
-  describe ".to_pml", :current => true do
+
+  describe ".full_analyses", :current => true do
+    let(:specimen){ FactoryGirl.create(:specimen) }
+    let(:specimen1) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
+    let(:specimen2) { FactoryGirl.create(:specimen, parent_id: specimen1.id) }
+    let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen1.id)}
+    let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen1.id)}
+    let(:analysis_3) { FactoryGirl.create(:analysis, specimen_id: specimen2.id)}
+    let(:analysis_4) { FactoryGirl.create(:analysis, specimen_id: specimen2.id)}
+    before do
+      specimen1
+      specimen2
+      analysis_1
+      analysis_2
+      analysis_3
+      analysis_4
+    end
+    it { expect(specimen1.analyses.count).to eq 2 }
+    it { expect(specimen2.analyses.count).to eq 2 }
+    it { expect(specimen.full_analyses.count).to eq 4 }
+  end
+
+  describe ".to_pml" do
     let(:specimen1) { FactoryGirl.create(:specimen) }
     let(:specimen2) { FactoryGirl.create(:specimen) }
     let(:specimens) { [specimen1] }
@@ -322,13 +344,13 @@ describe Specimen do
       end
     end
 
-    describe "to_bibtex", :current => true do
+    describe "to_bibtex" do
       subject {obj.to_bibtex}
       let(:obj) { FactoryGirl.create(:specimen) }
       it { expect(subject).to match(/^\@article/) }
     end
     
-    describe "igsn", :current => true do
+    describe "igsn" do
       let(:obj) { FactoryGirl.build(:specimen, igsn: igsn) }
       context "9桁の場合" do
         let(:igsn) { "abcd12345" }

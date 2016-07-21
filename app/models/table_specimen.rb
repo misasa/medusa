@@ -12,7 +12,7 @@ class TableSpecimen < ActiveRecord::Base
   end
 
   def create_table_analyses
-    specimen.analyses.each.with_index do |analysis, index|
+    specimen.full_analyses.each.with_index do |analysis, index|
       TableAnalysis.create!(table_id: table_id, specimen_id: specimen_id, analysis_id: analysis.id, priority: index)
     end
   end

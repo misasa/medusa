@@ -31,20 +31,26 @@ describe "TableSpecimen" do
     describe "create_table_analyses" do
       let(:table_specimen) { FactoryGirl.create(:table_specimen, specimen: specimen, table: table) }
       let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:sub_specimen){  FactoryGirl.create(:specimen, parent_id: specimen.id) }
       let(:table) { FactoryGirl.create(:table) }
       let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen) }
       let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen) }
+      let(:analysis_3) { FactoryGirl.create(:analysis, specimen: sub_specimen) }
+      let(:analysis_4) { FactoryGirl.create(:analysis, specimen: sub_specimen) }
+
       before do
         analysis_1
         analysis_2
+        analysis_3
+        analysis_4
       end
-      it { expect { table_specimen }.to change(TableAnalysis, :count).from(0).to(2) }
+      it { expect { table_specimen }.to change(TableAnalysis, :count).from(0).to(4) }
       describe "TableAnalysis record" do
         before { table_specimen }
-        it { expect(TableAnalysis.pluck(:table_id)).to eq [table.id, table.id] }
-        it { expect(TableAnalysis.pluck(:specimen_id)).to eq [specimen.id, specimen.id] }
-        it { expect(TableAnalysis.pluck(:analysis_id)).to include(analysis_1.id, analysis_2.id) }
-        it { expect(TableAnalysis.pluck(:priority)).to include(0, 1) }
+        it { expect(TableAnalysis.pluck(:table_id)).to eq [table.id, table.id,table.id, table.id] }
+        it { expect(TableAnalysis.pluck(:specimen_id)).to eq [specimen.id, specimen.id, specimen.id, specimen.id] }
+        it { expect(TableAnalysis.pluck(:analysis_id)).to include(analysis_1.id, analysis_2.id,analysis_3.id, analysis_4.id) }
+        it { expect(TableAnalysis.pluck(:priority)).to include(0, 1, 2, 3) }
       end
     end
   end

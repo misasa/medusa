@@ -69,6 +69,7 @@ class TablesController < ApplicationController
 
   def find_resource
     @table = Table.find(params[:id]).decorate
+    @table.refresh
   end
 
 end

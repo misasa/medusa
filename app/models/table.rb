@@ -19,6 +19,28 @@ class Table < ActiveRecord::Base
   validates :age_unit, presence: true, if: -> { with_age.present? }
   #validates :age_scale, presence: true, if: -> { with_age.present? }
 
+  def full_specimens
+    Specimen.where(id: specimens.map{|sp| sp.self_and_descendants}.flatten.map(&:id) )
+  end
+
+  def full_analyses
+    Analysis.where(specimen_id: specimens.map{|sp| sp.self_and_descendants }.flatten.map(&:id))
+  end
+
+  def full_chemistries
+    Chemistry.where(analysis_id: full_analyses.map(&:id))
+  end
+
+  def specimens_hash
+    h = Hash.new
+    specimens.each do |sp|
+      sp.self_and_descendants.each do |sub|
+        h[sub.id] = sp.id
+      end
+    end
+    h
+  end
+
   class Row
 
     include Enumerable
@@ -97,7 +119,9 @@ class Table < ActiveRecord::Base
     def chemistries_hash
       init_hash = Hash.new { |h, k| h[k] = [] }
       @chemistries_hash ||= chemistries.each_with_object(init_hash) do |chemistry, hash|
-        hash[chemistry.analysis.specimen_id] << chemistry
+        specimen_id = table.specimens_hash[chemistry.analysis.specimen_id]
+        hash[specimen_id] << chemistry
+        #hash[chemistry.analysis.specimen_id] << chemistry
       end
     end
 
@@ -175,11 +199,23 @@ class Table < ActiveRecord::Base
     table_analyses.detect { |table_analysis| table_analysis.analysis_id == analysis_id }.try!(:priority)
   end
 
+  def refresh
+    specimens.each do |specimen|
+      specimen.full_analyses.each do |analysis|
+        unless table_analyses.find_by_analysis_id(analysis.id)
+          priority = table_analyses.size 
+          table_analyses.create!(specimen_id: specimen.id, analysis_id: analysis.id, priority: priority)
+        end
+      end
+    end
+
+  end
+
   private
 
   def chemistries_hash
     init_hash = Hash.new { |h, k| h[k] = [] }
-    @chemistries_hash ||= chemistries.includes(:analysis).each_with_object(init_hash) do |chemistry, hash|
+    @chemistries_hash ||= full_chemistries.includes(:analysis).each_with_object(init_hash) do |chemistry, hash|
       hash[chemistry.measurement_item_id] << chemistry
     end
   end
