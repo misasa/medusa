@@ -73,7 +73,7 @@ describe Spot do
         spot.attachment_file.original_geometry = "123x234"
         spot.save
       end
-      it {expect(subject).to eq 2.34}
+      it {expect(subject).to eq 1.17}
     end
   end
 
