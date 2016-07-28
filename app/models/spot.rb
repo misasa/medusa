@@ -25,7 +25,7 @@ class Spot < ActiveRecord::Base
   end
 
   def generate_stroke_width
-    self.stroke_width = attachment_file.percent2pixel(1)
+    self.stroke_width = attachment_file.percent2pixel(0.5)
   end
 
   def spot_xy_from_center
