@@ -1,7 +1,13 @@
 <ul class="nav navbar-nav navbar-right">
   <li>
+  <% if current_user.box %>
+  <%= link_to box_path(current_user.box) do %>
+    <span class="glyphicon glyphicon-home"></span>
+  <% end %>
+  <% else %>
   <%= link_to root_path do %>
     <span class="glyphicon glyphicon-home"></span>
+  <% end %>
   <% end %>
   </li>
   <% if current_user.admin? %>
