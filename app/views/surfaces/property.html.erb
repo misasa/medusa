@@ -1,0 +1,7 @@
+<%= render partial: "parts/property", locals: { record: @surface } %>
+
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#edit_surface_<%= @surface.id %>", function() {
+    location.href="<% surface_path(@surface) %>";
+  });
+<% end %>

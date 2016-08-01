@@ -1,0 +1,77 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>name</th>
+      <th></th>
+      <th>spots</th>
+      <th>global-id</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= form_tag bundle_edit_attachment_files_path, id: "attachment-file-bundle-form" do %>
+      <% @surface.surface_images.order("position ASC").each do |surface_image| %>
+        <tr>
+          <% attachment_file = surface_image.image %>
+          <td>
+            <%= check_box_tag("ids[]", attachment_file.id, checked: false, id: "ids_#{attachment_file.id}", class: "select-row") if can?(:update, attachment_file) %>
+          </td>
+          <td><%= attachment_file.decorate.picture(width: 70, height: 70, type: :thumb) %></td>
+          <td><%= link_to_if can?(:read, attachment_file), attachment_file.data_file_name, attachment_file %></td>
+          <td></td>
+          <td><%= attachment_file.spots.try!(:size) %></td>
+          <td><%= attachment_file.try!(:global_id) %></td> 
+          <td>
+            <%= link_to move_to_top_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :move_to_top ,title: "move to top" do %>
+              <span class="glyphicon glyphicon-arrow-up"></span>
+            <% end %>
+          </td>
+          <td>
+            <%= link_to surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :delete, title: "unlink image", data: {confirm: t("confirm.unlink")} do %>
+              <span class="glyphicon glyphicon-remove"></span>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <%= form_for AttachmentFile.new, url: surface_images_path(@surface), multipart: true do |f|%>
+        <%= hidden_tabname_tag(__FILE__) %>
+        <%= f.fields_for :record_property_attributes do |r| %>
+          <%= r.hidden_field :user_id ,value: @current_user.id %>
+        <% end %>
+        <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
+        <th colspan= "3"><%= f.file_field :data %></th>
+        <th>
+          <%= f.button title:"add image", class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+        </th>
+      <% end %>
+      <%= form_tag link_by_global_id_surface_images_path(@surface), method: :post do %>
+        <%= hidden_tabname_tag(__FILE__) %>
+        <th>
+	  <div class="input-group">
+	    <%= text_field_tag :global_id, nil, id: "attachment-file-global-id", class: "form-control input-sm" %>
+	    <span class="input-group-addon">
+	      <%= link_to attachment_files_path(per_page: 5, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#attachment-file-global-id" do %>
+	      <span class="glyphicon glyphicon-search"></span>
+	      <% end %>
+	    </span>
+	  </div>
+	</th>
+        <th>
+          <%= button_tag title: "link image by global id", class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+        </th>
+      <% end %>
+    </tr>
+  </tfoot>
+</table>
+<%= link_to_function "edit", "$('#attachment-file-bundle-form').submit();", class: "btn btn-default" %>

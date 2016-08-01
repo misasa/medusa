@@ -168,6 +168,31 @@ describe AttachmentFile do
     end
   end
 
+  describe ".affine_transform" do
+    subject { obj.affine_transform(x, y)}
+    let(:obj){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
+    let(:point_1){ [0, 0] }
+    let(:x){ 0 }
+    let(:y){ 0 }
+    let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
+    let(:points){ obj.send(:image_xy2image_coord, *point_1) }
+    it {expect(subject).not_to be_empty} 
+  end
+
+
+  describe ".pixel_pairs_on_world" do
+    subject { obj.world_pairs_on_pixel( obj.pixel_pairs_on_world(pixel_pairs) ) }
+    let(:obj){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
+    let(:point_1){ [20, 30] }
+    let(:pixel_pairs){ [point_1] }
+    let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
+    let(:world){ obj.pixels_on_world(*point_1) }
+#    before do
+#      p pixel_pairs
+#      p subject
+#    end
+    it {expect(subject).not_to be_empty} 
+  end
   describe ".affine_matrix_in_string" do
     subject{obj.affine_matrix_in_string}
     let(:obj){FactoryGirl.create(:attachment_file)}

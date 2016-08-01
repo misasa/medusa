@@ -1,0 +1,40 @@
+
+<%= form_for Surface.new, url: bundle_update_surfaces_path do |f| %>
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>name</th>
+      <%= th_if_expand "owner" %>
+      <th>group</th>
+      <%= th_if_expand "published" %>
+      <th>updated-at</th>
+      <%= th_if_expand "created-at" %>
+      <th><%= toggle_column_link method: "post" %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= render partial: :surface, collection: SurfaceDecorator.decorate_collection(@surfaces), locals: { checked: true } %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th><%= check_box_tag nil, nil, true, class: "select-row-all" %></th>
+      <th></th>
+      <%= th_if_expand do %>
+        <%= f.select :user_id ,User.pluck(:username, :id), { include_blank: true }, class: "form-control input-sm" %>
+      <% end %>
+
+      <th><%= f.select :group_id ,Group.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
+      <%= th_if_expand do %>
+        <%= f.select :published ,[true, false], { include_blank: true }, class: "form-control input-sm" %>
+      <% end %>
+      <th>
+	<%= f.button class: "btn btn-default" do %>
+	<span class="glyphicon glyphicon-save"></span>
+	<% end %>
+      </th>
+      <th></th>
+    </tr>
+  </tfoot>
+</table>
+<% end %>

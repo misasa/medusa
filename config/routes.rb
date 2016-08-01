@@ -1,4 +1,6 @@
 Medusa::Application.routes.draw do
+  get "surfaces/index"
+  get "surfaces/show"
   devise_for :users, controllers: {
                omniauth_callbacks: "users/omniauth_callbacks",
                registrations: "users"
@@ -143,6 +145,18 @@ Medusa::Application.routes.draw do
     resources :analyses, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "bib", association_name: "analyses" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "bib" }
     resources :tables, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/tables", defaults: { parent_resource: "bib" }
+  end
+
+  resources :surfaces, concerns: [:bundleable, :reportable] do
+    member do
+      get :picture
+      get :property
+    end
+    resources :images, concerns: [:link_by_global_id], only: [:index, :show, :create, :update, :destroy], controller: "surface_images" do
+      member do
+        post 'move_to_top'
+      end
+    end
   end
 
   resources :tables, except: [:new] do

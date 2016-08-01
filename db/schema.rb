@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160108072716) do
+ActiveRecord::Schema.define(version: 20160728104147) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -337,6 +337,21 @@ ActiveRecord::Schema.define(version: 20160108072716) do
   end
 
   add_index "spots", ["attachment_file_id"], name: "index_spots_on_attachment_file_id", using: :btree
+
+  create_table "surface_images", force: true do |t|
+    t.integer  "surface_id"
+    t.integer  "image_id"
+    t.integer  "position"
+    t.boolean  "wall"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  create_table "surfaces", force: true do |t|
+    t.string   "name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "table_analyses", force: true, comment: "表内分析情報" do |t|
     t.integer  "table_id",    comment: "表ID"

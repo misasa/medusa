@@ -15,6 +15,8 @@ class AttachmentFile < ActiveRecord::Base
   has_many :boxes, -> { order(:name) }, through: :attachings, source: :attachable, source_type: "Box"
   has_many :bibs, through: :attachings, source: :attachable, source_type: "Bib"
   has_many :analyses, through: :attachings, source: :attachable, source_type: "Analysis"
+  has_many :surface_images
+  has_many :surfaces, :through => :surface_images
 
   attr_accessor :path
   after_post_process :save_geometry
@@ -99,10 +101,26 @@ class AttachmentFile < ActiveRecord::Base
     end
   end
 
+  def pixels_on_image(x, y)
+    return if affine_matrix.blank?
+    image_xy2image_coord(pixel2percent(x), pixel2percent(y))    
+  end
+
+  def pixels_on_world(x, y)
+    im = pixels_on_image(x, y)
+    affine_transform(*im)
+  end
+
   def percent2pixel(percent)
     return unless self.image?
     return unless self.length && self.length > 0
     return self.length.to_f * percent / 100
+  end
+
+  def pixel2percent(pix)
+    return unless self.image?
+    return unless self.length && self.length > 0
+    return pix/self.length.to_f * 100
   end
 
   def transform_length(l, type = :xy2world)
@@ -146,9 +164,18 @@ class AttachmentFile < ActiveRecord::Base
     return [xi, yi]
   end
 
+  def corners_on_image
+    return if affine_matrix.blank?
+    [image_xy2image_coord(0,0), image_xy2image_coord(x_max,0), image_xy2image_coord(x_max,y_max), image_xy2image_coord(0,y_max)]
+  end
+
+  def corners_on_world
+    a, b, c, d = corners_on_image
+    [affine_transform(*a),affine_transform(*b),affine_transform(*c),affine_transform(*d)]
+  end
+
   def width_in_um
     return if affine_matrix.blank?
-
     ps = image_xy2image_coord(0,0)
     pe = image_xy2image_coord(x_max,0)
     p1 = affine_transform(*ps)
@@ -181,6 +208,16 @@ class AttachmentFile < ActiveRecord::Base
     spots.inject(image) { |svg, spot| svg + spot.to_svg }
   end
 
+  def pixel_pairs_on_world(pairs)
+    xys = pairs.map{|pa| pixels_on_image(*pa)}
+    transform_points(xys)
+  end
+
+  def world_pairs_on_pixel(pairs)
+    xys = transform_points(pairs, :world2xy)
+    xys.map{|x, y| image_coord2xy(x, y).map{|z| percent2pixel(z)} }
+  end
+
   private
 
   def x_max
@@ -195,6 +232,12 @@ class AttachmentFile < ActiveRecord::Base
     center_point = [x_max/2, y_max/2]
     [x - center_point[0], center_point[1] - y]
   end
+
+  def image_coord2xy(ix,iy)
+    center_point = [x_max/2, y_max/2]
+    [ix + center_point[0], center_point[1] - iy]
+  end
+
 
   def array_to_matrix(array)
     m = Matrix[array[0..2],array[3..5],array[6..8]]
