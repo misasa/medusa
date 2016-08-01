@@ -1,4 +1,4 @@
 <div class="spot-viewer">
-  <%= content_tag :svg, nil, class: "spot-canvas", width: 600, height: 600, "data-image" => surface_image_path(@surface, @surface.first_image, format: :svg) %>
+  <%= content_tag :svg, nil, class: "spot-canvas", width: 600, height: 600, "data-image" => surface_image_path(@surface, @surface.first_image, format: :svg) if @surface.first_image %>
 </div>
   

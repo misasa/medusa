@@ -6,6 +6,6 @@ class Surface < ActiveRecord::Base
 
   def first_image
   	surface_image = surface_images.order('position ASC').first
-  	surface_image.image
+  	surface_image.image if surface_image
   end
 end
