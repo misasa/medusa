@@ -77,6 +77,14 @@ describe Spot do
     end
   end
 
+  describe ".to_svg" do
+    subject{ spot.to_svg }
+    context "stroke_width is not blank" do
+      let(:spot){FactoryGirl.create(:spot,stroke_width: 9)}
+      it {expect(subject).to match(/<circle/)}
+    end
+  end
+
   # describe ".spot_x_from_center" do
   #   subject{obj.spot_x_from_center}
   #   let(:obj){FactoryGirl.create(:spot)}

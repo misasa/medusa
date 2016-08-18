@@ -1,4 +1,5 @@
-class SurfaceImagesDecorator < Draper::Decorator
+class SurfaceImageDecorator < Draper::Decorator
+  include Rails.application.routes.url_helpers	
   delegate_all
 
   # Define presentation-specific methods here. Helpers are accessed through
@@ -10,4 +11,7 @@ class SurfaceImagesDecorator < Draper::Decorator
   #     end
   #   end
 
+  def target_path
+    surface_image_path(surface, self.image, script_name: Rails.application.config.relative_url_root)
+  end
 end

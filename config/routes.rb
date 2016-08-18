@@ -149,6 +149,7 @@ Medusa::Application.routes.draw do
 
   resources :surfaces, concerns: [:bundleable, :reportable] do
     member do
+      get :family
       get :picture
       get :property
     end

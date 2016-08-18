@@ -10,6 +10,9 @@ class SurfaceImagesController < ApplicationController
     respond_with @surface_image
   end
 
+  def family
+    respond_with @spot, layout: !request.xhr?
+  end
 
   def create
     @image = AttachmentFile.new(image_params)
@@ -71,7 +74,7 @@ class SurfaceImagesController < ApplicationController
   end
 
   def find_surface
-  	@surface = Surface.find(params[:surface_id])
+  	@surface = Surface.find(params[:surface_id]).decorate
   end
 
   def find_resource

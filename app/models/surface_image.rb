@@ -13,6 +13,33 @@ class SurfaceImage < ActiveRecord::Base
   	ss
   end
 
+  def to_region(opts = {})
+  	tag = ""
+  	#stroke_color = opts[:stroke_color] || 'green'
+    surface.surface_images.each do |osurface_image|
+      oimage = osurface_image.image
+      next if oimage === image
+      w = oimage.original_width
+  	  h = oimage.original_height
+  	  style = "stroke:rgb(0,255,0);stroke-width:10"
+  	  corners = [[0,0], [w,0], [w,h], [0,h]]
+      worlds = oimage.pixel_pairs_on_world(corners)
+      pixels = image.world_pairs_on_pixel(worlds)
+#      p oimage
+#  	  p corners
+#  	  p worlds
+#  	  p pixels
+      points = pixels.push(pixels[0]).map{|pix| pix.join(",")}.join(" ")
+  	  #tag += %Q|<line x1="#{pixels[0][0]}" y1="#{pixels[0][1]}" x2="#{pixels[1][0]}" y2="#{pixels[1][1]}" style="#{style}"/>|
+  	  #tag += %Q|<line x1="#{pixels[1][0]}" y1="#{pixels[1][1]}" x2="#{pixels[2][0]}" y2="#{pixels[2][1]}" style="#{style}"/>|
+  	  #tag += %Q|<line x1="#{pixels[2][0]}" y1="#{pixels[2][1]}" x2="#{pixels[3][0]}" y2="#{pixels[3][1]}" style="#{style}"/>|
+  	  #tag += %Q|<line x1="#{pixels[3][0]}" y1="#{pixels[3][1]}" x2="#{pixels[0][0]}" y2="#{pixels[0][1]}" style="#{style}"/>|  	  
+      tag += %Q|<polyline points="#{points}" style="fill:none;fill-opacity:0.1;stroke:purple;stroke-width:5" data-spot="#{osurface_image.decorate.target_path}"/>|
+  	end
+#  	p tag
+  	tag
+  end
+
   def to_svg(opts = {})
     x = opts[:x] || 0
     y = opts[:y] || 0
@@ -20,8 +47,10 @@ class SurfaceImage < ActiveRecord::Base
     height = opts[:height] || image.original_height
     image_tag = %Q|<image xlink:href="#{image.path}" x="0" y="0" width="#{image.original_width}" height="#{image.original_height}" data-id="#{id}"/>|
     svg = image_tag
+    svg += to_region
     surface.surface_images.each do |osurface_image|
       oimage = osurface_image.image
+      #image_region
       opixels = oimage.spots.map{|spot| [spot.spot_x, spot.spot_y]}
       worlds = oimage.pixel_pairs_on_world(opixels)
       pixels = image.world_pairs_on_pixel(worlds)

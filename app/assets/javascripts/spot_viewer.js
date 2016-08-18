@@ -22,6 +22,7 @@
       $(this.group).empty();
       this.image = $(svg).find("image");
       this.spots = $(svg).find("circle");
+      this.polylines = $(svg).find("polyline");
       spot = this.spots.filter("[data-target-uid='" + this.targetUid + "']");
       this._initTransform(this.image.attr("width"), this.image.attr("height"), spot.attr("cx"), spot.attr("cy"));
       svg.setAttribute("width", this.image.attr("width"));
@@ -37,6 +38,10 @@
       $(this.spots).click(function(e) {
         location.href = $(this).data("spot");
       });
+      $(this.polylines).css("cursor", "pointer");
+      $(this.polylines).click(function(e) {
+        location.href = $(this).data("spot");
+      });      
     },
     center: function() {
       return { left: ((this.options.width / 2) - this.translateX) / this.scale, top: ((this.options.height / 2) - this.translateY) / this.scale };

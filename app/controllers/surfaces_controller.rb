@@ -35,6 +35,10 @@ class SurfacesController < ApplicationController
     respond_with @surface
   end
 
+  def family
+    respond_with @surface, layout: !request.xhr?
+  end
+
   def picture
     respond_with @surface, layout: !request.xhr?
   end

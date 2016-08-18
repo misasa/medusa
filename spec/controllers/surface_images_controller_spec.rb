@@ -12,13 +12,22 @@ describe SurfaceImagesController do
   before { parent }
   before { child }
 
-  # describe "GET show" do
-  #   let(:method){get :show, surface_id: parent, id: child_id, format: 'svg'}
-  #   let(:child_id){child.id}
-  #   before { method }
-  #   it { expect(response.body).to include("\"global_id\":\"#{child.global_id}\"") }
-  # end
-
+  describe "GET show" do
+    #let(:method){get :show, surface_id: parent, id: child_id}
+    let(:image_1) { FactoryGirl.create(:attachment_file) }
+    let(:image_2) { FactoryGirl.create(:attachment_file) }
+    before do
+      image_1;image_2;
+      parent.images << image_1
+      parent.images << image_2
+    end
+    context "without format" do    
+      before{get :show,surface_id:parent.id, id: image_2.id }
+      it{expect(assigns(:surface)).to eq parent}
+      it{expect(assigns(:image)).to eq image_2}      
+      it{expect(response).to render_template("show") }
+    end
+  end
 
   describe "POST create" do
     let(:method){post :create, surface_id: parent, attachment_file: attributes}
