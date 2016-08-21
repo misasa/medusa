@@ -6,7 +6,7 @@ class SurfaceImagesController < ApplicationController
 #  load_and_authorize_resource
 
   def show
-    @surface_image = @surface.surface_images.find_by_image_id(@image.id)
+    #@surface_image = @surface.surface_images.find_by_image_id(@image.id)
     respond_with @surface_image
   end
 
@@ -42,7 +42,8 @@ class SurfaceImagesController < ApplicationController
   end
 
   def move_to_top
-    @surface.surface_images.find_by_image_id(@image.id).move_to_top
+    #@surface.surface_images.find_by_image_id(@image.id).move_to_top
+    @surface_image.move_to_top
     respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
   end
 
@@ -79,6 +80,7 @@ class SurfaceImagesController < ApplicationController
 
   def find_resource
   	@image = AttachmentFile.find(params[:id])
+    @surface_image = @surface.surface_images.find_by_image_id(@image.id).decorate
   end
 
 

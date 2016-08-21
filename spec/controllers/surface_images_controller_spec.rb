@@ -10,7 +10,10 @@ describe SurfaceImagesController do
   before { request.env["HTTP_REFERER"]  = url }
   before { sign_in user }
   before { parent }
-  before { child }
+  before do
+    child
+    parent.images << child
+  end
 
   describe "GET show" do
     #let(:method){get :show, surface_id: parent, id: child_id}
