@@ -36,6 +36,6 @@
     <%= f.collection_check_boxes :measurement_category_ids,MeasurementCategory.all,:id,:name %>
   </div>
 
-  <%= f.submit "update", class: "btn btn-sm" %>
+  <%= f.submit "OK", class: "btn btn-sm" %>
   <%= link_to "cancel", measurement_items_path, class: "btn btn-sm" %>
 <% end %>
