@@ -11,4 +11,7 @@
 <div class="btn-group">
   <a href="#display-type-html" class="btn radio-button-group">html</a>
   <a href="#display-type-tex" class="btn radio-button-group">tex</a>
-</div>  
+</div> 
+<%= link_to download_attachment_file_path(@image), class: "btn btn-default" do %>
+    <span class="glyphicon glyphicon-file"></span>
+<% end %>
