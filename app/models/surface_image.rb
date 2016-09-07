@@ -59,7 +59,9 @@ class SurfaceImage < ActiveRecord::Base
     width = opts[:width] || image.original_width
     height = opts[:height] || image.original_height
     image_tag = %Q|<image xlink:href="#{image.path}" x="0" y="0" width="#{image.original_width}" height="#{image.original_height}" data-id="#{id}"/>|
-    svg = image_tag
+    #svg = image_tag
+    svg = ""
+    svg += image_tag
     svg += to_region
     surface.surface_images.each do |osurface_image|
       oimage = osurface_image.image
