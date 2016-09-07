@@ -189,7 +189,7 @@ class AttachmentFileDecorator < Draper::Decorator
     basename = File.basename(name,".*")
     lines = []
     lines << "\\begin{overpic}[width=0.49\\textwidth]{#{basename}}"
-    lines << "\\put(1,74){\\colorbox{white}{(\\sublabel{#{basename}}) \\href{#{q_url}#{global_id}}{#{basename}}}}"
+    lines << "\\put(1,74){\\colorbox{white}{(\\sublabel{#{basename}}) \\nolinkurl{#{q_url}#{global_id}}{#{basename}}}}"
     lines << "%%(\\subref{#{basename}}) \\nolinkurl{#{basename}}"
     lines << "\\color{red}"
 
@@ -201,7 +201,7 @@ class AttachmentFileDecorator < Draper::Decorator
       xy_world = affine_transform(xy_image[0], xy_image[1])
 
       line = "\\put(#{x},#{y})"
-      line += "{\\footnotesize \\circle{0.7} \\href{#{q_url}#{spot.target_uid}}{#{spot.name}}}"
+      line += "{\\footnotesize \\circle{0.7} \\nolinkurl{#{q_url}#{spot.target_uid}}{#{spot.name}}}"
       line += " % #{spot.target_uid}" if spot.target_uid
       unless affine_matrix.blank?
         line += " % \\vs(#{("%.1f" %  xy_world[0])}, #{("%.1f" % xy_world[1])})"

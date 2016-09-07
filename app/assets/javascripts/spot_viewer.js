@@ -27,6 +27,7 @@
       this._initTransform(this.image.attr("width"), this.image.attr("height"), spot.attr("cx"), spot.attr("cy"));
       svg.setAttribute("width", this.image.attr("width"));
       svg.setAttribute("height", this.image.attr("height"));
+
       this.group.appendChild(svg);
       $(this.image).dblclick(function(e) {
         var offsetX = e.pageX - $(this).offset().left, offsetY = e.pageY - $(this).offset().top,
