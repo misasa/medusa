@@ -37,13 +37,20 @@
       <% end %>  
       <li>analysis:<%= @specimen.list_of_summary_of_analysis %></li>
     </ul>
-
-
     <div class="row spot-thumbnails">
       <%= @specimen.decorate.related_pictures %>
     </div>
 
+    <div class="row spot-thumbnails">
+      <% @specimen.generate_plots.each_with_index do |graph, id| %>
+        <div class="col-lg-4">
+          <%= high_chart("plot-#{id}", graph) %>
+        </div>
+      <% end %>
+    </div>
+    <% if false %>
     <% unless @specimen.analyses.empty? %>
+
       Table of analysis on <%= content_tag(:span, nil, class: specimen_ghost(@specimen, "glyphicon glyphicon-cloud")) + link_to(@specimen.name, specimen_path(@specimen), class: specimen_ghost(@specimen)) %>
       <table class="table table-condensed table-striped">
         <%
@@ -86,7 +93,7 @@
             <%= button_tag class: "btn btn-default" do %><span class="glyphicon glyphicon-refresh"></span><% end %>
       <% end %>
     <% end %>
-
+    <% end %>
   </div>
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @specimen.to_bibtex %></code></pre>

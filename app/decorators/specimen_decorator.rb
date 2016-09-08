@@ -89,6 +89,37 @@ class SpecimenDecorator < Draper::Decorator
     content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: "collapse" )
   end
 
+  def generate_plots
+    analyses = Analysis.where(specimen_id: self_and_descendants)
+    graphs = []
+    return graphs if analyses.count == 0
+    all_chemistries = Chemistry.where(analysis_id: analyses.map(&:id))
+    measurement_item_ids = Chemistry.where(analysis_id: analyses.map(&:id)).pluck(:measurement_item_id).uniq
+    measurement_items = MeasurementItem.find(measurement_item_ids)
+    measurement_items.each_with_index do |measurement_item, index|
+    #Chemistry.where(analysis_id: analyses.map(&:id)).group_by{|g| g.measurement_item_id}.each do |measurement_item_id, chemistries|
+      #measurement_item = MeasurementItem.find(measurement_item_id)
+      chemistries = all_chemistries.where(measurement_item_id:measurement_item.id)
+      values = chemistries.pluck(:value)
+      #chemistries = Chemistry.where(analysis_id: analyses.map(&:id), measurement_item_id: measurement_item.id).order(:value)
+      (bins, freqs) = values.histogram(5)
+      count = chemistries.count
+      min = chemistries.minimum(:value)
+      max = chemistries.maximum(:value)
+      avg = chemistries.average(:value)
+      graph = LazyHighCharts::HighChart.new('graph') do |f|
+        f.chart(borderWidth: 1)
+        f.title(text: sprintf("%s %.3f (n=%d)", measurement_item.display_in_html, avg, count))        
+        #f.subtitle(text: sprintf("average %.3f (%d)", avg, count), verticalAlign: 'middle')
+        f.xAxis(categories: bins.map{|n| sprintf("%.3f", n)})
+        f.series(name:  measurement_item.display_in_html, data: freqs, type: 'column')
+        f.legend(enabled: false)
+      end
+      graphs << graph
+    end
+    graphs
+  end
+
   def family_tree
     # list = [self].concat(children)
     # #list = [root].concat(root.children)
