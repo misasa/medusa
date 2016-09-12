@@ -96,7 +96,7 @@ class RecordsController < ApplicationController
 
 # /records/xxxx-xxx/self_and_siblings
   def self_and_siblings
-    @records = @record.respond_to?(:self_and_siblings) ? @record.self_and_siblings : []
+    @records = @record.respond_to?(:self_and_siblings) ? @record.self_and_siblings : [@record]
     respond_with @records do |format|
       format.json { render json: @records.map(&:record_property), methods: [:datum_attributes] }
       format.xml { render xml: @records.map(&:record_property), methods: [:datum_attributes] }
@@ -105,7 +105,7 @@ class RecordsController < ApplicationController
 
 # /records/xxxx-xxx/families
   def families
-    @records = @record.respond_to?(:families) ? @record.families : []
+    @records = @record.respond_to?(:families) ? @record.families : [@record]
     respond_with @records do |format|
       format.json { render json: @records.map(&:record_property), methods: [:datum_attributes] }
       format.xml { render xml: @records.map(&:record_property), methods: [:datum_attributes] }
