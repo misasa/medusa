@@ -41,6 +41,9 @@
       <%= @specimen.decorate.related_pictures %>
     </div>
 
+    <% if false %>
+          <%= high_chart("plot-summary", @specimen.generate_summary_plot) %>    
+    <% else %>
     <div class="row spot-thumbnails">
       <% @specimen.generate_plots.each_with_index do |graph, id| %>
         <div class="col-lg-4">
@@ -48,6 +51,8 @@
         </div>
       <% end %>
     </div>
+    <% end %>
+
     <% if false %>
     <% unless @specimen.analyses.empty? %>
 

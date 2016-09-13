@@ -89,24 +89,139 @@ class SpecimenDecorator < Draper::Decorator
     content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: "collapse" )
   end
 
+  def generate_chart_globals
+    chart_globals = LazyHighCharts::HighChartGlobals.new do |f|
+      f.global(useUTC: false)
+      f.chart(
+        backgroundColor: {
+          linearGradient: [0, 0, 500, 500],
+          stops: [
+            [0, "rgb(255, 255, 255)"],
+            [1, "rgb(240, 240, 255)"]
+          ]
+        },
+        borderWidth: 2,
+        plotBackgroundColor: "rgba(255, 255, 255, .9)",
+        plotShadow: true,
+        plotBorderWidth: 1
+      )
+      f.lang(thousandsSep: ",")
+      f.colors(["#90ed7d", "#f7a35c", "#8085e9", "#f15c80", "#e4d354"])
+    end
+  end
+
+  def generate_summary_plot
+
+    analyses = Analysis.where(specimen_id: self_and_descendants)
+    return if analyses.count == 0
+    all_chemistries = Chemistry.where(analysis_id: analyses.map(&:id))
+    measurement_item_ids = all_chemistries.pluck(:measurement_item_id).uniq
+    measurement_items = MeasurementItem.find(measurement_item_ids)
+    ms = {}
+    measurement_items.each_with_index do |measurement_item, index|
+      chemistries = all_chemistries.with_unit.search_with_measurement_item_id(measurement_item.id)
+      values = chemistries.select_value_in_parts.map(&:value_in_parts)
+      #ms[measurement_item.nickname] = values.compact.map{|v| [v, index]}
+      ms[measurement_item.display_in_html] = values.map{|v| [v, index] if v != 0.0}.compact
+      # (bins, freqs) = values.histogram(5)
+      # summary = chemistries.select_summary_value_in_parts[0]
+
+      # count = summary.count
+      # min = summary.min
+      # max = summary.max
+      # avg = summary.avg
+    end
+    #p ms
+    #ms = {'SiO2' => [0.562, 0.553, 0.512, 0.32].map{|v| [v, 1]}, 'Al2O3' => [0.00123,0.00225,0.00312].map{|v| [v,2]}}
+    #ms = {'SiO2' => [[0.562,1], [0.553,1], [0.512,1], [0.32,1]], 'Al2O3' => [[0.123,2],[0.225,2],[0.312,2]]}
+    #p ms
+    chart = LazyHighCharts::HighChart.new('graph') do |f|
+      f.chart(type: 'scatter', zoomType: 'xy')
+      f.title(text: 'Height Versus Weight of 507 Individuals by Gender')
+      f.subtitle(text: 'Source: Heinz 2003')
+      f.xAxis(title: {enabled: true,text: 'Value (parts)'},startOnTick: true,endOnTick: true,showLastLabel: true,type: 'logarithmic')
+      f.yAxis(title: {text: 'Measurement Item'}, labels: {enabled: false})
+      f.legend(enabled: false)
+      f.plotOptions(
+            scatter: {
+                marker: {
+                    radius: 5,
+                    states: {
+                        hover: {
+                            enabled: true,
+                            lineColor: 'rgb(100,100,100)'
+                        }
+                    }
+                },
+                states: {
+                    hover: {
+                        marker: {
+                            enabled: false
+                        }
+                    }
+                },
+                tooltip: {
+                    headerFormat: '<b>{series.name}</b><br>',
+                    pointFormat: '{point.x}'
+                }
+            }
+        )
+      ms.each do |key, value|
+        f.series(name: key, data: value)
+      end
+      # f.series(
+      #         name: 'Female',
+      #         #color: 'rgba(223, 83, 83, .5)',
+      #         data: [[161.2, 1], [167.5, 1], [159.5, 1], [15700.0, 1], [0.155, 1]]
+      # )
+
+      # f.series(
+      #         name: 'Male',
+      #         #color: 'rgba(119, 152, 191, .5)',
+      #         data: [[174.0, 2], [175.3, 2], [193.5, 2], [186.5, 2], [187.2, 2]]
+      # )
+
+
+      # f.series(name: 'Temperatures',data: [
+      #           [-9.7, 9.4],
+      #           [-8.7, 6.5],
+      #           [-3.5, 9.4],
+      #           [-1.4, 19.9],
+      #           [0.0, 22.6],
+      #           [2.9, 29.5],
+      #           [9.2, 30.7],
+      #           [7.3, 26.5],
+      #           [4.4, 18.0],
+      #           [-3.1, 11.4],
+      #           [-5.2, 10.4],
+      #           [-13.5, 9.8]
+      #       ]
+      # )
+    end
+    chart
+  end
+
   def generate_plots
     analyses = Analysis.where(specimen_id: self_and_descendants)
     graphs = []
     return graphs if analyses.count == 0
     all_chemistries = Chemistry.where(analysis_id: analyses.map(&:id))
-    measurement_item_ids = Chemistry.where(analysis_id: analyses.map(&:id)).pluck(:measurement_item_id).uniq
+#    all_chemistries = Chemistry.all
+    measurement_item_ids = all_chemistries.pluck(:measurement_item_id).uniq
     measurement_items = MeasurementItem.find(measurement_item_ids)
     measurement_items.each_with_index do |measurement_item, index|
     #Chemistry.where(analysis_id: analyses.map(&:id)).group_by{|g| g.measurement_item_id}.each do |measurement_item_id, chemistries|
       #measurement_item = MeasurementItem.find(measurement_item_id)
-      chemistries = all_chemistries.where(measurement_item_id:measurement_item.id)
-      values = chemistries.pluck(:value)
+      chemistries = all_chemistries.with_unit.search_with_measurement_item_id(measurement_item.id)
+      values = chemistries.select_value_in_parts.map(&:value_in_parts)
       #chemistries = Chemistry.where(analysis_id: analyses.map(&:id), measurement_item_id: measurement_item.id).order(:value)
       (bins, freqs) = values.histogram(5)
-      count = chemistries.count
-      min = chemistries.minimum(:value)
-      max = chemistries.maximum(:value)
-      avg = chemistries.average(:value)
+      summary = chemistries.select_summary_value_in_parts[0]
+
+      count = summary.count
+      min = summary.min
+      max = summary.max
+      avg = summary.avg
       graph = LazyHighCharts::HighChart.new('graph') do |f|
         f.chart(borderWidth: 1)
         f.title(text: sprintf("%s %.3f (n=%d)", measurement_item.display_in_html, avg, count))        

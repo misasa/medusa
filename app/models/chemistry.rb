@@ -12,6 +12,27 @@ class Chemistry < ActiveRecord::Base
   validates :value, numericality: true
   validates :uncertainty, numericality: true, allow_nil: true
 
+  scope :with_measurement_item, -> { joins(:measurement_item) }
+  scope :with_unit, -> { joins(:unit) }
+  scope :search_with_measurement_item_id, ->(item_id) { where(measurement_item_id: item_id) }
+
+  scope :add_select_field, lambda {|*fields|
+    scope = current_scope || relation
+    scope = scope.select(Arel.star) if scope.select_values.blank?
+    scope.select(*fields)
+  }
+
+  scope :select_value_in_parts, lambda {
+    add_select_field("#{value_in_parts_eq} as value_in_parts")
+  }
+
+  scope :select_summary_value_in_parts, lambda {
+    select("count(#{value_in_parts_eq}) as count, max(#{value_in_parts_eq}) as max, min(#{value_in_parts_eq}) as min, avg(#{value_in_parts_eq}) as avg")
+  }
+  def self.value_in_parts_eq
+    'value / units.conversion'
+  end
+
   def display_name
     "#{measurement_item.display_name}: #{sprintf("%.2f", self.value)}"
   end
