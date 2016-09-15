@@ -1,7 +1,7 @@
 <div class="display-type">
   <div id="display-type-html">
-	<div class="spot-viewer">
-	  <%= content_tag :svg, nil, class: "spot-canvas", width: 600, height: 600, "data-image" => surface_image_path(@surface, @image, format: :svg) if @image %>
+	<div class="surface-viewer">
+	  <%= content_tag :svg, nil, class: "surface-canvas", width: 600, height: 600, "data-image" => surface_image_path(@surface, @image, format: :svg) if @image %>
 	</div>
   </div>
   <div class="hidden" id="display-type-tex">

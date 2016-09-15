@@ -48,7 +48,7 @@ describe SurfaceImage do
     end  	
   end
 
-  describe "to_svg" do
+  describe "to_svg", :current => true do
   	subject {obj.to_svg}
   	it { expect(subject).to match(/<circle/)}
   	context "shares same surface's spots" do
@@ -61,6 +61,7 @@ describe SurfaceImage do
 	      surface.images << image_2
 	      spot_1
 	      spot_2
+	      #puts subject
 	    end
 	  	it { expect(obj.to_svg).to match(/<circle/)}
     end
