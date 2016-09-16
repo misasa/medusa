@@ -24,8 +24,12 @@
       this.image = $(svg).find("image");
       this.spots = $(svg).find("circle");
       this.polylines = $(svg).find("polyline");
-      spot = this.spots.filter("[data-target-uid='" + this.targetUid + "']");
-      this._initTransform(this.rect.attr("width"), this.rect.attr("height"), spot.attr("cx"), spot.attr("cy"));
+      //debugger;
+//      spot = this.spots.filter("[data-target-uid='" + this.targetUid + "']");
+      //this._initTransform(this.rect.attr("width"), this.rect.attr("height"), spot.attr("cx"), spot.attr("cy"));
+      cx = parseFloat(this.image.attr("x")) + parseFloat(this.image.attr("width"))/2
+      cy = parseFloat(this.image.attr("y")) + parseFloat(this.image.attr("height"))/2
+      this._initTransform(this.image.attr("width"), this.image.attr("height"), cx, cy);
       svg.setAttribute("width", this.rect.attr("width"));
       svg.setAttribute("height", this.rect.attr("height"));
 

@@ -1,6 +1,7 @@
 <div class="display-type">
   <div id="display-type-html">
 	<div class="surface-viewer">
+    <%= hidden_field_tag nil, @image.global_id, class: "target-uid" %>
 	  <%= content_tag :svg, nil, class: "surface-canvas", width: 600, height: 600, "data-image" => surface_image_path(@surface, @image, format: :svg) if @image %>
 	</div>
   </div>
