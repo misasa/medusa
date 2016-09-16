@@ -92,6 +92,9 @@ class SurfaceImage < ActiveRecord::Base
 
     xl = x_max - x_min
     yl = y_max - y_min
+
+    base_length = (xl > yl ? xl : yl)
+
     corners_on_world = image.pixel_pairs_on_world([[x_min, y_max],[x_max, y_max],[x_max, y_min]])
     corners_on_base = [[0,0],[xl,0],[xl,yl]]
     affine_base = MyTools::Affine.from_points_pair(corners_on_world, corners_on_base)
@@ -121,17 +124,20 @@ class SurfaceImage < ActiveRecord::Base
       tag += %Q|<polyline points="#{points}" style="fill:none;fill-opacity:0.1;stroke:purple;stroke-width:5" data-spot="#{osurface_image.decorate.target_path}"/>|
     end
     svg += tag
-
-
-
+    image_length = image.length
     surface.surface_images.each do |osurface_image|
       oimage = osurface_image.image
+      oimage_length = oimage.length
       #image_region
       opixels = oimage.spots.map{|spot| [spot.spot_x, spot.spot_y]}
       worlds = oimage.pixel_pairs_on_world(opixels)
 #      pixels = image.world_pairs_on_pixel(worlds)
       pixels = affine_base.transform_points(worlds)
       oimage.spots.each_with_index do |spot, idx|
+        radius  = spot.radius_in_percent
+        stroke_width = spot.stroke_width
+        spot.radius_in_percent = radius * oimage_length/image_length
+        spot.stroke_width = stroke_width * oimage_length/image_length
       	spot.spot_x = pixels[idx][0]
       	spot.spot_y = pixels[idx][1]
         svg += spot.to_svg
