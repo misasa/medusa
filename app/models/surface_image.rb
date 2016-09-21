@@ -75,7 +75,6 @@ class SurfaceImage < ActiveRecord::Base
       corners = [[0,0], [w,0], [w,h], [0,h]]
       worlds = oimage.pixel_pairs_on_world(corners)
       pixels = image.world_pairs_on_pixel(worlds)
-
       if idx == 0
         x_min = pixels[0][0]
         x_max = pixels[0][0]
@@ -95,14 +94,14 @@ class SurfaceImage < ActiveRecord::Base
 
     base_length = (xl > yl ? xl : yl)
 
-    corners_on_world = image.pixel_pairs_on_world([[x_min, y_max],[x_max, y_max],[x_max, y_min]])
+    corners_on_world = image.pixel_pairs_on_world([[x_min, y_min],[x_max, y_min],[x_max, y_max]])
     corners_on_base = [[0,0],[xl,0],[xl,yl]]
     affine_base = MyTools::Affine.from_points_pair(corners_on_world, corners_on_base)
-
     canvas_width = xl
     canvas_height = yl
 
-    image_xy = affine_base.transform_points(image.pixel_pairs_on_world([[0,image.original_height]]))[0]
+    image_xy = affine_base.transform_points(image.pixel_pairs_on_world([[0,0]]))[0]
+
     base_tag = %Q|<rect x="0" y="0" width="#{canvas_width}" height="#{canvas_height}" style="fill:skyblue;fill-opacity:0"/>|
     image_tag = %Q|<image xlink:href="#{image.path}" x="#{image_xy[0]}" y="#{image_xy[1]}" width="#{image.original_width}" height="#{image.original_height}" data-id="#{id}"/>|
     #svg = image_tag
@@ -125,23 +124,42 @@ class SurfaceImage < ActiveRecord::Base
     end
     svg += tag
     image_length = image.length
+    image_length_world = image.length_in_um
+
     surface.surface_images.each do |osurface_image|
       oimage = osurface_image.image
       oimage_length = oimage.length
+      oimage_length_world = oimage.length_in_um
       #image_region
       opixels = oimage.spots.map{|spot| [spot.spot_x, spot.spot_y]}
       worlds = oimage.pixel_pairs_on_world(opixels)
 #      pixels = image.world_pairs_on_pixel(worlds)
       pixels = affine_base.transform_points(worlds)
+      spot_tags = ""
       oimage.spots.each_with_index do |spot, idx|
         radius  = spot.radius_in_percent
+        #p "length: #{oimage_length} pix #{oimage_length_world} um #{spot.radius_in_percent}%"
+        radius_in_image = oimage_length * spot.radius_in_percent/100
+        radius_in_world = oimage_length_world * spot.radius_in_percent/100
+        #p "radius: #{radius_in_image} pix #{radius_in_world} um" 
+        #p affine_base.transform_length(radius_in_image)
+        radius_in_base = affine_base.transform_length(radius_in_world)
+        #p radius_in_base
         stroke_width = spot.stroke_width
-        spot.radius_in_percent = radius * oimage_length/image_length
-        spot.stroke_width = stroke_width * oimage_length/image_length
+        #p oimage_length
+        #p oimage.transform_length(oimage_length)
+        #rr = oimage_length_world/image_length_world * oimage_length/image_length
+        #rr = (oimage_length_world/image_length_world)
+        #spot.radius_in_percent = radius * rr
+        spot.stroke_width = stroke_width
       	spot.spot_x = pixels[idx][0]
       	spot.spot_y = pixels[idx][1]
-        svg += spot.to_svg
+        #p spot
+        spot_tags += %Q|<circle #{spot.svg_attributes.merge(:r => "#{radius_in_base}").map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/>|
+        #p spot_tags
+        #svg += spot.to_svg
       end
+      svg += spot_tags
     end
     svg
   end

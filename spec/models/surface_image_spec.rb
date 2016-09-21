@@ -50,17 +50,18 @@ describe SurfaceImage do
 
   describe "to_svg", :current => true do
   	subject {obj.to_svg}
-  	it { expect(subject).to match(/<circle/)}
+ # 	it { expect(subject).to match(/<circle/)}
   	context "shares same surface's spots" do
-	    let(:image_1) { FactoryGirl.create(:attachment_file, :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
-	    let(:image_2) { FactoryGirl.create(:attachment_file, :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
+ 	    let(:image) { FactoryGirl.create(:attachment_file, :original_geometry => "1198x665", :affine_matrix_in_string => "[1.944e+01,2.527e+02,-1.727e+02;-2.546e+02,1.804e+01,1.330e+03;0.000e+00,0.000e+00,1.000e+00]") }
+	    let(:image_1) { FactoryGirl.create(:attachment_file, :original_geometry => "1280x1024", :affine_matrix_in_string => "[1.278e+01,7.878e-01,4.336e+03;-1.457e+00,1.198e+01,-5.911e+02;0.000e+00,0.000e+00,1.000e+00]") }
+#	    let(:image_2) { FactoryGirl.create(:attachment_file, :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
 	    let(:spot_1) { FactoryGirl.create(:spot, :attachment_file_id => image_1.id) }
-	    let(:spot_2) { FactoryGirl.create(:spot, :attachment_file_id => image_2.id) }
+#	    let(:spot_2) { FactoryGirl.create(:spot, :attachment_file_id => image_2.id) }
 	  	before do
 	      surface.images << image_1
-	      surface.images << image_2
+#	      surface.images << image_2
 	      spot_1
-	      spot_2
+#	      spot_2
 	      #puts subject
 	    end
 	  	it { expect(obj.to_svg).to match(/<circle/)}

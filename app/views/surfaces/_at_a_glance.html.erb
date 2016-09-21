@@ -11,7 +11,9 @@
 <div class="btn-group">
   <a href="#display-type-html" class="btn radio-button-group">html</a>
   <a href="#display-type-tex" class="btn radio-button-group">tex</a>
-</div>  
+</div>
+<% if @surface.first_image %>
 <%= link_to download_attachment_file_path(@surface.first_image), class: "btn btn-default" do %>
     <span class="glyphicon glyphicon-file"></span>
+<% end %>
 <% end %>

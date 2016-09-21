@@ -130,6 +130,13 @@ module MyTools
 	  	(c/gain - Math.sin(theta))/Math.cos(theta)
 	  end
 
+	  def transform_length(l, type = :normal)
+	    src_points = [[0,0],[l,0]]
+	    dst_points = transform_points(src_points, type)
+	    return Math::sqrt((dst_points[0][0] - dst_points[1][0]) ** 2 + (dst_points[0][1] - dst_points[1][1]) ** 2)
+	  end
+
+
 	  def transform_points(points, type = :normal)
 	    case type
 	    when :inverse
@@ -137,7 +144,6 @@ module MyTools
 	    else
 	      affine = matrix
 	    end
-
 	    num_points = points.size
 	    src_points = Matrix[points.map{|p| p[0]}, points.map{|p| p[1]}, Array.new(points.size, 1.0)]
 	    warped_points = (affine * src_points).to_a

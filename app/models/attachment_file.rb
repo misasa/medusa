@@ -197,6 +197,15 @@ class AttachmentFile < ActiveRecord::Base
     return Math.sqrt(dx * dx + dy * dy)
   end
 
+  def length_in_um
+    w = width_in_um
+    h = height_in_um
+    if w && h
+      w > h ? w : h
+    else
+    end
+  end
+
   def to_svg(opts = {})
     x = opts[:x] || 0
     y = opts[:y] || 0
