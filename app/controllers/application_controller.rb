@@ -6,7 +6,7 @@ class ApplicationController < ActionController::Base
   helper_method :adjust_url_by_requesting_tab
 
   before_action :configure_permitted_parameters, if: :devise_controller?
-  before_action :authenticate_user!, :set_current_user
+  before_action :authenticate, :set_current_user
   before_action :set_searchable_records, if: Proc.new {|controller| controller.current_user }
   before_action :set_alias_specimen
   before_action do
@@ -17,14 +17,14 @@ class ApplicationController < ActionController::Base
 
   rescue_from CanCan::AccessDenied, with: :deny_access
 
-  before_filter :basic_authentication, unless: :format_html_or_signed_in?
-
-  def basic_authentication
-    authenticate_or_request_with_http_basic do |name, password|
-      resource = User.find_by(username: name)
-      if resource.valid_password?(password)
-        sign_in :user, resource
-      end
+  def authenticate
+    case request.headers["HTTP_AUTHORIZATION"]
+    when /^Basic\s+/
+      authenticate_by_basic
+    when ActionController::HttpAuthentication::Token::TOKEN_REGEX
+      authenticate_by_token
+    else
+      authenticate_user!
     end
   end
 
@@ -72,4 +72,17 @@ class ApplicationController < ActionController::Base
     @alias_specimen = Settings.specimen_name
   end
 
+  def authenticate_by_basic
+    authenticate_or_request_with_http_basic do |name, password|
+      resource = User.find_by(username: name)
+      sign_in :user, resource if resource.valid_password?(password)
+    end
+  end
+
+  def authenticate_by_token
+    resource = authenticate_or_request_with_http_token do |token, options|
+      resource = User.find_by_token(token)
+      sign_in :user, resource if resource
+    end
+  end
 end
