@@ -1,4 +1,4 @@
-# encoding: UTF-8
+# encoding: utf-8
 # This file is auto-generated from the current state of the database. Instead
 # of editing this file, please use the migrations feature of Active Record to
 # incrementally modify your database, and then regenerate this schema definition.
@@ -472,10 +472,13 @@ ActiveRecord::Schema.define(version: 20161025043020) do
     t.text     "description",                                         comment: "説明"
     t.string   "username",                               null: false, comment: "ユーザ名"
     t.integer  "box_id",                                              comment: "保管場所ID"
+    t.string   "staff_id",                                            comment: "職員ID"
+    t.string   "card_id",                                             comment: "カードID"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  add_index "users", ["staff_id"], name: "index_users_on_staff_id", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
 end
