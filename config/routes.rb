@@ -5,6 +5,7 @@ Medusa::Application.routes.draw do
                omniauth_callbacks: "users/omniauth_callbacks",
                registrations: "users"
              }
+  resources :tokens, only: :create
 
   root 'records#index'
 
