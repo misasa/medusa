@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   belongs_to :box
   
   validates :username, presence: true, length: {maximum: 255}, uniqueness: true
+  validates :staff_id, uniqueness: true, allow_blank: true
   validates :box, existence: true, allow_nil: true
 
   alias_attribute :admin?, :administrator
