@@ -1,6 +1,7 @@
 defaults: &defaults
   site_name: "Medusa"
   help_url: http://dream.misasa.okayama-u.ac.jp/documentation/
+  rplot_url: http://dream.misasa.okayama-u.ac.jp/R/chelyabinsk/  
   admin:
     email: medusa@example.com
     initial_password: vQxPIFMZ

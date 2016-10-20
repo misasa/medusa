@@ -18,6 +18,14 @@ class Settings < Settingslogic
     end
   end
 
+  def self.rplot_url
+    if has_key?("rplot_url") && rplot_url.present?
+      rplot_url
+    else
+      nil
+    end
+  end
+
 
   def self.sesar_host
     "app.geosamples.org"

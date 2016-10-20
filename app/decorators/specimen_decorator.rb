@@ -87,6 +87,10 @@ class SpecimenDecorator < Draper::Decorator
     end
     #content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: ( current ? "collapse in" : "collapse" ) )
     content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: "collapse" )
+    if Settings.rplot_url
+      content += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?' + self.global_id, :title => 'plot online')
+    end
+    content
   end
 
   def generate_chart_globals
