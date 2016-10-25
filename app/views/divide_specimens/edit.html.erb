@@ -1,0 +1,131 @@
+<%= javascript_tag do %>
+  $(document).ready(function(){
+    disabled_check();
+  });
+
+  //サブ資料削除
+  $(document).on("click", "a.remove-child", function() {
+    if ($("div.child").length > 1) {
+      $(this).parents("div.child").remove();
+    }
+    disabled_check();
+  });
+
+  //サブ資料追加
+  $(document).on("click", "a.add-child", function() {
+    $element = $("div.child").last().clone();
+    $element.find(".input-sm").each(function(){
+      $input = $(this);
+      var val = +$input.prop("name").match(/\[(\d*)\]/)[1] + 1;
+      var id = $input.prop("id").replace(/_\d*_/, "_" + val + "_");
+      var name = $input.prop("name").replace(/\[\d*\]/, "[" + val + "]");
+      $input.prop("id", id);
+      $input.prop("name", name);
+      $input.val("");
+    });
+    $("div.child").last().after($element);
+    disabled_check();
+  });
+
+  //ロスの計算
+  $(document).on("change", "input.quantity", function() {
+    var $form = $("form#divide_specimen");
+    $.ajax({
+      url: '<%= loss_divide_specimen_path %>',
+      type: 'put',
+      data: $form.serialize(),
+      success: function(result){
+        $("#divided_loss").text(result.loss);
+      }
+    });
+  });
+
+  //ボタン活性チェック
+  function disabled_check() {
+    if ($("div.child").length <= 1) {
+      $("a.remove-child").attr("disabled", true);
+    } else {
+      $("a.remove-child").attr("disabled", false);
+    }
+  }
+<% end %>
+
+<div class="row">
+  <%= link_to "<back", specimen_path(@specimen), class: ""  %>
+</div>
+
+<%= form_for @specimen, url: divide_specimen_path, html: { id: "divide_specimen" } do |f| %>
+  <% if f.object.errors.any? %>
+    <div class="alert alert-danger">
+      <ul class="list-unstyled">
+        <% f.object.errors.full_messages.each do |msg| %>
+          <% if msg != "Children is invalid" %>
+            <li><%= msg %></li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row">
+    <dl class="col-sm-2">
+      <dt><%= f.label :name, class: "small" %></dt>
+      <dd><%= f.object.name %></dd>
+    </dl>
+    <dl class="col-sm-2">
+      <dt><%= f.label :physical_form__id, class: "small" %></dt>
+      <dd><%= PhysicalForm.find_by(id: f.object.physical_form_id).try(:name) %></dd>
+    </dl>
+    <dl class="col-sm-2">
+      <dt><%= f.label :quantity, class: "small" %></dt>
+      <dd><%= f.text_field :quantity, class: "form-control input-sm quantity" %></dd>
+    </dl>
+    <dl class="col-sm-2">
+      <dt><%= f.label :quantity_unit, class: "small" %></dt>
+      <dd><%= f.text_field :quantity_unit, class: "form-control input-sm quantity" %></dd>
+    </dl>
+    <dl class="col-sm-4">
+      <dt><%= f.label :box_global_id, class: "small" %></dt>
+      <dd><%= f.object.box_global_id %></dd>
+    </dl>
+  </div>
+
+  <div class="row">
+    <dl class="col-sm-12">
+      <dt><%= f.label :comment, class: "small" %></dt>
+      <dd><%= f.text_field :comment, class: "form-control input-sm" %></dd>
+    </dl>
+  </div>
+
+  <hr>
+  <label>Children</label>
+  <%= f.fields_for :children do |c| %>
+    <% if c.object.id.nil? %>
+      <% if c.object.errors.any? %>
+        <div class="alert alert-danger">
+          <ul class="list-unstyled">
+            <% c.object.errors.full_messages.each do |msg| %>
+              <li><%= msg %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+      <%= render 'child_field', f: c %>
+    <% end %>
+  <% end %>
+  <a class="btn btn-default add-child">
+    <span class="glyphicon glyphicon-plus"></span>
+  </a>
+  <hr>
+
+  <div class="row">
+    <dl class="col-sm-12">
+      <dt><label>Divided loss</label></dt>
+      <dd id="divided_loss"><%= f.object.divided_loss.to_s(:delimited) %>(g)</dd>
+    </dl>
+  </div>
+
+  <%= f.button class: "btn btn-default" do %>
+    <span class="glyphicon glyphicon-save"></span>
+  <% end %>
+<% end %>
+

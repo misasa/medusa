@@ -155,7 +155,7 @@ describe ApplicationHelper do
     subject { helper.specimen_ghost(obj, html_class) }
     let(:html_class) { "test" }
     context "obj is Specimen" do
-      let(:obj) { FactoryGirl.create(:specimen, quantity: quantity) }
+      let(:obj) { FactoryGirl.build(:specimen, quantity: quantity) }
       context "quantity < 0" do
         let(:quantity) { -1 }
         it { expect(subject).to eq "test ghost" }

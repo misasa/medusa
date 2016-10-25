@@ -1,0 +1,25 @@
+<div class="panel panel-default">
+  <div class="panel-heading"><label><%= table_name %></label></div>
+  <div class="panel-body">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th>quantity</th>
+          <th>date</th>
+          <th>comment</th>
+          <th>original specimen</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% data.each do |row| %>
+          <tr>
+            <td><%= row[:quantity_str] %></td>
+            <td><%= row[:date_str] %></td>
+            <td><%= row[:comment] %></td>
+            <td><%= row[:before_specimen_name].presence || "-" %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+</div>

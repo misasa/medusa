@@ -8,8 +8,8 @@ FactoryGirl.define do
     association :box, factory: :box
     association :physical_form, factory: :physical_form
     association :classification, factory: :classification
-    quantity 1
-    quantity_unit "数量単位１"
+    quantity 100
+    quantity_unit "kg"
     sequence(:igsn) { |n| "%09d" % "#{n}" }
     age_min 1
     age_max 10
