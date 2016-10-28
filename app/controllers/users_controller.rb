@@ -51,6 +51,8 @@ class UsersController < ApplicationController
       :email,
       :password,
       :password_confirmation,
+      :staff_id,
+      :card_id,
       :administrator,
       :family_name,
       :first_name,
