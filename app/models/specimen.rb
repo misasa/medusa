@@ -139,13 +139,11 @@ class Specimen < ActiveRecord::Base
     h = Hash.new {|h, k| h[k] = Array.new }
     @quantity_history = divides.each_with_object(h) do |divide, hash|
       divide.specimen_quantities.each do |specimen_quantity|
-        decimal_quantity = specimen_quantity.decimal_quantity
-        specimen_id = specimen_quantity.specimen_id
-        hash[specimen_id] << point_info(divide, decimal_quantity.to_f, specimen_quantity.string_quantity)
-        total_hash[specimen_id] = decimal_quantity
+        hash[specimen_quantity.specimen_id] << specimen_quantity.point(divide)
+        total_hash[specimen_quantity.specimen_id] = specimen_quantity.decimal_quantity
       end
       total_val = total_hash.values.compact.sum
-      hash[0] << point_info(divide, total_val.to_f, Quantity.string_quantity(total_val, "g"))
+      hash[0] << SpecimenQuantity.point(divide, total_val.to_f, Quantity.string_quantity(total_val, "g"))
     end
     @quantity_history
   end
@@ -184,18 +182,6 @@ class Specimen < ActiveRecord::Base
   end
 
   private
-
-  def point_info(divide, quantity, quantity_str)
-    h = {}
-    h[:id] = divide.id
-    h[:x] = divide.chart_updated_at
-    h[:y] = quantity
-    h[:date_str] = divide.updated_at_str
-    h[:quantity_str] = quantity_str
-    h[:before_specimen_name] = divide.before_specimen.try(:name) if divide.divide_flg
-    h[:comment] = divide.log
-    h
-  end
 
   def new_children
     children.select(&:new_record?).to_a
