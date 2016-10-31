@@ -8,5 +8,8 @@ class CreateSpecimenQuantities < ActiveRecord::Migration
       t.string :quantity_unit, comment: "数量単位"
       t.timestamps
     end
+
+    add_index :specimen_quantities, :specimen_id
+    add_index :specimen_quantities, :divide_id
   end
 end

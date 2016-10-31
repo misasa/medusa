@@ -7,5 +7,7 @@ class CreateDivides < ActiveRecord::Migration
       t.string :log, comment: "ログ"
       t.timestamps
     end
+
+    add_index :divides, :before_specimen_quantity_id
   end
 end
