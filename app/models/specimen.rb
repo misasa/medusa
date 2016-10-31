@@ -9,6 +9,7 @@ class Specimen < ActiveRecord::Base
   include Quantity
 
   attr_accessor :divide_flg
+  attr_accessor :comment
 
   acts_as_taggable
  #with_recursive
@@ -155,14 +156,18 @@ class Specimen < ActiveRecord::Base
     decimal_quantity_was - all_decimal_quantity
   end
 
-  def divide_save(divide)
+  def divide_save
     self.divide_flg = true
-    build_specimen_quantity(divide)
-    new_children.each do |child|
-      child.divide_flg = true
-      child.build_specimen_quantity(divide)
+    ActiveRecord::Base.transaction do
+      divide = build_divide
+      divide.save!
+      build_specimen_quantity(divide)
+      new_children.each do |child|
+        child.divide_flg = true
+        child.build_specimen_quantity(divide)
+      end
+      save!
     end
-    save!
   end
 
   def build_specimen_quantity(divide = build_divide)
@@ -171,14 +176,6 @@ class Specimen < ActiveRecord::Base
     specimen_quantity.quantity_unit = quantity_unit
     specimen_quantity.divide = divide
     specimen_quantity
-  end
-
-  def build_divide
-    divide = Divide.new
-    divide.before_specimen_quantity = specimen_quantities.last
-    divide.divide_flg = divide_flg || false
-    divide.log = build_log
-    divide
   end
 
   private
@@ -191,9 +188,17 @@ class Specimen < ActiveRecord::Base
     [self].concat(new_children)
   end
 
+  def build_divide
+    divide = Divide.new
+    divide.before_specimen_quantity = specimen_quantities.last
+    divide.divide_flg = divide_flg || false
+    divide.log = build_log
+    divide
+  end
+
   def build_log
     if divide_flg
-      ""
+      comment
     elsif new_record?
       "[#{name}] new specimen."
     else
