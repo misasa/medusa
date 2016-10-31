@@ -46,6 +46,7 @@ class TablesController < ApplicationController
       :age_scale,
       :description,
       record_property_attributes: [
+        :id,
         :global_id,
         :user_id,
         :group_id,
@@ -54,7 +55,8 @@ class TablesController < ApplicationController
         :group_readable,
         :group_writable,
         :guest_readable,
-        :guest_writable
+        :guest_writable,
+        :lost
       ],
       table_specimens_attributes: [
         :id,

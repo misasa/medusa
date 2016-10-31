@@ -112,7 +112,42 @@ class RecordsController < ApplicationController
     end
   end
 
-  
+  def dispose
+    @record.dispose
+    if @record.errors.messages.present?
+      respond_with @record, location: adjust_url_by_requesting_tab(request.referer), action: "error"
+    else
+      respond_with @record
+    end
+  end
+
+  def restore
+    @record.restore
+    if @record.errors.messages.present?
+      respond_with @record, location: adjust_url_by_requesting_tab(request.referer), action: "error"
+    else
+      respond_with @record
+    end
+  end
+
+  def lose
+    @record.lose
+    if @record.errors.messages.present?
+      respond_with @record, location: adjust_url_by_requesting_tab(request.referer), action: "error"
+    else
+      respond_with @record
+    end
+  end
+
+  def found
+    @record.found
+    if @record.errors.messages.present?
+      respond_with @record, location: adjust_url_by_requesting_tab(request.referer), action: "error"
+    else
+      respond_with @record
+    end
+  end
+
   def destroy
     @record.destroy
     if @record.errors.messages.present?

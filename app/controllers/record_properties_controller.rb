@@ -11,6 +11,26 @@ class RecordPropertiesController < ApplicationController
     respond_with @record_property
   end
 
+  def dispose
+    @record_property.dispose
+    respond_with @record_property
+  end
+
+  def restore
+    @record_property.restore
+    respond_with @record_property
+  end
+
+  def lose
+    @record_property.lose
+    respond_with @record_property
+  end
+
+  def found
+    @record_property.found
+    respond_with @record_property
+  end
+
   private
 
   def find_resource
@@ -35,5 +55,4 @@ class RecordPropertiesController < ApplicationController
       :guest_writable
     )
   end
-
 end

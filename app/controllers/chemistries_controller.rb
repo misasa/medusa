@@ -23,6 +23,7 @@ class ChemistriesController < ApplicationController
       :uncertainty,
       :unit_id,
       record_property_attributes: [
+        :id,
         :global_id,
         :user_id,
         :group_id,
@@ -31,7 +32,8 @@ class ChemistriesController < ApplicationController
         :group_readable,
         :group_writable,
         :guest_readable,
-        :guest_writable
+        :guest_writable,
+        :lost
       ]
     )
   end

@@ -7,6 +7,8 @@ class RecordProperty < ActiveRecord::Base
 
   before_save :generate_global_id, if: "global_id.blank?"
   before_save :adjust_published_at
+  before_save :adjust_disposed_at
+  before_save :adjust_lost_at
 
   validates :user, existence: true
   validates :group, existence: true, allow_nil: true
@@ -56,11 +58,43 @@ class RecordProperty < ActiveRecord::Base
     self.global_id =  time.strftime("%Y%m%d%H%M%S") + '-' + sprintf('%06d',time.usec)[-3..-1] + sprintf('%03d',rand(1000))
   end
 
+  def dispose
+    update_attributes(disposed: true)
+  end
+
+  def restore
+    update_attributes(disposed: false)
+  end
+
+  def lose
+    update_attributes(lost: true)
+  end
+
+  def found
+    update_attributes(lost: false)
+  end
+
   def adjust_published_at
     if published
       self.published_at = Time.now if published_at.blank?
     else
       self.published_at = nil
+    end
+  end
+
+  def adjust_disposed_at
+    if disposed
+      self.disposed_at = Time.now if disposed_at.blank?
+    else
+      self.disposed_at = nil
+    end
+  end
+
+  def adjust_lost_at
+    if lost
+      self.lost_at = Time.now if lost_at.blank?
+    else
+      self.lost_at = nil
     end
   end
 

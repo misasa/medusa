@@ -122,6 +122,24 @@ describe RecordProperty do
     end
   end
 
+  describe ".dispose" do
+    let(:obj){ FactoryGirl.create(:record_property, disposed: false, disposed_at: nil) }
+    before do
+      obj.dispose
+    end
+    it { expect(obj.disposed).to eq true }
+    it { expect(obj.disposed_at).to be_present }
+  end
+
+  describe ".restore" do
+    let(:obj){ FactoryGirl.create(:record_property, disposed: true, disposed_at: "2016-10-10 12:13:14") }
+    before do
+      obj.restore
+    end
+    it { expect(obj.disposed).to eq false }
+    it { expect(obj.disposed_at).to be_nil }
+  end
+
   describe ".adjust_pubulished_at" do
     subject { obj.published_at }
     let(:obj){FactoryGirl.build(:record_property,published: published,published_at: published_at)}
@@ -147,6 +165,62 @@ describe RecordProperty do
       context "published_at is not nil" do
         let(:published_at){Time.now - 1}
         it{expect(subject).to be_nil}
+      end
+    end
+  end
+
+  describe ".adjust_disposed_at" do
+    let(:obj){FactoryGirl.build(:record_property, disposed: disposed, disposed_at: disposed_at)}
+    before{ obj.save }
+    subject { obj.disposed_at }
+    context "disposed true" do
+      let(:disposed){ true }
+      context "disposed_at is nil" do
+        let(:disposed_at){ nil }
+        it{ expect(subject).to be_present }
+      end
+      context "disposed_at is not nil" do
+        let(:disposed_at){ Time.now - 1.day }
+        it{ expect(subject).to eq disposed_at }
+      end
+    end
+    context "disposed false" do
+      let(:disposed){ false }
+      context "disposed_at is nil" do
+        let(:disposed_at){ nil }
+        it{ expect(subject).to be_nil }
+      end
+      context "disposed_at is not nil" do
+        let(:disposed_at){ Time.now - 1.day }
+        it{ expect(subject).to be_nil }
+      end
+    end
+  end
+
+  describe ".adjust_lost_at" do
+    let(:obj){FactoryGirl.build(:record_property, lost: lost, lost_at: lost_at)}
+    before{ obj.save }
+    subject { obj.lost_at }
+    context "lost true" do
+      let(:lost){ true }
+      context "lost_at is nil" do
+        let(:lost_at){ nil }
+        it{ expect(subject).to be_present }
+      end
+      context "lost_at is not nil" do
+        let(:lost_at){ Time.now - 1.day }
+        it{ expect(subject).to eq lost_at }
+      end
+    end
+    context "lost false" do
+      let(:lost){ false }
+      context "lost_at is nil" do
+        let(:lost_at){ nil }
+        it{ expect(subject).to be_nil }
+      end
+      context "lost_at is not nil" do
+        let(:lost_at){ Time.now - 1.day }
+        it{ expect(subject).to be_nil }
       end
     end
   end
