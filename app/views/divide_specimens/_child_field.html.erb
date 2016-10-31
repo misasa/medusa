@@ -1,4 +1,13 @@
 <div class="child">
+  <% if f.object.errors.any? %>
+    <div class="alert alert-danger">
+      <ul class="list-unstyled">
+        <% f.object.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
   <div class="row">
     <dl class="col-sm-2">
       <dt><%= f.label :name, class: "small" %></dt>
