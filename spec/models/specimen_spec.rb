@@ -277,22 +277,22 @@ describe Specimen do
 
   describe "#divide_save" do
     let(:user) { FactoryGirl.create(:user) }
+    let(:divide) { FactoryGirl.create(:divide) }
     before do
       User.current = user
       @specimen = FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg")
       @specimen_quantitiy = @specimen.specimen_quantities.last
       @specimen.quantity = 50
-      @specimen.comment = "comment"
       @specimen_child1 = @specimen.children.build(name: "a", quantity: 30, quantity_unit: "kg")
       @specimen_child2 = @specimen.children.build(name: "b", quantity: 20, quantity_unit: "kg")
     end
     describe "update parent_specimen" do
-      it { expect{ @specimen.divide_save }.to change{ Specimen.find(@specimen.id).quantity }.from(100).to(50) }
+      it { expect{ @specimen.divide_save(divide) }.to change{ Specimen.find(@specimen.id).quantity }.from(100).to(50) }
     end
     describe "create child_specimens" do
-      it { expect{ @specimen.divide_save }.to change{ Specimen.find(@specimen.id).children.count }.by(2) }
+      it { expect{ @specimen.divide_save(divide) }.to change{ Specimen.find(@specimen.id).children.count }.by(2) }
       it do
-        @specimen.divide_save
+        @specimen.divide_save(divide)
         expect(@specimen_child1.name).to eq("a")
         expect(@specimen_child1.quantity).to eq(30)
         expect(@specimen_child1.quantity_unit).to eq("kg")
@@ -302,18 +302,12 @@ describe Specimen do
       end
     end
     describe "create specimen_quantities" do
-      it { expect{ @specimen.divide_save }.to change{ SpecimenQuantity.count }.by(3) }
-      it { expect{ @specimen.divide_save }.to change{ @specimen.specimen_quantities.count }.by(1) }
-      it { expect{ @specimen.divide_save }.to change{ @specimen_child1.specimen_quantities.count }.by(1) }
-      it { expect{ @specimen.divide_save }.to change{ @specimen_child2.specimen_quantities.count }.by(1) }
-    end
-    describe "create divide" do
-      it { expect{ @specimen.divide_save }.to change{ Divide.count }.by(1) }
+      it { expect{ @specimen.divide_save(divide) }.to change{ SpecimenQuantity.count }.by(3) }
+      it { expect{ @specimen.divide_save(divide) }.to change{ @specimen.specimen_quantities.count }.by(1) }
+      it { expect{ @specimen.divide_save(divide) }.to change{ @specimen_child1.specimen_quantities.count }.by(1) }
+      it { expect{ @specimen.divide_save(divide) }.to change{ @specimen_child2.specimen_quantities.count }.by(1) }
       it do
-        @specimen.divide_save
-        divide = Divide.find_by(before_specimen_quantity_id: @specimen_quantitiy.id)
-        expect(divide.log).to eq("comment")
-        expect(divide.divide_flg).to eq(true)
+        @specimen.divide_save(divide)
         expect(divide.specimen_quantities).to\
           match_array([
             @specimen.specimen_quantities.last,
@@ -356,42 +350,6 @@ describe Specimen do
     end
   end
 
-  describe "point_info" do
-    let(:before_specimen) { FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg") }
-    let(:before_specimen_quantity) { FactoryGirl.create(:specimen_quantity, specimen: before_specimen, quantity: 100, quantity_unit: "kg") }
-    let(:divide) { FactoryGirl.create(:divide, before_specimen_quantity: before_specimen_quantity, updated_at: time, divide_flg: divide_flg, log: "log") }
-    let(:specimen) { FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg") }
-    let(:time) { Time.new(2016, 11,12) }
-    let(:divide_flg) { true }
-    subject { specimen.send(:point_info, divide, 100000.0, "100(kg)") }
-    context "divide_flg true" do
-      let(:divide_flg) { true }
-      it do
-        expect(subject.class).to eq(Hash)
-        expect(subject[:id]).to eq(divide.id)
-        expect(subject[:x]).to eq(divide.chart_updated_at)
-        expect(subject[:y]).to eq(100000.0)
-        expect(subject[:date_str]).to eq("2016/11/12 00:00:00")
-        expect(subject[:quantity_str]).to eq("100(kg)")
-        expect(subject[:before_specimen_name]).to eq(before_specimen.name)
-        expect(subject[:comment]).to eq("log")
-      end
-    end
-    context "divide_flg false" do
-      let(:divide_flg) { false }
-      it do
-        expect(subject.class).to eq(Hash)
-        expect(subject[:id]).to eq(divide.id)
-        expect(subject[:x]).to eq(divide.chart_updated_at)
-        expect(subject[:y]).to eq(100000.0)
-        expect(subject[:date_str]).to eq("2016/11/12 00:00:00")
-        expect(subject[:quantity_str]).to eq("100(kg)")
-        expect(subject[:before_specimen_name]).to be_nil
-        expect(subject[:comment]).to eq("log")
-      end
-    end
-  end
-
   describe "new_children" do
     let!(:specimen) { FactoryGirl.create(:specimen) }
     let!(:specimen_child) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
@@ -413,7 +371,7 @@ describe Specimen do
   end
 
   describe "build_divide" do
-    let!(:specimen) { FactoryGirl.create(:specimen, name: "specimenA", quantity: 100, quantity_unit: "kg", divide_flg: divide_flg, comment: "comment") }
+    let!(:specimen) { FactoryGirl.create(:specimen, name: "specimenA", quantity: 100, quantity_unit: "kg", divide_flg: divide_flg) }
     before do
       specimen.quantity = 200
       specimen.quantity_unit = "g"
@@ -424,7 +382,7 @@ describe Specimen do
       it do
         expect(subject.before_specimen_quantity).to be_nil
         expect(subject.divide_flg).to eq(true)
-        expect(subject.log).to eq("comment")
+        expect(subject.log).to eq("")
       end
     end
     context "divide_flg nil" do
@@ -439,7 +397,7 @@ describe Specimen do
   end
 
   describe "build_log" do
-    let!(:specimen) { FactoryGirl.create(:specimen, name: "specimenA", quantity: 100, quantity_unit: "kg", divide_flg: divide_flg, comment: "comment") }
+    let!(:specimen) { FactoryGirl.create(:specimen, name: "specimenA", quantity: 100, quantity_unit: "kg", divide_flg: divide_flg) }
     before do
       specimen.quantity = 200
       specimen.quantity_unit = "g"
@@ -447,12 +405,12 @@ describe Specimen do
     subject { specimen.send(:build_log) }
     context "divide_flg true" do
       let(:divide_flg) { true }
-      it { expect(subject).to eq("comment") }
+      it { expect(subject).to eq("") }
     end
     context "divide_flg false" do
       let(:divide_flg) { false }
       context "new_record" do
-        let!(:specimen) { FactoryGirl.build(:specimen, name: "specimenA", divide_flg: divide_flg, comment: "comment") }
+        let!(:specimen) { FactoryGirl.build(:specimen, name: "specimenA", divide_flg: divide_flg) }
         it { expect(subject).to eq("[specimenA] new specimen.") }
       end
       context "non new_record" do
