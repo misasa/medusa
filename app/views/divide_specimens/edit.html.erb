@@ -89,12 +89,16 @@
     </dl>
   </div>
 
-  <div class="row">
-    <dl class="col-sm-12">
-      <dt><%= f.label :comment, class: "small" %></dt>
-      <dd><%= f.text_field :comment, class: "form-control input-sm" %></dd>
-    </dl>
-  </div>
+  <%= fields_for @divide do |d| %>
+    <%= d.hidden_field :before_specimen_quantity_id %>
+    <%= d.hidden_field :divide_flg %>
+    <div class="row">
+      <dl class="col-sm-12">
+        <dt><%= d.label :comment, class: "small" %></dt>
+        <dd><%= d.text_field :log, class: "form-control input-sm" %></dd>
+      </dl>
+    </div>
+  <% end %>
 
   <hr>
   <label>Children</label>
