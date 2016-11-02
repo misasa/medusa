@@ -3,6 +3,22 @@ class SpecimenDecorator < Draper::Decorator
   delegate_all
   delegate :as_json  
 
+  STATUS_NAME = {
+    Specimen::Status::NORMAL => "",
+    Specimen::Status::UNDETERMINED_QUANTITY => "Undetermined quantity",
+    Specimen::Status::DISAPPEARANCE => "Disappearance",
+    Specimen::Status::DISPOSAL => "Disposal",
+    Specimen::Status::LOSS => "Loss"
+  }
+
+  STATUS_ICON_NAME = {
+    Specimen::Status::NORMAL => "",
+    Specimen::Status::UNDETERMINED_QUANTITY => "question-sign",
+    Specimen::Status::DISAPPEARANCE => "fire",
+    Specimen::Status::DISPOSAL => "trash",
+    Specimen::Status::LOSS => "eye-close"
+  }
+
   def name_with_id(flag_link = false)
     tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
     if flag_link
@@ -362,6 +378,14 @@ class SpecimenDecorator < Draper::Decorator
 
   def icon
     h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
+  end
+
+  def status_name
+    STATUS_NAME[status]
+  end
+
+  def status_icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-#{STATUS_ICON_NAME[status]}")
   end
 
   private

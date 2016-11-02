@@ -1,5 +1,6 @@
 <tr>
   <td><%= check_box_tag("ids[]", specimen.id, checked, id: "ids_#{specimen.id}", class: "select-row") if can?(:update, specimen) %></td>
+  <td><%= specimen.decorate.status_icon %></td>
   <td><%= link_to specimen.name, specimen, class: specimen_ghost(specimen) %></td>
   <td>
   <% if !specimen.igsn.blank? %>

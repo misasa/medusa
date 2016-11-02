@@ -187,6 +187,52 @@ describe SpecimenDecorator do
     it{ expect(subject).to include(child.global_id) }
     it{ expect(subject).to include(alias_specimen) }
   end
-  
 
+  describe "status_name" do
+    subject { obj.status_name }
+    context "normal" do
+      before { obj.update_attributes(quantity: 0.5, quantity_unit: "mg") }
+      it { expect(subject).to eq("Normal") }
+    end
+    context "undetermined quantity" do
+      before { obj.update_attributes(quantity: "", quantity_unit: "") }
+      it { expect(subject).to eq("Undetermined quantity") }
+    end
+    context "disappearance" do
+      before { obj.update_attributes(quantity: "0", quantity_unit: "kg") }
+      it { expect(subject).to eq("Disappearance") }
+    end
+    context "disposal" do
+      before { obj.record_property.update_attributes(disposed: true) }
+      it { expect(subject).to eq("Disposal") }
+    end
+    context "loss" do
+      before { obj.record_property.update_attributes(lost: true) }
+      it { expect(subject).to eq("Loss") }
+    end
+  end
+
+  describe "status_icon" do
+    subject { obj.status_icon }
+    context "normal" do
+      before { obj.update_attributes(quantity: 0.5, quantity_unit: "mg") }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-ok-circle\"></span>") }
+    end
+    context "undetermined quantity" do
+      before { obj.update_attributes(quantity: "", quantity_unit: "") }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-question-sign\"></span>") }
+    end
+    context "disappearance" do
+      before { obj.update_attributes(quantity: "0", quantity_unit: "kg") }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-fire\"></span>") }
+    end
+    context "disposal" do
+      before { obj.record_property.update_attributes(disposed: true) }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-trash\"></span>") }
+    end
+    context "loss" do
+      before { obj.record_property.update_attributes(lost: true) }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-eye-close\"></span>") }
+    end
+  end
 end

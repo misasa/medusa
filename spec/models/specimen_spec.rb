@@ -1,6 +1,30 @@
 require "spec_helper"
 
 describe Specimen do
+  describe "status" do
+    let(:specimen){ FactoryGirl.create(:specimen) }
+    subject { specimen.status }
+    context "normal" do
+      before { specimen.update_attributes(quantity: 0.5, quantity_unit: "mg") }
+      it { expect(subject).to eq(0) }
+    end
+    context "undetermined quantity" do
+      before { specimen.update_attributes(quantity: "", quantity_unit: "") }
+      it { expect(subject).to eq(1) }
+    end
+    context "disappearance" do
+      before { specimen.update_attributes(quantity: "0", quantity_unit: "kg") }
+      it { expect(subject).to eq(2) }
+    end
+    context "disposal" do
+      before { specimen.record_property.update_attributes(disposed: true) }
+      it { expect(subject).to eq(3) }
+    end
+    context "loss" do
+      before { specimen.record_property.update_attributes(lost: true) }
+      it { expect(subject).to eq(4) }
+    end
+  end
 
   describe ".full_analyses", :current => true do
     let(:specimen){ FactoryGirl.create(:specimen) }
