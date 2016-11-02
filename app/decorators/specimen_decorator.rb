@@ -17,11 +17,21 @@ class SpecimenDecorator < Draper::Decorator
   def bibs_with_link
     contents = []
     bibs.each do |bib| 
-      content = h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + "" + h.link_to_if(h.can?(:read, bib), h.raw(bib.to_html), bib)
+      content = h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+      content += ""
+      content += h.link_to_if(h.can?(:read, bib), h.raw(bib.to_html), bib)
+      if Settings.rplot_url
+        content += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + bib.global_id, :title => 'plot online')
+      end
+
       #content = h.content_tag(:li, content)
       table_links = []
       bib.tables.each do |table|
-         table_links << h.link_to(h.raw(table.caption), table ) if table.specimens && table.specimens.include?(self)
+         table_link = h.link_to(h.raw(table.caption), table ) if table.specimens && table.specimens.include?(self)
+         if table_link &&  Settings.rplot_url
+           table_link += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + table.global_id, :title => 'plot online')
+         end
+         table_links << table_link
          #table_links << h.link_to_if(true, h.raw(table.description), table )
       end
       unless table_links.empty?
@@ -79,7 +89,12 @@ class SpecimenDecorator < Draper::Decorator
     specimen_tag = icon + h.link_to_if( h.can?(:read, self), ( current ? h.content_tag(:strong, name, class: "text-primary bg-primary") : name ), self)
     specimen_tag = h.content_tag(:span, specimen_tag, class: "ghost") if specimen.ghost?
     content = specimen_tag
-    content += h.content_tag(:span, nil, class: "glyphicon glyphicon-stats") + h.content_tag(:a, h.content_tag(:span, analyses.size, class: "badge"), href: "#specimen-analyses-#{self.id}", :"data-toggle" => "collapse" )
+    content += h.content_tag(:span, nil, class: "glyphicon glyphicon-stats")    
+    if Settings.rplot_url
+      content += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + self.global_id, :title => 'plot online')
+    end
+    content += h.content_tag(:a, h.content_tag(:span, analyses.size, class: "badge"), href: "#specimen-analyses-#{self.id}", :"data-toggle" => "collapse" )
+
     lis = [] 
     measurement_items.each do |item|
       lis << h.raw(item.display_name) + h.link_to(h.content_tag(:span, item_counts[item], class:"badge"), h.chemistries_specimen_path(self, measurement_item_id: item.id, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal" ) if item_counts[item]
@@ -87,9 +102,6 @@ class SpecimenDecorator < Draper::Decorator
     end
     #content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: ( current ? "collapse in" : "collapse" ) )
     content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: "collapse" )
-    if Settings.rplot_url
-      content += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + self.global_id, :title => 'plot online')
-    end
     content
   end
 
