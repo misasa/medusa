@@ -18,7 +18,7 @@ class SpecimenQuantity < ActiveRecord::Base
     h
   end
 
-  def point(divide)
-    self.class.point(divide, decimal_quantity.to_f, string_quantity)
+  def point
+    self.class.point(self.divide, decimal_quantity.to_f, string_quantity)
   end
 end

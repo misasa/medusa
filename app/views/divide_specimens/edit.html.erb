@@ -38,6 +38,10 @@
       <dd><%= PhysicalForm.find_by(id: f.object.physical_form_id).try(:name) %></dd>
     </dl>
     <dl class="col-sm-2">
+      <dt><%= f.label :orignal_quantity, class: "small" %></dt>
+      <dd><%= "#{f.object.quantity}(#{f.object.quantity_unit})" %></dd>
+    </dl>
+    <dl class="col-sm-2">
       <dt><%= f.label :quantity, class: "small" %></dt>
       <dd><%= f.text_field :quantity, class: "form-control input-sm quantity" %></dd>
     </dl>
@@ -45,7 +49,7 @@
       <dt><%= f.label :quantity_unit, class: "small" %></dt>
       <dd><%= f.text_field :quantity_unit, class: "form-control input-sm quantity" %></dd>
     </dl>
-    <dl class="col-sm-4">
+    <dl class="col-sm-2">
       <dt><%= f.label :box_global_id, class: "small" %></dt>
       <dd><%= f.object.box_global_id %></dd>
     </dl>

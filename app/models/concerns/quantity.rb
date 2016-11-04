@@ -9,7 +9,7 @@ module Quantity
     end
 
     def string_quantity(quantity, quantity_unit)
-      quantity.present? ? "#{quantity.to_s(:delimited)}(#{quantity_unit})" : "-"
+      quantity.present? ? "#{quantity.to_s(:delimited)}(#{quantity_unit})" : ""
     end
 
     def unit_exists?(quantity_unit)

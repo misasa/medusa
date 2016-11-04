@@ -15,7 +15,7 @@ class Specimen < ActiveRecord::Base
  #with_recursive
 
   before_save :build_specimen_quantity,
-    if: -> (s) { !s.divide_flg && (s.new_record? || s.quantity_changed? || s.quantity_unit_changed?) }
+    if: -> (s) { !s.divide_flg && (s.quantity_changed? || s.quantity_unit_was.presence != s.quantity_unit.presence) }
 
   has_many :analyses, before_remove: :delete_table_analysis
   has_many :children, -> { order(:name) }, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify
@@ -140,11 +140,17 @@ class Specimen < ActiveRecord::Base
     h = Hash.new {|h, k| h[k] = Array.new }
     @quantity_history = divides.each_with_object(h) do |divide, hash|
       divide.specimen_quantities.each do |specimen_quantity|
-        hash[specimen_quantity.specimen_id] << specimen_quantity.point(divide)
+        hash[specimen_quantity.specimen_id] << specimen_quantity.point
         total_hash[specimen_quantity.specimen_id] = specimen_quantity.decimal_quantity
       end
       total_val = total_hash.values.compact.sum
       hash[0] << SpecimenQuantity.point(divide, total_val.to_f, Quantity.string_quantity(total_val, "g"))
+    end
+    last_divide = divides.last
+    @quantity_history.each do |key, quantity_line|
+      if quantity_line.last[:id] != last_divide.id
+        quantity_line << SpecimenQuantity.point(last_divide, quantity_line.last[:y], quantity_line.last[:quantity_str])
+      end
     end
     @quantity_history
   end
@@ -199,8 +205,10 @@ class Specimen < ActiveRecord::Base
   def build_log
     if divide_flg
       comment
-    elsif new_record?
-      "[#{name}] new specimen."
+    elsif string_quantity_was.blank?
+      "[#{name}] #{string_quantity}"
+    elsif string_quantity.blank?
+      "[#{name}] Deleted quantity."
     else
       "[#{name}] #{string_quantity_was} -> #{string_quantity}"
     end
