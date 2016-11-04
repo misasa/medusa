@@ -6,6 +6,7 @@ class Box < ActiveRecord::Base
   include HasAttachmentFile
   include HasRecursive
   include HasPath
+  include Quantity
 
   self.recursive_path_update = true
 
@@ -25,9 +26,12 @@ class Box < ActiveRecord::Base
   validates :parent_id, existence: true, allow_nil: true
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :parent_id }
   validate :parent_id_cannot_self_children, if: ->(box) { box.parent_id }
+  validates :quantity, presence: { if: -> { quantity_unit.present? } }
+  validates :quantity, numericality: true, allow_blank: true
+  validates :quantity_unit, presence: { if: -> { quantity.present? } }
+  validate :quantity_unit_exists
 
   after_save :reset_path
-
 
   def analyses
     analyses = []
@@ -39,6 +43,23 @@ class Box < ActiveRecord::Base
 
   def related_spots
     ancestors.map{|box| box.spot_links }.flatten
+  end
+
+  def total_decimal_quantity
+    self_and_descendants.inject(0) do |sum, box|
+      (box.disposal_or_loss? ? sum : sum + box.box_decimal_quantity) + box.specimens_decimal_quantity
+    end
+  end
+
+  def specimens_decimal_quantity
+    specimens.inject(0) do |sum, specimen|
+      specimen.disposal_or_loss? ? sum : sum + specimen.decimal_quantity
+    end
+  end
+
+  def box_decimal_quantity
+    # 重量が負数の場合、総量計算上は重さ0とする
+    decimal_quantity >= 0 ? decimal_quantity : 0.to_d
   end
 
   private

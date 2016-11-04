@@ -781,7 +781,7 @@ describe Specimen do
       end
     end
 
-    describe "quantity" do
+    describe "quantity_unit" do
       let(:obj) { FactoryGirl.build(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
       let(:quantity){ "1" }
       context "exists" do
