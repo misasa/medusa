@@ -71,7 +71,7 @@ class SpecimenDecorator < Draper::Decorator
       nodes += box.ancestors.map { |b| box_node(b) }
       nodes += [box_node(box)]
     end
-    nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + name]
+    nodes += [icon + name]
     h.raw(nodes.join("/"))
   end
 
@@ -307,7 +307,6 @@ class SpecimenDecorator < Draper::Decorator
 
   def tree_node(current=false)
     link = current ? h.content_tag(:strong, name, class: "text-primary bg-primary") : name
-    icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
     html = icon + h.link_to_if(h.can?(:read, self), link, self)
     html += h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + h.content_tag(:a, h.content_tag(:span, children.size, class: "badge"), href: "#tree-#{self.id}", :"data-toggle" => "collapse" ) if children.size > 0
     html += analyses_count
@@ -377,7 +376,7 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def icon
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + status_icon
   end
 
   def status_name

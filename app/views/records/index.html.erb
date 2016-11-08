@@ -8,6 +8,7 @@
         <span class="glyphicon glyphicon-refresh"></span>
         <% end %>
       </th>
+      <th></th>
       <th><%= sort_link @records_search, :name, "name" %></th>
       <th><%= sort_link @records_search, :global_id, "global-id" %></th>
       <th><%= sort_link @records_search, :user_username, "owner" %></th>
@@ -17,6 +18,7 @@
     </tr>
     <tr>
       <th><%= text_field_tag :per_page, (params[:per_page] || RecordProperty.default_per_page), class: "form-control input-sm", size: 4 %></th>
+      <th></th>
       <th><%= f.text_field :name_cont, class: "form-control input-sm", size: 15 %></th>
       <th><%= f.text_field :global_id_cont, class: "form-control input-sm", size: 15 %></th>
       <th><%= f.text_field :user_username_cont, class: "form-control input-sm", size: 15 %></th>
@@ -29,6 +31,7 @@
       </th>
     </tr>
     <tr>
+      <th></th>
       <th></th>
       <th></th>
       <th></th>
@@ -47,6 +50,7 @@
     <% @records.each do |record| %>
     <tr>
       <td></td>
+      <td><%= record.datum.decorate.status_icon if record.datum.class == Specimen %></td>
       <td><%= link_to record.name, record.datum, class: specimen_ghost(record.datum) %></td>
       <td><%= record.global_id %></td>
       <td><%= record.user.try!(:username) %></td>
