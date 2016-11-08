@@ -71,7 +71,7 @@ class Specimen < ActiveRecord::Base
   validates :collector, length: { maximum: 255 }
   validates :collector_detail, length: { maximum: 255 }
   validates :collection_date_precision, length: { maximum: 255 }
-  validate :status_is_nomal
+  validate :status_is_nomal, on: :divide
 
   def status
     if record_property.disposed
@@ -257,7 +257,7 @@ class Specimen < ActiveRecord::Base
   end
 
   def status_is_nomal
-    unless !divide_flg || status == Status::NORMAL
+    unless status == Status::NORMAL
       errors.add(:status, " is not normal")
     end
   end
