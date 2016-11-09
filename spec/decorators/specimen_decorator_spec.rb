@@ -29,7 +29,7 @@ describe SpecimenDecorator do
   end
 
   describe ".path" do
-    let(:me){"<span class=\"glyphicon glyphicon-cloud\"></span>#{obj.name}"}
+    let(:me){"<span class=\"glyphicon glyphicon-cloud\"></span><span class=\"glyphicon glyphicon-\"></span>#{obj.name}"}
     subject{obj.path}
     before { allow(obj.h).to receive(:can?).and_return(true) }
     context "box is nil" do
@@ -192,7 +192,7 @@ describe SpecimenDecorator do
     subject { obj.status_name }
     context "normal" do
       before { obj.update_attributes(quantity: 0.5, quantity_unit: "mg") }
-      it { expect(subject).to eq("Normal") }
+      it { expect(subject).to eq("") }
     end
     context "undetermined quantity" do
       before { obj.update_attributes(quantity: "", quantity_unit: "") }
@@ -216,7 +216,7 @@ describe SpecimenDecorator do
     subject { obj.status_icon }
     context "normal" do
       before { obj.update_attributes(quantity: 0.5, quantity_unit: "mg") }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-ok-circle\"></span>") }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-\"></span>") }
     end
     context "undetermined quantity" do
       before { obj.update_attributes(quantity: "", quantity_unit: "") }
