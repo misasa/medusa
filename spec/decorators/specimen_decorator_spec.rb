@@ -18,7 +18,7 @@ describe SpecimenDecorator do
       analysis_1.save
     }
 
-    it { expect(subject).to include("<a data-toggle=\"collapse\" href=\"#specimen-analyses-#{obj.id}\"><span class=\"badge\">1</span></a>") }
+    it { expect(subject).to include("<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#specimen-analyses-#{obj.id}\"><span class=\"badge\">1</span></a>") }
   end
 
   describe ".name_with_id" do
@@ -95,17 +95,37 @@ describe SpecimenDecorator do
       obj.bibs << bib 
       obj.attachment_files << attachment_file 
     end
-    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span><a data-toggle=\"collapse\" href=\"#tree-#{obj.id}\"><span class=\"badge\">#{obj.children.count}</span></a>")} 
+    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span><span>#{obj.specimens.count}</span>")} 
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-stats\"></span><span>#{obj.analyses.count}</span>")} 
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-book\"></span><span>#{obj.bibs.count}</span>")} 
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-file\"></span><span>#{obj.attachment_files.count}</span>")} 
     context "current" do
-      subject{obj.tree_node(true)}
-      it{expect(subject).to match("<strong class=\"text-primary bg-primary\">.*</strong>")} 
+      subject{obj.tree_node(current: true)}
+      it{expect(subject).to match("<strong class=\"text-primary bg-primary\">.*</strong>")}
     end
     context "not current" do
-      subject{obj.tree_node(false)}
+      subject{obj.tree_node(current: false)}
       it{expect(subject).not_to match("<strong>.*</strong>")} 
+    end
+    context "current_type" do
+      context "in_list_include" do
+        subject{ obj.tree_node(current_type: true, in_list_include: true) }
+        it{expect(subject).to include(
+          "<span class=\"glyphicon glyphicon-cloud\"></span><a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.id}\"><span class=\"badge badge-active\">#{obj.children.count}</span></a>"
+        )}
+      end
+      context "not in_list_include" do
+        subject{ obj.tree_node(current_type: true, in_list_include: false) }
+        it{expect(subject).to include(
+          "<span class=\"glyphicon glyphicon-cloud\"></span><a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.id}\"><span class=\"badge\">#{obj.children.count}</span></a>"
+        )}
+      end
+    end
+    context "not current_type" do
+      subject{ obj.tree_node(current_type: false) }
+      it{expect(subject).to include(
+        "<span class=\"glyphicon glyphicon-cloud\"></span><span>#{obj.specimens.count}</span>"
+      )}
     end
   end
 
@@ -113,15 +133,33 @@ describe SpecimenDecorator do
     subject{obj.children_count}
     let(:icon){"cloud"}
     let(:count){obj.children.count}
+    let(:child){FactoryGirl.create(:specimen)}
     context "count zero" do
       before{obj.children.clear}
       it{expect(subject).to be_blank} 
     end
-    context "count zero" do
-      let(:child){FactoryGirl.create(:specimen)}
+    context "count not zero" do
       before{obj.children << child}
-      it{expect(subject).to include("<span>#{count}</span>")} 
-      it{expect(subject).to include("<span>#{obj.children.count}</span>")} 
+      context "current_type" do
+        context "in_list_include" do
+          subject{ obj.children_count(true, true) }
+          it{expect(subject).to eq(
+            "<span class=\"glyphicon glyphicon-#{icon}\"></span><a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.id}\"><span class=\"badge badge-active\">#{count}</span></a>"
+          )}
+        end
+        context "not in_list_include" do
+          subject{ obj.children_count(true, false) }
+          it{expect(subject).to eq(
+            "<span class=\"glyphicon glyphicon-#{icon}\"></span><a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.id}\"><span class=\"badge\">#{count}</span></a>"
+          )}
+        end
+      end
+      context "not current_type" do
+        subject{ obj.children_count(false, false) }
+        it{expect(subject).to eq(
+          "<span class=\"glyphicon glyphicon-#{icon}\"></span><span>#{count}</span>"
+        )}
+      end
     end
   end
 

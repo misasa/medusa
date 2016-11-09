@@ -109,7 +109,7 @@ class SpecimenDecorator < Draper::Decorator
     # if Settings.rplot_url
     #   content += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + self.global_id, :title => 'plot online')
     # end
-    content += h.content_tag(:a, h.content_tag(:span, analyses.size, class: "badge"), href: "#specimen-analyses-#{self.id}", :"data-toggle" => "collapse" )
+    content += h.content_tag(:a, h.content_tag(:span, analyses.size, class: "badge"), href: "#specimen-analyses-#{self.id}", :"data-toggle" => "collapse", class: "collapse-active")
 
     lis = [] 
     measurement_items.each do |item|
@@ -319,23 +319,28 @@ class SpecimenDecorator < Draper::Decorator
     # list.uniq!
     # relatives = families.select{|e| list.include?(e) }
 #    h.tree(relatives_for_tree.group_by(&:parent_id)) do |obj|
-    h.tree(families.group_by(&:parent_id), nil, 1, [self].concat(ancestors)) do |obj|
-      obj.decorate.tree_node(self == obj)
+    in_list = [object].concat(ancestors)
+    h.tree(families.group_by(&:parent_id), type_name: "specimen", in_list: in_list) do |obj|
+      obj.decorate.tree_node(current: object == obj, current_type: (object.class == obj.class), in_list_include: in_list.include?(obj))
     end
   end
 
-  def tree_node(current=false)
+  def tree_node(current: false, current_type: false, in_list_include: false)
     link = current ? h.content_tag(:strong, name, class: "text-primary bg-primary") : name
     html = icon + h.link_to_if(h.can?(:read, self), link, self)
-    html += h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + h.content_tag(:a, h.content_tag(:span, children.size, class: "badge"), href: "#tree-#{self.id}", :"data-toggle" => "collapse" ) if children.size > 0
+    html += children_count(current_type, in_list_include)
     html += analyses_count
     html += bibs_count
     html += files_count
     html
   end
 
-  def children_count
-    icon_with_count("cloud", children.count)
+  def children_count(current_type=false, in_list_include=false)
+    if current_type
+      icon_with_badge_count("cloud", children.size, in_list_include)
+    else
+      icon_with_count("cloud", children.size)
+    end
   end
 
   def analyses_count
@@ -423,5 +428,13 @@ class SpecimenDecorator < Draper::Decorator
 
   def icon_with_count(icon, count)
     h.content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}") + h.content_tag(:span, count) if count.nonzero?
+  end
+
+  def icon_with_badge_count(icon, count, in_list_include=false)
+    if count > 0
+      badge = h.content_tag(:span, count, class: (in_list_include ? "badge badge-active" : "badge"))
+      html = h.content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}")
+      html += h.content_tag(:a, badge, href: "#tree-#{id}", :"data-toggle" => "collapse", class: "collapse-active")
+    end
   end
 end
