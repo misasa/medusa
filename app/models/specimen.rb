@@ -14,6 +14,20 @@ class Specimen < ActiveRecord::Base
   acts_as_taggable
  #with_recursive
 
+  #試料状態
+  module Status
+    # 正常
+    NORMAL = 0
+    # 未定量
+    UNDETERMINED_QUANTITY = 1
+    # 消失
+    DISAPPEARANCE = 2
+    # 廃棄
+    DISPOSAL = 3
+    # 紛失
+    LOSS = 4
+  end
+
   before_save :build_specimen_quantity,
     if: -> (s) { !s.divide_flg && (s.quantity_changed? || s.quantity_unit_was.presence != s.quantity_unit.presence) }
 
@@ -57,7 +71,22 @@ class Specimen < ActiveRecord::Base
   validates :collector, length: { maximum: 255 }
   validates :collector_detail, length: { maximum: 255 }
   validates :collection_date_precision, length: { maximum: 255 }
-  
+  validate :status_is_nomal, on: :divide
+
+  def status
+    if record_property.disposed
+      Status::DISPOSAL
+    elsif record_property.lost
+      Status::LOSS
+    elsif quantity.blank? || decimal_quantity < 0
+      Status::UNDETERMINED_QUANTITY
+    elsif decimal_quantity.zero?
+      Status::DISAPPEARANCE
+    else
+      Status::NORMAL
+    end
+  end
+
   def set_specimen_custom_attributes
     ids = specimen_custom_attributes.pluck('DISTINCT custom_attribute_id')
     if ids.size == CustomAttribute.count
@@ -224,6 +253,12 @@ class Specimen < ActiveRecord::Base
   def quantity_unit_exists
     unless quantity_unit.blank? || Quantity.unit_exists?(quantity_unit)
       errors.add(:quantity_unit, " does not exist")
+    end
+  end
+
+  def status_is_nomal
+    unless status == Status::NORMAL
+      errors.add(:status, " is not normal")
     end
   end
 

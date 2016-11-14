@@ -3,6 +3,22 @@ class SpecimenDecorator < Draper::Decorator
   delegate_all
   delegate :as_json  
 
+  STATUS_NAME = {
+    Specimen::Status::NORMAL => "",
+    Specimen::Status::UNDETERMINED_QUANTITY => "Undetermined quantity",
+    Specimen::Status::DISAPPEARANCE => "Disappearance",
+    Specimen::Status::DISPOSAL => "Disposal",
+    Specimen::Status::LOSS => "Loss"
+  }
+
+  STATUS_ICON_NAME = {
+    Specimen::Status::NORMAL => "",
+    Specimen::Status::UNDETERMINED_QUANTITY => "question-sign",
+    Specimen::Status::DISAPPEARANCE => "fire",
+    Specimen::Status::DISPOSAL => "trash",
+    Specimen::Status::LOSS => "eye-close"
+  }
+
   def name_with_id(flag_link = false)
     tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
     if flag_link
@@ -55,7 +71,7 @@ class SpecimenDecorator < Draper::Decorator
       nodes += box.ancestors.map { |b| box_node(b) }
       nodes += [box_node(box)]
     end
-    nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + name]
+    nodes += [icon + name]
     h.raw(nodes.join("/"))
   end
 
@@ -291,7 +307,6 @@ class SpecimenDecorator < Draper::Decorator
 
   def tree_node(current=false)
     link = current ? h.content_tag(:strong, name, class: "text-primary bg-primary") : name
-    icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
     html = icon + h.link_to_if(h.can?(:read, self), link, self)
     html += h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + h.content_tag(:a, h.content_tag(:span, children.size, class: "badge"), href: "#tree-#{self.id}", :"data-toggle" => "collapse" ) if children.size > 0
     html += analyses_count
@@ -361,7 +376,15 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def icon
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud") + status_icon
+  end
+
+  def status_name
+    STATUS_NAME[status]
+  end
+
+  def status_icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-#{STATUS_ICON_NAME[status]}")
   end
 
   private

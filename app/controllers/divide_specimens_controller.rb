@@ -9,7 +9,7 @@ class DivideSpecimensController < ApplicationController
   def update
     @specimen = Specimen.find(params[:id]).decorate
     @specimen.attributes = parent_specimen_params
-    if @specimen.valid?
+    if @specimen.valid?(:divide)
       @specimen.divide_save
       redirect_to specimen_path(@specimen)
     else

@@ -2,6 +2,7 @@
   <thead>
     <tr>
       <th></th>
+      <th></th>
       <th>name</th>
       <th>physical-form</th>
       <th>quantity</th>
@@ -18,6 +19,7 @@
           <td>
             <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
           </td>
+          <td><%= specimen.decorate.status_icon %></td>
           <td><%= link_to_if can?(:read, specimen), specimen.name,specimen, class: specimen_ghost(specimen) %></td>
           <td><%= specimen.physical_form.try!(:name) %></td>
           <td><%= specimen.try!(:quantity) %></td>
@@ -38,6 +40,7 @@
       <%= form_for Specimen.new, url: place_specimens_path(@place) do |f|%>
         <%= hidden_tabname_tag(__FILE__) %>
         <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
+        <th></th>
         <th><%= f.text_field :name, class: "form-control input-sm" %></th>
         <th><%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
         <th><%= f.text_field :quantity, class: "form-control input-sm" %></th>

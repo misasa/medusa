@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160728104147) do
+ActiveRecord::Schema.define(version: 20161102063045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,14 +97,16 @@ ActiveRecord::Schema.define(version: 20160728104147) do
   end
 
   create_table "boxes", force: true, comment: "保管場所" do |t|
-    t.string   "name",        comment: "名称"
-    t.integer  "parent_id",   comment: "親保管場所ID"
-    t.integer  "position",    comment: "表示位置"
-    t.string   "path",        comment: "保管場所パス"
-    t.integer  "box_type_id", comment: "保管場所種別ID"
-    t.datetime "created_at",  comment: "作成日時"
-    t.datetime "updated_at",  comment: "更新日時"
-    t.string   "description", comment: "説明"
+    t.string   "name",          comment: "名称"
+    t.integer  "parent_id",     comment: "親保管場所ID"
+    t.integer  "position",      comment: "表示位置"
+    t.string   "path",          comment: "保管場所パス"
+    t.integer  "box_type_id",   comment: "保管場所種別ID"
+    t.datetime "created_at",    comment: "作成日時"
+    t.datetime "updated_at",    comment: "更新日時"
+    t.string   "description",   comment: "説明"
+    t.float    "quantity",      comment: "数量"
+    t.string   "quantity_unit", comment: "数量単位"
   end
 
   add_index "boxes", ["box_type_id"], name: "index_boxes_on_box_type_id", using: :btree
@@ -162,6 +164,16 @@ ActiveRecord::Schema.define(version: 20160728104147) do
     t.datetime "created_at", comment: "作成日時"
     t.datetime "updated_at", comment: "更新日時"
   end
+
+  create_table "divides", force: true, comment: "分取" do |t|
+    t.integer  "before_specimen_quantity_id",                              comment: "分取前試料量ID"
+    t.boolean  "divide_flg",                  default: false, null: false, comment: "分取フラグ"
+    t.string   "log",                                                      comment: "ログ"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "divides", ["before_specimen_quantity_id"], name: "index_divides_on_before_specimen_quantity_id", using: :btree
 
   create_table "global_qrs", force: true, comment: "QRコード" do |t|
     t.integer  "record_property_id", comment: "レコードプロパティID"
@@ -261,6 +273,10 @@ ActiveRecord::Schema.define(version: 20160728104147) do
     t.string   "name",                                        comment: "名称"
     t.datetime "created_at",                                  comment: "作成日時"
     t.datetime "updated_at",                                  comment: "更新日時"
+    t.boolean  "disposed",       default: false, null: false, comment: "廃棄フラグ"
+    t.datetime "disposed_at",                                 comment: "廃棄日時"
+    t.boolean  "lost",           default: false, null: false, comment: "紛失フラグ"
+    t.datetime "lost_at",                                     comment: "紛失日時"
   end
 
   add_index "record_properties", ["datum_id"], name: "index_record_properties_on_datum_id", using: :btree
@@ -289,6 +305,18 @@ ActiveRecord::Schema.define(version: 20160728104147) do
 
   add_index "specimen_custom_attributes", ["custom_attribute_id"], name: "index_specimen_custom_attributes_on_custom_attribute_id", using: :btree
   add_index "specimen_custom_attributes", ["specimen_id"], name: "index_specimen_custom_attributes_on_specimen_id", using: :btree
+
+  create_table "specimen_quantities", force: true, comment: "試料量" do |t|
+    t.integer  "specimen_id",   comment: "標本ID"
+    t.integer  "divide_id"
+    t.float    "quantity",      comment: "数量"
+    t.string   "quantity_unit", comment: "数量単位"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "specimen_quantities", ["divide_id"], name: "index_specimen_quantities_on_divide_id", using: :btree
+  add_index "specimen_quantities", ["specimen_id"], name: "index_specimen_quantities_on_specimen_id", using: :btree
 
   create_table "specimens", force: true, comment: "標本" do |t|
     t.string   "name",                                comment: "名称"
