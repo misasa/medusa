@@ -64,6 +64,14 @@ Medusa::Application.routes.draw do
       get 'siblings'
       get 'self_and_siblings'
       get 'families'      
+      put :dispose
+      patch :dispose
+      put :restore
+      patch :restore
+      put :lose
+      patch :lose
+      put :found
+      patch :found
     end
   end
 
@@ -78,7 +86,18 @@ Medusa::Application.routes.draw do
       get :place, to: :show_place
       post :place, to: :create_place
     end
-    resource :record_property, only: [:show, :update], defaults: { parent_resource: "specimen" }
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "specimen" } do
+      member do
+        put :dispose
+        patch :dispose
+        put :restore
+        patch :restore
+        put :lose
+        patch :lose
+        put :found
+        patch :found
+      end
+    end
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "specimen" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "specimen" }
     resources :daughters, concerns: [:link_by_global_id], only: [:index, :create,:update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "specimen", association_name: "children" }
@@ -98,7 +117,18 @@ Medusa::Application.routes.draw do
       get :picture
       get :property
     end
-    resource :record_property, only: [:show, :update], defaults: { parent_resource: "box" }
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "box" } do
+      member do
+        put :dispose
+        patch :dispose
+        put :restore
+        patch :restore
+        put :lose
+        patch :lose
+        put :found
+        patch :found
+      end
+    end
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "box" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "box" }
     resources :specimens, concerns: [:link_by_global_id, :inventory], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "box", association_name: "specimens" }
@@ -113,7 +143,18 @@ Medusa::Application.routes.draw do
     collection do
       post :import
     end
-    resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" } do
+      member do
+        put :dispose
+        patch :dispose
+        put :restore
+        patch :restore
+        put :lose
+        patch :lose
+        put :found
+        patch :found
+      end
+    end
     resources :attachment_files, concerns: [:link_by_global_id],only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "place" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "place" }
     resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "place", association_name: "specimens" }
@@ -130,7 +171,18 @@ Medusa::Application.routes.draw do
       get :table
       get :castemls
     end
-    resource :record_property, only: [:show, :update], defaults: { parent_resource: "analysis" }
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "analysis" } do
+      member do
+        put :dispose
+        patch :dispose
+        put :restore
+        patch :restore
+        put :lose
+        patch :lose
+        put :found
+        patch :found
+      end
+    end
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "analysis" }
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "analysis" }
     resources :chemistries, concerns: [:multiple],only: [:index, :create, :update, :destroy], controller: "nested_resources/chemistries"
@@ -144,7 +196,18 @@ Medusa::Application.routes.draw do
     collection do
       get :download_to_tex
     end
-    resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" }
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "bib" } do
+      member do
+        put :dispose
+        patch :dispose
+        put :restore
+        patch :restore
+        put :lose
+        patch :lose
+        put :found
+        patch :found
+      end
+    end
     resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "bib", association_name: "specimens" }
     resources :boxes, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/boxes", defaults: { parent_resource: "bib", association_name: "boxes" }
     resources :places, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/places", defaults: { parent_resource: "bib", association_name: "places" }
@@ -180,7 +243,18 @@ Medusa::Application.routes.draw do
       get :picture
       get :download
     end
-    resource :record_property, only: [:show, :update], defaults: { parent_resource: "attachment_file" }
+    resource :record_property, only: [:show, :update], defaults: { parent_resource: "attachment_file" } do
+      member do
+        put :dispose
+        patch :dispose
+        put :restore
+        patch :restore
+        put :lose
+        patch :lose
+        put :found
+        patch :found
+      end
+    end
     resources :spots, only: [:index, :create, :update, :destroy], controller: "nested_resources/spots"
     resources :places, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/places", defaults: { parent_resource: "attachment_file", association_name: "places" }
     resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "attachment_file", association_name: "specimens" }

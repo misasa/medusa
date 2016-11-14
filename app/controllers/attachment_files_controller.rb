@@ -79,6 +79,7 @@ class AttachmentFilesController < ApplicationController
       :group_id,
       :published,
       record_property_attributes: [
+        :id,
         :global_id,
         :user_id,
         :group_id,
@@ -87,7 +88,8 @@ class AttachmentFilesController < ApplicationController
         :group_readable,
         :group_writable,
         :guest_readable,
-        :guest_writable
+        :guest_writable,
+        :lost
       ]
     )
   end

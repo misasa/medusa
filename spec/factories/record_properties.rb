@@ -13,5 +13,9 @@ FactoryGirl.define do
     global_id "グローバルID１"
     published false
     published_at DateTime.now.strftime("%Y-%m-%d %H:%M:%S")
+    disposed false
+    disposed_at nil
+    lost false
+    lost_at nil
   end
 end

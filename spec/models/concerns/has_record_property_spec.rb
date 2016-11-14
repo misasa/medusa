@@ -409,6 +409,31 @@ describe HasRecordProperty do
       end
     end
 
+    describe ".dispose" do
+      let(:specimen){ FactoryGirl.create(:specimen) }
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        User.current = user
+        specimen.dispose
+      end
+      it { expect(specimen.record_property.disposed).to eq true }
+      it { expect(specimen.record_property.disposed_at).to be_present }
+    end
+
+    describe ".restore" do
+      let(:specimen){ FactoryGirl.create(:specimen) }
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        User.current = user
+        specimen.record_property.disposed = true
+        specimen.record_property.disposed_at = "2016-10-10 12:13:14"
+        specimen.record_property.save!
+        specimen.restore
+      end
+      it { expect(specimen.record_property.disposed).to eq false }
+      it { expect(specimen.record_property.disposed_at).to be_nil }
+    end
+
     describe ".user_id=" do
       let(:specimen) { FactoryGirl.create(:specimen) }
       let(:user_id){999}

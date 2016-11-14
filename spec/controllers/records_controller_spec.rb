@@ -411,6 +411,34 @@ describe RecordsController do
     it { expect(controller).to receive(:send_data).with(/<?xml/, {type: "application/xml", filename: obj.global_id + ".pml", disposition: "attached"}).and_return{controller.render nothing: true} }
   end
 
+  describe "PUT dispose" do
+    let!(:specimen) { FactoryGirl.create(:specimen) }
+    it { expect { put :dispose, id: specimen.record_property.global_id }.to change{ specimen.record_property.reload.disposed }.from(false).to(true) }
+  end
+
+  describe "PUT restore" do
+    let!(:specimen) { FactoryGirl.create(:specimen) }
+    before do
+      specimen.record_property.disposed = true
+      specimen.record_property.save!
+    end
+    it { expect { put :restore, id: specimen.record_property.global_id }.to change{ specimen.record_property.reload.disposed }.from(true).to(false) }
+  end
+
+  describe "PUT lose" do
+    let!(:specimen) { FactoryGirl.create(:specimen) }
+    it { expect { put :lose, id: specimen.record_property.global_id }.to change{ specimen.record_property.reload.lost }.from(false).to(true) }
+  end
+
+  describe "PUT found" do
+    let!(:specimen) { FactoryGirl.create(:specimen) }
+    before do
+      specimen.record_property.lost = true
+      specimen.record_property.save!
+    end
+    it { expect { put :found, id: specimen.record_property.global_id }.to change{ specimen.record_property.reload.lost }.from(true).to(false) }
+  end
+
   describe "DELETE destroy" do
     let(:specimen) { FactoryGirl.create(:specimen) }
     before { specimen }

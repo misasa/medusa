@@ -180,6 +180,7 @@ class SpecimensController < ApplicationController
       :collected_at,
       :collection_date_precision,
       record_property_attributes: [
+        :id,
         :global_id,
         :user_id,
         :group_id,
@@ -188,7 +189,8 @@ class SpecimensController < ApplicationController
         :group_readable,
         :group_writable,
         :guest_readable,
-        :guest_writable
+        :guest_writable,
+        :lost
       ],
       specimen_custom_attributes_attributes: [
         :id,
@@ -221,6 +223,7 @@ class SpecimensController < ApplicationController
       :group_id,
       :published,
       record_property_attributes: [
+        :id,
         :global_id,
         :user_id,
         :group_id,
@@ -229,9 +232,9 @@ class SpecimensController < ApplicationController
         :group_readable,
         :group_writable,
         :guest_readable,
-        :guest_writable
+        :guest_writable,
+        :lost
       ]
-
     )
   end
 

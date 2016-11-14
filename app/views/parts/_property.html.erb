@@ -19,6 +19,14 @@
       <%= form.text_field :published_at, class: "form-control input-sm", disabled: true %>
     </div>
     <div class="form-group form-group-sm">
+      <%= f.label :lost_at, class: "small" %>
+      <%= f.text_field :lost_at, class: "form-control input-sm", disabled: true %>
+    </div>
+    <div class="form-group form-group-sm">
+      <%= f.label :disposed_at, class: "small" %>
+      <%= f.text_field :disposed_at, class: "form-control input-sm", disabled: true %>
+    </div>
+    <div class="form-group form-group-sm">
       <%= form.label :updated_at, class: "small" %>
       <%= form.text_field :updated_at, class: "form-control input-sm", disabled: true %>
     </div>
@@ -59,11 +67,28 @@
         <%= f.check_box :published %>
       <% end %>
     </div>
+    <div class="form-group form-group-sm">
+      <label class="small">Lost</label>
+      <%= f.label :lost, class: "checkbox-inline" do %>
+        <%= f.check_box :lost %>
+      <% end %>
+    </div>
   <% end %>
   <%= form.button class: "btn btn-default" do %>
   <span class="glyphicon glyphicon-save"></span>
   <% end %>
-  <%= link_to record_path(record.global_id), class: "btn btn-default", method: :delete , data: {confirm: t("confirm.delete",:recordname => record.name)} do %>
-  <span class="glyphicon glyphicon-remove"></span>
+  <% unless form.object.record_property.disposed %>
+    <%= link_to dispose_record_path(record.global_id), class: "btn btn-default", method: :put do %>
+      <span class="glyphicon glyphicon-trash"></span>
+    <% end %>
+  <% else %>
+    <%= link_to restore_record_path(record.global_id), class: "btn btn-default active", method: :put do %>
+      <span class="glyphicon glyphicon-trash"></span>
+    <% end %>
+    <% if current_user.admin? %>
+      <%= link_to record_path(record.global_id), class: "btn btn-danger", method: :delete , data: { confirm: t("confirm.delete",:recordname => record.name) } do %>
+        <span class="glyphicon glyphicon-remove"></span>
+      <% end %>
+    <% end %>
   <% end %>
 <% end %>

@@ -156,6 +156,22 @@ module HasRecordProperty
     tokens.join(" ")
   end
 
+  def dispose
+    record_property.dispose if record_property
+  end
+
+  def restore
+    record_property.restore if record_property
+  end
+
+  def lose
+    record_property.lose if record_property
+  end
+
+  def found
+    record_property.found if record_property
+  end
+
   def user_id=(id)
     record_property && record_property.user_id = id
   end
