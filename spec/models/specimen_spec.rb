@@ -194,6 +194,237 @@ describe Specimen do
     end
   end
 
+  describe "#quantity_history" do
+    let(:time) { Time.new(2016, 11,12) }
+    let!(:specimen1) { FactoryGirl.create(:specimen, divide_flg: true) }
+    let!(:specimen2) { FactoryGirl.create(:specimen, divide_flg: true, parent_id: specimen1.id) }
+    let!(:specimen3) { FactoryGirl.create(:specimen, divide_flg: true, parent_id: specimen2.id) }
+    let!(:divide1) { FactoryGirl.create(:divide, updated_at: time) }
+    let!(:divide2) { FactoryGirl.create(:divide, updated_at: time + 1.day, before_specimen_quantity: specimen_quantity1) }
+    let!(:divide3) { FactoryGirl.create(:divide, updated_at: time + 2.days, before_specimen_quantity: specimen_quantity3) }
+    let!(:specimen_quantity1) { FactoryGirl.create(:specimen_quantity, specimen: specimen1, divide: divide1, quantity: 100, quantity_unit: "kg") }
+    let!(:specimen_quantity2) { FactoryGirl.create(:specimen_quantity, specimen: specimen1, divide: divide2, quantity: 60, quantity_unit: "kg") }
+    let!(:specimen_quantity3) { FactoryGirl.create(:specimen_quantity, specimen: specimen2, divide: divide2, quantity: 40, quantity_unit: "kg") }
+    let!(:specimen_quantity4) { FactoryGirl.create(:specimen_quantity, specimen: specimen2, divide: divide3, quantity: 20, quantity_unit: "kg") }
+    let!(:specimen_quantity5) { FactoryGirl.create(:specimen_quantity, specimen: specimen3, divide: divide3, quantity: 10, quantity_unit: "kg") }
+    subject { specimen1.quantity_history }
+    it { expect(subject.class).to eq(Hash) }
+    it { expect(subject[0].class).to eq(Array) }
+    it { expect(subject[0].first.class).to eq(Hash) }
+    it "total" do
+      expect(subject[0].length).to eq(3)
+      expect(subject[0][0][:id]).to eq(divide1.id)
+      expect(subject[0][0][:y]).to eq(100000.0)
+      expect(subject[0][0][:quantity_str]).to eq("100,000.0(g)")
+      expect(subject[0][1][:id]).to eq(divide2.id)
+      expect(subject[0][1][:y]).to eq(100000.0)
+      expect(subject[0][1][:quantity_str]).to eq("100,000.0(g)")
+      expect(subject[0][2][:id]).to eq(divide3.id)
+      expect(subject[0][2][:y]).to eq(90000.0)
+      expect(subject[0][2][:quantity_str]).to eq("90,000.0(g)")
+    end
+    it "specimen1" do
+      expect(subject[specimen1.id].length).to eq(2)
+      expect(subject[specimen1.id][0][:id]).to eq(divide1.id)
+      expect(subject[specimen1.id][0][:y]).to eq(100000.0)
+      expect(subject[specimen1.id][0][:quantity_str]).to eq("100.0(kg)")
+      expect(subject[specimen1.id][1][:id]).to eq(divide2.id)
+      expect(subject[specimen1.id][1][:y]).to eq(60000.0)
+      expect(subject[specimen1.id][1][:quantity_str]).to eq("60.0(kg)")
+    end
+    it "specimen2" do
+      expect(subject[specimen2.id].length).to eq(2)
+      expect(subject[specimen2.id][0][:id]).to eq(divide2.id)
+      expect(subject[specimen2.id][0][:y]).to eq(40000.0)
+      expect(subject[specimen2.id][0][:quantity_str]).to eq("40.0(kg)")
+      expect(subject[specimen2.id][1][:id]).to eq(divide3.id)
+      expect(subject[specimen2.id][1][:y]).to eq(20000.0)
+      expect(subject[specimen2.id][1][:quantity_str]).to eq("20.0(kg)")
+    end
+    it "specimen3" do
+      expect(subject[specimen3.id].length).to eq(1)
+      expect(subject[specimen3.id][0][:id]).to eq(divide3.id)
+      expect(subject[specimen3.id][0][:y]).to eq(10000.0)
+      expect(subject[specimen3.id][0][:quantity_str]).to eq("10.0(kg)")
+    end
+  end
+
+  describe "#divided_loss" do
+    before do
+      @specimen = FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg")
+      @specimen.quantity = quantity
+      @specimen.quantity_unit = quantity_unit
+      @specimen.children.build(quantity: 30, quantity_unit: "kg")
+      @specimen.children.build(quantity: 20, quantity_unit: "kg")
+    end
+    subject { @specimen.divided_loss }
+    context "non loss" do
+      let(:quantity) { 50 }
+      let(:quantity_unit) { "kg" }
+      it { expect(subject).to eq(0.to_d) }
+    end
+    context "loss" do
+      let(:quantity) { 40 }
+      let(:quantity_unit) { "kg" }
+      it { expect(subject).to eq(10000.0.to_d) }
+    end
+    context "over" do
+      let(:quantity) { 60 }
+      let(:quantity_unit) { "kg" }
+      it { expect(subject).to eq(-10000.0.to_d) }
+    end
+  end
+
+  describe "#divide_save" do
+    let(:user) { FactoryGirl.create(:user) }
+    before do
+      User.current = user
+      @specimen = FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg")
+      @specimen_quantitiy = @specimen.specimen_quantities.last
+      @specimen.quantity = 50
+      @specimen.comment = "comment"
+      @specimen_child1 = @specimen.children.build(name: "a", quantity: 30, quantity_unit: "kg")
+      @specimen_child2 = @specimen.children.build(name: "b", quantity: 20, quantity_unit: "kg")
+    end
+    describe "update parent_specimen" do
+      it { expect{ @specimen.divide_save }.to change{ Specimen.find(@specimen.id).quantity }.from(100).to(50) }
+    end
+    describe "create child_specimens" do
+      it { expect{ @specimen.divide_save }.to change{ Specimen.find(@specimen.id).children.count }.by(2) }
+      it do
+        @specimen.divide_save
+        expect(@specimen_child1.name).to eq("a")
+        expect(@specimen_child1.quantity).to eq(30)
+        expect(@specimen_child1.quantity_unit).to eq("kg")
+        expect(@specimen_child2.name).to eq("b")
+        expect(@specimen_child2.quantity).to eq(20)
+        expect(@specimen_child2.quantity_unit).to eq("kg")
+      end
+    end
+    describe "create specimen_quantities" do
+      it { expect{ @specimen.divide_save }.to change{ SpecimenQuantity.count }.by(3) }
+      it { expect{ @specimen.divide_save }.to change{ @specimen.specimen_quantities.count }.by(1) }
+      it { expect{ @specimen.divide_save }.to change{ @specimen_child1.specimen_quantities.count }.by(1) }
+      it { expect{ @specimen.divide_save }.to change{ @specimen_child2.specimen_quantities.count }.by(1) }
+    end
+    describe "create divide" do
+      it { expect{ @specimen.divide_save }.to change{ Divide.count }.by(1) }
+      it do
+        @specimen.divide_save
+        divide = Divide.find_by(before_specimen_quantity_id: @specimen_quantitiy.id)
+        expect(divide.log).to eq("comment")
+        expect(divide.divide_flg).to eq(true)
+        expect(divide.specimen_quantities).to\
+          match_array([
+            @specimen.specimen_quantities.last,
+            @specimen_child1.specimen_quantities.last,
+            @specimen_child2.specimen_quantities.last
+          ])
+      end
+    end
+  end
+
+  describe "build_specimen_quantity" do
+    let(:specimen) { FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg") }
+    let(:divide) { FactoryGirl.create(:divide) }
+    before do
+      @specimen_quantity = specimen.specimen_quantities.last
+    end
+    context "argument is 0" do
+      subject { specimen.build_specimen_quantity }
+      it { expect(subject.specimen).to eq(specimen) }
+      it { expect(subject.quantity).to eq(100) }
+      it { expect(subject.quantity_unit).to eq("kg") }
+      it { expect(subject.divide).to be_new_record }
+      it { expect(subject.divide.before_specimen_quantity).to eq(@specimen_quantity) }
+      it do
+        expect(specimen).to receive(:build_divide)
+        subject
+      end
+    end
+    context "argument is 1" do
+      subject { specimen.build_specimen_quantity(divide) }
+      it { expect(subject.specimen).to eq(specimen) }
+      it { expect(subject.quantity).to eq(100) }
+      it { expect(subject.quantity_unit).to eq("kg") }
+      it { expect(subject.divide).to eq(divide) }
+      it { expect(subject.divide.before_specimen_quantity).to eq(divide.before_specimen_quantity) }
+      it do
+        expect(specimen).not_to receive(:build_divide)
+        subject
+      end
+    end
+  end
+
+  describe "new_children" do
+    let!(:specimen) { FactoryGirl.create(:specimen) }
+    let!(:specimen_child) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
+    before do
+      @new_specimen = specimen.children.build
+    end
+    subject { specimen.send(:new_children) }
+    it { expect(subject).to match_array([@new_specimen]) }
+  end
+
+  describe "self_and_new_children" do
+    let!(:specimen) { FactoryGirl.create(:specimen) }
+    let!(:specimen_child) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
+    before do
+      @new_specimen = specimen.children.build
+    end
+    subject { specimen.send(:self_and_new_children) }
+    it { expect(subject).to match_array([specimen, @new_specimen]) }
+  end
+
+  describe "build_divide" do
+    let!(:specimen) { FactoryGirl.create(:specimen, name: "specimenA", quantity: 100, quantity_unit: "kg", divide_flg: divide_flg, comment: "comment") }
+    before do
+      specimen.quantity = 200
+      specimen.quantity_unit = "g"
+    end
+    subject { specimen.send(:build_divide) }
+    context "divide_flg true" do
+      let(:divide_flg) { true }
+      it do
+        expect(subject.before_specimen_quantity).to be_nil
+        expect(subject.divide_flg).to eq(true)
+        expect(subject.log).to eq("comment")
+      end
+    end
+    context "divide_flg nil" do
+      let(:divide_flg) { nil }
+      it do
+        expect(subject.before_specimen_quantity).to_not be_nil
+        expect(subject.before_specimen_quantity).to eq(specimen.specimen_quantities.last)
+        expect(subject.divide_flg).to eq(false)
+        expect(subject.log).to eq("[specimenA] 100.0(kg) -> 200.0(g)")
+      end
+    end
+  end
+
+  describe "build_log" do
+    let!(:specimen) { FactoryGirl.create(:specimen, name: "specimenA", quantity: 100, quantity_unit: "kg", divide_flg: divide_flg, comment: "comment") }
+    before do
+      specimen.quantity = 200
+      specimen.quantity_unit = "g"
+    end
+    subject { specimen.send(:build_log) }
+    context "divide_flg true" do
+      let(:divide_flg) { true }
+      it { expect(subject).to eq("comment") }
+    end
+    context "divide_flg false" do
+      let(:divide_flg) { false }
+      context "new_record" do
+        let!(:specimen) { FactoryGirl.build(:specimen, name: "specimenA", divide_flg: divide_flg, comment: "comment") }
+        it { expect(subject).to eq("[specimenA] new specimen.") }
+      end
+      context "non new_record" do
+        it { expect(subject).to eq("[specimenA] 100.0(kg) -> 200.0(g)") }
+      end
+    end
+  end
+
   describe "#delete_table_analysis" do
     subject { specimen.send(:delete_table_analysis, analysis_1) }
     let(:specimen) { FactoryGirl.create(:specimen) }
@@ -260,6 +491,66 @@ describe Specimen do
       it { expect(specimen).to be_ghost }
     end
   end
+
+  describe "before_save" do
+    describe "build_specimen_quantity" do
+      let(:user) { FactoryGirl.create(:user) }
+      let(:specimen) { FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg") }
+      let(:quantity) { 100 }
+      let(:quantity_unit) { "kg" }
+      let(:divide_flg) { false }
+      before do
+        User.current = user
+        @specimen = specimen
+        @specimen.quantity = quantity
+        @specimen.quantity_unit = quantity_unit
+        @specimen.divide_flg = divide_flg
+      end
+      context "divide_flg true" do
+        let(:quantity) { 200 }
+        let(:quantity_unit) { "g" }
+        let(:divide_flg) { true }
+        it do
+          expect(@specimen).to_not receive(:build_specimen_quantity)
+          @specimen.save!
+        end
+      end
+      context "divide_flg false" do
+        context "new_record" do
+          let(:specimen) { FactoryGirl.build(:specimen, quantity: 100, quantity_unit: "kg") }
+          it do
+            expect(@specimen).to receive(:build_specimen_quantity)
+            @specimen.save!
+          end
+        end
+        context "non new_record" do
+          context "quantity_changed" do
+            let(:quantity) { 200 }
+            it do
+              expect(@specimen).to receive(:build_specimen_quantity)
+              @specimen.save!
+            end
+          end
+          context "not quantity_changed" do
+            context "quantity_unit_changed" do
+              let(:quantity_unit) { "g" }
+              it do
+                expect(@specimen).to receive(:build_specimen_quantity)
+                @specimen.save!
+              end
+            end
+            context "not quantity_unit_changed" do
+              it do
+                expect(@specimen).to_not receive(:build_specimen_quantity)
+                @specimen.save!
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
 
   describe "validates" do
   
@@ -431,7 +722,61 @@ describe Specimen do
       let(:obj) { FactoryGirl.build(:specimen, age_unit: value) }
       it_should_behave_like "length_check"
     end
-    
+
+    describe "quantity" do
+      let(:obj) { FactoryGirl.build(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+      let(:quantity_unit) { "kg" }
+      context "num" do
+        let(:quantity){ "1" }
+        it { expect(obj).to be_valid }
+        context "0" do
+          let(:quantity){ "0" }
+          it { expect(obj).to be_valid }
+        end
+        context "-1" do
+          let(:quantity){ "-1" }
+          it { expect(obj).not_to be_valid }
+        end
+      end
+      context "str" do
+        let(:quantity){ "a" }
+        it { expect(obj).not_to be_valid }
+      end
+      context "blank" do
+        let(:quantity){ "" }
+        context "quantity_unit present" do
+          it { expect(obj).not_to be_valid }
+        end
+        context "quantity_unit blank" do
+          let(:quantity_unit) { "" }
+          it { expect(obj).to be_valid }
+        end
+      end
+    end
+
+    describe "quantity" do
+      let(:obj) { FactoryGirl.build(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+      let(:quantity){ "1" }
+      context "exists" do
+        let(:quantity_unit) { "kgram" }
+        it { expect(obj).to be_valid }
+      end
+      context "not exists" do
+        let(:quantity_unit) { "kglam" }
+        it { expect(obj).not_to be_valid }
+      end
+      context "blank" do
+        let(:quantity_unit) { "" }
+        context "quantity present" do
+          it { expect(obj).not_to be_valid }
+        end
+        context "quantity blank" do
+          let(:quantity) { "" }
+          it { expect(obj).to be_valid }
+        end
+      end
+    end
+
     describe "size" do
       let(:obj) { FactoryGirl.build(:specimen, size: value) }
       it_should_behave_like "length_check"

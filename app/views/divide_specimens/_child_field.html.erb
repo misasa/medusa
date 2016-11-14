@@ -1,0 +1,37 @@
+<div class="child">
+  <% if f.object.errors.any? %>
+    <div class="alert alert-danger">
+      <ul class="list-unstyled">
+        <% f.object.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <div class="row">
+    <dl class="col-sm-2">
+      <dt><%= f.label :name, class: "small" %></dt>
+      <dd><%= f.text_field :name, class: "form-control input-sm" %></dd>
+    </dl>
+    <dl class="col-sm-2">
+      <dt><%= f.label :physical_form__id, class: "small" %></dt>
+      <dd><%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></dd>
+    </dl>
+    <dl class="col-sm-2">
+      <dt><%= f.label :quantity, class: "small" %></dt>
+      <dd><%= f.text_field :quantity, class: "form-control input-sm quantity" %></dd>
+    </dl>
+    <dl class="col-sm-2">
+      <dt><%= f.label :quantity_unit, class: "small" %></dt>
+      <dd><%= f.text_field :quantity_unit, class: "form-control input-sm quantity" %></dd>
+    </dl>
+    <dl class="col-sm-1">
+      <dt><label></label></dt>
+      <dd>
+        <a class="btn btn-default remove-child" disabled="disabled">
+          <span class="glyphicon glyphicon-remove"></span>
+        </a>
+      </dd>
+    </dl>
+  </div>
+</div>

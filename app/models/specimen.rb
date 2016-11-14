@@ -6,9 +6,16 @@ class Specimen < ActiveRecord::Base
   include HasAttachmentFile
   include HasRecursive
   include HasPath
+  include Quantity
+
+  attr_accessor :divide_flg
+  attr_accessor :comment
 
   acts_as_taggable
  #with_recursive
+
+  before_save :build_specimen_quantity,
+    if: -> (s) { !s.divide_flg && (s.quantity_changed? || s.quantity_unit_was.presence != s.quantity_unit.presence) }
 
   has_many :analyses, before_remove: :delete_table_analysis
   has_many :children, -> { order(:name) }, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify
@@ -18,13 +25,16 @@ class Specimen < ActiveRecord::Base
   has_many :chemistries, through: :analyses
   has_many :specimen_custom_attributes, dependent: :destroy
   has_many :custom_attributes, through: :specimen_custom_attributes
+  has_many :specimen_quantities
   belongs_to :parent, class_name: "Specimen", foreign_key: :parent_id
   belongs_to :box
   belongs_to :place
   belongs_to :classification
   belongs_to :physical_form
 
+  accepts_nested_attributes_for :specimen_quantities
   accepts_nested_attributes_for :specimen_custom_attributes
+  accepts_nested_attributes_for :children
 
   validates :box, existence: true, allow_nil: true
   validates :place, existence: true, allow_nil: true
@@ -38,13 +48,16 @@ class Specimen < ActiveRecord::Base
   validates :age_max, numericality: true, allow_nil: true
   validates :age_unit, presence: true, if: -> { age_min.present? || age_max.present? }
   validates :age_unit, length: { maximum: 255 }
+  validates :quantity, presence: { if: -> { quantity_unit.present? } }
+  validates :quantity, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
+  validates :quantity_unit, presence: { if: -> { quantity.present? } }
+  validate :quantity_unit_exists
   validates :size, length: { maximum: 255 }
   validates :size_unit, length: { maximum: 255 }
   validates :collector, length: { maximum: 255 }
   validates :collector_detail, length: { maximum: 255 }
   validates :collection_date_precision, length: { maximum: 255 }
   
-
   def set_specimen_custom_attributes
     ids = specimen_custom_attributes.pluck('DISTINCT custom_attribute_id')
     if ids.size == CustomAttribute.count
@@ -120,12 +133,97 @@ class Specimen < ActiveRecord::Base
     families.select{|e| list.include?(e) }    
   end
 
+  def quantity_history
+    return @quantity_history if @quantity_history
+    divides = Divide.includes(:specimen_quantities).specimen_id_is(self_and_descendants.map(&:id))
+    total_hash = {}
+    h = Hash.new {|h, k| h[k] = Array.new }
+    @quantity_history = divides.each_with_object(h) do |divide, hash|
+      divide.specimen_quantities.each do |specimen_quantity|
+        hash[specimen_quantity.specimen_id] << specimen_quantity.point
+        total_hash[specimen_quantity.specimen_id] = specimen_quantity.decimal_quantity
+      end
+      total_val = total_hash.values.compact.sum
+      hash[0] << SpecimenQuantity.point(divide, total_val.to_f, Quantity.string_quantity(total_val, "g"))
+    end
+    last_divide = divides.last
+    @quantity_history.each do |key, quantity_line|
+      if quantity_line.last[:id] != last_divide.id
+        quantity_line << SpecimenQuantity.point(last_divide, quantity_line.last[:y], quantity_line.last[:quantity_str])
+      end
+    end
+    @quantity_history
+  end
+
+  def divided_loss
+    all_decimal_quantity = self_and_new_children.inject(0) do |sum, specimen|
+      sum + specimen.decimal_quantity
+    end
+    decimal_quantity_was - all_decimal_quantity
+  end
+
+  def divide_save
+    self.divide_flg = true
+    ActiveRecord::Base.transaction do
+      divide = build_divide
+      divide.save!
+      build_specimen_quantity(divide)
+      new_children.each do |child|
+        child.divide_flg = true
+        child.build_specimen_quantity(divide)
+      end
+      save!
+    end
+  end
+
+  def build_specimen_quantity(divide = build_divide)
+    specimen_quantity = specimen_quantities.build
+    specimen_quantity.quantity = quantity
+    specimen_quantity.quantity_unit = quantity_unit
+    specimen_quantity.divide = divide
+    specimen_quantity
+  end
+
   private
+
+  def new_children
+    children.select(&:new_record?).to_a
+  end
+
+  def self_and_new_children
+    [self].concat(new_children)
+  end
+
+  def build_divide
+    divide = Divide.new
+    divide.before_specimen_quantity = specimen_quantities.last
+    divide.divide_flg = divide_flg || false
+    divide.log = build_log
+    divide
+  end
+
+  def build_log
+    if divide_flg
+      comment
+    elsif string_quantity_was.blank?
+      "[#{name}] #{string_quantity}"
+    elsif string_quantity.blank?
+      "[#{name}] Deleted quantity."
+    else
+      "[#{name}] #{string_quantity_was} -> #{string_quantity}"
+    end
+  end
 
   def parent_id_cannot_self_children
     invalid_ids = descendants.map(&:id).unshift(self.id)
     if invalid_ids.include?(self.parent_id)
       errors.add(:parent_id, " make loop.")
+    end
+  end
+
+  def quantity_unit_exists
+    unless quantity_unit.blank? || Quantity.unit_exists?(quantity_unit)
+      errors.add(:quantity_unit, " does not exist")
     end
   end
 
@@ -140,5 +238,4 @@ class Specimen < ActiveRecord::Base
   def delete_table_analysis(analysis)
     TableAnalysis.delete_all(analysis_id: analysis.id, specimen_id: self.id)
   end
-
 end

@@ -1,0 +1,34 @@
+<%= javascript_tag do %>
+  //グラフの点にマウスを合わせた際の表示
+  function chartPointInfo() {
+    var detail = "<b>" + this.series.name + "</b>";
+    detail += "<br /><b>Quantity: </b>" + this.point.quantityStr;
+    detail += "<br /><b>Date: </b>" + this.point.dateStr;
+    detail += "<br /><b>Comment: </b>" + this.point.comment;
+    if (this.point.beforeSpecimenName) {
+      detail += "<br /><b>Original specimen: </b>" + this.point.beforeSpecimenName;
+    }
+    return detail;
+  };
+<% end %>
+<%= high_chart("quantity_history_graph", @specimen.generate_chart_quantity_history) do %>
+  <%=raw "options.tooltip.formatter = chartPointInfo;"  %>
+<% end %>
+<div class="row">
+  <a class="btn btn-default col-sm-12 show_switching_content_open">
+    <span class="glyphicon glyphicon-chevron-down"></span>
+  </a>
+  <a class="btn btn-default col-sm-12 show_switching_content_close" style="display: none">
+    <span class="glyphicon glyphicon-chevron-up"></span>
+  </a>
+</div>
+<div class="row show_switching_content" style="display: none">
+  <%= render 'quantity_table', table_name: "total", data: @specimen.quantity_history[0] %>
+  <% @specimen.quantity_history.each do |key, points| %>
+    <% specimen = Specimen.find_by(id: key) %>
+    <% data = points.uniq {|point| point[:id] } %>
+    <% if specimen %>
+      <%= render 'quantity_table', table_name: specimen.name, data: data %>
+    <% end %>
+  <% end %>
+</div>
