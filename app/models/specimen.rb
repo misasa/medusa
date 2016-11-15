@@ -250,12 +250,6 @@ class Specimen < ActiveRecord::Base
     end
   end
 
-  def quantity_unit_exists
-    unless quantity_unit.blank? || Quantity.unit_exists?(quantity_unit)
-      errors.add(:quantity_unit, " does not exist")
-    end
-  end
-
   def status_is_nomal
     unless status == Status::NORMAL
       errors.add(:status, " is not normal")
