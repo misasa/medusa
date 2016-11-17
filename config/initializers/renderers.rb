@@ -14,15 +14,18 @@ class Array
 	      	# 		analysis.to_pml(xml)
 	      	# 	end
 	      	# end
+
 	      	else
 	      		analyses = []
 		      	analyses << obj.analysis if obj.respond_to?(:analysis)
 		      	if obj.respond_to?(:analyses)
 		      		analyses.concat(obj.analyses)
 		      	end
+
 		      	if obj.respond_to?(:spots)
 		      		obj.spots.each do |spot|
-		      			analyses << spot.target if spot.target && spot.target.instance_of?(Analysis)
+		      			#analyses << spot.target if spot.target && spot.target.instance_of?(Analysis)
+		      			analyses << spot
 		      		end
 		      	end
 		      	analyses = analyses.uniq.compact

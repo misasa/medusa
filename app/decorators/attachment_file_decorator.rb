@@ -5,7 +5,11 @@ class AttachmentFileDecorator < Draper::Decorator
   
 
   def name_with_id
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-file") + " #{name} < #{global_id} >"
+    tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-file") + " #{name} < #{global_id} >"
+    if Settings.rplot_url
+      tag += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
+    end
+    tag
   end
 
 

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161102063045) do
+ActiveRecord::Schema.define(version: 20161025043020) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,16 +97,14 @@ ActiveRecord::Schema.define(version: 20161102063045) do
   end
 
   create_table "boxes", force: true, comment: "保管場所" do |t|
-    t.string   "name",          comment: "名称"
-    t.integer  "parent_id",     comment: "親保管場所ID"
-    t.integer  "position",      comment: "表示位置"
-    t.string   "path",          comment: "保管場所パス"
-    t.integer  "box_type_id",   comment: "保管場所種別ID"
-    t.datetime "created_at",    comment: "作成日時"
-    t.datetime "updated_at",    comment: "更新日時"
-    t.string   "description",   comment: "説明"
-    t.float    "quantity",      comment: "数量"
-    t.string   "quantity_unit", comment: "数量単位"
+    t.string   "name",        comment: "名称"
+    t.integer  "parent_id",   comment: "親保管場所ID"
+    t.integer  "position",    comment: "表示位置"
+    t.string   "path",        comment: "保管場所パス"
+    t.integer  "box_type_id", comment: "保管場所種別ID"
+    t.datetime "created_at",  comment: "作成日時"
+    t.datetime "updated_at",  comment: "更新日時"
+    t.string   "description", comment: "説明"
   end
 
   add_index "boxes", ["box_type_id"], name: "index_boxes_on_box_type_id", using: :btree

@@ -175,7 +175,12 @@ class Analysis < ActiveRecord::Base
           xml.x_image(spot.spot_x_from_center)
           xml.y_image(spot.spot_y_from_center)
           xml.x_overpic(spot.spot_overpic_x)
-          xml.y_overpic(spot.spot_overpic_y)          
+          xml.y_overpic(spot.spot_overpic_y)         
+          world_xy = spot.spot_world_xy
+          if world_xy
+            xml.x_vs(world_xy[0])
+            xml.y_vs(world_xy[1]) 
+          end
         end
       end
       unless chemistries.empty?

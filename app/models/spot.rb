@@ -1,6 +1,6 @@
 class Spot < ActiveRecord::Base
   include HasRecordProperty
-
+#  attr_accessor :spot_x_world, :spot_y_world
   belongs_to :attachment_file
 
   validates :attachment_file, existence: true
@@ -28,6 +28,63 @@ class Spot < ActiveRecord::Base
     self.stroke_width = attachment_file.percent2pixel(0.5)
   end
 
+
+  def get_analysis
+    target if target && target.instance_of?(Analysis)
+  end
+
+  def to_pml(xml=nil)
+    unless xml
+      xml = ::Builder::XmlMarkup.new(indent: 2)
+      xml.instruct!
+    end
+    xml.acquisition do
+      analysis = get_analysis
+      if analysis
+        xml.global_id(analysis.global_id)
+        xml.name(analysis.name)
+        xml.device(analysis.device.try!(:name))
+        xml.technique(analysis.technique.try!(:name))
+        xml.operator(analysis.operator)
+        xml.sample_global_id(analysis.specimen.try!(:global_id))
+        xml.sample_name(analysis.specimen.try!(:name))
+        xml.description(analysis.description)
+      end
+      # spot = get_spot
+      xml.spot do
+        xml.global_id(global_id)
+        xml.attachment_file_global_id(attachment_file.try!(:global_id))
+        xml.x_image(spot_x_from_center)
+        xml.y_image(spot_y_from_center)
+        xml.x_overpic(spot_overpic_x)
+        xml.y_overpic(spot_overpic_y)
+        world_xy = spot_world_xy
+        if world_xy
+          xml.x_vs(world_xy[0])
+          xml.y_vs(world_xy[1]) 
+        end
+      end
+      if analysis
+        unless analysis.chemistries.empty?
+          xml.chemistries do
+            analysis.chemistries.each do |chemistry|
+              xml.analysis do
+                xml.nickname(chemistry.measurement_item.try!(:nickname))
+                xml.value(chemistry.value)
+                xml.unit(chemistry.unit.try!(:text))
+                xml.uncertainty(chemistry.uncertainty)
+                xml.label(chemistry.label)
+                xml.info(chemistry.info)
+              end
+            end
+          end
+        end
+      end
+    end
+    
+  end
+
+
   def spot_xy_from_center
     return unless attachment_file
     return unless spot_x
@@ -51,6 +108,12 @@ class Spot < ActiveRecord::Base
 
   def spot_overpic_y
     (attachment_file.height.to_f/attachment_file.length - spot_y/attachment_file.length) * 100 if attachment_file.length
+  end
+
+  def spot_world_xy
+    pixels = [[spot_x, spot_y]]
+    worlds = attachment_file.pixel_pairs_on_world(pixels)
+    worlds[0]
   end
 
 

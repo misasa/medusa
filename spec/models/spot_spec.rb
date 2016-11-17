@@ -85,6 +85,26 @@ describe Spot do
     end
   end
 
+  describe ".spot_world_xy", :current => true do
+    subject{ spot.spot_world_xy }
+    context "with calibrated image" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]")}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      it {expect(subject).not_to be_nil}
+      it {expect(subject[0]).not_to be_nil}
+      it {expect(subject[1]).not_to be_nil}      
+    end
+
+    context "without calibrated image" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "")}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      it {expect(subject).not_to be_nil}
+      it {expect(subject[0]).not_to be_nil}
+      it {expect(subject[1]).not_to be_nil}      
+    end
+
+  end
+
   # describe ".spot_x_from_center" do
   #   subject{obj.spot_x_from_center}
   #   let(:obj){FactoryGirl.create(:spot)}
