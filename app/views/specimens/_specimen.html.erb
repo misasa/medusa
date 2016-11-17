@@ -1,24 +1,7 @@
 <tr>
   <td><%= check_box_tag("ids[]", specimen.id, checked, id: "ids_#{specimen.id}", class: "select-row") if can?(:update, specimen) %></td>
-  <td><%= specimen.decorate.status_icon %></td>
-  <td><%= link_to specimen.name, specimen, class: specimen_ghost(specimen) %></td>
-  <td>
-  <% if !specimen.igsn.blank? %>
-   <%= link_to specimen.igsn, Settings.sesar_url(igsn: specimen.igsn) %>
-   <%= link_to Settings.sesar_url(igsn: specimen.igsn, edit: true), title: "edit on SESAR" do %><span class="glyphicon glyphicon-pencil"></span><% end %>
+  <% specimen = specimen.decorate %>
+  <% @search_columns.each do |column| %>
+  <td><%= specimen.content(column.name) %></td>
   <% end %>
-  </td>
-  <td><%= link_to specimen.parent.name,specimen.parent, class: specimen_ghost(specimen.parent) if specimen.parent %></td>
-  <%= td_if_expand do %>
-    <%= link_to specimen.box.name,specimen.box if specimen.box %>
-  <% end %>
-  <td><%= specimen.physical_form.try!(:name) %></td>
-  <td><%= specimen.classification.try!(:full_name) %></td>
-  <%= td_if_expand specimen.tag_list %>
-  <%= td_if_expand raw(specimen.age_in_text(:unit => specimen.age_unit, :with_unit => true) || "-") %>
-  <%= td_if_expand specimen.user.try!(:username) %>
-  <td><%= specimen.group.try!(:name) %></td>
-  <%= td_if_expand difference_from_now(specimen.published_at) %>
-  <td><%= difference_from_now(specimen.updated_at) %></td>
-  <%= td_if_expand difference_from_now(specimen.created_at) %>
 </tr>

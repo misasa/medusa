@@ -7,7 +7,7 @@ module HasRecordProperty
     has_one :group, through: :record_property
     accepts_nested_attributes_for :record_property
     delegate :global_id, :published_at, :readable?, to: :record_property
-    delegate :user_id, :group_id, :published, to: :record_property, allow_nil: true
+    delegate :user_id, :group_id, :published, :disposed, :disposed_at, :lost, :lost_at, to: :record_property, allow_nil: true
 
     after_create :generate_record_property
     after_save :update_record_property
@@ -79,7 +79,7 @@ module HasRecordProperty
       dream_url = "http://dream.misasa.okayama-u.ac.jp/?q=#{self.global_id}"
       items = []
       items << self.global_id
-      my_author = self.name.gsub(/"/,"''") # TK January 22, 2014 (Wed)
+      my_author = self.name.try(:gsub, /"/, "''") # TK January 22, 2014 (Wed)
       my_bib_title = self.bib_title.gsub(/"/,"''")
       items << " author={{#{my_author}}}"
       items << " title={#{my_bib_title}}"
@@ -182,6 +182,14 @@ module HasRecordProperty
 
   def published=(published)
     record_property && record_property.published = published
+  end
+
+  def disposed=(disposed)
+    record_property && record_property.disposed = disposed
+  end
+
+  def lost=(lost)
+    record_property && record_property.lost = lost
   end
 
   def writable?(user)

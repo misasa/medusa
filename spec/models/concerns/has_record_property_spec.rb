@@ -25,10 +25,14 @@ describe HasRecordProperty do
 
   describe "deligate methods" do
     let(:obj) { klass.create(name: "foo") }
-    let(:record_property) { obj.build_record_property(global_id: global_id, published: published, published_at: published_at) }
+    let(:record_property) { obj.build_record_property(global_id: global_id, published: published, published_at: published_at, disposed: disposed, disposed_at: disposed_at, lost: lost, lost_at: lost_at) }
     let(:global_id) { "12345" }
     let(:published) { true }
     let(:published_at) { Time.now }
+    let(:disposed) { true }
+    let(:disposed_at) { Time.now }
+    let(:lost) { true }
+    let(:lost_at) { Time.now }
     let(:readable) { true }
     let(:json) { "json" }
     before do
@@ -37,6 +41,10 @@ describe HasRecordProperty do
     it { expect(obj.global_id).to eq global_id }
     it { expect(obj.published).to eq published }
     it { expect(obj.published_at).to eq published_at }
+    it { expect(obj.disposed).to eq disposed }
+    it { expect(obj.disposed_at).to eq disposed_at }
+    it { expect(obj.lost).to eq lost }
+    it { expect(obj.lost_at).to eq lost_at }
     it { expect(obj.readable?).to be_truthy }
     it { expect(obj.to_json).to include "\"global_id\":\"#{global_id}\"" }
     it { expect(obj.to_xml).to include "<global-id>#{global_id}</global-id>" }
@@ -448,6 +456,18 @@ describe HasRecordProperty do
       it { expect(specimen.group_id).to eq group_id}
     end
 
-  end
+    describe ".disposed=" do
+      let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:disposed){ true }
+      before { specimen.disposed = disposed }
+      it { expect(specimen.disposed).to eq disposed }
+    end
 
+    describe ".lost=" do
+      let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:lost){ true }
+      before { specimen.lost = lost }
+      it { expect(specimen.lost).to eq lost }
+    end
+  end
 end

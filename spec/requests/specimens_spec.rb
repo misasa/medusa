@@ -4,10 +4,14 @@ describe "specimen" do
   before do
     login login_user
     create_data
+    crate_search_columns
     visit specimens_path
   end
   let(:login_user) { FactoryGirl.create(:user) }
   let(:create_data) {}
+  let(:crate_search_columns) do
+    FactoryGirl.create(:search_column, user: login_user, datum_type: "Specimen", name: "name", display_name: "name", display_type: 2)
+  end
   
   describe "specimen detail screen" do
     before { click_link(specimen.name) }

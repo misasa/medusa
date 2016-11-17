@@ -9,6 +9,8 @@ class SpecimensController < ApplicationController
     @search = Specimen.includes(:classification, :physical_form).readables(current_user).search(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @specimens = @search.result.page(params[:page]).per(params[:per_page])
+    @search_columns = SearchColumn.model_is(Specimen).user_is(current_user)
+    @search_columns = params[:toggle_column] == "expand" ? @search_columns.display_expand : @search_columns.display_always
     respond_with @specimens
   end
 
@@ -154,6 +156,7 @@ class SpecimensController < ApplicationController
   def specimen_params
     params.require(:specimen).permit(
       :name,
+      :specimen_type,
       :physical_form_id,
       :classification_id,
       :quantity,
@@ -169,6 +172,8 @@ class SpecimensController < ApplicationController
       :user_id,
       :group_id,
       :published,
+      :disposed,
+      :lost,
       :igsn,
       :age_min,
       :age_max,
@@ -243,6 +248,8 @@ class SpecimensController < ApplicationController
   end
 
   def find_resources
+    @search_columns = SearchColumn.model_is(Specimen).user_is(current_user)
+    @search_columns = params[:toggle_column] == "expand" ? @search_columns.display_expand : @search_columns.display_always
     @specimens = Specimen.where(id: params[:ids])
   end
 

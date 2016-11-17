@@ -6,10 +6,13 @@ class User < ActiveRecord::Base
          :recoverable, :rememberable, :trackable, :validatable
   devise :omniauthable, omniauth_providers: [:google_oauth2, :shibboleth]
 
+  after_create :create_search_columns
+
   has_many :group_members, dependent: :destroy
   has_many :groups, through: :group_members
   has_many :record_properties
   has_many :omniauths, dependent: :destroy
+  has_many :search_columns
   belongs_to :box
   
   validates :username, presence: true, length: {maximum: 255}, uniqueness: true
@@ -51,5 +54,14 @@ class User < ActiveRecord::Base
   def email_required?
     false
   end
-  
+
+  private
+
+  def create_search_columns
+    SearchColumn.master.each do |master_search_column|
+      search_column = master_search_column.dup
+      search_column.user = self
+      search_column.save!
+    end
+  end
 end

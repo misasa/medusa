@@ -290,6 +290,13 @@ Medusa::Application.routes.draw do
   resources :physical_forms, except: [:new]
   resources :classifications, except: [:new]
   resources :box_types, except: [:new]
+  resources :search_columns, only: [:index] do
+    collection do
+      post :update_order
+      get :master_index
+      post :master_update_order
+    end
+  end
   resources :measurement_items, except: [:new]
   resources :measurement_categories, except: [:new] do
     member do

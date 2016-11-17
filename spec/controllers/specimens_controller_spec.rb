@@ -12,11 +12,24 @@ describe SpecimensController do
     let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen_1.id) }
     let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen_2.id) }
     let(:analysis_3) { FactoryGirl.create(:analysis, specimen_id: specimen_3.id) }
+    let!(:column1) { FactoryGirl.create(:search_column, user: user, datum_type: "Specimen", display_order: 1, display_type: 0) }
+    let!(:column2) { FactoryGirl.create(:search_column, user: user, datum_type: "Specimen", display_order: 2, display_type: 1) }
+    let!(:column3) { FactoryGirl.create(:search_column, user: user, datum_type: "Specimen", display_order: 3, display_type: 2) }
+    let!(:column4) { FactoryGirl.create(:search_column, user: user, datum_type: "Box", display_order: 3, display_type: 2) }
+    let!(:column5) { FactoryGirl.create(:search_column, user_id: 0, datum_type: "Specimen", display_order: 3, display_type: 2) }
+    let(:toggle_column) { nil }
     before do
       specimen_1;specimen_2;specimen_3
-      get :index
+      get :index, toggle_column: toggle_column
     end
     it { expect(assigns(:specimens).count).to eq 3 }
+    context "toggle_column is nil" do
+      it { expect(assigns(:search_columns)).to eq [column3] }
+    end
+    context "toggle_column is expand" do
+      let(:toggle_column) { "expand" }
+      it { expect(assigns(:search_columns)).to eq [column2, column3] }
+    end
 
     context "with format 'json'" do
       before do
@@ -207,16 +220,29 @@ describe SpecimensController do
     let(:obj1) { FactoryGirl.create(:specimen, name: "obj1") }
     let(:obj2) { FactoryGirl.create(:specimen, name: "obj2") }
     let(:obj3) { FactoryGirl.create(:specimen, name: "obj3") }
+    let!(:column1) { FactoryGirl.create(:search_column, user: user, datum_type: "Specimen", display_order: 1, display_type: 0) }
+    let!(:column2) { FactoryGirl.create(:search_column, user: user, datum_type: "Specimen", display_order: 2, display_type: 1) }
+    let!(:column3) { FactoryGirl.create(:search_column, user: user, datum_type: "Specimen", display_order: 3, display_type: 2) }
+    let!(:column4) { FactoryGirl.create(:search_column, user: user, datum_type: "Box", display_order: 3, display_type: 2) }
+    let!(:column5) { FactoryGirl.create(:search_column, user_id: 0, datum_type: "Specimen", display_order: 3, display_type: 2) }
     let(:ids){[obj1.id,obj2.id]}
+    let(:toggle_column) { nil }
     before do
       obj1
       obj2
       obj3
-      post :bundle_edit, ids: ids
+      post :bundle_edit, ids: ids, toggle_column: toggle_column
     end
     it {expect(assigns(:specimens).include?(obj1)).to be_truthy}
     it {expect(assigns(:specimens).include?(obj2)).to be_truthy}
     it {expect(assigns(:specimens).include?(obj3)).to be_falsey}
+    context "toggle_column is nil" do
+      it { expect(assigns(:search_columns)).to eq [column3] }
+    end
+    context "toggle_column is expand" do
+      let(:toggle_column) { "expand" }
+      it { expect(assigns(:search_columns)).to eq [column2, column3] }
+    end
   end
 
   describe "POST bundle_update" do

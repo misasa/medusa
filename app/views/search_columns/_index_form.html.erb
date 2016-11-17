@@ -1,0 +1,54 @@
+<div class="panel panel-default">
+  <div class="panel-heading">Specimen</div>
+  <div class="panel-body">
+    <%= button_tag class: "btn btn-default" do %>
+    <span class="glyphicon glyphicon-save"></span>
+    <% end %>
+  </div>
+  <div class="panel-body">
+    <table class="table table-condensed table-hover">
+      <thead>
+        <tr>
+          <th>
+          </th>
+        </tr>
+        <tr>
+          <th>display order</th>
+          <th>name</th>
+          <th>display name</th>
+          <th>display type</th>
+        </tr>
+      </thead>
+      <tbody class="sortable">
+        <% @search_columns.each do |column| %>
+        <tr>
+          <td><%= column.display_order %></td>
+          <td><%= column.name %></td>
+          <td><%= column.display_name %></td>
+          <td>
+            <div class="btn-group" data-toggle="buttons">
+              <%= label_tag :"display_types[#{column.id}]_0", class: column.none? ? "btn btn-default active" : "btn btn-default" do %>
+                <%= radio_button_tag :"display_types[#{column.id}]", 0, column.none?, { autocomplete: "off" } %>
+                dislpay none
+              <% end %>
+              <%= label_tag :"display_types[#{column.id}]_1", class: column.expand? ? "btn btn-default active" : "btn btn-default" do %>
+                <%= radio_button_tag :"display_types[#{column.id}]", 1, column.expand?, { autocomplete: "off" } %>
+                only expansion
+              <% end %>
+              <%= label_tag :"display_types[#{column.id}]_2", class: column.always? ? "btn btn-default active" : "btn btn-default" do %>
+                <%= radio_button_tag :"display_types[#{column.id}]", 2, column.always?, { autocomplete: "off" } %>
+                always
+              <% end %>
+            </div>
+          </td>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="panel-body">
+    <%= button_tag class: "btn btn-default" do %>
+    <span class="glyphicon glyphicon-save"></span>
+    <% end %>
+  </div>
+</div>
