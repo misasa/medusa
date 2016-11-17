@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161025043020) do
+ActiveRecord::Schema.define(version: 20161114065543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -97,14 +97,16 @@ ActiveRecord::Schema.define(version: 20161025043020) do
   end
 
   create_table "boxes", force: true, comment: "保管場所" do |t|
-    t.string   "name",        comment: "名称"
-    t.integer  "parent_id",   comment: "親保管場所ID"
-    t.integer  "position",    comment: "表示位置"
-    t.string   "path",        comment: "保管場所パス"
-    t.integer  "box_type_id", comment: "保管場所種別ID"
-    t.datetime "created_at",  comment: "作成日時"
-    t.datetime "updated_at",  comment: "更新日時"
-    t.string   "description", comment: "説明"
+    t.string   "name",          comment: "名称"
+    t.integer  "parent_id",     comment: "親保管場所ID"
+    t.integer  "position",      comment: "表示位置"
+    t.string   "path",          comment: "保管場所パス"
+    t.integer  "box_type_id",   comment: "保管場所種別ID"
+    t.datetime "created_at",    comment: "作成日時"
+    t.datetime "updated_at",    comment: "更新日時"
+    t.string   "description",   comment: "説明"
+    t.float    "quantity",      comment: "数量"
+    t.string   "quantity_unit", comment: "数量単位"
   end
 
   add_index "boxes", ["box_type_id"], name: "index_boxes_on_box_type_id", using: :btree
@@ -170,8 +172,6 @@ ActiveRecord::Schema.define(version: 20161025043020) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "divides", ["before_specimen_quantity_id"], name: "index_divides_on_before_specimen_quantity_id", using: :btree
 
   create_table "global_qrs", force: true, comment: "QRコード" do |t|
     t.integer  "record_property_id", comment: "レコードプロパティID"
@@ -293,6 +293,19 @@ ActiveRecord::Schema.define(version: 20161025043020) do
   add_index "referrings", ["bib_id"], name: "index_referrings_on_bib_id", using: :btree
   add_index "referrings", ["referable_id"], name: "index_referrings_on_referable_id", using: :btree
 
+  create_table "search_columns", force: true do |t|
+    t.integer  "user_id",       null: false, comment: "ユーザID"
+    t.string   "datum_type",                 comment: "モデル種別"
+    t.string   "name",                       comment: "カラム名"
+    t.string   "display_name",               comment: "表示名"
+    t.integer  "display_order",              comment: "表示順"
+    t.integer  "display_type",               comment: "表示種別"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "search_columns", ["user_id"], name: "index_search_columns_on_user_id", using: :btree
+
   create_table "specimen_custom_attributes", force: true, comment: "標本別カスタム属性" do |t|
     t.integer  "specimen_id",         comment: "標本ID"
     t.integer  "custom_attribute_id", comment: "カスタム属性ID"
@@ -312,9 +325,6 @@ ActiveRecord::Schema.define(version: 20161025043020) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
-
-  add_index "specimen_quantities", ["divide_id"], name: "index_specimen_quantities_on_divide_id", using: :btree
-  add_index "specimen_quantities", ["specimen_id"], name: "index_specimen_quantities_on_specimen_id", using: :btree
 
   create_table "specimens", force: true, comment: "標本" do |t|
     t.string   "name",                                comment: "名称"

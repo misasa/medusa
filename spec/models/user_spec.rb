@@ -34,6 +34,38 @@ describe User do
     it { expect(user.as_json).to include("box_global_id" => box.global_id)}
   end
 
+  describe "create_search_columns" do
+    let!(:column1) { FactoryGirl.create(:search_column, user_id: 0, name: "name1", display_name: "display_name1", datum_type: "Specimen", display_order: 1, display_type: 0) }
+    let!(:column2) { FactoryGirl.create(:search_column, user_id: 0, name: "name2", display_name: "display_name2", datum_type: "Specimen", display_order: 2, display_type: 1) }
+    let!(:column3) { FactoryGirl.create(:search_column, user_id: 0, name: "name3", display_name: "display_name3", datum_type: "Specimen", display_order: 3, display_type: 2) }
+    let(:user) { FactoryGirl.build(:user_foo) }
+    before { user.save! }
+    describe "column1" do
+      subject { SearchColumn.user_is(user).where(name: "name1") }
+      it { expect(subject.count).to eq 1 }
+      it { expect(subject.first.display_name).to eq "display_name1" }
+      it { expect(subject.first.datum_type).to eq "Specimen" }
+      it { expect(subject.first.display_order).to eq 1 }
+      it { expect(subject.first.display_type).to eq 0 }
+    end
+    describe "column2" do
+      subject { SearchColumn.user_is(user).where(name: "name2") }
+      it { expect(subject.count).to eq 1 }
+      it { expect(subject.first.display_name).to eq "display_name2" }
+      it { expect(subject.first.datum_type).to eq "Specimen" }
+      it { expect(subject.first.display_order).to eq 2 }
+      it { expect(subject.first.display_type).to eq 1 }
+    end
+    describe "column3" do
+      subject { SearchColumn.user_is(user).where(name: "name3") }
+      it { expect(subject.count).to eq 1 }
+      it { expect(subject.first.display_name).to eq "display_name3" }
+      it { expect(subject.first.datum_type).to eq "Specimen" }
+      it { expect(subject.first.display_order).to eq 3 }
+      it { expect(subject.first.display_type).to eq 2 }
+    end
+  end
+
   describe "validates" do
     describe "name" do
       let(:obj) { FactoryGirl.build(:user, username: username,email: "test1@test.co.jp") }
