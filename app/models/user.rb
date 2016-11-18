@@ -13,6 +13,7 @@ class User < ActiveRecord::Base
   belongs_to :box
   
   validates :username, presence: true, length: {maximum: 255}, uniqueness: true
+  validates :staff_id, uniqueness: true, allow_blank: true
   validates :box, existence: true, allow_nil: true
 
   alias_attribute :admin?, :administrator
@@ -24,6 +25,11 @@ class User < ActiveRecord::Base
   def self.current=(user)
     Thread.current[:user] = user
   end
+
+  def self.find_by_token(token)
+    payload, _ = JWT.decode(token, Rails.application.config.secret_key_base)
+    find_by(payload)
+  end
   
   def as_json(options = {})
     super({:methods => :box_global_id}.merge(options))
@@ -33,6 +39,11 @@ class User < ActiveRecord::Base
     auth = omniauths.find_by_provider(provider)
     return unless auth
     auth.uid
+  end
+
+  def access_token
+    payload = { staff_id: staff_id, card_id: card_id }
+    JWT.encode(payload, Rails.application.config.secret_key_base)
   end
 
   protected
