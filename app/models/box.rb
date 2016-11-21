@@ -6,7 +6,7 @@ class Box < ActiveRecord::Base
   include HasAttachmentFile
   include HasRecursive
   include HasPath
-  include Quantity
+  include HasQuantity
 
   self.recursive_path_update = true
 

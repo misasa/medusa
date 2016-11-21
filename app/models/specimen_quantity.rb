@@ -1,5 +1,5 @@
 class SpecimenQuantity < ActiveRecord::Base
-  include Quantity
+  include HasQuantity
 
   belongs_to :specimen
   belongs_to :divide

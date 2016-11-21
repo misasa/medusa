@@ -6,7 +6,7 @@ class Specimen < ActiveRecord::Base
   include HasAttachmentFile
   include HasRecursive
   include HasPath
-  include Quantity
+  include HasQuantity
 
   attr_accessor :divide_flg
   attr_accessor :comment
