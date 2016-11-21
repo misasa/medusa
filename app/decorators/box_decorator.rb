@@ -17,7 +17,7 @@ class BoxDecorator < Draper::Decorator
 
   def family_tree
     in_list = [object].concat(ancestors)
-    h.tree(current_box_hash, type_name: "box", key: parent_id, in_list: in_list) do |obj|
+    h.tree(current_box_hash, klass: object.class, key: parent_id, in_list: in_list) do |obj|
       obj.decorate.tree_node(current: (self == obj), current_type: (object.class == obj.class), in_list_include: in_list.include?(obj))
     end
   end

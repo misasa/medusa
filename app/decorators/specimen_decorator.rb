@@ -320,7 +320,7 @@ class SpecimenDecorator < Draper::Decorator
     # relatives = families.select{|e| list.include?(e) }
 #    h.tree(relatives_for_tree.group_by(&:parent_id)) do |obj|
     in_list = [object].concat(ancestors)
-    h.tree(families.group_by(&:parent_id), type_name: "specimen", in_list: in_list) do |obj|
+    h.tree(families.group_by(&:parent_id), klass: object.class, in_list: in_list) do |obj|
       obj.decorate.tree_node(current: object == obj, current_type: (object.class == obj.class), in_list_include: in_list.include?(obj))
     end
   end
