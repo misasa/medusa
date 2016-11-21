@@ -103,6 +103,12 @@ describe Spot do
       it {expect(subject[1]).not_to be_nil}      
     end
 
+    context "with nil affine_matrix" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix => nil)}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      it {expect(subject).to be_nil}
+    end
+
   end
 
   # describe ".spot_x_from_center" do

@@ -112,6 +112,8 @@ class Spot < ActiveRecord::Base
 
   def spot_world_xy
     pixels = [[spot_x, spot_y]]
+    return unless attachment_file.affine_matrix
+    return if attachment_file.affine_matrix.empty?
     worlds = attachment_file.pixel_pairs_on_world(pixels)
     worlds[0]
   end
