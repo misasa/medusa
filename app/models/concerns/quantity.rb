@@ -5,7 +5,7 @@ module Quantity
 
   class << self
     def decimal_quantity(quantity, quantity_unit)
-      quantity.try(quantity_unit).to_f.to_d
+      quantity.try(quantity_unit.to_s).to_f.to_d
     end
 
     def string_quantity(quantity, quantity_unit)
@@ -13,7 +13,7 @@ module Quantity
     end
 
     def unit_exists?(quantity_unit)
-      num_and_unit = 1.try(quantity_unit)
+      num_and_unit = 1.try(quantity_unit.to_s)
       num_and_unit.class == Alchemist::Measurement && UNITS.include?(num_and_unit.unit_name)
     end
   end
