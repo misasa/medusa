@@ -248,7 +248,7 @@ describe Specimen do
       expect(subject[0][2][:quantity_str]).to eq("90,000.0(g)")
     end
     it "specimen1" do
-      expect(subject[specimen1.id].length).to eq(2)
+      expect(subject[specimen1.id].length).to eq(3)
       expect(subject[specimen1.id][0][:id]).to eq(divide1.id)
       expect(subject[specimen1.id][0][:y]).to eq(100000.0)
       expect(subject[specimen1.id][0][:quantity_str]).to eq("100.0(kg)")
@@ -441,7 +441,7 @@ describe Specimen do
       let(:divide_flg) { false }
       context "new_record" do
         let!(:specimen) { FactoryGirl.build(:specimen, name: "specimenA", divide_flg: divide_flg, comment: "comment") }
-        it { expect(subject).to eq("[specimenA] new specimen.") }
+        it { expect(subject).to eq("[specimenA] 200.0(g)") }
       end
       context "non new_record" do
         it { expect(subject).to eq("[specimenA] 100.0(kg) -> 200.0(g)") }
