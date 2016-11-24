@@ -224,7 +224,7 @@ describe SpecimenDecorator do
     end
     context "disappearance" do
       before { obj.update_attributes(quantity: "0", quantity_unit: "kg") }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-fire\"></span>") }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-ghost\"></span>") }
     end
     context "disposal" do
       before { obj.record_property.update_attributes(disposed: true) }
