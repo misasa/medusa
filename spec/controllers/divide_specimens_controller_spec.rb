@@ -5,14 +5,6 @@ describe DivideSpecimensController do
   let(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
 
-  describe "GET edit" do
-    let(:specimen) { FactoryGirl.create(:specimen) }
-    before { get :edit, id: specimen.id }
-    it { expect(assigns(:specimen)).to eq(specimen) }
-    it { expect(assigns(:specimen).children.first).to be_new_record }
-    it { expect(assigns(:specimen).children.size).to eq(1) }
-  end
-
   describe "PUT update" do
     let!(:specimen) { FactoryGirl.create(:specimen) }
     let!(:physical_form) { FactoryGirl.create(:physical_form) }
@@ -26,7 +18,7 @@ describe DivideSpecimensController do
         ]
       }
     end
-    subject { put :update, id: specimen.id, specimen:attributes }
+    subject { put :update, id: specimen.id, specimen:attributes, format: :json }
     context "witout format" do
       before { subject }
       it { expect(assigns(:specimen)).to eq specimen }

@@ -1,20 +1,11 @@
 class DivideSpecimensController < ApplicationController
-  respond_to :html, :xml, :json
-
-  def edit
-    @specimen = Specimen.find(params[:id]).decorate
-    @specimen.children.build
-  end
+  respond_to :json
 
   def update
-    @specimen = Specimen.find(params[:id]).decorate
+    @specimen = Specimen.find(params[:id])
     @specimen.attributes = parent_specimen_params
-    if @specimen.valid?(:divide)
-      @specimen.divide_save
-      redirect_to specimen_path(@specimen)
-    else
-      render :edit
-    end
+    @specimen.divide_save if @specimen.valid?(:divide)
+    respond_with @specimen
   end
 
   def loss
