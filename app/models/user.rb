@@ -16,7 +16,7 @@ class User < ActiveRecord::Base
   belongs_to :box
   
   validates :username, presence: true, length: {maximum: 255}, uniqueness: true
-  validates :staff_id, uniqueness: true, allow_blank: true
+  validates :api_key, uniqueness: true, allow_blank: true
   validates :box, existence: true, allow_nil: true
 
   alias_attribute :admin?, :administrator
@@ -45,7 +45,7 @@ class User < ActiveRecord::Base
   end
 
   def access_token
-    payload = { staff_id: staff_id, card_id: card_id }
+    payload = { api_key: api_key }
     JWT.encode(payload, Rails.application.config.secret_key_base)
   end
 

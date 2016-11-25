@@ -1,7 +1,7 @@
 class TokensController < ActionController::Base
   def create
-    if params[:staff_id].present? && params[:card_id].present?
-      user = User.find_by(staff_id: params[:staff_id], card_id: params[:card_id])
+    if params[:api_key].present?
+      user = User.find_by(api_key: params[:api_key])
       token = user && user.access_token
       render json: { token: token }, status: :created and return if token.present?
     end
