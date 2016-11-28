@@ -46,13 +46,13 @@ class Box < ActiveRecord::Base
   end
 
   def total_decimal_quantity
-    self_and_descendants.inject(0) do |sum, box|
+    descendants.inject(specimens_decimal_quantity) do |sum, box|
       (box.disposal_or_loss? ? sum : sum + box.box_decimal_quantity) + box.specimens_decimal_quantity
     end
   end
 
   def specimens_decimal_quantity
-    specimens.inject(0) do |sum, specimen|
+    specimens.inject(0.to_d) do |sum, specimen|
       specimen.disposal_or_loss? ? sum : sum + specimen.decimal_quantity
     end
   end

@@ -245,7 +245,7 @@ describe Box do
       box5.save!
     end
     subject { box1.total_decimal_quantity }
-    it { expect(subject).to eq 7031.to_d }
+    it { expect(subject).to eq 6031.to_d }
   end
 
   describe "specimens_decimal_quantity" do
