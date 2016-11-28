@@ -160,6 +160,8 @@ class BoxesController < ApplicationController
       :position,
       :path,
       :box_type_id,
+      :quantity,
+      :quantity_unit,
       :tag_list,
       :user_id,
       :description,

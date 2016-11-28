@@ -156,6 +156,10 @@ module HasRecordProperty
     tokens.join(" ")
   end
 
+  def disposal_or_loss?
+    record_property.disposed || record_property.lost
+  end
+
   def dispose
     record_property.dispose if record_property
   end

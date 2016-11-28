@@ -1,41 +1,6 @@
 require 'spec_helper'
 
-describe Quantity do
-  describe "class methods" do
-    describe "decimal_quantity" do
-      let(:quantity) { 100.0 }
-      let(:quantity_unit) { "kg" }
-      subject { Quantity.decimal_quantity(quantity, quantity_unit) }
-      it { expect(subject.class).to eq(BigDecimal) }
-      it { expect(subject).to eq(100000) }
-    end
-
-    describe "string_quantity" do
-      let(:quantity) { 100.0 }
-      let(:quantity_unit) { "kg" }
-      subject { Quantity.string_quantity(quantity, quantity_unit) }
-      it { expect(subject).to eq("100.0(kg)") }
-    end
-
-    describe "unit_exists?" do
-      subject { Quantity.unit_exists?(quantity_unit) }
-      context "exists" do
-        let(:quantity_unit) { "kg" }
-        it { expect(subject).to eq(true) }
-      end
-      context "not exists" do
-        context "error unit" do
-          let(:quantity_unit) { "kglam" }
-          it { expect(subject).to eq(false) }
-        end
-        context "other unit" do
-          let(:quantity_unit) { "km" }
-          it { expect(subject).to eq(false) }
-        end
-      end
-    end
-  end
-
+describe HasQuantity do
   describe "decimal_quantity" do
     let(:quantity) { 100 }
     let(:quantity_unit) { "kg" }
@@ -76,5 +41,19 @@ describe Quantity do
     end
     subject { specimen.string_quantity_was }
     it { expect(subject).to eq("100.0(kg)") }
+  end
+
+  describe "quantity_unit_exists" do
+    let(:obj) { FactoryGirl.build(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+    let(:quantity) { 100 }
+    before { obj.quantity_unit_exists }
+    context "exists unit" do
+      let(:quantity_unit) { "kilog" }
+      it { expect(obj.errors.full_messages).to be_empty }
+    end
+    context "not exists unit" do
+      let(:quantity_unit) { "kelog" }
+      it { expect(obj.errors.full_messages).to eq ["Quantity unit \"kelog\" does not exist"] }
+    end
   end
 end

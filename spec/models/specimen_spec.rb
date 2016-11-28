@@ -255,6 +255,9 @@ describe Specimen do
       expect(subject[specimen1.id][1][:id]).to eq(divide2.id)
       expect(subject[specimen1.id][1][:y]).to eq(60000.0)
       expect(subject[specimen1.id][1][:quantity_str]).to eq("60.0(kg)")
+      expect(subject[specimen1.id][1][:id]).to eq(divide2.id)
+      expect(subject[specimen1.id][1][:y]).to eq(60000.0)
+      expect(subject[specimen1.id][1][:quantity_str]).to eq("60.0(kg)")
     end
     it "specimen2" do
       expect(subject[specimen2.id].length).to eq(2)
@@ -778,7 +781,7 @@ describe Specimen do
       end
     end
 
-    describe "quantity" do
+    describe "quantity_unit" do
       let(:obj) { FactoryGirl.build(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
       let(:quantity){ "1" }
       context "exists" do
