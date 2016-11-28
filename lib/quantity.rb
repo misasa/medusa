@@ -16,7 +16,7 @@ module Quantity
     end
 
     def exponent(decimal_quantity)
-      origin_exponent = decimal_quantity.exponent - 1
+      origin_exponent = decimal_quantity.exponent - (decimal_quantity.zero? ? 0 : 1)
       exponent = (origin_exponent - origin_exponent % 3).to_f
       exponent_max = PREFIXES.keys.max
       exponent_min = PREFIXES.keys.min

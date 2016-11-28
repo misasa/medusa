@@ -1,17 +1,31 @@
 class DivideSpecimensController < ApplicationController
   respond_to :json
+  before_action :set_resource
 
   def update
-    @specimen = Specimen.find(params[:id])
-    @specimen.attributes = parent_specimen_params
     @specimen.divide_save if @specimen.valid?(:divide)
     respond_with @specimen
   end
 
   def loss
-    @specimen = Specimen.find(params[:id]).decorate
-    @specimen.attributes = parent_specimen_params
-    render json: { loss: "#{@specimen.divided_loss.to_s(:delimited)}(g)" }
+    if params[:manual]
+      decimal_quantity = @specimen.divided_loss
+      json = {
+        loss_quantity: Quantity.quantity(decimal_quantity).to_s,
+        loss_quantity_unit: Quantity.quantity_unit(decimal_quantity),
+        parent_quantity: @specimen.quantity.to_s,
+        parent_quantity_unit: @specimen.quantity_unit
+      }
+    else
+      decimal_quantity = @specimen.divided_parent_quantity
+      json = {
+        loss_quantity: "0.0",
+        loss_quantity_unit: "g",
+        parent_quantity: Quantity.quantity(decimal_quantity).to_s,
+        parent_quantity_unit: Quantity.quantity_unit(decimal_quantity)
+      }
+    end
+    render json: json
   end
 
   private
@@ -28,5 +42,10 @@ class DivideSpecimensController < ApplicationController
         :quantity_unit
       ]
     )
+  end
+
+  def set_resource
+    @specimen = Specimen.find(params[:id])
+    @specimen.attributes = parent_specimen_params
   end
 end

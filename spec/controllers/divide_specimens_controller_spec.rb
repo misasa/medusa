@@ -41,13 +41,21 @@ describe DivideSpecimensController do
         ]
       }
     end
-    subject { put :loss, id: specimen.id, specimen:attributes }
-    context "witout format" do
-      before { subject }
-      it do
-        json = JSON.parse(response.body)
-        expect(json["loss"]).to eq("10,000.0(g)")
-      end
+    before { put :loss, params }
+    subject { JSON.parse(response.body) }
+    context "exists manual params" do
+      let(:params) { { id: specimen.id, specimen:attributes, manual: "true" } }
+      it { expect(subject["loss_quantity"]).to eq("10.0") }
+      it { expect(subject["loss_quantity_unit"]).to eq("kg") }
+      it { expect(subject["parent_quantity"]).to eq("100.0") }
+      it { expect(subject["parent_quantity_unit"]).to eq("kg") }
+    end
+    context "not exists manual params" do
+      let(:params) { { id: specimen.id, specimen:attributes } }
+      it { expect(subject["loss_quantity"]).to eq("0.0") }
+      it { expect(subject["loss_quantity_unit"]).to eq("g") }
+      it { expect(subject["parent_quantity"]).to eq("110.0") }
+      it { expect(subject["parent_quantity_unit"]).to eq("kg") }
     end
   end
 end

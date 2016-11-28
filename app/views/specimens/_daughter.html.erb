@@ -85,7 +85,9 @@
       type: 'put',
       data: $form.serialize(),
       success: function(result){
-        $("#divided_loss").text(result.loss);
+        $("#parent_quantity").val(result.parent_quantity);
+        $("#parent_quantity_unit").val(result.parent_quantity_unit);
+        $("#divided_loss").text(result.loss_quantity + "(" + result.loss_quantity_unit + ")");
       }
     });
   };
@@ -95,6 +97,19 @@
   });
 
   $(document).on("click", ".remove-quantity-child", function() {
+    quantity_change_check();
+  });
+
+  $(document).on("change", "#manual", function() {
+    if ($(this).prop('checked')) {
+      $("input.parent.quantity").attr("readonly", false);
+      $(this).next().removeClass("glyphicon-minus");
+      $(this).next().addClass("glyphicon-ok");
+    } else {
+      $("input.parent.quantity").attr("readonly", true);
+      $(this).next().removeClass("glyphicon-ok");
+      $(this).next().addClass("glyphicon-minus");
+    }
     quantity_change_check();
   });
 
@@ -135,6 +150,9 @@
         <div class="col-sm-3">
           <%= f.label :quantity_unit, class: "small" do "Quantity unit(#{f.object.quantity_unit_was})" end %>
         </div>
+        <div class="col-sm-1">
+          <%= f.label :manual, class: "small" %>
+        </div>
       </div>
       <div class="row">
         <div class="col-sm-3">
@@ -144,10 +162,18 @@
           <%= PhysicalForm.find_by(id: f.object.physical_form_id).try(:name) %>
         </div>
         <div class="col-sm-3">
-          <%= f.text_field :quantity, class: "form-control input-sm parent quantity", id: "parent_quantity" %>
+          <%= f.text_field :quantity, class: "form-control input-sm parent quantity", id: "parent_quantity", readonly: true %>
         </div>
         <div class="col-sm-3">
-          <%= f.text_field :quantity_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_unit" %>
+          <%= f.text_field :quantity_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_unit", readonly: true %>
+        </div>
+        <div class="col-sm-1">
+          <div class="btn-group" data-toggle="buttons">
+            <%= label_tag :manual, class: "btn btn-default btn-sm" do %>
+              <%= check_box_tag :manual, true, false, autocomplete: "off" %>
+              <span class="glyphicon glyphicon-minus"></span>
+            <% end %>
+          </div>
         </div>
       </div>
 
