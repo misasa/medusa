@@ -83,7 +83,7 @@ class AttachmentFileDecorator < Draper::Decorator
       spots_tag = h.raw("")
       spots.each do |spot|
         spots_tag += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-          spot.decorate.tree_node(false)
+          spot.decorate.tree_node(current: false)
         end
       end
       spots_tag
@@ -136,7 +136,7 @@ class AttachmentFileDecorator < Draper::Decorator
 
     spots.each do |spot|
       html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-        spot.decorate.tree_node(false)
+        spot.decorate.tree_node(current: false)
       end
     end
     html
@@ -157,9 +157,8 @@ class AttachmentFileDecorator < Draper::Decorator
     link
   end
 
-  def tree_node(current=false)
+  def tree_node(current: false, current_type: false, in_list_include: false)
     link = current ? h.content_tag(:strong, name) : name
-    icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-file")
     icon + h.link_to_if(h.can?(:read, self), link, self)
   end
 

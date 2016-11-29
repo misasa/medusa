@@ -8,8 +8,22 @@
   .glyphicon {
     margin: 0px 0px;
   }
+
+  .glyphicon-folder-open {
+    margin: 0px 3px 0px 0px;
+  }
 }
 
-.badge-active{
+.badge {
   background-color: #444444;
+}
+
+.badge.badge-active {
+  background-color: #999999;
+}
+
+.tree-node {
+  .glyphicon-active-color {
+    color: #999999;
+  }
 }

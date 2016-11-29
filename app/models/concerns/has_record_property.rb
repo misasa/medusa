@@ -181,6 +181,10 @@ module HasRecordProperty
     record_property.found if record_property
   end
 
+  def record_property_id
+    record_property.try(:id)
+  end
+
   def user_id=(id)
     record_property && record_property.user_id = id
   end
