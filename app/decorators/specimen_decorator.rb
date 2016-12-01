@@ -103,7 +103,7 @@ class SpecimenDecorator < Draper::Decorator
     quantity_unit: { index: :text, bundle_edit: :text },
     age_min: { index: :text, bundle_edit: :text },
     age_max: { index: :text, bundle_edit: :text },
-    age_unit: { index: :text, bundle_edit: :text },
+    age_unit: { index: :select_age_unit, bundle_edit: :select_age_unit },
     size: { index: :text, bundle_edit: :text },
     size_unit: { index: :text, bundle_edit: :text },
     collected_at: { index: :text, bundle_edit: :text },
@@ -607,6 +607,10 @@ class SpecimenDecorator < Draper::Decorator
 
     def create_form_select_flg(f, column)
       f.select(column.name.to_sym, [true, false], { include_blank: true }, class: "form-control input-sm", style: "min-width: 60px;")
+    end
+
+    def create_form_select_age_unit(f, column)
+      f.select(:age_unit, ["a", "ka", "Ma", "Ga"], { include_blank: true }, class: "form-control input-sm", style: "min-width: 60px;")
     end
 
     def create_form_text(f, column)
