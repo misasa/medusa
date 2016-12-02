@@ -49,8 +49,11 @@
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @bib.to_tex %></code></pre>
   </div>
+  <%= display_plot @bib if Settings.rplot_url %>
+
 </div>
 <div class="btn-group">
-  <a href="#display-type-html" class="btn radio-button-group">html</a>
-  <a href="#display-type-tex" class="btn radio-button-group">tex</a>
+  <%= display_type_for 'html' %>
+  <%= display_type_for 'tex' %>
+  <%= display_type_for 'plot' if Settings.rplot_url %>
 </div>

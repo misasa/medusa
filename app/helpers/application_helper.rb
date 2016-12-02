@@ -6,6 +6,25 @@ module ApplicationHelper
     end
   end
 
+  def display_type_for(target)
+    content_tag(:a, target, href: "#display-type-#{target}", class: "btn radio-button-group")
+  end
+
+  def display_plot(obj)
+    content_tag(:div, class:"hidden", id:"display-type-plot") do
+      rplot_iframe obj
+    end
+      # <div class="hidden" id="display-type-plot">
+      # <%= @surface.rplot_iframe %>
+      # </div>  
+  end
+
+
+  def rplot_iframe(obj, size = '600')
+    content_tag(:iframe, nil, src: obj.rplot_url, width: size, height: size, frameborder: "no", class: "embed-responsive-item")
+  end
+
+
   def format_date(date)
     date.present? ? Date.parse(date).strftime("%Y-%m-%d") : ""
   end

@@ -107,9 +107,12 @@
   <div class="hidden" id="display-type-casteml">
     <pre><code><%= @specimen.to_pml %></code></pre>
   </div>  
+  <%= display_plot @specimen if Settings.rplot_url %>
+
 </div>
 <div class="btn-group">
   <a href="#display-type-html" class="btn radio-button-group">html</a>
   <a href="#display-type-tex" class="btn radio-button-group">bibtex</a>
   <a href="#display-type-casteml" class="btn radio-button-group">casteml</a>  
+  <%= display_type_for 'plot' if Settings.rplot_url %>
 </div>
