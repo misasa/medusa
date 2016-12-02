@@ -6,7 +6,7 @@ class Specimen < ActiveRecord::Base
   include HasAttachmentFile
   include HasRecursive
   include HasPath
-  include Quantity
+  include HasQuantity
 
   attr_accessor :divide_flg
   attr_accessor :comment
@@ -247,12 +247,6 @@ class Specimen < ActiveRecord::Base
     invalid_ids = descendants.map(&:id).unshift(self.id)
     if invalid_ids.include?(self.parent_id)
       errors.add(:parent_id, " make loop.")
-    end
-  end
-
-  def quantity_unit_exists
-    unless quantity_unit.blank? || Quantity.unit_exists?(quantity_unit)
-      errors.add(:quantity_unit, " does not exist")
     end
   end
 

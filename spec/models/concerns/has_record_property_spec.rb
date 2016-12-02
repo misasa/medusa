@@ -409,6 +409,38 @@ describe HasRecordProperty do
       end
     end
 
+    describe ".disposal_or_loss?" do
+      let(:specimen){ FactoryGirl.create(:specimen) }
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        User.current = user
+        specimen.record_property.lost = lost
+        specimen.record_property.disposed = disposed
+        specimen.save!
+      end
+      subject { specimen.disposal_or_loss? }
+      context "lost = false, disposed = false" do
+        let(:lost) { false }
+        let(:disposed) { false }
+        it { expect(subject).to eq false }
+      end
+      context "lost = true, disposed = false" do
+        let(:lost) { true }
+        let(:disposed) { false }
+        it { expect(subject).to eq true }
+      end
+      context "lost = false, disposed = true" do
+        let(:lost) { false }
+        let(:disposed) { true }
+        it { expect(subject).to eq true }
+      end
+      context "lost = true, disposed = true" do
+        let(:lost) { true }
+        let(:disposed) { true }
+        it { expect(subject).to eq true }
+      end
+    end
+
     describe ".dispose" do
       let(:specimen){ FactoryGirl.create(:specimen) }
       let(:user) { FactoryGirl.create(:user) }

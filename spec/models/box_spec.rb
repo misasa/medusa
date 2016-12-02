@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Box do
+  let(:user) { FactoryGirl.create(:user) }
+  before { User.current = user }
 
   describe "validates" do
     describe "name" do
@@ -65,6 +67,60 @@ describe Box do
         end
         context "and valid id" do
           it { expect(box).to be_valid }
+        end
+      end
+    end
+
+    describe "quantity" do
+      let(:obj) { FactoryGirl.build(:box, quantity: quantity, quantity_unit: quantity_unit) }
+      let(:quantity_unit) { "kg" }
+      context "num" do
+        let(:quantity){ "1" }
+        it { expect(obj).to be_valid }
+        context "0" do
+          let(:quantity){ "0" }
+          it { expect(obj).to be_valid }
+        end
+        context "-1" do
+          let(:quantity){ "-1" }
+          it { expect(obj).to be_valid }
+        end
+      end
+      context "str" do
+        let(:quantity){ "a" }
+        it { expect(obj).not_to be_valid }
+      end
+      context "blank" do
+        let(:quantity){ "" }
+        context "quantity_unit present" do
+          it { expect(obj).not_to be_valid }
+        end
+        context "quantity_unit blank" do
+          let(:quantity_unit) { "" }
+          it { expect(obj).to be_valid }
+        end
+      end
+    end
+
+    describe "quantity_unit" do
+      let(:obj) { FactoryGirl.build(:box, quantity: quantity, quantity_unit: quantity_unit) }
+      let(:quantity){ "1" }
+      context "exists" do
+        let(:quantity_unit) { "kgram" }
+        it { expect(obj).to be_valid }
+      end
+      context "not exists" do
+        let(:quantity_unit) { "kglam" }
+        it { expect(obj).not_to be_valid }
+      end
+      context "blank" do
+        let(:quantity_unit) { "" }
+        context "quantity present" do
+          it { expect(obj).not_to be_valid }
+        end
+        context "quantity blank" do
+          let(:quantity) { "" }
+          it { expect(obj).to be_valid }
         end
       end
     end
@@ -168,6 +224,63 @@ describe Box do
       end
       it { expect(subject.count).to eq (specimen1.analyses.size + specimen2.analyses.size)}
       it { expect(subject).to eq (specimen1.analyses + specimen2.analyses)}
+    end
+  end
+
+  describe "total_decimal_quantity" do
+    let!(:box1) { FactoryGirl.create(:box, quantity: 1, quantity_unit: "kg") }
+    let!(:box2) { FactoryGirl.create(:box, quantity: 2, quantity_unit: "kg", parent: box1) }
+    let!(:box3) { FactoryGirl.create(:box, quantity: 4, quantity_unit: "kg", parent: box2) }
+    let!(:box4) { FactoryGirl.create(:box, quantity: 8, quantity_unit: "kg", parent: box2) }
+    let!(:box5) { FactoryGirl.create(:box, quantity: 16, quantity_unit: "kg", parent: box2) }
+    let!(:specimen1) { FactoryGirl.create(:specimen, quantity: 1, quantity_unit: "g", box: box1) }
+    let!(:specimen2) { FactoryGirl.create(:specimen, quantity: 2, quantity_unit: "g", box: box2) }
+    let!(:specimen3) { FactoryGirl.create(:specimen, quantity: 4, quantity_unit: "g", box: box3) }
+    let!(:specimen4) { FactoryGirl.create(:specimen, quantity: 8, quantity_unit: "g", box: box4) }
+    let!(:specimen5) { FactoryGirl.create(:specimen, quantity: 16, quantity_unit: "g", box: box5) }
+    before do
+      box4.record_property.lost = true
+      box4.save!
+      box5.record_property.disposed = true
+      box5.save!
+    end
+    subject { box1.total_decimal_quantity }
+    it { expect(subject).to eq 6031.to_d }
+  end
+
+  describe "specimens_decimal_quantity" do
+    let(:user) { FactoryGirl.create(:user) }
+    let!(:box) { FactoryGirl.create(:box, quantity: 1, quantity_unit: "kg") }
+    let!(:specimen1) { FactoryGirl.create(:specimen, quantity: 2, quantity_unit: "kg", box: box) }
+    let!(:specimen2) { FactoryGirl.create(:specimen, quantity: 4, quantity_unit: "kg", box: box) }
+    let!(:specimen3) { FactoryGirl.create(:specimen, quantity: 8, quantity_unit: "kg", box: box) }
+    let!(:specimen4) { FactoryGirl.create(:specimen, quantity: 16, quantity_unit: "kg", box: box) }
+    before do
+      User.current = user
+      specimen3.record_property.update_attributes(lost: true)
+      specimen4.record_property.update_attributes(disposed: true)
+    end
+    subject { box.specimens_decimal_quantity }
+    it { expect(subject).to eq 6000.to_d }
+  end
+
+  describe "box_decimal_quantity" do
+    let(:box) { FactoryGirl.create(:box, quantity: quantity, quantity_unit: quantity_unit) }
+    subject { box.box_decimal_quantity }
+    context "1" do
+      let(:quantity) { 1 }
+      let(:quantity_unit) { "kg" }
+      it { expect(subject).to eq 1000.to_d }
+    end
+    context "0" do
+      let(:quantity) { 0 }
+      let(:quantity_unit) { "kg" }
+      it { expect(subject).to eq 0.to_d }
+    end
+    context "-1" do
+      let(:quantity) { -1 }
+      let(:quantity_unit) { "kg" }
+      it { expect(subject).to eq 0.to_d }
     end
   end
 end

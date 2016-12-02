@@ -387,6 +387,14 @@ class SpecimenDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-#{STATUS_ICON_NAME[status]}")
   end
 
+  def status_name
+    STATUS_NAME[status]
+  end
+
+  def status_icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-#{STATUS_ICON_NAME[status]}")
+  end
+
   private
 
   def box_node(box)
