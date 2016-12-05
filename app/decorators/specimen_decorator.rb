@@ -36,9 +36,9 @@ class SpecimenDecorator < Draper::Decorator
       content = h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
       content += ""
       content += h.link_to_if(h.can?(:read, bib), h.raw(bib.to_html), bib)
-      if Settings.rplot_url
-        content += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + bib.global_id, :title => 'plot online')
-      end
+      # if Settings.rplot_url
+      #   content += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + bib.global_id, :title => 'plot online')
+      # end
 
       #content = h.content_tag(:li, content)
       table_links = []
@@ -106,9 +106,9 @@ class SpecimenDecorator < Draper::Decorator
     specimen_tag = h.content_tag(:span, specimen_tag, class: "ghost") if specimen.ghost?
     content = specimen_tag
     content += h.content_tag(:span, nil, class: "glyphicon glyphicon-stats")    
-    if Settings.rplot_url
-      content += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + self.global_id, :title => 'plot online')
-    end
+    # if Settings.rplot_url
+    #   content += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + self.global_id, :title => 'plot online')
+    # end
     content += h.content_tag(:a, h.content_tag(:span, analyses.size, class: "badge"), href: "#specimen-analyses-#{self.id}", :"data-toggle" => "collapse" )
 
     lis = [] 
@@ -119,6 +119,25 @@ class SpecimenDecorator < Draper::Decorator
     #content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: ( current ? "collapse in" : "collapse" ) )
     content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: "collapse" )
     content
+  end
+
+  def plot_chemistries
+    #h.high_chart("plot-summary", generate_summary_plot)
+    if Settings.rplot_url
+      h.rplot_iframe self
+    else
+      plot_histograms
+    end
+  end
+
+  def plot_histograms
+    tag = ""
+    pls = []
+    generate_plots.each_with_index do |graph, id|
+      pls << h.raw(h.content_tag(:div, h.high_chart("plot-#{id}", graph), class: 'col-lg-4'))
+    end
+    tag += h.content_tag(:div, h.raw(pls.join), class: 'row spot-thumbnails')
+    h.raw(tag)
   end
 
   def generate_chart_globals

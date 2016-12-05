@@ -38,6 +38,8 @@
       <% end %>
     </ul>
 
+  <%= rplot_iframe @bib %>
+
 
   <div class="row spot-thumbnails">
     <%= @bib.decorate.related_pictures %>
@@ -49,11 +51,11 @@
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @bib.to_tex %></code></pre>
   </div>
-  <%= display_plot @bib if Settings.rplot_url %>
+  <%#= display_plot @bib if Settings.rplot_url %>
 
 </div>
 <div class="btn-group">
   <%= display_type_for 'html' %>
   <%= display_type_for 'tex' %>
-  <%= display_type_for 'plot' if Settings.rplot_url %>
+  <%#= display_type_for 'plot' if Settings.rplot_url %>
 </div>
