@@ -1,5 +1,6 @@
 <div class="display-type">
   <div id="display-type-html">
+    <%= rplot_iframe @bib unless @bib.analyses.empty? %>
     <ul>
       <%= li_if_exist("entry type: ", @bib.entry_type) %>
       <%= li_if_exist("abbreviation: ", @bib.abbreviation) %>
@@ -39,6 +40,7 @@
     </ul>
 
 
+
   <div class="row spot-thumbnails">
     <%= @bib.decorate.related_pictures %>
   </div>
@@ -49,8 +51,11 @@
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @bib.to_tex %></code></pre>
   </div>
+  <%#= display_plot @bib if Settings.rplot_url %>
+
 </div>
 <div class="btn-group">
-  <a href="#display-type-html" class="btn radio-button-group">html</a>
-  <a href="#display-type-tex" class="btn radio-button-group">tex</a>
+  <%= display_type_for 'html' %>
+  <%= display_type_for 'tex' %>
+  <%#= display_type_for 'plot' if Settings.rplot_url %>
 </div>

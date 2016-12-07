@@ -3,17 +3,22 @@
 	<div class="surface-viewer">
 	  <%= content_tag :svg, nil, class: "surface-canvas", width: 600, height: 600, "data-image" => surface_image_path(@surface, @surface.first_image, format: :svg) if @surface.first_image %>
 	</div>
+  <%= rplot_iframe @surface %>
   </div>
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @surface.to_tex %></code></pre>
   </div>
+  <%#= display_plot @surface if Settings.rplot_url %>
 </div>
 <div class="btn-group">
-  <a href="#display-type-html" class="btn radio-button-group">html</a>
-  <a href="#display-type-tex" class="btn radio-button-group">tex</a>
-</div>
+  <%= display_type_for 'html' %>
+  <%= display_type_for 'tex' %>
+  <%#= display_type_for 'plot' if Settings.rplot_url %>
 <% if @surface.first_image %>
 <%= link_to download_attachment_file_path(@surface.first_image), class: "btn btn-default" do %>
     <span class="glyphicon glyphicon-file"></span>
 <% end %>
+</div>
+
+
 <% end %>

@@ -1,5 +1,10 @@
 <div class="display-type">
   <div id="display-type-html">
+    <% if false %>
+      <%= high_chart("plot-summary", @specimen.generate_summary_plot) %>    
+    <% else %>
+      <%= @specimen.plot_chemistries %>
+    <% end %>  
     <ul>
       <% unless @specimen.igsn.blank? %>
         <li>
@@ -42,64 +47,7 @@
       <%= @specimen.decorate.related_pictures %>
     </div>
 
-    <% if false %>
-          <%= high_chart("plot-summary", @specimen.generate_summary_plot) %>    
-    <% else %>
-    <div class="row spot-thumbnails">
-      <% @specimen.generate_plots.each_with_index do |graph, id| %>
-        <div class="col-lg-4">
-          <%= high_chart("plot-#{id}", graph) %>
-        </div>
-      <% end %>
-    </div>
-    <% end %>
 
-    <% if false %>
-    <% unless @specimen.analyses.empty? %>
-
-      Table of analysis on <%= content_tag(:span, nil, class: specimen_ghost(@specimen, "glyphicon glyphicon-cloud")) + link_to(@specimen.name, specimen_path(@specimen), class: specimen_ghost(@specimen)) %>
-      <table class="table table-condensed table-striped">
-        <%
-        if params[:measurement_category_id].blank?
-          measurement_items = MeasurementItem.includes(:unit).all
-        else
-          measurement_items = MeasurementCategory.find(params[:measurement_category_id]).measurement_items
-        end
-        %>
-        <thead>
-          <tr><th colspan="<%= @specimen.analyses.size + 2 %>"></th></tr>
-          <tr>
-            <th></th>
-            <th>unit</th>
-            <% @specimen.analyses.each do |analysis| %>
-              <th <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>><%= link_to(analysis.name, analysis_path(analysis)) %></th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <% measurement_items.each do |measurement_item| %>
-            <tr>
-              <th align="right"><%== measurement_item.display_name %></th>
-              <th> <%== measurement_item.unit.try!(:html) %></th>
-              <% @specimen.analyses.each do |analysis| %>
-                <% value = analysis.chemistries.detect {|chemistry| chemistry.measurement_item_id == measurement_item.id }.try(:value) || "-" %>
-                <td <%== "class=\"success\"" if params[:analysis_id] == analysis.id.to_s %>align="right">
-                  <%= value %>
-                </td>
-              <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-      <%= form_tag(specimen_path(@specimen), method: :get) do %>
-        analysis:
-        <%= select_tag :analysis_id, options_for_select(@specimen.analyses.map {|analysis| [analysis.name, analysis.id]}, params[:analysis_id]), include_blank: true %>
-        measurement-category:
-        <%= select_tag :measurement_category_id, options_for_select(MeasurementCategory.pluck(:name, :id), params[:measurement_category_id]), include_blank: true %>
-            <%= button_tag class: "btn btn-default" do %><span class="glyphicon glyphicon-refresh"></span><% end %>
-      <% end %>
-    <% end %>
-    <% end %>
   </div>
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @specimen.to_bibtex %></code></pre>
@@ -107,9 +55,11 @@
   <div class="hidden" id="display-type-casteml">
     <pre><code><%= @specimen.to_pml %></code></pre>
   </div>  
+  <%#= display_plot @specimen if Settings.rplot_url %>
 </div>
 <div class="btn-group">
   <a href="#display-type-html" class="btn radio-button-group">html</a>
   <a href="#display-type-tex" class="btn radio-button-group">bibtex</a>
   <a href="#display-type-casteml" class="btn radio-button-group">casteml</a>  
+  <%#= display_type_for 'plot' if Settings.rplot_url %>
 </div>

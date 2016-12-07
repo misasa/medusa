@@ -10,16 +10,15 @@ class BibDecorator < Draper::Decorator
   def name_with_id
     tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
     tag += " #{name} < #{global_id} >"
-    if Settings.rplot_url
-      tag += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
-    end
+    # if Settings.rplot_url
+    #   tag += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
+    # end
     tag
   end
 
-  def tree_node(current=false)
+  def tree_node(current: false, current_type: false, in_list_include: false)
     link = current ? h.content_tag(:strong, name) : name
-    icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
-    icon + h.link_to_if(h.can?(:read, self), link, self) + specimens_count + boxes_count + analyses_count + places_count + files_count
+    icon + h.link_to_if(h.can?(:read, self), link, self)
   end
 
   def specimens_count

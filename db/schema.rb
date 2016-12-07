@@ -173,6 +173,8 @@ ActiveRecord::Schema.define(version: 20161114065543) do
     t.datetime "updated_at"
   end
 
+  add_index "divides", ["before_specimen_quantity_id"], name: "index_divides_on_before_specimen_quantity_id", using: :btree
+
   create_table "global_qrs", force: true, comment: "QRコード" do |t|
     t.integer  "record_property_id", comment: "レコードプロパティID"
     t.string   "file_name",          comment: "ファイル名"
@@ -325,6 +327,9 @@ ActiveRecord::Schema.define(version: 20161114065543) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "specimen_quantities", ["divide_id"], name: "index_specimen_quantities_on_divide_id", using: :btree
+  add_index "specimen_quantities", ["specimen_id"], name: "index_specimen_quantities_on_specimen_id", using: :btree
 
   create_table "specimens", force: true, comment: "標本" do |t|
     t.string   "name",                                comment: "名称"

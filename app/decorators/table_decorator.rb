@@ -17,9 +17,9 @@ class TableDecorator < Draper::Decorator
 
   def to_link
      table_link = h.link_to(h.raw(self.caption), self )
-     if Settings.rplot_url
-       table_link += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + self.global_id, :title => 'plot online')
-     end
+     # if Settings.rplot_url
+     #   table_link += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + self.global_id, :title => 'plot online')
+     # end
      table_link
   end
 

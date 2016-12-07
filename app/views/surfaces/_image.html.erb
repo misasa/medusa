@@ -14,6 +14,7 @@
   <tbody>
     <%= form_tag bundle_edit_attachment_files_path, id: "attachment-file-bundle-form" do %>
       <% @surface.surface_images.order("position ASC").each do |surface_image| %>
+        <% next unless surface_image.image %>
         <tr>
           <% attachment_file = surface_image.image %>
           <td>

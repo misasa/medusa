@@ -98,7 +98,7 @@ class SpotDecorator < Draper::Decorator
       spots_tag = h.raw("")
       attachment_file.spots.each do |spot|
         spots_tag += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-          spot.decorate.tree_node(false)
+          spot.decorate.tree_node(current: false)
         end
       end
       spots_tag
@@ -136,13 +136,13 @@ class SpotDecorator < Draper::Decorator
 
     attachment_file.spots.each do |spot|
       html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-        spot.decorate.tree_node(self == spot)
+        spot.decorate.tree_node(current: (self == spot))
       end
     end
     html
   end
 
-  def tree_node(current=false)
+  def tree_node(current: false, current_type: false, in_list_include: false)
     icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-screenshot")
     link = current ? icon : h.link_to_if(h.can?(:read, self), icon, self, :title => spot.name )
 #    link += spot.name

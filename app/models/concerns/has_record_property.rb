@@ -30,6 +30,11 @@ module HasRecordProperty
   end
   
 
+  def rplot_url
+    return unless Settings.rplot_url
+    Settings.rplot_url + '?id=' + global_id
+  end
+  
   def form_name
     return self.physical_form.name if self.respond_to?(:physical_form) && self.physical_form
     return self.box_type.name if self.respond_to?(:box_type) && self.box_type
@@ -174,6 +179,10 @@ module HasRecordProperty
 
   def found
     record_property.found if record_property
+  end
+
+  def record_property_id
+    record_property.try(:id)
   end
 
   def user_id=(id)
