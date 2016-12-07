@@ -1,0 +1,232 @@
+Specimen:
+  status:
+    search_name:
+    search_form:
+    create_form:
+      index:
+      bundle_edit:
+    call_content: status_icon
+  name:
+    search_name: name
+    search_form: cont
+    create_form:
+      index: text
+      bundle_edit:
+    call_content: name_link
+  igsn:
+    search_name: igsn
+    search_form: cont
+    create_form:
+      index:
+      bundle_edit:
+    call_content: igsn
+  parent:
+    search_name: parent_name
+    search_form: cont
+    create_form:
+      index: global_id_specimen
+      bundle_edit: global_id_specimen
+    call_content: parent_link
+  box:
+    search_name: box_name
+    search_form: cont
+    create_form:
+      index: global_id_box
+      bundle_edit: global_id_box
+    call_content: box_link
+  physical_form: 
+    search_name: physical_form_name
+    search_form: cont
+    create_form:
+      index: select_collection
+      bundle_edit: select_collection
+    call_content: physical_form_name
+  classification:
+    search_name: classification_full_name
+    search_form: cont
+    create_form:
+      index: select_collection
+      bundle_edit: select_collection
+    call_content: classification_full_name
+  tags:
+    search_name:
+    search_form: select_tags
+    create_form:
+      index: text_tags
+      bundle_edit: text_tags
+    call_content: tag_list
+  age:
+    search_name:
+    search_form:
+    create_form:
+      index:
+      bundle_edit:
+    call_content: age_raw
+  user:
+    search_name: user_username
+    search_form: cont
+    create_form:
+      index: label_username
+      bundle_edit: select_collection
+    call_content: user_name
+  group:
+    search_name: group_name
+    search_form: cont
+    create_form:
+      index: select_collection
+      bundle_edit: select_collection
+    call_content: group_name
+  published:
+    search_name: record_property_published
+    search_form: select_flg
+    create_form:
+      index:
+      bundle_edit: select_flg
+    call_content: published
+  published_at: 
+    search_name: record_property_published_at
+    search_form: from_to_date
+    create_form:
+      index:
+      bundle_edit:
+    call_content: format_published_at
+  updated_at: 
+    search_name: updated_at
+    search_form: from_to_date
+    create_form:
+      index:
+      bundle_edit:
+    call_content: format_updated_at
+  created_at: 
+    search_name: created_at
+    search_form: from_to_date
+    create_form:
+      index:
+      bundle_edit:
+    call_content: format_created_at
+  specimen_type: 
+    search_name: specimen_type
+    search_form: cont
+    create_form:
+      index: text
+      bundle_edit: text
+    call_content: specimen_type
+  description:
+    search_name: description
+    search_form: cont
+    create_form:
+      index: text
+      bundle_edit: text
+    call_content: description
+  place:
+    search_name: place_name
+    search_form: cont
+    create_form:
+      index: global_id_place
+      bundle_edit: global_id_place
+    call_content: place_link
+  quantity:
+    search_name: quantity
+    search_form: from_to
+    create_form:
+      index: text
+      bundle_edit: text
+    call_content: quantity
+  quantity_unit: 
+    search_name: quantity_unit
+    search_form: cont
+    create_form:
+      index: text
+      bundle_edit: text
+    call_content: quantity_unit
+  age_min: 
+    search_name: age_min
+    search_form: from_to
+    create_form:
+      index: text
+      bundle_edit: text
+    call_content: age_min
+  age_max: 
+    search_name: age_max
+    search_form: from_to
+    create_form:
+      index: text
+      bundle_edit: text
+    call_content: age_max
+  age_unit: 
+    search_name: age_unit
+    search_form: cont
+    create_form:
+      index: select_age_unit
+      bundle_edit: select_age_unit
+    call_content: age_unit
+  size:
+    search_name: size
+    search_form: cont
+    create_form:
+      index: text
+      bundle_edit: text
+    call_content: size
+  size_unit: 
+    search_name: size_unit
+    search_form: cont
+    create_form:
+      index: text
+      bundle_edit: text
+    call_content: size_unit
+  collected_at: 
+    search_name: collected_at
+    search_form: from_to_date
+    create_form:
+      index: text
+      bundle_edit: text
+    call_content: format_collected_at
+  collection_date_precision: 
+    search_name: collection_date_precision
+    search_form: cont
+    create_form:
+      index: text
+      bundle_edit: text
+    call_content: collection_date_precision
+  collector:
+    search_name: collector
+    search_form: cont
+    create_form:
+      index: text
+      bundle_edit: text
+    call_content: collector
+  collector_detail: 
+    search_name: collector_detail
+    search_form: cont
+    create_form:
+      index: text
+      bundle_edit: text
+    call_content: collector_detail
+  disposed:
+    search_name: record_property_disposed
+    search_form: select_flg
+    create_form:
+      index:
+      bundle_edit: select_flg
+    call_content: disposed
+  disposed_at: 
+    search_name: record_property_disposed_at
+    search_form: from_to_date
+    create_form:
+      index:
+      bundle_edit:
+    call_content: format_disposed_at
+  lost:
+    search_name: record_property_lost
+    search_form: select_flg
+    create_form:
+      index:
+      bundle_edit: select_flg
+    call_content: lost
+  lost_at: 
+    search_name: record_property_lost_at
+    search_form: from_to_date
+    create_form:
+      index:
+      bundle_edit:
+    call_content: format_lost_at

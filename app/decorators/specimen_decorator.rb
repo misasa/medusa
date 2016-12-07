@@ -19,155 +19,25 @@ class SpecimenDecorator < Draper::Decorator
     Specimen::Status::LOSS => "eye-close"
   }
 
- SEARCH_NAMES = {
-    name: :name,
-    igsn: :igsn,
-    parent: :parent_name,
-    box: :box_name,
-    physical_form: :physical_form_name,
-    classification: :classification_full_name,
-    user: :user_username,
-    group: :group_name,
-    published: :record_property_published,
-    published_at: :record_property_published_at,
-    updated_at: :updated_at,
-    created_at: :created_at,
-    specimen_type: :specimen_type,
-    description: :description,
-    place: :place_name,
-    quantity: :quantity,
-    quantity_unit: :quantity_unit,
-    age_min: :age_min,
-    age_max: :age_max,
-    age_unit: :age_unit,
-    size: :size,
-    size_unit: :size_unit,
-    collected_at: :collected_at,
-    collection_date_precision: :collection_date_precision,
-    collector: :collector,
-    collector_detail: :collector_detail,
-    disposed: :record_property_disposed,
-    disposed_at: :record_property_disposed_at,
-    lost: :record_property_lost,
-    lost_at: :record_property_lost_at
-  }
-
-  SEARCH_FORM_TYPES = {
-    name: :cont,
-    igsn: :cont,
-    parent: :cont,
-    box: :cont,
-    physical_form: :cont,
-    classification: :cont,
-    tags: :select_tags,
-    user: :cont,
-    group: :cont,
-    published: :select_flg,
-    published_at: :from_to_date,
-    updated_at: :from_to_date,
-    created_at: :from_to_date,
-    specimen_type: :cont,
-    description: :cont,
-    place: :cont,
-    quantity: :from_to,
-    quantity_unit: :cont,
-    age_min: :from_to,
-    age_max: :from_to,
-    age_unit: :cont,
-    size: :cont,
-    size_unit: :cont,
-    collected_at: :from_to_date,
-    collection_date_precision: :cont,
-    collector: :cont,
-    collector_detail: :cont,
-    disposed: :select_flg,
-    disposed_at: :from_to_date,
-    lost: :select_flg,
-    lost_at: :from_to_date
-  }
-
-  CREATE_FORM_TYPES = {
-    name: { index: :text },
-    parent: { index: :global_id_specimen, bundle_edit: :global_id_specimen },
-    box: { index: :global_id_box, bundle_edit: :global_id_box },
-    physical_form: { index: :select_collection, bundle_edit: :select_collection },
-    classification: { index: :select_collection, bundle_edit: :select_collection },
-    tags: { index: :text_tags, bundle_edit: :text_tags },
-    user: { index: :label_username, bundle_edit: :select_collection },
-    group: { index: :select_collection, bundle_edit: :select_collection },
-    published: { bundle_edit: :select_flg },
-    specimen_type: { index: :text, bundle_edit: :text },
-    description: { index: :text, bundle_edit: :text },
-    place: { index: :global_id_place, bundle_edit: :global_id_place },
-    quantity: { index: :text, bundle_edit: :text },
-    quantity_unit: { index: :text, bundle_edit: :text },
-    age_min: { index: :text, bundle_edit: :text },
-    age_max: { index: :text, bundle_edit: :text },
-    age_unit: { index: :select_age_unit, bundle_edit: :select_age_unit },
-    size: { index: :text, bundle_edit: :text },
-    size_unit: { index: :text, bundle_edit: :text },
-    collected_at: { index: :text, bundle_edit: :text },
-    collection_date_precision: { index: :text, bundle_edit: :text },
-    collector: { index: :text, bundle_edit: :text },
-    collector_detail: { index: :text, bundle_edit: :text },
-    disposed: { bundle_edit: :select_flg },
-    lost: { bundle_edit: :select_flg }
-  }
-
-  CALL_CONTENTS = {
-    status: :status_icon,
-    name: :name_link,
-    igsn: :igsn,
-    parent: :parent_link,
-    box: :box_link,
-    physical_form: :physical_form_name,
-    classification: :classification_full_name,
-    tags: :tag_list,
-    user: :user_name,
-    group: :group_name,
-    updated_at: :format_updated_at,
-    created_at: :format_created_at,
-    specimen_type: :specimen_type,
-    description: :description,
-    place: :place_link,
-    quantity: :quantity,
-    quantity_unit: :quantity_unit,
-    age: :age_raw,
-    age_min: :age_min,
-    age_max: :age_max,
-    age_unit: :age_unit,
-    size: :size,
-    size_unit: :size_unit,
-    collected_at: :format_collected_at,
-    collection_date_precision: :collection_date_precision,
-    collector: :collector,
-    collector_detail: :collector_detail,
-    published: :published,
-    published_at: :format_published_at,
-    disposed: :disposed,
-    disposed_at: :format_disposed_at,
-    lost: :lost,
-    lost_at: :format_lost_at
-  }
-
   class << self
     def search_name(column)
-      SEARCH_NAMES[column.name.to_sym]
+      SearchColumnType.val(Specimen, column.name).search_name
     end
 
     def search_form(f, column)
-      form_type = SEARCH_FORM_TYPES[column.name.to_sym]
+      form_type = SearchColumnType.val(Specimen, column.name).search_form
       send("search_form_#{form_type}", f, column) if form_type.present?
     end
 
     def create_form(f, column, page_type=:index)
-      form_type = CREATE_FORM_TYPES.fetch(column.name.to_sym, {})[page_type]
+      form_type = SearchColumnType.val(Specimen, column.name).create_form[page_type]
       send("create_form_#{form_type}", f, column) if form_type.present?
     end
   end
 
-  def content(colum_name)
-    send(CALL_CONTENTS[colum_name.to_sym]) if colum_name && CALL_CONTENTS[colum_name.to_sym]
+  def content(column_name)
+    column_type = SearchColumnType.val(Specimen, column_name)
+    send(column_type.call_content) if column_type && column_type.call_content.present?
   end
 
   def name_with_id(flag_link = false)
