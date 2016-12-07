@@ -76,6 +76,13 @@
   </div>
 </div>
 
+<div class="row">
+  <div class="col-lg-4">
+    <b>Specimen search column</b><br />
+    <%= link_to "Edit", search_columns_path, class: "btn btn-default" %>
+  </div>
+</div>
+
 Number of IGSN assinged records: <%= Specimen.readables(@user).count("igsn is not null or igsn != ''") %>
 
 <div class="row">
