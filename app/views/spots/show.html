@@ -34,6 +34,7 @@
       <%= hidden_field_tag nil, @spot.target_uid, class: "target-uid" %>
       <%= content_tag :svg, nil, class: "spot-canvas", width: 800, height: 600, "data-scale" => 2, "data-image" => attachment_file_path(@spot.attachment_file, format: :svg) %>
     </div>
+    <%= rplot_iframe @spot %>
   </div>
 
   <div class="hidden" id="display-type-tex">

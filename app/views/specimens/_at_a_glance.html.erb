@@ -1,5 +1,10 @@
 <div class="display-type">
   <div id="display-type-html">
+    <% if false %>
+      <%= high_chart("plot-summary", @specimen.generate_summary_plot) %>    
+    <% else %>
+      <%= @specimen.plot_chemistries %>
+    <% end %>  
     <ul>
       <% unless @specimen.igsn.blank? %>
         <li>
@@ -42,11 +47,6 @@
       <%= @specimen.decorate.related_pictures %>
     </div>
 
-    <% if false %>
-      <%= high_chart("plot-summary", @specimen.generate_summary_plot) %>    
-    <% else %>
-      <%= @specimen.plot_chemistries %>
-    <% end %>
 
   </div>
   <div class="hidden" id="display-type-tex">

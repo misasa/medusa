@@ -122,6 +122,8 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def plot_chemistries
+    analyses = Analysis.where(specimen_id: self_and_descendants)
+    return if analyses.count == 0
     #h.high_chart("plot-summary", generate_summary_plot)
     if Settings.rplot_url
       h.rplot_iframe self
