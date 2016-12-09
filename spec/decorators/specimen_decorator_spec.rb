@@ -12,11 +12,11 @@ describe SpecimenDecorator do
     subject { SpecimenDecorator.search_name(column) }
     context "column is name" do
       let(:name) { "name" }
-      it { expect(subject).to eq :name }
+      it { expect(subject).to eq "name" }
     end
     context "column is name" do
       let(:name) { "published" }
-      it { expect(subject).to eq :record_property_published }
+      it { expect(subject).to eq "record_property_published" }
     end
     context "column is age" do
       let(:name) { "age" }
@@ -733,7 +733,11 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_age_unit\" name=\"specimen[age_unit]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<select class=\"form-control input-sm\" id=\"specimen_age_unit\" name=\"specimen[age_unit]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "<option value=\"a\">a</option>\n"\
+            + "<option value=\"ka\">ka</option>\n"\
+            + "<option value=\"Ma\">Ma</option>\n"\
+            + "<option value=\"Ga\">Ga</option></select>"
           )
         end
       end
@@ -741,7 +745,11 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_age_unit\" name=\"specimen[age_unit]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<select class=\"form-control input-sm\" id=\"specimen_age_unit\" name=\"specimen[age_unit]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "<option value=\"a\">a</option>\n"\
+            + "<option value=\"ka\">ka</option>\n"\
+            + "<option value=\"Ma\">Ma</option>\n"\
+            + "<option value=\"Ga\">Ga</option></select>"
           )
         end
       end
@@ -952,7 +960,7 @@ describe SpecimenDecorator do
     end
     subject { specimen.decorate.content(column_name) }
     describe "name_link" do
-      let(:column_name){ :name }
+      let(:column_name){ "name" }
       it do
         expect(subject).to eq(
           "<a class=\"\" href=\"/specimens/#{specimen.id}\">specimen1</a>"
@@ -961,7 +969,7 @@ describe SpecimenDecorator do
     end
 
     describe "parent_link" do
-      let(:column_name){ :parent }
+      let(:column_name){ "parent" }
       it do
         expect(subject).to eq(
           "<a class=\"\" href=\"/specimens/#{parent.id}\">parent1</a>"
@@ -970,7 +978,7 @@ describe SpecimenDecorator do
     end
 
     describe "place_link" do
-      let(:column_name){ :place }
+      let(:column_name){ "place" }
       it do
         expect(subject).to eq(
           "<a href=\"/places/#{place.id}\">place1</a>"
@@ -979,7 +987,7 @@ describe SpecimenDecorator do
     end
 
     describe "box_link" do
-      let(:column_name){ :box }
+      let(:column_name){ "box" }
       it do
         expect(subject).to eq(
           "<a href=\"/boxes/#{box.id}\">box1</a>"
@@ -988,12 +996,12 @@ describe SpecimenDecorator do
     end
 
     describe "physical_form_name" do
-      let(:column_name){ :physical_form }
+      let(:column_name){ "physical_form" }
       it { expect(subject).to eq "physical_form1" }
     end
 
     describe "classification_full_name" do
-      let(:column_name) { :classification }
+      let(:column_name) { "classification" }
       it { expect(subject).to eq "classification1:classification2" }
     end
 
@@ -1002,42 +1010,42 @@ describe SpecimenDecorator do
     end
 
     describe "user_name" do
-      let(:column_name) { :user }
+      let(:column_name) { "user" }
       it { expect(subject).to eq "user" }
     end
 
     describe "group_name" do
-      let(:column_name) { :group }
+      let(:column_name) { "group" }
       it { expect(subject).to eq "group1" }
     end
 
     describe "format_created_at" do
-      let(:column_name) { :created_at }
+      let(:column_name) { "created_at" }
       it { expect(subject.to_s).to eq "2016-11-01" }
     end
 
     describe "format_updated_at" do
-      let(:column_name) { :updated_at }
+      let(:column_name) { "updated_at" }
       it { expect(subject.to_s).to eq "2016-11-01" }
     end
 
     describe "format_collected_at" do
-      let(:column_name) { :collected_at }
+      let(:column_name) { "collected_at" }
       it { expect(subject.to_s).to eq "2016-11-01" }
     end
 
     describe "format_published_at" do
-      let(:column_name) { :published_at }
+      let(:column_name) { "published_at" }
       it { expect(subject.to_s).to eq "2016-11-01" }
     end
 
     describe "format_disposed_at" do
-      let(:column_name) { :disposed_at }
+      let(:column_name) { "disposed_at" }
       it { expect(subject.to_s).to eq "2016-11-01" }
     end
 
     describe "format_lost_at" do
-      let(:column_name) { :lost_at }
+      let(:column_name) { "lost_at" }
       it { expect(subject.to_s).to eq "2016-11-01" }
     end
   end
