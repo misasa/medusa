@@ -245,6 +245,8 @@ class SpecimensController < ApplicationController
 
   def find_resource
     @specimen = Specimen.find(params[:id]).decorate
+    @divide_specimen = Specimen.find(params[:id])
+    @divide_specimen.children.build
   end
 
   def find_resources

@@ -184,11 +184,15 @@ class Specimen < ActiveRecord::Base
     @quantity_history
   end
 
-  def divided_loss
-    all_decimal_quantity = self_and_new_children.inject(0) do |sum, specimen|
+  def divided_parent_quantity
+    children_decimal_quantity = new_children.inject(0.to_d) do |sum, specimen|
       sum + specimen.decimal_quantity
     end
-    decimal_quantity_was - all_decimal_quantity
+    decimal_quantity_was - children_decimal_quantity
+  end
+
+  def divided_loss
+    divided_parent_quantity - decimal_quantity
   end
 
   def divide_save
@@ -217,10 +221,6 @@ class Specimen < ActiveRecord::Base
 
   def new_children
     children.select(&:new_record?).to_a
-  end
-
-  def self_and_new_children
-    [self].concat(new_children)
   end
 
   def build_divide

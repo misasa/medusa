@@ -276,6 +276,32 @@ describe Specimen do
     end
   end
 
+  describe "#divided_parent_quantity" do
+    before do
+      @specimen = FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg")
+      @specimen.quantity = 0
+      @specimen.quantity_unit = "g"
+      @specimen.children.build(quantity: 50, quantity_unit: "kg")
+      @specimen.children.build(quantity: quantity, quantity_unit: quantity_unit)
+    end
+    subject { @specimen.divided_parent_quantity }
+    context "non loss" do
+      let(:quantity) { 50 }
+      let(:quantity_unit) { "kg" }
+      it { expect(subject).to eq(0.to_d) }
+    end
+    context "loss" do
+      let(:quantity) { 40 }
+      let(:quantity_unit) { "kg" }
+      it { expect(subject).to eq(10000.0.to_d) }
+    end
+    context "over" do
+      let(:quantity) { 60 }
+      let(:quantity_unit) { "kg" }
+      it { expect(subject).to eq(-10000.0.to_d) }
+    end
+  end
+
   describe "#divided_loss" do
     before do
       @specimen = FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg")
@@ -391,16 +417,6 @@ describe Specimen do
     end
     subject { specimen.send(:new_children) }
     it { expect(subject).to match_array([@new_specimen]) }
-  end
-
-  describe "self_and_new_children" do
-    let!(:specimen) { FactoryGirl.create(:specimen) }
-    let!(:specimen_child) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
-    before do
-      @new_specimen = specimen.children.build
-    end
-    subject { specimen.send(:self_and_new_children) }
-    it { expect(subject).to match_array([specimen, @new_specimen]) }
   end
 
   describe "build_divide" do

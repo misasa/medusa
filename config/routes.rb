@@ -106,7 +106,7 @@ Medusa::Application.routes.draw do
     resources :analyses, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "specimen" }
   end
 
-  resources :divide_specimens, only: [:edit, :update] do
+  resources :divide_specimens, only: [:update] do
     member do
       put :loss
     end

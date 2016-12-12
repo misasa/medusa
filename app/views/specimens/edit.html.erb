@@ -19,13 +19,6 @@
     <%= f.label :quantity_unit, class: "small" %>
     <%= f.text_field :quantity_unit, class: "form-control input-sm" %>
   </div>
-  <% if f.object.quantity.present? %>
-    <div class="btn-group btn-group-sm">
-      <%= link_to edit_divide_specimen_path(@specimen), class: "btn btn-default", id: "filter-button" do %>
-        <span class="glyphicon glyphicon-filter"></span>
-      <% end %>
-    </div>
-  <% end %>
   <div class="form-group form-group-sm">
     <%= f.label :tag_list, class: "small" %>
     <%= f.text_field :tag_list, class: "form-control input-sm" %>
