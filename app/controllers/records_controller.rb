@@ -5,7 +5,7 @@ class RecordsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def index
-    @records_search = RecordProperty.readables(current_user).where.not(datum_type: ["Chemistry", "Spot", "Table"]).search(params[:q])
+    @records_search = RecordProperty.readables(current_user).where.not(datum_type: ["Chemistry", "Spot", "Table"]).search(reserved_params)
     @records_search.sorts = "updated_at DESC" if @records_search.sorts.empty?
     @records = @records_search.result.page(params[:page]).per(params[:per_page])
 #    respond_with @records, :methods  # TODO: jsonおよびxml表現ではどのような形式で欲しいのか？
@@ -171,4 +171,12 @@ class RecordsController < ApplicationController
     end
   end
 
+  # Set reserved word at search
+  def reserved_params
+    reserved_params = {}
+    if params[:q] && params[:q][:name_or_global_id_cont].include?("##delete")
+      reserved_params[:disposed_eq] = "true"
+    end
+    reserved_params.presence || params[:q]
+  end
 end
