@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161102063045) do
+ActiveRecord::Schema.define(version: 20161114065543) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -294,6 +294,19 @@ ActiveRecord::Schema.define(version: 20161102063045) do
   add_index "referrings", ["bib_id", "referable_id", "referable_type"], name: "index_referrings_on_bib_id_and_referable_id_and_referable_type", unique: true, using: :btree
   add_index "referrings", ["bib_id"], name: "index_referrings_on_bib_id", using: :btree
   add_index "referrings", ["referable_id"], name: "index_referrings_on_referable_id", using: :btree
+
+  create_table "search_columns", force: true do |t|
+    t.integer  "user_id",       null: false, comment: "ユーザID"
+    t.string   "datum_type",                 comment: "モデル種別"
+    t.string   "name",                       comment: "カラム名"
+    t.string   "display_name",               comment: "表示名"
+    t.integer  "display_order",              comment: "表示順"
+    t.integer  "display_type",               comment: "表示種別"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "search_columns", ["user_id"], name: "index_search_columns_on_user_id", using: :btree
 
   create_table "specimen_custom_attributes", force: true, comment: "標本別カスタム属性" do |t|
     t.integer  "specimen_id",         comment: "標本ID"

@@ -7,6 +7,1049 @@ describe SpecimenDecorator do
   let(:box){FactoryGirl.create(:box)}
   before{User.current = user}
 
+  describe "search_name" do
+    let(:column) { FactoryGirl.create(:search_column, name: name) }
+    subject { SpecimenDecorator.search_name(column) }
+    context "column is name" do
+      let(:name) { "name" }
+      it { expect(subject).to eq "name" }
+    end
+    context "column is name" do
+      let(:name) { "published" }
+      it { expect(subject).to eq "record_property_published" }
+    end
+    context "column is age" do
+      let(:name) { "age" }
+      it { expect(subject).to eq nil }
+    end
+  end
+
+  describe "search_form" do
+    let(:column) { FactoryGirl.create(:search_column, name: name) }
+    let(:f) do
+      form = nil
+      h.search_form_for(Specimen.search){|f| form = f }
+      form
+    end
+    subject { SpecimenDecorator.search_form(f, column) }
+    context "column is status" do
+      let(:name) { "status" }
+      it { expect(subject).to eq nil }
+    end
+    context "column is name" do
+      let(:name) { "name" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_name_cont\" name=\"q[name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is igsn" do
+      let(:name) { "igsn" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_igsn_cont\" name=\"q[igsn_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is parent" do
+      let(:name) { "parent" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_parent_name_cont\" name=\"q[parent_name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is box" do
+      let(:name) { "box" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_box_name_cont\" name=\"q[box_name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is physical_form" do
+      let(:name) { "physical_form" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_physical_form_name_cont\" name=\"q[physical_form_name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is classification" do
+      let(:name) { "classification" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_classification_full_name_cont\" name=\"q[classification_full_name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is tags" do
+      let(:name) { "tags" }
+      it do
+        expect(subject).to eq(
+          "<select class=\"form-control input-sm\" id=\"q_tags_name_eq\" name=\"q[tags_name_eq]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+          + "</select>"
+        )
+      end
+    end
+    context "column is age" do
+      let(:name) { "age" }
+      it { expect(subject).to eq nil }
+    end
+    context "column is user" do
+      let(:name) { "user" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_user_username_cont\" name=\"q[user_username_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is group" do
+      let(:name) { "group" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_group_name_cont\" name=\"q[group_name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is published" do
+      let(:name) { "published" }
+      it do
+        expect(subject).to eq(
+          "<select class=\"form-control input-sm\" id=\"q_record_property_published_eq\" name=\"q[record_property_published_eq]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+          + "<option value=\"true\">true</option>\n"\
+          + "<option value=\"false\">false</option></select>"
+        )
+      end
+    end
+    context "column is published_at" do
+      let(:name) { "published_at" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm datepicker\" id=\"q_record_property_published_at_gteq\" name=\"q[record_property_published_at_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"\
+          + "<input class=\"form-control input-sm datepicker\" id=\"q_record_property_published_at_lteq_end_of_day\" name=\"q[record_property_published_at_lteq_end_of_day]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+        )
+      end
+    end
+    context "column is updated_at" do
+      let(:name) { "updated_at" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm datepicker\" id=\"q_updated_at_gteq\" name=\"q[updated_at_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"\
+          + "<input class=\"form-control input-sm datepicker\" id=\"q_updated_at_lteq_end_of_day\" name=\"q[updated_at_lteq_end_of_day]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+        )
+      end
+    end
+    context "column is created_at" do
+      let(:name) { "created_at" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm datepicker\" id=\"q_created_at_gteq\" name=\"q[created_at_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"\
+          + "<input class=\"form-control input-sm datepicker\" id=\"q_created_at_lteq_end_of_day\" name=\"q[created_at_lteq_end_of_day]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+        )
+      end
+    end
+    context "column is specimen_type" do
+      let(:name) { "specimen_type" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_specimen_type_cont\" name=\"q[specimen_type_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is description" do
+      let(:name) { "description" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_description_cont\" name=\"q[description_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is place" do
+      let(:name) { "place" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_place_name_cont\" name=\"q[place_name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is quantity" do
+      let(:name) { "quantity" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_quantity_gteq\" name=\"q[quantity_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" />"\
+          + "<input class=\"form-control input-sm\" id=\"q_quantity_lteq\" name=\"q[quantity_lteq]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is quantity_unit" do
+      let(:name) { "quantity_unit" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_quantity_unit_cont\" name=\"q[quantity_unit_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is age_min" do
+      let(:name) { "age_min" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_age_min_gteq\" name=\"q[age_min_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" />"\
+          + "<input class=\"form-control input-sm\" id=\"q_age_min_lteq\" name=\"q[age_min_lteq]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is age_max" do
+      let(:name) { "age_max" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_age_max_gteq\" name=\"q[age_max_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" />"\
+          + "<input class=\"form-control input-sm\" id=\"q_age_max_lteq\" name=\"q[age_max_lteq]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is age_unit" do
+      let(:name) { "age_unit" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_age_unit_cont\" name=\"q[age_unit_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is size" do
+      let(:name) { "size" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_size_cont\" name=\"q[size_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is size_unit" do
+      let(:name) { "size_unit" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_size_unit_cont\" name=\"q[size_unit_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is collected_at" do
+      let(:name) { "collected_at" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm datepicker\" id=\"q_collected_at_gteq\" name=\"q[collected_at_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"\
+          + "<input class=\"form-control input-sm datepicker\" id=\"q_collected_at_lteq_end_of_day\" name=\"q[collected_at_lteq_end_of_day]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+        )
+      end
+    end
+    context "column is collection_date_precision" do
+      let(:name) { "collection_date_precision" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_collection_date_precision_cont\" name=\"q[collection_date_precision_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is collector" do
+      let(:name) { "collector" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_collector_cont\" name=\"q[collector_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is collector_detail" do
+      let(:name) { "collector_detail" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm\" id=\"q_collector_detail_cont\" name=\"q[collector_detail_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+        )
+      end
+    end
+    context "column is disposed" do
+      let(:name) { "disposed" }
+      it do
+        expect(subject).to eq(
+          "<select class=\"form-control input-sm\" id=\"q_record_property_disposed_eq\" name=\"q[record_property_disposed_eq]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+          + "<option value=\"true\">true</option>\n"\
+          + "<option value=\"false\">false</option></select>"
+        )
+      end
+    end
+    context "column is disposed_at" do
+      let(:name) { "disposed_at" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm datepicker\" id=\"q_record_property_disposed_at_gteq\" name=\"q[record_property_disposed_at_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"\
+          + "<input class=\"form-control input-sm datepicker\" id=\"q_record_property_disposed_at_lteq_end_of_day\" name=\"q[record_property_disposed_at_lteq_end_of_day]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+        )
+      end
+    end
+    context "column is lost" do
+      let(:name) { "lost" }
+      it do
+        expect(subject).to eq(
+          "<select class=\"form-control input-sm\" id=\"q_record_property_lost_eq\" name=\"q[record_property_lost_eq]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+          + "<option value=\"true\">true</option>\n"\
+          + "<option value=\"false\">false</option></select>"
+        )
+      end
+    end
+    context "column is lost_at" do
+      let(:name) { "lost_at" }
+      it do
+        expect(subject).to eq(
+          "<input class=\"form-control input-sm datepicker\" id=\"q_record_property_lost_at_gteq\" name=\"q[record_property_lost_at_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"\
+          + "<input class=\"form-control input-sm datepicker\" id=\"q_record_property_lost_at_lteq_end_of_day\" name=\"q[record_property_lost_at_lteq_end_of_day]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+        )
+      end
+    end
+  end
+
+  describe "create_form" do
+    let(:column) { FactoryGirl.create(:search_column, name: name) }
+    let(:f) do
+      form = nil
+      h.form_for(Specimen.new){|f| form = f }
+      form
+    end
+    subject { SpecimenDecorator.create_form(f, column, page_type) }
+    context "column is status" do
+      let(:name) { "status" }
+      context "index" do
+        let(:page_type) { :index }
+        it { expect(subject).to eq nil }
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it { expect(subject).to eq nil }
+      end
+    end
+    context "column is name" do
+      let(:name) { "name" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_name\" name=\"specimen[name]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it { expect(subject).to eq nil }
+      end
+    end
+    context "column is igsn" do
+      let(:name) { "igsn" }
+      context "index" do
+        let(:page_type) { :index }
+        it { expect(subject).to eq nil }
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it { expect(subject).to eq nil }
+      end
+    end
+    context "column is parent" do
+      let(:name) { "parent" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<div class=\"input-group\">"\
+            + "<input class=\"form-control input-sm\" id=\"specimen_parent_global_id\" name=\"specimen[parent_global_id]\" style=\"min-width: 60px;\" type=\"text\" />"\
+            + "<span class=\"input-group-addon\">"\
+            + "<a data-input=\"#specimen_parent_global_id\" data-target=\"#search-modal\" data-toggle=\"modal\" href=\"/specimens.modal?per_page=10\">"\
+            + "<span class=\"glyphicon glyphicon-search\"></span>"\
+            + "</a>"\
+            + "</span>"\
+            + "</div>"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<div class=\"input-group\">"\
+            + "<input class=\"form-control input-sm\" id=\"specimen_parent_global_id\" name=\"specimen[parent_global_id]\" style=\"min-width: 60px;\" type=\"text\" />"\
+            + "<span class=\"input-group-addon\">"\
+            + "<a data-input=\"#specimen_parent_global_id\" data-target=\"#search-modal\" data-toggle=\"modal\" href=\"/specimens.modal?per_page=10\">"\
+            + "<span class=\"glyphicon glyphicon-search\"></span>"\
+            + "</a>"\
+            + "</span>"\
+            + "</div>"
+          )
+        end
+      end
+    end
+    context "column is box" do
+      let(:name) { "box" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<div class=\"input-group\">"\
+            + "<input class=\"form-control input-sm\" id=\"specimen_box_global_id\" name=\"specimen[box_global_id]\" style=\"min-width: 60px;\" type=\"text\" />"\
+            + "<span class=\"input-group-addon\">"\
+            + "<a data-input=\"#specimen_box_global_id\" data-target=\"#search-modal\" data-toggle=\"modal\" href=\"/boxes.modal?per_page=10\">"\
+            + "<span class=\"glyphicon glyphicon-search\"></span>"\
+            + "</a>"\
+            + "</span>"\
+            + "</div>"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<div class=\"input-group\">"\
+            + "<input class=\"form-control input-sm\" id=\"specimen_box_global_id\" name=\"specimen[box_global_id]\" style=\"min-width: 60px;\" type=\"text\" />"\
+            + "<span class=\"input-group-addon\">"\
+            + "<a data-input=\"#specimen_box_global_id\" data-target=\"#search-modal\" data-toggle=\"modal\" href=\"/boxes.modal?per_page=10\">"\
+            + "<span class=\"glyphicon glyphicon-search\"></span>"\
+            + "</a>"\
+            + "</span>"\
+            + "</div>"
+          )
+        end
+      end
+    end
+    context "column is physical_form" do
+      let(:name) { "physical_form" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<select class=\"form-control input-sm\" id=\"specimen_physical_form_id\" name=\"specimen[physical_form_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "</select>"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<select class=\"form-control input-sm\" id=\"specimen_physical_form_id\" name=\"specimen[physical_form_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "</select>"
+          )
+        end
+      end
+    end
+    context "column is classification" do
+      let(:name) { "classification" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<select class=\"form-control input-sm\" id=\"specimen_classification_id\" name=\"specimen[classification_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "</select>"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<select class=\"form-control input-sm\" id=\"specimen_classification_id\" name=\"specimen[classification_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "</select>"
+          )
+        end
+      end
+    end
+    context "column is tags" do
+      let(:name) { "tags" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_tag_list\" name=\"specimen[tag_list]\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_tag_list\" name=\"specimen[tag_list]\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+          )
+        end
+      end
+    end
+    context "column is age" do
+      let(:name) { "age" }
+      context "index" do
+        let(:page_type) { :index }
+        it { expect(subject).to eq nil }
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it { expect(subject).to eq nil }
+      end
+    end
+    context "column is user" do
+      let(:name) { "user" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<label for=\"specimen_user\">user</label>"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<select class=\"form-control input-sm\" id=\"specimen_user_id\" name=\"specimen[user_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "<option value=\"#{user.id}\">user</option></select>"
+          )
+        end
+      end
+    end
+    context "column is group" do
+      let(:name) { "group" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<select class=\"form-control input-sm\" id=\"specimen_group_id\" name=\"specimen[group_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "</select>"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<select class=\"form-control input-sm\" id=\"specimen_group_id\" name=\"specimen[group_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "</select>"
+          )
+        end
+      end
+    end
+    context "column is published" do
+      let(:name) { "published" }
+      context "index" do
+        let(:page_type) { :index }
+        it { expect(subject).to eq nil }
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<select class=\"form-control input-sm\" id=\"specimen_published\" name=\"specimen[published]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "<option value=\"true\">true</option>\n"\
+            + "<option value=\"false\">false</option></select>"
+          )
+        end
+      end
+    end
+    context "column is published_at" do
+      let(:name) { "published_at" }
+      context "index" do
+        let(:page_type) { :index }
+        it { expect(subject).to eq nil }
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it { expect(subject).to eq nil }
+      end
+    end
+    context "column is updated_at" do
+      let(:name) { "updated_at" }
+      context "index" do
+        let(:page_type) { :index }
+        it { expect(subject).to eq nil }
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it { expect(subject).to eq nil }
+      end
+    end
+    context "column is created_at" do
+      let(:name) { "created_at" }
+      context "index" do
+        let(:page_type) { :index }
+        it { expect(subject).to eq nil }
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it { expect(subject).to eq nil }
+      end
+    end
+    context "column is specimen_type" do
+      let(:name) { "specimen_type" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_specimen_type\" name=\"specimen[specimen_type]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_specimen_type\" name=\"specimen[specimen_type]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+    end
+    context "column is description" do
+      let(:name) { "description" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_description\" name=\"specimen[description]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_description\" name=\"specimen[description]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+    end
+    context "column is place" do
+      let(:name) { "place" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<div class=\"input-group\">"\
+            + "<input class=\"form-control input-sm\" id=\"specimen_place_global_id\" name=\"specimen[place_global_id]\" style=\"min-width: 60px;\" type=\"text\" />"\
+            + "<span class=\"input-group-addon\">"\
+            + "<a data-input=\"#specimen_place_global_id\" data-target=\"#search-modal\" data-toggle=\"modal\" href=\"/places.modal?per_page=10\">"\
+            + "<span class=\"glyphicon glyphicon-search\"></span>"\
+            + "</a>"\
+            + "</span>"\
+            + "</div>"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<div class=\"input-group\">"\
+            + "<input class=\"form-control input-sm\" id=\"specimen_place_global_id\" name=\"specimen[place_global_id]\" style=\"min-width: 60px;\" type=\"text\" />"\
+            + "<span class=\"input-group-addon\">"\
+            + "<a data-input=\"#specimen_place_global_id\" data-target=\"#search-modal\" data-toggle=\"modal\" href=\"/places.modal?per_page=10\">"\
+            + "<span class=\"glyphicon glyphicon-search\"></span>"\
+            + "</a>"\
+            + "</span>"\
+            + "</div>"
+          )
+        end
+      end
+    end
+    context "column is quantity" do
+      let(:name) { "quantity" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_quantity\" name=\"specimen[quantity]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_quantity\" name=\"specimen[quantity]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+    end
+    context "column is quantity_unit" do
+      let(:name) { "quantity_unit" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_quantity_unit\" name=\"specimen[quantity_unit]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_quantity_unit\" name=\"specimen[quantity_unit]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+    end
+    context "column is age_min" do
+      let(:name) { "age_min" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_age_min\" name=\"specimen[age_min]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_age_min\" name=\"specimen[age_min]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+    end
+    context "column is age_max" do
+      let(:name) { "age_max" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_age_max\" name=\"specimen[age_max]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_age_max\" name=\"specimen[age_max]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+    end
+    context "column is age_unit" do
+      let(:name) { "age_unit" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<select class=\"form-control input-sm\" id=\"specimen_age_unit\" name=\"specimen[age_unit]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "<option value=\"a\">a</option>\n"\
+            + "<option value=\"ka\">ka</option>\n"\
+            + "<option value=\"Ma\">Ma</option>\n"\
+            + "<option value=\"Ga\">Ga</option></select>"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<select class=\"form-control input-sm\" id=\"specimen_age_unit\" name=\"specimen[age_unit]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "<option value=\"a\">a</option>\n"\
+            + "<option value=\"ka\">ka</option>\n"\
+            + "<option value=\"Ma\">Ma</option>\n"\
+            + "<option value=\"Ga\">Ga</option></select>"
+          )
+        end
+      end
+    end
+    context "column is size" do
+      let(:name) { "size" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_size\" name=\"specimen[size]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_size\" name=\"specimen[size]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+    end
+    context "column is size_unit" do
+      let(:name) { "size_unit" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_size_unit\" name=\"specimen[size_unit]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_size_unit\" name=\"specimen[size_unit]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+    end
+    context "column is collected_at" do
+      let(:name) { "collected_at" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_collected_at\" name=\"specimen[collected_at]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_collected_at\" name=\"specimen[collected_at]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+    end
+    context "column is collection_date_precision" do
+      let(:name) { "collection_date_precision" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_collection_date_precision\" name=\"specimen[collection_date_precision]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_collection_date_precision\" name=\"specimen[collection_date_precision]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+    end
+    context "column is collector" do
+      let(:name) { "collector" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_collector\" name=\"specimen[collector]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_collector\" name=\"specimen[collector]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+    end
+    context "column is collector_detail" do
+      let(:name) { "collector_detail" }
+      context "index" do
+        let(:page_type) { :index }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_collector_detail\" name=\"specimen[collector_detail]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<input class=\"form-control input-sm\" id=\"specimen_collector_detail\" name=\"specimen[collector_detail]\" style=\"min-width: 60px;\" type=\"text\" />"
+          )
+        end
+      end
+    end
+    context "column is disposed" do
+      let(:name) { "disposed" }
+      context "index" do
+        let(:page_type) { :index }
+        it { expect(subject).to eq nil }
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<select class=\"form-control input-sm\" id=\"specimen_disposed\" name=\"specimen[disposed]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "<option value=\"true\">true</option>\n"\
+            + "<option value=\"false\">false</option></select>"
+          )
+        end
+      end
+    end
+    context "column is disposed_at" do
+      let(:name) { "disposed_at" }
+      context "index" do
+        let(:page_type) { :index }
+        it { expect(subject).to eq nil }
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it { expect(subject).to eq nil }
+      end
+    end
+    context "column is lost" do
+      let(:name) { "lost" }
+      context "index" do
+        let(:page_type) { :index }
+        it { expect(subject).to eq nil }
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it do
+          expect(subject).to eq(
+            "<select class=\"form-control input-sm\" id=\"specimen_lost\" name=\"specimen[lost]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            + "<option value=\"true\">true</option>\n"\
+            + "<option value=\"false\">false</option></select>"
+          )
+        end
+      end
+    end
+    context "column is lost_at" do
+      let(:name) { "lost_at" }
+      context "index" do
+        let(:page_type) { :index }
+        it { expect(subject).to eq nil }
+      end
+      context "bundle_edit" do
+        let(:page_type) { :bundle_edit }
+        it { expect(subject).to eq nil }
+      end
+    end
+  end
+
+  describe "content" do
+    let(:parent) { FactoryGirl.create(:specimen, name: "parent1") }
+    let(:box) { FactoryGirl.create(:box, name: "box1") }
+    let(:place) { FactoryGirl.create(:place, name: "place1") }
+    let(:physical_form) { FactoryGirl.create(:physical_form, name: "physical_form1") }
+    let(:parent_classification) { FactoryGirl.create(:classification, name: "classification1") }
+    let(:classification) { FactoryGirl.create(:classification, name: "classification2", parent: parent_classification) }
+    let(:group) { FactoryGirl.create(:group, name: "group1") }
+    let(:time) { "2016-11-01 10:11:12".to_time }
+    let(:specimen) do
+      FactoryGirl.create(:specimen,
+        name: "specimen1",
+        parent: parent,
+        box: box,
+        place: place,
+        physical_form: physical_form,
+        classification: classification,
+        created_at: time,
+        updated_at: time,
+        collected_at: time)
+    end
+    before do
+      specimen.published = true
+      specimen.disposed = true
+      specimen.lost = true
+      specimen.save!
+      specimen.record_property.group = group
+      specimen.record_property.published_at = time
+      specimen.record_property.disposed_at = time
+      specimen.record_property.lost_at = time
+      specimen.save!
+    end
+    subject { specimen.decorate.content(column_name) }
+    describe "name_link" do
+      let(:column_name){ "name" }
+      it do
+        expect(subject).to eq(
+          "<a class=\"\" href=\"/specimens/#{specimen.id}\">specimen1</a>"
+        )
+      end
+    end
+
+    describe "parent_link" do
+      let(:column_name){ "parent" }
+      it do
+        expect(subject).to eq(
+          "<a class=\"\" href=\"/specimens/#{parent.id}\">parent1</a>"
+        )
+      end
+    end
+
+    describe "place_link" do
+      let(:column_name){ "place" }
+      it do
+        expect(subject).to eq(
+          "<a href=\"/places/#{place.id}\">place1</a>"
+        )
+      end
+    end
+
+    describe "box_link" do
+      let(:column_name){ "box" }
+      it do
+        expect(subject).to eq(
+          "<a href=\"/boxes/#{box.id}\">box1</a>"
+        )
+      end
+    end
+
+    describe "physical_form_name" do
+      let(:column_name){ "physical_form" }
+      it { expect(subject).to eq "physical_form1" }
+    end
+
+    describe "classification_full_name" do
+      let(:column_name) { "classification" }
+      it { expect(subject).to eq "classification1:classification2" }
+    end
+
+    describe "age_raw" do
+
+    end
+
+    describe "user_name" do
+      let(:column_name) { "user" }
+      it { expect(subject).to eq "user" }
+    end
+
+    describe "group_name" do
+      let(:column_name) { "group" }
+      it { expect(subject).to eq "group1" }
+    end
+
+    describe "format_created_at" do
+      let(:column_name) { "created_at" }
+      it { expect(subject.to_s).to eq "2016-11-01" }
+    end
+
+    describe "format_updated_at" do
+      let(:column_name) { "updated_at" }
+      it { expect(subject.to_s).to eq "2016-11-01" }
+    end
+
+    describe "format_collected_at" do
+      let(:column_name) { "collected_at" }
+      it { expect(subject.to_s).to eq "2016-11-01" }
+    end
+
+    describe "format_published_at" do
+      let(:column_name) { "published_at" }
+      it { expect(subject.to_s).to eq "2016-11-01" }
+    end
+
+    describe "format_disposed_at" do
+      let(:column_name) { "disposed_at" }
+      it { expect(subject.to_s).to eq "2016-11-01" }
+    end
+
+    describe "format_lost_at" do
+      let(:column_name) { "lost_at" }
+      it { expect(subject.to_s).to eq "2016-11-01" }
+    end
+  end
+
   describe ".summary_of_analysis" do
     subject { obj.summary_of_analysis }
     let(:analysis_1){FactoryGirl.create(:analysis)}
@@ -447,4 +1490,6 @@ describe SpecimenDecorator do
       it { expect(subject).to eq("<span class=\"glyphicon glyphicon-eye-close\"></span>") }
     end
   end
+
+
 end

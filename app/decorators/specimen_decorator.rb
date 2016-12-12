@@ -19,6 +19,27 @@ class SpecimenDecorator < Draper::Decorator
     Specimen::Status::LOSS => "eye-close"
   }
 
+  class << self
+    def search_name(column)
+      SearchColumnType.val(Specimen, column.name).search_name
+    end
+
+    def search_form(f, column)
+      form_type = SearchColumnType.val(Specimen, column.name).search_form
+      send("search_form_#{form_type}", f, column) if form_type.present?
+    end
+
+    def create_form(f, column, page_type=:index)
+      form_type = SearchColumnType.val(Specimen, column.name).create_form[page_type]
+      send("create_form_#{form_type}", f, column) if form_type.present?
+    end
+  end
+
+  def content(column_name)
+    column_type = SearchColumnType.val(Specimen, column_name)
+    send(column_type.call_content) if column_type && column_type.call_content.present?
+  end
+
   def name_with_id(flag_link = false)
     tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
     if flag_link
@@ -329,7 +350,8 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def tree_node(current: false, current_type: false, in_list_include: false)
-    link = current ? h.content_tag(:strong, name, class: "text-primary bg-primary") : name
+    name_str = name.presence || "[no name]"
+    link = current ? h.content_tag(:strong, name_str, class: "text-primary bg-primary") : name_str
     html = icon(in_list_include) + h.link_to_if(h.can?(:read, self), link, self)
     html += children_count(current_type, in_list_include)
     html += analyses_count(current_type, in_list_include)
@@ -427,6 +449,139 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   private
+
+  class << self
+    def search_form_cont(f, column)
+      f.text_field(:"#{search_name(column)}_cont", class: "form-control input-sm", style: "min-width: 60px;")
+    end
+
+    def search_form_from_to(f, column)
+      content = f.text_field(:"#{search_name(column)}_gteq", placeholder: "from:", class: "form-control input-sm", style: "min-width: 60px;")
+      content += f.text_field(:"#{search_name(column)}_lteq", placeholder: "to:", class: "form-control input-sm", style: "min-width: 60px;")
+    end
+
+    def search_form_from_to_date(f, column)
+      gteq = :"#{search_name(column)}_gteq"
+      lteq = :"#{search_name(column)}_lteq_end_of_day"
+      content = f.text_field(gteq, placeholder: "from:",value: h.format_date(h.params[:q] && h.params[:q][gteq]), class: "form-control input-sm datepicker", style: "min-width: 60px;")
+      content += f.text_field(lteq, placeholder: "to:", value: h.format_date(h.params[:q] && h.params[:q][lteq]), class: "form-control input-sm datepicker", style: "min-width: 60px;")
+    end
+
+    def search_form_select_flg(f, column)
+      f.select(:"#{search_name(column)}_eq", [true, false], { include_blank: true }, class: "form-control input-sm", style: "min-width: 60px;")
+    end
+
+    def search_form_select_tags(f, column)
+      f.select(:tags_name_eq, ActsAsTaggableOn::Tag.pluck(:name), { include_blank: true }, class: "form-control input-sm", style: "min-width: 60px;")
+    end
+
+    def create_form_global_id(f, column, path)
+      field = f.text_field(:"#{column.name}_global_id", class: "form-control input-sm", style: "min-width: 60px;")
+      link = h.link_to(path, "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#specimen_#{column.name}_global_id") do
+        h.content_tag(:span, link, class: "glyphicon glyphicon-search")
+      end
+      button = h.content_tag(:span, link, class: "input-group-addon")
+      h.content_tag(:div, field + button, class: "input-group")
+    end
+
+    def create_form_global_id_box(f, column)
+      create_form_global_id(f, column, h.boxes_path(per_page: 10, format: :modal))
+    end
+
+    def create_form_global_id_place(f, column)
+      create_form_global_id(f, column, h.places_path(per_page: 10, format: :modal))
+    end
+
+    def create_form_global_id_specimen(f, column)
+      create_form_global_id(f, column, h.specimens_path(per_page: 10, format: :modal))
+    end
+
+    def create_form_label_username(f, column)
+      f.label(column.name.to_sym, User.current.username)
+    end
+
+    def create_form_select_collection(f, column)
+      klass = column.name.classify.constantize
+      name = search_name(column).to_s.gsub("#{column.name}_", "")
+      f.select(:"#{column.name}_id", klass.pluck(name, :id), { include_blank: true }, class: "form-control input-sm", style: "min-width: 60px;")
+    end
+
+    def create_form_select_flg(f, column)
+      f.select(column.name.to_sym, [true, false], { include_blank: true }, class: "form-control input-sm", style: "min-width: 60px;")
+    end
+
+    def create_form_select_age_unit(f, column)
+      f.select(:age_unit, ["a", "ka", "Ma", "Ga"], { include_blank: true }, class: "form-control input-sm", style: "min-width: 60px;")
+    end
+
+    def create_form_text(f, column)
+      f.text_field(column.name.to_sym, class: "form-control input-sm", style: "min-width: 60px;")
+    end
+
+    def create_form_text_tags(f, column)
+      f.text_field(:tag_list, class: "form-control input-sm", style: "min-width: 60px;")
+    end
+  end
+
+  def name_link
+    h.link_to(name.presence || "[no name]", object, class: h.specimen_ghost(object))
+  end
+
+  def parent_link
+    h.link_to(parent.name, parent, class: h.specimen_ghost(parent)) if parent
+  end
+
+  def place_link
+    h.link_to(place.name, place) if place
+  end
+
+  def box_link
+    h.link_to(box.name, box) if box
+  end
+
+  def physical_form_name
+    physical_form.try!(:name)
+  end
+
+  def classification_full_name
+    specimen.classification.try!(:full_name)
+  end
+
+  def age_raw
+    h.raw(age_in_text(:with_unit => true) || "-")
+  end
+
+  def user_name
+    user.try!(:username)
+  end
+
+  def group_name
+    group.try!(:name)
+  end
+
+  def format_created_at
+    h.difference_from_now(created_at)
+  end
+
+  def format_updated_at
+    h.difference_from_now(updated_at)
+  end
+
+  def format_collected_at
+    h.difference_from_now(collected_at)
+  end
+
+  def format_published_at
+    h.difference_from_now(published_at)
+  end
+
+  def format_disposed_at
+    h.difference_from_now(disposed_at)
+  end
+
+  def format_lost_at
+    h.difference_from_now(lost_at)
+  end
 
   def box_node(box)
     h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + h.link_to_if(h.can?(:read, box), box.name, box)
