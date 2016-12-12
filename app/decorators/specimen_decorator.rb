@@ -14,7 +14,7 @@ class SpecimenDecorator < Draper::Decorator
   STATUS_ICON_NAME = {
     Specimen::Status::NORMAL => "",
     Specimen::Status::UNDETERMINED_QUANTITY => "question-sign",
-    Specimen::Status::DISAPPEARANCE => "fire",
+    Specimen::Status::DISAPPEARANCE => "ghost",
     Specimen::Status::DISPOSAL => "trash",
     Specimen::Status::LOSS => "eye-close"
   }
