@@ -3,13 +3,16 @@ class PlaceDecorator < Draper::Decorator
   delegate_all
   delegate :as_json
 
+  def self.icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+  end
+
   def name_with_id
     h.content_tag(:span, nil, class: "glyphicon glyphicon-globe") + " #{name} < #{global_id} >"
   end
 
-
   def icon
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+    self.class.icon
   end
 
   def latitude_to_text
