@@ -362,6 +362,24 @@ class SpecimenDecorator < Draper::Decorator
     end
   end
 
+  def tree_nodes(klass, depth)
+    hash = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = Array.new } }
+    objects = []
+    if klass == Analysis
+      objects = analyses
+    elsif klass == Bib
+      objects = bibs
+    elsif klass == AttachmentFile
+      objects = attachment_files
+    end
+    hash[record_property_id][klass] = objects
+    in_list = [object]
+    classes = [Box, Specimen]
+    h.tree(hash, classes: classes, key: record_property_id, in_list: in_list, depth: depth) do |obj|
+      obj.decorate.tree_node(current_type: (object.class == obj.class))
+    end
+  end
+
   def tree_node(current: false, current_type: false, in_list_include: false)
     name_str = name.presence || "[no name]"
     link = current ? h.content_tag(:strong, name_str, class: "text-primary bg-primary") : name_str
@@ -608,7 +626,7 @@ class SpecimenDecorator < Draper::Decorator
 
   def icon_with_badge_count(klass, count, in_list_include=false)
     if count.nonzero?
-      badge = h.content_tag(:span, count, class: (in_list_include ? "badge badge-active" : "badge"))
+      badge = h.content_tag(:span, count, :"data-klass" => "#{klass}", :"data-record_property_id" => record_property_id, class: (in_list_include ? "badge badge-active" : "badge"))
       html = h.content_tag(:span, "#{klass}Decorator".constantize.try(:icon), class: (in_list_include ? "glyphicon-active-color" : ""))
       html += h.content_tag(:a, badge, href: "#tree-#{klass}-#{record_property_id}", :"data-toggle" => "collapse", class: "collapse-active")
     end

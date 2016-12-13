@@ -1,3 +1,22 @@
+<%= javascript_tag do %>
+  $(document).on("click", "span.badge", function() {
+    var $data = $(this).data();
+    $data.depth = $(this).parent().parent().data('depth');
+    var content = '#tree-' + $data.klass + '-' + $data.record_property_id
+    if ($(content).html() == "") {
+      $.ajax({
+        url: '<%= tree_node_box_path %>',
+        type: 'get',
+        data: $data,
+        success: function(result){
+          $(content).replaceWith(result.tree_node);
+          $(content).removeClass('in');
+          $("a[href = " + content + "]").click();
+        }
+      });
+    }
+  });
+<% end %>
 <div class="row">
   <div id="show-caption" class="col-lg-12">
     <%= @box.box_path_with_id %>

@@ -28,19 +28,54 @@ class BoxDecorator < Draper::Decorator
   end
 
   def current_box_hash
-    boxes = [object].concat(descendants)
-    h = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = Array.new } }
-    h[object.parent.try(:record_property_id)][Box] = [object]
-    boxes.each_with_object(h) do |box, hash|
-      hash[box.record_property_id][Box] = box.children
-      hash[box.record_property_id][Specimen] = box.specimens
-      hash[box.record_property_id][Bib] = box.bibs
-      hash[box.record_property_id][AttachmentFile] = box.attachment_files
-      box.specimens.each do |specimen|
-        hash[specimen.record_property_id][Analysis] = specimen.analyses
-        hash[specimen.record_property_id][Bib] = specimen.bibs
-        hash[specimen.record_property_id][AttachmentFile] = specimen.attachment_files
+    hash = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = Array.new } }
+    hash[object.parent.try(:record_property_id)][Box] = [object]
+    hash[object.record_property_id][Box] = object.children
+    hash[object.record_property_id][Specimen] = object.specimens
+    hash[object.record_property_id][Bib] = object.bibs
+    hash[object.record_property_id][AttachmentFile] = object.attachment_files
+    children.each do |box|
+      hash[box.record_property_id][Box] = []
+      hash[box.record_property_id][Specimen] = []
+      hash[box.record_property_id][Bib] = []
+      hash[box.record_property_id][AttachmentFile] = []
+    end
+    object.specimens.each do |specimen|
+      hash[specimen.record_property_id][Analysis] = []
+      hash[specimen.record_property_id][Bib] = []
+      hash[specimen.record_property_id][AttachmentFile] = []
+    end
+    hash
+  end
+
+  def tree_nodes(klass, depth)
+    hash = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = Array.new } }
+    objects = []
+    if klass == Box
+      objects = children
+      objects.each do |box|
+        hash[box.record_property_id][Box] = []
+        hash[box.record_property_id][Specimen] = []
+        hash[box.record_property_id][Bib] = []
+        hash[box.record_property_id][AttachmentFile] = []
       end
+    elsif klass == Specimen
+      objects = specimens
+      objects.each do |specimen|
+        hash[specimen.record_property_id][Analysis] = []
+        hash[specimen.record_property_id][Bib] = []
+        hash[specimen.record_property_id][AttachmentFile] = []
+      end
+    elsif klass == Bib
+      objects = bibs
+    elsif klass == AttachmentFile
+      objects = attachment_files
+    end
+    hash[record_property_id][klass] = objects
+    in_list = [object]
+    classes = [Box, Specimen]
+    h.tree(hash, classes: classes, key: record_property_id, in_list: in_list, depth: depth) do |obj|
+      obj.decorate.tree_node(current_type: (object.class == obj.class))
     end
   end
 
@@ -182,7 +217,7 @@ class BoxDecorator < Draper::Decorator
 
   def icon_with_badge_count(klass, count, in_list_include=false)
     if count.nonzero?
-      badge = h.content_tag(:span, count, class: (in_list_include ? "badge badge-active" : "badge"))
+      badge = h.content_tag(:span, count, :"data-klass" => "#{klass}", :"data-record_property_id" => record_property_id, class: (in_list_include ? "badge badge-active" : "badge"))
       html = h.content_tag(:span, "#{klass}Decorator".constantize.try(:icon), class: (in_list_include ? "glyphicon-active-color" : ""))
       html += h.content_tag(:a, badge, href: "#tree-#{klass}-#{record_property_id}", :"data-toggle" => "collapse", class: "collapse-active")
     end

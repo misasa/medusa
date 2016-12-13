@@ -120,6 +120,14 @@ class BoxesController < ApplicationController
     respond_with @box, layout: !request.xhr?
   end
 
+  def tree_node
+    record_property_id = params[:record_property_id].to_i
+    klass = params[:klass].constantize
+    depth = params[:depth].to_i + 1
+    object = RecordProperty.find(record_property_id).datum.decorate
+    render json: { tree_node: object.tree_nodes(klass, depth) }
+  end
+
   def bundle_edit
     respond_with @boxes
   end
