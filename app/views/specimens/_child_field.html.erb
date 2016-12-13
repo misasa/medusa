@@ -8,20 +8,22 @@
       </ul>
     </div>
   <% end %>
-  <div class="row">
-    <div class="col-sm-3">
-      <%= f.text_field :name, class: "form-control input-sm" %>
+  <div class="row">  
+    <div class="col-sm-1">
+    </div>
+    <div class="col-sm-2">
+      <%= f.text_field :name, placeholder: "name", class: "form-control input-sm" %>
     </div>
     <div class="col-sm-2">
       <%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
     </div>
-    <div class="col-sm-3">
-      <%= f.text_field :quantity, class: "form-control input-sm quantity" %>
-    </div>
-    <div class="col-sm-3">
-      <%= f.text_field :quantity_unit, class: "form-control input-sm quantity" %>
+    <div class="col-sm-2">
+      <%= f.text_field :quantity, placeholder: "quantity", class: "form-control input-sm quantity" %>
     </div>
     <div class="col-sm-1">
+      <%= f.text_field :quantity_unit, class: "form-control input-sm quantity" %>
+    </div>
+    <div class="col-sm-offset-3 col-sm-1">
       <div class="remove-quantity-child">
         <a class="btn btn-default btn-sm remove-child" disabled="disabled">
           <span class="glyphicon glyphicon-remove"></span>
