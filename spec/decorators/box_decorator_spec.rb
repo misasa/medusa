@@ -5,6 +5,19 @@ describe BoxDecorator do
   let(:obj){FactoryGirl.create(:box).decorate}
   before{User.current = user}
 
+  describe "icon" do
+    subject { BoxDecorator.icon }
+    it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-folder-close\"></span>") }
+    context "in_list_include is true" do
+      subject { BoxDecorator.icon(true) }
+      it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-folder-open\"></span>") }
+    end
+    context "in_list_include is false" do
+      subject { BoxDecorator.icon(false) }
+      it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-folder-close\"></span>") }
+    end
+  end
+
   describe ".to_json", :current => true do
     subject{obj.to_json}
     it{ expect(subject).to include "global_id" }
@@ -68,6 +81,90 @@ describe BoxDecorator do
     end
     context "box not link specimen" do
       it{expect(subject).not_to include("#{specimen.name}")}
+    end
+  end
+
+  describe "tree_nodes" do
+    let(:box) { FactoryGirl.create(:box, name: "test_1") }
+    let(:specimen) { FactoryGirl.create(:specimen, name: "test_2") }
+    let(:bib) { FactoryGirl.create(:bib, name: "test_3") }
+    let(:attachment_file) { FactoryGirl.create(:attachment_file, name: "test_4", data_file_name: "test_4.jpg") }
+    let(:analysis) { FactoryGirl.create(:analysis, name: "test_5") }
+    before do
+      sign_in user
+      obj.children << box
+      obj.specimens << specimen
+      obj.bibs << bib
+      obj.attachment_files << attachment_file
+    end
+    subject { obj.tree_nodes(klass, 10) }
+    context "klass is Box" do
+      let(:klass) { Box }
+      it do
+        expect(subject).to eq(
+          "<div class=\"collapse in\" id=\"tree-#{klass}-#{obj.record_property_id}\">"\
+          + "<div class=\"tree-node\" data-depth=\"10\">"\
+          + "<span class=\"box\">"\
+          + "<span class=\"glyphicon glyphicon-folder-close\"></span>"\
+          + "</span>"\
+          + "<a href=\"/boxes/#{box.id}\">test_1</a>"\
+          + "</div>"\
+          + "<div class=\"collapse\" id=\"tree-Box-#{box.record_property_id}\"></div>"\
+          + "<div class=\"collapse\" id=\"tree-Specimen-#{box.record_property_id}\"></div>"\
+          + "<div class=\"collapse\" id=\"tree-Bib-#{box.record_property_id}\"></div>"\
+          + "<div class=\"collapse\" id=\"tree-AttachmentFile-#{box.record_property_id}\"></div>"\
+          + "</div>"
+        )
+      end
+    end
+    context "klass is Specimen" do
+      let(:klass) { Specimen }
+      it do
+        expect(subject).to eq(
+          "<div class=\"collapse in\" id=\"tree-#{klass}-#{obj.record_property_id}\">"\
+          + "<div class=\"tree-node\" data-depth=\"10\">"\
+          + "<span class=\"\">"\
+          + "<span class=\"glyphicon glyphicon-cloud\"></span>"\
+          + "<span class=\"glyphicon glyphicon-\"></span>"\
+          + "</span>"\
+          + "<a href=\"/specimens/#{specimen.id}\">test_2</a>"\
+          + "</div>"\
+          + "<div class=\"collapse\" id=\"tree-Analysis-#{specimen.record_property_id}\"></div>"\
+          + "<div class=\"collapse\" id=\"tree-Bib-#{specimen.record_property_id}\"></div>"\
+          + "<div class=\"collapse\" id=\"tree-AttachmentFile-#{specimen.record_property_id}\"></div>"\
+          + "</div>"
+        )
+      end
+    end
+    context "klass is Bib" do
+      let(:klass) { Bib }
+      it do
+        expect(subject).to eq(
+          "<div class=\"collapse in\" id=\"tree-#{klass}-#{obj.record_property_id}\">"\
+          + "<div class=\"tree-node\" data-depth=\"10\">"\
+          + "<span class=\"glyphicon glyphicon-book\"></span>"\
+          + "<a href=\"/bibs/#{bib.id}\">test_3</a>"\
+          + "</div>"\
+          + "</div>"
+        )
+      end
+    end
+    context "klass is AttachmentFile" do
+      let(:klass) { AttachmentFile }
+      it do
+        expect(subject).to eq(
+          "<div class=\"collapse in\" id=\"tree-#{klass}-#{obj.record_property_id}\">"\
+          + "<div class=\"tree-node\" data-depth=\"10\">"\
+          + "<span class=\"glyphicon glyphicon-file\"></span>"\
+          + "<a href=\"/attachment_files/#{attachment_file.id}\">test_4.jpg</a>"\
+          + "</div>"\
+          + "</div>"
+        )
+      end
+    end
+    context "other klass" do
+      let(:klass) { Analysis }
+      it { expect(subject).to eq("") }
     end
   end
 

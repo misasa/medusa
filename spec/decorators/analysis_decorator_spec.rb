@@ -5,6 +5,11 @@ describe AnalysisDecorator do
   let(:user) { FactoryGirl.create(:user) }
   before{ User.current = user }
 
+  describe "icon" do
+    subject { AnalysisDecorator.icon }
+    it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-stats\"></span>") }
+  end
+
   describe ".primary_picture" do
     let(:attachment_file){ FactoryGirl.create(:attachment_file) }
     let(:picture) { obj.primary_picture(width: width, height: height) }

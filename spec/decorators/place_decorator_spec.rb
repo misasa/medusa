@@ -8,6 +8,11 @@ describe PlaceDecorator do
   let(:place){FactoryGirl.create(:place,latitude: latitude,longitude: longitude,elevation: elevation).decorate}
   before{User.current = user}
 
+  describe "icon" do
+    subject { PlaceDecorator.icon }
+    it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-globe\"></span>") }
+  end
+
   describe ".latitude_to_text" do
     subject{ place.latitude_to_text }
     context "latitude is blank" do

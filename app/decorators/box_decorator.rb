@@ -70,6 +70,8 @@ class BoxDecorator < Draper::Decorator
       objects = bibs
     elsif klass == AttachmentFile
       objects = attachment_files
+    else
+      return ""
     end
     hash[record_property_id][klass] = objects
     in_list = [object]

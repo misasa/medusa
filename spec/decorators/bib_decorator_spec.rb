@@ -5,6 +5,11 @@ describe BibDecorator do
   let(:user) { FactoryGirl.create(:user) }
   before{ User.current = user }
 
+  describe "icon" do
+    subject { BibDecorator.icon }
+    it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-book\"></span>") }
+  end
+
   describe ".primary_picture" do
     let(:attachment_file){ FactoryGirl.create(:attachment_file) }
     let(:picture) { obj.primary_picture(width: width, height: height) }
