@@ -55,6 +55,6 @@
 </table>
 <%= javascript_tag do %>
   $(document).on("succeed.ajaxForm", "#new_measurement_category", function() {
-    window.location.href = '/measurement_categories'
+    window.location.href = '<%= measurement_categories_path %>'
   });
 <% end %>
