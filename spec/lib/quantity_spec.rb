@@ -146,7 +146,7 @@ describe Quantity do
       let(:quantity) { 100.0 }
       let(:quantity_unit) { "kg" }
       subject { Quantity.string_quantity(quantity, quantity_unit) }
-      it { expect(subject).to eq("100.0(kg)") }
+      it { expect(subject).to eq("100.0 kg") }
     end
 
     describe "unit_exists?" do

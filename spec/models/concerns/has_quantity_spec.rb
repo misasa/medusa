@@ -28,7 +28,7 @@ describe HasQuantity do
     let(:quantity_unit) { "kg" }
     let(:specimen) { FactoryGirl.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
     subject { specimen.string_quantity }
-    it { expect(subject).to eq("100.0(kg)") }
+    it { expect(subject).to eq("100.0 kg") }
   end
 
   describe "decimal_quantity_was" do
@@ -40,7 +40,7 @@ describe HasQuantity do
       specimen.quantity_unit = "g"
     end
     subject { specimen.string_quantity_was }
-    it { expect(subject).to eq("100.0(kg)") }
+    it { expect(subject).to eq("100.0 kg") }
   end
 
   describe "quantity_unit_exists" do

@@ -79,7 +79,7 @@ describe SpecimenQuantity do
           expect(subject[:x]).to eq(divide.chart_updated_at)
           expect(subject[:y]).to eq(100000.0)
           expect(subject[:date_str]).to eq("2016/11/12 00:00:00")
-          expect(subject[:quantity_str]).to eq("100.0(kg)")
+          expect(subject[:quantity_str]).to eq("100.0 kg")
           expect(subject[:before_specimen_name]).to eq(before_specimen.name)
           expect(subject[:comment]).to eq("log")
         end
@@ -92,7 +92,7 @@ describe SpecimenQuantity do
           expect(subject[:x]).to eq(divide.chart_updated_at)
           expect(subject[:y]).to eq(100000.0)
           expect(subject[:date_str]).to eq("2016/11/12 00:00:00")
-          expect(subject[:quantity_str]).to eq("100.0(kg)")
+          expect(subject[:quantity_str]).to eq("100.0 kg")
           expect(subject[:before_specimen_name]).to be_nil
           expect(subject[:comment]).to eq("log")
         end

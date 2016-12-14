@@ -18,12 +18,11 @@
       <%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
     </div>
     <div class="col-sm-2">
-      <%= f.text_field :quantity, placeholder: "quantity", class: "form-control input-sm quantity" %>
+      <%= f.text_field :quantity_with_unit, placeholder: "ex) 10.0 g", class: "form-control input-sm quantity" %>
+      <%#= f.text_field :quantity, placeholder: "quantity", class: "form-control input-sm quantity" %>
+      <%#= f.text_field :quantity_unit, class: "form-control input-sm quantity" %>
     </div>
     <div class="col-sm-1">
-      <%= f.text_field :quantity_unit, class: "form-control input-sm quantity" %>
-    </div>
-    <div class="col-sm-offset-3 col-sm-1">
       <div class="remove-quantity-child">
         <a class="btn btn-default btn-sm remove-child" disabled="disabled">
           <span class="glyphicon glyphicon-remove"></span>

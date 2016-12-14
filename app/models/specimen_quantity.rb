@@ -14,6 +14,7 @@ class SpecimenQuantity < ActiveRecord::Base
     h[:date_str] = divide.updated_at_str
     h[:quantity_str] = quantity_str
     h[:before_specimen_name] = divide.before_specimen.try(:name) if divide.divide_flg
+    h[:before_specimen] = divide.before_specimen if divide.divide_flg    
     h[:comment] = divide.log
     h
   end

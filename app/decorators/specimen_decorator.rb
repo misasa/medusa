@@ -315,11 +315,11 @@ class SpecimenDecorator < Draper::Decorator
       f.xAxis(type: 'datetime')
       f.yAxis(min: 0, title: { text: "quantity(g)" })
       f.chart(height: 600)
-      f.series(name: "total", data: quantity_history[0], type: 'line', step: 'left')
+      f.series(name: "myself and descendants", data: quantity_history[0], type: 'line', step: 'left')
       quantity_history.each do |key, data|
         specimen = Specimen.find_by(id: key)
         if specimen
-          f.series(name: specimen.name, data: data, type: 'line', step: 'left')
+          f.series(name: (self == specimen ? "myself" : specimen.name), data: data, type: 'line', step: 'left')
         end
       end
     end

@@ -34,12 +34,14 @@ class DivideSpecimensController < ApplicationController
     params.require(:specimen).permit(
       :quantity,
       :quantity_unit,
+      :quantity_with_unit,
       :comment,
       children_attributes: [
         :name,
         :physical_form_id,
         :quantity,
-        :quantity_unit
+        :quantity_unit,
+        :quantity_with_unit        
       ]
     )
   end

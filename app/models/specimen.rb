@@ -113,6 +113,17 @@ class Specimen < ActiveRecord::Base
     sps
   end
 
+  def quantity_with_unit
+    return unless quantity
+    "#{quantity} #{quantity_unit}"
+  end
+
+  def quantity_with_unit=(string)
+    vals = string.split(/\s/)
+    self.quantity = vals[0]
+    self.quantity_unit = vals[1] if vals.size > 1
+  end
+
   # def to_pml
   #   [self].to_pml
   # end
@@ -235,11 +246,11 @@ class Specimen < ActiveRecord::Base
     if divide_flg
       comment
     elsif string_quantity_was.blank?
-      "[#{name}] #{string_quantity}"
+      "Quantity of #{name} was set to #{string_quantity}"
     elsif string_quantity.blank?
-      "[#{name}] Deleted quantity."
+      "Quantity of #{name} was deleted"
     else
-      "[#{name}] #{string_quantity_was} -> #{string_quantity}"
+      "Quantity of #{name} was changed from #{string_quantity_was} to #{string_quantity}"
     end
   end
 

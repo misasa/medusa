@@ -1,5 +1,5 @@
 <div class="panel panel-default">
-  <div class="panel-heading">Specimen</div>
+  <div class="panel-heading"></div>
   <div class="panel-body">
     <%= button_tag class: "btn btn-default" do %>
     <span class="glyphicon glyphicon-save"></span>
@@ -13,7 +13,7 @@
           </th>
         </tr>
         <tr>
-          <th>display order</th>
+          <th>order</th>
           <th>name</th>
           <th>display name</th>
           <th>display type</th>
@@ -27,17 +27,17 @@
           <td><%= column.display_name %></td>
           <td>
             <div class="btn-group" data-toggle="buttons">
+              <%= label_tag :"display_types[#{column.id}]_2", class: column.always? ? "btn btn-default active" : "btn btn-default" do %>
+                <%= radio_button_tag :"display_types[#{column.id}]", 2, column.always?, { autocomplete: "off" } %>
+                always
+              <% end %>
               <%= label_tag :"display_types[#{column.id}]_0", class: column.none? ? "btn btn-default active" : "btn btn-default" do %>
                 <%= radio_button_tag :"display_types[#{column.id}]", 0, column.none?, { autocomplete: "off" } %>
-                dislpay none
+                none
               <% end %>
               <%= label_tag :"display_types[#{column.id}]_1", class: column.expand? ? "btn btn-default active" : "btn btn-default" do %>
                 <%= radio_button_tag :"display_types[#{column.id}]", 1, column.expand?, { autocomplete: "off" } %>
                 only expansion
-              <% end %>
-              <%= label_tag :"display_types[#{column.id}]_2", class: column.always? ? "btn btn-default active" : "btn btn-default" do %>
-                <%= radio_button_tag :"display_types[#{column.id}]", 2, column.always?, { autocomplete: "off" } %>
-                always
               <% end %>
             </div>
           </td>

@@ -239,40 +239,40 @@ describe Specimen do
       expect(subject[0].length).to eq(3)
       expect(subject[0][0][:id]).to eq(divide1.id)
       expect(subject[0][0][:y]).to eq(100000.0)
-      expect(subject[0][0][:quantity_str]).to eq("100,000.0(g)")
+      expect(subject[0][0][:quantity_str]).to eq("100,000.0 g")
       expect(subject[0][1][:id]).to eq(divide2.id)
       expect(subject[0][1][:y]).to eq(100000.0)
-      expect(subject[0][1][:quantity_str]).to eq("100,000.0(g)")
+      expect(subject[0][1][:quantity_str]).to eq("100,000.0 g")
       expect(subject[0][2][:id]).to eq(divide3.id)
       expect(subject[0][2][:y]).to eq(90000.0)
-      expect(subject[0][2][:quantity_str]).to eq("90,000.0(g)")
+      expect(subject[0][2][:quantity_str]).to eq("90,000.0 g")
     end
     it "specimen1" do
       expect(subject[specimen1.id].length).to eq(3)
       expect(subject[specimen1.id][0][:id]).to eq(divide1.id)
       expect(subject[specimen1.id][0][:y]).to eq(100000.0)
-      expect(subject[specimen1.id][0][:quantity_str]).to eq("100.0(kg)")
+      expect(subject[specimen1.id][0][:quantity_str]).to eq("100.0 kg")
       expect(subject[specimen1.id][1][:id]).to eq(divide2.id)
       expect(subject[specimen1.id][1][:y]).to eq(60000.0)
-      expect(subject[specimen1.id][1][:quantity_str]).to eq("60.0(kg)")
+      expect(subject[specimen1.id][1][:quantity_str]).to eq("60.0 kg")
       expect(subject[specimen1.id][1][:id]).to eq(divide2.id)
       expect(subject[specimen1.id][1][:y]).to eq(60000.0)
-      expect(subject[specimen1.id][1][:quantity_str]).to eq("60.0(kg)")
+      expect(subject[specimen1.id][1][:quantity_str]).to eq("60.0 kg")
     end
     it "specimen2" do
       expect(subject[specimen2.id].length).to eq(2)
       expect(subject[specimen2.id][0][:id]).to eq(divide2.id)
       expect(subject[specimen2.id][0][:y]).to eq(40000.0)
-      expect(subject[specimen2.id][0][:quantity_str]).to eq("40.0(kg)")
+      expect(subject[specimen2.id][0][:quantity_str]).to eq("40.0 kg")
       expect(subject[specimen2.id][1][:id]).to eq(divide3.id)
       expect(subject[specimen2.id][1][:y]).to eq(20000.0)
-      expect(subject[specimen2.id][1][:quantity_str]).to eq("20.0(kg)")
+      expect(subject[specimen2.id][1][:quantity_str]).to eq("20.0 kg")
     end
     it "specimen3" do
       expect(subject[specimen3.id].length).to eq(1)
       expect(subject[specimen3.id][0][:id]).to eq(divide3.id)
       expect(subject[specimen3.id][0][:y]).to eq(10000.0)
-      expect(subject[specimen3.id][0][:quantity_str]).to eq("10.0(kg)")
+      expect(subject[specimen3.id][0][:quantity_str]).to eq("10.0 kg")
     end
   end
 
@@ -440,7 +440,7 @@ describe Specimen do
         expect(subject.before_specimen_quantity).to_not be_nil
         expect(subject.before_specimen_quantity).to eq(specimen.specimen_quantities.last)
         expect(subject.divide_flg).to eq(false)
-        expect(subject.log).to eq("[specimenA] 100.0(kg) -> 200.0(g)")
+        expect(subject.log).to eq("Quantity of specimenA was changed from 100.0 kg to 200.0 g")
       end
     end
   end
@@ -460,14 +460,72 @@ describe Specimen do
       let(:divide_flg) { false }
       context "new_record" do
         let!(:specimen) { FactoryGirl.build(:specimen, name: "specimenA", divide_flg: divide_flg, comment: "comment") }
-        it { expect(subject).to eq("[specimenA] 200.0(g)") }
+        it { expect(subject).to eq("Quantity of specimenA was set to 200.0 g") }
       end
       context "non new_record" do
-        it { expect(subject).to eq("[specimenA] 100.0(kg) -> 200.0(g)") }
+        it { expect(subject).to eq("Quantity of specimenA was changed from 100.0 kg to 200.0 g") }
       end
     end
   end
 
+  describe "quantity_with_unit" do
+    subject { specimen.quantity_with_unit }
+    let(:specimen) { FactoryGirl.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+    let(:quantity) { 100.0 }
+    let(:quantity_unit) { "kg" }
+    context "with quantity and unit" do
+      it { expect(subject).to eq("#{quantity} #{quantity_unit}")}
+    end
+
+    context "without quantity and unit" do
+      let(:quantity) { nil }
+      let(:quantity_unit) { nil }      
+      it { expect(subject).to be_nil }
+    end
+  end
+
+  describe "quantity_with_unit=" do
+    #subject { specimen.quantity_with_unit = quantity_with_unit }
+    let(:specimen) { FactoryGirl.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+    let(:quantity) { 100.0 }
+    let(:quantity_unit) { "kg" }
+    let(:quantity_with_unit){ "80 g"}
+    before do
+      specimen
+      specimen.quantity_with_unit = quantity_with_unit
+    end
+    it { 
+      expect(specimen.quantity).to eq(80.0)
+      expect(specimen.quantity_unit).to eq("g")
+    }
+  end
+
+
+  describe "quantity_with_unit= for children", :current => true do
+    before do
+      @specimen = FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg")
+      @specimen.quantity = quantity
+      @specimen.quantity_unit = quantity_unit
+      @specimen.children.build(quantity_with_unit: "30 kg")
+      @specimen.children.build(quantity_with_unit: "20 kg")
+    end
+    subject { @specimen.divided_loss }
+    context "non loss" do
+      let(:quantity) { 50 }
+      let(:quantity_unit) { "kg" }
+      it { expect(subject).to eq(0.to_d) }
+    end
+    context "loss" do
+      let(:quantity) { 40 }
+      let(:quantity_unit) { "kg" }
+      it { expect(subject).to eq(10000.0.to_d) }
+    end
+    context "over" do
+      let(:quantity) { 60 }
+      let(:quantity_unit) { "kg" }
+      it { expect(subject).to eq(-10000.0.to_d) }
+    end
+  end
   describe "#delete_table_analysis" do
     subject { specimen.send(:delete_table_analysis, analysis_1) }
     let(:specimen) { FactoryGirl.create(:specimen) }

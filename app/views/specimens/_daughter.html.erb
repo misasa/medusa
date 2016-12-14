@@ -2,13 +2,74 @@
   <div id="display-type-html">
     <div class="panel panel-default">
       <div class="panel-heading">
-        <%= @specimen.name %>  (<%= @specimen.quantity_was %> <%= @specimen.quantity_unit_was %>)      
+        <%#= "#{@specimen.name} (#{@specimen.quantity_was} #{@specimen.quantity_unit_was})" %>      
       </div>
       <div class="panel-body">
+        <%= form_for @divide_specimen, url: divide_specimen_path, remote: true, format: :json, html: { class: "update", role: "form", id: "divide_specimen" } do |f| %>
+          <div class="row">
+            <div class="col-sm-5">
+            original
+            </div>
+            <div class="col-sm-2">
+                <dd id="original"><%= @specimen.quantity_with_unit %></dd>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-5">
+            reminder
+            </div>
+            <div class="col-sm-2">
+              <%= f.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", readonly: true %>
+              <%#= f.text_field :quantity_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_unit", readonly: true %>
+            </div>
+            <div class="col-sm-1">
+              <div class="btn-group" data-toggle="buttons">
+                <%= label_tag :manual, class: "btn btn-default btn-sm" do %>
+                  <%= check_box_tag :manual, true, false, autocomplete: "off" %>
+                  <span class="glyphicon glyphicon-minus"></span>
+                <% end %>
+              </div>            
+            </div>            
+          </div>
+
+          <div class="children">
+            <%= f.fields_for :children do |c| %>
+              <% if c.object.id.nil? %>
+                <%= render 'child_field', f: c %>
+              <% end %>
+            <% end %>
+            <div class="row">
+              <div class="col-sm-offset-7 col-sm-1">
+                <a class="btn btn-default btn-sm add-child">
+                  <span class="glyphicon glyphicon-chevron-down"></span>
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-offset-1 col-sm-4">
+            loss on operation
+            </div>
+            <div class="col-sm-2">
+                <dd id="divided_loss">0.0 g</dd>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-sm-offset-1 col-sm-10">
+              <dd><%= f.text_field :comment, :placeholder => "operation", class: "form-control input-sm" %></dd>
+            </div>
+            <div class="col-sm-1">
+              <%= f.button class: "btn btn-default" do %>
+                <span class="glyphicon glyphicon-save"></span>
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+        <hr/>
         <%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
           <div class="row">
             <div class="col-sm-1">
-            <%= link_to_function "edit", "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
             </div>
             <div  class="col-sm-2">
               name
@@ -24,10 +85,8 @@
           </div>
           <% @specimen.children.each do |specimen| %>
             <div class="row">
-              <div class="col-sm-1">
-                  <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
-              </div>
-              <div class="col-sm-2">
+              <div class="col-sm-offset-1 col-sm-2">
+                <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
                 <%= specimen.decorate.status_icon %>
                 <%= link_to_if can?(:read, specimen), specimen.name, specimen, class: specimen_ghost(specimen) %>
               </div>
@@ -38,8 +97,10 @@
                 <%= specimen.try!(:quantity) %>
                 <%= specimen.try!(:quantity_unit) %>
               </div>
-              <div class="col-sm-5">
+              <div class="col-sm-4">
               <%= specimen.try!(:global_id) %>
+              </div>
+              <div class="col-sm-1">            
                   <%= link_to specimen_daughter_path(@specimen, specimen) + tab_param(__FILE__), method: :delete, title: "unlink specimen", data: {confirm: t("confirm.unlink")} do %>
                     <span class="glyphicon glyphicon-remove"></span>
                   <% end %>
@@ -50,13 +111,14 @@
         <div class="row">
           <%= form_for Specimen.new, url: specimen_daughters_path(@specimen) do |f|%>
               <%= hidden_tabname_tag(__FILE__) %>
-              <div class="col-sm-1">
+              <div class="col-sm-offset-1 col-sm-2">
                 <%= check_box_tag nil, nil, false, class: "select-row-all" %>
+                <%= link_to_function "edit", "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
               </div>
           <% end %>
           <%= form_tag link_by_global_id_specimen_daughters_path(@specimen), method: :post do %>
             <%= hidden_tabname_tag(__FILE__) %>
-            <div class="col-sm-offset-6 col-sm-4">
+            <div class="col-sm-offset-4 col-sm-4">
               <div class="input-group">
                 <%= text_field_tag :global_id, nil, id: "daughter-global-id", class: "form-control input-sm" %>
                 <span class="input-group-addon">
@@ -73,60 +135,6 @@
             </div>
           <% end %>
         </div>
-        <hr/>    
-        <%= form_for @divide_specimen, url: divide_specimen_path, remote: true, format: :json, html: { class: "update", role: "form", id: "divide_specimen" } do |f| %>
-          <div class="children">
-            <%= f.fields_for :children do |c| %>
-              <% if c.object.id.nil? %>
-                <%= render 'child_field', f: c %>
-              <% end %>
-            <% end %>
-            <div class="row">
-              <div class="col-sm-offset-11 col-sm-1">
-                <a class="btn btn-default btn-sm add-child">
-                  <span class="glyphicon glyphicon-plus"></span>
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-1">
-              <div class="btn-group" data-toggle="buttons">
-                <%= label_tag :manual, class: "btn btn-default btn-sm" do %>
-                  <%= check_box_tag :manual, true, false, autocomplete: "off" %>
-                  <span class="glyphicon glyphicon-minus"></span>
-                <% end %>
-              </div>            
-            </div>            
-            <div class="col-sm-4">
-            parent quantity
-            </div>
-            <div class="col-sm-2">
-              <%= f.text_field :quantity, class: "form-control input-sm parent quantity", id: "parent_quantity", readonly: true %>
-            </div>
-            <div class="col-sm-1">
-              <%= f.text_field :quantity_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_unit", readonly: true %>
-            </div>
-            <div class="col-sm-1">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-offset-1 col-sm-2">
-            loss
-            </div>
-            <div class="col-sm-offset-2 col-sm-2">
-                <dd id="divided_loss">0.0(g)</dd>
-            </div>
-            <div class="col-sm-4">
-              <dd><%= f.text_field :comment, :placeholder => "Comment", class: "form-control input-sm" %></dd>
-            </div>
-            <div class="col-sm-1">
-              <%= f.button class: "btn btn-default" do %>
-                <span class="glyphicon glyphicon-save"></span>
-              <% end %>
-            </div>        
-          </div>
-        <% end %>
       </div>
     </div>
   </div>
@@ -143,6 +151,7 @@
       success: function(result){
         $("#parent_quantity").val(result.parent_quantity);
         $("#parent_quantity_unit").val(result.parent_quantity_unit);
+        $("#parent_quantity_with_unit").val(result.parent_quantity + " " + result.parent_quantity_unit);        
         $("#divided_loss").text(result.loss_quantity + " " + result.loss_quantity_unit);
       }
     });
