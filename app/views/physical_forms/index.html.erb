@@ -47,6 +47,6 @@
 </table>
 <%= javascript_tag do %>
   $(document).on("succeed.ajaxForm", "#new_physical_form", function() {
-    window.location.href = '/physical_forms'
+    window.location.href = '<%= physical_forms_path %>'
   });
 <% end %>

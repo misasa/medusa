@@ -42,6 +42,6 @@
 </table>
 <%= javascript_tag do %>
   $(document).on("succeed.ajaxForm", "#new_box_type", function() {
-    window.location.href = '/box_types'
+    window.location.href = '<%= box_types_path %>'
   });
 <% end %>

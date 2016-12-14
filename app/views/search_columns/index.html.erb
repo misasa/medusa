@@ -3,6 +3,6 @@
 <% end %>
 <%= javascript_tag do %>
   $(document).on("succeed.ajaxForm", "#update_display_search_columns", function() {
-    window.location.href = '/search_columns'
+    window.location.href = '<%= search_columns_path %>'
   });
 <% end %>

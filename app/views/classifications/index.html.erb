@@ -49,6 +49,6 @@
 </table>
 <%= javascript_tag do %>
   $(document).on("succeed.ajaxForm", "#new_classification", function() {
-    window.location.href = '/classifications'
+    window.location.href = '<%= classifications_path %>'
   });
 <% end %>
