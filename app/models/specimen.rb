@@ -263,7 +263,7 @@ class Specimen < ActiveRecord::Base
   end
 
   def status_is_nomal
-    unless status == Status::NORMAL
+    unless [Status::NORMAL, Status::UNDETERMINED_QUANTITY].include?(status)
       errors.add(:status, " is not normal")
     end
   end
