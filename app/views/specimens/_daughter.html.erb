@@ -1,142 +1,106 @@
 <div class="display-type">
   <div id="display-type-html">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <%#= "#{@specimen.name} (#{@specimen.quantity_was} #{@specimen.quantity_unit_was})" %>      
-      </div>
-      <div class="panel-body">
-        <%= form_for @divide_specimen, url: divide_specimen_path, remote: true, format: :json, html: { class: "update", role: "form", id: "divide_specimen" } do |f| %>
-          <div class="row">
-            <div class="col-sm-5">
-            original
-            </div>
-            <div class="col-sm-2">
-                <dd id="original"><%= @specimen.quantity_with_unit %></dd>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-sm-5">
-            reminder
-            </div>
-            <div class="col-sm-2">
-              <%= f.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", readonly: true %>
-              <%#= f.text_field :quantity_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_unit", readonly: true %>
-            </div>
-            <div class="col-sm-1">
-              <div class="btn-group" data-toggle="buttons">
-                <%= label_tag :manual, class: "btn btn-default btn-sm" do %>
-                  <%= check_box_tag :manual, true, false, autocomplete: "off" %>
-                  <span class="glyphicon glyphicon-minus"></span>
-                <% end %>
-              </div>            
-            </div>            
-          </div>
 
-          <div class="children">
-            <%= f.fields_for :children do |c| %>
-              <% if c.object.id.nil? %>
-                <%= render 'child_field', f: c %>
-              <% end %>
+    <%= form_for @divide_specimen, url: divide_specimen_path, remote: true, format: :json, html: { class: "update", role: "form", id: "divide_specimen" } do |f| %>
+      <div class="row">
+
+        <div class="col-sm-3">
+          <dd><%= f.text_field :comment, :placeholder => "operation", class: "form-control input-sm" %></dd>        
+        </div>        
+        <div class="col-sm-8 form-inline">
+          <%= f.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", size: 5, readonly: true %>
+          <div class="btn-group" data-toggle="buttons">
+            <%= label_tag :manual, class: "btn btn-default btn-sm" do %>
+              <%= check_box_tag :manual, true, false, autocomplete: "off" %>
+              <span class="glyphicon glyphicon-minus"></span>
             <% end %>
-            <div class="row">
-              <div class="col-sm-offset-7 col-sm-1">
-                <a class="btn btn-default btn-sm add-child">
-                  <span class="glyphicon glyphicon-chevron-down"></span>
-                </a>
-              </div>
-            </div>
           </div>
-          <div class="row">
-            <div class="col-sm-offset-1 col-sm-4">
-            loss on operation
-            </div>
-            <div class="col-sm-2">
-                <dd id="divided_loss">0.0 g</dd>
-            </div>
-          </div>
-
-          <div class="row">
-            <div class="col-sm-offset-1 col-sm-10">
-              <dd><%= f.text_field :comment, :placeholder => "operation", class: "form-control input-sm" %></dd>
-            </div>
-            <div class="col-sm-1">
-              <%= f.button class: "btn btn-default" do %>
-                <span class="glyphicon glyphicon-save"></span>
-              <% end %>
-            </div>
-          </div>
-        <% end %>
-        <hr/>
-        <%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
-          <div class="row">
-            <div class="col-sm-1">
-            </div>
-            <div  class="col-sm-2">
-              name
-            </div>
-            <div class="col-sm-2">
-              physical-form
-            </div>
-            <div class="col-sm-2">
-              quantity
-            </div>
-            <div class="col-sm-1">
-            </div>
-          </div>
-          <% @specimen.children.each do |specimen| %>
-            <div class="row">
-              <div class="col-sm-offset-1 col-sm-2">
-                <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
-                <%= specimen.decorate.status_icon %>
-                <%= link_to_if can?(:read, specimen), specimen.name, specimen, class: specimen_ghost(specimen) %>
-              </div>
-              <div class="col-sm-2">
-                <%= specimen.physical_form.try!(:name) %>
-              </div>
-              <div class="col-sm-2">
-                <%= specimen.try!(:quantity) %>
-                <%= specimen.try!(:quantity_unit) %>
-              </div>
-              <div class="col-sm-4">
-              <%= specimen.try!(:global_id) %>
-              </div>
-              <div class="col-sm-1">            
-                  <%= link_to specimen_daughter_path(@specimen, specimen) + tab_param(__FILE__), method: :delete, title: "unlink specimen", data: {confirm: t("confirm.unlink")} do %>
-                    <span class="glyphicon glyphicon-remove"></span>
-                  <% end %>
-              </div>
-            </div>
+          /<span id="original"><%= @specimen.quantity_with_unit %><span>
+          <%#= f.text_field :quantity_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_unit", readonly: true %>
+          Note: Loss on this operation is <span id="divided_loss">0.0 g</span>.
+        </div>
+        <div class="col-sm-1">
+          <%= f.button class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
           <% end %>
-        <% end %>
-        <div class="row">
-          <%= form_for Specimen.new, url: specimen_daughters_path(@specimen) do |f|%>
-              <%= hidden_tabname_tag(__FILE__) %>
-              <div class="col-sm-offset-1 col-sm-2">
-                <%= check_box_tag nil, nil, false, class: "select-row-all" %>
-                <%= link_to_function "edit", "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
-              </div>
-          <% end %>
-          <%= form_tag link_by_global_id_specimen_daughters_path(@specimen), method: :post do %>
-            <%= hidden_tabname_tag(__FILE__) %>
-            <div class="col-sm-offset-4 col-sm-4">
-              <div class="input-group">
-                <%= text_field_tag :global_id, nil, id: "daughter-global-id", class: "form-control input-sm" %>
-                <span class="input-group-addon">
-                  <%= link_to specimens_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#daughter-global-id" do %>
-                    <span class="glyphicon glyphicon-search"></span>
-                  <% end %>
-                </span>
-              </div>
-            </div>
-            <div class="col-sm-1">            
-              <%= button_tag title: "link specimen by global id", class: "btn btn-default" do %>
-                <span class="glyphicon glyphicon-save"></span>
-              <% end %>
-            </div>
-          <% end %>
+        </div>        
+      </div>
+      <div class="row">
+        <div  class="col-sm-2">
+          name
+        </div>
+        <div class="col-sm-2">
+          physical-form
+        </div>
+        <div class="col-sm-2">
+          quantity
         </div>
       </div>
+
+
+      <div class="children">
+        <%= f.fields_for :children do |c| %>
+          <% if c.object.id.nil? %>
+            <%= render 'child_field', f: c %>
+          <% end %>
+        <% end %>
+      </div>
+    <% end %>
+    <hr/>
+    <%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
+      <% @specimen.children.each do |specimen| %>
+        <div class="row">
+          <div class="col-sm-2">
+            <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
+            <%= specimen.decorate.status_icon %>
+            <%= link_to_if can?(:read, specimen), specimen.name, specimen, class: specimen_ghost(specimen) %>
+          </div>
+          <div class="col-sm-2">
+            <%= specimen.physical_form.try!(:name) %>
+          </div>
+          <div class="col-sm-2">
+            <%= specimen.try!(:quantity) %>
+            <%= specimen.try!(:quantity_unit) %>
+          </div>
+          <div class="col-sm-5">
+          <%= specimen.try!(:global_id) %>
+          </div>
+          <div class="col-sm-1">            
+              <%= link_to specimen_daughter_path(@specimen, specimen) + tab_param(__FILE__), method: :delete, title: "unlink specimen", data: {confirm: t("confirm.unlink")} do %>
+                <span class="glyphicon glyphicon-remove"></span>
+              <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+    <div class="row">
+      <%= form_tag link_by_global_id_specimen_daughters_path(@specimen), method: :post do %>
+        <%= hidden_tabname_tag(__FILE__) %>
+        <div class="col-sm-offset-6 col-sm-5">
+          <div class="input-group">
+            <%= text_field_tag :global_id, nil, id: "daughter-global-id", class: "form-control input-sm" %>
+            <span class="input-group-addon">
+              <%= link_to specimens_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#daughter-global-id" do %>
+                <span class="glyphicon glyphicon-search"></span>
+              <% end %>
+            </span>
+          </div>
+        </div>
+        <div class="col-sm-1">            
+          <%= button_tag title: "link specimen by global id", class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+        </div>
+      <% end %>
     </div>
+    <% unless @specimen.children.empty? %>
+      <div class="row">
+        <div class="col-sm-2">
+              <%= check_box_tag nil, nil, false, class: "select-row-all" %>
+              <%= link_to_function "edit", "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>
 

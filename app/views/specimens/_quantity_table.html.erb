@@ -5,18 +5,18 @@
       <thead>
         <tr>
           <th>date</th>
-          <th>quantity</th>
           <th>target</th>          
           <th>operation</th>
+          <th>quantity</th>
         </tr>
       </thead>
       <tbody>
         <% data.each do |row| %>
           <tr>
             <td><%= row[:date_str] %></td>          
-            <td><%= row[:quantity_str] %></td>
             <td><%= row[:before_specimen].presence ? link_to(row[:before_specimen_name], row[:before_specimen]) : "-" %></td>            
             <td><%= row[:comment] %></td>
+            <td><%= row[:quantity_str] %></td>
           </tr>
         <% end %>
       </tbody>
