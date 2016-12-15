@@ -74,6 +74,7 @@ class Specimen < ActiveRecord::Base
   validate :status_is_nomal, on: :divide
 
   def status
+    return unless record_property
     if record_property.disposed
       Status::DISPOSAL
     elsif record_property.lost
@@ -104,7 +105,7 @@ class Specimen < ActiveRecord::Base
   end
 
   def ghost?
-    quantity && quantity < 0
+    quantity && quantity <= 0 || [Status::DISAPPEARANCE, Status::DISPOSAL, Status::LOSS].include?(status)
   end
 
   def related_spots

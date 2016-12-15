@@ -963,7 +963,7 @@ describe SpecimenDecorator do
       let(:column_name){ "name" }
       it do
         expect(subject).to eq(
-          "<a class=\"\" href=\"/specimens/#{specimen.id}\">specimen1</a>"
+          "<a class=\" ghost\" href=\"/specimens/#{specimen.id}\">specimen1</a>"
         )
       end
     end
@@ -1072,7 +1072,7 @@ describe SpecimenDecorator do
   end
 
   describe ".path" do
-    let(:me){"<span class=\"glyphicon glyphicon-cloud\"></span><span class=\"glyphicon glyphicon-\"></span>#{obj.name}"}
+    let(:me){"<span class=\"glyphicon glyphicon-cloud\"></span><span class=\"glyphicon glyphicon-\" title=\"status:\"></span>#{obj.name}"}
     subject{obj.path}
     before { allow(obj.h).to receive(:can?).and_return(true) }
     context "box is nil" do
@@ -1451,19 +1451,19 @@ describe SpecimenDecorator do
     end
     context "undetermined quantity" do
       before { obj.update_attributes(quantity: "", quantity_unit: "") }
-      it { expect(subject).to eq("Undetermined quantity") }
+      it { expect(subject).to eq("unknown") }
     end
     context "disappearance" do
       before { obj.update_attributes(quantity: "0", quantity_unit: "kg") }
-      it { expect(subject).to eq("Disappearance") }
+      it { expect(subject).to eq("disappeared") }
     end
     context "disposal" do
       before { obj.record_property.update_attributes(disposed: true) }
-      it { expect(subject).to eq("Disposal") }
+      it { expect(subject).to eq("disposed") }
     end
     context "loss" do
       before { obj.record_property.update_attributes(lost: true) }
-      it { expect(subject).to eq("Loss") }
+      it { expect(subject).to eq("lost") }
     end
   end
 
@@ -1471,23 +1471,23 @@ describe SpecimenDecorator do
     subject { obj.status_icon }
     context "normal" do
       before { obj.update_attributes(quantity: 0.5, quantity_unit: "mg") }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-\"></span>") }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-\" title=\"status:\"></span>") }
     end
     context "undetermined quantity" do
       before { obj.update_attributes(quantity: "", quantity_unit: "") }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-question-sign\"></span>") }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-question-sign\" title=\"status:unknown\"></span>") }
     end
     context "disappearance" do
       before { obj.update_attributes(quantity: "0", quantity_unit: "kg") }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-ghost\"></span>") }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-minus-sign\" title=\"status:disappeared\"></span>") }
     end
     context "disposal" do
       before { obj.record_property.update_attributes(disposed: true) }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-trash\"></span>") }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-trash\" title=\"status:disposed\"></span>") }
     end
     context "loss" do
       before { obj.record_property.update_attributes(lost: true) }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-eye-close\"></span>") }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-warning-sign\" title=\"status:lost\"></span>") }
     end
   end
 

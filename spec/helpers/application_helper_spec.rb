@@ -162,7 +162,7 @@ describe ApplicationHelper do
       end
       context "quantity = 0" do
         let(:quantity) { 0 }
-        it { expect(subject).to eq "test" }
+        it { expect(subject).to eq "test ghost" }
       end
       context "quantity > 0" do
         let(:quantity) { 1 }

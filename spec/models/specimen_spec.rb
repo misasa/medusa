@@ -573,7 +573,7 @@ describe Specimen do
     end
   end
 
-  describe "#ghost" do
+  describe "#ghost", :current => true do
     let(:specimen) { FactoryGirl.build(:specimen, quantity: quantity) }
     context "quantity is null" do
       let(:quantity) { nil }
@@ -585,7 +585,7 @@ describe Specimen do
     end
     context "quantity equals zero" do
       let(:quantity) { 0 }
-      it { expect(specimen).to_not be_ghost }
+      it { expect(specimen).to be_ghost }
     end
     context "quantity less than zero" do
       let(:quantity) { -1 }

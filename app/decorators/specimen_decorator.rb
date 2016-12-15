@@ -5,18 +5,18 @@ class SpecimenDecorator < Draper::Decorator
 
   STATUS_NAME = {
     Specimen::Status::NORMAL => "",
-    Specimen::Status::UNDETERMINED_QUANTITY => "Undetermined quantity",
-    Specimen::Status::DISAPPEARANCE => "Disappearance",
-    Specimen::Status::DISPOSAL => "Disposal",
-    Specimen::Status::LOSS => "Loss"
+    Specimen::Status::UNDETERMINED_QUANTITY => "unknown",
+    Specimen::Status::DISAPPEARANCE => "disappeared",
+    Specimen::Status::DISPOSAL => "disposed",
+    Specimen::Status::LOSS => "lost"
   }
 
   STATUS_ICON_NAME = {
     Specimen::Status::NORMAL => "",
     Specimen::Status::UNDETERMINED_QUANTITY => "question-sign",
-    Specimen::Status::DISAPPEARANCE => "ghost",
+    Specimen::Status::DISAPPEARANCE => "minus-sign",
     Specimen::Status::DISPOSAL => "trash",
-    Specimen::Status::LOSS => "eye-close"
+    Specimen::Status::LOSS => "warning-sign"
   }
 
   class << self
@@ -445,7 +445,7 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def status_icon(in_list_include=false)
-    h.content_tag(:span, nil, class: (in_list_include ? "glyphicon glyphicon-#{STATUS_ICON_NAME[status]} glyphicon-active-color" : "glyphicon glyphicon-#{STATUS_ICON_NAME[status]}"))
+    h.content_tag(:span, nil, title: "status:" + STATUS_NAME[status], class: (in_list_include ? "glyphicon glyphicon-#{STATUS_ICON_NAME[status]} glyphicon-active-color" : "glyphicon glyphicon-#{STATUS_ICON_NAME[status]}"))
   end
 
   private
