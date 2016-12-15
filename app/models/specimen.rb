@@ -81,7 +81,7 @@ class Specimen < ActiveRecord::Base
       Status::LOSS
     elsif quantity.blank? || decimal_quantity < 0
       Status::UNDETERMINED_QUANTITY
-    elsif decimal_quantity.zero?
+    elsif decimal_quantity_was.zero?
       Status::DISAPPEARANCE
     else
       Status::NORMAL
@@ -263,7 +263,7 @@ class Specimen < ActiveRecord::Base
   end
 
   def status_is_nomal
-    unless status == Status::NORMAL
+    unless [Status::NORMAL, Status::UNDETERMINED_QUANTITY].include?(status)
       errors.add(:status, " is not normal")
     end
   end
