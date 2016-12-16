@@ -74,7 +74,7 @@
         </tr>
       </tfoot>
     </table>
-    <%= link_to_function "edit", "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
+    <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
   </div>
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @box.to_tex(@alias_specimen) %></code></pre>
