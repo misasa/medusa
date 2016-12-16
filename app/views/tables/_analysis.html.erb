@@ -10,6 +10,7 @@
     <b><%= table_specimen.specimen.name %></b>
     <ul class="table-analyses">
       <% @table.table_analyses.where(specimen_id: table_specimen.specimen_id).includes(analysis: [:technique, :device]).each do |table_analysis| %>
+        <% next unless table_analysis.analysis %>
 	<li class="row list-unstyled">
 	  <div class="col-lg-6">
 	    <%= f.fields_for :table_analyses, table_analysis do |g| %>
