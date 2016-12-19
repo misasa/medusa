@@ -1,29 +1,6 @@
 <div class="display-type">
   <div id="display-type-html">
-
-    <%= form_for @divide_specimen, url: divide_specimen_path, remote: true, format: :json, html: { class: "update", role: "form", id: "divide_specimen" } do |f| %>
-      <div class="row">
-
-        <div class="col-sm-11 form-inline">
-          After operation <%= f.text_field :comment, placeholder: "ex) cut by saw", class: "form-control input-sm", size: 12 %>, 
-          <span id="original"><%= @specimen.quantity_with_unit %><span> will be
-          <%= f.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", size: 5, readonly: true %>
-          <div class="btn-group" data-toggle="buttons">
-            <%= label_tag :manual, class: "btn btn-default btn-sm" do %>
-              <%= check_box_tag :manual, true, false, autocomplete: "off" %>
-              <span class="glyphicon glyphicon-minus"></span>
-            <% end %>
-          </div>
-          
-          <%#= f.text_field :quantity_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_unit", readonly: true %>
-          Note: Loss on this operation is <span id="divided_loss">0.0 g</span>.
-        </div>
-        <div class="col-sm-1">
-          <%= f.button class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-save"></span>
-          <% end %>
-        </div>        
-      </div>
+    <%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
       <div class="row">
         <div  class="col-sm-2">
           name
@@ -35,18 +12,6 @@
           quantity
         </div>
       </div>
-
-
-      <div class="children">
-        <%= f.fields_for :children do |c| %>
-          <% if c.object.id.nil? %>
-            <%= render 'child_field', f: c %>
-          <% end %>
-        <% end %>
-      </div>
-    <% end %>
-    <hr/>
-    <%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
       <% @specimen.children.each do |specimen| %>
         <div class="row">
           <div class="col-sm-2">
@@ -73,9 +38,16 @@
       <% end %>
     <% end %>
     <div class="row">
+      <div class="col-sm-2">
+        <% unless @specimen.children.empty? %>
+          <%= check_box_tag nil, nil, false, class: "select-row-all" %>
+          <%#= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
+          <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
+        <% end %>
+      </div>
       <%= form_tag link_by_global_id_specimen_daughters_path(@specimen), method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
-        <div class="col-sm-offset-6 col-sm-5">
+        <div class="col-sm-offset-4 col-sm-5">
           <div class="input-group">
             <%= text_field_tag :global_id, nil, id: "daughter-global-id", class: "form-control input-sm" %>
             <span class="input-group-addon">
@@ -92,13 +64,35 @@
         </div>
       <% end %>
     </div>
-    <% unless @specimen.children.empty? %>
+
+    <%= form_for @divide_specimen, url: divide_specimen_path, remote: true, format: :json, html: { class: "update", role: "form", id: "divide_specimen" } do |f| %>
+
+
+      <div class="children">
+        <%= f.fields_for :children do |c| %>
+          <% if c.object.id.nil? %>
+            <%= render 'child_field', f: c %>
+          <% end %>
+        <% end %>
+      </div>
       <div class="row">
-        <div class="col-sm-2">
-              <%= check_box_tag nil, nil, false, class: "select-row-all" %>
-              <%#= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
-              <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
+        <div class="col-sm-11 form-inline">
+          Have daughter by operation <%= f.text_field :comment, placeholder: "cut by saw", class: "form-control input-sm", size: 8 %>.
+          Quantity <span id="original"><%= (@specimen.quantity ? @specimen.quantity_with_unit : 'nil') %><span> and loss on operation will be
+          <%= f.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", size: 5, readonly: true %>
+          <div class="btn-group" data-toggle="buttons">
+            <%= label_tag :manual, class: "btn btn-default btn-sm" do %>
+              <%= check_box_tag :manual, true, false, autocomplete: "off" %>
+              <span class="glyphicon glyphicon-minus"></span>
+            <% end %>
+          </div>
+          and <span id="divided_loss">0.0 g</span>.
         </div>
+        <div class="col-sm-1">
+          <%= f.button class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+        </div>        
       </div>
     <% end %>
   </div>

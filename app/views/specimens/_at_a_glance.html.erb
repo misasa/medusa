@@ -24,7 +24,7 @@
       <%= li_if_exist("classification: ", @specimen.classification.try!(:full_name)) %>
       <%= li_if_exist("physical-form: ", @specimen.physical_form.try!(:name)) %>
       <%= li_if_exist("quantity (#{@specimen.quantity_unit}): ", @specimen.quantity) %>
-      <%= content_tag(:li, "status: #{@specimen.status_icon} (#{@specimen.status_name})", {}, false) if @specimen.status_name.present? %>
+      <%= content_tag(:li, "status: #{@specimen.status_name} #{@specimen.status_icon}", {}, false) if @specimen.status_name.present? %>
       <%= li_if_exist("age (#{@specimen.age_unit}): ", @specimen.age_in_text) %>
       <%= li_if_exist("tag list: ", @specimen.tag_list) %>
       <%= li_if_exist("description: ", @specimen.description) %>

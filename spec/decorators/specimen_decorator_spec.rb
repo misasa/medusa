@@ -1455,11 +1455,11 @@ describe SpecimenDecorator do
     end
     context "disappearance" do
       before { obj.update_attributes(quantity: "0", quantity_unit: "kg") }
-      it { expect(subject).to eq("disappeared") }
+      it { expect(subject).to eq("zero") }
     end
     context "disposal" do
       before { obj.record_property.update_attributes(disposed: true) }
-      it { expect(subject).to eq("disposed") }
+      it { expect(subject).to eq("trash") }
     end
     context "loss" do
       before { obj.record_property.update_attributes(lost: true) }
@@ -1479,11 +1479,11 @@ describe SpecimenDecorator do
     end
     context "disappearance" do
       before { obj.update_attributes(quantity: "0", quantity_unit: "kg") }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-ban-circle\" title=\"status:disappeared\"></span>") }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-ban-circle\" title=\"status:zero\"></span>") }
     end
     context "disposal" do
       before { obj.record_property.update_attributes(disposed: true) }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-trash\" title=\"status:disposed\"></span>") }
+      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-trash\" title=\"status:trash\"></span>") }
     end
     context "loss" do
       before { obj.record_property.update_attributes(lost: true) }

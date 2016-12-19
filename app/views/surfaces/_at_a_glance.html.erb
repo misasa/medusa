@@ -14,11 +14,14 @@
   <%= display_type_for 'html' %>
   <%= display_type_for 'tex' %>
   <%#= display_type_for 'plot' if Settings.rplot_url %>
+</div>
+
 <% if @surface.first_image %>
+<%= link_to "image", attachment_file_path(@surface.first_image) %>
+
 <%= link_to download_attachment_file_path(@surface.first_image), class: "btn btn-default" do %>
     <span class="glyphicon glyphicon-file"></span>
 <% end %>
-</div>
 
 
 <% end %>

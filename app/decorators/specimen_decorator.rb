@@ -6,8 +6,8 @@ class SpecimenDecorator < Draper::Decorator
   STATUS_NAME = {
     Specimen::Status::NORMAL => "",
     Specimen::Status::UNDETERMINED_QUANTITY => "unknown",
-    Specimen::Status::DISAPPEARANCE => "disappeared",
-    Specimen::Status::DISPOSAL => "disposed",
+    Specimen::Status::DISAPPEARANCE => "zero",
+    Specimen::Status::DISPOSAL => "trash",
     Specimen::Status::LOSS => "lost"
   }
 

@@ -10,13 +10,13 @@
   <% end %>
   <div class="row">  
     <div class="col-sm-2">
-      <%= f.text_field :name, placeholder: "name", class: "form-control input-sm" %>
+      <%= f.text_field :name, placeholder: @specimen.name, class: "form-control input-sm" %>
     </div>
     <div class="col-sm-2">
       <%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
     </div>
     <div class="col-sm-2">
-      <%= f.text_field :quantity_with_unit, placeholder: "ex) 10.0 g", class: "form-control input-sm quantity" %>
+      <%= f.text_field :quantity_with_unit, placeholder: "1 g", class: "form-control input-sm quantity" %>
       <%#= f.text_field :quantity, placeholder: "quantity", class: "form-control input-sm quantity" %>
       <%#= f.text_field :quantity_unit, class: "form-control input-sm quantity" %>
     </div>
