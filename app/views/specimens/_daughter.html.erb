@@ -2,6 +2,8 @@
   <div id="display-type-html">
     <%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
       <div class="row">
+        <div  class="col-sm-1">
+        </div>      
         <div  class="col-sm-2">
           name
         </div>
@@ -12,10 +14,13 @@
           quantity
         </div>
       </div>
+      <div class="daughter">
       <% @specimen.children.each do |specimen| %>
         <div class="row">
-          <div class="col-sm-2">
+          <div  class="col-sm-1">
             <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
+          </div>
+          <div class="col-sm-2">
             <%= specimen.decorate.status_icon %>
             <%= link_to_if can?(:read, specimen), specimen.name, specimen, class: specimen_ghost(specimen) %>
           </div>
@@ -26,7 +31,7 @@
             <%= specimen.try!(:quantity) %>
             <%= specimen.try!(:quantity_unit) %>
           </div>
-          <div class="col-sm-5">
+          <div class="col-sm-4">
           <%= specimen.try!(:global_id) %>
           </div>
           <div class="col-sm-1">            
@@ -36,18 +41,18 @@
           </div>
         </div>
       <% end %>
+      </div>
     <% end %>
     <div class="row">
       <div class="col-sm-2">
         <% unless @specimen.children.empty? %>
           <%= check_box_tag nil, nil, false, class: "select-row-all" %>
           <%#= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
-          <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
         <% end %>
       </div>
       <%= form_tag link_by_global_id_specimen_daughters_path(@specimen), method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
-        <div class="col-sm-offset-4 col-sm-5">
+        <div class="col-sm-offset-5 col-sm-4">
           <div class="input-group">
             <%= text_field_tag :global_id, nil, id: "daughter-global-id", class: "form-control input-sm" %>
             <span class="input-group-addon">
@@ -66,8 +71,6 @@
     </div>
 
     <%= form_for @divide_specimen, url: divide_specimen_path, remote: true, format: :json, html: { class: "update", role: "form", id: "divide_specimen" } do |f| %>
-
-
       <div class="children">
         <%= f.fields_for :children do |c| %>
           <% if c.object.id.nil? %>
@@ -76,9 +79,8 @@
         <% end %>
       </div>
       <div class="row">
-        <div class="col-sm-11 form-inline">
-          Have daughter by operation <%= f.text_field :comment, placeholder: "cut by saw", class: "form-control input-sm", size: 8 %>.
-          Quantity <span id="original"><%= (@specimen.quantity ? @specimen.quantity_with_unit : 'nil') %><span> and loss on operation will be
+        <div class="col-sm-offset-1 col-sm-10 form-inline">
+          Quantity <span id="original">(<%= (@specimen.quantity ? @specimen.quantity_with_unit : 'nil') %>)<span> and loss will be
           <%= f.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", size: 5, readonly: true %>
           <div class="btn-group" data-toggle="buttons">
             <%= label_tag :manual, class: "btn btn-default btn-sm" do %>
@@ -86,7 +88,7 @@
               <span class="glyphicon glyphicon-minus"></span>
             <% end %>
           </div>
-          and <span id="divided_loss">0.0 g</span>.
+          and <span id="divided_loss">0.0 g</span> by operation <%= f.text_field :comment, placeholder: "cut by saw", class: "form-control input-sm", size: 12 %>.
         </div>
         <div class="col-sm-1">
           <%= f.button class: "btn btn-default" do %>
@@ -95,6 +97,7 @@
         </div>        
       </div>
     <% end %>
+    <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
   </div>
 </div>
 
@@ -139,4 +142,10 @@
   $(document).on("succeed.ajaxForm", "#divide_specimen", function() {
     location.href="<% specimen_path(@specimen) %>";
   });
+
+  $(document).on("click", "input.select-row-all-div", function() {
+    $(document).find("input.select-row").prop("checked", $(this).prop("checked"));
+  });
+
+
 <% end %>
