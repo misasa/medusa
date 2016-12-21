@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161114065543) do
+ActiveRecord::Schema.define(version: 20161125055035) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -487,13 +487,12 @@ ActiveRecord::Schema.define(version: 20161114065543) do
     t.text     "description",                                         comment: "説明"
     t.string   "username",                               null: false, comment: "ユーザ名"
     t.integer  "box_id",                                              comment: "保管場所ID"
-    t.string   "staff_id",                                            comment: "職員ID"
-    t.string   "card_id",                                             comment: "カードID"
+    t.string   "api_key",                                             comment: "APIキー"
   end
 
+  add_index "users", ["api_key"], name: "index_users_on_api_key", unique: true, using: :btree
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
   add_index "users", ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
-  add_index "users", ["staff_id"], name: "index_users_on_staff_id", unique: true, using: :btree
   add_index "users", ["username"], name: "index_users_on_username", unique: true, using: :btree
 
 end
