@@ -1,6 +1,9 @@
 require "spec_helper"
 
 describe Specimen do
+  let(:user) { FactoryGirl.create(:user) }
+  before { User.current = user }
+
   describe "status" do
     let(:specimen){ FactoryGirl.create(:specimen) }
     subject { specimen.status }
