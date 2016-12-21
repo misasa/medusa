@@ -353,6 +353,7 @@ class SpecimenDecorator < Draper::Decorator
     name_str = name.presence || "[no name]"
     link = current ? h.content_tag(:strong, name_str, class: "text-primary bg-primary") : name_str
     html = icon(in_list_include) + h.link_to_if(h.can?(:read, self), link, self)
+    html += status_icon(in_list_include)
     html += children_count(current_type, in_list_include)
     html += analyses_count(current_type, in_list_include)
     html += bibs_count(current_type, in_list_include)
@@ -437,7 +438,8 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def icon(in_list_include=false)
-    h.content_tag(:span, nil, class: (in_list_include ? "glyphicon glyphicon-cloud glyphicon-active-color" : "glyphicon glyphicon-cloud")) + status_icon(in_list_include)
+#    h.content_tag(:span, nil, class: (in_list_include ? "glyphicon glyphicon-cloud glyphicon-active-color" : "glyphicon glyphicon-cloud")) + status_icon(in_list_include)
+    h.content_tag(:span, nil, class: (in_list_include ? "glyphicon glyphicon-cloud glyphicon-active-color" : "glyphicon glyphicon-cloud"))
   end
 
   def status_name

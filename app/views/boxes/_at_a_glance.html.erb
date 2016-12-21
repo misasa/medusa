@@ -2,7 +2,7 @@
   <%= li_if_exist("box type: ", @box.box_type.try!(:name)) %>
   <%= li_if_exist("quantity (#{@box.quantity_unit}): ", @box.quantity) %>
   <% total_decimal_quantity = @box.total_decimal_quantity %>
-  <li><%= "Box total quantity (#{Quantity.quantity_unit(total_decimal_quantity)}): #{Quantity.quantity(total_decimal_quantity)}" %></li>
+  <li><%= "Box total quantity: #{Quantity.quantity(total_decimal_quantity)} #{Quantity.quantity_unit(total_decimal_quantity)}" %></li>
   <%= li_if_exist("tag list: ", @box.tag_list) %>
   <li>updated-at: <%= difference_from_now(@box.updated_at) %></li>
   <%= li_if_exist("bib:", @box.bibs_with_link) %>
