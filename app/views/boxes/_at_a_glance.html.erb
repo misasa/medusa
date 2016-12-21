@@ -1,6 +1,6 @@
 <ul>
   <%= li_if_exist("box type: ", @box.box_type.try!(:name)) %>
-  <%= li_if_exist("quantity (#{@box.quantity_unit}): ", @box.quantity) %>
+  <%= li_if_exist("quantity: ", @box.quantity_with_unit) %>
   <% total_decimal_quantity = @box.total_decimal_quantity %>
   <li><%= "Box total quantity: #{Quantity.quantity(total_decimal_quantity)} #{Quantity.quantity_unit(total_decimal_quantity)}" %></li>
   <%= li_if_exist("tag list: ", @box.tag_list) %>
