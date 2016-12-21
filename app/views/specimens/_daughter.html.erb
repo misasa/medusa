@@ -80,7 +80,7 @@
       </div>
       <div class="row">
         <div class="col-sm-offset-1 col-sm-10 form-inline">
-          Quantity <span id="original">(<%= (@specimen.quantity ? @specimen.quantity_with_unit : 'nil') %>)<span> and loss will be
+          Quantity <span id="original">(<%= (@specimen.quantity ? @specimen.quantity_with_unit : 'nil') %>)<span> is 
           <%= f.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", size: 5, readonly: true %>
           <div class="btn-group" data-toggle="buttons">
             <%= label_tag :manual, class: "btn btn-default btn-sm" do %>
@@ -88,7 +88,9 @@
               <span class="glyphicon glyphicon-minus"></span>
             <% end %>
           </div>
-          and <span id="divided_loss">0.0 g</span> by operation <%= f.text_field :comment, placeholder: "cut by saw", class: "form-control input-sm", size: 12 %>.
+          and loss is
+          <span id="divided_loss">0.0 g</span>
+          after operation <%= f.text_field :comment, placeholder: "cut by saw", class: "form-control input-sm", size: 12 %>.
         </div>
         <div class="col-sm-1">
           <%= f.button class: "btn btn-default" do %>
