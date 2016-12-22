@@ -173,10 +173,15 @@ class RecordsController < ApplicationController
 
   # Set reserved word at search
   def reserved_params
-    reserved_params = {}
-    if params[:q] && params[:q][:name_or_global_id_cont].include?("##delete")
-      reserved_params[:disposed_eq] = "true"
+    if params[:q] && params[:q][:name_or_global_id_cont] =~ /\A##(\w+)\z/
+      case $1
+      when "delete"
+        { disposed_eq: "true" }
+      else
+        params[:q]
+      end
+    else
+      params[:q]
     end
-    reserved_params.presence || params[:q]
   end
 end
