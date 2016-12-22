@@ -3,11 +3,12 @@ module TreeViewHelper
   def tree(hash, classes: [], key: nil, depth: 1, in_list: [] , &block)
     blank = capture { "" }
     return blank unless hash[key]
-    hash[key].inject(blank) do |str, obj|
-      tree_nodes = classes.any?{|klass| obj.is_a?(klass) } ? tree(hash, classes: classes, key: obj.record_property_id, depth: depth + 1, in_list: in_list, &block) : ""
-      html = str + tree_node(obj, depth, &block)
-      html += content_tag(:div, tree_nodes, class: (in_list.include?(obj) ? "collapse in" : "collapse"), id: "tree-#{obj.record_property_id}")
-      html
+    hash[key].inject(blank) do |str, (klass, objects)|
+      tree_nodes = objects.inject(blank) do |str, obj|
+        node_item = classes.include?(klass) ? tree(hash, classes: classes, key: obj.record_property_id, depth: depth + 1, in_list: in_list, &block) : ""
+        str + tree_node(obj, depth, &block) + node_item
+      end
+      str + content_tag(:div, tree_nodes, class: (in_list.any?{|obj| obj.try(:record_property_id) == key } ? "collapse in" : "collapse"), id: "tree-#{klass}-#{key}")
     end
   end
 
@@ -26,8 +27,7 @@ module TreeViewHelper
     content_tag(:span, nil, class: "glyphicon glyphicon-arrow-right")
   end
 
-  def icon_with_count(icon, count)
-    content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}") + content_tag(:span, count) if count.nonzero?
+  def icon_with_count(klass, count)
+    "#{klass}Decorator".constantize.icon + h.content_tag(:span, count) if count.nonzero?
   end
-
 end

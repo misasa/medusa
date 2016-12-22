@@ -6,6 +6,11 @@ describe AttachmentFileDecorator do
   let(:attachment_file){FactoryGirl.create(:attachment_file).decorate}
   before{User.current = user}
 
+  describe "icon" do
+    subject { AttachmentFileDecorator.icon }
+    it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-file\"></span>") }
+  end
+
   describe ".picture" do
     let(:picture) { attachment_file.picture(width: width, height: height) }
     let(:capybara) { Capybara.string(picture) }

@@ -3,6 +3,10 @@ class BibDecorator < Draper::Decorator
   delegate_all
   delegate :as_json
 
+  def self.icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+  end
+
   def primary_picture(width: 250, height: 250)
     attachment_files.first.decorate.picture(width: width, height: height) if attachment_files.present?
   end
@@ -22,27 +26,27 @@ class BibDecorator < Draper::Decorator
   end
 
   def specimens_count
-    h.icon_with_count("cloud", specimens.count)
+    h.icon_with_count(Specimen, specimens.count)
   end
 
   def boxes_count
-    h.icon_with_count("folder-close", boxes.count)
+    h.icon_with_count(Box, boxes.count)
   end
 
   def analyses_count
-    h.icon_with_count("stats", specimens.inject(0) {|count, specimen| count += specimen.analyses.size })
+    h.icon_with_count(Analysis, specimens.inject(0) {|count, specimen| count += specimen.analyses.size })
   end
 
   def places_count
-    h.icon_with_count("stats", places.count )
+    h.icon_with_count(Place, places.count)
   end
 
   def files_count
-    h.icon_with_count("stats", attachment_files.count )
+    h.icon_with_count(AttachmentFile, attachment_files.count)
   end
 
   def icon
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+    self.class.icon
   end
   # def as_json(options = {})
   #   super({:methods => [:author_ids, :global_id]}.merge(options))

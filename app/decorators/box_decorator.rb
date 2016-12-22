@@ -2,7 +2,11 @@
 class BoxDecorator < Draper::Decorator
   delegate_all
   delegate :as_json
-  
+
+  def self.icon(in_list_include=false)
+    h.content_tag(:span, nil, class: in_list_include ? "glyphicon glyphicon-folder-open" : "glyphicon glyphicon-folder-close")
+  end
+
   def name_with_id
     h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + " #{name} < #{global_id} >"
   end
@@ -16,7 +20,7 @@ class BoxDecorator < Draper::Decorator
   end
 
   def family_tree
-    in_list = [object]
+    in_list = [object, object.parent]
     classes = [Box, Specimen]
     h.tree(current_box_hash, classes: classes, key: parent.try(:record_property_id), in_list: in_list) do |obj|
       obj.decorate.tree_node(current: (self == obj), current_type: (object.class == obj.class), in_list_include: in_list.include?(obj))
@@ -24,14 +28,56 @@ class BoxDecorator < Draper::Decorator
   end
 
   def current_box_hash
-    boxes = [object].concat(descendants)
-    h = Hash.new {|h, k| h[k] = Array.new }
-    h.merge!(boxes.group_by{|box| box.parent.try(:record_property_id) })
-    boxes.each_with_object(h) do |box, hash|
-      hash[box.record_property_id] += box.specimens + box.bibs + box.attachment_files
-      box.specimens.each do |specimen|
-        hash[specimen.record_property_id] += specimen.analyses + specimen.bibs + specimen.attachment_files
+    hash = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = Array.new } }
+    hash[object.parent.try(:record_property_id)][Box] = [object]
+    hash[object.record_property_id][Box] = object.children
+    hash[object.record_property_id][Specimen] = object.specimens
+    hash[object.record_property_id][Bib] = object.bibs
+    hash[object.record_property_id][AttachmentFile] = object.attachment_files
+    children.each do |box|
+      hash[box.record_property_id][Box] = []
+      hash[box.record_property_id][Specimen] = []
+      hash[box.record_property_id][Bib] = []
+      hash[box.record_property_id][AttachmentFile] = []
+    end
+    object.specimens.each do |specimen|
+      hash[specimen.record_property_id][Analysis] = []
+      hash[specimen.record_property_id][Bib] = []
+      hash[specimen.record_property_id][AttachmentFile] = []
+    end
+    hash
+  end
+
+  def tree_nodes(klass, depth)
+    hash = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = Array.new } }
+    objects = []
+    if klass == Box
+      objects = children
+      objects.each do |box|
+        hash[box.record_property_id][Box] = []
+        hash[box.record_property_id][Specimen] = []
+        hash[box.record_property_id][Bib] = []
+        hash[box.record_property_id][AttachmentFile] = []
       end
+    elsif klass == Specimen
+      objects = specimens
+      objects.each do |specimen|
+        hash[specimen.record_property_id][Analysis] = []
+        hash[specimen.record_property_id][Bib] = []
+        hash[specimen.record_property_id][AttachmentFile] = []
+      end
+    elsif klass == Bib
+      objects = bibs
+    elsif klass == AttachmentFile
+      objects = attachment_files
+    else
+      return ""
+    end
+    hash[record_property_id][klass] = objects
+    in_list = [object]
+    classes = [Box, Specimen]
+    h.tree(hash, classes: classes, key: record_property_id, in_list: in_list, depth: depth) do |obj|
+      obj.decorate.tree_node(current_type: (object.class == obj.class))
     end
   end
 
@@ -47,22 +93,22 @@ class BoxDecorator < Draper::Decorator
 
   def specimens_count(current_type=false, in_list_include=false)
     if current_type
-      icon_with_badge_count("cloud", specimens.count, in_list_include)
+      icon_with_badge_count(Specimen, specimens.count, in_list_include)
     else
-      icon_with_count("cloud", specimens.count, in_list_include)
+      icon_with_count(Specimen, specimens.count)
     end
   end
 
   def boxes_count(current_type=false, in_list_include=false)
     if current_type
-      icon_with_badge_count("folder-close", children.size, in_list_include)
+      icon_with_badge_count(Box, children.size, in_list_include)
     else
-      icon_with_count("folder-close", children.count, in_list_include)
+      icon_with_count(Box, children.count)
     end
   end
 
   def analyses_count
-    icon_with_count("stats", specimens.inject(0) {|count, specimen| count += specimen.analyses.size })
+    icon_with_count(Analysis, specimens.inject(0) {|count, specimen| count += specimen.analyses.size })
   end
 
   def bibs_with_link
@@ -79,17 +125,17 @@ class BoxDecorator < Draper::Decorator
 
   def bibs_count(current_type=false, in_list_include=false)
     if current_type
-      icon_with_badge_count("book", bibs.count, in_list_include)
+      icon_with_badge_count(Bib, bibs.count, in_list_include)
     else
-      icon_with_count("book", bibs.count, in_list_include)
+      icon_with_count(Bib, bibs.count)
     end
   end
 
   def files_count(current_type=false, in_list_include=false)
     if current_type
-      icon_with_badge_count("file", attachment_files.count, in_list_include)
+      icon_with_badge_count(AttachmentFile, attachment_files.count, in_list_include)
     else
-      icon_with_count("file", attachment_files.count, in_list_include)
+      icon_with_count(AttachmentFile, attachment_files.count)
     end
   end
 
@@ -143,7 +189,7 @@ class BoxDecorator < Draper::Decorator
 
 
   def icon(in_list_include=false)
-    h.content_tag(:span, nil, class: (in_list_include ? "box glyphicon glyphicon-folder-open glyphicon-active-color" : "box glyphicon glyphicon-folder-close"))
+    h.content_tag(:span, self.class.icon(in_list_include), class: (in_list_include ? "box glyphicon-active-color" : "box"))
   end
 
 
@@ -167,18 +213,15 @@ class BoxDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + h.link_to_if(h.can?(:read, box), box.name, box)
   end
 
-  def icon_with_count(icon, count, in_list_include=false)
-    if count.nonzero?
-      html = h.content_tag(:span, nil, class: (in_list_include ? "glyphicon glyphicon-#{icon} glyphicon-active-color" : "glyphicon glyphicon-#{icon}"))
-      html += h.content_tag(:span, count)
-    end
+  def icon_with_count(klass, count)
+    "#{klass}Decorator".constantize.icon + h.content_tag(:span, count) if count.nonzero?
   end
 
-  def icon_with_badge_count(icon, count, in_list_include=false)
-    if count > 0
-      badge = h.content_tag(:span, count, class: (in_list_include ? "badge badge-active" : "badge"))
-      html = h.content_tag(:span, nil, class: (in_list_include ? "glyphicon glyphicon-#{icon} glyphicon-active-color" : "glyphicon glyphicon-#{icon}"))
-      html += h.content_tag(:a, badge, href: "#tree-#{record_property_id}", :"data-toggle" => "collapse", class: "collapse-active")
+  def icon_with_badge_count(klass, count, in_list_include=false)
+    if count.nonzero?
+      badge = h.content_tag(:span, count, :"data-klass" => "#{klass}", :"data-record_property_id" => record_property_id, class: (in_list_include ? "badge badge-active" : "badge"))
+      html = h.content_tag(:span, "#{klass}Decorator".constantize.try(:icon), class: (in_list_include ? "glyphicon-active-color" : ""))
+      html += h.content_tag(:a, badge, href: "#tree-#{klass}-#{record_property_id}", :"data-toggle" => "collapse", class: "collapse-active")
     end
   end
 end

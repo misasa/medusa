@@ -2,7 +2,10 @@
 class AttachmentFileDecorator < Draper::Decorator
   delegate_all
   delegate :as_json
-  
+
+  def self.icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-file")
+  end
 
   def name_with_id
     tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-file") + " #{name} < #{global_id} >"
@@ -12,9 +15,8 @@ class AttachmentFileDecorator < Draper::Decorator
     tag
   end
 
-
   def icon
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-file")
+    self.class.icon
   end
 
   def picture_with_spots(width: 250, height: 250, spots: [], with_cross: false)
@@ -163,23 +165,23 @@ class AttachmentFileDecorator < Draper::Decorator
   end
 
   def specimens_count
-    icon_with_count("cloud", specimens.count)
+    icon_with_count(Specimen, specimens.count)
   end
 
   def boxes_count
-    icon_with_count("folder-close", boxes.count)
+    icon_with_count(Box, boxes.count)
   end
 
   def analyses_count
-    icon_with_count("stats", analyses.size)
+    icon_with_count(Analysis, analyses.size)
   end
 
   def bibs_count
-    icon_with_count("book", bibs.count)
+    icon_with_count(Bib, bibs.count)
   end
 
   def files_count
-    icon_with_count("file", attachment_files.count)
+    icon_with_count(AttachmentFile, attachment_files.count)
   end
 
   def image_link(width: 40, height: 40)
@@ -228,7 +230,7 @@ class AttachmentFileDecorator < Draper::Decorator
 
   private
 
-  def icon_with_count(icon, count)
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}") + h.content_tag(:span, count) if count.nonzero?
+  def icon_with_count(klass, count)
+    "#{klass}Decorator".constantize.icon + h.content_tag(:span, count) if count.nonzero?
   end
 end

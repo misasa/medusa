@@ -5,6 +5,11 @@ describe SpotDecorator do
   let(:spot){ FactoryGirl.create(:spot, target_uid: target_uid).decorate }
   before{User.current = user}
 
+  describe "icon" do
+    subject { SpotDecorator.icon }
+    it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-screenshot\"></span>") }
+  end
+
   describe ".taget_link" do
     subject{ spot.target_link }
     context "target_uid is nil" do

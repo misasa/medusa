@@ -19,7 +19,13 @@ class SpecimenDecorator < Draper::Decorator
     Specimen::Status::LOSS => "warning-sign"
   }
 
+
+
   class << self
+    def icon
+      h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
+    end
+
     def search_name(column)
       SearchColumnType.val(Specimen, column.name).search_name
     end
@@ -342,10 +348,37 @@ class SpecimenDecorator < Draper::Decorator
     # list.uniq!
     # relatives = families.select{|e| list.include?(e) }
 #    h.tree(relatives_for_tree.group_by(&:parent_id)) do |obj|
-    in_list = [object].concat(ancestors)
-    current_specimen_hash = families.group_by{|specimen| specimen.parent.try(:record_property_id) }
+    in_list = [object, nil].concat(ancestors)
     h.tree(current_specimen_hash, classes: [Specimen], in_list: in_list) do |obj|
       obj.decorate.tree_node(current: object == obj, current_type: (object.class == obj.class), in_list_include: in_list.include?(obj))
+    end
+  end
+
+  def current_specimen_hash
+    h = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = Array.new } }
+    h[nil][Specimen] = [root]
+    families.each_with_object(h) do |specimen, hash|
+      hash[specimen.record_property_id][Specimen] = specimen.children
+    end
+  end
+
+  def tree_nodes(klass, depth)
+    hash = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = Array.new } }
+    objects = []
+    if klass == Analysis
+      objects = analyses
+    elsif klass == Bib
+      objects = bibs
+    elsif klass == AttachmentFile
+      objects = attachment_files
+    else
+      return ""
+    end
+    hash[record_property_id][klass] = objects
+    in_list = [object]
+    classes = [Box, Specimen]
+    h.tree(hash, classes: classes, key: record_property_id, in_list: in_list, depth: depth) do |obj|
+      obj.decorate.tree_node(current_type: (object.class == obj.class))
     end
   end
 
@@ -363,7 +396,7 @@ class SpecimenDecorator < Draper::Decorator
 
   def children_count(current_type=false, in_list_include=false)
     if current_type
-      icon_with_badge_count("cloud", children.size, in_list_include)
+      icon_with_badge_count(Specimen, children.size, in_list_include)
     else
       ""
     end
@@ -371,25 +404,25 @@ class SpecimenDecorator < Draper::Decorator
 
   def analyses_count(current_type=false, in_list_include=false)
     if current_type
-      icon_with_count("stats", analyses.count, in_list_include)
+      icon_with_count(Analysis, analyses.count)
     else
-      icon_with_badge_count("stats", analyses.count, in_list_include)
+      icon_with_badge_count(Analysis, analyses.count, in_list_include)
     end
   end
 
   def bibs_count(current_type=false, in_list_include=false)
     if current_type
-      icon_with_count("book", bibs.count, in_list_include)
+      icon_with_count(Bib, bibs.count)
     else
-      icon_with_badge_count("book", bibs.count, in_list_include)
+      icon_with_badge_count(Bib, bibs.count, in_list_include)
     end
   end
 
   def files_count(current_type=false, in_list_include=false)
     if current_type
-      icon_with_count("file", attachment_files.count, in_list_include)
+      icon_with_count(AttachmentFile, attachment_files.count)
     else
-      icon_with_badge_count("file", attachment_files.count, in_list_include)
+      icon_with_badge_count(AttachmentFile, attachment_files.count, in_list_include)
     end
   end
 
@@ -438,8 +471,7 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def icon(in_list_include=false)
-#    h.content_tag(:span, nil, class: (in_list_include ? "glyphicon glyphicon-cloud glyphicon-active-color" : "glyphicon glyphicon-cloud")) + status_icon(in_list_include)
-    h.content_tag(:span, nil, class: (in_list_include ? "glyphicon glyphicon-cloud glyphicon-active-color" : "glyphicon glyphicon-cloud"))
+    h.content_tag(:span, self.class.icon, class: (in_list_include ? "glyphicon-active-color" : ""))
   end
 
   def status_name
@@ -447,7 +479,8 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def status_icon(in_list_include=false)
-    h.content_tag(:span, nil, title: "status:" + STATUS_NAME[status], class: (in_list_include ? "glyphicon glyphicon-#{STATUS_ICON_NAME[status]} glyphicon-active-color" : "glyphicon glyphicon-#{STATUS_ICON_NAME[status]}"))
+    status_icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-#{STATUS_ICON_NAME[status]}")
+    h.content_tag(:span, status_icon, title: "status:" + status_name, class: (in_list_include ? "glyphicon-active-color" : ""))
   end
 
   private
@@ -589,18 +622,15 @@ class SpecimenDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + h.link_to_if(h.can?(:read, box), box.name, box)
   end
 
-  def icon_with_count(icon, count, in_list_include=false)
-    if count.nonzero?
-      html = h.content_tag(:span, nil, class: (in_list_include ? "glyphicon glyphicon-#{icon} glyphicon-active-color" : "glyphicon glyphicon-#{icon}"))
-      html += h.content_tag(:span, count)
-    end
+  def icon_with_count(klass, count)
+    "#{klass}Decorator".constantize.icon + h.content_tag(:span, count) if count.nonzero?
   end
 
-  def icon_with_badge_count(icon, count, in_list_include=false)
-    if count > 0
-      badge = h.content_tag(:span, count, class: (in_list_include ? "badge badge-active" : "badge"))
-      html = h.content_tag(:span, nil, class: (in_list_include ? "glyphicon glyphicon-#{icon} glyphicon-active-color" : "glyphicon glyphicon-#{icon}"))
-      html += h.content_tag(:a, badge, href: "#tree-#{record_property_id}", :"data-toggle" => "collapse", class: "collapse-active")
+  def icon_with_badge_count(klass, count, in_list_include=false)
+    if count.nonzero?
+      badge = h.content_tag(:span, count, :"data-klass" => "#{klass}", :"data-record_property_id" => record_property_id, class: (in_list_include ? "badge badge-active" : "badge"))
+      html = h.content_tag(:span, "#{klass}Decorator".constantize.try(:icon), class: (in_list_include ? "glyphicon-active-color" : ""))
+      html += h.content_tag(:a, badge, href: "#tree-#{klass}-#{record_property_id}", :"data-toggle" => "collapse", class: "collapse-active")
     end
   end
 end

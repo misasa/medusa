@@ -5,6 +5,19 @@ describe BoxDecorator do
   let(:obj){FactoryGirl.create(:box).decorate}
   before{User.current = user}
 
+  describe "icon" do
+    subject { BoxDecorator.icon }
+    it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-folder-close\"></span>") }
+    context "in_list_include is true" do
+      subject { BoxDecorator.icon(true) }
+      it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-folder-open\"></span>") }
+    end
+    context "in_list_include is false" do
+      subject { BoxDecorator.icon(false) }
+      it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-folder-close\"></span>") }
+    end
+  end
+
   describe ".to_json", :current => true do
     subject{obj.to_json}
     it{ expect(subject).to include "global_id" }
@@ -53,11 +66,11 @@ describe BoxDecorator do
       obj.children << child
     end
     it{expect(subject).to match("<div class=\"tree-node\" data-depth=\"1\">.*</div>")}
-    it{expect(subject).to include("<span class=\"box glyphicon glyphicon-folder-open glyphicon-active-color\"></span>")}
+    it{expect(subject).to include("<span class=\"box glyphicon-active-color\"><span class=\"glyphicon glyphicon-folder-open\"></span></span>")}
     it{expect(subject).to match("<a href=\"/boxes/#{obj.id}\">.*</a>")}
     it{expect(subject).to include("<strong class=\"text-primary bg-primary\">#{obj.name}</strong>")}
     it{expect(subject).to match("<div class=\"tree-node\" data-depth=\"2\">.*</div>")}
-    it{expect(subject).to include("<span class=\"box glyphicon glyphicon-folder-close\"></span>")}
+    it{expect(subject).to include("<span class=\"box\"><span class=\"glyphicon glyphicon-folder-close\"></span></span>")}
     it{expect(subject).to match("<a href=\"/boxes/#{child.id}\">.*</a>")}
     it{expect(subject).to include("#{child.name}")}
     context "box linked specimen" do
@@ -68,6 +81,92 @@ describe BoxDecorator do
     end
     context "box not link specimen" do
       it{expect(subject).not_to include("#{specimen.name}")}
+    end
+  end
+
+  describe "tree_nodes" do
+    let(:box) { FactoryGirl.create(:box, name: "test_1") }
+    let(:specimen) { FactoryGirl.create(:specimen, name: "test_2") }
+    let(:bib) { FactoryGirl.create(:bib, name: "test_3") }
+    let(:attachment_file) { FactoryGirl.create(:attachment_file, name: "test_4", data_file_name: "test_4.jpg") }
+    let(:analysis) { FactoryGirl.create(:analysis, name: "test_5") }
+    before do
+      sign_in user
+      obj.children << box
+      obj.specimens << specimen
+      obj.bibs << bib
+      obj.attachment_files << attachment_file
+    end
+    subject { obj.tree_nodes(klass, 10) }
+    context "klass is Box" do
+      let(:klass) { Box }
+      it do
+        expect(subject).to eq(
+          "<div class=\"collapse in\" id=\"tree-#{klass}-#{obj.record_property_id}\">"\
+          + "<div class=\"tree-node\" data-depth=\"10\">"\
+          + "<span class=\"box\">"\
+          + "<span class=\"glyphicon glyphicon-folder-close\"></span>"\
+          + "</span>"\
+          + "<a href=\"/boxes/#{box.id}\">test_1</a>"\
+          + "</div>"\
+          + "<div class=\"collapse\" id=\"tree-Box-#{box.record_property_id}\"></div>"\
+          + "<div class=\"collapse\" id=\"tree-Specimen-#{box.record_property_id}\"></div>"\
+          + "<div class=\"collapse\" id=\"tree-Bib-#{box.record_property_id}\"></div>"\
+          + "<div class=\"collapse\" id=\"tree-AttachmentFile-#{box.record_property_id}\"></div>"\
+          + "</div>"
+        )
+      end
+    end
+    context "klass is Specimen" do
+      let(:klass) { Specimen }
+      it do
+        expect(subject).to eq(
+          "<div class=\"collapse in\" id=\"tree-#{klass}-#{obj.record_property_id}\">"\
+          + "<div class=\"tree-node\" data-depth=\"10\">"\
+          + "<span class=\"\">"\
+          + "<span class=\"glyphicon glyphicon-cloud\"></span>"\
+          + "</span>"\
+          + "<a href=\"/specimens/#{specimen.id}\">test_2</a>"\
+          + "<span class=\"\" title=\"status:\">"\
+          + "<span class=\"glyphicon glyphicon-\"></span>"\
+          + "</span>"\
+          + "</div>"\
+          + "<div class=\"collapse\" id=\"tree-Analysis-#{specimen.record_property_id}\"></div>"\
+          + "<div class=\"collapse\" id=\"tree-Bib-#{specimen.record_property_id}\"></div>"\
+          + "<div class=\"collapse\" id=\"tree-AttachmentFile-#{specimen.record_property_id}\"></div>"\
+          + "</div>"
+        )
+      end
+    end
+    context "klass is Bib" do
+      let(:klass) { Bib }
+      it do
+        expect(subject).to eq(
+          "<div class=\"collapse in\" id=\"tree-#{klass}-#{obj.record_property_id}\">"\
+          + "<div class=\"tree-node\" data-depth=\"10\">"\
+          + "<span class=\"glyphicon glyphicon-book\"></span>"\
+          + "<a href=\"/bibs/#{bib.id}\">test_3</a>"\
+          + "</div>"\
+          + "</div>"
+        )
+      end
+    end
+    context "klass is AttachmentFile" do
+      let(:klass) { AttachmentFile }
+      it do
+        expect(subject).to eq(
+          "<div class=\"collapse in\" id=\"tree-#{klass}-#{obj.record_property_id}\">"\
+          + "<div class=\"tree-node\" data-depth=\"10\">"\
+          + "<span class=\"glyphicon glyphicon-file\"></span>"\
+          + "<a href=\"/attachment_files/#{attachment_file.id}\">test_4.jpg</a>"\
+          + "</div>"\
+          + "</div>"
+        )
+      end
+    end
+    context "other klass" do
+      let(:klass) { Analysis }
+      it { expect(subject).to eq("") }
     end
   end
 
@@ -106,16 +205,16 @@ describe BoxDecorator do
         subject { obj.tree_node(current_type: true, in_list_include: true) }
         it do
           expect(subject).to include(
-            "<span class=\"glyphicon glyphicon-folder-close glyphicon-active-color\">"\
-            + "</span><a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.record_property_id}\">"\
-            + "<span class=\"badge badge-active\">#{obj.children.count}</span></a>"
+            "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-folder-close\"></span></span>"\
+            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-Box-#{obj.record_property_id}\">"\
+            + "<span class=\"badge badge-active\" data-klass=\"Box\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.children.count}</span></a>"
           )
         end
         it do
           expect(subject).to include(
-            "<span class=\"glyphicon glyphicon-cloud glyphicon-active-color\"></span>"\
-            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.record_property_id}\">"\
-            + "<span class=\"badge badge-active\">#{obj.specimens.count}</span></a>"
+            "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-cloud\"></span></span>"\
+            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-Specimen-#{obj.record_property_id}\">"\
+            + "<span class=\"badge badge-active\" data-klass=\"Specimen\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.specimens.count}</span></a>"
           )
         end
       end
@@ -123,16 +222,16 @@ describe BoxDecorator do
         subject { obj.tree_node(current_type: true, in_list_include: false) }
         it do
           expect(subject).to include(
-            "<span class=\"glyphicon glyphicon-folder-close\"></span>"\
-            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.record_property_id}\">"\
-            + "<span class=\"badge\">#{obj.children.count}</span></a>"
+            "<span class=\"\"><span class=\"glyphicon glyphicon-folder-close\"></span></span>"\
+            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-Box-#{obj.record_property_id}\">"\
+            + "<span class=\"badge\" data-klass=\"Box\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.children.count}</span></a>"
           )
         end
         it do
           expect(subject).to include(
-            "<span class=\"glyphicon glyphicon-cloud\"></span>"\
-            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.record_property_id}\">"\
-            + "<span class=\"badge\">#{obj.specimens.count}</span></a>"
+            "<span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span>"\
+            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-Specimen-#{obj.record_property_id}\">"\
+            + "<span class=\"badge\" data-klass=\"Specimen\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.specimens.count}</span></a>"
           )
         end
       end
@@ -151,6 +250,7 @@ describe BoxDecorator do
   describe "specimens_count" do
     subject{obj.specimens_count}
     let(:icon){"cloud"}
+    let(:klass) { "Specimen" }
     let(:count){obj.specimens.count}
     let(:specimen){FactoryGirl.create(:specimen)}
     context "count zero" do
@@ -164,9 +264,9 @@ describe BoxDecorator do
           subject { obj.specimens_count(true, true) }
           it do
             expect(subject).to eq(
-              "<span class=\"glyphicon glyphicon-#{icon} glyphicon-active-color\"></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.record_property_id}\">"\
-              + "<span class=\"badge badge-active\">#{count}</span></a>"
+              "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
+              + "<span class=\"badge badge-active\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
             )
           end
         end
@@ -174,9 +274,9 @@ describe BoxDecorator do
           subject { obj.specimens_count(true, false) }
           it do
             expect(subject).to eq(
-              "<span class=\"glyphicon glyphicon-#{icon}\"></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.record_property_id}\">"\
-              + "<span class=\"badge\">#{count}</span></a>"
+              "<span class=\"\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
+              + "<span class=\"badge\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
             )
           end
         end
@@ -184,7 +284,7 @@ describe BoxDecorator do
       context "not current_type" do
         context "in_list_include" do
           subject { obj.specimens_count(false, true) }
-          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon} glyphicon-active-color\"></span><span>#{count}</span>") }
+          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon}\"></span><span>#{count}</span>") }
         end
         context "not in_list_include" do
           subject { obj.specimens_count(false, false) }
@@ -197,6 +297,7 @@ describe BoxDecorator do
   describe "boxes_count" do
     subject{obj.boxes_count}
     let(:icon){"folder-close"}
+    let(:klass){"Box"}
     let(:count){obj.children.count}
     let(:child){FactoryGirl.create(:box)}
     context "count zero" do
@@ -210,9 +311,9 @@ describe BoxDecorator do
           subject { obj.boxes_count(true, true) }
           it do
             expect(subject).to eq(
-              "<span class=\"glyphicon glyphicon-#{icon} glyphicon-active-color\"></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.record_property_id}\">"\
-              + "<span class=\"badge badge-active\">#{count}</span></a>"
+              "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
+              + "<span class=\"badge badge-active\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
             )
           end
         end
@@ -220,9 +321,9 @@ describe BoxDecorator do
           subject { obj.boxes_count(true, false) }
           it do
             expect(subject).to eq(
-              "<span class=\"glyphicon glyphicon-#{icon}\"></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.record_property_id}\">"\
-              + "<span class=\"badge\">#{count}</span></a>"
+              "<span class=\"\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
+              + "<span class=\"badge\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
             )
           end
         end
@@ -230,7 +331,7 @@ describe BoxDecorator do
       context "not current_type" do
         context "in_list_include" do
           subject { obj.boxes_count(false, true) }
-          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon} glyphicon-active-color\"></span><span>#{count}</span>") }
+          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon}\"></span><span>#{count}</span>") }
         end
         context "not in_list_include" do
           subject { obj.boxes_count(false, false) }
@@ -261,6 +362,7 @@ describe BoxDecorator do
   describe "bibs_count" do
     subject { obj.bibs_count }
     let(:icon) { "book" }
+    let(:klass) { "Bib" }
     let(:count) { obj.bibs.count }
     let(:bib) { FactoryGirl.create(:bib) }
     context "count zero" do
@@ -274,9 +376,9 @@ describe BoxDecorator do
           subject { obj.bibs_count(true, true) }
           it do
             expect(subject).to eq(
-              "<span class=\"glyphicon glyphicon-#{icon} glyphicon-active-color\"></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.record_property_id}\">"\
-              + "<span class=\"badge badge-active\">#{count}</span></a>"
+              "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
+              + "<span class=\"badge badge-active\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
             )
           end
         end
@@ -284,9 +386,9 @@ describe BoxDecorator do
           subject { obj.bibs_count(true, false) }
           it do
             expect(subject).to eq(
-              "<span class=\"glyphicon glyphicon-#{icon}\"></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.record_property_id}\">"\
-              + "<span class=\"badge\">#{count}</span></a>"
+              "<span class=\"\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
+              + "<span class=\"badge\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
             )
           end
         end
@@ -294,7 +396,7 @@ describe BoxDecorator do
       context "not current_type" do
         context "in_list_include" do
           subject { obj.bibs_count(false, true) }
-          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon} glyphicon-active-color\"></span><span>#{count}</span>") }
+          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon}\"></span><span>#{count}</span>") }
         end
         context "not in_list_include" do
           subject { obj.bibs_count(false, false) }
@@ -307,6 +409,7 @@ describe BoxDecorator do
   describe "files_count" do
     subject { obj.files_count }
     let(:icon) { "file" }
+    let(:klass) { "AttachmentFile" }
     let(:count) { obj.attachment_files.count }
     let(:attachment_file) { FactoryGirl.create(:attachment_file) }
     context "count zero" do
@@ -320,9 +423,9 @@ describe BoxDecorator do
           subject { obj.files_count(true, true) }
           it do
             expect(subject).to eq(
-              "<span class=\"glyphicon glyphicon-#{icon} glyphicon-active-color\"></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.record_property_id}\">"\
-              + "<span class=\"badge badge-active\">#{count}</span></a>"
+              "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
+              + "<span class=\"badge badge-active\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
             )
           end
         end
@@ -330,9 +433,9 @@ describe BoxDecorator do
           subject { obj.files_count(true, false) }
           it do
             expect(subject).to eq(
-              "<span class=\"glyphicon glyphicon-#{icon}\"></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{obj.record_property_id}\">"\
-              + "<span class=\"badge\">#{count}</span></a>"
+              "<span class=\"\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
+              + "<span class=\"badge\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
             )
           end
         end
@@ -340,7 +443,7 @@ describe BoxDecorator do
       context "not current_type" do
         context "in_list_include" do
           subject { obj.files_count(false, true) }
-          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon} glyphicon-active-color\"></span><span>#{count}</span>") }
+          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon}\"></span><span>#{count}</span>") }
         end
         context "not in_list_include" do
           subject { obj.files_count(false, false) }
