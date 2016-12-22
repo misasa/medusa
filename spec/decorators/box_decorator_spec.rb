@@ -125,9 +125,11 @@ describe BoxDecorator do
           + "<div class=\"tree-node\" data-depth=\"10\">"\
           + "<span class=\"\">"\
           + "<span class=\"glyphicon glyphicon-cloud\"></span>"\
-          + "<span class=\"glyphicon glyphicon-\"></span>"\
           + "</span>"\
           + "<a href=\"/specimens/#{specimen.id}\">test_2</a>"\
+          + "<span class=\"\" title=\"status:\">"\
+          + "<span class=\"glyphicon glyphicon-\"></span>"\
+          + "</span>"\
           + "</div>"\
           + "<div class=\"collapse\" id=\"tree-Analysis-#{specimen.record_property_id}\"></div>"\
           + "<div class=\"collapse\" id=\"tree-Bib-#{specimen.record_property_id}\"></div>"\

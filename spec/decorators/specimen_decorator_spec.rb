@@ -1077,7 +1077,7 @@ describe SpecimenDecorator do
   end
 
   describe ".path" do
-    let(:me){"<span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span><span class=\"glyphicon glyphicon-\"></span></span>#{obj.name}"}
+    let(:me){"<span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span>#{obj.name}"}
     subject{obj.path}
     before { allow(obj.h).to receive(:can?).and_return(true) }
     context "box is nil" do
@@ -1538,23 +1538,23 @@ describe SpecimenDecorator do
     subject { obj.status_icon }
     context "normal" do
       before { obj.update_attributes(quantity: 0.5, quantity_unit: "mg") }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-\" title=\"status:\"></span>") }
+      it { expect(subject).to eq("<span class=\"\" title=\"status:\"><span class=\"glyphicon glyphicon-\"></span></span>") }
     end
     context "undetermined quantity" do
       before { obj.update_attributes(quantity: "", quantity_unit: "") }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-question-sign\" title=\"status:unknown\"></span>") }
+      it { expect(subject).to eq("<span class=\"\" title=\"status:unknown\"><span class=\"glyphicon glyphicon-question-sign\"></span></span>") }
     end
     context "disappearance" do
       before { obj.update_attributes(quantity: "0", quantity_unit: "kg") }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-ban-circle\" title=\"status:zero\"></span>") }
+      it { expect(subject).to eq("<span class=\"\" title=\"status:zero\"><span class=\"glyphicon glyphicon-ban-circle\"></span></span>") }
     end
     context "disposal" do
       before { obj.record_property.update_attributes(disposed: true) }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-trash\" title=\"status:trash\"></span>") }
+      it { expect(subject).to eq("<span class=\"\" title=\"status:trash\"><span class=\"glyphicon glyphicon-trash\"></span></span>") }
     end
     context "loss" do
       before { obj.record_property.update_attributes(lost: true) }
-      it { expect(subject).to eq("<span class=\"glyphicon glyphicon-warning-sign\" title=\"status:lost\"></span>") }
+      it { expect(subject).to eq("<span class=\"\" title=\"status:lost\"><span class=\"glyphicon glyphicon-warning-sign\"></span></span>") }
     end
   end
 
