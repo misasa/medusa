@@ -22,6 +22,8 @@ class Box < ActiveRecord::Base
   belongs_to :parent, class_name: "Box", foreign_key: :parent_id
   belongs_to :box_type
 
+  delegate :name, to: :box_type, prefix: true, allow_nil: true
+
   validates :box_type, existence: true, allow_nil: true
   validates :parent_id, existence: true, allow_nil: true
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :parent_id }
@@ -32,6 +34,21 @@ class Box < ActiveRecord::Base
   validate :quantity_unit_exists
 
   after_save :reset_path
+
+  def as_json(options = {})
+    super({ methods: [:box_type_name, :primary_file_thumbnail_path] }.merge(options))
+  end
+
+  def quantity_with_unit
+    return unless quantity
+    "#{quantity} #{quantity_unit}"
+  end
+
+  def quantity_with_unit=(string)
+    vals = string.split(/\s/)
+    self.quantity = vals[0]
+    self.quantity_unit = vals[1] if vals.size > 1
+  end
 
   def analyses
     analyses = []

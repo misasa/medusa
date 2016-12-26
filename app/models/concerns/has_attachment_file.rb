@@ -4,6 +4,12 @@ module HasAttachmentFile
   included do
     has_many :attachings, as: :attachable, dependent: :destroy
     has_many :attachment_files, -> { order('attachings.position asc') }, through: :attachings
+
+    delegate :thumbnail_path, to: :primary_file, prefix: true, allow_nil: true
+  end
+
+  def primary_file
+    attachment_files.first
   end
 
   def attachment_pdf_files
