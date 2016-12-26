@@ -174,6 +174,21 @@ class Specimen < ActiveRecord::Base
     families.select{|e| list.include?(e) }    
   end
 
+  def quantity_history_with_current
+    time_str = Time.now + 9.hours
+    time_int = time_str.to_i * 1000
+    dup = quantity_history.dup
+    dup.each do |key, val|
+      last_hash = val[-1].dup
+      last_hash[:x] = time_int
+      last_hash[:date_str] = 'now'
+      last_hash[:id] = nil
+      last_hash[:log] = nil
+      val.push(last_hash)
+    end
+    dup
+  end
+
   def quantity_history
     return @quantity_history if @quantity_history
     divides = Divide.includes(:specimen_quantities).specimen_id_is(self_and_descendants.map(&:id))

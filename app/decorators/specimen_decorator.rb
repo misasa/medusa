@@ -317,12 +317,12 @@ class SpecimenDecorator < Draper::Decorator
 
   def generate_chart_quantity_history
     LazyHighCharts::HighChart.new('graph') do |f|
-      f.title(text: 'Specimen quantity history graph')
+      f.title(text: '')
       f.xAxis(type: 'datetime')
-      f.yAxis(min: 0, title: { text: "quantity(g)" })
+      f.yAxis(min: 0, title: { text: "quantity (g)" })
       f.chart(height: 600)
-      f.series(name: "myself and descendants", data: quantity_history[0], type: 'line', step: 'left')
-      quantity_history.each do |key, data|
+      f.series(name: "total", data: quantity_history_with_current[0], type: 'line', step: 'left')
+      quantity_history_with_current.each do |key, data|
         specimen = Specimen.find_by(id: key)
         if specimen
           f.series(name: (self == specimen ? "myself" : specimen.name), data: data, type: 'line', step: 'left')
