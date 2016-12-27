@@ -112,6 +112,12 @@ Medusa::Application.routes.draw do
     end
   end
 
+  resources :divides, only: [:edit, :update, :destroy] do
+    member do
+      put :loss
+    end
+  end
+
   resources :boxes, concerns: [:bundleable, :reportable], except: [:new] do
     member do
       get :family

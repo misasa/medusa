@@ -142,7 +142,7 @@
   });
 
   $(document).on("succeed.ajaxForm", "#divide_specimen", function() {
-    location.href="<% specimen_path(@specimen) %>";
+    location.href="<%= specimen_path(@specimen) %>";
   });
 
   $(document).on("click", "input.select-row-all-div", function() {

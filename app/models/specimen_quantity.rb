@@ -3,6 +3,7 @@ class SpecimenQuantity < ActiveRecord::Base
 
   belongs_to :specimen
   belongs_to :divide
+  has_one :after_divide, foreign_key: "before_specimen_quantity_id", class_name: "Divide"
 
   validates :quantity, numericality: { greater_than_or_equal_to: 0 }, allow_blank: true
 
@@ -14,7 +15,8 @@ class SpecimenQuantity < ActiveRecord::Base
     h[:date_str] = divide.updated_at_str
     h[:quantity_str] = quantity_str
     h[:before_specimen_name] = divide.before_specimen.try(:name) if divide.divide_flg
-    h[:before_specimen] = divide.before_specimen if divide.divide_flg    
+    h[:before_specimen] = divide.before_specimen if divide.divide_flg
+    h[:divide_flg] = divide.divide_flg
     h[:comment] = divide.log
     h
   end
