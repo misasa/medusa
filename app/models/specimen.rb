@@ -114,17 +114,6 @@ class Specimen < ActiveRecord::Base
     sps
   end
 
-  def quantity_with_unit
-    return unless quantity
-    "#{quantity} #{quantity_unit}"
-  end
-
-  def quantity_with_unit=(string)
-    vals = string.split(/\s/)
-    self.quantity = vals[0]
-    self.quantity_unit = vals[1] if vals.size > 1
-  end
-
   # def to_pml
   #   [self].to_pml
   # end
