@@ -1,0 +1,112 @@
+<%= form_for @divide, remote: true, format: :json, html: { class: "update col-lg-10", role: "form", id: "edit_divide" } do |f| %>
+
+  <table class="table table-condensed">
+    <thead>
+      <tr>
+        <th>
+          name
+        </th>
+        <th>
+          physical-form
+        </th>
+        <th>
+          quantity
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <%= f.fields_for :specimen_quantities do |fi| %>
+        <% unless f.object.parent_specimen == fi.object.specimen %>
+          <tr>
+            <td>
+              <%= link_to_if can?(:read, fi.object.specimen), fi.object.specimen.try(:name), fi.object.specimen, class: specimen_ghost(fi.object.specimen) %>
+            </td>
+            <td>
+              <%= fi.object.specimen.try(:physical_form).try(:name) %>
+            </td>
+            <td>
+              <%= fi.text_field :quantity_with_unit, placeholder: fi.object.quantity_with_unit, class: "form-control input-sm quantity" %>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+    </tbody>
+
+    <tfoot>
+      <%= f.fields_for :specimen_quantities do |fi| %>
+        <% if f.object.parent_specimen == fi.object.specimen %>
+          <tr>
+            <td>
+              <%= link_to_if can?(:read, fi.object.specimen), fi.object.specimen.try(:name), fi.object.specimen, class: specimen_ghost(fi.object.specimen) %>
+            </td>
+            <td colspan="2">
+              <div class="form-inline">
+                Quantity <span id="original">(<%= (f.object.before_specimen_quantity.try(:quantity_with_unit).presence || 'nil') %>)</span> is 
+                <%= fi.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", size: 5 %>
+                <div class="btn-group" data-toggle="buttons">
+                  <%= label_tag :manual, class: "btn btn-default btn-sm active" do %>
+                    <%= check_box_tag :manual, true, true, autocomplete: "off" %>
+                    <span class="glyphicon glyphicon-ok"></span>
+                  <% end %>
+                </div>
+                and loss is
+                <span id="divided_loss">0.0 g</span>
+                after operation <%= f.text_field :log, placeholder: "cut by saw", class: "form-control input-sm", size: 12 %>.
+              </div>
+            </td>
+          </tr>
+        <% end %>
+      <% end %>
+
+      <tr>
+        <td colspan="3" class="text-right">
+          <%= f.button class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+
+          <%= link_to "cancel", specimen_path(params[:specimen_id], tab: "quantity"), class: "btn btn-default" %>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+<% end %>
+
+<%= javascript_tag do %>
+  //ロスの計算
+  function quantity_change_check() {
+    var $form = $("form#edit_divide");
+    $.ajax({
+      url: '<%= loss_divide_path %>',
+      type: 'put',
+      data: $form.serialize(),
+      success: function(result){
+        $("#parent_quantity").val(result.parent_quantity);
+        $("#parent_quantity_unit").val(result.parent_quantity_unit);
+        $("#parent_quantity_with_unit").val(result.parent_quantity + " " + result.parent_quantity_unit);
+        $("#divided_loss").text(result.loss_quantity + " " + result.loss_quantity_unit);
+      }
+    });
+  };
+
+  $(document).on("change", "input.quantity", function() {
+    quantity_change_check();
+  });
+
+  $(document).on("change", "#manual", function() {
+    if ($(this).prop('checked')) {
+      $("input.parent.quantity").attr("readonly", false);
+      $(this).next().removeClass("glyphicon-minus");
+      $(this).next().addClass("glyphicon-ok");
+    } else {
+      $("input.parent.quantity").attr("readonly", true);
+      $(this).next().removeClass("glyphicon-ok");
+      $(this).next().addClass("glyphicon-minus");
+    }
+    quantity_change_check();
+  });
+
+  $(document).on("succeed.ajaxForm", "#edit_divide", function() {
+    location.href="<%= specimen_path(params[:specimen_id], tab: "quantity") %>";
+  });
+<% end %>
