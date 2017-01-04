@@ -19,7 +19,7 @@ describe "specimen" do
       specimen.attachment_files << attachment_file 
       specimen.create_record_property(user_id: login_user.id)
     end
-    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:specimen) { FactoryGirl.create(:specimen, quantity: nil, quantity_unit: nil) }
     let(:attachment_file) { FactoryGirl.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
     let(:data_type) { "image/jpeg" }
 

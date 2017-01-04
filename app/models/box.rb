@@ -36,7 +36,7 @@ class Box < ActiveRecord::Base
   after_save :reset_path
 
   def as_json(options = {})
-    super({ methods: [:box_type_name, :primary_file_thumbnail_path] }.merge(options))
+    super({ methods: [:global_id, :box_type_name, :primary_file_thumbnail_path] }.merge(options))
   end
 
   def quantity_with_unit

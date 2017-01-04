@@ -76,7 +76,7 @@ class Specimen < ActiveRecord::Base
   validate :status_is_nomal, on: :divide
 
   def as_json(options = {})
-    super({ methods: [:physical_form_name, :primary_file_thumbnail_path] }.merge(options))
+    super({ methods: [:global_id, :physical_form_name, :primary_file_thumbnail_path] }.merge(options))
   end
 
   def status
