@@ -18,6 +18,8 @@ class SpecimenQuantity < ActiveRecord::Base
     h[:before_specimen] = divide.before_specimen if divide.divide_flg
     h[:divide_flg] = divide.divide_flg
     h[:comment] = divide.log
+    h[:parent_specimen] = divide.parent_specimen
+    h[:child_specimens] = divide.child_specimens
     h
   end
 

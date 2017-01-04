@@ -251,7 +251,7 @@ describe Specimen do
       expect(subject[0][2][:quantity_str]).to eq("90,000.0 g")
     end
     it "specimen1" do
-      expect(subject[specimen1.id].length).to eq(3)
+      expect(subject[specimen1.id].length).to eq(2)
       expect(subject[specimen1.id][0][:id]).to eq(divide1.id)
       expect(subject[specimen1.id][0][:y]).to eq(100000.0)
       expect(subject[specimen1.id][0][:quantity_str]).to eq("100.0 kg")
@@ -279,7 +279,7 @@ describe Specimen do
     end
   end
 
-  describe "#quantity_history_plus", :current => true do
+  describe "#quantity_history_with_current", :current => true do
     let(:time) { Time.new(2016, 11,12) }
     let!(:specimen1) { FactoryGirl.create(:specimen, divide_flg: true) }
     let!(:specimen2) { FactoryGirl.create(:specimen, divide_flg: true, parent_id: specimen1.id) }
@@ -312,19 +312,16 @@ describe Specimen do
       expect(subject[0][3][:quantity_str]).to eq("90,000.0 g")
     end
     it "specimen1" do
-      expect(subject[specimen1.id].length).to eq(4)
+      expect(subject[specimen1.id].length).to eq(3)
       expect(subject[specimen1.id][0][:id]).to eq(divide1.id)
       expect(subject[specimen1.id][0][:y]).to eq(100000.0)
       expect(subject[specimen1.id][0][:quantity_str]).to eq("100.0 kg")
       expect(subject[specimen1.id][1][:id]).to eq(divide2.id)
       expect(subject[specimen1.id][1][:y]).to eq(60000.0)
       expect(subject[specimen1.id][1][:quantity_str]).to eq("60.0 kg")
-      expect(subject[specimen1.id][2][:id]).to eq(divide3.id)
+      expect(subject[specimen1.id][2][:id]).to be_nil
       expect(subject[specimen1.id][2][:y]).to eq(60000.0)
       expect(subject[specimen1.id][2][:quantity_str]).to eq("60.0 kg")
-      expect(subject[specimen1.id][3][:id]).to be_nil
-      expect(subject[specimen1.id][3][:y]).to eq(60000.0)
-      expect(subject[specimen1.id][3][:quantity_str]).to eq("60.0 kg")
     end
     it "specimen2" do
       expect(subject[specimen2.id].length).to eq(3)

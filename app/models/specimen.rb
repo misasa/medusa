@@ -172,8 +172,14 @@ class Specimen < ActiveRecord::Base
   def quantity_history_with_current
     time_str = Time.now + 9.hours
     time_int = time_str.to_i * 1000
-    dup = quantity_history.dup
+    dup = quantity_history.clone
+    dup.each do |key, oval|
+      val = oval.dup
+      dup[key] = val
+    end
+
     dup.each do |key, val|
+      #val = oval.dup
       last_hash = val[-1].dup
       last_hash[:x] = time_int
       last_hash[:date_str] = 'now'
@@ -197,12 +203,12 @@ class Specimen < ActiveRecord::Base
       total_val = total_hash.values.compact.sum
       hash[0] << SpecimenQuantity.point(divide, total_val.to_f, Quantity.string_quantity(total_val, "g"))
     end
-    last_divide = divides.last
-    @quantity_history.each do |key, quantity_line|
-      if quantity_line.last[:id] != last_divide.id
-        quantity_line << SpecimenQuantity.point(last_divide, quantity_line.last[:y], quantity_line.last[:quantity_str])
-      end
-    end
+    # last_divide = divides.last
+    # @quantity_history.each do |key, quantity_line|
+    #   if quantity_line.last[:id] != last_divide.id
+    #     quantity_line << SpecimenQuantity.point(last_divide, quantity_line.last[:y], quantity_line.last[:quantity_str])
+    #   end
+    # end
     @quantity_history
   end
 
