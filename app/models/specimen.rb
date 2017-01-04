@@ -46,6 +46,8 @@ class Specimen < ActiveRecord::Base
   belongs_to :classification
   belongs_to :physical_form
 
+  delegate :name, to: :physical_form, prefix: true, allow_nil: true
+
   accepts_nested_attributes_for :specimen_quantities
   accepts_nested_attributes_for :specimen_custom_attributes
   accepts_nested_attributes_for :children
@@ -72,6 +74,10 @@ class Specimen < ActiveRecord::Base
   validates :collector_detail, length: { maximum: 255 }
   validates :collection_date_precision, length: { maximum: 255 }
   validate :status_is_nomal, on: :divide
+
+  def as_json(options = {})
+    super({ methods: [:global_id, :physical_form_name, :primary_file_thumbnail_path] }.merge(options))
+  end
 
   def status
     return unless record_property
