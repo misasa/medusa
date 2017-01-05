@@ -50,4 +50,17 @@ describe Divide do
     subject { divide.updated_at_str }
     it { expect(subject).to eq("2016/11/12 13:14:15") }
   end
+
+  describe "modify updated_at" do
+    let(:time) { Time.new(2016, 11,12, 13, 14, 15) }
+
+    let(:divide) { FactoryGirl.create(:divide, updated_at: time) }
+    subject { divide.updated_at_str }
+    before do
+      divide.updated_at = "2015/11/12 13:14:15"
+      divide.save
+    end
+    it { expect(subject).to eq("2015/11/12 13:14:15") }
+  end
+
 end

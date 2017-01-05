@@ -44,6 +44,7 @@ class DividesController < ApplicationController
 
   def divide_params
     params.require(:divide).permit(
+      :updated_at,
       :log,
       specimen_quantities_attributes: [
         :id,
