@@ -92,6 +92,8 @@ describe Surface do
         spot_3
       end
       it { expect(obj.to_pml).to match(/<?xml/)}
+      it { expect(obj.to_pml).to match(/<attachment_file_global_id>*.+<\/attachment_file_global_id>/)}      
+      it { expect(obj.to_pml).to match(/<attachment_file_path>*.+<\/attachment_file_path>/)}
     end
   end
 

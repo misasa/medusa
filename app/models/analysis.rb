@@ -172,6 +172,7 @@ class Analysis < ActiveRecord::Base
         xml.spot do
           xml.global_id(spot.global_id)
           xml.attachment_file_global_id(spot.attachment_file.try!(:global_id))
+          xml.attachment_file_path(spot.attachment_file.data.try!(:path))
           xml.x_image(spot.spot_x_from_center)
           xml.y_image(spot.spot_y_from_center)
           xml.x_overpic(spot.spot_overpic_x)

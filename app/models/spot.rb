@@ -54,6 +54,7 @@ class Spot < ActiveRecord::Base
       xml.spot do
         xml.global_id(global_id)
         xml.attachment_file_global_id(attachment_file.try!(:global_id))
+        xml.attachment_file_path(attachment_file.data.try!(:path))
         xml.x_image(spot_x_from_center)
         xml.y_image(spot_y_from_center)
         xml.x_overpic(spot_overpic_x)
