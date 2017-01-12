@@ -64,10 +64,12 @@ class Divide < ActiveRecord::Base
 
   def destroy
     ActiveRecord::Base.transaction do
-      parent_specimen.update_columns(
-        quantity: before_specimen_quantity.try(:quantity),
-        quantity_unit: before_specimen_quantity.try(:quantity_unit)
-      )
+      if parent_specimen
+        parent_specimen.update_columns(
+          quantity: before_specimen_quantity.try(:quantity),
+          quantity_unit: before_specimen_quantity.try(:quantity_unit)
+        )
+      end
       if divide_flg
         #child_specimen_quantities.each {|specimen_quantity| specimen_quantity.specimen.destroy }
         child_specimens.each {|specimen| specimen.destroy if specimen}
