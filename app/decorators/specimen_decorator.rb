@@ -331,6 +331,66 @@ class SpecimenDecorator < Draper::Decorator
     end
   end
 
+  def history_table
+    tag = ''
+
+    heads = ['','date','operation','total']
+    specimens = []
+    data_a = Hash.new
+    data_a['total'] = quantity_history[0]    
+    quantity_history.each do |key, points|
+      specimen = Specimen.find_by(id: key)
+      next unless specimen
+      specimens << specimen
+      data = points.uniq {|point| point[:id] }
+      data_a[specimen.name] = data
+    end
+    heads.concat(specimens.map(&:name))
+    heads.concat([''])
+
+    tag = h.content_tag(:thead, h.content_tag(:tr, h.raw(heads.map{|v| h.content_tag(:th, v)}.join(''))))
+    lines = [tag]
+
+    data_a['total'].each do |row|
+      tds = []
+      row_id = row[:id]
+      link = h.link_to(h.edit_divide_path(row[:id], specimen_id: id)) do
+        h.content_tag(:span,nil,class: "glyphicon glyphicon-edit")
+      end
+      tds << h.content_tag(:td, link)
+      tds << h.content_tag(:td, row[:date_str])
+      if row[:comment].blank?
+        operation_str = 'no comment'
+      else
+        operation_str = row[:comment]
+      end
+      tds << h.content_tag(:td, operation_str)      
+      tds << h.content_tag(:td, row[:quantity_str])
+      specimens.each do |specimen|
+        tag = ''
+        rr = data_a[specimen.name].find{|r| r[:id] == row_id}
+        tag = rr[:quantity_str] if rr
+        tds << h.content_tag(:td, tag)
+      end
+
+      delete_tag = ''
+      if Divide.find_by(id: row[:id]).try(:afters).blank?
+        confirm = h.t("confirm.delete",:recordname =>"operation \"#{row[:comment]}\" at #{row[:date_str]}")
+        confirm += "\nAre you sure you want to permanently delete divided specimens [#{row[:child_specimens].map{|sq| sq.name}.join(', ')}] too?" if row[:divide_flg] 
+        delete_tag = h.link_to(h.divide_path(row[:id], specimen_id: id), method: :delete , data: { confirm: confirm }) do
+          h.content_tag(:span, nil, class:"glyphicon glyphicon-remove")
+        end
+
+      end
+      tds << h.content_tag(:td, delete_tag)   
+      lines << h.content_tag(:tr, h.raw(tds.join()))
+
+    end
+    tag = h.raw(lines.join)
+    tag = h.content_tag(:table, tag, class: 'table table-striped')
+    tag
+  end
+
   def family_tree
     # list = [self].concat(children)
     # #list = [root].concat(root.children)

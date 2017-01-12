@@ -27,7 +27,7 @@
             <td>
               <% if Divide.find_by(id: row[:id]).try(:afters).blank? %>
                 <% confirm = t("confirm.delete",:recordname =>"\"#{row[:comment]}\"") %>
-                <% confirm += "\nAre you sure you want to permanently delete divided specimen too?" if row[:divide_flg] %>
+                <% confirm += "\nAre you sure you want to permanently delete divided specimens [#{row[:child_specimens].map{|sq| sq.name}.join(', ')}] too?" if row[:divide_flg] %>
                 <%= link_to divide_path(row[:id], specimen_id: params[:id]), method: :delete , data: { confirm: confirm } do %>
                   <span class="glyphicon glyphicon-remove"></span>
                 <% end %>

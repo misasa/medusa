@@ -14,6 +14,13 @@
 <%= high_chart("quantity_history_graph", @specimen.generate_chart_quantity_history) do %>
   <%=raw "options.tooltip.formatter = chartPointInfo;"  %>
 <% end %>
+<div class="panel panel-default">
+  <div class="panel-heading"><label>history</label></div>
+  <div class="panel-body">
+    <%= @specimen.history_table %>
+  </div>
+</div>
+
 <div class="row">
   <a class="btn btn-default col-sm-12 show_switching_content_open">
     <span class="glyphicon glyphicon-chevron-down"></span>
@@ -23,6 +30,7 @@
   </a>
 </div>
 <div class="row show_switching_content" style="display: none">
+
   <%= render 'quantity_table', table_name: "total", data: @specimen.quantity_history[0] %>
   <% @specimen.quantity_history.each do |key, points| %>
     <% specimen = Specimen.find_by(id: key) %>
