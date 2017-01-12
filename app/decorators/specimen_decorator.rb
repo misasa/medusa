@@ -376,7 +376,7 @@ class SpecimenDecorator < Draper::Decorator
       end
 
       delete_tag = ''
-      if Divide.find_by(id: row[:id]).try(:afters).blank? || index == num_history
+      if Divide.find_by(id: row[:id]).try(:afters).blank? || (index + 1) == num_history
         confirm = h.t("confirm.delete",:recordname =>"operation \"#{row[:comment]}\" at #{row[:date_str]}")
         confirm += "\nAre you sure you want to permanently delete divided specimens [#{row[:child_specimens].map{|sq| sq.name}.join(', ')}] too?" if row[:divide_flg] && !row[:child_specimens].empty?
         delete_tag = h.link_to(h.divide_path(row[:id], specimen_id: id), method: :delete , data: { confirm: confirm }) do
