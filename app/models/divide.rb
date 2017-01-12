@@ -33,7 +33,7 @@ class Divide < ActiveRecord::Base
   end
 
   def child_specimens
-    @child_specimens ||= child_specimen_quantities.map {|specimen_quantity| specimen_quantity.specimen }
+    @child_specimens ||= child_specimen_quantities.map {|specimen_quantity| specimen_quantity.specimen }.compact
   end
 
   def divided_parent_quantity
