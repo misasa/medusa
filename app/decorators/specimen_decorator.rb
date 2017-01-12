@@ -334,8 +334,10 @@ class SpecimenDecorator < Draper::Decorator
   def history_table
     tag = ''
 
-    heads = ['','date','operation','total']
+    num_history = quantity_history.size unless quantity_history[0].empty?
+    heads = ["#{num_history}",'date','operation','total']
     specimens = []
+
     data_a = Hash.new
     data_a['total'] = quantity_history[0]    
     quantity_history.each do |key, points|
@@ -351,7 +353,7 @@ class SpecimenDecorator < Draper::Decorator
     tag = h.content_tag(:thead, h.content_tag(:tr, h.raw(heads.map{|v| h.content_tag(:th, v)}.join(''))))
     lines = [tag]
 
-    data_a['total'].each do |row|
+    data_a['total'].each_with_index do |row, index|
       tds = []
       row_id = row[:id]
       link = h.link_to(h.edit_divide_path(row[:id], specimen_id: id)) do
@@ -374,7 +376,7 @@ class SpecimenDecorator < Draper::Decorator
       end
 
       delete_tag = ''
-      if Divide.find_by(id: row[:id]).try(:afters).blank?
+      if index == num_history
         confirm = h.t("confirm.delete",:recordname =>"operation \"#{row[:comment]}\" at #{row[:date_str]}")
         confirm += "\nAre you sure you want to permanently delete divided specimens [#{row[:child_specimens].map{|sq| sq.name}.join(', ')}] too?" if row[:divide_flg] && !row[:child_specimens].empty?
         delete_tag = h.link_to(h.divide_path(row[:id], specimen_id: id), method: :delete , data: { confirm: confirm }) do
@@ -382,7 +384,7 @@ class SpecimenDecorator < Draper::Decorator
         end
 
       end
-      tds << h.content_tag(:td, delete_tag)   
+      tds << h.content_tag(:td, delete_tag)
       lines << h.content_tag(:tr, h.raw(tds.join()))
 
     end
