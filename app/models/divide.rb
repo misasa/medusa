@@ -69,7 +69,8 @@ class Divide < ActiveRecord::Base
         quantity_unit: before_specimen_quantity.try(:quantity_unit)
       )
       if divide_flg
-        child_specimen_quantities.each {|specimen_quantity| specimen_quantity.specimen.destroy }
+        #child_specimen_quantities.each {|specimen_quantity| specimen_quantity.specimen.destroy }
+        child_specimens.each {|specimen| specimen.destroy if specimen}
       end
       super
     end
