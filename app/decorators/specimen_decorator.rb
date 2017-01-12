@@ -334,7 +334,7 @@ class SpecimenDecorator < Draper::Decorator
   def history_table
     tag = ''
 
-    num_history = quantity_history.size unless quantity_history[0].empty?
+    num_history = quantity_history[0].size unless quantity_history[0].empty?
     heads = ["#{num_history}",'date','operation','total']
     specimens = []
 
