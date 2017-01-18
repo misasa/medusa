@@ -1,8 +1,15 @@
+
+<div class="btn-group">
+  <%= display_type_for 'plot' %>
+  <%= display_type_for 'tex' %>
+  <%#= display_type_for 'plot' if Settings.rplot_url %>
+</div>
+
+<% if @surface.first_image %>
+<%= link_to "image", attachment_file_path(@surface.first_image) %>
+<% end %>
 <div class="display-type">
-  <div id="display-type-html">
-	<div class="surface-viewer">
-	  <%= content_tag :svg, nil, class: "surface-canvas", width: 600, height: 600, "data-image" => surface_image_path(@surface, @surface.first_image, format: :svg) if @surface.first_image %>
-	</div>
+  <div id="display-type-plot">
   <%= rplot_iframe @surface %>
   </div>
   <div class="hidden" id="display-type-tex">
@@ -10,13 +17,7 @@
   </div>
   <%#= display_plot @surface if Settings.rplot_url %>
 </div>
-<div class="btn-group">
-  <%= display_type_for 'html' %>
-  <%= display_type_for 'tex' %>
-  <%#= display_type_for 'plot' if Settings.rplot_url %>
-</div>
 
-<% if @surface.first_image %>
-<%= link_to "image", attachment_file_path(@surface.first_image) %>
-
+<%= javascript_tag do %>
+  $("div.surface-viewer").surfaceViewer();
 <% end %>

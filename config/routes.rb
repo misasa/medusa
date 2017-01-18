@@ -232,6 +232,7 @@ Medusa::Application.routes.draw do
     end
     resources :images, concerns: [:link_by_global_id], only: [:index, :show, :create, :update, :destroy], controller: "surface_images" do
       member do
+        get :family
         post 'move_to_top'
       end
     end

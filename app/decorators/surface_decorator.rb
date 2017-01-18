@@ -23,6 +23,15 @@ class SurfaceDecorator < Draper::Decorator
     surface_images[0].decorate.to_tex unless surface_images.empty?
   end
 
+  def related_pictures
+    links = []
+    surface_images.order("position ASC").each do |surface_image|
+      file = surface_image.image
+      links << h.content_tag(:div, surface_image.decorate.spots_panel(spots: file.spots) , class: "col-lg-4") if file.image?
+    end
+    h.content_tag(:div, h.raw( links.join ), class: "row spot-thumbnails")
+  end
+
   # Define presentation-specific methods here. Helpers are accessed through
   # `helpers` (aka `h`). You can override attributes, for example:
   #

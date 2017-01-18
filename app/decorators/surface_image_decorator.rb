@@ -11,6 +11,26 @@ class SurfaceImageDecorator < Draper::Decorator
   #     end
   #   end
 
+
+
+  def spots_panel(width: 70, height:60, spots:[])
+    surface = self.surface
+    file = self.image
+    svg = file.decorate.picture_with_spots(width:width, height:height, spots:spots)
+    svg_link = h.link_to(h.surface_image_path(surface, file)) do
+      svg
+    end
+    left = h.content_tag(:div, svg_link, class: "col-md-12")
+    #right = h.content_tag(:div, my_tree(spots), class: "col-md-12")
+    row = h.content_tag(:div, left, class: "row")
+    header = h.content_tag(:div, class: "panel-heading") do
+    end
+
+    body = h.content_tag(:div, row, class: "panel-body")
+    tag = h.content_tag(:div, body, class: "panel panel-default")
+    tag
+  end
+
   def to_tex
     q_url = "http://dream.misasa.okayama-u.ac.jp/?q="
     basename = File.basename(image.name,".*")

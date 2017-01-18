@@ -78,6 +78,7 @@ class SurfacesController < ApplicationController
 
   def find_resource
     @surface = Surface.find(params[:id]).decorate
+    @image = @surface.first_image
   end
 
   def find_resources
