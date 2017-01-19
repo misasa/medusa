@@ -36,7 +36,8 @@ class SurfaceImageDecorator < Draper::Decorator
 
     html_class = "tree-node"
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
-      attachment_file.decorate.picture_link
+      #attachment_file.decorate.picture_link
+      h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file)
     end
 
     # html += h.content_tag(:div, id: "spots-#{attachment_file.id}", class: "collapse") do
