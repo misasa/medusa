@@ -4,6 +4,7 @@
   <% total_decimal_quantity = @box.total_decimal_quantity %>
   <li><%= "Box total quantity: #{Quantity.quantity(total_decimal_quantity)} #{Quantity.quantity_unit(total_decimal_quantity)}" %></li>
   <%= li_if_exist("tag list: ", @box.tag_list) %>
+  <%= li_if_exist("description: ", @box.description) %>
   <li>updated-at: <%= difference_from_now(@box.updated_at) %></li>
   <%= li_if_exist("bib:", @box.bibs_with_link) %>
 
