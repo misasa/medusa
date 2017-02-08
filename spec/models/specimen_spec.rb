@@ -4,6 +4,30 @@ describe Specimen do
   let(:user) { FactoryGirl.create(:user) }
   before { User.current = user }
 
+  describe "rplace" do
+    let(:specimen){ FactoryGirl.create(:specimen, place_id: nil) }
+    let(:specimen1) { FactoryGirl.create(:specimen, parent_id: specimen.id, place_id: nil) }
+    let(:specimen2) { FactoryGirl.create(:specimen, parent_id: specimen1.id, place_id: place.id) }
+    let(:specimen3) { FactoryGirl.create(:specimen, parent_id: specimen2.id, place_id: nil) }
+    let(:place){ FactoryGirl.create(:place)}
+
+    context "get its place" do
+      it { expect(specimen.rplace).to be_nil}
+    end
+
+    context "get its place" do
+      it { expect(specimen2.rplace).to eql(place)}
+    end
+
+    context "get ancestor's place" do
+      it { expect(specimen3.rplace).to eql(place)}
+    end
+
+    context "does not get descendant's place" do
+      it { expect(specimen1.rplace).to be_nil}
+    end
+  end
+
   describe "status" do
     let(:specimen){ FactoryGirl.create(:specimen) }
     subject { specimen.status }

@@ -394,6 +394,16 @@ describe Analysis do
     it { expect(obj.to_pml).to be_present }
     it { expect(objs.to_pml).to be_eql([obj, obj2, obj3].to_pml) }
     it { expect(objs2.to_pml).to be_eql([obj, obj2, obj3].to_pml) }
+    context "with place", :current => true do
+      let(:place){ FactoryGirl.create(:place)}
+      let(:specimen){ FactoryGirl.create(:specimen, box_id: box.id, place_id: place.id)}
+
+      before do
+
+        puts obj.to_pml
+      end
+      it { expect(obj.to_pml).to match(/place/)}
+    end
   end
 
   describe ".get_spot" do

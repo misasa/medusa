@@ -184,6 +184,18 @@ class Analysis < ActiveRecord::Base
           end
         end
       end
+
+      place = get_place
+      if place
+        xml.place do
+          xml.global_id(place.global_id)
+          xml.name(place.name)          
+          xml.longitude(place.longitude)
+          xml.latitude(place.latitude)
+          xml.elevation(place.elevation)
+          xml.description(place.description)
+        end        
+      end
       unless chemistries.empty?
         xml.chemistries do
           chemistries.each do |chemistry|
@@ -206,6 +218,11 @@ class Analysis < ActiveRecord::Base
     spots = Spot.where(target_uid: global_id)
     return if spots.empty?
     spots[0]
+  end
+
+  def get_place
+    return unless specimen
+    specimen.rplace
   end
 
   private

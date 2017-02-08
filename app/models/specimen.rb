@@ -151,6 +151,19 @@ class Specimen < ActiveRecord::Base
     return text
   end
 
+  def rplace
+    ans_and_self = [self]
+    ans_and_self.concat(ancestors.reverse) unless ancestors.empty?
+    rp = nil
+    ans_and_self.each do |s|
+      if s.place
+        rp = s.place
+        break
+      end
+    end
+    rp
+  end
+
   def relatives_for_tree
     list = [self].concat(children)
     #list = [root].concat(root.children)

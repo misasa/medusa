@@ -205,7 +205,7 @@ describe AttachmentFile do
     end
   end
 
-  describe ".to_pml", :current => true do
+  describe ".to_pml" do
     subject{[obj].to_pml}
     let(:obj){FactoryGirl.create(:attachment_file)}
     let(:analysis){FactoryGirl.create(:analysis)}
