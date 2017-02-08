@@ -25,6 +25,7 @@ class Array
 		      	if obj.respond_to?(:spots)
 		      		obj.spots.each do |spot|
 		      			#analyses << spot.target if spot.target && spot.target.instance_of?(Analysis)
+		      			analyses.delete(spot.target) if spot.target && spot.target.instance_of?(Analysis)
 		      			analyses << spot
 		      		end
 		      	end

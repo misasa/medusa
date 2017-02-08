@@ -205,6 +205,24 @@ describe AttachmentFile do
     end
   end
 
+  describe ".to_pml", :current => true do
+    subject{[obj].to_pml}
+    let(:obj){FactoryGirl.create(:attachment_file)}
+    let(:analysis){FactoryGirl.create(:analysis)}
+    let(:spot){FactoryGirl.create(:spot, :target_uid => analysis.global_id)}
+    before do
+      obj
+      analysis
+      obj.analyses << analysis
+      obj.spots << spot
+    end
+
+    context "output xml" do
+      it {expect(subject).to match(/xml/) }
+    end
+  end
+
+
 
 end
 
