@@ -15,7 +15,7 @@ class AttachmentFile < ActiveRecord::Base
   has_many :boxes, -> { order(:name) }, through: :attachings, source: :attachable, source_type: "Box"
   has_many :bibs, through: :attachings, source: :attachable, source_type: "Bib"
   has_many :analyses, through: :attachings, source: :attachable, source_type: "Analysis"
-  has_many :surface_images
+  has_many :surface_images, foreign_key: :image_id
   has_many :surfaces, :through => :surface_images
 
   attr_accessor :path

@@ -27,10 +27,29 @@ class SurfaceDecorator < Draper::Decorator
     links = []
     surface_images.order("position ASC").each do |surface_image|
       file = surface_image.image
-      links << h.content_tag(:div, surface_image.decorate.spots_panel(spots: file.spots) , class: "col-lg-4") if file.image?
+      links << h.content_tag(:div, surface_image.decorate.spots_panel(spots: file.spots) , class: "col-lg-3") if file.image?
     end
     h.content_tag(:div, h.raw( links.join ), class: "row spot-thumbnails")
   end
+
+  def spots_panel(width: 40, height:40, spots:[])
+    surface = self
+    file = self.first_image
+    svg = file.decorate.picture_with_spots(width:width, height:height, spots:spots)
+    svg_link = h.link_to(h.surface_image_path(surface, file)) do
+      svg
+    end
+    left = h.content_tag(:div, svg_link, class: "col-md-12")
+    right = h.content_tag(:div, nil, class: "col-md-12")
+    row = h.content_tag(:div, left + right, class: "row")
+    header = h.content_tag(:div, class: "panel-heading") do
+    end
+
+    body = h.content_tag(:div, row, class: "panel-body")
+    tag = h.content_tag(:div, body, class: "panel panel-default")
+    tag
+  end
+
 
   # Define presentation-specific methods here. Helpers are accessed through
   # `helpers` (aka `h`). You can override attributes, for example:

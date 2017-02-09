@@ -13,7 +13,7 @@ class SurfaceImageDecorator < Draper::Decorator
 
 
 
-  def spots_panel(width: 70, height:60, spots:[])
+  def spots_panel(width: 40, height:40, spots:[])
     surface = self.surface
     file = self.image
     svg = file.decorate.picture_with_spots(width:width, height:height, spots:spots)

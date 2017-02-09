@@ -9,15 +9,33 @@ class AttachmentFileDecorator < Draper::Decorator
 
   def name_with_id
     tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-file") + " #{name} < #{global_id} >"
-    if Settings.rplot_url
-      tag += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
-    end
+#    if Settings.rplot_url
+#      tag += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
+#    end
     tag
   end
 
   def icon
     self.class.icon
   end
+
+  def related_pictures
+    links = []
+    surfaces.each do |surface|
+      links << h.content_tag(:div, surface.decorate.spots_panel(width:140, height: 120), class: "col-lg-3")
+    end
+    # related_spots.each do |spot|
+    #   links << h.content_tag(:div, spot.decorate.spots_panel, class: "col-lg-3")
+    # end
+    # spot_links.each do |spot|
+    #   links << h.content_tag(:div, spot.decorate.spots_panel , class: "col-lg-3")
+    # end
+    # attachment_image_files.each do |file|
+    #   links << h.content_tag(:div, file.decorate.spots_panel(spots: file.spots) , class: "col-lg-3") if file.image?
+    # end
+    h.content_tag(:div, h.raw( links.join ), class: "row spot-thumbnails")
+  end
+
 
   def picture_with_spots(width: 250, height: 250, spots: [], with_cross: false)
     return unless image?

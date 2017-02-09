@@ -9,6 +9,15 @@
       <li>affine matrix: <%= @attachment_file.affine_matrix_in_string %></li>
     <% end %>
   <% end %>
+  <% if @attachment_file.surface_images.present? %>
+    <li>
+      <% @attachment_file.surface_images.each do |surface_image| %>
+        <% surface = surface_image.surface %>
+        <%= link_to(surface.name, surface_path(surface)) %>
+      <% end %>
+    </li>
+  <% end %>  
+
   <li>modified at <%= difference_from_now(@attachment_file.updated_at) -%></li>
   <% if @attachment_file.pdf? %>
     <li>
@@ -17,16 +26,15 @@
     </li>
   <% end %>
 </ul>
-
-<div class="spot-viewer">
-  <%= content_tag :svg, nil, class: "spot-canvas", width: 250, height: 250, "data-image" => attachment_file_path(@attachment_file, format: :svg) %>
+<div class="row spot-thumbnails">
+  <%= @attachment_file.decorate.related_pictures %>
 </div>
 
 
 <div class="display-type">
   <div id="display-type-html">
-    <% if @attachment_file.image? && @attachment_file.spots.size > 0  %>
-      <%= render partial: "spot" %>
+    <% if @attachment_file.image? %>
+      <%= rplot_iframe @attachment_file %>
     <% end %>
 </div>
   <div class="hidden" id="display-type-tex">
@@ -37,5 +45,4 @@
   <a href="#display-type-html" class="btn radio-button-group">html</a>
   <a href="#display-type-tex" class="btn radio-button-group">tex</a>
 </div>
-
 

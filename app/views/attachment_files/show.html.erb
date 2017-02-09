@@ -36,63 +36,27 @@
   </div>
 
   <div id="show-body" class="col-lg-8">
+    <% tab_info = [
+        ["at-a-glance",nil],
+#        ["spot",@attachment_file.spots],
+        ["specimen",@attachment_file.specimens],
+        ["box",@attachment_file.boxes],
+        ["place",@attachment_file.places],
+        ["analysis",@attachment_file.analyses],
+        ["bib",@attachment_file.bibs]] %>
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+      <% tab_info.each do |key,array| %>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= key + data_count(array) %></a></li>
+      <% end %>
 
-<div class="display-type">
-  <div id="display-type-html">
-
-
-  <% if @attachment_file.image? %>
-    <div class="spot-viewer">
-      <%= content_tag :svg, nil, class: "spot-canvas", width: 600, height: 600, "data-image" => attachment_file_path(@attachment_file, format: :svg) %>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <% tab_info.each do |key,array| %>
+        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
+      <% end %>
     </div>
 
-<%= form_for Spot.new, url: attachment_file_spots_path(@attachment_file) do |f|%>
-  <%= hidden_field_tag :tab,"" %>
-  <table>
-    <tr>
-      <td><%=icon_tag("screenshot") %> (link ID </td>
-      <td>
-  <div class="input-group">
-    <%= f.text_field :target_uid, class: "form-control input-sm" %>
-    <span class="input-group-addon">
-      <%= link_to records_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#spot_target_uid" do %>
-      <span class="glyphicon glyphicon-search"></span>
-      <% end %>
-    </span>
   </div>
-      </td>
-      <td>)</td>
-      <td>
-        <%= f.hidden_field :spot_x ,value: "0" %>
-        <%= f.hidden_field :spot_y ,value: "0" %>
-        <%= f.hidden_field :radius_in_percent ,value: "1" %>
-        <%= f.hidden_field :stroke_color ,value: "blue" %>
-        <%= f.hidden_field :fill_color ,value: "blue" %>
-        <%= f.hidden_field :opacity ,value: "0" %>
-        <%= f.hidden_field :with_cross ,value: "false" %>
-        <%= f.button title:"add new spot", class: "btn btn-default" do %>
-          <span class="glyphicon glyphicon-save"></span>
-        <% end %>
-      </td>
-    </tr>
-  </table>
-<%= rplot_iframe @attachment_file %>
-
-<% end %>
-</div>
-  <div class="hidden" id="display-type-tex">
-    <pre><code><%= @attachment_file.to_tex %></code></pre>
-  </div>
-</div>
-<div class="btn-group">
-  <a href="#display-type-html" class="btn radio-button-group">html</a>
-  <a href="#display-type-tex" class="btn radio-button-group">tex</a>
-</div>
-
-
-    <%= javascript_tag do %>
-      $("div.spot-viewer").spotViewer();
-    <% end %>
-  </div>
-<% end %>  
 </div>
