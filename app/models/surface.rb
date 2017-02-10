@@ -24,6 +24,14 @@ class Surface < ActiveRecord::Base
   	ss
   end
 
+  def specimens
+    sps = []
+    images.each do |image|
+      next unless image
+      sps.concat(image.specimens) if image.specimens
+    end
+    sps.compact.uniq
+  end
 
   def first_image
   	surface_image = surface_images.order('position ASC').first

@@ -490,6 +490,10 @@ class SpecimenDecorator < Draper::Decorator
 
   def related_pictures
     links = []
+    surfaces.each do |surface|
+      next unless surface
+      links << h.content_tag(:div, surface.decorate.spots_panel, class: "col-lg-3") if surface.first_image
+    end
     related_spots.each do |spot|
 #      links << h.content_tag(:div, h.content_tag(:div, spot.decorate.thumblink_with_spot_info, class: "panel-body"), class: "panel panel-default col-lg-4")
 #      links << h.content_tag(:div, spot.decorate.thumblink_with_spot_info, class: "col-lg-3")

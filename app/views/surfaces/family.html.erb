@@ -1,10 +1,10 @@
 
-<div id="family-tree">
-  <%#= @spot.family_tree %>
-</div>
 <div class="surface-viewer">
 <%= content_tag :svg, nil, class: "surface-canvas", width: 300, height: 300, "data-image" => surface_image_path(@surface, @surface.first_image, format: :svg) if @surface.first_image %>
 </div>  
+<div id="family-tree">
+  <%= @surface.family_tree %>
+</div>
 <%= @surface.related_pictures %>
 
 <%= javascript_tag do %>

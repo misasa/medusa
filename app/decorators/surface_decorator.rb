@@ -2,6 +2,10 @@ class SurfaceDecorator < Draper::Decorator
   delegate_all
   delegate :as_json
 
+  def icon
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+  end
+
   # def rplot_url
   #   return unless Settings.rplot_url
   #   Settings.rplot_url + '?id=' + global_id
@@ -23,16 +27,35 @@ class SurfaceDecorator < Draper::Decorator
     surface_images[0].decorate.to_tex unless surface_images.empty?
   end
 
+
+  def family_tree(current_spot = nil)
+    html_class = "tree-node"
+    html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
+      picture = h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+      specimens.each do |specimen|
+        next unless specimen
+        link = specimen.name
+        icon = specimen.decorate.icon
+        icon += h.link_to(link, specimen)
+        picture += icon        
+      end
+      picture += h.icon_tag("screenshot") + h.content_tag(:a, h.content_tag(:span, spots.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if surface.spots.size > 0
+      picture
+    end
+    html
+  end
+
+
   def related_pictures
     links = []
     surface_images.order("position ASC").each do |surface_image|
       file = surface_image.image
-      links << h.content_tag(:div, surface_image.decorate.spots_panel(spots: file.spots) , class: "col-lg-3") if file.image?
+      links << h.content_tag(:div, surface_image.decorate.spots_panel(spots: file.spots) , class: "col-lg-2", :style => "padding:0 0 0 0" ) if file.image?
     end
-    h.content_tag(:div, h.raw( links.join ), class: "row spot-thumbnails")
+    h.content_tag(:div, h.raw( links.join ), class: "row spot-thumbnails", :style => "margin-left:0; margin-right:0;")
   end
 
-  def spots_panel(width: 40, height:40, spots:[])
+  def spots_panel(width: 140, height:120, spots:[])
     surface = self
     file = self.first_image
     svg = file.decorate.picture_with_spots(width:width, height:height, spots:spots)
@@ -40,7 +63,7 @@ class SurfaceDecorator < Draper::Decorator
       svg
     end
     left = h.content_tag(:div, svg_link, class: "col-md-12")
-    right = h.content_tag(:div, nil, class: "col-md-12")
+    right = h.content_tag(:div, my_tree, class: "col-md-12")
     row = h.content_tag(:div, left + right, class: "row")
     header = h.content_tag(:div, class: "panel-heading") do
     end
@@ -50,7 +73,27 @@ class SurfaceDecorator < Draper::Decorator
     tag
   end
 
+  def my_tree
+    html_class = "tree-node"
+    html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
+      picture = h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+      picture += h.link_to(surface.name, surface)
+      #picture = h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-globe"), self)
 
+      # specimens.each do |specimen|
+      #   next unless specimen
+      #   link = specimen.name
+      #   icon = specimen.decorate.icon
+      #   icon += h.link_to(link, specimen)
+      #   picture += icon        
+      # end
+      picture += h.icon_tag("picture") + h.content_tag(:a, h.content_tag(:span, images.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if images.size > 1
+      picture += h.icon_tag("screenshot") + h.content_tag(:a, h.content_tag(:span, spots.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if surface.spots.size > 0
+      picture
+    end
+
+    html
+  end
   # Define presentation-specific methods here. Helpers are accessed through
   # `helpers` (aka `h`). You can override attributes, for example:
   #

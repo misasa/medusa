@@ -110,6 +110,14 @@ class Specimen < ActiveRecord::Base
     Analysis.where(specimen_id: self_and_descendants)
   end
 
+  def surfaces
+    sfs = []
+    attachment_image_files.each do |image|
+      sfs.concat(image.surfaces) if image.surfaces
+    end
+    sfs.compact.uniq
+  end
+
   def ghost?
     quantity && quantity <= 0 || [Status::DISAPPEARANCE, Status::DISPOSAL, Status::LOSS].include?(status)
   end

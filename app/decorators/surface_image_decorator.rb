@@ -20,13 +20,13 @@ class SurfaceImageDecorator < Draper::Decorator
     svg_link = h.link_to(h.surface_image_path(surface, file)) do
       svg
     end
-    left = h.content_tag(:div, svg_link, class: "col-md-12")
-    right = h.content_tag(:div, my_tree(spots), class: "col-md-12")
-    row = h.content_tag(:div, left + right, class: "row")
+    left = h.content_tag(:div, svg_link, class: "col-md-9", :style => "padding:0 0 0 0")
+    right = h.content_tag(:div, my_tree(spots), class: "col-md-3", :style => "padding:0 0 0 0")
+    row = h.content_tag(:div, left + right, class: "row", :style => "margin-left:0; margin-right:0;")
     header = h.content_tag(:div, class: "panel-heading") do
     end
 
-    body = h.content_tag(:div, row, class: "panel-body")
+    body = h.content_tag(:div, row, class: "panel-body", :style => 'padding: 2px')
     tag = h.content_tag(:div, body, class: "panel panel-default")
     tag
   end

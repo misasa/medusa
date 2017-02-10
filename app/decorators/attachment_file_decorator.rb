@@ -137,6 +137,14 @@ class AttachmentFileDecorator < Draper::Decorator
     html_class = "tree-node"
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
       picture = h.content_tag(:span, nil, class: "glyphicon glyphicon-picture")
+      #picture += 
+      surfaces.each do |surface|
+        link = surface.name
+        icon = surface.decorate.icon
+        icon += h.link_to(link, surface)
+        picture += icon
+      end
+
       attachings.each do |attaching|
         attachable = attaching.attachable
         if attachable
