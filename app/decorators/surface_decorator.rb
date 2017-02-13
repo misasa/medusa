@@ -50,6 +50,7 @@ class SurfaceDecorator < Draper::Decorator
     links = []
     surface_images.order("position ASC").each do |surface_image|
       file = surface_image.image
+      next unless file
       links << h.content_tag(:div, surface_image.decorate.spots_panel(spots: file.spots) , class: "col-lg-2", :style => "padding:0 0 0 0" ) if file.image?
     end
     h.content_tag(:div, h.raw( links.join ), class: "row spot-thumbnails", :style => "margin-left:0; margin-right:0;")

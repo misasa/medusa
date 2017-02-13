@@ -1,10 +1,12 @@
+<div class="btn-group">
+  <a href="#display-type-html" class="btn radio-button-group">info</a>
+  <a href="#display-type-rplot" class="btn radio-button-group">data</a>
+  <a href="#display-type-tex" class="btn radio-button-group">bibtex</a>
+  <a href="#display-type-casteml" class="btn radio-button-group">casteml</a>  
+  <%#= display_type_for 'plot' if Settings.rplot_url %>
+</div>
 <div class="display-type">
   <div id="display-type-html">
-    <% if false %>
-      <%= high_chart("plot-summary", @specimen.generate_summary_plot) %>    
-    <% else %>
-      <%= @specimen.plot_chemistries %>
-    <% end %>  
     <ul>
       <% unless @specimen.igsn.blank? %>
         <li>
@@ -49,6 +51,13 @@
 
 
   </div>
+  <div class="hidden" id="display-type-rplot">
+    <% if false %>
+      <%= high_chart("plot-summary", @specimen.generate_summary_plot) %>    
+    <% else %>
+      <%= @specimen.plot_chemistries %>
+    <% end %>
+  </div>
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @specimen.to_bibtex %></code></pre>
   </div>
@@ -56,10 +65,4 @@
     <pre><code><%= @specimen.to_pml %></code></pre>
   </div>  
   <%#= display_plot @specimen if Settings.rplot_url %>
-</div>
-<div class="btn-group">
-  <a href="#display-type-html" class="btn radio-button-group">html</a>
-  <a href="#display-type-tex" class="btn radio-button-group">bibtex</a>
-  <a href="#display-type-casteml" class="btn radio-button-group">casteml</a>  
-  <%#= display_type_for 'plot' if Settings.rplot_url %>
 </div>

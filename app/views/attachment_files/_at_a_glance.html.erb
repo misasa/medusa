@@ -1,14 +1,11 @@
 <div class="btn-group">
-  <a href="#display-type-html" class="btn radio-button-group">html</a>
+  <a href="#display-type-html" class="btn radio-button-group">info</a>
+  <a href="#display-type-rplot" class="btn radio-button-group">data</a>
   <a href="#display-type-tex" class="btn radio-button-group">tex</a>
 </div>
 
 <div class="display-type">
   <div id="display-type-html">
-    <% if @attachment_file.image? %>
-      <%= rplot_iframe @attachment_file %>
-    <% end %>
-
 <ul>
   <%= li_if_exist("name: ", @attachment_file.name) %>
   <%= li_if_exist("description: ", @attachment_file.description) %>
@@ -43,6 +40,12 @@
 
 
 </div>
+  <div class="hidden" id="display-type-rplot">
+    <% if @attachment_file.image? %>
+      <%= rplot_iframe @attachment_file %>
+    <% end %>
+  </div>
+
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @attachment_file.to_tex %></code></pre>
   </div>

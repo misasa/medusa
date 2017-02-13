@@ -1,3 +1,11 @@
+<div class="btn-group">
+  <%= display_type_for 'info' %>
+  <%= display_type_for 'data' %>
+</div>
+
+<div class="display-type">
+  <div id="display-type-info">
+
 <ul>
   <%= li_if_exist 'technique: ', @analysis.technique.try!(:name) %>
   <%= li_if_exist 'device: ', @analysis.device.try!(:name) %>
@@ -88,4 +96,10 @@
   <% end %>
 </div>
 <% end %>
-<%= rplot_iframe @analysis %>
+</div>
+
+
+  <div class="hidden" id="display-type-data">
+    <%= rplot_iframe @analysis %>
+  </div>
+</div>
