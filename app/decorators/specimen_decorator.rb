@@ -57,6 +57,20 @@ class SpecimenDecorator < Draper::Decorator
     tag
   end
 
+  def surfaces_with_link
+    contents = []
+    surfaces.each do |surface|
+      content = h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+      content += ""
+      content += h.link_to_if(h.can?(:read, surface), h.raw(surface.name), surface)
+      content = h.content_tag(:li, content)
+      contents << content
+    end
+    unless contents.empty?
+      h.content_tag(:ul, h.raw(contents.join(" ")) )
+    end
+  end
+
   def bibs_with_link
     contents = []
     bibs.each do |bib| 

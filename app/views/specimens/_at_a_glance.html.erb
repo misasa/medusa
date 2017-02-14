@@ -34,6 +34,7 @@
         <%= li_if_exist("#{specimen_custom_attribute.custom_attribute.name}: ", specimen_custom_attribute.value ) %>
       <% end %> 
       <li>modified at <%= difference_from_now(@specimen.updated_at) %></li>
+      <%= li_if_exist("surface:", @specimen.surfaces_with_link) %>
       <%= li_if_exist("bib:", @specimen.bibs_with_link) %>
       <% if @specimen.attachment_pdf_files.present? %>
         <li>

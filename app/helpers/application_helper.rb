@@ -20,8 +20,8 @@ module ApplicationHelper
   end
 
 
-  def rplot_iframe(obj, size = '800')
-    content_tag(:iframe, nil, src: obj.rplot_url, width: size, height: (size.to_i * 1.2).to_s, frameborder: "no", class: "embed-responsive-item")
+  def rplot_iframe(obj, size = '800', width = 800, height = 600)
+    content_tag(:iframe, nil, src: obj.rplot_url, width: width, height: height, frameborder: "no" , class: "embed-responsive-item")
   end
 
 
