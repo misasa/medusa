@@ -14,8 +14,10 @@
   <tbody>
     <%= form_tag bundle_edit_attachment_files_path, id: "attachment-file-bundle-form" do %>
       <% @surface.surface_images.order("position ASC").each do |surface_image| %>
+        <% attachment_file = surface_image.image %>
+        <% next unless attachment_file %>
+
         <tr>
-          <% attachment_file = surface_image.image %>
           <td>
             <%= check_box_tag("ids[]", attachment_file.id, checked: false, id: "ids_#{attachment_file.id}", class: "select-row") if can?(:update, attachment_file) %>
           </td>
