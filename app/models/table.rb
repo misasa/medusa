@@ -20,7 +20,7 @@ class Table < ActiveRecord::Base
 
   validates :age_unit, presence: true, if: -> { with_age.present? }
   #validates :age_scale, presence: true, if: -> { with_age.present? }
-
+#  attr_accessor :ignore_take_over_specimen?
 
 
   class Row
@@ -226,6 +226,22 @@ class Table < ActiveRecord::Base
     @specimens_hash
   end
 
+  def flag_ignore_take_over_specimen=(b)
+    @flag_ignore_take_over_specimen = b
+  end
+
+  def flag_ignore_take_over_specimen
+    @flag_ignore_take_over_specimen
+  end
+
+  def take_over_specimen?
+    !ignore_take_over_specimen?
+  end
+
+  def ignore_take_over_specimen?
+    @flag_ignore_take_over_specimen
+  end
+
   private
 
   def chemistries_hash
@@ -248,6 +264,7 @@ class Table < ActiveRecord::Base
 
   def take_over_specimen(specimen)
     return unless bib
+    return if ignore_take_over_specimen?
     bib.specimens << specimen if bib.specimens.exclude?(specimen)
   end
 

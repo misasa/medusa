@@ -56,6 +56,7 @@ class NestedResources::TablesController < ApplicationController
       :with_age,
       :age_unit,
       :description,
+      :flag_ignore_take_over_specimen,
       record_property_attributes: [
         :global_id,
         :user_id,

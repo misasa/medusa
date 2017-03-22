@@ -5,6 +5,7 @@ describe NestedResources::TablesController do
   let(:child_name){ :table }
   let(:parent) { FactoryGirl.create(parent_name) }
   let(:child) { FactoryGirl.create(child_name) }
+  let(:specimen) { FactoryGirl.create(:specimen) }
   let(:user) { FactoryGirl.create(:user) }
   let(:url){ "where_i_came_from" }
   let(:attributes) { {description: description} }
@@ -12,6 +13,7 @@ describe NestedResources::TablesController do
   before do
     request.env["HTTP_REFERER"] = url
     parent
+    parent.specimens << specimen
     child
     sign_in user
   end
@@ -21,10 +23,22 @@ describe NestedResources::TablesController do
     before { child }
     it { expect{ method }.to change(Table, :count).by(1) }
     context "valid" do
-      before { method }
+      before { 
+        method 
+      }
       it { expect(parent.tables.exists?(description: description)).to eq true }
       it { expect(response).to redirect_to request.env["HTTP_REFERER"] }
     end
+
+    context "with flag_ignore_take_over_specimen" do
+      let(:attributes) { {description: description, flag_ignore_take_over_specimen: true} }
+      before { 
+        method 
+      }
+      it { expect(parent.tables.exists?(description: description)).to eq true }
+      it { expect(response).to redirect_to request.env["HTTP_REFERER"] }
+    end
+
   end
 
   describe "PUT update" do

@@ -163,6 +163,7 @@ class Bib < ActiveRecord::Base
   end
 
   def take_over_specimens(table)
+    return if table.ignore_take_over_specimen?
     table.specimens = specimens
   end
 end

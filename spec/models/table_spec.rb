@@ -102,7 +102,7 @@ describe "Table" do
     it { expect(table.table_analyses.count).to be_eql 2}
   end
 
-  describe "#each", :current => true do
+  describe "#each" do
     context "table not link category_measurement_item" do
       it { expect { |b| table.each(&b) }.not_to yield_control }
     end
@@ -265,6 +265,41 @@ describe "after_remove specimens" do
 
 end
 
+
+describe "table" do
+  let(:bib) { FactoryGirl.create(:bib) }
+  let(:table) { FactoryGirl.create(:table, measurement_category: measurement_category) }
+  let(:table_2) { FactoryGirl.create(:table, measurement_category: measurement_category) }
+  let(:measurement_category) { FactoryGirl.create(:measurement_category, unit: unit) }
+  let(:unit) { FactoryGirl.create(:unit, name: "gram_per_gram", conversion: 1) }
+  let(:specimen_1) { FactoryGirl.create(:specimen) }
+  let(:specimen_2) { FactoryGirl.create(:specimen) }
+  let(:specimen_3) { FactoryGirl.create(:specimen) }
+#  subject { table.specimens.destroy(specimen_2) }
+  context "takes over specimen from bib" do
+    before do
+      bib.specimens << specimen_1
+      bib.specimens << specimen_2
+      bib.specimens << specimen_3
+      bib.tables << table
+    end
+    it { expect(bib.specimens.count).to be_eql(3) }
+    it { expect(table.specimens.count).to be_eql(3) }    
+  end
+
+  context "with flag_ingore = true does not take over specimen from bib" do
+    before do
+      bib.specimens << specimen_1
+      bib.specimens << specimen_2
+      bib.specimens << specimen_3
+      table.flag_ignore_take_over_specimen = true
+      bib.tables << table
+    end
+    it { expect(bib.specimens.count).to be_eql(3) }
+    it { expect(table.specimens.count).to be_eql(0) }    
+  end
+
+end
 describe "Table::Row" do
   let(:row) { Table::Row.new(table, category_measurement_item, [chemistry]) }
   let(:table) { FactoryGirl.create(:table, measurement_category: measurement_category) }
@@ -337,7 +372,7 @@ describe "Table::Row" do
     end
 
 
-    context "table linked 2 chemistries with different device & technique pair", :current => true do
+    context "table linked 2 chemistries with different device & technique pair" do
       let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2]) }
       let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
       let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
