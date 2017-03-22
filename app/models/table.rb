@@ -48,20 +48,27 @@ class Table < ActiveRecord::Base
       end
     end
 
+    def each(&block)
+      table.table_specimens.each do |table_specimen|
+        yield Cell.new(self, chemistries_hash[table_specimen.specimen_id])
+      end
+    end
+
     def symbol
-      return if cells.blank?
-      symbols = cells.map(&:symbol)
+      symbols = []
+      table.table_specimens.each do |table_specimen|
+        value = chemistries_hash[table_specimen.specimen_id]
+        next unless value.present?
+        cell = Cell.new(self, value)
+        symbols << cell.symbol
+      end
+      # return if cells.blank?
+      # symbols = cells.map(&:symbol)
       return if symbols.blank?
 
       symbols.uniq!
       return unless symbols.size == 1
       symbols[0]
-    end
-
-    def each(&block)
-      table.table_specimens.each do |table_specimen|
-        yield Cell.new(self, chemistries_hash[table_specimen.specimen_id])
-      end
     end
 
     def mean(round = true)
@@ -88,6 +95,7 @@ class Table < ActiveRecord::Base
       category_measurement_item.unit || table.measurement_category.unit || category_measurement_item.measurement_item.unit || Unit.first
     end
 
+
     private
 
     def category_measurement_item
@@ -102,6 +110,7 @@ class Table < ActiveRecord::Base
       init_hash = Hash.new { |h, k| h[k] = [] }
       @chemistries_hash ||= chemistries.each_with_object(init_hash) do |chemistry, hash|
         specimen_id = table.specimens_hash[chemistry.analysis.specimen_id]
+        #hash[specimen_id] << chemistry if table.specimens.map(&:id).include?(specimen_id)
         hash[specimen_id] << chemistry
         #hash[chemistry.analysis.specimen_id] << chemistry
       end
@@ -110,6 +119,7 @@ class Table < ActiveRecord::Base
     def cells
       @cells ||= chemistries_hash.values.find_all(&:present?).map { |chemistries| Cell.new(self, chemistries) }
     end
+
   end
 
   class Cell

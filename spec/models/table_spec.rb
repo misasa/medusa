@@ -371,7 +371,58 @@ describe "Table::Row" do
       it { expect(subject.present?).to eq(true) }
     end
 
+    context "table linked 2 chemistries with same device & technique pair and 1 chemistry without device & techniqu pair" do
+      let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2, chemistry_3]) }
+      let(:measurement_item_2) { FactoryGirl.create(:measurement_item, unit: unit, nickname: "測定2", display_in_html: "[B]", display_in_tex: "\abundance{B}") }
+      let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
+      let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
+      let(:table_specimen_3) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_3) }
+      let(:specimen_1) { FactoryGirl.create(:specimen) }
+      let(:specimen_2) { FactoryGirl.create(:specimen) }
+      let(:specimen_3) { FactoryGirl.create(:specimen) }      
+      let(:device_1){ FactoryGirl.create(:device) }
+      let(:technique_1){ FactoryGirl.create(:technique) }
+      let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1, device: device_1, technique: technique_1) }
+      let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2, device: device_1, technique: technique_1) }
+      let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_3, device: device_1, technique: nil) }      
+      let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
+      let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
+      let(:chemistry_3) { FactoryGirl.create(:chemistry, analysis: analysis_3, unit: unit, measurement_item: measurement_item, value: 3) }
+      before do
+        table_specimen_1
+        table_specimen_2
+        table_specimen_3
+        #table.specimens.destroy(specimen_3)
+      end
+      it { expect(subject.present?).to eq(false) }
+    end
 
+
+    context "table linked 2 chemistries with same device & technique pair and 1 chemistry without device & techniqu pair and after remove last chemistry", :current => true do
+      let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2, chemistry_3]) }
+      let(:measurement_item_2) { FactoryGirl.create(:measurement_item, unit: unit, nickname: "測定2", display_in_html: "[B]", display_in_tex: "\abundance{B}") }
+      let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
+      let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
+      let(:table_specimen_3) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_3) }
+      let(:specimen_1) { FactoryGirl.create(:specimen) }
+      let(:specimen_2) { FactoryGirl.create(:specimen) }
+      let(:specimen_3) { FactoryGirl.create(:specimen) }      
+      let(:device_1){ FactoryGirl.create(:device) }
+      let(:technique_1){ FactoryGirl.create(:technique) }
+      let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1, device: device_1, technique: technique_1) }
+      let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2, device: device_1, technique: technique_1) }
+      let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_3, device: device_1, technique: nil) }      
+      let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
+      let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
+      let(:chemistry_3) { FactoryGirl.create(:chemistry, analysis: analysis_3, unit: unit, measurement_item: measurement_item, value: 3) }
+      before do
+        table_specimen_1
+        table_specimen_2
+        table_specimen_3
+        table.specimens.destroy(specimen_3)
+      end
+      it { expect(subject.present?).to eq(true) }
+    end
     context "table linked 2 chemistries with different device & technique pair" do
       let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2]) }
       let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
