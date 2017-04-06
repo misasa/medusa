@@ -39,7 +39,7 @@ GEM
       tzinfo (~> 0.3.37)
     acts_as_list (0.4.0)
       activerecord (>= 3.0)
-    acts_as_mappable (0.0.2)
+    acts_as_mappable (0.0.3)
       actionpack (~> 4.0)
       activerecord (~> 4.0)
       railties (~> 4.0)
@@ -379,7 +379,7 @@ PLATFORMS
 DEPENDENCIES
   activeresource
   acts_as_list
-  acts_as_mappable
+  acts_as_mappable (= 0.0.3)
   acts_as_taggable_on
   alchemist!
   barby
