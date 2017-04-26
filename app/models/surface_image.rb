@@ -67,6 +67,7 @@ class SurfaceImage < ActiveRecord::Base
     surface.surface_images.each_with_index do |osurface_image, idx|
       oimage = osurface_image.image
       next unless oimage
+      next if oimage.affine_matrix.blank?
       w = oimage.original_width
       h = oimage.original_height
       style = "stroke:rgb(0,255,0);stroke-width:10"
@@ -111,6 +112,7 @@ class SurfaceImage < ActiveRecord::Base
     surface.surface_images.each do |osurface_image|
       oimage = osurface_image.image
       next unless oimage
+      next if oimage.affine_matrix.blank?
       w = oimage.original_width
       h = oimage.original_height
       style = "stroke:rgb(0,255,0);stroke-width:10"
@@ -128,6 +130,7 @@ class SurfaceImage < ActiveRecord::Base
     surface.surface_images.each do |osurface_image|
       oimage = osurface_image.image
       next unless oimage
+      next if oimage.affine_matrix.blank?
       oimage_length = oimage.length
       oimage_length_world = oimage.length_in_um
       #image_region
