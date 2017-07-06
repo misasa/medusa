@@ -97,7 +97,7 @@ describe "Table" do
       table_specimen
    end
     it do
-      expect(table.selected_analyses.count).to be_eql 1
+      expect(table.selected_analyses).to be_an_instance_of(Array)
     end
     #it { expect(table.analyses.count).to be_eql 2}
     #it { expect(table.selected_analyses.count).to be_eql 1}    

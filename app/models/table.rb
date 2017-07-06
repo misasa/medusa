@@ -167,12 +167,15 @@ class Table < ActiveRecord::Base
   end
 
   def selected_analyses
-    array = []
-    table_specimens.includes(:specimen).each do |table_specimen|
-      specimen = table_specimen.specimen
-      array << Analysis.new
+    anys = []
+    self.each do |row|
+      if cell.value
+        chemistry = row.chemistry
+        analysis = chemistry.analysis
+        anys << analysis unless anys.include?(analysis)
+      end
     end
-    array
+    anys
   end
 
   def each(&block)
