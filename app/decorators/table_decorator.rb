@@ -23,4 +23,9 @@ class TableDecorator < Draper::Decorator
      table_link
   end
 
+  def plot_chemistries
+    if Settings.rplot_url
+      h.rplot_iframe self
+    end
+  end
 end
