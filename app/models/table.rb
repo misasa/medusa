@@ -171,7 +171,7 @@ class Table < ActiveRecord::Base
     self.each do |row|
       row.each do |cell|
         if cell.value
-          chemistry = row.chemistry
+          chemistry = cell.chemistry
           analysis = chemistry.analysis
           anys << analysis unless anys.include?(analysis)
         end
