@@ -188,6 +188,7 @@ class Table < ActiveRecord::Base
     selected_analyses.each do |analysis|
       analysis.to_pml(xml)
     end
+    xml
   end
 
 
