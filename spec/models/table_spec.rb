@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require "spec_helper"
 
 describe "Table" do
@@ -82,6 +83,25 @@ describe "Table" do
     it { expect(table.analyses.count).to be_eql 2}
     it { expect(table.analyses.count).to be_eql 2}    
     it { expect(table.chemistries.count).to be_eql 2}
+  end
+
+  describe "selected_analyses", :current => true do
+    before do
+      specimen
+      analysis
+      chemistry
+      sub_specimen
+      sub_analysis
+      sub_chemistry
+      table
+      table_specimen
+   end
+    it do
+      expect(table.selected_analyses.count).to be_eql 1
+    end
+    #it { expect(table.analyses.count).to be_eql 2}
+    #it { expect(table.selected_analyses.count).to be_eql 1}    
+    #it { expect(table.chemistries.count).to be_eql 2}
   end
 
   describe "refresh" do
@@ -798,6 +818,6 @@ describe "Table::Cell" do
       it { expect(subject).to eq true }
     end
   end
-  
+
 end
 

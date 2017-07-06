@@ -166,6 +166,15 @@ class Table < ActiveRecord::Base
     end
   end
 
+  def selected_analyses
+    array = []
+    table_specimens.includes(:specimen).each do |table_specimen|
+      specimen = table_specimen.specimen
+      array << Analysis.new
+    end
+    array
+  end
+
   def each(&block)
     category_measurement_items.includes(:measurement_item).each do |category_measurement_item|
       yield Row.new(self, category_measurement_item, chemistries_hash[category_measurement_item.measurement_item_id])
