@@ -169,10 +169,12 @@ class Table < ActiveRecord::Base
   def selected_analyses
     anys = []
     self.each do |row|
-      if cell.value
-        chemistry = row.chemistry
-        analysis = chemistry.analysis
-        anys << analysis unless anys.include?(analysis)
+      row.each do |cell|
+        if cell.value
+          chemistry = row.chemistry
+          analysis = chemistry.analysis
+          anys << analysis unless anys.include?(analysis)
+        end
       end
     end
     anys
