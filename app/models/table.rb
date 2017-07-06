@@ -180,6 +180,17 @@ class Table < ActiveRecord::Base
     anys
   end
 
+  def to_pml(xml=nil)
+    unless xml
+      xml = ::Builder::XmlMarkup.new(indent: 2)
+      xml.instruct!
+    end
+    selected_analyses.each do |analysis|
+      analysis.to_pml(xml)
+    end
+  end
+
+
   def each(&block)
     category_measurement_items.includes(:measurement_item).each do |category_measurement_item|
       yield Row.new(self, category_measurement_item, chemistries_hash[category_measurement_item.measurement_item_id])

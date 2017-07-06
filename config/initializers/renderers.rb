@@ -15,10 +15,11 @@ class Array
 	      	# 	end
 	      	# end
                 elsif obj.instance_of?(Table)
-                  analyses = obj.selected_analyses
-                  analyses.each do |analysis|
-                    analysis.to_pml(xml)
-                  end
+                  obj.to_pml(xml)
+                  #analyses = obj.selected_analyses
+                  #analyses.each do |analysis|
+                  #  analysis.to_pml(xml)
+                  #end
 	      	else
 	      		analyses = []
 		      	analyses << obj.analysis if obj.respond_to?(:analysis)
