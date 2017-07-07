@@ -180,16 +180,17 @@ class Table < ActiveRecord::Base
     anys
   end
 
-  def to_pml(xml=nil)
-    unless xml
-      xml = ::Builder::XmlMarkup.new(indent: 2)
-      xml.instruct!
-    end
-    selected_analyses.each do |analysis|
-      analysis.to_pml(xml)
-    end
-    xml
-  end
+#  def to_pml(xml=nil)
+#    p "Table#to_pml"
+#    unless xml
+#      xml = ::Builder::XmlMarkup.new(indent: 2)
+#      xml.instruct!
+#    end
+#    selected_analyses.each do |analysis|
+#      analysis.to_pml(xml)
+#    end
+#    xml
+#  end
 
 
   def each(&block)

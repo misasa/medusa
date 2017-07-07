@@ -25,6 +25,16 @@ describe TablesController do
         expect(flag).to eq true
       end
     end
+    context "format pml", :current => true do
+      before { get :show, id: table.id, format: :pml }
+      it do
+        expect(response.headers.has_value?("application/xml; charset=utf-8")).to eq true
+      end
+      it do
+        flag = response.body == [table].to_pml
+        expect(flag).to eq true
+      end
+    end
   end
   
   describe "GET edit" do
