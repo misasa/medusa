@@ -1,0 +1,83 @@
+<%= form_for @table, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
+  <table class="table table-condensed table-striped">
+    <ul>
+      <li>measurement-category: <%= link_to @table.measurement_category.try!(:name), edit_measurement_category_path(@table.measurement_category) if @table.measurement_category %></li>
+      <li>modified at <%= difference_from_now(@table.updated_at) -%></li>
+    </ul>
+    <thead>
+      <tr class="specimens">
+        <th>measured</th>
+        <th>unit</th>
+        <% @table.table_specimens.includes(:specimen).each do |table_specimen| %>
+          <th class="sortable">
+            <%= f.fields_for :table_specimens, table_specimen do |g| %>
+              <% specimen = g.object.specimen %>
+              <span class="glyphicon glyphicon-transfer"></span> <%= link_to_if can?(:read, specimen), specimen.name, specimen, class: specimen_ghost(specimen) %>
+              <%= g.hidden_field :position, class: "position" %>
+              <%= link_to table_specimen_path(@table,specimen), method: :delete ,title: "unlink specimen",data: {confirm: "Are you sure you want to unlink #{specimen.name}?"} do %>
+                <span class="glyphicon glyphicon-remove"></span>
+              <% end %>
+            <% end %>
+
+          </th>
+        <% end %>
+        <% if @table.with_average %>
+          <th>mean(1SD)</th>
+        <% end %>
+      </tr>
+    </thead>
+    <tbody>
+      <%= render(partial: "place_rows", locals: {table: @table}) if @table.with_place %>
+      <%= render(partial: "age_rows", locals: {table: @table}) if @table.with_age %>
+      <% @table.each do |row| %>
+        <tr>
+          <th><%== row.name(:html) %>  <%= raw "<sup>#{row.symbol}</sup>" if row.symbol.present? %></th>
+          <th><%== row.unit.try!(:html) %></th>
+          <% row.each do |cell| %>
+            <td><%= cell.value || "-" %> <%= raw "<sup>#{cell.symbol}</sup>" if !row.symbol.present? && cell.symbol.present? %></td>
+          <% end %>
+          <% if @table.with_average %>
+            <td>
+              <%= row.present? ? "#{row.mean}" : "-" %>
+              <%= " (#{row.standard_diviation})" if row.standard_diviation.present? %>
+            </td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <% @table.method_descriptions.each do |sign, description| %>
+    <div class="row">
+      <%= "(#{sign}) determined by #{description}" %>
+    </div>
+  <% end %>
+  <div class="pull-right">
+    <%= f.button class: "btn btn-default" do %>
+      <span class="glyphicon glyphicon-save"></span>
+    <% end %>
+  </div>
+<% end %>
+
+<%= javascript_tag do %>
+(function($) {
+  var src;
+  $("tr.specimens").sortable({
+    items: "th.sortable",
+    placeholder: "ui-state-highlight",
+    start: function(event, ui) {
+      src = ui.item.index();
+    },
+    update: function(event, ui) {
+      var dst = ui.item.index();
+      $(this).closest("table").find("tbody").find("tr").each(function(_, tr) {
+        var td = $(tr).children()[src];
+        $(td).detach();
+        $(td).insertBefore($(tr).children()[dst]);
+      });
+      $(this).find("th.sortable").each(function(index, element) {
+        $(this).find("input.position").val(index + 1);
+      });
+    }
+  });
+})(jQuery);
+<% end %>
