@@ -82,7 +82,7 @@ gem 'builder'
 gem 'activeresource'
 gem 'geocoder'
 gem 'migration_comments'
-gem 'dimensions'
+#gem 'dimensions'
 group :development, :test do
   gem 'rak'
   gem 'pry-rails'
