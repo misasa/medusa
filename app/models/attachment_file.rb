@@ -30,7 +30,7 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super({:methods => [:original_path, :thumbnail_path, :tiny_path, :global_id]}.merge(options))
+    super({:methods => [:corners_on_world, :width_in_um, :height_in_um, :original_path, :thumbnail_path, :tiny_path, :global_id]}.merge(options))
   end
 
   def original_path
@@ -170,6 +170,7 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def corners_on_world
+    return if affine_matrix.blank?
     a, b, c, d = corners_on_image
     [affine_transform(*a),affine_transform(*b),affine_transform(*c),affine_transform(*d)]
   end
@@ -281,5 +282,5 @@ class AttachmentFile < ActiveRecord::Base
     end
     return dst_points
   end
-
+  
 end

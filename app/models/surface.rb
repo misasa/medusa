@@ -38,4 +38,8 @@ class Surface < ActiveRecord::Base
   	surface_image = surface_images.order('position ASC').first
   	surface_image.image if surface_image
   end
+
+  def as_json(options = {})
+    super({ methods: [:global_id, :image_ids] }.merge(options))
+  end
 end
