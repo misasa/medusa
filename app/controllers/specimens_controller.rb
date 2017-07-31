@@ -195,6 +195,7 @@ class SpecimensController < ApplicationController
         :group_writable,
         :guest_readable,
         :guest_writable,
+        :published,
         :lost
       ],
       specimen_custom_attributes_attributes: [

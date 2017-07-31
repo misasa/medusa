@@ -56,6 +56,7 @@ class TablesController < ApplicationController
         :group_writable,
         :guest_readable,
         :guest_writable,
+        :published,
         :lost
       ],
       table_specimens_attributes: [

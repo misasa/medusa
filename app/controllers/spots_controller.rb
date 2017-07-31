@@ -66,6 +66,7 @@ class SpotsController < ApplicationController
         :group_writable,
         :guest_readable,
         :guest_writable,
+        :published,
         :lost
       ]
     )

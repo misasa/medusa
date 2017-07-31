@@ -105,6 +105,7 @@ class BibsController < ApplicationController
         :group_writable,
         :guest_readable,
         :guest_writable,
+        :published,
         :lost
       ],
       bib_authors_attributes: [
