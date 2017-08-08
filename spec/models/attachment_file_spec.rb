@@ -193,6 +193,27 @@ describe AttachmentFile do
 #    end
     it {expect(subject).not_to be_empty} 
   end
+  describe ".bounds", :current => true do
+    subject {obj.bounds}
+    let(:obj){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
+    let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
+
+    context "affine_matrix is blank" do
+      before {obj.affine_matrix = nil}
+      it { expect(subject).to eq nil}
+    end
+    context "affine_matrix is not blank" do
+      let(:left){ -5200.24 }
+      let(:right){ 3000.13 }
+      let(:upper){ 2500.45 }
+      let(:bottom){ -1200.45 }
+      before do
+        obj.stub(:corners_on_world){[[left, 0],[0,upper],[right,0],[0,bottom]]}
+      end
+      it { expect(subject).to eq [left, upper, right, bottom] }
+    end
+  end
+
   describe ".affine_matrix_in_string" do
     subject{obj.affine_matrix_in_string}
     let(:obj){FactoryGirl.create(:attachment_file)}

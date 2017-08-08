@@ -51,7 +51,7 @@ describe Surface do
     end
   end
 
-  describe "spots", :current => true do
+  describe "spots" do
     #it { expect(obj.spots).to include(spot)}
     context "shares same surface's spots" do
       let(:obj){ FactoryGirl.create(:surface) }
@@ -71,7 +71,21 @@ describe Surface do
   end
 
 
-  describe "to_pml", :current => true do
+  describe "bounds", :current => true do
+    #it { expect(obj.spots).to include(spot)}
+      let(:obj){ FactoryGirl.create(:surface) }
+      let(:image_1) { FactoryGirl.create(:attachment_file, :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
+      let(:image_2) { FactoryGirl.create(:attachment_file, :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
+      before do
+        obj.images << image_1
+        obj.images << image_2
+      end
+      it { expect(obj.bounds).to be_an_instance_of(Array)}
+      it { expect(obj.center).to be_an_instance_of(Array)}
+  end
+
+
+  describe "to_pml" do
     context "shares same surface's spots" do
       let(:obj){ FactoryGirl.create(:surface) }
       let(:image_1) { FactoryGirl.create(:attachment_file, :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }

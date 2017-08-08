@@ -1,6 +1,6 @@
 class Surface < ActiveRecord::Base
   include HasRecordProperty
-  has_many :surface_images, :dependent => :destroy
+  has_many :surface_images, :dependent => :destroy, :order => ("position ASC") 
   has_many :images, through: :surface_images	
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: true
 
@@ -39,7 +39,47 @@ class Surface < ActiveRecord::Base
   	surface_image.image if surface_image
   end
 
+  def center
+    return if bounds.blank?
+    left, upper, right, bottom = bounds
+    x = left + (right - left)/2
+    y = bottom + (upper - bottom)/2
+    [x, y]
+  end
+
+  def width
+    return if bounds.blank?
+    left, upper, right, bottom = bounds
+    right - left
+  end
+
+  def height
+    return if bounds.blank?
+    left, upper, right, bottom = bounds
+    upper - bottom
+  end
+
+  def length
+    return if bounds.blank?
+    l = width
+    l = height if height > width
+    l
+  end
+
+  def bounds
+    left,upper,right,bottom = images[0].bounds
+    images.each do |image|
+      next if image.bounds.blank?
+      l,u,r,b = image.bounds
+      left = l if l < left
+      upper = u if u > upper
+      right = r if r > right
+      bottom = b if b < bottom
+    end
+    [left, upper, right, bottom]
+  end
+
   def as_json(options = {})
-    super({ methods: [:global_id, :image_ids] }.merge(options))
+    super({ methods: [:global_id, :image_ids, :center, :length, :bounds] }.merge(options))
   end
 end

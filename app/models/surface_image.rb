@@ -167,6 +167,9 @@ class SurfaceImage < ActiveRecord::Base
     svg
   end
 
+  def as_json(options = {})
+    super({ methods: [:spots, :bounds]}.merge(options))
+  end
 
   private
   def check_image
