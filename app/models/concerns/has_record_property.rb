@@ -32,7 +32,14 @@ module HasRecordProperty
 
   def rplot_url
     return unless Settings.rplot_url
-    Settings.rplot_url + '?id=' + global_id
+#    Settings.rplot_url + '?id=' + global_id
+    Settings.rplot_url + 'chelyabinsk/?id=' + global_id
+  end
+
+  def rmap_url
+    return unless Settings.rplot_url
+#    Settings.rplot_url + '?id=' + global_id
+    Settings.rplot_url + 'surfaces/?id=' + global_id
   end
   
   def form_name
