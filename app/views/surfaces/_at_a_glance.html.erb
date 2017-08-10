@@ -1,15 +1,11 @@
 <div class="btn-group">
   <%= display_type_for 'data' %>
-  <%= display_type_for 'map' %>
   <%= display_type_for 'tex' %>
   <%#= display_type_for 'plot' if Settings.rplot_url %>
 </div>
 <div class="display-type">
   <div id="display-type-data">
     <%= rplot_iframe @surface %>
-  </div>
-  <div id="display-type-map">
-    <%= rmap_iframe @surface %>
   </div>
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @surface.to_tex %></code></pre>
