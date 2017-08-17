@@ -13,7 +13,7 @@ class SurfaceDecorator < Draper::Decorator
 
   def name_with_id
     tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-globe") + " #{name} < #{global_id} >"
-    if Settings.rplot_url
+    if false && Settings.rplot_url
       tag += h.link_to("map", rmap_url, :title => 'map online', :target=>["_blank"])
     end
     tag    

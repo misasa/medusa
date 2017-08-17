@@ -1,6 +1,7 @@
 <div class="btn-group">
   <a href="#display-type-plot" class="btn radio-button-group">data</a>
   <a href="#display-type-tex" class="btn radio-button-group">tex</a>
+  <%= link_to('place', @surface_image.surface.rmap_url, class: "btn radio-button-group", :title => "place online", :target => ["_blank"]) %>
 </div> 
 <div class="display-type">
   <div id="display-type-plot">
