@@ -1,8 +1,12 @@
 class Surface < ActiveRecord::Base
   include HasRecordProperty
-  has_many :surface_images, :dependent => :destroy, :order => ("position ASC") 
-  has_many :images, through: :surface_images	
+
+  has_many :surface_images, :dependent => :destroy, :order => ("position ASC")
+  has_many :images, through: :surface_images
+  has_many :spots, through: :images
+
   after_save :make_map
+
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: true
 
   def map_dir
@@ -30,8 +34,8 @@ class Surface < ActiveRecord::Base
   end
 
   def spots
-  	ss = []
-  	image = first_image
+    ss = []
+    image = first_image
     surface_images.each do |osurface_image|
       oimage = osurface_image.image
       next unless oimage
@@ -47,7 +51,7 @@ class Surface < ActiveRecord::Base
         ss << spot
       end
     end
-  	ss
+    ss
   end
 
   def specimens
@@ -60,8 +64,8 @@ class Surface < ActiveRecord::Base
   end
 
   def first_image
-  	surface_image = surface_images.order('position ASC').first
-  	surface_image.image if surface_image
+    surface_image = surface_images.order('position ASC').first
+    surface_image.image if surface_image
   end
 
   def center
