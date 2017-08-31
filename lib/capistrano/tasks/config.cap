@@ -51,7 +51,8 @@ namespace :config do
 		invoke "config:unicorn:setup"
 		invoke "config:environment:setup"		
 		invoke "config:apache:setup"
-		invoke "config:init:setup"		
+		invoke "config:init:setup"
+                invoke "config:google:setup"		
 	end
 
   namespace :application do
@@ -118,6 +119,24 @@ namespace :config do
   		end
   	end
   end
+  namespace :google do
+	relative_path = 'google.yml'
+
+  	desc "Create google.yml"
+  	task :setup do
+  		default_template = "#overwriteme"
+		on roles(:all) do |host|
+			remote_path = File.join("#{shared_path}/config", relative_path)
+		    upload_config_file appname, relative_path, default_template
+		end
+  	end
+  	task :clean do
+  		on roles(:all) do |host|
+  			remove_config_file relative_path
+  		end
+  	end
+  end
+
   namespace :site_init do
   	relative_path = "site_init.sh"
   	desc "Create site_init.sh"

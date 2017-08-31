@@ -7,7 +7,14 @@ defaults: &defaults
   barcode:
     prefix:
     type: 2D
-
+  sesar:
+    user:
+    password:
+    user_code:
+  sign_in:
+    enable_password: true
+    enable_google: false
+    enable_shibboleth: false
 production:
   <<: *defaults
 staging:

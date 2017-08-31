@@ -6,7 +6,7 @@
 
 # Ignore bundler config.
 /.bundle
-
+/vendor/bundle
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
@@ -32,3 +32,7 @@
 public/system
 vendor/bundler
 db_dump
+
+*~
+\.\#*
+\#*\#
