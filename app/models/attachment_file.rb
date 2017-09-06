@@ -75,7 +75,7 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def rotate
-    logger.debug("rotating...")
+    logger.info("rotating...")
     return unless bounds
     return unless File.exists?(local_path)
     return unless image?
