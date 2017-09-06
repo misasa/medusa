@@ -60,14 +60,15 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def warped_path
-    dirname = File.dirname(path)
-    basename = File.basename(path, ".*")
+    _path = data.path
+    dirname = File.dirname(_path)
+    basename = File.basename(_path, ".*")
     File.join([dirname, basename + "_warped.png"])
     #File.join([Rails.root.to_s, "public", dirname, basename + "_warped.png"])
   end
 
   def local_path(style = :original)
-    _path = path(style)
+    _path = data.path(style)
     if style == :warped
       _path = warped_path
     end
@@ -75,10 +76,12 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def rotate
-    logger.info("rotating...")
+    logger.info("in rotate")
     return unless bounds
+    logger.info(local_path)
     return unless File.exists?(local_path)
     return unless image?
+    logger.info("generating...")
     left, upper, right, bottom = bounds
     bb = bounds
     b_w = right - left
