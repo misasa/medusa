@@ -62,14 +62,20 @@ class AttachmentFile < ActiveRecord::Base
   def warped_path
     dirname = File.dirname(path)
     basename = File.basename(path, ".*")
-    File.join([Rails.root.to_s, "public", dirname, basename + "_warped.png"])
+    File.join([dirname, basename + "_warped.png"])
+    #File.join([Rails.root.to_s, "public", dirname, basename + "_warped.png"])
   end
 
   def local_path(style = :original)
-    File.join([Rails.root, "public", path(style).sub(/\?\d+$/,"")])
+    _path = path(style)
+    if style == :warped
+      _path = warped_path
+    end
+    File.join([Rails.root, "public", _path.sub(/\?\d+$/,"")])
   end
 
   def rotate
+    logger.debug("rotating...")
     return unless bounds
     return unless File.exists?(local_path)
     return unless image?
@@ -87,11 +93,12 @@ class AttachmentFile < ActiveRecord::Base
       corners_on_new_image << pixs
     end
     image_1 = local_path
-    image_2 = warped_path
+    image_2 = local_path(:warped)
     png = ChunkyPNG::Image.new(new_geometry[0], new_geometry[1])
     png.save(image_2)
     array_str = corners_on_new_image.to_s.gsub(/\s+/,"")
     cmd = "image_in_image #{image_1} #{image_2} #{array_str} -o #{image_2}"
+    logger.info(cmd)
     system(cmd)
   end
 
