@@ -72,7 +72,7 @@ class AttachmentFile < ActiveRecord::Base
     if style == :warped
       _path = warped_path
     end
-    File.join([Rails.root, "public", _path.sub(/\?\d+$/,"")])
+    _path.sub(/\?\d+$/,"")
   end
 
   def rotate
