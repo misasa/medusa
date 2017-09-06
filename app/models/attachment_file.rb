@@ -3,7 +3,7 @@ class AttachmentFile < ActiveRecord::Base
   include HasRecordProperty
 
   has_attached_file :data,
-                    styles: { thumb: "160x120>", tiny: "50x50" },
+  styles: { thumb: "160x120>", tiny: "50x50"},
                     path: ":rails_root/public/system/:class/:id_partition/:basename_with_style.:extension",
                     url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension"
   alias_attribute :name, :data_file_name
@@ -20,6 +20,7 @@ class AttachmentFile < ActiveRecord::Base
 
   attr_accessor :path
   after_post_process :save_geometry
+  after_save :rotate
 
   serialize :affine_matrix, Array
 
@@ -56,6 +57,42 @@ class AttachmentFile < ActiveRecord::Base
 
   def save_geometry
     self.original_geometry = Paperclip::Geometry.from_file(data.queued_for_write[:original]).to_s rescue nil
+  end
+
+  def warped_path
+    dirname = File.dirname(path)
+    basename = File.basename(path, ".*")
+    File.join([Rails.root.to_s, "public", dirname, basename + "_warped.png"])
+  end
+
+  def local_path(style = :original)
+    File.join([Rails.root, "public", path(style).sub(/\?\d+$/,"")])
+  end
+
+  def rotate
+    return unless bounds
+    return unless File.exists?(local_path)
+    return unless image?
+    left, upper, right, bottom = bounds
+    bb = bounds
+    b_w = right - left
+    b_h = upper - bottom
+    p_um = pixels_per_um
+    new_geometry = [(b_w * p_um).ceil, (b_h * p_um).ceil]
+    corners_on_new_image = []
+    corners_on_world.each do |corner|
+      dx = corner[0] - left
+      dy = upper - corner[1]
+      pixs = [(dx/b_w*new_geometry[0]).to_int, (dy/b_h*new_geometry[1]).to_int]
+      corners_on_new_image << pixs
+    end
+    image_1 = local_path
+    image_2 = warped_path
+    png = ChunkyPNG::Image.new(new_geometry[0], new_geometry[1])
+    png.save(image_2)
+    array_str = corners_on_new_image.to_s.gsub(/\s+/,"")
+    cmd = "image_in_image #{image_1} #{image_2} #{array_str} -o #{image_2}"
+    system(cmd)
   end
 
   def pdf?
@@ -104,6 +141,12 @@ class AttachmentFile < ActiveRecord::Base
   def pixels_on_image(x, y)
     return if affine_matrix.blank?
     image_xy2image_coord(pixel2percent(x), pixel2percent(y))    
+  end
+
+  def pixels_per_um
+    um = width_in_um
+    return unless um
+    width/um
   end
 
   def pixels_on_world(x, y)

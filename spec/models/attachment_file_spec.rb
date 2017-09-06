@@ -52,7 +52,7 @@ describe AttachmentFile do
     end
   end
 
-  describe ".md5hash", :current => true do
+  describe ".md5hash" do
     let(:user) { FactoryGirl.create(:user) }
     let(:md5hash){ Digest::MD5.hexdigest(File.open("spec/fixtures/files/test_image.jpg", 'rb').read) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
@@ -81,6 +81,28 @@ describe AttachmentFile do
     end
     it {expect(obj.original_geometry).to eq("2352x1568")}
   end
+
+  describe ".create", :current => true do
+    let(:user) { FactoryGirl.create(:user) }
+    before do
+      User.current = user
+      obj
+      obj.save
+    end
+
+ #   it {expect(obj.original_geometry).to eq("2352x1568")}
+    context "with affine_matrix" do
+      let(:obj) { AttachmentFile.new(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg'), affine_matrix_in_string: affine_matrix_in_string) }
+      let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
+      it {expect(obj.affine_matrix).not_to be_nil}
+    end
+    context "without affine_matrix" do
+      let(:obj) { AttachmentFile.new(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+      it {expect(obj.affine_matrix).to be_eql([])}
+    end
+
+  end
+
 
   describe "#pdf?" do
     subject { obj.pdf? }
@@ -193,7 +215,7 @@ describe AttachmentFile do
 #    end
     it {expect(subject).not_to be_empty} 
   end
-  describe ".bounds", :current => true do
+  describe ".bounds" do
     subject {obj.bounds}
     let(:obj){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
     let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
