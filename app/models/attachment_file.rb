@@ -66,6 +66,15 @@ class AttachmentFile < ActiveRecord::Base
     File.join([dirname, basename + "_warped.png"])
     #File.join([Rails.root.to_s, "public", dirname, basename + "_warped.png"])
   end
+ 
+  def warped_url
+    _url = data.url
+    dirname = File.dirname(_url)
+    basename = File.basename(_url, ".*")
+    File.join([dirname, basename + "_warped.png"])
+    #File.join([Rails.root.to_s, "public", dirname, basename + "_warped.png"])
+
+  end
 
   def local_path(style = :original)
     _path = data.path(style)
