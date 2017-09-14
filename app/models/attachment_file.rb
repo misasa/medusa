@@ -20,7 +20,8 @@ class AttachmentFile < ActiveRecord::Base
 
   attr_accessor :path
   after_post_process :save_geometry
-  after_save :rotate
+#  after_save :rotate
+  after_save :check_affine_matrix
 
   serialize :affine_matrix, Array
 
@@ -82,6 +83,16 @@ class AttachmentFile < ActiveRecord::Base
       _path = warped_path
     end
     _path.sub(/\?\d+$/,"")
+  end
+
+  def check_affine_matrix
+    if affine_matrix_changed?
+      b, a = affine_matrix_change
+      if a.instance_of?(Array) && a.size == 9 && (a != [1,0,0,0,1,0,0,0,1])
+        #p "rotating..."
+        RotateWorker.perform_async(id)
+      end
+    end
   end
 
   def rotate

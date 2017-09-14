@@ -82,7 +82,23 @@ describe AttachmentFile do
     it {expect(obj.original_geometry).to eq("2352x1568")}
   end
 
-  describe ".create", :current => true do
+  describe ".save_affine_matrix", :current => true do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+    let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
+
+    before do
+      User.current = user
+      obj
+      obj.affine_matrix_in_string = affine_matrix_in_string
+      #allow(obj).to receive(:rotate).and_return("hello world")
+    end
+    it { expect{obj.save}.not_to raise_error}
+  end
+
+
+
+  describe ".create" do
     let(:user) { FactoryGirl.create(:user) }
     before do
       User.current = user

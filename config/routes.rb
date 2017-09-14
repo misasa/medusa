@@ -1,4 +1,6 @@
 Medusa::Application.routes.draw do
+  require 'sidekiq/web'
+  mount Sidekiq::Web => '/sidekiq'
   get "surfaces/index"
   get "surfaces/show"
   devise_for :users, controllers: {
