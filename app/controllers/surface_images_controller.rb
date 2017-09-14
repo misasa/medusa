@@ -41,6 +41,11 @@ class SurfaceImagesController < ApplicationController
     duplicate_global_id
   end
 
+  def tiles
+    TileWorker.perform_async(@surface_image.id)
+    respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
+  end
+
   def move_to_top
     #@surface.surface_images.find_by_image_id(@image.id).move_to_top
     @surface_image.move_to_top

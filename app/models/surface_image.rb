@@ -2,9 +2,37 @@ class SurfaceImage < ActiveRecord::Base
   belongs_to :surface
   belongs_to :image, class_name: AttachmentFile 
   acts_as_list :scope => :surface_id, column: :position
-
+  
   validate :check_image
   
+  def tile_dir
+    File.join(surface.map_dir,image.id.to_s)
+  end
+  
+  def make_tiles(options = {})
+    system(make_tiles_cmd(options))
+  end
+
+  def make_tiles_cmd(options = {})
+    maxzoom = options[:maxzoom] || 4
+    transparent = options.has_key?(:transparent) ? options[:transparent] : false 
+    image_path = image.local_path(:warped)
+    unless File.exists?(image_path)
+      image.rotate
+    end
+    bs = image.bounds
+    ce = surface.center
+    if bs && bs.size == 4 && ce && ce.size == 2
+      bounds_str = sprintf("[%.2f,%.2f,%.2f,%.2f]", bs[0], bs[1], bs[2], bs[3])
+      center_str = sprintf("[%.2f,%.2f]", ce[0], ce[1])
+      length_str = sprintf("%.2f", surface.length)
+      cmd = "make_tiles #{image_path} #{bounds_str} #{length_str} #{center_str} -o #{tile_dir} -z #{maxzoom}"
+    end
+    cmd += " -t" if transparent
+    cmd
+  end
+
+
   def spots
   	ss = []
     surface.surface_images.each do |osurface_image|

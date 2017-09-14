@@ -2,7 +2,22 @@ class Surface < ActiveRecord::Base
   include HasRecordProperty
   has_many :surface_images, :dependent => :destroy, :order => ("position ASC") 
   has_many :images, through: :surface_images	
+  after_save :make_map
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: true
+
+  def map_dir
+    File.join(Rails.public_path,"system/maps",global_id)
+  end
+
+  def make_map(opts = {})
+    #maxzoom = opts[:maxzoom] || 5
+    surface_images.order("position ASC").each_with_index do |surface_image, index|
+      options = opts
+      options.merge!(:transparent => true) if index > 0 
+      TileWorker.perform_async(surface_image.id, options)
+      #surface_image.make_tiles(opts.merge({:transparent => true})) if index > 0
+    end
+  end
 
   def spots
   	ss = []

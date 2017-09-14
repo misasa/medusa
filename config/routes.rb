@@ -236,6 +236,7 @@ Medusa::Application.routes.draw do
       member do
         get :family
         post 'move_to_top'
+        post 'tiles'
       end
     end
   end
