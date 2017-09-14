@@ -9,6 +9,7 @@
       <th>global-id</th>
       <th></th>
       <th></th>
+      <th></th>
     </tr>
   </thead>
   <tbody>
@@ -24,7 +25,19 @@
           <td><%= link_to_if can?(:read, attachment_file), attachment_file.data_file_name, attachment_file_path(attachment_file) %></td>
           <td></td>
           <td><%= attachment_file.spots.try!(:size) %></td>
-          <td><%= attachment_file.try!(:global_id) %></td> 
+          <td><%= attachment_file.try!(:global_id) %></td>
+          <td><% if File.exists?(surface_image.tile_dir) %>
+                <%= link_to(url_for_tile(surface_image), title: "tiles") do %>
+                 <span class="glyphicon glyphicon-globe"></span>
+                <% end %>
+              <% else %>
+                <span class="glyphicon glyphicon-globe"></span>
+                <%= link_to(tiles_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :post, title: "make tiles" ) do %>
+                 <span class="glyphicon glyphicon-refresh"></span>
+                <% end %>
+              <% end %>
+          </td>
+
           <td>
             <%= link_to move_to_top_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :move_to_top ,title: "move to top" do %>
               <span class="glyphicon glyphicon-arrow-up"></span>
