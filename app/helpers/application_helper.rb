@@ -2,7 +2,7 @@ module ApplicationHelper
   def url_for_tile(surface_image, zoom=0,x=0,y=0)
     surface = surface_image.surface
     image = surface_image.image
-    return "#{root_url}system/maps/#{surface.global_id}/#{image.id}/#{zoom}/#{x}_#{y}.png"
+    return "#{root_path}system/maps/#{surface.global_id}/"
   end
   def content_tag_if(boolean, name, content_or_options_with_block = nil, options = nil, escape = true, &block)
     if boolean
