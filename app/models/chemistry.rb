@@ -43,4 +43,11 @@ class Chemistry < ActiveRecord::Base
     val = val.round(scale) if scale
     val
   end
+
+  def to_pmlame
+    [
+      unit ? Alchemist.measure(value, unit.name.to_sym).to(:parts).to_f : value,
+      unit ? Alchemist.measure(uncertainty, unit.name.to_sym).to(:parts).to_f : uncertainty
+    ]
+  end
 end

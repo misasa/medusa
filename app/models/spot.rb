@@ -1,5 +1,8 @@
 class Spot < ActiveRecord::Base
   include HasRecordProperty
+
+  PMLAME_HEADER = %w(image_id image_path x_image y_image x_vs y_vs)
+
 #  attr_accessor :spot_x_world, :spot_y_world
   belongs_to :attachment_file
 
@@ -83,6 +86,18 @@ class Spot < ActiveRecord::Base
       end
     end
     
+  end
+
+  def to_pmlame
+    world_xy = spot_world_xy || []
+    [
+      attachment_file.try!(:global_id),
+      attachment_file.try!(:url),
+      spot_x_from_center,
+      spot_y_from_center,
+      world_xy[0],
+      world_xy[1]
+    ]
   end
 
 

@@ -214,6 +214,14 @@ class Analysis < ActiveRecord::Base
     
   end
 
+  def to_pmlame(nicknames)
+    init = [ name ]
+    nicknames.inject(init) do |pmlame, nickname|
+      chemistry = chemistries.detect { |ch| ch.measurement_item.nickname == nickname }
+      pmlame += chemistry ? chemistry.to_pmlame : Array.new(2)
+    end
+  end
+
   def get_spot
     spots = Spot.where(target_uid: global_id)
     return if spots.empty?

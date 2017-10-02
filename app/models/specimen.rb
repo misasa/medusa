@@ -132,6 +132,19 @@ class Specimen < ActiveRecord::Base
   #   [self].to_pml
   # end
 
+  def to_pmlame(nicknames = nil)
+    nicknames ||= chemistries.map { |chemistry| chemistry.measurement_item.nickname }.flatten.uniq
+    header = nicknames + Spot::PMLAME_HEADER + Place::PMLAME_HEADER
+    analyses.inject([header]) do |pmlame, analysis|
+      values = analysis.to_pmlame(nicknames)
+      spot = Spot.find_by(target_uid: analysis.global_id)
+      values += spot ? spot.to_pmlame : Array.new(Spot::PMLAME_HEADER.size)
+      place = rplace
+      values += place ? place.to_pmlame : Array.new(Place::PMLAME_HEADER.size)
+      pmlame << values
+    end
+  end
+
   def age_mean
     return unless ( age_min && age_max )
     (age_min + age_max) / 2.0
