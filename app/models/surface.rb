@@ -8,6 +8,16 @@ class Surface < ActiveRecord::Base
   def map_dir
     File.join(Rails.public_path,"system/maps",global_id)
   end
+  
+  def publish!
+    objs = [self]
+    objs.concat(self.surface_images.map(&:image))
+    objs.compact!
+    objs.each do |obj|
+      obj.published = true if obj
+      obj.save
+    end
+  end
 
   def make_map(opts = {})
     #maxzoom = opts[:maxzoom] || 5

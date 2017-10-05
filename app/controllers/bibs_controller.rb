@@ -29,6 +29,11 @@ class BibsController < ApplicationController
     @bib.update_attributes(bib_params)
     respond_with @bib
   end
+
+  def publish
+    @bib.publish!
+    respond_with @bib
+  end
   
   def destroy
     @bib.destroy

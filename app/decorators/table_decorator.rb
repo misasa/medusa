@@ -15,6 +15,14 @@ class TableDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list") + " #{caption} < #{global_id} >"
   end
 
+  def publish_badge
+    if self.published
+      h.content_tag(:button, "published", type: "button", class: "btn btn-primary")
+    else
+      h.link_to(h.content_tag(:button, "publish", type: "button", class: "btn btn-danger"), h.publish_table_path(self.id), method: :put)
+    end
+  end
+
   def to_link
      table_link = h.link_to(h.raw(self.caption), self )
      # if Settings.rplot_url

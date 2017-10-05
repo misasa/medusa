@@ -22,6 +22,11 @@ class TablesController < ApplicationController
     respond_with @table
   end
 
+  def publish
+    @table.publish!
+    respond_with @table
+  end
+
   def property
     respond_with @table, layout: !request.xhr?
   end

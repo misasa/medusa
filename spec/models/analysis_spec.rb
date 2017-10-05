@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'spec_helper'
 
 describe Analysis do
@@ -440,6 +441,15 @@ describe Analysis do
     end
   end
   
+  describe "publish!", :current => true do
+    subject { analysis.publish! }
+    let(:analysis) { FactoryGirl.create(:analysis) }
+    before do
+      analysis
+    end
+    it { expect{subject}.not_to raise_error }
+  end
+
   describe "#update_table_analyses" do
     subject { analysis.send(:update_table_analyses) }
     let(:analysis) { FactoryGirl.create(:analysis, name: "分析１", specimen: specimen_1) }
@@ -475,6 +485,5 @@ describe Analysis do
         end
       end
     end
-  end
-    
+  end    
 end

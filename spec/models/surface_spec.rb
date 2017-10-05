@@ -30,6 +30,15 @@ describe Surface do
   	it { expect(obj.global_id).not_to be_nil }
   end
 
+  describe "publish!", :current => true do
+    subject { surface.publish!  }
+    let(:surface){ FactoryGirl.create(:surface) }
+    before do
+      surface
+    end
+    it { expect{ subject }.not_to raise_error } 
+  end
+
   describe "images <<" do
     subject { obj.images << image }
   	let(:obj){ FactoryGirl.create(:surface) }

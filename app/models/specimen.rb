@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Specimen < ActiveRecord::Base
   include HasRecordProperty
   include HasViewSpot
@@ -91,6 +92,40 @@ class Specimen < ActiveRecord::Base
       Status::DISAPPEARANCE
     else
       Status::NORMAL
+    end
+  end
+  
+  def publish!
+    specimens = [self]
+    specimens.concat(self.ancestors)
+    boxes = []
+    places = []
+    attachment_files = []
+    specimens.each do |specimen|
+      attachment_files.concat(specimen.attachment_files)
+      if specimen.box
+        boxes << specimen.box
+        boxes.concat(specimen.box.ancestors) if specimen.box
+      end
+      if specimen.place
+        places << specimen.place
+        attachment_files.concat(place.attachment_files)
+      end
+    end
+    boxes.each do |box|
+      attachment_files.concat(box.attachment_files)
+    end
+    objs = []
+    objs.concat(specimens)   
+    objs.concat(boxes)
+    objs.concat(places)
+    objs.concat(attachment_files)    
+    objs.each do |obj|
+      obj.published = true
+      obj.save
+    end
+    self.surfaces.each do |surface|
+      surface.publish!
     end
   end
 

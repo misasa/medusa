@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require "spec_helper"
 
 describe Bib do
@@ -345,6 +346,7 @@ describe Bib do
     it { expect(subject).to eq "can't be blank" }
   end
 
+
   describe "#referrings_analyses" do
     let(:bib) { FactoryGirl.create(:bib) }
 
@@ -374,6 +376,47 @@ describe Bib do
     it { expect(bib.referrings_analyses).to match_array([analysis_1, analysis_2, analysis_3, analysis_4])}
     it { expect(bib.to_pml).to include("\<global_id\>#{analysis_3.global_id}") }    
     it { expect(bib.to_pml).to include("\<global_id\>#{analysis_4.global_id}") }    
+  end
+
+  describe "#publish!", :current => true do
+    subject { bib.publish! }
+    let(:bib) { FactoryGirl.create(:bib) }
+
+    let(:box_1){ FactoryGirl.create(:box)}
+    let(:place_1){ FactoryGirl.create(:place)}
+    let(:specimen_1) { FactoryGirl.create(:specimen, name: "hoge", box_id: box_1.id) }
+    let(:specimen_2) { FactoryGirl.create(:specimen, name: "specimen_2", place_id: place_1.id) }
+    let(:specimen_3) { FactoryGirl.create(:specimen, name: "specimen_3", box_id: box_1.id) }
+    let(:specimen_4) { FactoryGirl.create(:specimen, name: "specimen_3") }
+    let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen_1.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen_2.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, specimen_id: specimen_3.id) }
+    let(:analysis_4) { FactoryGirl.create(:analysis) }
+
+    before do
+      bib
+      box_1;place_1;
+      specimen_1;specimen_2;specimen_3;specimen_4;
+      analysis_1;analysis_2;analysis_3;analysis_4;
+      bib.boxes << box_1
+      bib.places << place_1
+      allow(specimen_3).to receive(:publish!)
+      bib.specimens << specimen_3
+      allow(analysis_3).to receive(:publish!)
+      allow(analysis_4).to receive(:publish!)
+      bib.analyses << analysis_3     
+      bib.analyses << analysis_4
+    end
+
+    it { expect{ subject }.not_to raise_error }
+    it { expect{ subject }.to change{bib.published}.from(be_falsey).to(be_truthy) }
+    it { expect{ subject }.to change{box_1.published}.from(be_falsey).to(be_truthy) }
+    it { expect{ subject }.to change{place_1.published}.from(be_falsey).to(be_truthy) }
+#    it { expect{ subject }.to change{specimen_3.published}.from(be_falsey).to(be_truthy) }
+#    it { expect{ subject }.to change{analysis_3.published}.from(be_falsey).to(be_truthy) }
+#    it { expect{ subject }.to change{analysis_4.published}.from(be_falsey).to(be_truthy) }
+
+
   end
 
 end

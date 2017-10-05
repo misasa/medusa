@@ -11,6 +11,11 @@ class Spot < ActiveRecord::Base
   before_validation :generate_stroke_width, if: "stroke_width.blank?"
 #  after_create :attachment_to_target
 
+  def surface
+    nil if attachment_file.surfaces.blank?
+    attachment_file.surfaces[0]
+  end
+
   def generate_name
     if target_uid.blank? 
       self.name = "untitled spot #{attachment_file.spots.size + 1}"
