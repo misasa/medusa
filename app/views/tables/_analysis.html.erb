@@ -15,7 +15,7 @@
 	<li class="row list-unstyled">
 	  <div class="col-lg-6">
 	    <%= f.fields_for :table_analyses, table_analysis do |g| %>
-	      <%= g.object.analysis.name %> on <%= g.object.analysis.specimen.try(:name) %>
+	      <%= g.object.analysis.name %> on <%= g.object.analysis.specimen.try(:name) %> <%= g.object.analysis.decorate.publish_badge %>
 	      <%= g.hidden_field :priority, class: "priority" %>
 	    <% end %>
 	  </div>

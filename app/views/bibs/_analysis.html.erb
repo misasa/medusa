@@ -17,7 +17,7 @@
           <td>
             <%= check_box_tag("ids[]", analysis.id, false, {id: "ids_#{analysis.id}", class: "select-row"}) if can?(:update, analysis) %>
           </td>
-          <td><%= link_to_if can?(:read, analysis), analysis.name, analysis %></td>
+          <td><%= link_to_if can?(:read, analysis), analysis.name, analysis %> <%= analysis.decorate.publish_badge %></td>
           <td><%= analysis.device.try!(:name) %></td>
           <td></td>
           <td><%= analysis.chemistries.size %></td>

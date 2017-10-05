@@ -71,6 +71,15 @@ class SpecimenDecorator < Draper::Decorator
     end
   end
 
+  def publish_badge
+    if self.published
+      h.content_tag(:button, "published", type: "button", class: "btn btn-primary")
+    else
+#      h.link_to(h.content_tag(:button, "publish", type: "button", class: "btn btn-danger"), h.publish_table_path(self.id), method: :put) 
+      h.content_tag(:button, "publish", type: "button", class: "btn btn-danger")
+    end
+  end
+
   def bibs_with_link
     contents = []
     bibs.each do |bib| 
