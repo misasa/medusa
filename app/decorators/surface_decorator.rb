@@ -27,6 +27,14 @@ class SurfaceDecorator < Draper::Decorator
     surface_images[0].decorate.to_tex unless surface_images.empty?
   end
 
+  def map
+    h.content_tag(:div, nil, id: "surface-map", data: {
+                    base_url: Settings.map_url,
+                    global_id: global_id,
+                    attachment_files: images.each_with_object({}) { |image, hash| hash[File.basename(image.name, ".*")] = image.id },
+                    spots: spots.map { |spot| { id: spot.id, x: spot.spot_x, y: spot.spot_y } }
+                  })
+  end
 
   def family_tree(current_spot = nil)
     html_class = "tree-node"
