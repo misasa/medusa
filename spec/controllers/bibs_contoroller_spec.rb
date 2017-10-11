@@ -71,7 +71,7 @@ describe BibsController do
     let(:bib) { FactoryGirl.create(:bib) }
     #let(:attributes) { {name: "update_name"} }
     it { expect(assigns(:bib)).to eq bib }
-    it { expect(assigns(:bib).published).to be_truthy }
+    #it { expect(assigns(:bib).published).to be_truthy }
   end
 
   

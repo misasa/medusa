@@ -23,7 +23,8 @@ class TablesController < ApplicationController
   end
 
   def publish
-    @table.publish!
+    #@table.publish!
+    PublishWorker.perform_async(@table.global_id)
     respond_with @table
   end
 

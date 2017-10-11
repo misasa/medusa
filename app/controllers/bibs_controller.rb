@@ -31,7 +31,8 @@ class BibsController < ApplicationController
   end
 
   def publish
-    @bib.publish!
+    #@bib.publish!
+    PublishWorker.perform_async(@bib.global_id)
     respond_with @bib
   end
   

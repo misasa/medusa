@@ -22,9 +22,9 @@ class BibDecorator < Draper::Decorator
 
   def publish_badge
     if self.published
-      h.content_tag(:button, "published", type: "button", class: "btn btn-primary")
+      h.content_tag(:button, "published", type: "button", class: "btn btn-danger")
     else
-      h.link_to(h.content_tag(:button, "publish", type: "button", class: "btn btn-danger"), h.publish_bib_path(self.id), method: :put)
+      h.link_to(h.content_tag(:button, "publish", type: "button", class: "btn btn-primary"), h.publish_bib_path(self.id), method: :put)
     end
   end
 
