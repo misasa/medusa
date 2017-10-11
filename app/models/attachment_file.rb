@@ -196,6 +196,11 @@ class AttachmentFile < ActiveRecord::Base
     return pix/self.length.to_f * 100
   end
 
+  def width_on_stage
+    return if affine_matrix.blank?
+    transform_length(width / length.to_f * 100)
+  end
+
   def transform_length(l, type = :xy2world)
     src_points = [[0,0],[l,0]]
     dst_points = transform_points(src_points, type)
