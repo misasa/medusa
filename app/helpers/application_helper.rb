@@ -1,4 +1,10 @@
 module ApplicationHelper
+  def published_label(obj)
+    if obj.published
+      content_tag(:span, "published", class: "label label-danger")
+    end
+  end
+
   def url_for_tile(surface_image, zoom=0,x=0,y=0)
     surface = surface_image.surface
     image = surface_image.image

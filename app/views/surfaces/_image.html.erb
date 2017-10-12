@@ -30,12 +30,11 @@
                 <%= link_to(url_for_tile(surface_image), title: "world image") do %>
                  <span class="glyphicon glyphicon-globe"></span>
                 <% end %>
-              <% else %>
+              <% end %>
                 <span class="glyphicon glyphicon-globe"></span>
                 <%= link_to(tiles_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :post, title: "make world image" ) do %>
                  <span class="glyphicon glyphicon-refresh"></span>
                 <% end %>
-              <% end %>
           </td>
 
           <td>

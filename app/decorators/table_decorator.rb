@@ -17,9 +17,9 @@ class TableDecorator < Draper::Decorator
 
   def publish_badge
     if self.published
-      h.content_tag(:button, "published", type: "button", class: "btn btn-danger")
-    else
-      h.link_to(h.content_tag(:button, "publish", type: "button", class: "btn btn-primary"), h.publish_table_path(self.id), method: :put)
+      h.published_label(self)
+#    else
+#      h.link_to(h.content_tag(:button, "publish", type: "button", class: "btn btn-primary"), h.publish_table_path(self.id), method: :put)
     end
   end
 

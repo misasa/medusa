@@ -75,6 +75,8 @@ Medusa::Application.routes.draw do
       patch :lose
       put :found
       patch :found
+      put :publish
+      patch :publish
     end
   end
 

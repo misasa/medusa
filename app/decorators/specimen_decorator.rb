@@ -73,7 +73,7 @@ class SpecimenDecorator < Draper::Decorator
 
   def publish_badge
     if self.published
-      h.content_tag(:button, "published", type: "button", class: "btn btn-danger")
+      h.published_label(self)
     else
 #      h.link_to(h.content_tag(:button, "publish", type: "button", class: "btn btn-danger"), h.publish_table_path(self.id), method: :put) 
       h.content_tag(:button, "publish", type: "button", class: "btn btn-primary")
