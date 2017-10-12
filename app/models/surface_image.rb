@@ -14,7 +14,7 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def make_tiles_cmd(options = {})
-    maxzoom = options[:maxzoom] || 4
+    maxzoom = options[:maxzoom] || 6
     transparent = options.has_key?(:transparent) ? options[:transparent] : false 
     image_path = image.local_path(:warped)
     unless File.exists?(image_path)
