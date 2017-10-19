@@ -15,5 +15,6 @@ require 'capistrano/rails/migrations'
 
 require "whenever/capistrano"
 require "capistrano/sidekiq"
+require "capistrano-db-tasks"
 # Loads custom tasks from `lib/capistrano/tasks' if you have any defined.
 Dir.glob('lib/capistrano/tasks/*.cap').each { |r| import r }

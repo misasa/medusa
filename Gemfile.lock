@@ -66,6 +66,8 @@ GEM
     capistrano-bundler (1.1.1)
       capistrano (~> 3.0)
       sshkit (>= 1.2.0)
+    capistrano-db-tasks (0.6)
+      capistrano (>= 3.0.0)
     capistrano-rails (1.1.1)
       capistrano (~> 3.1)
       capistrano-bundler (~> 1.1)
@@ -401,6 +403,7 @@ DEPENDENCIES
   cancan
   capistrano
   capistrano-bundler
+  capistrano-db-tasks
   capistrano-rails
   capistrano-rbenv
   capistrano-sidekiq
