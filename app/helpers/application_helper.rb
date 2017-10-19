@@ -14,7 +14,7 @@ module ApplicationHelper
   def list_title(obj)
     if obj.respond_to?(:decorate)
       obj = obj.decorate
-      tag = obj.try(:icon) + raw(" ") + obj.name
+      tag = obj.try(:icon) ? obj.icon + raw(" ") + obj.name : obj.name
     else
       tag = obj.name
     end

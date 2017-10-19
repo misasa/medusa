@@ -18,14 +18,13 @@
           <td>
             <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
           </td>
-          <td><%= link_to_if can?(:read, specimen), specimen.name,specimen, class: specimen_ghost(specimen) %></td>
+          <td><%= link_to_if can?(:read, specimen), list_title(specimen),specimen, class: specimen_ghost(specimen) %></td>
           <td><%= specimen.physical_form.try!(:name) %></td>
           <td><%= specimen.try!(:quantity) %></td>
           <td><%= specimen.try!(:quantity_unit) %></td>
           <td></td>
           <td><%= specimen.try!(:global_id) %></td> 
           <td>
-            <%= published_label(specimen) %>
             <%= link_to table_specimen_path(@table,specimen) + tab_param(__FILE__), method: :delete ,title: "unlink specimen",data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
             <% end %>
