@@ -12,7 +12,7 @@
     <% @bib.tables.each do |table| %>
       <tr>
         <td></td>
-        <td><%= link_to_if can?(:read, table), table.caption, table %> <%=table.decorate.publish_badge %></td>
+        <td><%= link_to_if can?(:read, table), list_title(table), table %></td>
         <td><%= link_to table.measurement_category.try!(:name), edit_measurement_category_path(table.measurement_category) if table.measurement_category %></td>
         <td><%= table.specimens.count %></td>
         <td>

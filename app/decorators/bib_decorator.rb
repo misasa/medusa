@@ -21,8 +21,8 @@ class BibDecorator < Draper::Decorator
   end
 
   def publish_badge
-    if self.published
-      h.published_label 
+    if object.published
+      h.published_label(object) 
     end
   end
 

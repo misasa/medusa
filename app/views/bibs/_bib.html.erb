@@ -1,6 +1,6 @@
 <tr>
   <td><%= check_box_tag("ids[]", bib.id, checked, id: "ids_#{bib.id}", class: "select-row") if can?(:update, bib) %></td>
-  <td><%= link_to bib.name, bib %></td>
+  <td><%= link_to list_title(bib), bib %></td>
   <td><%= bib.try!(:doi) %></td>
   <td><%= bib.authors.map {|author| author.name }.join(" & ")%></td>
   <td><%= bib.try!(:year) %></td>

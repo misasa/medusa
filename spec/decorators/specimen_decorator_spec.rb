@@ -967,9 +967,8 @@ describe SpecimenDecorator do
     describe "name_link" do
       let(:column_name){ "name" }
       it do
-        expect(subject).to eq(
-          "<a class=\" ghost\" href=\"/specimens/#{specimen.id}\">specimen1</a>"
-        )
+        expect(subject).to eq("<a class=\" ghost\" href=\"/specimens/#{specimen.id}\"><span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span> specimen1 <span class=\"label label-danger\">pub</span></a>")
+        #expect(subject).to eq("<a class=\" ghost\" href=\"/specimens/#{specimen.id}\">specimen1</a>")
       end
     end
 

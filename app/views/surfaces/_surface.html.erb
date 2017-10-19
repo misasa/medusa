@@ -1,6 +1,6 @@
 <tr>
   <td><%= check_box_tag("ids[]", surface.id, checked, id: "ids_#{surface.id}", class: "select-row") if can?(:update, surface) %></td>
-  <td><%= link_to surface.name, surface %></td>
+  <td><%= link_to list_title(surface), surface %></td>
   <%= td_if_expand surface.user.try!(:username) %>
   <td><%= surface.group.try!(:name) %></td>
   <%= td_if_expand difference_from_now(surface.published_at) %>

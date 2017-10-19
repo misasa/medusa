@@ -1,8 +1,25 @@
 module ApplicationHelper
   def published_label(obj)
     if obj.published
-      content_tag(:span, "published", class: "label label-danger")
+      content_tag(:span, "pub", class: "label label-danger")
     end
+  end
+
+  def show_title(obj)
+    tag = obj.name_with_id
+    tag += raw(" ") + published_label(obj) if obj.published
+    tag
+  end
+
+  def list_title(obj)
+    if obj.respond_to?(:decorate)
+      obj = obj.decorate
+      tag = obj.try(:icon) + raw(" ") + obj.name
+    else
+      tag = obj.name
+    end
+    tag += raw(" ") + published_label(obj) if obj.published
+    tag
   end
 
   def url_for_tile(surface_image, zoom=0,x=0,y=0)

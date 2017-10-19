@@ -54,6 +54,7 @@ class SpecimenDecorator < Draper::Decorator
       tag += " #{name}"
     end
     tag += " < #{global_id} >"
+    tag += h.published_label(object) if object.published
     tag
   end
 
@@ -112,7 +113,7 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def path_with_id
-    path + " < #{global_id} >"
+    tag = path + " < #{global_id} >"
   end
 
   def path
@@ -648,7 +649,8 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def name_link
-    h.link_to(name.presence || "[no name]", object, class: h.specimen_ghost(object))
+#    h.list_title(object)
+    h.link_to(h.list_title(object) || "[no name]", object, class: h.specimen_ghost(object))
   end
 
   def parent_link
