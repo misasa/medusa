@@ -5,6 +5,8 @@ class Analysis < ActiveRecord::Base
 
   PERMIT_IMPORT_TYPES = ["text/plain", "text/csv", "application/csv", "application/vnd.ms-excel"]
 
+  PMLAME_HEADER = %w(element sample_id)
+
   has_many :chemistries
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
@@ -176,11 +178,11 @@ class Analysis < ActiveRecord::Base
           xml.x_image(spot.spot_x_from_center)
           xml.y_image(spot.spot_y_from_center)
           xml.x_overpic(spot.spot_overpic_x)
-          xml.y_overpic(spot.spot_overpic_y)         
+          xml.y_overpic(spot.spot_overpic_y)
           world_xy = spot.spot_world_xy
           if world_xy
             xml.x_vs(world_xy[0])
-            xml.y_vs(world_xy[1]) 
+            xml.y_vs(world_xy[1])
           end
         end
       end
@@ -189,12 +191,12 @@ class Analysis < ActiveRecord::Base
       if place
         xml.place do
           xml.global_id(place.global_id)
-          xml.name(place.name)          
+          xml.name(place.name)
           xml.longitude(place.longitude)
           xml.latitude(place.latitude)
           xml.elevation(place.elevation)
           xml.description(place.description)
-        end        
+        end
       end
       unless chemistries.empty?
         xml.chemistries do
@@ -211,11 +213,12 @@ class Analysis < ActiveRecord::Base
         end
       end
     end
-    
+
   end
 
-  def to_pmlame(nicknames)
-    init = [ name ]
+  def to_pmlame(nicknames, duplicate_names = [])
+    element_name = duplicate_names.include?(name) ? "#{name} <stone #{specimen.global_id}>" : name
+    init = [ element_name, specimen.global_id ]
     nicknames.inject(init) do |pmlame, nickname|
       chemistry = chemistries.detect { |ch| ch.measurement_item.nickname == nickname }
       pmlame += chemistry ? chemistry.to_pmlame : Array.new(2)

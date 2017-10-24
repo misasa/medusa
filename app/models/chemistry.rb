@@ -46,8 +46,17 @@ class Chemistry < ActiveRecord::Base
 
   def to_pmlame
     [
-      unit ? Alchemist.measure(value, unit.name.to_sym).to(:parts).to_f : value,
-      unit ? Alchemist.measure(uncertainty, unit.name.to_sym).to(:parts).to_f : uncertainty
+      measured_value,
+      measured_uncertainty
     ]
   end
+
+  def measured_value
+    unit ? Alchemist.measure(value, unit.name.to_sym).to(:parts).to_f : value
+  end
+
+  def measured_uncertainty
+    (unit && uncertainty) ? Alchemist.measure(uncertainty, unit.name.to_sym).to(:parts).to_f : uncertainty
+  end
+
 end
