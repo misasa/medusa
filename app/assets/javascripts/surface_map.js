@@ -79,7 +79,18 @@ function initSurfaceMap() {
   };
   radiusControl.addTo(map);
 
-  L.control.scale({ imperial: false }).addTo(map);
+  L.Control.CustomScale = L.Control.Scale.extend({
+    _updateMetric: function (maxMeters) {
+      var meters = this._getRoundNum(maxMeters),
+	  label = meters / 20 + 'mm';
+
+      this._updateScale(this._mScale, label, meters / maxMeters);
+    },
+  });
+  L.control.customScale = function(options) {
+    return new L.Control.CustomScale(options);
+  };
+  L.control.customScale({ imperial: false }).addTo(map);
 
   L.control.layers(baseMaps, overlayMaps).addTo(map);
 
