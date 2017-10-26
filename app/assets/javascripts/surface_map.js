@@ -36,7 +36,7 @@ function initSurfaceMap() {
     circle.id = spot.id;
     circle.on("click", function() {
       var latlng = this.getLatLng();
-      this.bindPopup("lat: " + latlng.lat + "<br />lng: " + latlng.lng).openPopup();
+      this.bindPopup("x: " + latlng.lng.toFixed(2) + "<br />y: " + -latlng.lat.toFixed(2)).openPopup();
     });
     circle.addTo(circlesLayer);
   }
