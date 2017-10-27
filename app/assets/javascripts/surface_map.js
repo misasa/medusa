@@ -3,6 +3,7 @@ function initSurfaceMap() {
   var radiusSelect = document.getElementById("spot-radius");
   var baseUrl = div.dataset.baseUrl;
   var global_id = div.dataset.globalId;
+  var length = parseFloat(div.dataset.length);
   var attachment_files = JSON.parse(div.dataset.attachmentFiles);
   var spots = JSON.parse(div.dataset.spots);
   var layers = [];
@@ -80,12 +81,14 @@ function initSurfaceMap() {
   radiusControl.addTo(map);
 
   L.Control.CustomScale = L.Control.Scale.extend({
-    _updateMetric: function (maxMeters) {
-      var meters = this._getRoundNum(maxMeters),
-	  label = meters / 20 + 'mm';
-
-      this._updateScale(this._mScale, label, meters / maxMeters);
-    },
+    _updateMetric: function(maxMeters) {
+      var pixelsPerMeter = this.options.maxWidth / (maxMeters * map.getZoomScale(map.getZoom(), 0)),
+	  microMetersPerPixel = length / map.getSize().x,
+	  rate = pixelsPerMeter * microMetersPerPixel,
+	  meters = this._getRoundNum(maxMeters * rate),
+	  label = meters < 1000 ? meters + ' μm' : (meters / 1000) + ' mm';
+      this._updateScale(this._mScale, label, meters / rate / maxMeters);
+    }
   });
   L.control.customScale = function(options) {
     return new L.Control.CustomScale(options);
