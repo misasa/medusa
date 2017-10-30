@@ -25,7 +25,7 @@ function initSurfaceMap() {
       overlayMaps[name] = layer;
     }
   }
-    
+
   var circlesLayer = L.layerGroup();
   for(spot of spots) {
     var circle = L.circleMarker([-spot.y, spot.x], {
@@ -49,6 +49,19 @@ function initSurfaceMap() {
     crs: L.CRS.Simple,
     layers: layers
   });
+
+  var gridLayer = L.layerGroup();
+  for (x = 0; x <= map.getSize().x; x += 20) {
+    var top = map.unproject([0, x]),
+	bottom = map.unproject([map.getSize().x, x]);
+    L.polyline([top, bottom], { color: 'red', weight: 1, opacity: 0.5 }).addTo(gridLayer);
+  }
+  for (y = 0; y <= map.getSize().y; y += 20) {
+    var left = map.unproject([y, 0]),
+	right = map.unproject([y, map.getSize().y]);
+    L.polyline([left, right], { color: 'red', weight: 1, opacity: 0.5 }).addTo(gridLayer);
+  }
+  overlayMaps['grid'] = gridLayer;
 
   var radiusControl = L.control({position: 'bottomright'});
   radiusControl.onAdd = function (map) {
