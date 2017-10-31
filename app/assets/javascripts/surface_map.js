@@ -35,9 +35,11 @@ function initSurfaceMap() {
       radius: 3,
     });
     circle.id = spot.id;
+    circle.name = spot.name;
     circle.on("click", function() {
-      var latlng = this.getLatLng();
-      this.bindPopup("x: " + latlng.lng.toFixed(2) + "<br />y: " + -latlng.lat.toFixed(2)).openPopup();
+      var latlng = this.getLatLng(),
+          link = '<a href=/records/' + this.id + '>' + this.name + '</a><br/>';
+      this.bindPopup(link + "x: " + latlng.lng.toFixed(2) + "<br />y: " + -latlng.lat.toFixed(2)).openPopup();
     });
     circle.addTo(circlesLayer);
   }
