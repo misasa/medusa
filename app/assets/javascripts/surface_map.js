@@ -16,6 +16,29 @@ L.control.surfaceScale = function(options) {
 };
 
 
+// Customized marker for spot.
+L.circleMarker.spot = function(spot, options) {
+  var options = L.Util.extend({}, { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 3 }, options),
+      marker = new L.circleMarker([-spot.y, spot.x], options);
+  marker.on('click', function() {
+    var latlng = this.getLatLng(),
+        link = '<a href=/records/' + spot.id + '>' + spot.name + '</a><br/>';
+    this.bindPopup(link + "x: " + latlng.lng.toFixed(2) + "<br />y: " + -latlng.lat.toFixed(2)).openPopup();
+  });
+  return marker;
+};
+
+
+// Customized layer group for spots.
+L.layerGroup.spots = function(spots) {
+  var group = L.layerGroup();
+  for(spot of spots) {
+    L.circleMarker.spot(spot).addTo(group);
+  }
+  return group;
+};
+
+
 function initSurfaceMap() {
   var div = document.getElementById("surface-map");
   var radiusSelect = document.getElementById("spot-radius");
@@ -44,23 +67,7 @@ function initSurfaceMap() {
     }
   }
 
-  var circlesLayer = L.layerGroup();
-  for(spot of spots) {
-    var circle = L.circleMarker([-spot.y, spot.x], {
-      color: 'red',
-      fillColor: '#f03',
-      fillOpacity: 0.5,
-      radius: 3,
-    });
-    circle.id = spot.id;
-    circle.name = spot.name;
-    circle.on("click", function() {
-      var latlng = this.getLatLng(),
-          link = '<a href=/records/' + this.id + '>' + this.name + '</a><br/>';
-      this.bindPopup(link + "x: " + latlng.lng.toFixed(2) + "<br />y: " + -latlng.lat.toFixed(2)).openPopup();
-    });
-    circle.addTo(circlesLayer);
-  }
+  var circlesLayer = L.layerGroup.spots(spots);
   layers.push(circlesLayer);
 
   var map = L.map('surface-map', {
