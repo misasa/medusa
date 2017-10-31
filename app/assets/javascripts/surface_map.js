@@ -1,3 +1,21 @@
+// Customized scale controll for surface.
+L.Control.SurfaceScale = L.Control.Scale.extend({
+  options: L.Util.extend({}, L.Control.Scale.prototype.options, { length: undefined }),
+  _updateMetric: function(maxMeters) {
+    var map = this._map,
+	pixelsPerMeter = this.options.maxWidth / (maxMeters * map.getZoomScale(map.getZoom(), 0)),
+	microMetersPerPixel = this.options.length / map.getSize().x,
+	rate = pixelsPerMeter * microMetersPerPixel,
+	meters = this._getRoundNum(maxMeters * rate),
+	label = meters < 1000 ? meters + ' μm' : (meters / 1000) + ' mm';
+    this._updateScale(this._mScale, label, meters / rate / maxMeters);
+  }
+});
+L.control.surfaceScale = function(options) {
+  return new L.Control.SurfaceScale(options);
+};
+
+
 function initSurfaceMap() {
   var div = document.getElementById("surface-map");
   var radiusSelect = document.getElementById("spot-radius");
@@ -95,20 +113,7 @@ function initSurfaceMap() {
   };
   radiusControl.addTo(map);
 
-  L.Control.CustomScale = L.Control.Scale.extend({
-    _updateMetric: function(maxMeters) {
-      var pixelsPerMeter = this.options.maxWidth / (maxMeters * map.getZoomScale(map.getZoom(), 0)),
-	  microMetersPerPixel = length / map.getSize().x,
-	  rate = pixelsPerMeter * microMetersPerPixel,
-	  meters = this._getRoundNum(maxMeters * rate),
-	  label = meters < 1000 ? meters + ' μm' : (meters / 1000) + ' mm';
-      this._updateScale(this._mScale, label, meters / rate / maxMeters);
-    }
-  });
-  L.control.customScale = function(options) {
-    return new L.Control.CustomScale(options);
-  };
-  L.control.customScale({ imperial: false }).addTo(map);
+  L.control.surfaceScale({ imperial: false, length: length }).addTo(map);
 
   L.control.layers(baseMaps, overlayMaps).addTo(map);
 
