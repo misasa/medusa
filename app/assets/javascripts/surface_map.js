@@ -16,10 +16,10 @@ L.control.surfaceScale = function(options) {
 };
 
 
-// Customized marker for spot.
-L.circleMarker.spot = function(spot, options) {
+// Customized circle for spot.
+L.circle.spot = function(spot, options) {
   var options = L.Util.extend({}, { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 3 }, options),
-      marker = new L.circleMarker([-spot.y, spot.x], options);
+      marker = new L.circle([-spot.y, spot.x], options);
   marker.on('click', function() {
     var latlng = this.getLatLng(),
         link = '<a href=/records/' + spot.id + '>' + spot.name + '</a><br/>';
@@ -40,8 +40,9 @@ L.Control.Radius = L.Control.extend({
 	div = L.DomUtil.create('div', 'leaflet-control-layers'),
         range = L.DomUtil.create('input');
     range.type = 'range';
-    range.min = 1;
+    range.min = 0.1;
     range.max = 10;
+    range.step = 0.1;
     range.value = 3;
     range.style = 'width:60px;margin:3px;';
     div.appendChild(range);
@@ -73,7 +74,7 @@ L.control.radius = function(layerGroup, options) {
 L.layerGroup.spots = function(spots) {
   var group = L.layerGroup();
   for(spot of spots) {
-    L.circleMarker.spot(spot).addTo(group);
+    L.circle.spot(spot).addTo(group);
   }
   return group;
 };
