@@ -79,6 +79,23 @@ L.layerGroup.spots = function(spots) {
 };
 
 
+// Customized layer group for grid.
+L.layerGroup.grid = function(map) {
+  var group = L.layerGroup();
+  for (y = 0; y <= map.getSize().y; y += 20) {
+    var left = map.unproject([0, y], 0),
+	right = map.unproject([map.getSize().x, y]);
+    L.polyline([left, right], { color: 'red', weight: 1, opacity: 0.5 }).addTo(group);
+  }
+  for (x = 0; x <= map.getSize().x; x += 20) {
+    var top = map.unproject([x, 0], 0),
+	bottom = map.unproject([x, map.getSize().y]);
+    L.polyline([top, bottom], { color: 'red', weight: 1, opacity: 0.5 }).addTo(group);
+  }
+  return group;
+};
+
+
 function initSurfaceMap() {
   var div = document.getElementById("surface-map");
   var radiusSelect = document.getElementById("spot-radius");
@@ -117,18 +134,7 @@ function initSurfaceMap() {
     layers: layers
   });
 
-  var gridLayer = L.layerGroup();
-  for (x = 0; x <= map.getSize().x; x += 20) {
-    var top = map.unproject([0, x]),
-	bottom = map.unproject([map.getSize().x, x]);
-    L.polyline([top, bottom], { color: 'red', weight: 1, opacity: 0.5 }).addTo(gridLayer);
-  }
-  for (y = 0; y <= map.getSize().y; y += 20) {
-    var left = map.unproject([y, 0]),
-	right = map.unproject([y, map.getSize().y]);
-    L.polyline([left, right], { color: 'red', weight: 1, opacity: 0.5 }).addTo(gridLayer);
-  }
-  overlayMaps['grid'] = gridLayer;
+  overlayMaps['grid'] = L.layerGroup.grid(map);
 
   L.control.radius(circlesLayer, {position: 'bottomright'}).addTo(map);
 
