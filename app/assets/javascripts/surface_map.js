@@ -29,6 +29,46 @@ L.circleMarker.spot = function(spot, options) {
 };
 
 
+// Radius control for Circle.
+L.Control.Radius = L.Control.extend({
+  initialize: function (layerGroup, options) {
+    this._layerGroup = layerGroup;
+    L.Util.setOptions(this, options);
+  },
+  onAdd: function(map) {
+    var layerGroup = this._layerGroup,
+	div = L.DomUtil.create('div', 'leaflet-control-layers'),
+        range = L.DomUtil.create('input');
+    range.type = 'range';
+    range.min = 1;
+    range.max = 10;
+    range.value = 3;
+    range.style = 'width:60px;margin:3px;';
+    div.appendChild(range);
+    L.DomEvent.on(range, 'change', function() {
+      layerGroup.eachLayer(function(layer) {
+	layer.setRadius(range.value);
+      });
+    });
+    L.DomEvent.on(range, 'input', function() {
+      layerGroup.eachLayer(function(layer) {
+	layer.setRadius(range.value);
+      });
+    });
+    L.DomEvent.on(range, 'mouseenter', function(e) {
+      map.dragging.disable()
+    });
+    L.DomEvent.on(range, 'mouseleave', function(e) {
+      map.dragging.enable();
+    });
+    return div;
+  }
+});
+L.control.radius = function(layerGroup, options) {
+  return new L.Control.Radius(layerGroup, options);
+};
+
+
 // Customized layer group for spots.
 L.layerGroup.spots = function(spots) {
   var group = L.layerGroup();
@@ -90,35 +130,7 @@ function initSurfaceMap() {
   }
   overlayMaps['grid'] = gridLayer;
 
-  var radiusControl = L.control({position: 'bottomright'});
-  radiusControl.onAdd = function (map) {
-    var div = L.DomUtil.create('div', 'leaflet-control-layers'),
-        range = L.DomUtil.create('input');
-    range.type = 'range';
-    range.min = 1;
-    range.max = 10;
-    range.value = 3;
-    range.style = 'width:60px;margin:3px;';
-    div.appendChild(range);
-    L.DomEvent.on(range, 'change', function() {
-      circlesLayer.eachLayer(function(layer) {
-        layer.setRadius(range.value);
-      });
-    });
-    L.DomEvent.on(range, 'input', function() {
-      circlesLayer.eachLayer(function(layer) {
-        layer.setRadius(range.value);
-      });
-    });
-    L.DomEvent.on(range, 'mouseenter', function(e) {
-      map.dragging.disable()
-    });
-    L.DomEvent.on(range, 'mouseleave', function(e) {
-      map.dragging.enable();
-    });
-    return div;
-  };
-  radiusControl.addTo(map);
+  L.control.radius(circlesLayer, {position: 'bottomright'}).addTo(map);
 
   L.control.surfaceScale({ imperial: false, length: length }).addTo(map);
 
