@@ -107,8 +107,6 @@ function initSurfaceMap() {
   var layers = [];
   var baseMaps = {};
   var overlayMaps = {};
-  var x = 256;
-  var y = 256;
   var zoom = 1;
 
   var first = true;
@@ -142,5 +140,5 @@ function initSurfaceMap() {
 
   L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-  map.setView(map.unproject([x, y], zoom), zoom);
+  map.setView(map.unproject([map.getSize().x / 2, map.getSize().y / 2], 0), zoom);
 }
