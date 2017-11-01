@@ -1,4 +1,4 @@
-// Customized scale controll for surface.
+// Customized scale control for surface.
 L.Control.SurfaceScale = L.Control.Scale.extend({
   options: L.Util.extend({}, L.Control.Scale.prototype.options, { length: undefined }),
   _updateMetric: function(maxMeters) {
