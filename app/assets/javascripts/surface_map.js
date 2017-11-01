@@ -124,9 +124,6 @@ function initSurfaceMap() {
     }
   }
 
-  var circlesLayer = L.layerGroup.spots(spots);
-  layers.push(circlesLayer);
-
   var map = L.map('surface-map', {
     maxZoom: 8,
     minZoom: 0,
@@ -134,9 +131,12 @@ function initSurfaceMap() {
     layers: layers
   });
 
+  var spotsLayer = L.layerGroup.spots(spots);
+  map.addLayer(spotsLayer);
+
   overlayMaps['grid'] = L.layerGroup.grid(map);
 
-  L.control.radius(circlesLayer, {position: 'bottomright'}).addTo(map);
+  L.control.radius(spotsLayer, {position: 'bottomright'}).addTo(map);
 
   L.control.surfaceScale({ imperial: false, length: length }).addTo(map);
 
