@@ -113,7 +113,7 @@ function initSurfaceMap() {
   var first = true;
   for(name in attachment_files) {
     var id = attachment_files[name];
-    var layer = L.tileLayer(baseUrl + global_id + '/' + id + '/{z}/{x}_{y}.png', { attribution: 'Map data &copy' });
+    var layer = L.tileLayer(baseUrl + global_id + '/' + id + '/{z}/{x}_{y}.png');
     layers.push(layer);
     if (first) {
       baseMaps[name] = layer;
