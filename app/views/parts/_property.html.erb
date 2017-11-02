@@ -67,8 +67,8 @@
         <%= f.check_box :published %>
       <% end %>
       <% if current_user.admin? %>
-        <%= link_to publish_record_path(record.global_id), title: "recursive publish", class: "btn btn-primary", method: :put , data: { confirm: "Are you sure you want to publish #{record.name} with related records?" } do %>
-          <span>publish</span>
+        <%= link_to publish_record_path(record.global_id), title: "recursive publish", class: "btn btn-default", method: :put , data: { confirm: "Are you sure you want to publish #{record.name} with related records?" } do %>
+          <span>Chpub -R</span>
         <% end %>
       <% end %>
     </div>
