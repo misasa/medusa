@@ -1,7 +1,4 @@
-
-<div class="surface-viewer">
-<%= content_tag :svg, nil, class: "surface-canvas", width: 300, height: 300, "data-image" => surface_image_path(@surface, @surface.first_image, format: :svg) if @surface.first_image %>
-</div>  
+<%= @surface.map %>
 <div id="family-tree">
   <%= @surface.family_tree %>
 </div>
@@ -10,3 +7,6 @@
 <%= javascript_tag do %>
   $("div.surface-viewer").surfaceViewer();
 <% end %>
+<script>
+  initSurfaceMap();
+</script>
