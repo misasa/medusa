@@ -31,7 +31,7 @@ class SurfaceDecorator < Draper::Decorator
     h.content_tag(:div, nil, id: "surface-map", data: {
                     base_url: Settings.map_url,
                     global_id: global_id,
-                    length: images[0].length_in_um,
+                    length: length,
                     attachment_files: images.each_with_object({}) { |image, hash| hash[File.basename(image.name, ".*")] = image.id },
                     spots: spots.map { |spot|
                       target = spot.target

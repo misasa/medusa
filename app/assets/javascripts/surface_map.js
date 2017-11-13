@@ -4,7 +4,7 @@ L.Control.SurfaceScale = L.Control.Scale.extend({
   _updateMetric: function(maxMeters) {
     var map = this._map,
 	pixelsPerMeter = this.options.maxWidth / (maxMeters * map.getZoomScale(map.getZoom(), 0)),
-	microMetersPerPixel = this.options.length / map.getSize().x,
+	microMetersPerPixel = this.options.length / 256;
 	rate = pixelsPerMeter * microMetersPerPixel,
 	meters = this._getRoundNum(maxMeters * rate),
 	label = meters < 1000 ? meters + ' μm' : (meters / 1000) + ' mm';
@@ -81,16 +81,25 @@ L.layerGroup.spots = function(spots) {
 
 
 // Customized layer group for grid.
-L.layerGroup.grid = function(map) {
-  var group = L.layerGroup();
-  for (y = 0; y <= map.getSize().y; y += 20) {
-    var left = map.unproject([0, y], 0),
-	right = map.unproject([map.getSize().x, y]);
+L.layerGroup.grid = function(map, length) {
+  var group = L.layerGroup(),
+      pixelsPerMiliMeter = 256 * 1000 / length,
+      getFromTo = function(center, step) {
+        return {
+	  from: center - Math.ceil(center / step) * step,
+	  to: center + Math.ceil(center / step) * step
+	}
+      },
+      xFromTo = getFromTo(map.getSize().x / 2, pixelsPerMiliMeter),
+      yFromTo = getFromTo(map.getSize().y / 2, pixelsPerMiliMeter);
+  for (y = yFromTo.from; y <= yFromTo.to; y += pixelsPerMiliMeter) {
+    var left = map.unproject([xFromTo.from, y], 0),
+	right = map.unproject([xFromTo.to, y]);
     L.polyline([left, right], { color: 'red', weight: 1, opacity: 0.5 }).addTo(group);
   }
-  for (x = 0; x <= map.getSize().x; x += 20) {
-    var top = map.unproject([x, 0], 0),
-	bottom = map.unproject([x, map.getSize().y]);
+  for (x = xFromTo.from; x <= xFromTo.to; x += pixelsPerMiliMeter) {
+    var top = map.unproject([x, yFromTo.from], 0),
+	bottom = map.unproject([x, yFromTo.to]);
     L.polyline([top, bottom], { color: 'red', weight: 1, opacity: 0.5 }).addTo(group);
   }
   return group;
@@ -133,7 +142,7 @@ function initSurfaceMap() {
   var spotsLayer = L.layerGroup.spots(spots);
   map.addLayer(spotsLayer);
 
-  overlayMaps['grid'] = L.layerGroup.grid(map);
+  overlayMaps['grid'] = L.layerGroup.grid(map, length);
 
   L.control.radius(spotsLayer, {position: 'bottomright'}).addTo(map);
 
