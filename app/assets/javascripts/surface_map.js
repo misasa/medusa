@@ -73,8 +73,8 @@ L.control.radius = function(layerGroup, options) {
 // Customized layer group for spots.
 L.layerGroup.spots = function(spots) {
   var group = L.layerGroup();
-  for(spot of spots) {
-    L.circle.spot(spot).addTo(group);
+  for(var i = 0; i < spots.length; i++) {
+    L.circle.spot(spots[i]).addTo(group);
   }
   return group;
 };
