@@ -96,6 +96,7 @@ class Surface < ActiveRecord::Base
   end
 
   def bounds
+    return Array.new(4) { 0 } if globe?
     left,upper,right,bottom = images[0].bounds
     images.each do |image|
       next if image.bounds.blank?
