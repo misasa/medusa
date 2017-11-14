@@ -102,14 +102,15 @@ class Specimen < ActiveRecord::Base
     places = []
     attachment_files = []
     specimens.each do |specimen|
-      attachment_files.concat(specimen.attachment_files)
+      attachment_files.concat(specimen.attachment_files) if specimen.attachment_files
       if specimen.box
         boxes << specimen.box
         boxes.concat(specimen.box.ancestors) if specimen.box
       end
       if specimen.place
-        places << specimen.place
-        attachment_files.concat(place.attachment_files)
+        place = specimen.place
+        places << place
+        attachment_files.concat(place.attachment_files) if place.attachment_files
       end
     end
     boxes.each do |box|
