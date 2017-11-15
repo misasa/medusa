@@ -17,9 +17,9 @@ L.control.surfaceScale = function(options) {
 
 
 // Customized circle for spot.
-L.circle.spot = function(spot, options) {
+L.circle.spot = function(map, spot, options) {
   var options = L.Util.extend({}, { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 3 }, options),
-      marker = new L.circle([-spot.y, spot.x], options);
+      marker = new L.circle(map.unproject([spot.x, spot.y], 0), options);
   marker.on('click', function() {
     var latlng = this.getLatLng(),
         link = '<a href=/records/' + spot.id + '>' + spot.name + '</a><br/>';
@@ -71,10 +71,10 @@ L.control.radius = function(layerGroup, options) {
 
 
 // Customized layer group for spots.
-L.layerGroup.spots = function(spots) {
+L.layerGroup.spots = function(map, spots) {
   var group = L.layerGroup();
   for(var i = 0; i < spots.length; i++) {
-    L.circle.spot(spots[i]).addTo(group);
+    L.circle.spot(map, spots[i]).addTo(group);
   }
   return group;
 };
@@ -139,7 +139,7 @@ function initSurfaceMap() {
     layers: layers
   });
 
-  var spotsLayer = L.layerGroup.spots(spots);
+  var spotsLayer = L.layerGroup.spots(map, spots);
   map.addLayer(spotsLayer);
 
   overlayMaps['grid'] = L.layerGroup.grid(map, length);
