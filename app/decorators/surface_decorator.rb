@@ -33,13 +33,18 @@ class SurfaceDecorator < Draper::Decorator
                     global_id: global_id,
                     length: length,
                     attachment_files: images.each_with_object({}) { |image, hash| hash[File.basename(image.name, ".*")] = image.id },
-                    spots: spots.map { |spot|
-                      target = spot.target
-                      {
-                        id: target.try(:global_id) || spot.global_id,
-                        name: target.try(:name) || name,
-                        x: spot.spot_x,
-                        y: spot.spot_y
+                    spots: images.inject([]) { |array, image|
+                      array + image.spots.map { |spot|
+                        target = spot.target
+                        worlds = spot.spot_world_xy
+                        x = (worlds[0] - bounds[0] + (length - width) / 2) * 256 / length
+                        y = (bounds[1] - worlds[1] + (length - height) / 2) * 256 / length
+                        {
+                          id: target.try(:global_id) || spot.global_id,
+                          name: target.try(:name) || name,
+                          x: x,
+                          y: y
+                        }
                       }
                     }
                   })
