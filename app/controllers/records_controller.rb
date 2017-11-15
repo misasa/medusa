@@ -76,6 +76,7 @@ class RecordsController < ApplicationController
     end
   end
 
+ # /records/xxxx-xxx/pmlame?type=xxx
   def pmlame
     target = params[:type] == "family" ? :families : :self_and_descendants
     @records = @record.respond_to?(target) ? @record.send(target) : [@record]

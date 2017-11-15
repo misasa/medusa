@@ -6,7 +6,7 @@ describe Chemistry do
     let(:specimen_1) { FactoryGirl.create(:specimen) }
     let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1) }
     let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_1) }
-    let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_1) }    
+    let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_1) }
     let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis_1, measurement_item: measurement_item, unit: unit, value: value) }
     let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_2, measurement_item: measurement_item, unit: unit_2, value: value) }
     let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_3, measurement_item: measurement_item, unit: unit, value: value) }
@@ -73,7 +73,7 @@ describe Chemistry do
       it { expect(subject).to eq "nickname: 1.00" }
     end
   end
-  
+
   describe "#unit_conversion_value" do
     subject { chemistry.unit_conversion_value(unit_name, scale) }
     let(:chemistry) { FactoryGirl.create(:chemistry, unit: unit, value: value) }
@@ -139,6 +139,75 @@ describe Chemistry do
       context "unit_name is 'ounce'" do
         let(:unit_name) { "ounce" }
         it { expect(subject).to be_within(0.001).of(0.3527) }
+      end
+    end
+  end
+
+  describe "#measured_value" do
+    subject { chemistry.measured_value }
+    let(:chemistry) { FactoryGirl.create(:chemistry, unit: unit, value: value) }
+    let(:unit) { FactoryGirl.create(:unit, name: "parts_per_milli", conversion: conversion) }
+    let(:conversion) { 1000000 }
+    let(:value) { 3000000 }
+
+    before do
+      parts = FactoryGirl.create(:unit, name: "parts", conversion: 1)
+      Alchemist.setup
+      Alchemist.register(:mass, parts.name.to_sym, 1.to_d / parts.conversion)
+      Alchemist.register(:mass, unit.name.to_sym, 1.to_d / unit.conversion)
+    end
+
+    context "unit is present" do
+      it "return measured value" do
+        expect(subject).to eq(value / conversion)
+      end
+    end
+    context "unit is not present" do
+      before { chemistry.unit = nil }
+      it "return unmeasured value" do
+        expect(subject).to eq(value)
+      end
+    end
+  end
+
+  describe "#measured_uncertainty" do
+    subject { chemistry.measured_uncertainty }
+    let(:chemistry) { FactoryGirl.create(:chemistry, unit: unit, uncertainty: uncertainty) }
+    let(:unit) { FactoryGirl.create(:unit, name: "parts_per_milli", conversion: conversion) }
+    let(:conversion) { 1000000 }
+    context "unit is present" do
+      before do
+        parts = FactoryGirl.create(:unit, name: "parts", conversion: 1)
+        Alchemist.setup
+        Alchemist.register(:mass, parts.name.to_sym, 1.to_d / parts.conversion)
+        Alchemist.register(:mass, unit.name.to_sym, 1.to_d / unit.conversion)
+      end
+      context "uncertainty is present" do
+        let(:uncertainty) { 2000000 }
+        it "return measured uncertainty" do
+          expect(subject).to eq(uncertainty / conversion)
+        end
+      end
+      context "uncertainty is not present" do
+        let(:uncertainty) { nil }
+        it "return nil" do
+          expect(subject).to be_nil
+        end
+      end
+    end
+    context "unit is not present" do
+      before { chemistry.unit = nil }
+      context "uncertainty is present" do
+        let(:uncertainty) { 2000000 }
+        it "return unmeasured uncertainty" do
+          expect(subject).to eq(chemistry.uncertainty)
+        end
+      end
+      context "uncertainty is not present" do
+        let(:uncertainty) { nil }
+        it "return nil" do
+          expect(subject).to be_nil
+        end
       end
     end
   end

@@ -406,6 +406,65 @@ describe Analysis do
     end
   end
 
+  describe "#to_pmlame" do
+    subject { analysis.to_pmlame(nicknames, duplicate_names) }
+    let(:analysis) { FactoryGirl.create(:analysis,  name: "analysis_name_1") }
+    let(:chemistry_1) { FactoryGirl.create(:chemistry) }
+    let(:chemistry_2) { FactoryGirl.create(:chemistry) }
+    let(:measurement_item_1) { FactoryGirl.create(:measurement_item, nickname: "Si") }
+    let(:measurement_item_2) { FactoryGirl.create(:measurement_item, nickname: "SiO2") }
+    let(:duplicate_names) { [] }
+    let(:nicknames) { ["Si", "SiO2"] }
+    before do
+      chemistry_1.measurement_item = measurement_item_1
+      chemistry_2.measurement_item = measurement_item_2
+      analysis.chemistries << chemistry_1
+      analysis.chemistries << chemistry_2
+    end
+
+    context "when it exists duplicate element names" do
+      let(:duplicate_names) { ["analysis_name_1"] }
+      it "elementに<stone XXXX> が付加されてること" do
+        global_id = analysis.specimen.global_id
+        allow(chemistry_1).to receive(:to_pmlame).and_return(nil)
+        allow(chemistry_2).to receive(:to_pmlame).and_return([10, 0.1])
+        element_name = "analysis_name_1 <stone #{global_id}>"
+        expect(subject).to match_array([element_name, global_id, nil, nil, 10, 0.1])
+      end
+    end
+    context "when it does not exists duplicate element names" do
+      let(:duplicate_names) { ["analysis_name_2"] }
+      it "elementに<stone XXXX> が付加されていないこと" do
+        global_id = analysis.specimen.global_id
+        allow(chemistry_1).to receive(:to_pmlame).and_return(nil)
+        allow(chemistry_2).to receive(:to_pmlame).and_return([10, 0.1])
+        element_name = "analysis_name_1"
+        expect(subject).to match_array([element_name, global_id, nil, nil, 10, 0.1])
+      end
+    end
+    context "when it exists chemistry" do
+      it "returns [element_name, specimen, value, uncertainty, ...]" do
+        global_id = analysis.specimen.global_id
+        allow(chemistry_1).to receive(:to_pmlame).and_return(nil)
+        allow(chemistry_2).to receive(:to_pmlame).and_return([10, 0.1])
+        element_name = "analysis_name_1"
+        expect(subject).to match_array([element_name, global_id, nil, nil, 10, 0.1])
+      end
+    end
+    context "when it does not exists chemistry" do
+      before do
+        analysis.chemistries = []
+      end
+      it "returns [element_name, specimen, nil, ...]" do
+        global_id = analysis.specimen.global_id
+        allow(chemistry_1).to receive(:to_pmlame).and_return(20, 0.2)
+        allow(chemistry_2).to receive(:to_pmlame).and_return([10, 0.1])
+        element_name = "analysis_name_1"
+        expect(subject).to match_array([element_name, global_id, nil, nil, nil, nil])
+      end
+    end
+  end
+
   describe ".get_spot" do
     subject { obj.get_spot }
     let(:user){FactoryGirl.create(:user)}
@@ -439,7 +498,7 @@ describe Analysis do
       it{expect(subject).to eq spot1}
     end
   end
-  
+
   describe "#update_table_analyses" do
     subject { analysis.send(:update_table_analyses) }
     let(:analysis) { FactoryGirl.create(:analysis, name: "分析１", specimen: specimen_1) }
@@ -476,5 +535,5 @@ describe Analysis do
       end
     end
   end
-    
+
 end

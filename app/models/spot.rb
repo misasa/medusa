@@ -85,11 +85,10 @@ class Spot < ActiveRecord::Base
         end
       end
     end
-
   end
 
   def to_pmlame
-    world_xy = spot_world_xy || []
+    return unless attachment_file.image?
     [
       attachment_file.try!(:global_id),
       attachment_file.data.try!(:url),

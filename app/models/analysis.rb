@@ -221,7 +221,7 @@ class Analysis < ActiveRecord::Base
     init = [ element_name, specimen.global_id ]
     nicknames.inject(init) do |pmlame, nickname|
       chemistry = chemistries.detect { |ch| ch.measurement_item.nickname == nickname }
-      pmlame += chemistry ? chemistry.to_pmlame : Array.new(2)
+      pmlame += chemistry.try(:to_pmlame) || Array.new(2)
     end
   end
 

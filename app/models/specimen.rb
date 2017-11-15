@@ -143,7 +143,7 @@ class Specimen < ActiveRecord::Base
     duplicate_names = element_names.select { |x| element_names.count(x) > 1 }.uniq
     analyses.uniq.inject([]) do |pmlame, analysis|
       spot = Spot.find_by(target_uid: analysis.global_id)
-      data = spot ? spot.to_pmlame : Array.new(Spot::PMLAME_HEADER.size)
+      data = spot.try(:to_pmlame) || Array.new(Spot::PMLAME_HEADER.size)
       data += analysis.to_pmlame(nicknames, duplicate_names)
       key_value = [header, data].transpose
       values = Hash[*key_value.flatten]
