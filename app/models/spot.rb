@@ -1,7 +1,7 @@
 class Spot < ActiveRecord::Base
   include HasRecordProperty
 #  attr_accessor :spot_x_world, :spot_y_world
-  belongs_to :attachment_file
+  belongs_to :attachment_file, inverse_of: :spots
 
   validates :attachment_file, existence: true
   validates :spot_x, presence: true

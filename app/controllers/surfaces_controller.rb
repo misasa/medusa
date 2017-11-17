@@ -1,6 +1,6 @@
 class SurfacesController < ApplicationController
   respond_to :html, :xml, :json, :svg
-  before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update]
+  before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update, :family]
   before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
 
@@ -36,6 +36,7 @@ class SurfacesController < ApplicationController
   end
 
   def family
+    @surface = Surface.preload(images: :spots).find(params[:id]).decorate
     respond_with @surface, layout: !request.xhr?
   end
 
