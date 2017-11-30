@@ -70,7 +70,7 @@ gem 'exception_notification'
 gem 'settingslogic'
 gem 'validates_existence'
 #gem 'acts_as_mappable', git: 'git@devel.misasa.okayama-u.ac.jp:gems/actsasmappable.git'
-gem 'acts_as_mappable', '0.0.3'
+gem 'acts_as_mappable', '0.1.1'
 #gem 'with_recursive', git: 'git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.git'
 gem 'with_recursive'
 gem 'thinreports'
@@ -98,6 +98,7 @@ group :development, :test do
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
   gem 'capistrano-sidekiq'
+  gem 'capistrano-db-tasks', require: false
 end
 
 group :test do

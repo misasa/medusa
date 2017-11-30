@@ -1,6 +1,6 @@
 <tr>
   <td><%= check_box_tag("ids[]", analysis.id, checked, id: "ids_#{analysis.id}", class: "select-row") if can?(:update, analysis) %></td>
-  <td><%= link_to analysis.name,analysis %></td>
+  <td><%= link_to list_title(analysis),analysis %></td>
   <td><%= analysis.device.try!(:name) %></td>
   <td><%= link_to analysis.specimen.name,analysis.specimen, class: specimen_ghost(analysis.specimen) if analysis.specimen %></td>
   <td><%= raw(analysis.chemistry_summary) %></td>

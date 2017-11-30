@@ -27,6 +27,34 @@ class SurfaceDecorator < Draper::Decorator
     surface_images[0].decorate.to_tex unless surface_images.empty?
   end
 
+  def map
+    left, top, _ = bounds
+    len = length
+    x_offset = (len - width) / 2
+    y_offset = (len - height) / 2
+    target_uids = images.inject([]) { |array, image| array + image.spots.map(&:target_uid) }.uniq
+    targets = RecordProperty.where(global_id: target_uids).index_by(&:global_id)
+    h.content_tag(:div, nil, id: "surface-map", data: {
+                    base_url: Settings.map_url,
+                    global_id: global_id,
+                    length: len,
+                    attachment_files: images.each_with_object({}) { |image, hash| hash[File.basename(image.name, ".*")] = image.id },
+                    spots: images.inject([]) { |array, image|
+                      array + image.spots.map { |spot|
+                        target = targets[spot.target_uid]
+                        worlds = spot.spot_world_xy
+                        x = (worlds[0] - left + x_offset) * 256 / len
+                        y = (top - worlds[1] + y_offset) * 256 / len
+                        {
+                          id: target.try(:global_id) || spot.global_id,
+                          name: target.try(:name) || spot.name,
+                          x: x,
+                          y: y
+                        }
+                      }
+                    }
+                  })
+  end
 
   def family_tree(current_spot = nil)
     html_class = "tree-node"

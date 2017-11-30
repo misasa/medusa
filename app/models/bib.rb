@@ -1,4 +1,4 @@
-class Bib < ActiveRecord::Base
+class Bib < ActiveRecord::Base 
   include HasRecordProperty
   include HasViewSpot
   include OutputPdf
@@ -145,6 +145,24 @@ class Bib < ActiveRecord::Base
     return "#{html}."
   end
 
+  def publish!
+    objs = [self]
+    objs.concat(self.boxes)
+    objs.concat(self.places)
+    objs.each do |obj|
+      obj.published = true
+      obj.save
+    end
+    
+    objs_r = []
+    objs_r.concat(self.specimens)
+    objs_r.concat(self.analyses)
+    objs_r.concat(self.tables)
+    objs_r.each do |obj|
+      obj.publish!
+    end
+  end
+
   private
 
   def pdf_files
@@ -166,4 +184,5 @@ class Bib < ActiveRecord::Base
     return if table.ignore_take_over_specimen?
     table.specimens = specimens
   end
+
 end

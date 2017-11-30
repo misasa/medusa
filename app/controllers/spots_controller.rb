@@ -39,6 +39,10 @@ class SpotsController < ApplicationController
     respond_with attachment_file
   end
 
+  def analysis
+    render json: @spot.get_analysis.to_json(include: { chemistries: { include: [:measurement_item, :unit] } })
+  end
+
 
   private
 

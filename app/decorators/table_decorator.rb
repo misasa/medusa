@@ -1,6 +1,10 @@
 class TableDecorator < Draper::Decorator
   delegate_all
 
+  def self.icon
+      h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list")
+  end
+
   def bib_name_with_id
   	return unless bib
     h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + h.link_to_if(h.can?(:read, bib), " #{bib.name} < #{bib.global_id} >", bib)
@@ -15,6 +19,14 @@ class TableDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list") + " #{caption} < #{global_id} >"
   end
 
+  def publish_badge
+    if self.published
+      h.published_label(self)
+#    else
+#      h.link_to(h.content_tag(:button, "publish", type: "button", class: "btn btn-primary"), h.publish_table_path(self.id), method: :put)
+    end
+  end
+
   def to_link
      table_link = h.link_to(h.raw(self.caption), self )
      # if Settings.rplot_url
@@ -27,5 +39,9 @@ class TableDecorator < Draper::Decorator
     if Settings.rplot_url
       h.rplot_iframe self
     end
+  end
+
+  def icon
+    self.class.icon
   end
 end

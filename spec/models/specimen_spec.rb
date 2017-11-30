@@ -1,8 +1,26 @@
+# -*- coding: utf-8 -*-
 require "spec_helper"
 
 describe Specimen do
   let(:user) { FactoryGirl.create(:user) }
   before { User.current = user }
+
+  describe "publish!", :current => true do
+    subject { specimen.publish!  }
+    let(:specimen){ FactoryGirl.create(:specimen, parent_id: specimen_root.id)}
+    let(:specimen_root) { FactoryGirl.create(:specimen, parent_id: nil, place_id: place.id) }
+    let(:specimen_sibling) { FactoryGirl.create(:specimen, parent_id: specimen_root.id) }
+    let(:specimen_descendant) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
+    let(:place){ FactoryGirl.create(:place) }
+    before do
+      specimen
+      specimen_sibling
+      specimen_descendant
+    end
+    it { expect{ subject }.not_to raise_error }
+    #it { expect{ subject }.to change{specimen.published}.from(be_falsey).to(be_truthy)}
+    #it { expect{ subject }.to change{specimen_root.published}.from(be_falsey).to(be_truthy)}
+  end
 
   describe "rplace" do
     let(:specimen){ FactoryGirl.create(:specimen, place_id: nil) }

@@ -241,7 +241,7 @@ class AttachmentFileDecorator < Draper::Decorator
     end
 
     unless affine_matrix.blank?
-      width_on_stage = transform_length(width / length * 100)
+#      width_on_stage = transform_length(width / length.to_f * 100)
       scale_length_on_stage = 10 ** (Math::log10(width_on_stage).round - 1)
       scale_length_on_image = transform_length(scale_length_on_stage, :world2xy).round
       lines << "%%scale #{("%.0f" % scale_length_on_stage)}\ micro meter"

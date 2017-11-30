@@ -20,6 +20,16 @@ class AnalysisDecorator < Draper::Decorator
     icon + h.link_to_if(h.can?(:read, self), link, self)
   end
 
+  def publish_badge
+    if self.published
+      h.published_label(self)
+#    else
+#      h.link_to(h.content_tag(:button, "publish", type: "button", class: "btn btn-danger"), h.publish_table_path(self.id), method: :put) 
+#      h.content_tag(:button, "publish", type: "button", class: "btn btn-primary")
+    end
+  end
+
+
   def related_pictures
     links = []
     related_spots.each do |spot|

@@ -22,6 +22,12 @@ class TablesController < ApplicationController
     respond_with @table
   end
 
+  def publish
+    #@table.publish!
+    PublishWorker.perform_async(@table.global_id)
+    respond_with @table
+  end
+
   def property
     respond_with @table, layout: !request.xhr?
   end

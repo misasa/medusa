@@ -20,6 +20,12 @@ class BibDecorator < Draper::Decorator
     tag
   end
 
+  def publish_badge
+    if object.published
+      h.published_label(object) 
+    end
+  end
+
   def tree_node(current: false, current_type: false, in_list_include: false)
     link = current ? h.content_tag(:strong, name) : name
     icon + h.link_to_if(h.can?(:read, self), link, self)

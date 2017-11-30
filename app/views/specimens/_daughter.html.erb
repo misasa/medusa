@@ -22,7 +22,7 @@
           </div>
           <div class="col-sm-2">
             <%= specimen.decorate.status_icon %>
-            <%= link_to_if can?(:read, specimen), specimen.name, specimen, class: specimen_ghost(specimen) %>
+            <%= link_to_if can?(:read, specimen), list_title(specimen), specimen, class: specimen_ghost(specimen) %>
           </div>
           <div class="col-sm-2">
             <%= specimen.physical_form.try!(:name) %>

@@ -76,6 +76,8 @@ Medusa::Application.routes.draw do
       patch :lose
       put :found
       patch :found
+      put :publish
+      patch :publish
     end
   end
 
@@ -203,6 +205,7 @@ Medusa::Application.routes.draw do
     member do
       get :picture
       get :property
+      put :publish
     end
     collection do
       get :download_to_tex
@@ -245,6 +248,7 @@ Medusa::Application.routes.draw do
   resources :tables, except: [:new] do
     member do
       get :property
+      put :publish
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
     resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "table", association_name: "specimens" }
@@ -285,6 +289,7 @@ Medusa::Application.routes.draw do
       get :family
       get :property
       get :picture
+      get :analysis
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "spot" }
   end

@@ -108,7 +108,7 @@ class Path < ActiveRecord::Base
   end
 
   def related_spots
-    boxes.map{|box| box.spot_links }.flatten
+    boxes.compact.map{|box| box.spot_links }.flatten
   end
 
   def self.ransackable_scopes(auth_object = nil)

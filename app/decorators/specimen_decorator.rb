@@ -54,6 +54,7 @@ class SpecimenDecorator < Draper::Decorator
       tag += " #{name}"
     end
     tag += " < #{global_id} >"
+    tag += h.published_label(object) if object.published
     tag
   end
 
@@ -68,6 +69,15 @@ class SpecimenDecorator < Draper::Decorator
     end
     unless contents.empty?
       h.content_tag(:ul, h.raw(contents.join(" ")) )
+    end
+  end
+
+  def publish_badge
+    if self.published
+      h.published_label(self)
+    else
+#      h.link_to(h.content_tag(:button, "publish", type: "button", class: "btn btn-danger"), h.publish_table_path(self.id), method: :put) 
+      h.content_tag(:button, "publish", type: "button", class: "btn btn-primary")
     end
   end
 
@@ -103,7 +113,7 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def path_with_id
-    path + " < #{global_id} >"
+    tag = path + " < #{global_id} >"
   end
 
   def path
@@ -639,7 +649,8 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def name_link
-    h.link_to(name.presence || "[no name]", object, class: h.specimen_ghost(object))
+#    h.list_title(object)
+    h.link_to(h.list_title(object) || "[no name]", object, class: h.specimen_ghost(object))
   end
 
   def parent_link

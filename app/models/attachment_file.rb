@@ -8,7 +8,7 @@ class AttachmentFile < ActiveRecord::Base
                     url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension"
   alias_attribute :name, :data_file_name
 
-  has_many :spots, dependent: :destroy
+  has_many :spots, dependent: :destroy, inverse_of: :attachment_file
   has_many :attachings, dependent: :destroy
   has_many :specimens, -> { order(:name) }, through: :attachings, source: :attachable, source_type: "Specimen"
   has_many :places, through: :attachings, source: :attachable, source_type: "Place"
@@ -194,6 +194,11 @@ class AttachmentFile < ActiveRecord::Base
     return unless self.image?
     return unless self.length && self.length > 0
     return pix/self.length.to_f * 100
+  end
+
+  def width_on_stage
+    return if affine_matrix.blank?
+    transform_length(width / length.to_f * 100)
   end
 
   def transform_length(l, type = :xy2world)

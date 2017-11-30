@@ -4,7 +4,7 @@ class Spot < ActiveRecord::Base
   PMLAME_HEADER = %w(image_id image_path x_image y_image)
 
 #  attr_accessor :spot_x_world, :spot_y_world
-  belongs_to :attachment_file
+  belongs_to :attachment_file, inverse_of: :spots
 
   validates :attachment_file, existence: true
   validates :spot_x, presence: true
@@ -13,6 +13,11 @@ class Spot < ActiveRecord::Base
   before_validation :generate_name, if: "name.blank?"
   before_validation :generate_stroke_width, if: "stroke_width.blank?"
 #  after_create :attachment_to_target
+
+  def surface
+    nil if attachment_file.surfaces.blank?
+    attachment_file.surfaces[0]
+  end
 
   def generate_name
     if target_uid.blank?

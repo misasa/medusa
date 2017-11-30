@@ -39,6 +39,24 @@ class Analysis < ActiveRecord::Base
     specimen.related_spots
   end
 
+  def publish!
+    attachment_files = []
+    objs = [self]
+    #objs << self.specimen if self.specimen
+    spot = self.get_spot
+    if spot
+      objs << spot
+      spot.surface.publish! if spot.surface
+    end
+    objs.concat(self.attachment_files)
+    objs.compact!
+    objs.each do |obj|
+      obj.published = true if obj && obj.record_property
+      obj.save
+    end
+    self.specimen.publish! if self.specimen
+  end
+
   def chemistry_summary(length=100)
     display_names = chemistries.map { |ch| ch.display_name if ch.measurement_item }.compact
     display_names.join(", ").truncate(length)

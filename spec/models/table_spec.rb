@@ -85,7 +85,25 @@ describe "Table" do
     it { expect(table.chemistries.count).to be_eql 2}
   end
 
-  describe "selected_analyses", :current => true do
+  describe "publish!", :current => true do
+    subject { table.publish! }
+    before do
+      specimen
+      allow(specimen).to receive(:publish!)
+      analysis
+      chemistry
+      sub_specimen
+      allow(sub_specimen).to receive(:publish!)
+      sub_analysis
+      sub_chemistry
+      table
+      table_specimen
+    end
+    it { expect{ subject }.not_to raise_error }
+    it { expect{ subject }.to change{table.published}.from(be_falsey).to(be_truthy) }
+  end
+
+  describe "selected_analyses" do
     before do
       specimen
       analysis
@@ -418,7 +436,7 @@ describe "Table::Row" do
     end
 
 
-    context "table linked 2 chemistries with same device & technique pair and 1 chemistry without device & techniqu pair and after remove last chemistry", :current => true do
+    context "table linked 2 chemistries with same device & technique pair and 1 chemistry without device & techniqu pair and after remove last chemistry" do
       let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2, chemistry_3]) }
       let(:measurement_item_2) { FactoryGirl.create(:measurement_item, unit: unit, nickname: "測定2", display_in_html: "[B]", display_in_tex: "\abundance{B}") }
       let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }

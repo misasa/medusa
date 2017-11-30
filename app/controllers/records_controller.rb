@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class RecordsController < ApplicationController
   respond_to :html, :json, :xml, :pml
   before_action :find_resource, except: [:index]
@@ -156,6 +157,11 @@ class RecordsController < ApplicationController
     else
       respond_with @record
     end
+  end
+
+  def publish
+    PublishWorker.perform_async(@record.global_id)
+    respond_with @record
   end
 
   def destroy

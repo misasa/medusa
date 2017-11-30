@@ -279,6 +279,17 @@ class Table < ActiveRecord::Base
     @flag_ignore_take_over_specimen
   end
 
+  def publish!
+    self.published = true
+    self.save
+    objs_r = []
+    objs_r.concat(self.specimens)
+    objs_r.concat(self.selected_analyses)
+    objs_r.each do |obj|
+      obj.publish!
+    end
+  end
+
   private
 
   def chemistries_hash

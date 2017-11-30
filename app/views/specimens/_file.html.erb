@@ -14,13 +14,14 @@
   <tbody>
     <%= form_tag bundle_edit_attachment_files_path, id: "attachment-file-bundle-form" do %>
       <% @specimen.attachings.where(attachable_type: "Specimen").order("position ASC").each do |attaching| %>
+        <% next unless attaching.attachment_file %>
         <tr>
           <% attachment_file = attaching.attachment_file %>
           <td>
             <%= check_box_tag("ids[]", attachment_file.id, checked: false, id: "ids_#{attachment_file.id}", class: "select-row") if can?(:update, attachment_file) %>
           </td>
           <td><%= attachment_file.decorate.picture(width: 70, height: 70, type: :thumb) %></td>
-          <td><%= link_to_if can?(:read, attachment_file), attachment_file.data_file_name, attachment_file %></td>
+          <td><%= link_to_if can?(:read, attachment_file), list_title(attachment_file), attachment_file %></td>
           <td>
             <% if attachment_file.pdf? %>
               <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_file.id), id: "file-#{attachment_file.id}-button") %>

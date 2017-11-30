@@ -17,7 +17,7 @@
           <td>
             <%= check_box_tag("ids[]", place.id, false, {id: "ids_#{place.id}", class: "select-row"}) if can?(:update, place) %>
           </td>
-          <td><%= link_to_if can?(:read, place), place.name, place %></td>
+          <td><%= link_to_if can?(:read, place), list_title(place), place %></td>
           <td><%= place.decorate.latitude_to_text %></td>
           <td><%= place.decorate.longitude_to_text %></td>
           <td></td>
