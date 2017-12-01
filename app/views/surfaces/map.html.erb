@@ -1,0 +1,7 @@
+<% if @surface.globe? %>
+  <%= ActsAsMappable::Mappable::HtmlGenerator.generate(lat: 35, lng: 135, width: "auto", height: 500) %>
+  <%= javascript_tag "actsAsMappable.initToMap();" %>
+<% else %>
+  <%= @surface.map %>
+  <%= javascript_tag "initSurfaceMap();" %>
+<% end  %>

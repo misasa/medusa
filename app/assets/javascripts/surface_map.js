@@ -84,20 +84,21 @@ L.layerGroup.spots = function(map, spots) {
 L.layerGroup.grid = function(map, length) {
   var group = L.layerGroup(),
       pixelsPerMiliMeter = 256 * 1000 / length,
-      getFromTo = function(center, step) {
+      getFromTo = function(half, step) {
+        var center = 256 / 2;
         return {
-	  from: center - Math.ceil(center / step) * step,
-	  to: center + Math.ceil(center / step) * step
+	  from: center - Math.ceil(half / step) * step,
+	  to: center + Math.ceil(half / step) * step
 	}
       },
       xFromTo = getFromTo(map.getSize().x / 2, pixelsPerMiliMeter),
       yFromTo = getFromTo(map.getSize().y / 2, pixelsPerMiliMeter);
-  for (y = yFromTo.from; y <= yFromTo.to; y += pixelsPerMiliMeter) {
+  for (y = yFromTo.from; y < yFromTo.to + 1; y += pixelsPerMiliMeter) {
     var left = map.unproject([xFromTo.from, y], 0),
 	right = map.unproject([xFromTo.to, y]);
     L.polyline([left, right], { color: 'red', weight: 1, opacity: 0.5 }).addTo(group);
   }
-  for (x = xFromTo.from; x <= xFromTo.to; x += pixelsPerMiliMeter) {
+  for (x = xFromTo.from; x < xFromTo.to + 1; x += pixelsPerMiliMeter) {
     var top = map.unproject([x, yFromTo.from], 0),
 	bottom = map.unproject([x, yFromTo.to]);
     L.polyline([top, bottom], { color: 'red', weight: 1, opacity: 0.5 }).addTo(group);
@@ -150,5 +151,5 @@ function initSurfaceMap() {
 
   L.control.layers(baseMaps, overlayMaps).addTo(map);
 
-  map.setView(map.unproject([map.getSize().x / 2, map.getSize().y / 2], 0), zoom);
+  map.setView(map.unproject([256 / 2, 256 / 2], 0), zoom);
 }

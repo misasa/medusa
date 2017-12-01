@@ -56,6 +56,11 @@ class SurfacesController < ApplicationController
     @surfaces.each { |surface| surface.update_attributes(surface_params.only_presence) }
     render :bundle_edit
   end
+
+  def map
+    respond_with @surface, layout: !request.xhr?
+  end
+
   private
 
   def surface_params

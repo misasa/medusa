@@ -1,4 +1,4 @@
-<tr>
+<tr class="show-map" data-url="<%= map_surface_path(surface) %>">
   <td><%= check_box_tag("ids[]", surface.id, checked, id: "ids_#{surface.id}", class: "select-row") if can?(:update, surface) %></td>
   <td><%= link_to surface.first_image.decorate.picture(width: 70, height: 70, type: :thumb), surface.first_image if surface.first_image %></td>
   <td><%= link_to list_title(surface), surface %></td>

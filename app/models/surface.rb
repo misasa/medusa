@@ -1,6 +1,8 @@
 class Surface < ActiveRecord::Base
   include HasRecordProperty
 
+  paginates_per 10
+
   has_many :surface_images, :dependent => :destroy, :order => ("position ASC")
   has_many :images, through: :surface_images
   has_many :spots, through: :images

@@ -1,7 +1,7 @@
 <% if @surface.globe? %>
   <%= ActsAsMappable::Mappable::HtmlGenerator.generate(lat: 35, lng: 135, width: 300, height: 300) %>
 <% else %>
-  <%= @surface.map %>
+  <%= @surface.map(class: "small-map") %>
 <% end  %>
 <div id="family-tree">
   <%= @surface.family_tree %>
