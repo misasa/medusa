@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161125055035) do
+ActiveRecord::Schema.define(version: 20171114014553) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -173,8 +173,6 @@ ActiveRecord::Schema.define(version: 20161125055035) do
     t.datetime "updated_at"
   end
 
-  add_index "divides", ["before_specimen_quantity_id"], name: "index_divides_on_before_specimen_quantity_id", using: :btree
-
   create_table "global_qrs", force: true, comment: "QRコード" do |t|
     t.integer  "record_property_id", comment: "レコードプロパティID"
     t.string   "file_name",          comment: "ファイル名"
@@ -328,9 +326,6 @@ ActiveRecord::Schema.define(version: 20161125055035) do
     t.datetime "updated_at"
   end
 
-  add_index "specimen_quantities", ["divide_id"], name: "index_specimen_quantities_on_divide_id", using: :btree
-  add_index "specimen_quantities", ["specimen_id"], name: "index_specimen_quantities_on_specimen_id", using: :btree
-
   create_table "specimens", force: true, comment: "標本" do |t|
     t.string   "name",                                comment: "名称"
     t.string   "specimen_type",                       comment: "標本種別"
@@ -392,6 +387,7 @@ ActiveRecord::Schema.define(version: 20161125055035) do
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "globe",      default: false, null: false, comment: "地球表面フラグ"
   end
 
   create_table "table_analyses", force: true, comment: "表内分析情報" do |t|

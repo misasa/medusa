@@ -1,82 +1,100 @@
-<%= paginate @surfaces %>
-<table class="table table-condensed table-striped">
-  <thead>
-    <%= search_form_for @search do |f| %>
-    <tr>
-      <th>
-        <%= f.button class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-refresh"></span>
-        <% end %>
-      </th>
-      <th></th>
-      <th><%= sort_link @search, :name, "name" %></th>
-      <th>images</th>
-      <th>spots</th>
-      <%= th_if_expand do %>
-        <%= sort_link @search, :user_username, "owner" %>
-      <% end %>
-      <th><%= sort_link @search, :group_name, "group" %></th>
-      <%= th_if_expand do %>
-        <%= sort_link @search, :record_property_published_at, "published" %>
-      <% end %>
-      <th><%= sort_link @search, :updated_at, "updated-at" %></th>
-      <%= th_if_expand do %>
-        <%= sort_link @search, :created_at, "created-at" %>
-      <% end %>
-      <th><%= toggle_column_link %></th>
-    </tr>
-    <tr>
-      <th><%= text_field_tag :per_page, (params[:per_page] || Surface.default_per_page), class: "form-control input-sm", size: 4 %></th>
-      <th></th>
-      <th><%= f.text_field :name_cont, class: "form-control input-sm", size: 15 %></th>
-      <th></th>
-      <th></th>
-      <%= th_if_expand do %>
-        <%= f.text_field :user_username_cont, class: "form-control input-sm", size: 15 %>
-      <% end %>
-      <th><%= f.text_field :group_name_cont, class: "form-control input-sm", size: 15 %></th>
-      <%= th_if_expand do %>
-        <%= f.select :record_property_published_eq, [true, false], { include_blank: true }, class: "form-control input-sm" %>
-      <% end %>
-      <th>
-        <%= f.text_field :updated_at_gteq, placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]), class: "form-control input-sm datepicker", size: 10 %>
-      </th>
-      <%= th_if_expand do %>
-        <%= f.text_field :created_at_gteq, placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]), class: "form-control input-sm datepicker", size: 10 %>
-      <% end %>
-    </tr>
-    <tr>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
-      <th></th>
- 
-      <%= th_if_expand nil %>
-      <th></th>
-      <%= th_if_expand nil %>
-      <th>
-        <%= f.text_field :updated_at_lteq_end_of_day, placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]), class: "form-control input-sm datepicker", size: 10 %>
-      </th>
-      <%= th_if_expand do %>
-        <%= f.text_field :created_at_lteq_end_of_day, placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]), class: "form-control input-sm datepicker", size: 10 %>
-      <% end %>
-    </tr>
-    <% end %>
-  </thead>
-  <tbody>
-    <%= form_tag bundle_edit_surfaces_path, id: "bundle-form" do %>
-    <%= render partial: :surface, collection: SurfaceDecorator.decorate_collection(@surfaces), locals: { checked: false } %>
-    <% end %>
-  </tbody>
-  <tfoot>
-    <%= render partial: "new", locals: { surface: Surface.new } %>
-  </tfoot>
-</table>
-<%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#bundle-form').submit();", class: "btn btn-default" %>
-
+<div class="row">
+  <div id="index-list" class="col-lg-6">
+    <%= paginate @surfaces %>
+    <table class="table table-condensed table-striped">
+      <thead>
+	<%= search_form_for @search do |f| %>
+	  <tr>
+	    <th>
+              <%= f.button class: "btn btn-default" do %>
+		<span class="glyphicon glyphicon-refresh"></span>
+              <% end %>
+	    </th>
+	    <th></th>
+	    <th><%= sort_link @search, :name, "name" %></th>
+	    <th>images</th>
+	    <th>spots</th>
+	    <%= th_if_expand do %>
+              <%= sort_link @search, :user_username, "owner" %>
+	    <% end %>
+	    <th><%= sort_link @search, :group_name, "group" %></th>
+	    <%= th_if_expand do %>
+              <%= sort_link @search, :record_property_published_at, "published" %>
+	    <% end %>
+	    <th><%= sort_link @search, :updated_at, "updated-at" %></th>
+	    <%= th_if_expand do %>
+              <%= sort_link @search, :created_at, "created-at" %>
+	    <% end %>
+	    <th><%= toggle_column_link %></th>
+	  </tr>
+	  <tr>
+	    <th><%= text_field_tag :per_page, (params[:per_page] || Surface.default_per_page), class: "form-control input-sm", size: 4 %></th>
+	    <th></th>
+	    <th><%= f.text_field :name_cont, class: "form-control input-sm", size: 15 %></th>
+	    <th></th>
+	    <th></th>
+	    <%= th_if_expand do %>
+              <%= f.text_field :user_username_cont, class: "form-control input-sm", size: 15 %>
+	    <% end %>
+	    <th><%= f.text_field :group_name_cont, class: "form-control input-sm", size: 15 %></th>
+	    <%= th_if_expand do %>
+              <%= f.select :record_property_published_eq, [true, false], { include_blank: true }, class: "form-control input-sm" %>
+	    <% end %>
+	    <th>
+              <%= f.text_field :updated_at_gteq, placeholder: "from:", value: format_date(params[:q] && params[:q][:updated_at_gteq]), class: "form-control input-sm datepicker", size: 10 %>
+	    </th>
+	    <%= th_if_expand do %>
+              <%= f.text_field :created_at_gteq, placeholder: "from:", value: format_date(params[:q] && params[:q][:created_at_gteq]), class: "form-control input-sm datepicker", size: 10 %>
+	    <% end %>
+	  </tr>
+	  <tr>
+	    <th></th>
+	    <th></th>
+	    <th></th>
+	    <th></th>
+	    <th></th>
+	    
+	    <%= th_if_expand nil %>
+	    <th></th>
+	    <%= th_if_expand nil %>
+	    <th>
+              <%= f.text_field :updated_at_lteq_end_of_day, placeholder: "to:", value: format_date(params[:q] && params[:q][:updated_at_lteq_end_of_day]), class: "form-control input-sm datepicker", size: 10 %>
+	    </th>
+	    <%= th_if_expand do %>
+              <%= f.text_field :created_at_lteq_end_of_day, placeholder: "to:", value: format_date(params[:q] && params[:q][:created_at_lteq_end_of_day]), class: "form-control input-sm datepicker", size: 10 %>
+	    <% end %>
+	  </tr>
+	<% end %>
+      </thead>
+      <tbody>
+	<%= form_tag bundle_edit_surfaces_path, id: "bundle-form" do %>
+	  <%= render partial: :surface, collection: SurfaceDecorator.decorate_collection(@surfaces), locals: { checked: false } %>
+	<% end %>
+      </tbody>
+      <tfoot>
+	<%= render partial: "new", locals: { surface: Surface.new } %>
+      </tfoot>
+    </table>
+    <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#bundle-form').submit();", class: "btn btn-default" %>
+  </div>
+  <div id="index-map" class="col-lg-6" style="height:500px;">
+  </div>
+</div>
 <%= javascript_tag do %>
   $(document).on("succeed.ajaxForm", "#new_surface", function() {
     $("#surface_search").submit();
+  });
+
+  $(document).on("click", "tr.show-map", function() {
+    if ($(this).hasClass("info")) {
+      return;
+    }
+    $(this).siblings("tr.show-map").removeClass("info");
+    $(this).addClass("info");
+    $.get($(this).data("url")).done(function(data) {
+      $("#index-map").html(data);
+    }).fail(function() {
+      $("#index-map").empty();
+    });
   });
 <% end %>

@@ -27,14 +27,14 @@ class SurfaceDecorator < Draper::Decorator
     surface_images[0].decorate.to_tex unless surface_images.empty?
   end
 
-  def map
+  def map(options = {})
     left, top, _ = bounds
     len = length
     x_offset = (len - width) / 2
     y_offset = (len - height) / 2
     target_uids = images.inject([]) { |array, image| array + image.spots.map(&:target_uid) }.uniq
     targets = RecordProperty.where(global_id: target_uids).index_by(&:global_id)
-    h.content_tag(:div, nil, id: "surface-map", data: {
+    h.content_tag(:div, nil, id: "surface-map", class: options[:class], data: {
                     base_url: Settings.map_url,
                     global_id: global_id,
                     length: len,

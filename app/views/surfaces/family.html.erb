@@ -1,12 +1,20 @@
-<%= @surface.map %>
+<% if @surface.globe? %>
+  <%= ActsAsMappable::Mappable::HtmlGenerator.generate(lat: 35, lng: 135, width: 300, height: 300) %>
+<% else %>
+  <%= @surface.map(class: "small-map") %>
+<% end  %>
 <div id="family-tree">
   <%= @surface.family_tree %>
 </div>
 <%= @surface.related_pictures %>
 
-<%= javascript_tag do %>
-  $("div.surface-viewer").surfaceViewer();
-<% end %>
-<script>
-  initSurfaceMap();
-</script>
+<% if @surface.globe? %>
+  <%= javascript_tag "actsAsMappable.initToMap();" %>
+<% else %>
+  <%= javascript_tag do %>
+    $("div.surface-viewer").surfaceViewer();
+  <% end %>
+  <script>
+    initSurfaceMap();
+  </script>
+<% end  %>

@@ -1,7 +1,10 @@
 #surface-map {
+  margin-bottom: 10px;
+  height: 100%;
+}
+#surface-map.small-map {
   width: 300px;
   height: 300px;
-  margin-bottom: 10px;
 }
 #surface-map.leaflet-container {
   background: #000000;

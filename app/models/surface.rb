@@ -1,6 +1,8 @@
 class Surface < ActiveRecord::Base
   include HasRecordProperty
 
+  paginates_per 10
+
   has_many :surface_images, :dependent => :destroy, :order => ("position ASC")
   has_many :images, through: :surface_images
   has_many :spots, through: :images
@@ -96,6 +98,7 @@ class Surface < ActiveRecord::Base
   end
 
   def bounds
+    return Array.new(4) { 0 } if globe?
     left,upper,right,bottom = images[0].bounds
     images.each do |image|
       next if image.bounds.blank?
