@@ -44,8 +44,8 @@ class RecordsController < ApplicationController
   def casteml
     send_data([@record].to_pml,
               :type => 'application/xml',
-              :filename => @record.global_id + '.pml', 
-              :disposition=>'attached')    
+              :filename => @record.global_id + '.pml',
+              :disposition=>'attached')
   end
 
   def property
@@ -74,6 +74,16 @@ class RecordsController < ApplicationController
     respond_with @records do |format|
       format.json { render json: @records.map(&:record_property), methods: [:datum_attributes] }
       format.xml { render xml: @records.map(&:record_property), methods: [:datum_attributes] }
+    end
+  end
+
+ # /records/xxxx-xxx/pmlame?type=xxx
+  def pmlame
+    target = params[:type] == "family" ? :families : :self_and_descendants
+    @records = @record.respond_to?(target) ? @record.send(target) : [@record]
+    element_names = @records.map(&:analyses).flatten.map(&:name)
+    respond_with @records do |format|
+      format.json { render json: [ @records.map {|item| item.to_pmlame(element_names)}.flatten.uniq ], methods: [:datum_attributes] }
     end
   end
 

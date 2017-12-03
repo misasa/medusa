@@ -92,7 +92,7 @@ describe Spot do
       let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
       it {expect(subject).not_to be_nil}
       it {expect(subject[0]).not_to be_nil}
-      it {expect(subject[1]).not_to be_nil}      
+      it {expect(subject[1]).not_to be_nil}
     end
 
     context "without calibrated image" do
@@ -100,7 +100,7 @@ describe Spot do
       let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
       it {expect(subject).not_to be_nil}
       it {expect(subject[0]).not_to be_nil}
-      it {expect(subject[1]).not_to be_nil}      
+      it {expect(subject[1]).not_to be_nil}
     end
 
     context "with nil affine_matrix" do
@@ -111,13 +111,13 @@ describe Spot do
 
   end
 
-  # describe ".spot_x_from_center" do
+  # describe "#spot_x_from_center" do
   #   subject{obj.spot_x_from_center}
   #   let(:obj){FactoryGirl.create(:spot)}
   #   it {expect(subject).to eq -49.0}
   # end
-
-  # describe ".spot_y_from_center" do
+  #
+  # describe "#spot_y_from_center" do
   #   subject{obj.spot_y_from_center}
   #   let(:obj){FactoryGirl.create(:spot)}
   #   it {expect(subject).to eq 49.0}
@@ -156,6 +156,44 @@ describe Spot do
     context "length is present" do
       let(:length) { 100 }
       it { expect(subject).to eq (spot_y / length * 100) }
+    end
+  end
+
+  describe "#to_pmlame" do
+    subject { spot.to_pmlame }
+    let(:spot) { FactoryGirl.build(:spot, attachment_file: attachment_file) }
+    let(:attachment_file) { FactoryGirl.create(:attachment_file, data_content_type: data_content_type, data_file_name: data_file_name) }
+    before do
+      allow(spot).to receive(:spot_x_from_center).and_return(10)
+      allow(spot).to receive(:spot_y_from_center).and_return(20)
+    end
+    context "when the type of the data_content_type is text/plain." do
+      let(:data_content_type) { "text/plain" }
+      let(:data_file_name) { "file_name_1.txt" }
+      it "return nil" do
+        expect(subject).to be_nil
+      end
+    end
+    context "when the type of the data_content_type is application/pdf." do
+      let(:data_content_type) { "application/pdf" }
+      let(:data_file_name) { "file_name_1.pdf" }
+      it "return nil" do
+        expect(subject).to be_nil
+      end
+    end
+    context "when the type of the data_content_type is image/jpeg." do
+      let(:data_content_type) { "image/jpeg" }
+      let(:data_file_name) { "file_name_1.jpg" }
+      it "return spot data" do
+        expect(subject).to match_array([attachment_file.global_id, attachment_file.data.url, 10, 20])
+      end
+    end
+    context "when the type of the data_content_type is image/bmp." do
+      let(:data_content_type) { "image/bmp" }
+      let(:data_file_name) { "file_name_1.bmp" }
+      it "return spot data" do
+        expect(subject).to match_array([attachment_file.global_id, attachment_file.data.url, 10, 20])
+      end
     end
   end
 

@@ -1,5 +1,8 @@
 class Spot < ActiveRecord::Base
   include HasRecordProperty
+
+  PMLAME_HEADER = %w(image_id image_path x_image y_image)
+
 #  attr_accessor :spot_x_world, :spot_y_world
   belongs_to :attachment_file, inverse_of: :spots
 
@@ -17,7 +20,7 @@ class Spot < ActiveRecord::Base
   end
 
   def generate_name
-    if target_uid.blank? 
+    if target_uid.blank?
       self.name = "untitled spot #{attachment_file.spots.size + 1}"
     else
       record_property = RecordProperty.find_by_global_id(target_uid)
@@ -67,7 +70,7 @@ class Spot < ActiveRecord::Base
         world_xy = spot_world_xy
         if world_xy
           xml.x_vs(world_xy[0])
-          xml.y_vs(world_xy[1]) 
+          xml.y_vs(world_xy[1])
         end
       end
       if analysis
@@ -87,7 +90,16 @@ class Spot < ActiveRecord::Base
         end
       end
     end
-    
+  end
+
+  def to_pmlame
+    return unless attachment_file.image?
+    [
+      attachment_file.try!(:global_id),
+      attachment_file.data.try!(:url),
+      spot_x_from_center,
+      spot_y_from_center,
+    ]
   end
 
 

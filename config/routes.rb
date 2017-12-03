@@ -34,7 +34,7 @@ Medusa::Application.routes.draw do
       post :link_by_global_id
     end
   end
-  
+
   concern :inventory do
     member do
       post :inventory
@@ -47,7 +47,7 @@ Medusa::Application.routes.draw do
       post :multiple_create
     end
   end
-  
+
   concern :sesar_upload do
     member do
       post :sesar_upload
@@ -60,13 +60,14 @@ Medusa::Application.routes.draw do
       get 'casteml'
       get 'ancestors'
       get 'descendants'
-      get 'self_and_descendants'      
+      get 'self_and_descendants'
+      get 'pmlame'
       get 'root'
-      get 'parent'      
+      get 'parent'
       get 'daughters'
       get 'siblings'
       get 'self_and_siblings'
-      get 'families'      
+      get 'families'
       put :dispose
       patch :dispose
       put :restore

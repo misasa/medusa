@@ -150,12 +150,12 @@ describe Specimen do
         context "us not present" do
           let(:parent_id) { nil }
            #before { specimen.parent_id = parent_specimen.id }
-           it { expect(specimen.blood_path).to eq "/#{specimen.name}" }          
+           it { expect(specimen.blood_path).to eq "/#{specimen.name}" }
         end
         context "is present" do
           let(:parent_id) { parent_specimen.id }
            before { specimen.parent_id = parent_specimen.id }
-           it { expect(specimen.blood_path).to eq "/#{parent_specimen.name}/#{specimen.name}" }          
+           it { expect(specimen.blood_path).to eq "/#{parent_specimen.name}/#{specimen.name}" }
         end
       end
   end
@@ -168,7 +168,7 @@ describe Specimen do
     let(:age_max){ 55 }
     context "with min and max" do
       let(:age_mean){ 50 }
-      let(:age_error){ 5 } 
+      let(:age_error){ 5 }
       let(:age_min){ age_mean - age_error }
       let(:age_max){ age_mean + age_error }
       it { expect(subject).to be_eql(50.0) }
@@ -199,7 +199,7 @@ describe Specimen do
     let(:age_max){ 55 }
     context "with min and max" do
       let(:age_mean){ 50 }
-      let(:age_error){ 5 } 
+      let(:age_error){ 5 }
       let(:age_min){ age_mean - age_error }
       let(:age_max){ age_mean + age_error }
       it { expect(subject).to be_eql(5.0) }
@@ -230,7 +230,7 @@ describe Specimen do
     let(:age_max){ 55 }
     context "with min and max" do
       let(:age_mean){ 50 }
-      let(:age_error){ 5 } 
+      let(:age_error){ 5 }
       let(:age_min){ age_mean - age_error }
       let(:age_max){ age_mean + age_error }
       it { expect(subject).to be_eql("50 (5)") }
@@ -521,6 +521,103 @@ describe Specimen do
     end
   end
 
+  describe "#whole_family_analyses" do
+    before do
+      root = FactoryGirl.create(:specimen, name: "root")
+      @target = FactoryGirl.create(:specimen, parent_id: root.id)
+      brother = FactoryGirl.create(:specimen, parent_id: root.id)
+      child = FactoryGirl.create(:specimen, parent_id: @target.id)
+      @root_analysis_1 = FactoryGirl.create(:analysis, specimen_id: root.id)
+      @root_analysis_2 = FactoryGirl.create(:analysis, specimen_id: root.id)
+      @target_analysis = FactoryGirl.create(:analysis, specimen_id: @target.id)
+      @brother_analysis = FactoryGirl.create(:analysis, specimen_id: brother.id)
+      @child_analysis_1 = FactoryGirl.create(:analysis, specimen_id: child.id)
+      @child_analysis_2 = FactoryGirl.create(:analysis, specimen_id: child.id)
+    end
+    it "receives whole family analyses" do
+      analyses_array = [@root_analysis_1, @root_analysis_2, @target_analysis, @brother_analysis, @child_analysis_1, @child_analysis_2]
+      expect(@target.whole_family_analyses).to match_array(analyses_array)
+    end
+  end
+
+  describe "#to_pmlame" do
+    let(:specimen) { FactoryGirl.create(:specimen) }
+    let!(:spot) { FactoryGirl.create(:spot, target_uid: analysis.try(:global_id)) }
+    let(:chemistry_1) { FactoryGirl.create(:chemistry) }
+    let(:chemistry_2) { FactoryGirl.create(:chemistry) }
+    let(:measurement_item_1) { FactoryGirl.create(:measurement_item, nickname: "測定１")}
+    let(:measurement_item_2) { FactoryGirl.create(:measurement_item, nickname: "測定２")}
+    let(:analysis) { FactoryGirl.create(:analysis, specimen_id: specimen.id) }
+    let(:spot_to_pmlame) { ['global_id_xxxx', 'www/medusa.spot.xxx/1', 10, 20]}
+    let(:header) { Spot::PMLAME_HEADER + Analysis::PMLAME_HEADER + [measurement_item_1.nickname, measurement_item_1.nickname + "_error", measurement_item_2.nickname, measurement_item_2.nickname + "_error"] }
+
+    subject { specimen.to_pmlame([]) }
+
+    before do
+      chemistry_1.measurement_item = measurement_item_1
+      chemistry_2.measurement_item = measurement_item_2
+      analysis.chemistries << chemistry_1 if analysis
+      analysis.chemistries << chemistry_2 if analysis
+      allow_any_instance_of(Chemistry).to receive(:to_pmlame).and_return([1,2])
+      allow_any_instance_of(Spot).to receive(:to_pmlame).and_return(spot_to_pmlame)
+    end
+
+    context "when analyses is present" do
+      shared_examples_for "analyses is present" do
+        it { expect(subject).to be_present }
+
+        it 'contains hash keys' do
+          subject.each do |service|
+            expect(service.keys).to match_array(header)
+          end
+        end
+
+        it 'has correct values' do
+          subject.each do |service|
+            expect(service["element"]).to eq(analysis.name)
+            expect(service["sample_id"]).to eq(specimen.global_id)
+            expect(service["測定１"]).to eq(1)
+            expect(service["測定１_error"]).to eq(2)
+            expect(service["測定２"]).to eq(1)
+            expect(service["測定２_error"]).to eq(2)
+          end
+        end
+     end
+
+      context "when spot is present" do
+        it_should_behave_like "analyses is present"
+
+        it 'has correct values' do
+          subject.each do |service|
+            expect(service["image_id"]).to eq('global_id_xxxx')
+            expect(service["image_path"]).to eq('www/medusa.spot.xxx/1')
+            expect(service["x_image"]).to eq(10)
+            expect(service["y_image"]).to eq(20)
+          end
+        end
+      end
+      context "when spot is not present" do
+        let(:spot) { nil }
+        it_should_behave_like "analyses is present"
+
+        it 'has correct values' do
+          subject.each do |service|
+            expect(service["image_id"]).to be_nil
+            expect(service["image_path"]).to be_nil
+            expect(service["x_image"]).to be_nil
+            expect(service["y_image"]).to be_nil
+          end
+        end
+      end
+    end
+    context "when analyses is not present" do
+      let(:analysis) { nil }
+      it 'returns empty array' do
+        expect(subject).to be_empty
+      end
+    end
+  end
+
   describe "new_children" do
     let!(:specimen) { FactoryGirl.create(:specimen) }
     let!(:specimen_child) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
@@ -591,7 +688,7 @@ describe Specimen do
 
     context "without quantity and unit" do
       let(:quantity) { nil }
-      let(:quantity_unit) { nil }      
+      let(:quantity_unit) { nil }
       it { expect(subject).to be_nil }
     end
   end
@@ -606,7 +703,7 @@ describe Specimen do
       specimen
       specimen.quantity_with_unit = quantity_with_unit
     end
-    it { 
+    it {
       expect(specimen.quantity).to eq(80.0)
       expect(specimen.quantity_unit).to eq("g")
     }
@@ -766,7 +863,7 @@ describe Specimen do
 
 
   describe "validates" do
-  
+
     shared_examples_for "length_check" do
       context "is 255 characters" do
         let(:value) { "a" * 255 }
@@ -777,7 +874,7 @@ describe Specimen do
         it { expect(obj).not_to be_valid }
       end
     end
-    
+
     describe "name" do
       let(:obj) { FactoryGirl.build(:specimen, name: value) }
       it_should_behave_like "length_check"
@@ -816,7 +913,7 @@ describe Specimen do
         end
       end
     end
-    
+
     describe "parent_id" do
       let(:parent_specimen) { FactoryGirl.create(:specimen) }
       let(:specimen) { FactoryGirl.create(:specimen, parent_id: parent_id) }
@@ -853,7 +950,7 @@ describe Specimen do
       let(:obj) { FactoryGirl.create(:specimen) }
       it { expect(subject).to match(/^\@article/) }
     end
-    
+
     describe "igsn" do
       let(:obj) { FactoryGirl.build(:specimen, igsn: igsn) }
       context "9桁の場合" do
@@ -886,7 +983,7 @@ describe Specimen do
       end
 
     end
-    
+
     describe "age_min" do
       let(:obj) { FactoryGirl.build(:specimen, age_min: age_min) }
       context "数値の場合" do
@@ -908,7 +1005,7 @@ describe Specimen do
         it { expect(obj).to be_valid }
       end
     end
-    
+
     describe "age_max" do
       let(:obj) { FactoryGirl.build(:specimen, age_max: age_max) }
       context "数値の場合" do
@@ -930,7 +1027,7 @@ describe Specimen do
         it { expect(obj).to be_valid }
       end
     end
-    
+
     describe "age_unit" do
       let(:obj) { FactoryGirl.build(:specimen, age_unit: value) }
       it_should_behave_like "length_check"
@@ -994,22 +1091,22 @@ describe Specimen do
       let(:obj) { FactoryGirl.build(:specimen, size: value) }
       it_should_behave_like "length_check"
     end
-    
+
     describe "size_unit" do
       let(:obj) { FactoryGirl.build(:specimen, size_unit: value) }
       it_should_behave_like "length_check"
     end
-    
+
     describe "collector" do
       let(:obj) { FactoryGirl.build(:specimen, collector: value) }
       it_should_behave_like "length_check"
     end
-    
+
     describe "collector_detail" do
       let(:obj) { FactoryGirl.build(:specimen, collector_detail: value) }
       it_should_behave_like "length_check"
     end
-    
+
     describe "collection_date_precision" do
       let(:obj) { FactoryGirl.build(:specimen, collection_date_precision: value) }
       it_should_behave_like "length_check"

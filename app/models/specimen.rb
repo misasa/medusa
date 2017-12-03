@@ -34,7 +34,7 @@ class Specimen < ActiveRecord::Base
 
   has_many :analyses, before_remove: :delete_table_analysis
   has_many :children, -> { order(:name) }, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify
-  has_many :specimens, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify  
+  has_many :specimens, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
   has_many :chemistries, through: :analyses
@@ -146,6 +146,10 @@ class Specimen < ActiveRecord::Base
     Analysis.where(specimen_id: self_and_descendants)
   end
 
+  def whole_family_analyses
+    Analysis.where(specimen_id: families)
+  end
+
   def surfaces
     sfs = []
     attachment_image_files.each do |image|
@@ -168,6 +172,21 @@ class Specimen < ActiveRecord::Base
   #   [self].to_pml
   # end
 
+  def to_pmlame(element_names, nicknames = nil)
+    header = Spot::PMLAME_HEADER + Analysis::PMLAME_HEADER
+    header += chemistries.map { |chemistry| [chemistry.measurement_item.nickname, chemistry.measurement_item.nickname + '_error'] }.flatten.uniq
+    nicknames ||= chemistries.map{ |chemistry| chemistry.measurement_item.nickname }.flatten.uniq
+    duplicate_names = element_names.select { |x| element_names.count(x) > 1 }.uniq
+    analyses.uniq.inject([]) do |pmlame, analysis|
+      spot = Spot.find_by(target_uid: analysis.global_id)
+      data = spot.try(:to_pmlame) || Array.new(Spot::PMLAME_HEADER.size)
+      data += analysis.to_pmlame(nicknames, duplicate_names)
+      key_value = [header, data].transpose
+      values = Hash[*key_value.flatten]
+      pmlame << values
+    end
+  end
+
   def age_mean
     return unless ( age_min && age_max )
     (age_min + age_max) / 2.0
@@ -189,7 +208,7 @@ class Specimen < ActiveRecord::Base
     elsif age_min
       text = ">" + Alchemist.measure(self.age_min, self.age_unit.to_sym).to(unit.to_sym).value.round(scale).to_s
     elsif age_max
-      text = "<" + Alchemist.measure(self.age_max, self.age_unit.to_sym).to(unit.to_sym).value.round(scale).to_s      
+      text = "<" + Alchemist.measure(self.age_max, self.age_unit.to_sym).to(unit.to_sym).value.round(scale).to_s
     end
     text += " #{unit}" if text && opts[:with_unit]
     return text
@@ -223,7 +242,7 @@ class Specimen < ActiveRecord::Base
     #   list.concat(ans[1].descendants)
     end
     list.uniq!
-    families.select{|e| list.include?(e) }    
+    families.select{|e| list.include?(e) }
   end
 
   def quantity_history_with_current
