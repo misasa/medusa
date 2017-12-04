@@ -2,12 +2,10 @@
   <td><%= check_box_tag("ids[]", surface.id, checked, id: "ids_#{surface.id}", class: "select-row") if can?(:update, surface) %></td>
   <td>
     <% if surface.globe? %>
-      <%= link_to surface do %>
-	<img src="http://a.tile.openstreetmap.org/0/0/0.png" width="70" height="70">
-      <% end  %>
+      <img src="http://a.tile.openstreetmap.org/0/0/0.png" width="50" height="50">
     <% else %>
-      <%= link_to surface.first_image.decorate.picture(width: 70, height: 70, type: :thumb), surface.first_image if surface.first_image %>
-      <% end %>
+      <%= image_tag(surface.base_image_url, width:50, height:50 )  %>
+    <% end %>
   </td>
   <td><%= link_to list_title(surface), surface %></td>
   <td><%= surface.images_count %></td>

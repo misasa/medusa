@@ -139,4 +139,9 @@ class SurfaceDecorator < Draper::Decorator
   def spots_count
     globe ? Place.count : images.sum { |image| image.spots.count }
   end
+
+  def base_image_url
+    si = surface_images.first
+    h.raw(h.url_for_tile(si) + "#{si.image.id}/0/0_0.png")
+  end
 end
