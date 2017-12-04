@@ -132,4 +132,11 @@ class SurfaceDecorator < Draper::Decorator
   #     end
   #   end
 
+  def images_count
+    images.count unless globe?
+  end
+
+  def spots_count
+    globe ? Place.count : images.sum { |image| image.spots.count }
+  end
 end
