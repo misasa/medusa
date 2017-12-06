@@ -85,6 +85,11 @@ class Box < ActiveRecord::Base
     decimal_quantity >= 0 ? decimal_quantity : 0.to_d
   end
 
+  def recursive_inventory(checked_at)
+    specimens.where(fixed_in_box: true).each { |specimen| specimen.paths.current.first.update_attributes(checked_at: checked_at) if specimen.paths.current.first }
+    boxes.where(fixed_in_box: true).each { |box| box.paths.current.first.update_attributes(checked_at: checked_at) if box.paths.current.first }
+  end
+
   private
 
   def parent_id_cannot_self_children

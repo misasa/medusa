@@ -184,6 +184,7 @@ class SpecimensController < ApplicationController
       :collector_detail,
       :collected_at,
       :collection_date_precision,
+      :fixed_in_box,
       record_property_attributes: [
         :id,
         :global_id,

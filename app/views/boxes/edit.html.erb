@@ -30,10 +30,16 @@
       </span>
     </div>
   </div>
-	<div class="form-group form-group-sm">
-		<%= f.label :description, class: "small" %>
-		<%= f.text_area :description, class: "form-control input-sm" %>
-	</div>
+  <div class="form-group form-group-sm">
+    <%= f.label :description, class: "small" %>
+    <%= f.text_area :description, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <label class="small">Fixed in box</label>
+    <%= f.label :fixed_in_box, class: "checkbox-inline" do %>
+      <%= f.check_box :fixed_in_box %>
+    <% end %>
+  </div>
   <%= f.button class: "btn btn-default" do %>
   <span class="glyphicon glyphicon-save"></span>
   <% end %>

@@ -175,6 +175,7 @@ class BoxesController < ApplicationController
       :description,
       :group_id,
       :published,
+      :fixed_in_box,
       record_property_attributes: [
         :id,
         :global_id,

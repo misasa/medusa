@@ -38,6 +38,9 @@ module HasPath
     end
   end
 
+  def recursive_inventory(checked_at)
+  end
+
   private
 
   def path_changed?
