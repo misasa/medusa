@@ -108,6 +108,7 @@ describe BoxDecorator do
           + "<span class=\"glyphicon glyphicon-folder-close\"></span>"\
           + "</span>"\
           + "<a href=\"/boxes/#{box.id}\">test_1</a>"\
+          + "<span class=\"\" title=\"status:unknown\"><span class=\"glyphicon glyphicon-question-sign\"></span></span>"\
           + "</div>"\
           + "<div class=\"collapse\" id=\"tree-Box-#{box.record_property_id}\"></div>"\
           + "<div class=\"collapse\" id=\"tree-Specimen-#{box.record_property_id}\"></div>"\

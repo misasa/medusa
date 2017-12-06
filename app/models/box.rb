@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class Box < ActiveRecord::Base
   include HasRecordProperty
   include HasViewSpot
@@ -37,6 +38,11 @@ class Box < ActiveRecord::Base
 
   def as_json(options = {})
     super({ methods: [:global_id, :box_type_name, :primary_file_thumbnail_path] }.merge(options))
+  end
+
+
+  def ghost?
+    [Status::DISAPPEARANCE, Status::DISPOSAL, Status::LOSS].include?(status)
   end
 
   def quantity_with_unit

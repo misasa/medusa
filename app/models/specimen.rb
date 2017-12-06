@@ -15,20 +15,6 @@ class Specimen < ActiveRecord::Base
   acts_as_taggable
  #with_recursive
 
-  #試料状態
-  module Status
-    # 正常
-    NORMAL = 0
-    # 未定量
-    UNDETERMINED_QUANTITY = 1
-    # 消失
-    DISAPPEARANCE = 2
-    # 廃棄
-    DISPOSAL = 3
-    # 紛失
-    LOSS = 4
-  end
-
   before_save :build_specimen_quantity,
     if: -> (s) { !s.divide_flg && (s.quantity_changed? || s.quantity_unit_was.presence != s.quantity_unit.presence) }
 

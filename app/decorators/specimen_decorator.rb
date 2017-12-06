@@ -4,19 +4,19 @@ class SpecimenDecorator < Draper::Decorator
   delegate :as_json  
 
   STATUS_NAME = {
-    Specimen::Status::NORMAL => "",
-    Specimen::Status::UNDETERMINED_QUANTITY => "unknown",
-    Specimen::Status::DISAPPEARANCE => "zero",
-    Specimen::Status::DISPOSAL => "trash",
-    Specimen::Status::LOSS => "lost"
+    Status::NORMAL => "",
+    Status::UNDETERMINED_QUANTITY => "unknown",
+    Status::DISAPPEARANCE => "zero",
+    Status::DISPOSAL => "trash",
+    Status::LOSS => "lost"
   }
 
   STATUS_ICON_NAME = {
-    Specimen::Status::NORMAL => "",
-    Specimen::Status::UNDETERMINED_QUANTITY => "question-sign",
-    Specimen::Status::DISAPPEARANCE => "ban-circle",
-    Specimen::Status::DISPOSAL => "trash",
-    Specimen::Status::LOSS => "warning-sign"
+    Status::NORMAL => "",
+    Status::UNDETERMINED_QUANTITY => "question-sign",
+    Status::DISAPPEARANCE => "ban-circle",
+    Status::DISPOSAL => "trash",
+    Status::LOSS => "warning-sign"
   }
 
 
@@ -402,7 +402,7 @@ class SpecimenDecorator < Draper::Decorator
       delete_tag = ''
       if Divide.find_by(id: row[:id]).try(:afters).blank? || (index + 1) == num_history
         confirm = h.t("confirm.delete",:recordname =>"operation \"#{row[:comment]}\" at #{row[:date_str]}")
-        confirm += "\nAre you sure you want to permanently delete divided specimens [#{row[:child_specimens].map{|sq| sq.name}.join(', ')}] too?" if row[:divide_flg] && !row[:child_specimens].empty?
+        confirm += "\nAre you sure you want to permanently delete divided specimens #{row[:child_specimens].map{|sq| sq.name}.join(', ')}] too?" if row[:divide_flg] && !row[:child_specimens].empty?
         delete_tag = h.link_to(h.divide_path(row[:id], specimen_id: id), method: :delete , data: { confirm: confirm }) do
           h.content_tag(:span, nil, class:"glyphicon glyphicon-remove")
         end

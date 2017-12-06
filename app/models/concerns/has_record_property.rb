@@ -1,5 +1,20 @@
+# -*- coding: utf-8 -*-
+module Status
+  # 正常
+  NORMAL = 0
+  # 未定量
+  UNDETERMINED_QUANTITY = 1
+  # 消失
+  DISAPPEARANCE = 2
+  # 廃棄
+  DISPOSAL = 3
+  # 紛失
+  LOSS = 4  
+end
 module HasRecordProperty
   extend ActiveSupport::Concern
+
+  #HasRecordProperty::Status::NORMAL = 0
 
   included do
     has_one :record_property, as: :datum, dependent: :destroy
@@ -13,6 +28,21 @@ module HasRecordProperty
     after_save :update_record_property
 
     scope :readables, ->(user) { includes(:record_property).joins(:record_property).merge(RecordProperty.readables(user)) }
+  end
+
+  def status
+    return unless record_property
+    if record_property.disposed
+      Status::DISPOSAL
+    elsif record_property.lost
+      Status::LOSS
+    elsif quantity.blank? || decimal_quantity < 0
+      Status::UNDETERMINED_QUANTITY
+    elsif decimal_quantity_was.zero?
+      Status::DISAPPEARANCE
+    else
+      Status::NORMAL
+    end
   end
 
   def as_json(options = {})

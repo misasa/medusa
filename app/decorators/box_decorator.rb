@@ -3,6 +3,22 @@ class BoxDecorator < Draper::Decorator
   delegate_all
   delegate :as_json
 
+  STATUS_NAME = {
+    Status::NORMAL => "",
+    Status::UNDETERMINED_QUANTITY => "unknown",
+    Status::DISAPPEARANCE => "zero",
+    Status::DISPOSAL => "trash",
+    Status::LOSS => "lost"
+  }
+
+  STATUS_ICON_NAME = {
+    Status::NORMAL => "",
+    Status::UNDETERMINED_QUANTITY => "question-sign",
+    Status::DISAPPEARANCE => "ban-circle",
+    Status::DISPOSAL => "trash",
+    Status::LOSS => "warning-sign"
+  }
+
   def self.icon(in_list_include=false)
     h.content_tag(:span, nil, class: in_list_include ? "glyphicon glyphicon-folder-open" : "glyphicon glyphicon-folder-close")
   end
@@ -84,11 +100,21 @@ class BoxDecorator < Draper::Decorator
   def tree_node(current: false, current_type: false, in_list_include: false)
     link = current ? h.content_tag(:strong, name, class: "text-primary bg-primary") : name
     html = icon(in_list_include) + h.link_to_if(h.can?(:read, self), link, self)
+    html += status_icon(in_list_include)
     html += boxes_count(current_type, in_list_include)
     html += specimens_count(current_type, in_list_include)
     html += bibs_count(current_type, in_list_include)
     html += files_count(current_type, in_list_include)
     html
+  end
+
+  def status_name
+    STATUS_NAME[status]
+  end
+
+  def status_icon(in_list_include=false)
+    status_icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-#{STATUS_ICON_NAME[status]}")
+    h.content_tag(:span, status_icon, title: "status:" + status_name, class: (in_list_include ? "glyphicon-active-color" : ""))
   end
 
   def specimens_count(current_type=false, in_list_include=false)
