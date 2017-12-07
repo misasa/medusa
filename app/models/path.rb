@@ -9,6 +9,9 @@ class Path < ActiveRecord::Base
   scope :contents_of, -> (box_id) { where("? = ANY(ids)", box_id) }
   scope :current, -> { where(brought_out_at: nil) }
   scope :exists_at, -> (date) { where(arel_table[:brought_in_at].lteq(date.to_date.end_of_day).and(arel_table[:brought_out_at].eq(nil).or(arel_table[:brought_out_at].gteq(date.to_date.beginning_of_day)))) rescue none }
+
+  after_save :recursive_inventory, if: -> { checked_at_changed? }
+
   def self.oldest
     order(brought_in_at: :asc).first
   end
@@ -113,6 +116,10 @@ class Path < ActiveRecord::Base
 
   def self.ransackable_scopes(auth_object = nil)
     %i(exists_at)
+  end
+
+  def recursive_inventory
+    datum.recursive_inventory(checked_at)
   end
 
   private

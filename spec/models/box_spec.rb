@@ -283,4 +283,18 @@ describe Box do
       it { expect(subject).to eq 0.to_d }
     end
   end
+
+  describe "recursive_inventory" do
+    let(:box) { FactoryGirl.create(:box) }
+    let!(:fixed_child) { FactoryGirl.create(:box, parent: box, fixed_in_box: true) }
+    let!(:fixed_specimen) { FactoryGirl.create(:specimen, box: box, fixed_in_box: true) }
+    let!(:unfixed_child) { FactoryGirl.create(:box, parent: box) }
+    let!(:unfixed_specimen) { FactoryGirl.create(:specimen, box: box) }
+    let(:checked_at) { Time.current.round }
+    before { box.recursive_inventory(checked_at) }
+    it { expect(fixed_child.paths.current.first.checked_at).to eq checked_at }
+    it { expect(fixed_specimen.paths.current.first.checked_at).to eq checked_at }
+    it { expect(unfixed_child.paths.current.first.checked_at).to be_nil }
+    it { expect(unfixed_specimen.paths.current.first.checked_at).to be_nil }
+  end
 end

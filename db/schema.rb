@@ -97,16 +97,17 @@ ActiveRecord::Schema.define(version: 20171114014553) do
   end
 
   create_table "boxes", force: true, comment: "保管場所" do |t|
-    t.string   "name",          comment: "名称"
-    t.integer  "parent_id",     comment: "親保管場所ID"
-    t.integer  "position",      comment: "表示位置"
-    t.string   "path",          comment: "保管場所パス"
-    t.integer  "box_type_id",   comment: "保管場所種別ID"
-    t.datetime "created_at",    comment: "作成日時"
-    t.datetime "updated_at",    comment: "更新日時"
-    t.string   "description",   comment: "説明"
-    t.float    "quantity",      comment: "数量"
-    t.string   "quantity_unit", comment: "数量単位"
+    t.string   "name",                                       comment: "名称"
+    t.integer  "parent_id",                                  comment: "親保管場所ID"
+    t.integer  "position",                                   comment: "表示位置"
+    t.string   "path",                                       comment: "保管場所パス"
+    t.integer  "box_type_id",                                comment: "保管場所種別ID"
+    t.datetime "created_at",                                 comment: "作成日時"
+    t.datetime "updated_at",                                 comment: "更新日時"
+    t.string   "description",                                comment: "説明"
+    t.float    "quantity",                                   comment: "数量"
+    t.string   "quantity_unit",                              comment: "数量単位"
+    t.boolean  "fixed_in_box",  default: false, null: false, comment: "固定格納フラグ"
   end
 
   add_index "boxes", ["box_type_id"], name: "index_boxes_on_box_type_id", using: :btree
@@ -172,6 +173,8 @@ ActiveRecord::Schema.define(version: 20171114014553) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  add_index "divides", ["before_specimen_quantity_id"], name: "index_divides_on_before_specimen_quantity_id", using: :btree
 
   create_table "global_qrs", force: true, comment: "QRコード" do |t|
     t.integer  "record_property_id", comment: "レコードプロパティID"
@@ -326,29 +329,33 @@ ActiveRecord::Schema.define(version: 20171114014553) do
     t.datetime "updated_at"
   end
 
+  add_index "specimen_quantities", ["divide_id"], name: "index_specimen_quantities_on_divide_id", using: :btree
+  add_index "specimen_quantities", ["specimen_id"], name: "index_specimen_quantities_on_specimen_id", using: :btree
+
   create_table "specimens", force: true, comment: "標本" do |t|
-    t.string   "name",                                comment: "名称"
-    t.string   "specimen_type",                       comment: "標本種別"
-    t.text     "description",                         comment: "説明"
-    t.integer  "parent_id",                           comment: "親標本ID"
-    t.integer  "place_id",                            comment: "場所ID"
-    t.integer  "box_id",                              comment: "保管場所ID"
-    t.integer  "physical_form_id",                    comment: "形状ID"
-    t.integer  "classification_id",                   comment: "分類ID"
-    t.float    "quantity",                            comment: "数量"
-    t.string   "quantity_unit",                       comment: "数量単位"
-    t.datetime "created_at",                          comment: "作成日時"
-    t.datetime "updated_at",                          comment: "更新日時"
-    t.string   "igsn",                      limit: 9, comment: "IGSN"
-    t.float    "age_min",                             comment: "年代（最小）"
-    t.float    "age_max",                             comment: "年代（最大）"
-    t.string   "age_unit",                            comment: "年代単位"
-    t.string   "size",                                comment: "サイズ"
-    t.string   "size_unit",                           comment: "サイズ単位"
-    t.datetime "collected_at",                        comment: "採取日時"
-    t.string   "collection_date_precision",           comment: "採取日時精度"
-    t.string   "collector",                           comment: "採取者"
-    t.string   "collector_detail",                    comment: "採取詳細情報"
+    t.string   "name",                                                             comment: "名称"
+    t.string   "specimen_type",                                                    comment: "標本種別"
+    t.text     "description",                                                      comment: "説明"
+    t.integer  "parent_id",                                                        comment: "親標本ID"
+    t.integer  "place_id",                                                         comment: "場所ID"
+    t.integer  "box_id",                                                           comment: "保管場所ID"
+    t.integer  "physical_form_id",                                                 comment: "形状ID"
+    t.integer  "classification_id",                                                comment: "分類ID"
+    t.float    "quantity",                                                         comment: "数量"
+    t.string   "quantity_unit",                                                    comment: "数量単位"
+    t.datetime "created_at",                                                       comment: "作成日時"
+    t.datetime "updated_at",                                                       comment: "更新日時"
+    t.string   "igsn",                      limit: 9,                              comment: "IGSN"
+    t.float    "age_min",                                                          comment: "年代（最小）"
+    t.float    "age_max",                                                          comment: "年代（最大）"
+    t.string   "age_unit",                                                         comment: "年代単位"
+    t.string   "size",                                                             comment: "サイズ"
+    t.string   "size_unit",                                                        comment: "サイズ単位"
+    t.datetime "collected_at",                                                     comment: "採取日時"
+    t.string   "collection_date_precision",                                        comment: "採取日時精度"
+    t.string   "collector",                                                        comment: "採取者"
+    t.string   "collector_detail",                                                 comment: "採取詳細情報"
+    t.boolean  "fixed_in_box",                        default: false, null: false, comment: "固定格納フラグ"
   end
 
   add_index "specimens", ["classification_id"], name: "index_specimens_on_classification_id", using: :btree
