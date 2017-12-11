@@ -13,6 +13,6 @@
   <%= td_if_expand surface.user.try!(:username) %>
   <td><%= surface.group.try!(:name) %></td>
   <%= td_if_expand difference_from_now(surface.published_at) %>
-  <td><%= difference_from_now(surface.updated_at) unless surface.globe? %></td>
-  <%= td_if_expand difference_from_now(surface.created_at) unless surface.globe? %>
+  <td><%= difference_from_now(surface.updated_at) %></td>
+  <%= td_if_expand difference_from_now(surface.created_at) %>
 </tr>
