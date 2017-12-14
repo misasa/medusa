@@ -175,6 +175,7 @@ class SpecimensController < ApplicationController
       :disposed,
       :lost,
       :igsn,
+      :abs_age,
       :age_min,
       :age_max,
       :age_unit,

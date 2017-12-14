@@ -15,6 +15,7 @@ class Specimen < ActiveRecord::Base
   acts_as_taggable
  #with_recursive
 
+  after_initialize :calculate_rel_age
   before_save :build_specimen_quantity,
     if: -> (s) { !s.divide_flg && (s.quantity_changed? || s.quantity_unit_was.presence != s.quantity_unit.presence) }
 
@@ -47,6 +48,7 @@ class Specimen < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 255 }
   validate :parent_id_cannot_self_children, if: ->(specimen) { specimen.parent_id }
   validates :igsn, uniqueness: true, length: { maximum: 9 }, allow_nil: true, allow_blank: true
+  validates :abs_age, numericality: { only_integer: true }, allow_nil: true
   validates :age_min, numericality: true, allow_nil: true
   validates :age_max, numericality: true, allow_nil: true
   validates :age_unit, presence: true, if: -> { age_min.present? || age_max.present? }
@@ -171,6 +173,15 @@ class Specimen < ActiveRecord::Base
       values = Hash[*key_value.flatten]
       pmlame << values
     end
+  end
+
+  def abs_age_text
+    return unless abs_age
+    "#{era} #{abs_age.abs}"
+  end
+
+  def era
+    (abs_age < 0) ? "B.C." : "A.D."
   end
 
   def age_mean
@@ -356,5 +367,18 @@ class Specimen < ActiveRecord::Base
 
   def delete_table_analysis(analysis)
     TableAnalysis.delete_all(analysis_id: analysis.id, specimen_id: self.id)
+  end
+
+  def calculate_rel_age
+    return unless abs_age
+    rel_age = Time.current.year - abs_age
+    digits = Math.log10(rel_age.abs).to_i + 1
+    self.age_unit = case digits
+                    when 1..3; "a"
+                    when 4..6; "ka"
+                    when 7..9; "Ma"
+                    else "Ga"
+                    end
+    self.age_min = self.age_max = Alchemist.measure(rel_age, :a).to(age_unit.to_sym).value.round(2)
   end
 end
