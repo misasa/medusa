@@ -356,6 +356,7 @@ ActiveRecord::Schema.define(version: 20171114014553) do
     t.string   "collector",                                                        comment: "採取者"
     t.string   "collector_detail",                                                 comment: "採取詳細情報"
     t.boolean  "fixed_in_box",                        default: false, null: false, comment: "固定格納フラグ"
+    t.integer  "abs_age",                   limit: 8,                              comment: "絶対年代"
   end
 
   add_index "specimens", ["classification_id"], name: "index_specimens_on_classification_id", using: :btree

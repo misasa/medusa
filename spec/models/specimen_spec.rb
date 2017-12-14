@@ -160,6 +160,27 @@ describe Specimen do
       end
   end
 
+  describe "#abs_age_text" do
+    subject { specimen.abs_age_text }
+    let(:specimen) { FactoryGirl.build(:specimen, abs_age: abs_age) }
+    context "when abs_age is nil." do
+      let(:abs_age) { nil }
+      it { expect(subject).to be_nil }
+    end
+    context "when abs_age is greater than 0." do
+      let(:abs_age) { 1 }
+      it { expect(subject).to eq "A.D. 1" }
+    end
+    context "when abs_age is 0." do
+      let(:abs_age) { 0 }
+      it { expect(subject).to eq "A.D. 0" }
+    end
+    context "when abs_age is less than 0." do
+      let(:abs_age) { -1 }
+      it { expect(subject).to eq "B.C. 1" }
+    end
+  end
+
   describe "#age_mean" do
     subject {specimen.age_mean }
     let(:specimen){ FactoryGirl.create(:specimen, age_min: age_min, age_max: age_max, age_unit: age_unit)}
@@ -802,6 +823,49 @@ describe Specimen do
     end
   end
 
+  describe "after_initialize" do
+    describe "calculate_rel_age" do
+      before do
+        Timecop.freeze(now)
+        specimen.reload
+      end
+      after { Timecop.return }
+      let(:now) { Time.zone.local(2000, 1, 1) }
+      let(:specimen) { FactoryGirl.create(:specimen, abs_age: abs_age, age_unit: nil, age_min: nil, age_max: nil) }
+      context "when abs_age is nil." do
+        let(:abs_age) { nil }
+        it { expect(specimen.age_unit).to be_nil }
+        it { expect(specimen.age_min).to be_nil }
+        it { expect(specimen.age_max).to be_nil }
+      end
+      context "when digits of relatonal age is 1." do
+        let(:abs_age) { 1999 }
+        it { expect(specimen.age_unit).to eq "a" }
+        it { expect(specimen.age_min).to eq 1.0 }
+        it { expect(specimen.age_max).to eq 1.0 }
+      end
+      context "when digits of relatonal age is 4." do
+        let(:abs_age) { 11 }
+        it { expect(specimen.age_unit).to eq "ka" }
+        it { expect(specimen.age_min).to eq 1.99 }
+        it { expect(specimen.age_max).to eq 1.99 }
+      end
+      context "when digits of relatonal age is 7." do
+        let(:abs_age) { -1003001 }
+        it { expect(specimen.age_unit).to eq "Ma" }
+        it { expect(specimen.age_min).to eq 1.01 }
+        it { expect(specimen.age_max).to eq 1.01 }
+      end
+      context "when digits of relatonal age is 10." do
+        let(:abs_age) { -1000003001 }
+        it { expect(specimen.age_unit).to eq "Ga" }
+        it { expect(specimen.age_min).to eq 1.0 }
+        it { expect(specimen.age_max).to eq 1.0 }
+      end
+    end
+  end
+
+
   describe "before_save" do
     describe "build_specimen_quantity" do
       let(:user) { FactoryGirl.create(:user) }
@@ -982,6 +1046,28 @@ describe Specimen do
         it { expect(obj).to be_valid }
       end
 
+    end
+
+    describe "abs_age" do
+      let(:obj) { FactoryGirl.build(:specimen, abs_age: abs_age) }
+      context "数値の場合" do
+        context "整数" do
+          let(:abs_age) { 1 }
+          it { expect(obj).to be_valid }
+        end
+        context "小数点以下を含む" do
+          let(:abs_age) { 3.5 }
+          it {expect(obj).not_to be_valid}
+        end
+      end
+      context "文字列の場合" do
+        let(:abs_age) { "あいうえお" }
+        it { expect(obj).not_to be_valid }
+      end
+      context "allow_nil" do
+        let(:abs_age) { nil }
+        it { expect(obj).to be_valid }
+      end
     end
 
     describe "age_min" do

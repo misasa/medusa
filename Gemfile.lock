@@ -360,6 +360,7 @@ GEM
     thor (0.18.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
+    timecop (0.9.1)
     timers (1.1.0)
     tins (0.13.2)
     treetop (1.4.15)
@@ -451,6 +452,7 @@ DEPENDENCIES
   spring
   therubyracer
   thinreports
+  timecop
   uglifier (>= 1.3.0)
   unicorn
   validates_existence
