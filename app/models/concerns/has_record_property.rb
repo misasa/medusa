@@ -9,7 +9,7 @@ module Status
   # 廃棄
   DISPOSAL = 3
   # 紛失
-  LOSS = 4  
+  LOSS = 4
 end
 module HasRecordProperty
   extend ActiveSupport::Concern
@@ -49,7 +49,6 @@ module HasRecordProperty
     super({:methods => :global_id}.merge(options))
   end
 
-
   def to_xml(options = {})
     #self.to_json(:methods => :global_id)
     super({:methods => :global_id}.merge(options))
@@ -58,7 +57,35 @@ module HasRecordProperty
   def to_pml
     [self].to_pml
   end
-  
+
+  def build_pmlame(element_names)
+    chemistries = pml_elements.map{ |element| element.try(:chemistries) }.flatten.compact
+
+    duplicate_names = element_names.select { |x| element_names.count(x) > 1 }.uniq
+    pml_elements.uniq.each.with_index(1).inject([]) do |pmlame, (element, index)|
+      spot = Spot.find_by(target_uid: element.global_id)
+      spot_data = spot.try(:to_pmlame) || {}
+      opts = {duplicate_names: duplicate_names, index: index}
+      data = element.try(:to_pmlame, opts)
+      data.merge!(spot_data)
+      pmlame << data
+    end
+  end
+
+  def pml_elements
+    return @pml_elements if @pml_elements
+    array = []
+    array << self.analysis if self.respond_to?(:analysis)
+    array << self.analyses if self.respond_to?(:analyses)
+    array.flatten!
+    if self.respond_to?(:spots)
+      self.spots.each do |spot|
+        array.delete(spot.target) if spot.target && spot.target.instance_of?(Analysis)
+        array << spot
+      end
+    end
+    @pml_elements = array.flatten.uniq.compact
+  end
 
   def rplot_url
     return unless Settings.rplot_url
@@ -71,7 +98,7 @@ module HasRecordProperty
 #    Settings.rplot_url + '?id=' + global_id
     Settings.rplot_url + 'surfaces/?id=' + global_id
   end
-  
+
   def form_name
     return self.physical_form.name if self.respond_to?(:physical_form) && self.physical_form
     return self.box_type.name if self.respond_to?(:box_type) && self.box_type
@@ -106,7 +133,7 @@ module HasRecordProperty
     else
       items << "at \\nolinkurl{#{self.current_location}}" if self.current_location
     end
-    items.join(' ')    
+    items.join(' ')
   end
 
 
@@ -130,7 +157,7 @@ module HasRecordProperty
       items << ' pages={' + self.global_id + '}'
       items << ' year={' + self.created_at.strftime("%Y") +'}'
       items << " url={#{dream_url}}"
-      return "@article{" + items.compact.join(",\n") + ",\n}"    
+      return "@article{" + items.compact.join(",\n") + ",\n}"
     end
   end
 
@@ -194,7 +221,7 @@ module HasRecordProperty
     tokens << "<#{self.class.model_name.human.downcase} #{global_id}>"
     # tokens << "<link: " + links.join(" ") + ">"
     # tokens << "<last-modified: #{updated_at}>"
-    # tokens << "<created: #{created_at}>"        
+    # tokens << "<created: #{created_at}>"
     tokens.join(" ")
   end
 

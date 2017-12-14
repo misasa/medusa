@@ -6,7 +6,6 @@ class Place < ActiveRecord::Base
 
   TEMPLATE_HEADER = "name,latitude(decimal degree),longitude(decimal degree),elevation(m),description\n"
   PERMIT_IMPORT_TYPES = ["text/plain", "text/csv", "application/csv", "application/vnd.ms-excel"]
-  PMLAME_HEADER = %w(place_id longitude latitude elevation)
 
   acts_as_mappable
 
@@ -119,7 +118,7 @@ class Place < ActiveRecord::Base
 
   def analyses
     analyses = []
-    specimens.each do |specimen| 
+    specimens.each do |specimen|
       (analyses = analyses + specimen.analyses) unless specimen.analyses.empty?
     end
     analyses
@@ -155,7 +154,7 @@ class Place < ActiveRecord::Base
 
   def longitude_dms_sec
     longitude_dms[:sec]
-  end    
+  end
 
   def method_missing(method, *args, &block)
     case method.to_s
@@ -166,15 +165,6 @@ class Place < ActiveRecord::Base
     else
       super
     end
-  end
-
-  def to_pmlame
-    [
-      global_id,
-      longitude,
-      latitude,
-      elevation
-    ]
   end
 
   protected

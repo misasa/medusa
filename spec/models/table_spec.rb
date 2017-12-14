@@ -67,7 +67,7 @@ describe "Table" do
       end
     end
   end
-  
+
   describe "recursive" do
     before do
       specimen
@@ -81,7 +81,7 @@ describe "Table" do
     end
     it { expect(table.full_specimens.count).to be_eql 2}
     it { expect(table.analyses.count).to be_eql 2}
-    it { expect(table.analyses.count).to be_eql 2}    
+    it { expect(table.analyses.count).to be_eql 2}
     it { expect(table.chemistries.count).to be_eql 2}
   end
 
@@ -118,7 +118,7 @@ describe "Table" do
       expect(table.selected_analyses).to be_an_instance_of(Array)
     end
     #it { expect(table.analyses.count).to be_eql 2}
-    #it { expect(table.selected_analyses.count).to be_eql 1}    
+    #it { expect(table.selected_analyses.count).to be_eql 1}
     #it { expect(table.chemistries.count).to be_eql 2}
   end
 
@@ -174,7 +174,7 @@ describe "Table" do
       it { expect { |b| table.each(&b) }.to yield_successive_args(:row_2, :row_1) }
     end
   end
-  
+
   describe "#method_descriptions" do
     subject { table.method_descriptions }
     context "table has 0 description" do
@@ -200,7 +200,7 @@ describe "Table" do
       it { expect(subject).to eq({"a" => "#{technique_1.name} on #{device_1.name}", "b" => "#{technique_2.name} on #{device_2.name}"}) }
     end
   end
-  
+
   describe "#method_sign" do
     context "method call once" do
       subject { table.method_sign(technique, device) }
@@ -246,7 +246,7 @@ describe "Table" do
       end
     end
   end
-  
+
   describe "#priority" do
     subject { table.priority(analysis_id) }
     let(:analysis_id) { analysis_2.id }
@@ -322,7 +322,7 @@ describe "table" do
       bib.tables << table
     end
     it { expect(bib.specimens.count).to be_eql(3) }
-    it { expect(table.specimens.count).to be_eql(3) }    
+    it { expect(table.specimens.count).to be_eql(3) }
   end
 
   context "with flag_ingore = true does not take over specimen from bib" do
@@ -334,7 +334,7 @@ describe "table" do
       bib.tables << table
     end
     it { expect(bib.specimens.count).to be_eql(3) }
-    it { expect(table.specimens.count).to be_eql(0) }    
+    it { expect(table.specimens.count).to be_eql(0) }
   end
 
 end
@@ -352,7 +352,7 @@ describe "Table::Row" do
     Alchemist.setup
     Alchemist.register(:mass, unit.name.to_sym, 1.to_d / unit.conversion)
   end
-  
+
   describe "#name" do
     subject { row.name(type) }
     let(:type) { nil }
@@ -368,7 +368,7 @@ describe "Table::Row" do
       it { expect(subject).to eq(measurement_item.display_in_tex) }
     end
   end
-  
+
   describe "#symbol" do
     subject { row.symbol }
 
@@ -417,12 +417,12 @@ describe "Table::Row" do
       let(:table_specimen_3) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_3) }
       let(:specimen_1) { FactoryGirl.create(:specimen) }
       let(:specimen_2) { FactoryGirl.create(:specimen) }
-      let(:specimen_3) { FactoryGirl.create(:specimen) }      
+      let(:specimen_3) { FactoryGirl.create(:specimen) }
       let(:device_1){ FactoryGirl.create(:device) }
       let(:technique_1){ FactoryGirl.create(:technique) }
       let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1, device: device_1, technique: technique_1) }
       let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2, device: device_1, technique: technique_1) }
-      let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_3, device: device_1, technique: nil) }      
+      let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_3, device: device_1, technique: nil) }
       let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
       let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
       let(:chemistry_3) { FactoryGirl.create(:chemistry, analysis: analysis_3, unit: unit, measurement_item: measurement_item, value: 3) }
@@ -444,12 +444,12 @@ describe "Table::Row" do
       let(:table_specimen_3) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_3) }
       let(:specimen_1) { FactoryGirl.create(:specimen) }
       let(:specimen_2) { FactoryGirl.create(:specimen) }
-      let(:specimen_3) { FactoryGirl.create(:specimen) }      
+      let(:specimen_3) { FactoryGirl.create(:specimen) }
       let(:device_1){ FactoryGirl.create(:device) }
       let(:technique_1){ FactoryGirl.create(:technique) }
       let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1, device: device_1, technique: technique_1) }
       let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2, device: device_1, technique: technique_1) }
-      let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_3, device: device_1, technique: nil) }      
+      let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_3, device: device_1, technique: nil) }
       let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
       let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
       let(:chemistry_3) { FactoryGirl.create(:chemistry, analysis: analysis_3, unit: unit, measurement_item: measurement_item, value: 3) }
@@ -508,7 +508,7 @@ describe "Table::Row" do
       it { expect { |b| row.each(&b) }.to yield_successive_args(:cell, :cell) }
     end
   end
-  
+
   describe "#mean" do
     subject { row.mean(round_flag) }
     let(:round_flag) { false }
@@ -581,7 +581,7 @@ describe "Table::Row" do
       end
     end
   end
-  
+
   describe "#standard_diviation" do
     subject { row.standard_diviation }
     let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2, chemistry_3]) }
@@ -625,7 +625,7 @@ describe "Table::Row" do
       end
     end
   end
-  
+
   describe "#present?" do
     subject { row.present? }
     let(:row) { Table::Row.new(table, category_measurement_item, [chemistry]) }
@@ -639,7 +639,7 @@ describe "Table::Row" do
       it { expect(subject).to eq true }
     end
   end
-  
+
   describe "#scale" do
     subject { row.scale }
     let(:row) { Table::Row.new(table, category_measurement_item, [chemistry]) }
@@ -751,7 +751,7 @@ describe "Table::Cell" do
     Alchemist.setup
     Alchemist.register(:mass, unit.name.to_sym, 1.to_d / unit.conversion)
   end
-  
+
   describe "#raw" do
     subject { cell.raw }
     before { allow_any_instance_of(Alchemist).to receive(:value).and_return(value) }
@@ -783,7 +783,7 @@ describe "Table::Cell" do
     end
 
   end
-  
+
   describe "value" do
     subject { cell.value }
     context "table have not link chemistry" do
@@ -801,7 +801,7 @@ describe "Table::Cell" do
       it { expect(subject).to eq(1.round(row.scale)) }
     end
   end
-  
+
   describe "symbol" do
     subject { cell.symbol }
     context "table have not link chemistry" do
@@ -811,7 +811,7 @@ describe "Table::Cell" do
       before do
         specimen
         analysis
-        table        
+        table
         table_specimen
         chemistry
         allow(table).to receive(:method_sign).with(analysis.technique, analysis.device).and_return(:method_sign)
@@ -819,7 +819,7 @@ describe "Table::Cell" do
       it { expect(subject).to eq(:method_sign) }
     end
   end
-  
+
   describe "#present?" do
     subject { cell.present? }
     context "table have not link chemistry" do
@@ -829,7 +829,7 @@ describe "Table::Cell" do
       before do
         specimen
         analysis
-        table        
+        table
         table_specimen
         chemistry
       end
@@ -837,5 +837,18 @@ describe "Table::Cell" do
     end
   end
 
+  describe "pml_elements" do
+    subject { obj.pml_elements }
+    let(:obj) { FactoryGirl.create(:table)}
+    let(:analysis_1) { FactoryGirl.create(:analysis) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, name: "分類2") }
+    let(:analysis_3) { FactoryGirl.create(:analysis, name: "分類3") }
+    let(:analysis_4) { FactoryGirl.create(:analysis, name: "分類4") }
+    before do
+      obj.analyses << analysis_1
+      obj.analyses << analysis_2
+      allow(obj).to receive(:selected_analyses).and_return([analysis_3, analysis_3, analysis_4])
+    end
+    it { expect(subject).to match_array([analysis_3, analysis_4]) }
+  end
 end
-

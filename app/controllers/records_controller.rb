@@ -77,13 +77,13 @@ class RecordsController < ApplicationController
     end
   end
 
- # /records/xxxx-xxx/pmlame?type=xxx
+# /records/xxxx-xxx/pmlame?type=xxx
   def pmlame
     target = params[:type] == "family" ? :families : :self_and_descendants
     @records = @record.respond_to?(target) ? @record.send(target) : [@record]
-    element_names = @records.map(&:analyses).flatten.map(&:name)
+    element_names = @records.map(&:pml_elements).flatten.map(&:name)
     respond_with @records do |format|
-      format.json { render json: [ @records.map {|item| item.to_pmlame(element_names)}.flatten.uniq ], methods: [:datum_attributes] }
+      format.json { render json: [ @records.map {|item| item.build_pmlame(element_names)}.flatten.uniq ], methods: [:datum_attributes] }
     end
   end
 

@@ -408,14 +408,16 @@ describe Analysis do
   end
 
   describe "#to_pmlame" do
-    subject { analysis.to_pmlame(nicknames, duplicate_names) }
+    subject { analysis.to_pmlame({nicknames: nicknames, duplicate_names: duplicate_names}) }
     let(:analysis) { FactoryGirl.create(:analysis,  name: "analysis_name_1") }
     let(:chemistry_1) { FactoryGirl.create(:chemistry) }
     let(:chemistry_2) { FactoryGirl.create(:chemistry) }
-    let(:measurement_item_1) { FactoryGirl.create(:measurement_item, nickname: "Si") }
-    let(:measurement_item_2) { FactoryGirl.create(:measurement_item, nickname: "SiO2") }
+    let(:measurement_item_1) { FactoryGirl.create(:measurement_item, nickname: nickname_1) }
+    let(:measurement_item_2) { FactoryGirl.create(:measurement_item, nickname: nickname_2) }
     let(:duplicate_names) { [] }
-    let(:nicknames) { ["Si", "SiO2"] }
+    let(:nicknames) { [nickname_1, nickname_2] }
+    let(:nickname_1) { "Si" }
+    let(:nickname_2) { "SiO2" }
     before do
       chemistry_1.measurement_item = measurement_item_1
       chemistry_2.measurement_item = measurement_item_2
@@ -423,45 +425,68 @@ describe Analysis do
       analysis.chemistries << chemistry_2
     end
 
-    context "when it exists duplicate element names" do
+    context "when it exists duplicate element names," do
       let(:duplicate_names) { ["analysis_name_1"] }
       it "elementに<stone XXXX> が付加されてること" do
+        allow(chemistry_1).to receive(:measured_value).and_return(nil)
+        allow(chemistry_1).to receive(:measured_uncertainty).and_return(nil)
+        allow(chemistry_2).to receive(:measured_value).and_return(10)
+        allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
         global_id = analysis.specimen.global_id
-        allow(chemistry_1).to receive(:to_pmlame).and_return(nil)
-        allow(chemistry_2).to receive(:to_pmlame).and_return([10, 0.1])
         element_name = "analysis_name_1 <stone #{global_id}>"
-        expect(subject).to match_array([element_name, global_id, nil, nil, 10, 0.1])
+        result = {
+          element: element_name, sample_id: global_id,
+          "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
+          "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
+        }
+        expect(subject).to eq(result)
       end
     end
-    context "when it does not exists duplicate element names" do
+    context "when it does not exists duplicate element names," do
       let(:duplicate_names) { ["analysis_name_2"] }
       it "elementに<stone XXXX> が付加されていないこと" do
-        global_id = analysis.specimen.global_id
-        allow(chemistry_1).to receive(:to_pmlame).and_return(nil)
-        allow(chemistry_2).to receive(:to_pmlame).and_return([10, 0.1])
+        allow(chemistry_1).to receive(:measured_value).and_return(nil)
+        allow(chemistry_1).to receive(:measured_uncertainty).and_return(nil)
+        allow(chemistry_2).to receive(:measured_value).and_return(10)
+        allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
         element_name = "analysis_name_1"
-        expect(subject).to match_array([element_name, global_id, nil, nil, 10, 0.1])
+        global_id = analysis.specimen.global_id
+        result = {
+          element: element_name, sample_id: global_id,
+          "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
+          "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
+        }
+        expect(subject).to eq(result)
       end
     end
-    context "when it exists chemistry" do
+    context "when it exists chemistry," do
       it "returns [element_name, specimen, value, uncertainty, ...]" do
-        global_id = analysis.specimen.global_id
-        allow(chemistry_1).to receive(:to_pmlame).and_return(nil)
-        allow(chemistry_2).to receive(:to_pmlame).and_return([10, 0.1])
+        allow(chemistry_1).to receive(:measured_value).and_return(nil)
+        allow(chemistry_1).to receive(:measured_uncertainty).and_return(nil)
+        allow(chemistry_2).to receive(:measured_value).and_return(10)
+        allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
         element_name = "analysis_name_1"
-        expect(subject).to match_array([element_name, global_id, nil, nil, 10, 0.1])
+        global_id = analysis.specimen.global_id
+        result = {
+          element: element_name, sample_id: global_id,
+          "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
+          "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
+        }
+        expect(subject).to eq(result)
       end
     end
-    context "when it does not exists chemistry" do
+    context "when it does not exists chemistry," do
       before do
         analysis.chemistries = []
       end
       it "returns [element_name, specimen, nil, ...]" do
         global_id = analysis.specimen.global_id
-        allow(chemistry_1).to receive(:to_pmlame).and_return(20, 0.2)
-        allow(chemistry_2).to receive(:to_pmlame).and_return([10, 0.1])
+        allow(chemistry_1).to receive(:measured_value).and_return(20)
+        allow(chemistry_1).to receive(:measured_uncertainty).and_return(0.2)
+        allow(chemistry_2).to receive(:measured_value).and_return(10)
+        allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
         element_name = "analysis_name_1"
-        expect(subject).to match_array([element_name, global_id, nil, nil, nil, nil])
+        expect(subject).to eq({element: element_name, sample_id: global_id})
       end
     end
   end
@@ -544,5 +569,11 @@ describe Analysis do
         end
       end
     end
+  end
+
+  describe "#pml_elements" do
+    subject { obj.pml_elements }
+    let(:obj) { FactoryGirl.create(:analysis)}
+    it { expect(subject).to match_array([obj]) }
   end
 end

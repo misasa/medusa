@@ -5,8 +5,6 @@ class Analysis < ActiveRecord::Base
 
   PERMIT_IMPORT_TYPES = ["text/plain", "text/csv", "application/csv", "application/vnd.ms-excel"]
 
-  PMLAME_HEADER = %w(element sample_id)
-
   has_many :chemistries
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
@@ -32,7 +30,6 @@ class Analysis < ActiveRecord::Base
       mc.export_headers.map { |header| name header }
     end
   end
-
 
   def related_spots
     return [] unless specimen
@@ -234,13 +231,11 @@ class Analysis < ActiveRecord::Base
 
   end
 
-  def to_pmlame(nicknames, duplicate_names = [])
-    element_name = duplicate_names.include?(name) ? "#{name} <stone #{specimen.global_id}>" : name
-    init = [ element_name, specimen.global_id ]
-    nicknames.inject(init) do |pmlame, nickname|
-      chemistry = chemistries.detect { |ch| ch.measurement_item.nickname == nickname }
-      pmlame += chemistry.try(:to_pmlame) || Array.new(2)
-    end
+  def to_pmlame(duplicate_names: [], index: nil)
+    element_name = duplicate_names.include?(name) ? "#{name} <stone #{specimen.global_id}>#{index}" : name
+    info = { element: element_name, sample_id: specimen.global_id }
+    measurement_data = chemistries.map(&:to_pmlame).inject({}, :merge)
+    info.merge(measurement_data)
   end
 
   def get_spot
@@ -252,6 +247,10 @@ class Analysis < ActiveRecord::Base
   def get_place
     return unless specimen
     specimen.rplace
+  end
+
+  def pml_elements
+    [self]
   end
 
   private

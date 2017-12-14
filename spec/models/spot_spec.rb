@@ -163,36 +163,66 @@ describe Spot do
     subject { spot.to_pmlame }
     let(:spot) { FactoryGirl.build(:spot, attachment_file: attachment_file) }
     let(:attachment_file) { FactoryGirl.create(:attachment_file, data_content_type: data_content_type, data_file_name: data_file_name) }
+    let(:spot_world_xy) {}
     before do
       allow(spot).to receive(:spot_x_from_center).and_return(10)
       allow(spot).to receive(:spot_y_from_center).and_return(20)
+      allow(spot).to receive(:spot_world_xy).and_return(spot_world_xy)
     end
-    context "when the type of the data_content_type is text/plain." do
+    context "when the type of the data_content_type is text/plain," do
       let(:data_content_type) { "text/plain" }
       let(:data_file_name) { "file_name_1.txt" }
       it "return nil" do
         expect(subject).to be_nil
       end
     end
-    context "when the type of the data_content_type is application/pdf." do
+    context "when the type of the data_content_type is application/pdf," do
       let(:data_content_type) { "application/pdf" }
       let(:data_file_name) { "file_name_1.pdf" }
       it "return nil" do
         expect(subject).to be_nil
       end
     end
-    context "when the type of the data_content_type is image/jpeg." do
+    context "when the type of the data_content_type is image/jpeg," do
       let(:data_content_type) { "image/jpeg" }
       let(:data_file_name) { "file_name_1.jpg" }
       it "return spot data" do
-        expect(subject).to match_array([attachment_file.global_id, attachment_file.data.url, 10, 20])
+        result = {
+          image_id: attachment_file.global_id,
+          image_path: attachment_file.data.url,
+          x_image: 10,
+          y_image: 20
+        }
+        expect(subject).to eq(result)
       end
     end
-    context "when the type of the data_content_type is image/bmp." do
+    context "when the type of the data_content_type is image/bmp," do
       let(:data_content_type) { "image/bmp" }
       let(:data_file_name) { "file_name_1.bmp" }
       it "return spot data" do
-        expect(subject).to match_array([attachment_file.global_id, attachment_file.data.url, 10, 20])
+        result = {
+          image_id: attachment_file.global_id,
+          image_path: attachment_file.data.url,
+          x_image: 10,
+          y_image: 20
+        }
+        expect(subject).to eq(result)
+      end
+    end
+    context "when spot has spot_world_xy," do
+      let(:data_content_type) { "image/bmp" }
+      let(:data_file_name) { "file_name_1.bmp" }
+      let(:spot_world_xy) { [50, 60] }
+      it "return spot data" do
+        result = {
+          image_id: attachment_file.global_id,
+          image_path: attachment_file.data.url,
+          x_image: 10,
+          y_image: 20,
+          x_vs: 50,
+          y_vs: 60
+        }
+        expect(subject).to eq(result)
       end
     end
   end

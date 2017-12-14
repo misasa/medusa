@@ -95,7 +95,6 @@ class Table < ActiveRecord::Base
       category_measurement_item.unit || table.measurement_category.unit || category_measurement_item.measurement_item.unit || Unit.first
     end
 
-
     private
 
     def category_measurement_item
@@ -223,7 +222,7 @@ class Table < ActiveRecord::Base
     specimens.each do |specimen|
       specimen.full_analyses.each do |analysis|
         unless table_analyses.find_by_analysis_id(analysis.id)
-          priority = table_analyses.size 
+          priority = table_analyses.size
           table_analyses.create!(specimen_id: specimen.id, analysis_id: analysis.id, priority: priority)
         end
       end
@@ -288,6 +287,10 @@ class Table < ActiveRecord::Base
     objs_r.each do |obj|
       obj.publish!
     end
+  end
+
+  def pml_elements
+    self.selected_analyses.flatten.compact.uniq
   end
 
   private

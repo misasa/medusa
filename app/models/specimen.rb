@@ -80,7 +80,7 @@ class Specimen < ActiveRecord::Base
       Status::NORMAL
     end
   end
-  
+
   def publish!
     specimens = [self]
     specimens.concat(self.ancestors)
@@ -103,10 +103,10 @@ class Specimen < ActiveRecord::Base
       attachment_files.concat(box.attachment_files)
     end
     objs = []
-    objs.concat(specimens)   
+    objs.concat(specimens)
     objs.concat(boxes)
     objs.concat(places)
-    objs.concat(attachment_files)    
+    objs.concat(attachment_files)
     objs.each do |obj|
       obj.published = true
       obj.save
@@ -157,21 +157,6 @@ class Specimen < ActiveRecord::Base
   # def to_pml
   #   [self].to_pml
   # end
-
-  def to_pmlame(element_names, nicknames = nil)
-    header = Spot::PMLAME_HEADER + Analysis::PMLAME_HEADER
-    header += chemistries.map { |chemistry| [chemistry.measurement_item.nickname, chemistry.measurement_item.nickname + '_error'] }.flatten.uniq
-    nicknames ||= chemistries.map{ |chemistry| chemistry.measurement_item.nickname }.flatten.uniq
-    duplicate_names = element_names.select { |x| element_names.count(x) > 1 }.uniq
-    analyses.uniq.inject([]) do |pmlame, analysis|
-      spot = Spot.find_by(target_uid: analysis.global_id)
-      data = spot.try(:to_pmlame) || Array.new(Spot::PMLAME_HEADER.size)
-      data += analysis.to_pmlame(nicknames, duplicate_names)
-      key_value = [header, data].transpose
-      values = Hash[*key_value.flatten]
-      pmlame << values
-    end
-  end
 
   def age_mean
     return unless ( age_min && age_max )
