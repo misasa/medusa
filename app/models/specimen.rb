@@ -181,7 +181,7 @@ class Specimen < ActiveRecord::Base
   end
 
   def era
-    (abs_age < 0) ? "B.C." : "A.D."
+    (abs_age < 0) ? "BC" : "AD"
   end
 
   def age_mean

@@ -169,15 +169,15 @@ describe Specimen do
     end
     context "when abs_age is greater than 0." do
       let(:abs_age) { 1 }
-      it { expect(subject).to eq "A.D. 1" }
+      it { expect(subject).to eq "AD 1" }
     end
     context "when abs_age is 0." do
       let(:abs_age) { 0 }
-      it { expect(subject).to eq "A.D. 0" }
+      it { expect(subject).to eq "AD 0" }
     end
     context "when abs_age is less than 0." do
       let(:abs_age) { -1 }
-      it { expect(subject).to eq "B.C. 1" }
+      it { expect(subject).to eq "BC 1" }
     end
   end
 
