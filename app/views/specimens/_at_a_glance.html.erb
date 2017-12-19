@@ -28,7 +28,7 @@
       <%= li_if_exist("quantity (#{@specimen.quantity_unit}): ", @specimen.quantity) %>
       <%= content_tag(:li, "status: #{@specimen.status_name} #{@specimen.status_icon}", {}, false) if @specimen.status_name.present? %>
       <% if @specimen.abs_age_text %>
-        <li> birth-year: <%= @specimen.abs_age_text %> </li>
+        <li> birth: <%= @specimen.abs_age_text %> </li>
         <%= li_if_exist("age (#{@specimen.age_unit}): ", @specimen.age_in_text) %>
       <% else %>
         <%= li_if_exist("age (#{@specimen.age_unit}): ", @specimen.age_in_text) %>
