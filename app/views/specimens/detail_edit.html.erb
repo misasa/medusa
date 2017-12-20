@@ -4,10 +4,6 @@
     <%= f.text_field :igsn, class: "form-control input-sm", disabled: true%>
   </div>
   <div class="form-group form-group-sm">
-    <%= f.label :birth, class: "small" %>
-    <%= f.text_field :abs_age, class: "form-control input-sm", placeholder: "When this stone was born in unit of AD year." %>
-  </div>
-  <div class="form-group form-group-sm">
     <%= f.label :age_min, class: "small" %>
     <%= f.text_field :age_min, class: "form-control input-sm" %>
   </div>
@@ -18,6 +14,10 @@
   <div class="form-group form-group-sm">
     <%= f.label :age_unit, class: "small" %>
     <%= f.select :age_unit, ["a","ka","Ma","Ga"].map{|n| [n,n]}, { include_blank: true }, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :birth, class: "small" %>
+    <%= f.text_field :abs_age, class: "form-control input-sm", placeholder: "Type AD year when you know the absolute age." %>
   </div>
   <div class="form-group form-group-sm">
     <%= f.label :size, class: "small" %>
