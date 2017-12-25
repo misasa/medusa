@@ -7,7 +7,7 @@ class Analysis < ActiveRecord::Base
 
   PMLAME_HEADER = %w(element sample_id)
 
-  has_many :chemistries
+  has_many :chemistries, inverse_of: :analysis
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
   belongs_to :specimen
