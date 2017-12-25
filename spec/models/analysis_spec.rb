@@ -176,9 +176,9 @@ describe Analysis do
             analysis.set_chemistry(nickname, unit_name, data)
           end
           it { expect(1).to be_equal(1)}
-          #it { expect(subject).to be_present }
-          #it { expect{subject}.to change(Analysis, :count)}
-          #it { expect{subject}.to change(Chemistry, :count)}
+          it { expect(subject).to be_present }
+          it { expect{subject}.to change(Analysis, :count)}
+          it { expect{subject}.to change(Chemistry, :count)}
         end
 
         context "object is invalid" do
