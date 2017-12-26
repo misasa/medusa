@@ -555,6 +555,14 @@ describe HasRecordProperty do
         expect(subject).to match_array(result)
       end
     end
+    context "when pml_elements is exist which has not have to_pmlame method," do
+      let(:pml_elements) { [box] }
+      let(:box) { FactoryGirl.create(:box ) }
+      it do
+        result = []
+        expect(subject).to match_array(result)
+      end
+    end
   end
 
   describe "#pml_elements" do

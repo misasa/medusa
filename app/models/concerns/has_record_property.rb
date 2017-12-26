@@ -60,15 +60,15 @@ module HasRecordProperty
 
   def build_pmlame(element_names)
     chemistries = pml_elements.map{ |element| element.try(:chemistries) }.flatten.compact
-
     duplicate_names = element_names.select { |x| element_names.count(x) > 1 }.uniq
-    pml_elements.uniq.each.with_index(1).inject([]) do |pmlame, (element, index)|
+    pml_elements.each.with_index(1).inject([]) do |pmlame, (element, index)|
       spot = Spot.find_by(target_uid: element.global_id)
       spot_data = spot.try(:to_pmlame) || {}
       opts = {duplicate_names: duplicate_names, index: index}
-      data = element.try(:to_pmlame, opts)
+      data = element.try(:to_pmlame, opts) || {}
       data.merge!(spot_data)
-      pmlame << data
+      pmlame << data if data.present?
+      pmlame
     end
   end
 
