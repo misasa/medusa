@@ -9,6 +9,7 @@ class RecordProperty < ActiveRecord::Base
   before_save :adjust_published_at
   before_save :adjust_disposed_at
   before_save :adjust_lost_at
+  after_save :recursive_lose_or_found, if: -> { lost_changed? }
 
   validates :user, existence: true
   validates :group, existence: true, allow_nil: true
@@ -113,5 +114,13 @@ class RecordProperty < ActiveRecord::Base
 
   def self.guest_readables_where_clauses
     self.arel_table[:guest_readable].eq(true)
+  end
+
+  def recursive_lose_or_found
+    if lost
+      datum.recursive_lose
+    else
+      datum.recursive_found
+    end
   end
 end

@@ -39,7 +39,7 @@ GEM
       tzinfo (~> 0.3.37)
     acts_as_list (0.4.0)
       activerecord (>= 3.0)
-    acts_as_mappable (0.1.1)
+    acts_as_mappable (0.1.3)
       actionpack (~> 4.0)
       activerecord (~> 4.0)
       railties (~> 4.0)
@@ -360,6 +360,7 @@ GEM
     thor (0.18.1)
     thread_safe (0.3.5)
     tilt (1.4.1)
+    timecop (0.9.1)
     timers (1.1.0)
     tins (0.13.2)
     treetop (1.4.15)
@@ -394,7 +395,7 @@ PLATFORMS
 DEPENDENCIES
   activeresource
   acts_as_list
-  acts_as_mappable (= 0.1.1)
+  acts_as_mappable (= 0.1.3)
   acts_as_taggable_on
   alchemist!
   barby
@@ -451,6 +452,7 @@ DEPENDENCIES
   spring
   therubyracer
   thinreports
+  timecop
   uglifier (>= 1.3.0)
   unicorn
   validates_existence

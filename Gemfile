@@ -70,7 +70,7 @@ gem 'exception_notification'
 gem 'settingslogic'
 gem 'validates_existence'
 #gem 'acts_as_mappable', git: 'git@devel.misasa.okayama-u.ac.jp:gems/actsasmappable.git'
-gem 'acts_as_mappable', '0.1.1'
+gem 'acts_as_mappable', '0.1.3'
 #gem 'with_recursive', git: 'git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.git'
 gem 'with_recursive'
 gem 'thinreports'
@@ -108,4 +108,5 @@ group :test do
   gem 'simplecov-rcov', :require => false
   gem 'ci_reporter'
   gem 'factory_girl_rails'
+  gem 'timecop'
 end

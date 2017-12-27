@@ -159,7 +159,28 @@ describe Analysis do
         context "objects is all valid" do
           let(:analysis) { FactoryGirl.build(:analysis) }
           it { expect(subject).to be_present }
+          it { expect{subject}.to change(Analysis, :count)}
         end
+
+        context "objects is all valid with chemistries", :current => true do
+          let(:analysis) { FactoryGirl.build(:analysis) }
+          let(:nickname) { "nickname" }
+          let(:unit_name) { nil }
+          let(:data) { " 10 " }
+          let(:measurement_item) { FactoryGirl.create(:measurement_item, nickname: nickname, unit_id: unit.id) }
+          let(:unit) { FactoryGirl.create(:unit, name: "parts_per_gram") }
+          before do
+            unit
+            measurement_item
+            analysis
+            analysis.set_chemistry(nickname, unit_name, data)
+          end
+          it { expect(1).to be_equal(1)}
+          it { expect(subject).to be_present }
+          it { expect{subject}.to change(Analysis, :count)}
+          it { expect{subject}.to change(Chemistry, :count)}
+        end
+
         context "object is invalid" do
           let(:analysis) { FactoryGirl.build(:analysis, name: nil) }
           it { expect(subject).to eq false }
@@ -375,7 +396,7 @@ describe Analysis do
     it {expect(subject).to be_present}
   end
 
-  describe "#to_pml", :current => true do
+  describe "#to_pml" do
     let(:box){ FactoryGirl.create(:box)}
     let(:specimen){ FactoryGirl.create(:specimen, box_id: box.id)}
     let(:spot){FactoryGirl.create(:spot, target_uid: obj.global_id)}
@@ -395,27 +416,25 @@ describe Analysis do
     it { expect(obj.to_pml).to be_present }
     it { expect(objs.to_pml).to be_eql([obj, obj2, obj3].to_pml) }
     it { expect(objs2.to_pml).to be_eql([obj, obj2, obj3].to_pml) }
-    context "with place", :current => true do
+    context "with place" do
       let(:place){ FactoryGirl.create(:place)}
       let(:specimen){ FactoryGirl.create(:specimen, box_id: box.id, place_id: place.id)}
 
       before do
-
-        puts obj.to_pml
+        #puts obj.to_pml
       end
       it { expect(obj.to_pml).to match(/place/)}
     end
   end
 
   describe "#to_pmlame" do
-    subject { analysis.to_pmlame({nicknames: nicknames, duplicate_names: duplicate_names}) }
+    subject { analysis.to_pmlame({duplicate_names: duplicate_names}) }
     let(:analysis) { FactoryGirl.create(:analysis,  name: "analysis_name_1") }
     let(:chemistry_1) { FactoryGirl.create(:chemistry) }
     let(:chemistry_2) { FactoryGirl.create(:chemistry) }
     let(:measurement_item_1) { FactoryGirl.create(:measurement_item, nickname: nickname_1) }
     let(:measurement_item_2) { FactoryGirl.create(:measurement_item, nickname: nickname_2) }
     let(:duplicate_names) { [] }
-    let(:nicknames) { [nickname_1, nickname_2] }
     let(:nickname_1) { "Si" }
     let(:nickname_2) { "SiO2" }
     before do
@@ -525,7 +544,7 @@ describe Analysis do
     end
   end
 
-  describe "publish!", :current => true do
+  describe "publish!" do
     subject { analysis.publish! }
     let(:analysis) { FactoryGirl.create(:analysis) }
     before do

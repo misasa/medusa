@@ -288,6 +288,12 @@ module HasRecordProperty
     Spot.find_all_by_target_uid(global_id)
   end
 
+  def recursive_lose
+  end
+
+  def recursive_found
+  end
+
   def method_missing(method_id, *args, &block)
     if method_id =~ /(.*)_count/
       count = 0

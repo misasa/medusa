@@ -5,15 +5,19 @@
   </div>
   <div class="form-group form-group-sm">
     <%= f.label :age_min, class: "small" %>
-    <%= f.text_field :age_min, class: "form-control input-sm" %>
+    <%= f.text_field :age_min, class: "form-control input-sm rel-age" %>
   </div>
   <div class="form-group form-group-sm">
     <%= f.label :age_max, class: "small" %>
-    <%= f.text_field :age_max, class: "form-control input-sm" %>
+    <%= f.text_field :age_max, class: "form-control input-sm rel-age" %>
   </div>
   <div class="form-group form-group-sm">
     <%= f.label :age_unit, class: "small" %>
-    <%= f.select :age_unit, ["a","ka","Ma","Ga"].map{|n| [n,n]}, { include_blank: true }, class: "form-control input-sm" %>
+    <%= f.select :age_unit, ["a","ka","Ma","Ga"].map{|n| [n,n]}, { include_blank: true }, class: "form-control input-sm rel-age" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :birth, class: "small" %>
+    <%= f.text_field :abs_age, id: "abs-age", class: "form-control input-sm", placeholder: "Type AD year when you know the absolute age." %>
   </div>
   <div class="form-group form-group-sm">
     <%= f.label :size, class: "small" %>
@@ -71,6 +75,9 @@
     $(this).closest("form").find(":input").filter(":not(:hidden)").prop("disabled", true);
     $("#specimen_igsn").prop("disabled", false).val("");
   });
+  $(document).on("change", "#abs-age", function() {
+    $(".rel-age").prop("disabled", $(this).val().length > 0);
+  });
   $(function() {
     $(document).ready(function() {
       if ("<%= @specimen.igsn %>"){
@@ -78,6 +85,7 @@
       }else{
         $("#sesar_upload").prop("disabled", false);
       }
+      $("#abs-age").change();
     });
   });
 <% end %>

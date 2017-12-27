@@ -90,6 +90,16 @@ class Box < ActiveRecord::Base
     boxes.where(fixed_in_box: true).each { |box| box.paths.current.first.update_attributes(checked_at: checked_at) if box.paths.current.first }
   end
 
+  def recursive_lose
+    specimens.where(fixed_in_box: true).each(&:lose)
+    boxes.where(fixed_in_box: true).each(&:lose)
+  end
+
+  def recursive_found
+    specimens.where(fixed_in_box: true).each(&:found)
+    boxes.where(fixed_in_box: true).each(&:found)
+  end
+
   private
 
   def parent_id_cannot_self_children

@@ -1,5 +1,5 @@
 <% if @surface.globe? %>
-  <%= ActsAsMappable::Mappable::HtmlGenerator.generate(lat: 35, lng: 135, width: 300, height: 300) %>
+  <%= ActsAsMappable::Mappable::HtmlGenerator.generate(lat: 0, lng: 0, zoom: 0, width: 300, height: 300) %>
 <% else %>
   <%= @surface.map(class: "small-map") %>
 <% end  %>

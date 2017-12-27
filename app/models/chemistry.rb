@@ -6,7 +6,8 @@ class Chemistry < ActiveRecord::Base
   belongs_to :unit
   delegate :specimen, to: :analysis
 
-  validates :analysis, existence: true
+  # avoid failure, when analysis import from csv.
+  validates :analysis, existence: true, unless: -> { analysis && analysis.new_record? }
   validates :measurement_item, existence: true
   validates :unit, existence: true
   validates :value, numericality: true

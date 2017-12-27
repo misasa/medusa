@@ -5,7 +5,7 @@ class Analysis < ActiveRecord::Base
 
   PERMIT_IMPORT_TYPES = ["text/plain", "text/csv", "application/csv", "application/vnd.ms-excel"]
 
-  has_many :chemistries
+  has_many :chemistries, inverse_of: :analysis
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
   belongs_to :specimen
