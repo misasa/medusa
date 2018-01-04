@@ -18,7 +18,7 @@ class SpotDecorator < Draper::Decorator
   end
 
   def name_with_id
-    icon + " #{name} < #{global_id} >"
+    icon + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
   end
 
   def icon

@@ -191,6 +191,10 @@ module ApplicationHelper
     content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}")
   end
 
+  def draggable_id(id)
+    content_tag(:span, id, class: "glyphicon glyphicon-transfer global-id", draggable: true)
+  end
+
   private
 
   def tabname_from_filename(filename)

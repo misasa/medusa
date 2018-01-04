@@ -28,7 +28,7 @@ class BoxDecorator < Draper::Decorator
   end
 
   def box_path_with_id(link_flag = false)
-    box_path + " < #{global_id} >"
+    box_path + h.raw(" < #{h.draggable_id(global_id)} >")
   end
 
   def primary_picture(width: 250, height: 250)

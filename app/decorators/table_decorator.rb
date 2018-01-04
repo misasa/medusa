@@ -16,7 +16,7 @@ class TableDecorator < Draper::Decorator
   end
 
   def name_with_id
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list") + " #{caption} < #{global_id} >"
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list") + h.raw(" #{caption} < #{h.draggable_id(global_id)} >")
   end
 
   def publish_badge
