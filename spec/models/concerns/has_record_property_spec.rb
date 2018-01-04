@@ -50,7 +50,7 @@ describe HasRecordProperty do
     it { expect(obj.to_xml).to include "<global-id>#{global_id}</global-id>" }
     it { expect(obj.latex_mode).to match /<.* #{global_id}>/}
     #it { expect(obj.latex_mode).to include "<last-modified: #{obj.updated_at}>"}
-    #it { expect(obj.latex_mode).to include "<created: #{obj.created_at}>"}        
+    #it { expect(obj.latex_mode).to include "<created: #{obj.created_at}>"}
   end
 
   describe "#spot_links" do
@@ -232,7 +232,7 @@ describe HasRecordProperty do
         end
         it { expect(subject).to eq(2) }
       end
-    end    
+    end
   end
 
   describe "#latex_mode" do
@@ -385,7 +385,7 @@ describe HasRecordProperty do
       end
     end
   end
-  
+
   describe "callbacks" do
     describe "after_create" do
       describe "generate_record_property" do
@@ -501,5 +501,130 @@ describe HasRecordProperty do
       before { specimen.lost = lost }
       it { expect(specimen.lost).to eq lost }
     end
+  end
+
+  describe "#build_pmlame" do
+    subject{ obj.build_pmlame([]) }
+    let(:obj) { FactoryGirl.create(:specimen)}
+    let(:analysis_1) { FactoryGirl.create(:analysis) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, name: "分類2") }
+    let!(:spot_1) { FactoryGirl.create(:spot, target_uid: analysis_1.try(:global_id) ) }
+    let(:pml_elements) { [] }
+
+    before do
+      @spot_1_pmlame = {
+        image_id: "global_id_spot_1",
+        image_path: "image_path_spot_1",
+        x_image: 1, y_image: 2,
+      }
+      @analysis_1_pmlame = {
+        element: analysis_1.name,
+        sample_id: "global_id_ana_1",
+        "Ti" => 10, "Ti_error" => 11,
+        "C" => 12, "C_error" => 13,
+      }
+      @analysis_2_pmlame = {
+        element: analysis_2.name,
+        sample_id: "global_id_ana_2",
+        "P" => 14, "P_error" => 15,
+      }
+      allow(obj).to receive(:pml_elements).and_return(pml_elements)
+      allow_any_instance_of(Spot).to receive(:to_pmlame).and_return(@spot_1_pmlame)
+      allow(analysis_1).to receive(:to_pmlame).and_return(@analysis_1_pmlame)
+      allow(analysis_2).to receive(:to_pmlame).and_return(@analysis_2_pmlame)
+    end
+    context "when pml_elements and spot is exist, " do
+      let(:pml_elements) { [analysis_1, analysis_2] }
+      it do
+        result = [@analysis_1_pmlame.merge(@spot_1_pmlame), @analysis_2_pmlame]
+        expect(subject).to match_array(result)
+      end
+    end
+    context "when only pml_elements is exist and spot is not exists " do
+      let(:pml_elements) { [analysis_1, analysis_2] }
+      let!(:spot_1) { FactoryGirl.create(:spot, target_uid: nil ) }
+      it do
+        result = [@analysis_1_pmlame, @analysis_2_pmlame]
+        expect(subject).to match_array(result)
+      end
+    end
+    context "when pml_elements is not exist," do
+      let(:pml_elements) { [] }
+      it do
+        result = []
+        expect(subject).to match_array(result)
+      end
+    end
+    context "when pml_elements is exist which has not have to_pmlame method," do
+      let(:pml_elements) { [box] }
+      let(:box) { FactoryGirl.create(:box ) }
+      it do
+        result = []
+        expect(subject).to match_array(result)
+      end
+    end
+  end
+
+  describe "#pml_elements" do
+    subject { obj.pml_elements }
+    before do
+      obj
+    end
+    context "when datum type is Specimen" do
+      let(:obj) { FactoryGirl.create(:specimen)}
+      let(:analysis_1) { FactoryGirl.create(:analysis) }
+      let(:analysis_2) { FactoryGirl.create(:analysis, name: "分類2") }
+      before do
+        obj.analyses << analysis_1
+        obj.analyses << analysis_2
+        obj.analyses << analysis_1
+      end
+      it { expect(subject).to match_array([analysis_1, analysis_2]) }
+    end
+    context "when datum type is Place" do
+      let(:obj) { FactoryGirl.create(:place)}
+      let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:analysis_1) { FactoryGirl.create(:analysis) }
+      let(:analysis_2) { FactoryGirl.create(:analysis, name: "分類2") }
+      before do
+        specimen.analyses << analysis_1
+        specimen.analyses << analysis_2
+        obj.specimens << specimen
+      end
+      it { expect(subject).to match_array([analysis_1, analysis_2]) }
+    end
+    context "when datum type is Chemistry" do
+      let(:obj) { FactoryGirl.create(:chemistry)}
+      let(:analysis_1) { FactoryGirl.create(:analysis) }
+      let(:analysis_2) { FactoryGirl.create(:analysis, name: "分類2") }
+      before do
+        obj.analysis = analysis_1
+      end
+      it { expect(subject).to match_array([analysis_1]) }
+    end
+    context "when datum type is AttachmentFile" do
+      let(:obj) { FactoryGirl.create(:attachment_file)}
+      let(:analysis_1) { FactoryGirl.create(:analysis) }
+      let(:analysis_2) { FactoryGirl.create(:analysis, name: "分類2") }
+      before do
+        obj.analyses << analysis_1
+        obj.analyses << analysis_2
+      end
+      it { expect(subject).to match_array([analysis_1, analysis_2]) }
+    end
+    context "when datum type is Surface" do
+      let(:obj) { FactoryGirl.create(:surface)}
+      let(:spot_1) { FactoryGirl.create(:spot) }
+      let(:spot_2) { FactoryGirl.create(:spot) }
+      let(:target_1) { FactoryGirl.create(:analysis) }
+      let(:target_2) { FactoryGirl.create(:spot) }
+      before do
+        allow(obj).to receive(:spots).and_return([spot_1, spot_2])
+        allow(spot_1).to receive(:target).and_return(target_1)
+        allow(spot_2).to receive(:target).and_return(target_2)
+      end
+      it { expect(subject).to match_array([spot_1, spot_2]) }
+    end
+
   end
 end

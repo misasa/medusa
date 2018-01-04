@@ -1,13 +1,13 @@
 class Spot < ActiveRecord::Base
   include HasRecordProperty
 
-  PMLAME_HEADER = %w(image_id image_path x_image y_image)
-
 #  attr_accessor :spot_x_world, :spot_y_world
   belongs_to :attachment_file, inverse_of: :spots
 
   validates :attachment_file, existence: true
   validates :spot_x, presence: true
+
+
   validates :spot_y, presence: true
 
   before_validation :generate_name, if: "name.blank?"
@@ -92,16 +92,23 @@ class Spot < ActiveRecord::Base
     end
   end
 
-  def to_pmlame
+  def to_pmlame(args = {})
     return unless attachment_file.image?
-    [
-      attachment_file.try!(:global_id),
-      attachment_file.data.try!(:url),
-      spot_x_from_center,
-      spot_y_from_center,
-    ]
+    result = {
+      image_id: attachment_file.try!(:global_id),
+      image_path: attachment_file.data.try!(:url),
+      x_image: spot_x_from_center,
+      y_image: spot_y_from_center,
+    }
+    if spot_world_xy
+      result.merge!(
+        { x_vs: spot_world_xy[0],
+          y_vs: spot_world_xy[1]
+        }
+      )
+    end
+    result
   end
-
 
   def spot_xy_from_center
     return unless attachment_file
@@ -189,5 +196,4 @@ private
     return unless target.respond_to? :attachment_files
     target.attachment_files << attachment_file
   end
-
 end

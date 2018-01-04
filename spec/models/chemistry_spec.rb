@@ -212,4 +212,42 @@ describe Chemistry do
     end
   end
 
+  describe "#to_pmlame" do
+    subject { chemistry.to_pmlame }
+    let(:chemistry) { FactoryGirl.create(:chemistry, unit: unit, value: value, uncertainty: uncertainty, measurement_item: measurement_item) }
+    let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit, nickname: "SiO") }
+    let(:unit) { FactoryGirl.create(:unit, name: "parts_per_milli", conversion: conversion) }
+    let(:conversion) { 1000000 }
+    let(:value) { 3000000 }
+    let(:uncertainty) { 2000000 }
+
+    before do
+      parts = FactoryGirl.create(:unit, name: "parts", conversion: 1)
+      Alchemist.setup
+      Alchemist.register(:mass, parts.name.to_sym, 1.to_d / parts.conversion)
+      Alchemist.register(:mass, unit.name.to_sym, 1.to_d / unit.conversion)
+    end
+
+    context "when it has measured value and measured uncertainty," do
+      it "return hash what has measured value and uncertainty value" do
+        expect(subject).to eq({"SiO" => 3.0, "SiO_error" => 2.0})
+      end
+    end
+
+    context "when measured_value is nil," do
+      it "return hash what has measured value and uncertainty value" do
+        allow(chemistry).to receive(:measured_value).and_return(nil)
+        expect(subject).to eq({"SiO" => nil, "SiO_error" => 2.0})
+      end
+    end
+
+    context "when measured_uncertainty is nil," do
+      it "return hash what has measured value and uncertainty value" do
+        allow(chemistry).to receive(:measured_uncertainty).and_return(nil)
+        expect(subject).to eq({"SiO" => 3.0, "SiO_error" => nil})
+      end
+    end
+
+  end
+
 end

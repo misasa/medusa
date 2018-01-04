@@ -46,10 +46,10 @@ class Chemistry < ActiveRecord::Base
   end
 
   def to_pmlame
-    [
-      measured_value,
-      measured_uncertainty
-    ]
+    {
+      "#{measurement_item.nickname}" => measured_value,
+      "#{measurement_item.nickname}_error" => measured_uncertainty,
+     }
   end
 
   def measured_value
