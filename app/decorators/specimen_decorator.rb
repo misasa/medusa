@@ -113,7 +113,7 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def path_with_id
-    tag = path + " < #{global_id} >"
+    path + h.raw(" < #{h.draggable_id(global_id)} >")
   end
 
   def path

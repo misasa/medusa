@@ -12,7 +12,7 @@ class AnalysisDecorator < Draper::Decorator
   end
 
   def name_with_id
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-stats") + " #{name} < #{global_id} >"
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-stats") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
   end
 
   def tree_node(current: false, current_type: false, in_list_include: false)

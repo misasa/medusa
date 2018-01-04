@@ -8,7 +8,7 @@ class PlaceDecorator < Draper::Decorator
   end
 
   def name_with_id
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-globe") + " #{name} < #{global_id} >"
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-globe") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
   end
 
   def icon
