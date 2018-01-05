@@ -479,7 +479,7 @@ describe Analysis do
       end
     end
     context "when it exists chemistry," do
-      it "returns [element_name, specimen, value, uncertainty, ...]" do
+      it "return element info and measured values." do
         allow(chemistry_1).to receive(:measured_value).and_return(nil)
         allow(chemistry_1).to receive(:measured_uncertainty).and_return(nil)
         allow(chemistry_2).to receive(:measured_value).and_return(10)
@@ -498,7 +498,7 @@ describe Analysis do
       before do
         analysis.chemistries = []
       end
-      it "returns [element_name, specimen, nil, ...]" do
+      it "return only element info." do
         global_id = analysis.specimen.global_id
         allow(chemistry_1).to receive(:measured_value).and_return(20)
         allow(chemistry_1).to receive(:measured_uncertainty).and_return(0.2)
@@ -506,6 +506,24 @@ describe Analysis do
         allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
         element_name = "analysis_name_1"
         expect(subject).to eq({element: element_name, sample_id: global_id})
+      end
+    end
+    context "when it does not exists specimen," do
+      before do
+        analysis.specimen = nil
+      end
+      it "return element info and measured values without sample_id." do
+        allow(chemistry_1).to receive(:measured_value).and_return(20)
+        allow(chemistry_1).to receive(:measured_uncertainty).and_return(0.2)
+        allow(chemistry_2).to receive(:measured_value).and_return(10)
+        allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
+        element_name = "analysis_name_1"
+        result = {
+          element: element_name, sample_id: nil,
+          "#{nickname_1}" => 20, "#{nickname_1}_error" => 0.2,
+          "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
+        }
+        expect(subject).to eq(result)
       end
     end
   end

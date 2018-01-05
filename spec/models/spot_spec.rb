@@ -225,6 +225,12 @@ describe Spot do
         expect(subject).to eq(result)
       end
     end
+    context "when attachment_file is nil," do
+      let(:attachment_file) { nil }
+      it "return blank" do
+        expect(subject).to be_blank
+      end
+    end
   end
 
 end
