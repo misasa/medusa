@@ -93,7 +93,7 @@ class Spot < ActiveRecord::Base
   end
 
   def to_pmlame(args = {})
-    return unless attachment_file.image?
+    return unless attachment_file.try(:image?)
     result = {
       image_id: attachment_file.try!(:global_id),
       image_path: attachment_file.data.try!(:url),

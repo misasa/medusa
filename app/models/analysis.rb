@@ -232,8 +232,8 @@ class Analysis < ActiveRecord::Base
   end
 
   def to_pmlame(duplicate_names: [], index: nil)
-    element_name = duplicate_names.include?(name) ? "#{name} <stone #{specimen.global_id}>#{index}" : name
-    info = { element: element_name, sample_id: specimen.global_id }
+    element_name = duplicate_names.include?(name) ? "#{name} <stone #{specimen.try(:global_id)}>#{index}" : name
+    info = { element: element_name, sample_id: specimen.try(:global_id) }
     measurement_data = chemistries.map(&:to_pmlame).inject({}, :merge)
     info.merge(measurement_data)
   end
