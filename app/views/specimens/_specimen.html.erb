@@ -1,5 +1,6 @@
 <tr>
   <td><%= check_box_tag("ids[]", specimen.id, checked, id: "ids_#{specimen.id}", class: "select-row") if can?(:update, specimen) %> </td>
+  <td><%= link_to specimen.attachment_image_files.first.decorate.picture(width: 70, height: 70, type: :thumb), specimen.attachment_image_files.first, class: specimen_ghost(specimen) if specimen.attachment_image_files.present? %></td>
   <% specimen = specimen.decorate %>
   <% @search_columns.each do |column| %>
   <td><%= specimen.content(column.name) %></td>

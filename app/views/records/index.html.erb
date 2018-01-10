@@ -9,6 +9,7 @@
         <% end %>
       </th>
       <th></th>
+      <th></th>
       <th><%= sort_link @records_search, :name, "name" %></th>
       <th><%= sort_link @records_search, :global_id, "global-id" %></th>
       <th><%= sort_link @records_search, :user_username, "owner" %></th>
@@ -18,6 +19,7 @@
     </tr>
     <tr>
       <th><%= text_field_tag :per_page, (params[:per_page] || RecordProperty.default_per_page), class: "form-control input-sm", size: 4 %></th>
+      <th></th>
       <th></th>
       <th><%= f.text_field :name_cont, class: "form-control input-sm", size: 15 %></th>
       <th><%= f.text_field :global_id_cont, class: "form-control input-sm", size: 15 %></th>
@@ -52,6 +54,7 @@
     <% object = object.decorate if object.respond_to?(:decorate) %>
     <tr>
       <td></td>
+      <td><%= link_to record.datum.attachment_image_files.first.decorate.picture(width: 70, height: 70, type: :thumb), record.datum.attachment_image_files.first, class: specimen_ghost(record.datum) if record.datum.is_a?(HasAttachmentFile) &&record.datum.attachment_image_files.present? %></td>
       <td><%= record.datum.decorate.status_icon if record.datum.class == Specimen %></td>
       <td><%= link_to list_title(object), object, class: specimen_ghost(object) %></td>
       <td><%= record.global_id %></td>

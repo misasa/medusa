@@ -1,5 +1,6 @@
 <tr>
   <td><%= check_box_tag("ids[]", box.id, checked, id: "ids_#{box.id}", class: "select-row") if can?(:update, box) %></td>
+  <td><%= link_to box.attachment_image_files.first.decorate.picture(width: 70, height: 70, type: :thumb), box.attachment_image_files.first if box.attachment_image_files.present? %></td>
   <td><%= link_to list_title(box), box %></td>
   <td><%= link_to box.parent.name,box.parent if box.parent %></td>
   <td><%= box.box_type.try!(:name) %></td>
