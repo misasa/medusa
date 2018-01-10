@@ -54,7 +54,7 @@
     <% object = object.decorate if object.respond_to?(:decorate) %>
     <tr>
       <td></td>
-      <td><%= link_to record.datum.attachment_image_files.first.decorate.picture(width: 70, height: 70, type: :thumb), record.datum.attachment_image_files.first if record.datum.is_a?(HasAttachmentFile) &&record.datum.attachment_image_files.present? %></td>
+      <td><%= link_to record.datum.attachment_image_files.first.decorate.picture(width: 70, height: 70, type: :thumb), record.datum.attachment_image_files.first, class: specimen_ghost(record.datum) if record.datum.is_a?(HasAttachmentFile) &&record.datum.attachment_image_files.present? %></td>
       <td><%= record.datum.decorate.status_icon if record.datum.class == Specimen %></td>
       <td><%= link_to list_title(object), object, class: specimen_ghost(object) %></td>
       <td><%= record.global_id %></td>
