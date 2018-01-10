@@ -8,6 +8,7 @@
         <span class="glyphicon glyphicon-refresh"></span>
         <% end %>
       </th>
+      <th></th>
       <% @search_columns.each do |column| %>
       <th>
         <% if SpecimenDecorator.search_name(column).present? %>
@@ -23,6 +24,7 @@
       <th style="vertical-align:top;">
         <%= text_field_tag :per_page, (params[:per_page] || Specimen.default_per_page), class: "form-control input-sm", size: 4 %>
       </th>
+      <th></th>
       <% @search_columns.each do |column| %>
       <th style="vertical-align:top;">
         <%= SpecimenDecorator.search_form(f, column) %>
