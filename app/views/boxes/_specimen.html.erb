@@ -19,7 +19,7 @@
 		      <% end %>
 		    </td>
 		    <td class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-		      <%= link_to specimen.attachment_files.first.decorate.picture(width: 160, height: 160, type: :thumb), specimen if specimen.attachment_files.present? %>
+		      <%= link_to specimen.attachment_files.first.decorate.picture(width: 160, height: 160, type: :thumb), specimen, class: specimen_ghost(specimen) if specimen.attachment_files.present? %>
 		    </td>
 
 		    <td class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
