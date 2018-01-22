@@ -2,12 +2,18 @@
   .glyphicon {
     opacity: 0.5;
   }
+  img {
+    opacity: 0.8;
+  }
   a {
     text-decoration: line-through;
   }
 }
 .ghost.glyphicon {
   opacity: 0.5;
+}
+img.ghost {
+  opacity: 0.8;
 }
 a.ghost {
   text-decoration: line-through;

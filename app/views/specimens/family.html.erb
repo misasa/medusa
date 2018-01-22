@@ -1,6 +1,6 @@
 <div>
   <% if @specimen.attachment_files.present? %>
-    <%= link_to(@specimen.primary_picture, attachment_file_path(@specimen.attachment_files.first)) %>
+    <%= link_to(@specimen.primary_picture, attachment_file_path(@specimen.attachment_files.first), class: specimen_ghost(@specimen)) %>
   <% end %>
 </div>
 <div id="family-tree">
