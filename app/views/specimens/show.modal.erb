@@ -1,7 +1,7 @@
 <div class="row">
-  <div class="col-lg-4">
+  <%= content_tag :div, class: specimen_ghost(@specimen, "col-lg-4") do %>
     <%= @specimen.primary_picture %>
-  </div>
+  <% end  %>
   <div class="col-lg-8">
     <dl class="dl-horizontal">
       <dt>name</dt>
