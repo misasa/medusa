@@ -189,7 +189,7 @@ class RecordsController < ApplicationController
 
   # Set reserved word at search
   def reserved_params
-    if params[:q] && params[:q][:name_or_global_id_cont] =~ /\A##(\w+)\z/
+    if params[:q] && params[:q][:name_or_global_id_or_datum_of_Specimen_type_classification_name_cont] =~ /\A##(\w+)\z/
       case $1
       when "delete"
         { disposed_eq: "true" }
