@@ -84,7 +84,7 @@ module HasRecordProperty
         array << spot
       end
     end
-    @pml_elements = array.flatten.uniq.compact
+    @pml_elements = array.flatten.compact.uniq
   end
 
   def rplot_url

@@ -36,7 +36,7 @@ describe Surface do
     before do
       surface
     end
-    it { expect{ subject }.not_to raise_error } 
+    it { expect{ subject }.not_to raise_error }
   end
 
   describe "images <<" do
@@ -115,8 +115,60 @@ describe Surface do
         spot_3
       end
       it { expect(obj.to_pml).to match(/<?xml/)}
-      it { expect(obj.to_pml).to match(/<attachment_file_global_id>*.+<\/attachment_file_global_id>/)}      
+      it { expect(obj.to_pml).to match(/<attachment_file_global_id>*.+<\/attachment_file_global_id>/)}
       it { expect(obj.to_pml).to match(/<attachment_file_path>*.+<\/attachment_file_path>/)}
+    end
+  end
+
+  describe "pml_elements" do
+    let(:obj){ FactoryGirl.create(:surface, globe: globe?) }
+
+    let(:spot_1){ FactoryGirl.create(:spot, name: "spot1", attachment_file_id: surface_image.image_id) }
+    let(:spot_2){ FactoryGirl.create(:spot, name: "spot2", attachment_file_id: surface_image.image_id) }
+    let(:surface_image){ FactoryGirl.create(:surface_image, surface_id: obj.id) }
+
+    let(:place_1){ FactoryGirl.create(:place, name: "place1") }
+    let(:place_2){ FactoryGirl.create(:place, name: "place2") }
+    let(:specimen_1){ FactoryGirl.create(:specimen, name: "specimen1") }
+    let(:specimen_2){ FactoryGirl.create(:specimen, name: "specimen2") }
+    let(:specimen_3){ FactoryGirl.create(:specimen, name: "specimen3") }
+
+    let(:bib){ FactoryGirl.create(:bib) }
+    let(:analysis_1){ FactoryGirl.create(:analysis, name: "分析_1", specimen_id: specimen_1.id)}
+    let(:analysis_2){ FactoryGirl.create(:analysis, name: "分析_2", specimen_id: specimen_2.id)}
+    let(:analysis_3){ FactoryGirl.create(:analysis, name: "分析_3", specimen_id: specimen_3.id)}
+    let(:analysis_4){ FactoryGirl.create(:analysis, name: "分析_4", specimen_id: nil)}
+    let(:analysis_5){ FactoryGirl.create(:analysis, name: "分析_5", specimen_id: nil)}
+    let(:analysis_6){ FactoryGirl.create(:analysis, name: "分析_6", specimen_id: nil)}
+    let(:analysis_7){ FactoryGirl.create(:analysis, name: "分析_7", specimen_id: nil)}
+
+    before do
+      specimen_1.analyses << analysis_1
+      specimen_2.analyses << analysis_2
+      specimen_3.analyses << analysis_3
+
+      bib.analyses << analysis_4
+      bib.analyses << analysis_5
+
+      allow(spot_1).to receive(:target).and_return(analysis_6)
+      allow(spot_2).to receive(:target).and_return(analysis_7)
+
+      place_1.specimens << specimen_1
+      place_2.specimens << specimen_2
+      place_2.specimens << specimen_3
+      place_2.bibs << bib
+    end
+    context "surface is globe," do
+      let(:globe?){ true }
+      it "returns place's pmlame elements." do
+        expect(obj.pml_elements).to match_array([analysis_1, analysis_2, analysis_3, analysis_4, analysis_5])
+      end
+    end
+    context "surface is NOT globe," do
+      let(:globe?){ false }
+      it "returns spot's pmlame elements." do
+        expect(obj.pml_elements).to match_array([spot_1, spot_2])
+      end
     end
   end
 

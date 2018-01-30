@@ -231,6 +231,29 @@ describe Spot do
         expect(subject).to be_blank
       end
     end
+    context "when spot has analysis," do
+      let(:data_content_type) { "image/jpeg" }
+      let(:data_file_name) { "file_name_1.jpg" }
+      let(:analysis) { FactoryGirl.create(:analysis) }
+      let(:analysis_to_pmlame) { {element: "name", sample_id: "id", "ana_1" => 1.0, "ana_2" => 2.0} }
+      before do
+        allow(spot).to receive(:get_analysis).and_return(analysis)
+        allow(analysis).to receive(:to_pmlame).and_return(analysis_to_pmlame)
+      end
+      it "return spot data" do
+        result = {
+          image_id: attachment_file.global_id,
+          image_path: attachment_file.data.url,
+          x_image: 10,
+          y_image: 20,
+          element: "name",
+          sample_id: "id",
+          "ana_1" => 1.0,
+          "ana_2" => 2.0
+        }
+        expect(subject).to eq(result)
+      end
+    end
   end
 
 end

@@ -107,6 +107,12 @@ class Spot < ActiveRecord::Base
         }
       )
     end
+    analysis = get_analysis
+    if analysis
+      result.merge!(
+        analysis.to_pmlame
+      )
+    end
     result
   end
 
