@@ -64,7 +64,7 @@ class SurfaceDecorator < Draper::Decorator
         next unless specimen
         link = specimen.name
         icon = specimen.decorate.icon
-        icon += h.link_to(link, specimen)
+        icon += h.link_to(link, specimen, class: h.specimen_ghost(specimen))
         picture += icon        
       end
       picture += h.icon_tag("screenshot") + h.content_tag(:a, h.content_tag(:span, spots.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if surface.spots.size > 0

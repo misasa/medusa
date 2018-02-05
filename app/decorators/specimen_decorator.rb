@@ -53,6 +53,7 @@ class SpecimenDecorator < Draper::Decorator
     else
       tag += " #{name}"
     end
+    tag = h.content_tag(:span, tag, class: h.specimen_ghost(object))
     tag += " < #{global_id} >"
     tag += h.published_label(object) if object.published
     tag
@@ -122,7 +123,7 @@ class SpecimenDecorator < Draper::Decorator
       nodes += box.ancestors.map { |b| box_node(b) }
       nodes += [box_node(box)]
     end
-    nodes += [icon + name]
+    nodes += [h.content_tag(:span, icon + name, class: h.specimen_ghost(object))]
     h.raw(nodes.join("/"))
   end
 
