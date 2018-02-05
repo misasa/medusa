@@ -14,7 +14,7 @@ class Surface < ActiveRecord::Base
   def map_dir
     File.join(Rails.public_path,"system/maps",global_id)
   end
-  
+
   def publish!
     objs = [self]
     objs.concat(self.surface_images.map(&:image))
@@ -29,7 +29,7 @@ class Surface < ActiveRecord::Base
     #maxzoom = opts[:maxzoom] || 5
     surface_images.order("position ASC").each_with_index do |surface_image, index|
       options = opts
-      options.merge!(:transparent => true) if index > 0 
+      options.merge!(:transparent => true) if index > 0
       TileWorker.perform_async(surface_image.id, options)
       #surface_image.make_tiles(opts.merge({:transparent => true})) if index > 0
     end
@@ -113,5 +113,19 @@ class Surface < ActiveRecord::Base
 
   def as_json(options = {})
     super({ methods: [:global_id, :image_ids, :center, :length, :bounds] }.merge(options))
+  end
+
+  def pml_elements
+    if globe?
+      places = Place.all
+      array = []
+      array << places.map(&:specimens)
+      array << places.map(&:bibs)
+      array = array.flatten.compact.uniq
+      array = array.map(&:pml_elements).flatten.compact.uniq
+      array
+    else
+      super
+    end
   end
 end
