@@ -36,7 +36,7 @@
 
 <%= search_form_for @records_search, url: records_path, class: "navbar-form navbar-right" do |f| %>
   <div class="form-group">
-    <%= f.text_field(:name_or_global_id_cont, class: "form-control") %>
+    <%= f.text_field(:name_or_global_id_or_datum_of_Specimen_type_classification_name_cont, class: "form-control") %>
   </div>
   <%= f.submit "search", class: "btn btn-default" %>
 <% end %>
