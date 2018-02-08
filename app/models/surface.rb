@@ -50,6 +50,8 @@ class Surface < ActiveRecord::Base
       	spot.attachment_file_id = image.id
         spot.spot_x = pixels[idx][0]
         spot.spot_y = pixels[idx][1]
+        spot.world_x = worlds[idx][0]
+        spot.world_y = worlds[idx][1]
         ss << spot
       end
     end

@@ -1,7 +1,7 @@
 class Spot < ActiveRecord::Base
   include HasRecordProperty
 
-#  attr_accessor :spot_x_world, :spot_y_world
+  attr_accessor :world_x, :world_y
   belongs_to :attachment_file, inverse_of: :spots
 
   validates :attachment_file, existence: true
@@ -105,6 +105,13 @@ class Spot < ActiveRecord::Base
         { x_vs: spot_world_xy[0],
           y_vs: spot_world_xy[1]
         }
+      )
+    end
+    if world_x && world_y
+      result.merge!(
+        { x_world: world_x,
+          y_world: world_y
+                    }
       )
     end
     analysis = get_analysis
