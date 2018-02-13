@@ -17,12 +17,12 @@ L.control.surfaceScale = function(options) {
 
 
 // Customized circle for spot.
-L.circle.spot = function(map, spot, options) {
+L.circle.spot = function(map, spot, urlRoot, options) {
   var options = L.Util.extend({}, { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 3 }, options),
       marker = new L.circle(map.unproject([spot.x, spot.y], 0), options);
   marker.on('click', function() {
     var latlng = this.getLatLng(),
-        link = '<a href=/records/' + spot.id + '>' + spot.name + '</a><br/>';
+        link = '<a href=' + urlRoot + 'records/' + spot.id + '>' + spot.name + '</a><br/>';
     this.bindPopup(link + "x: " + latlng.lng.toFixed(2) + "<br />y: " + -latlng.lat.toFixed(2)).openPopup();
   });
   return marker;
@@ -71,10 +71,10 @@ L.control.radius = function(layerGroup, options) {
 
 
 // Customized layer group for spots.
-L.layerGroup.spots = function(map, spots) {
+L.layerGroup.spots = function(map, spots, urlRoot) {
   var group = L.layerGroup();
   for(var i = 0; i < spots.length; i++) {
-    L.circle.spot(map, spots[i]).addTo(group);
+    L.circle.spot(map, spots[i], urlRoot).addTo(group);
   }
   return group;
 };
@@ -111,6 +111,7 @@ function initSurfaceMap() {
   var div = document.getElementById("surface-map");
   var radiusSelect = document.getElementById("spot-radius");
   var baseUrl = div.dataset.baseUrl;
+  var urlRoot = div.dataset.urlRoot;
   var global_id = div.dataset.globalId;
   var length = parseFloat(div.dataset.length);
   var attachment_files = JSON.parse(div.dataset.attachmentFiles);
@@ -140,7 +141,7 @@ function initSurfaceMap() {
     layers: layers
   });
 
-  var spotsLayer = L.layerGroup.spots(map, spots);
+  var spotsLayer = L.layerGroup.spots(map, spots, urlRoot);
   map.addLayer(spotsLayer);
 
   overlayMaps['grid'] = L.layerGroup.grid(map, length);

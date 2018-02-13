@@ -36,6 +36,7 @@ class SurfaceDecorator < Draper::Decorator
     targets = RecordProperty.where(global_id: target_uids).index_by(&:global_id)
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data: {
                     base_url: Settings.map_url,
+                    url_root: "#{Rails.application.config.relative_url_root}/",
                     global_id: global_id,
                     length: len,
                     attachment_files: images.each_with_object({}) { |image, hash| hash[File.basename(image.name, ".*")] = image.id },
