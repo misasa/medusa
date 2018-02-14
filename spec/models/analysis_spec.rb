@@ -162,7 +162,7 @@ describe Analysis do
           it { expect{subject}.to change(Analysis, :count)}
         end
 
-        context "objects is all valid with chemistries", :current => true do
+        context "objects is all valid with chemistries" do
           let(:analysis) { FactoryGirl.build(:analysis) }
           let(:nickname) { "nickname" }
           let(:unit_name) { nil }
@@ -217,10 +217,10 @@ describe Analysis do
     it { expect(subject).to eq [object_1, object_2] }
   end
 
-  describe ".set_object" do
+  describe ".set_object", :current => true do
     subject { Analysis.set_object(methods, data_array) }
-    let(:methods) { ["id", "name", "description", "specimen_id", "technique_id", "device_id", "operator"] }
-    let(:data_array) { [id, name, description, specimen_id, technique_id, device_id, operator] }
+    let(:methods) { ["id", "name", "description", "specimen_id", "technique_id", "device_id", "operator", row_name] }
+    let(:data_array) { [id, name, description, specimen_id, technique_id, device_id, operator, data] }
     let(:id) { "1" }
     let(:name) { "分析名" }
     let(:description) { "説明" }
@@ -228,6 +228,16 @@ describe Analysis do
     let(:technique_id) { "3" }
     let(:device_id) { "4" }
     let(:operator) { "オペレータ" }
+    let(:nickname) {"Chem"}
+    let(:row_name) {"#{nickname}"}
+    let(:data) {"1"}
+    let(:measurement_item) { FactoryGirl.create(:measurement_item, nickname: nickname, unit_id: unit_1.id) }
+    let(:unit_1) { FactoryGirl.create(:unit, name: "parts_per_gram") }
+    let(:unit_2) { FactoryGirl.create(:unit, name: "parts") }
+    before do
+      measurement_item
+      unit_2
+    end
     it { expect(subject.class).to eq Analysis }
     it do
       expect(subject.id).to eq(id.to_i)
@@ -237,7 +247,18 @@ describe Analysis do
       expect(subject.technique_id).to eq(technique_id.to_i)
       expect(subject.device_id).to eq(device_id.to_i)
       expect(subject.operator).to eq operator
+      expect(subject.chemistries[0].measurement_item_id).to eq measurement_item.id
+      expect(subject.chemistries[0].value).to eq data.to_f
+      expect(subject.chemistries[0].unit_id).to eq unit_1.id 
     end
+    context "chemistry_with_unit" do
+      let(:row_name) {"#{nickname}_in_#{unit_2.name}"}
+      it do
+        expect(subject.chemistries[0].measurement_item_id).to eq measurement_item.id
+        expect(subject.chemistries[0].value).to eq data.to_f
+        expect(subject.chemistries[0].unit_id).to eq unit_2.id
+      end
+    end 
   end
 
   describe "#set_chemistry" do
