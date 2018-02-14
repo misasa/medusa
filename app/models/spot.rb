@@ -100,18 +100,11 @@ class Spot < ActiveRecord::Base
       x_image: spot_x_from_center,
       y_image: spot_y_from_center,
     }
-    if spot_world_xy
-      result.merge!(
-        { x_vs: spot_world_xy[0],
-          y_vs: spot_world_xy[1]
-        }
-      )
-    end
     if world_x && world_y
       result.merge!(
-        { x_world: world_x,
-          y_world: world_y
-                    }
+        { x_vs: world_x,
+          y_vs: world_y
+        }
       )
     end
     analysis = get_analysis
