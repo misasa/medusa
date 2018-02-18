@@ -163,11 +163,13 @@ describe Spot do
     subject { spot.to_pmlame }
     let(:spot) { FactoryGirl.build(:spot, attachment_file: attachment_file) }
     let(:attachment_file) { FactoryGirl.create(:attachment_file, data_content_type: data_content_type, data_file_name: data_file_name) }
-    let(:spot_world_xy) {}
+    let(:world_x) {}
+    let(:world_y) { 60 }
     before do
       allow(spot).to receive(:spot_x_from_center).and_return(10)
       allow(spot).to receive(:spot_y_from_center).and_return(20)
-      allow(spot).to receive(:spot_world_xy).and_return(spot_world_xy)
+      allow(spot).to receive(:world_x).and_return(world_x)
+      allow(spot).to receive(:world_y).and_return(world_y)
     end
     context "when the type of the data_content_type is text/plain," do
       let(:data_content_type) { "text/plain" }
@@ -212,7 +214,7 @@ describe Spot do
     context "when spot has spot_world_xy," do
       let(:data_content_type) { "image/bmp" }
       let(:data_file_name) { "file_name_1.bmp" }
-      let(:spot_world_xy) { [50, 60] }
+      let(:world_x) { 50 }
       it "return spot data" do
         result = {
           image_id: attachment_file.global_id,
