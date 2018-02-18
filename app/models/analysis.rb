@@ -103,7 +103,7 @@ class Analysis < ActiveRecord::Base
   end
 
   def method_missing(method_name, *arguments)
-    if (method_name.to_s =~ /^(.+?)(_error)?(?:_in_(.+))?(=)?$/) && MeasurementItem.exists?(nickname: $1)
+    if (method_name.to_s =~ /^(.+?)(_error)?(?:_in_(.+?))?(=)?$/) && MeasurementItem.exists?(nickname: $1)
       if $4.present?
         if $2.present?
           set_uncertainty($1, arguments[0])
