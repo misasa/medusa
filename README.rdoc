@@ -1,4 +1,0 @@
-== README
-
-Serve as Medusa to keep track specimens and boxes.
-More details can be found on the official website http://dream.misasa.okayama-u.ac.jp/
