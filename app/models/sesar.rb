@@ -1,8 +1,9 @@
+# -*- coding: utf-8 -*-
 require "active_resource"
 require "geocoder"
 
 class Sesar < ActiveResource::Base
-  self.site = "http://app.geosamples.org/"
+  self.site = "https://app.geosamples.org/"
   self.user = Settings.sesar.user
   self.password = Settings.sesar.password
   self.prefix = "/sample/"
