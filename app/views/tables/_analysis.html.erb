@@ -1,4 +1,4 @@
-<p>To list more analysis, add a <%= @alias_specimen %> in <%= @alias_specimen %> sub-tab.</p>
+<p>The table is created from analysis shown below. The assembly <%= link_to @table.measurement_category.try!(:name), edit_measurement_category_path(@table.measurement_category) if @table.measurement_category %> filters out analysis. Upper analysis has priority.To list more analysis, add a <%= @alias_specimen %> in <%= @alias_specimen %> sub-tab.</p>
 <%= form_for @table, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
   <ul>
     <li class="row list-unstyled">

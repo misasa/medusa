@@ -1,7 +1,7 @@
 <%= form_for @table, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
   <table class="table table-condensed table-striped">
     <ul>
-      <li>measurement-category: <%= link_to @table.measurement_category.try!(:name), edit_measurement_category_path(@table.measurement_category) if @table.measurement_category %></li>
+      <li>assembly: <%= link_to @table.measurement_category.try!(:name), edit_measurement_category_path(@table.measurement_category) if @table.measurement_category %></li>
       <li>modified at <%= difference_from_now(@table.updated_at) -%></li>
     </ul>
     <thead>
