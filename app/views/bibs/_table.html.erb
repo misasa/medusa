@@ -30,7 +30,7 @@
         <th></th>
         <th><%= f.text_field :caption, class: "form-control input-sm" %></th>
         <th><%= f.select :measurement_category_id, MeasurementCategory.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
-        <th><%= @bib.specimens.count %>/nil<%= f.check_box :flag_ignore_take_over_specimen, {}, true, false %></th>
+        <th>manual<%= f.check_box :flag_ignore_take_over_specimen, {}, true, false %></th>
         <th>
           <%= f.button title:"add table",class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>
