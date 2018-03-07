@@ -1081,7 +1081,7 @@ describe SpecimenDecorator do
     before { allow(obj.h).to receive(:can?).and_return(true) }
     context "box is nil" do
       before{obj.box = nil}
-      it{expect(subject).to eq me} 
+      it{expect(subject).to eq "<span class=\"\"><span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span>#{obj.name}</span>"} 
     end
     context "box is not nil" do
       before{obj.box = box}
