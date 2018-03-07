@@ -52,7 +52,7 @@ class Bib < ActiveRecord::Base
 
   def doi_link_url
     return unless doi
-    "http://dx.doi.org/#{doi}"
+    "https://doi.org/#{doi}"
   end
   
   def primary_pdf_attachment_file

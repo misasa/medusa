@@ -55,7 +55,7 @@ describe Bib do
     end
     context "doi is not nil" do
       let(:doi_1) { "test" }
-      it { expect(subject).to eq "http://dx.doi.org/test" }
+      it { expect(subject).to eq "https://doi.org/test" }
     end
   end
   

@@ -104,7 +104,7 @@ describe Sesar do
         it { expect(@xml).to include "<sample_other_names><sample_other_name>#{specimen.global_id}</sample_other_name></sample_other_names>" }
       end
       context "external_urls" do
-        it { expect(@xml).to include "<external_urls><external_url><url>http://dream.misasa.okayama-u.ac.jp/?q=#{specimen.global_id}</url><description/><url_type>regular URL</url_type></external_url><external_url><url>http://dx.doi.org/doi１</url><description>書誌情報１</description><url_type>DOI</url_type></external_url></external_urls>" }
+        it { expect(@xml).to include "<external_urls><external_url><url>http://dream.misasa.okayama-u.ac.jp/?q=#{specimen.global_id}</url><description/><url_type>regular URL</url_type></external_url><external_url><url>https://doi.org/doi１</url><description>書誌情報１</description><url_type>DOI</url_type></external_url></external_urls>" }
       end
     end
 
@@ -203,7 +203,7 @@ describe Sesar do
       context "紐づくbibが存在しない場合" do
         let(:model) { FactoryGirl.create(:specimen, igsn: "") }
         it { expect(subject).to include({description: nil, url_type: "regular URL", url: "http://dream.misasa.okayama-u.ac.jp/?q=#{model.global_id}"}) }
-        it { expect(subject).to_not include({url: "http://dx.doi.org/doi１", description: "書誌情報１", url_type: "DOI"}) }
+        it { expect(subject).to_not include({url: "https://doi.org/doi１", description: "書誌情報１", url_type: "DOI"}) }
       end
       context "紐づくbibが存在する場合" do
         let(:model) { FactoryGirl.create(:specimen, igsn: "") }
@@ -211,15 +211,15 @@ describe Sesar do
         before do
           model.bibs << bib
         end        
-        it { expect(subject).to include({url: "http://dx.doi.org/doi１", description: "書誌情報１", url_type: "DOI"}) }
+        it { expect(subject).to include({url: "https://doi.org/doi１", description: "書誌情報１", url_type: "DOI"}) }
         context "doi is nil" do
           let(:bib) { FactoryGirl.create(:bib, doi: nil)}
-          it { expect(subject).not_to include({url: "http://dx.doi.org/", description: "書誌情報１", url_type: "DOI"}) }
+          it { expect(subject).not_to include({url: "https://doi.org/", description: "書誌情報１", url_type: "DOI"}) }
         end
 
         context "doi is ''" do
           let(:bib) { FactoryGirl.create(:bib, doi: "")}
-          it { expect(subject).not_to include({url: "http://dx.doi.org/", description: "書誌情報１", url_type: "DOI"}) }
+          it { expect(subject).not_to include({url: "https://doi.org/", description: "書誌情報１", url_type: "DOI"}) }
         end
 
       end
