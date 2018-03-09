@@ -41,6 +41,10 @@ class BibsController < ApplicationController
     respond_with @bib
   end
 
+  def family
+    respond_with @bib, layout: !request.xhr?
+  end
+
   def picture
     respond_with @bib, layout: !request.xhr?
   end
@@ -92,6 +96,8 @@ class BibsController < ApplicationController
       :number,
       :pages,
       :month,
+      :abstract,
+      :summary,
       :note,
       :key,
       :link_url,

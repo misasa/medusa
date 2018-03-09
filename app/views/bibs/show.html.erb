@@ -7,6 +7,9 @@
   <div id="show-tools" class="col-lg-4">
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
+        <%= link_to family_bib_path(@bib), class: "btn btn-default activate", id: "tree-conifer-button", remote: true do %>
+          <span class="glyphicon glyphicon-tree-conifer"></span>
+        <% end %>
         <% if @bib.has_image? %>
           <%= link_to picture_bib_path(@bib), class: "btn btn-default", id: "picture-button", remote: true do %>
             <span class="glyphicon glyphicon-picture"></span>

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171114014553) do
+ActiveRecord::Schema.define(version: 20180309025838) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -89,6 +89,8 @@ ActiveRecord::Schema.define(version: 20171114014553) do
     t.text     "doi",          comment: "DOI"
     t.datetime "created_at",   comment: "作成日時"
     t.datetime "updated_at",   comment: "更新日時"
+    t.text     "abstract"
+    t.text     "summary"
   end
 
   create_table "box_types", force: true, comment: "保管場所種別" do |t|

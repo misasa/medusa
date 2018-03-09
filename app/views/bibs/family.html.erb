@@ -1,0 +1,8 @@
+<div>
+  <% if @bib.attachment_files.present? %>
+    <%= link_to(@bib.primary_picture, attachment_file_path(@bib.attachment_files.first), class: specimen_ghost(@bib)) %>
+  <% end %>
+</div>
+<div id="family-tree">
+  <%= @bib.family_tree %>
+</div>

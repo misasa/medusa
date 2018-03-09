@@ -7,6 +7,12 @@
 
 <div class="display-type">
   <div id="display-type-info">
+    <% if @bib.abstract? %>
+      <p>Abstract<br/><%= simple_format(@bib.abstract) %></p>
+    <% end %>
+    <% if @bib.summary? %>
+      <p>Summary<br/><%= simple_format(@bib.summary) %></p>
+    <% end %>
     <ul>
       <%= li_if_exist("entry type: ", @bib.entry_type) %>
       <%= li_if_exist("abbreviation: ", @bib.abbreviation) %>

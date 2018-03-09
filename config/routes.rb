@@ -203,6 +203,7 @@ Medusa::Application.routes.draw do
 
   resources :bibs, concerns: [:bundleable, :reportable], except: [:new] do
     member do
+      get :family
       get :picture
       get :property
       put :publish
