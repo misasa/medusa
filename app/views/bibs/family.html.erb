@@ -1,7 +1,20 @@
 <div>
   <% if @bib.attachment_files.present? %>
-    <%= link_to(@bib.primary_picture, attachment_file_path(@bib.attachment_files.first), class: specimen_ghost(@bib)) %>
+    <%= link_to(@bib.primary_picture(width: 390), attachment_file_path(@bib.attachment_files.first), class: specimen_ghost(@bib)) %>
   <% end %>
+  <% if @bib.abstract? %>
+  <div>
+  <b>Abstract</b>
+  <%=simple_format(@bib.abstract) %>
+  </div>
+  <% end %>
+  <% if @bib.summary? %>
+  <div>
+  <b>Summary</b>
+  <%=simple_format(@bib.summary) %>
+  </div>
+  <% end %>
+
 </div>
 <div id="family-tree">
   <%= @bib.family_tree %>

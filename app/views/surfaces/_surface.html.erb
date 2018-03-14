@@ -1,5 +1,9 @@
 <tr class="show-map" data-url="<%= map_surface_path(surface) %>">
-  <td><%= check_box_tag("ids[]", surface.id, checked, id: "ids_#{surface.id}", class: "select-row") if can?(:update, surface) %></td>
+  <td><%= check_box_tag("ids[]", surface.id, checked, id: "ids_#{surface.id}", class: "select-row") if can?(:update, surface) %>
+    <%= link_to surface do %>
+      <span class="glyphicon glyphicon-edit"></span>
+    <% end %>
+  </td>
   <td>
     <% if surface.globe? %>
       <img src="http://a.tile.openstreetmap.org/0/0/0.png" width="50" height="50">
@@ -7,7 +11,13 @@
       <%= image_tag(surface.base_image_url, width:50, height:50 )  %>
     <% end %>
   </td>
-  <td><%= link_to list_title(surface), surface %></td>
+  <td><%#= link_to list_title(surface), surface %>
+    <% if surface.globe? %>
+      <%= list_title(surface) %>
+    <% else %>
+      <%= link_to(list_title(surface), surface.rmap_url, class: "btn radio-button-group", :title => "place online", :target => ["_blank"]) %>
+    <% end %>
+  </td>
   <td><%= surface.images_count %></td>
   <td><%= surface.spots_count %></td>
   <%= td_if_expand surface.user.try!(:username) %>
