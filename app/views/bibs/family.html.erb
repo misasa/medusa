@@ -2,18 +2,12 @@
   <% if @bib.attachment_files.present? %>
     <%= link_to(@bib.primary_picture(width: 390), attachment_file_path(@bib.attachment_files.first), class: specimen_ghost(@bib)) %>
   <% end %>
-  <% if @bib.abstract? %>
-  <div>
-  <b>Abstract</b>
-  <%=simple_format(@bib.abstract) %>
-  </div>
-  <% end %>
-  <% if @bib.summary? %>
-  <div>
-  <b>Summary</b>
-  <%=simple_format(@bib.summary) %>
-  </div>
-  <% end %>
+  <ul>
+    <%= li_if_exist("author: ", @bib.author_lists) %>
+    <% if @bib.abstract? %><li>abstract: <%= simple_format(@bib.abstract) %></li><% end %>
+    <% if @bib.summary? %><li>summary: <%=simple_format(@bib.summary)%></li><% end %>
+    <% if @bib.doi? %><li>doi: <%= link_to(@bib.doi, @bib.doi_link_url) %></li><% end %>
+  </ul>
 
 </div>
 <div id="family-tree">
