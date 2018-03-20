@@ -35,6 +35,23 @@ class Bib < ActiveRecord::Base
   def as_json(options = {})
     super({:methods => [:author_ids, :global_id]}.merge(options))
   end
+
+  def specimen_places
+    Place.eager_load(:specimens).where(specimens: {id: self.specimen_ids})
+  end
+
+  def table_specimens
+    Specimen.eager_load(:table_specimens).where(tables: {id: self.table_ids})
+  end
+
+  def all_specimens
+    self.specimens + self.table_specimens
+  end
+
+  def all_places
+    rplaces = self.places + self.specimen_places
+    rplaces
+  end
   
   def referrings_analyses
     ranalyses = self.analyses

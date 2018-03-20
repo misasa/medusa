@@ -12,7 +12,8 @@
   </thead>
   <tbody>
     <%= form_tag bundle_edit_places_path, id: "place-bundle-form" do %>
-      <% @bib.places.each do |place| %>
+      <% @bib.all_places.each do |place| %>
+        <% next unless place %>
         <tr>
           <td>
             <%= check_box_tag("ids[]", place.id, false, {id: "ids_#{place.id}", class: "select-row"}) if can?(:update, place) %>

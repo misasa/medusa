@@ -50,10 +50,10 @@
         <a href="#box" data-toggle="tab"><%= "box#{data_count(@bib.boxes)}" %></a>
       </li>
       <li class="<%= active_if_current('place') %>">
-        <a href="#place" data-toggle="tab"><%= "place#{data_count(@bib.places)}" %></a>
+        <a href="#place" data-toggle="tab"><%= "place#{data_count(@bib.all_places)}" %></a>
       </li>
       <li class="<%= active_if_current('analysis') %>">
-        <a href="#analysis" data-toggle="tab"><%= "analysis#{data_count(@bib.analyses)}" %></a>
+        <a href="#analysis" data-toggle="tab"><%= "analysis#{data_count(@bib.referrings_analyses)}" %></a>
       </li>
       <li class="<%= active_if_current('file') %>">
         <a href="#file" data-toggle="tab"><%= "file#{data_count(@bib.attachment_files)}" %></a>

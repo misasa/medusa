@@ -346,6 +346,79 @@ describe Bib do
     it { expect(subject).to eq "can't be blank" }
   end
 
+  describe "#all_specimens", :current => true do
+    let(:bib) { FactoryGirl.create(:bib) }
+    let(:table){ FactoryGirl.create(:table) }
+    let(:specimen_1){ FactoryGirl.create(:specimen) }
+    let(:specimen_2){ FactoryGirl.create(:specimen) }
+    let(:specimen_3){ FactoryGirl.create(:specimen) }
+    before do
+      bib
+      specimen_1;specimen_2;specimen_3;
+      bib.specimens << specimen_1
+      bib.specimens << specimen_2
+      bib.tables << table
+      table.specimens << specimen_3
+      #bib.specimens << specimen_3
+    end
+
+    it { expect(bib.specimens).to match_array([specimen_1, specimen_2])}
+    #it { expect(bib.all_specimens).to match_array([specimen_1, specimen_2, specimen_3])}
+
+  end
+
+  describe "#all_places", :current => true do
+    let(:bib) { FactoryGirl.create(:bib) }
+    let(:place_1){ FactoryGirl.create(:place) }
+    let(:place_2){ FactoryGirl.create(:place) }
+    let(:place_3){ FactoryGirl.create(:place) }
+    let(:place_4){ FactoryGirl.create(:place) }
+    let(:specimen_1){ FactoryGirl.create(:specimen, place_id: place_1.id) }
+    let(:specimen_2){ FactoryGirl.create(:specimen, place_id: place_2.id) }
+    let(:specimen_3){ FactoryGirl.create(:specimen)}
+    before do
+      bib
+      place_1;place_2;place_3;place_4;
+      specimen_1;specimen_2;specimen_3;
+      bib.places << place_3
+      bib.places << place_4
+      #specimen_3.place = nil
+      #specimen_3.save
+      bib.specimens << specimen_1
+      bib.specimens << specimen_2
+      #bib.specimens << specimen_3
+    end
+
+    it { expect(bib.places).to match_array([place_3, place_4])}
+    it { expect(bib.all_places).to match_array([place_1, place_2, place_3, place_4])}
+  end
+
+  describe "#specimen_places", :current => true do
+    let(:bib) { FactoryGirl.create(:bib) }
+    let(:place_1){ FactoryGirl.create(:place) }
+    let(:place_2){ FactoryGirl.create(:place) }
+    let(:place_3){ FactoryGirl.create(:place) }
+    let(:place_4){ FactoryGirl.create(:place) }
+    let(:specimen_1){ FactoryGirl.create(:specimen, place_id: place_1.id) }
+    let(:specimen_2){ FactoryGirl.create(:specimen, place_id: place_2.id) }
+    let(:specimen_3){ FactoryGirl.create(:specimen)}
+    before do
+      bib
+      place_1;place_2;place_3;place_4;
+      specimen_1;specimen_2;specimen_3;
+      bib.places << place_3
+      bib.places << place_4
+      #specimen_3.place = nil
+      #specimen_3.save
+      bib.specimens << specimen_1
+      bib.specimens << specimen_2
+      #bib.specimens << specimen_3
+    end
+
+    it { expect(bib.places).to match_array([place_3, place_4])}
+    it { expect(bib.specimen_places).to match_array([place_1, place_2])}
+  end
+
 
   describe "#referrings_analyses" do
     let(:bib) { FactoryGirl.create(:bib) }

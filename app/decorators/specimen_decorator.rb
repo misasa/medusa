@@ -144,7 +144,7 @@ class SpecimenDecorator < Draper::Decorator
       content = h.content_tag(:ul, h.content_tag(:li, summary_of_analysis(true)) + children_list )
     end
     unless root == specimen
-      content = h.content_tag(:ul, h.content_tag(:li, root.decorate.summary_of_analysis) + content )      
+      content = h.content_tag(:ul, h.content_tag(:li, root.decorate.summary_of_analysis) + content ) if root
     end
     content
   end

@@ -10,10 +10,10 @@
     <ul>
       <%= li_if_exist("entry type: ", @bib.entry_type) %>
       <%= li_if_exist("abbreviation: ", @bib.abbreviation) %>
-      <%= li_if_exist("name: ", @bib.name) %>
-      <%= li_if_exist("author: ", @bib.author_lists) %>
+      <%#= li_if_exist("name: ", @bib.name) %>
+      <%#= li_if_exist("author: ", @bib.author_lists) %>
       <% if @bib.doi.present? %>
-        <li>doi: <%= link_to(@bib.doi, @bib.doi_link_url) %></li>
+        <!-- <li>doi: <%= link_to(@bib.doi, @bib.doi_link_url) %></li> -->
       <% end %>
       <%= li_if_exist("journal: ", @bib.journal) %>
       <%= li_if_exist("year: ", @bib.year) %>
@@ -24,8 +24,8 @@
       <%= li_if_exist("note: ", @bib.note) %>
       <%= li_if_exist("key: ", @bib.key) %>
       <%= li_if_exist("link url: ", @bib.link_url) %>
-      <% if @bib.abstract? %><li>abstract: <%= simple_format(@bib.abstract) %></li><% end %>
-      <% if @bib.summary? %><li>summary: <%=simple_format(@bib.summary)%></li><% end %>
+      <% if @bib.abstract? %><!-- <li>abstract: <%= simple_format(@bib.abstract) %></li> --><% end %>
+      <% if @bib.summary? %><!-- <li>summary: <%=simple_format(@bib.summary)%></li> --><% end %>
       <% if !@bib.tables.empty? %>
         <li>table:</li>
         <% @bib.tables.each do |table| %>
