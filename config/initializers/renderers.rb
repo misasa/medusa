@@ -15,6 +15,10 @@ class Array
             array << analysis
 #            analysis.to_pml(xml)
           end
+        elsif obj.instance_of?(Bib)
+          obj.referrings_analyses.each do |analysis|
+            array << analysis
+          end
         else
 #          analyses = []
           array << obj.analysis if obj.respond_to?(:analysis)

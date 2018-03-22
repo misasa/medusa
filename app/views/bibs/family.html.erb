@@ -8,7 +8,6 @@
     <% if @bib.summary? %><li>summary: <%=simple_format(@bib.summary)%></li><% end %>
     <% if @bib.doi? %><li>doi: <%= link_to(@bib.doi, @bib.doi_link_url) %></li><% end %>
   </ul>
-
 </div>
 <div id="family-tree">
   <%= @bib.family_tree %>

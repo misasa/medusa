@@ -5,7 +5,11 @@ class NestedResources::PlacesController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @places = @parent.places
+    if @parent.respond_to?(:all_places)
+      @places = @parent.all_places
+    else
+      @places = @parent.places
+    end
     respond_with @places
   end
   

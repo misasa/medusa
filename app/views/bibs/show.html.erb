@@ -15,6 +15,11 @@
             <span class="glyphicon glyphicon-picture"></span>
           <% end %>
         <% end %>
+        <% if @bib.all_places.present? %>
+          <%= link_to map_bib_path(@bib), class: "btn btn-default", id: "globe-button", remote: true do %>
+            <span class="glyphicon glyphicon-globe"></span>
+          <% end %>
+        <% end %>
       </div>
       <% if can? :update, @bib %>
       <div class="btn-group btn-group-sm">

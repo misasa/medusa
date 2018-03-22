@@ -205,6 +205,7 @@ Medusa::Application.routes.draw do
     member do
       get :family
       get :picture
+      get :map
       get :property
       put :publish
     end
