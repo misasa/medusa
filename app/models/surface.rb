@@ -113,9 +113,9 @@ class Surface < ActiveRecord::Base
     [left, upper, right, bottom]
   end
 
-  def as_json(options = {})
-    super({ methods: [:global_id, :image_ids, :globe, :center, :length, :bounds] }.merge(options))
-  end
+#  def as_json(options = {})
+#    super({ methods: [:global_id, :image_ids, :globe, :center, :length, :bounds] }.merge(options))
+#  end
 
   def pml_elements
     if globe?

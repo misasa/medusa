@@ -6,6 +6,17 @@ class SurfaceDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
   end
 
+  def url_for_tile
+    h.root_url + "system/map/#{global_id}/"
+  end
+
+  def url_for_tiles
+    image_ids.map{|image_id| url_for_tile + "#{image_id}/{z}/{x}_{y}.png"}
+  end
+
+  def as_json(options = {})
+    super({ methods: [:global_id, :image_ids, :globe, :center, :length, :bounds, :url_for_tiles] }.merge(options))
+  end
   # def rplot_url
   #   return unless Settings.rplot_url
   #   Settings.rplot_url + '?id=' + global_id

@@ -7,7 +7,8 @@ class SurfacesController < ApplicationController
   def index
     @search = Surface.readables(current_user).search(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
-    @surfaces = @search.result.page(params[:page]).per(params[:per_page])
+    
+    @surfaces = SurfaceDecorator.decorate_collection(@search.result.page(params[:page]).per(params[:per_page]))
     respond_with @surfaces
   end
 
@@ -89,7 +90,7 @@ class SurfacesController < ApplicationController
   end
 
   def find_resources
-    @surfaces = Surface.where(id: params[:ids])
+    @surfaces = SurfaceDecorator.decorate_collection(Surface.where(id: params[:ids]))
   end
 
 end
