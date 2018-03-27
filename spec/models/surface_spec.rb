@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'spec_helper'
 
 describe Surface do
@@ -30,7 +31,7 @@ describe Surface do
   	it { expect(obj.global_id).not_to be_nil }
   end
 
-  describe "publish!", :current => true do
+  describe "publish!" do
     subject { surface.publish!  }
     let(:surface){ FactoryGirl.create(:surface) }
     before do
@@ -80,7 +81,7 @@ describe Surface do
   end
 
 
-  describe "bounds", :current => true do
+  describe "bounds" do
     #it { expect(obj.spots).to include(spot)}
       let(:obj){ FactoryGirl.create(:surface) }
       let(:image_1) { FactoryGirl.create(:attachment_file, :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
@@ -120,7 +121,7 @@ describe Surface do
     end
   end
 
-  describe "pml_elements" do
+  describe "pml_elements", :current => true do
     let(:obj){ FactoryGirl.create(:surface, globe: globe?) }
 
     let(:spot_1){ FactoryGirl.create(:spot, name: "spot1", attachment_file_id: surface_image.image_id) }
