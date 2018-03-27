@@ -7,8 +7,7 @@ class SurfacesController < ApplicationController
   def index
     @search = Surface.readables(current_user).search(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
-    
-    @surfaces = SurfaceDecorator.decorate_collection(@search.result.page(params[:page]).per(params[:per_page]))
+    @surfaces = SurfaceDecorator.decorate_collection(@search.result)
     respond_with @surfaces
   end
 

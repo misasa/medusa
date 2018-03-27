@@ -12,11 +12,7 @@
     <% end %>
   </td>
   <td><%#= link_to list_title(surface), surface %>
-    <% if surface.globe? %>
-      <%= list_title(surface) %>
-    <% else %>
-      <%= link_to(list_title(surface), surface.rmap_url, class: "btn radio-button-group", :title => "place online", :target => ["_blank"]) %>
-    <% end %>
+    <%= link_to(list_title(surface), surface.rmap_url, class: "btn radio-button-group", :title => "place online", :target => ["_blank"]) %>
   </td>
   <td><%= surface.images_count %></td>
   <td><%= surface.spots_count %></td>
