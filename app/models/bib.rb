@@ -180,6 +180,10 @@ class Bib < ActiveRecord::Base
     end
   end
 
+  def pml_elements
+    self.referrings_analyses
+  end
+
   private
 
   def pdf_files
@@ -201,5 +205,6 @@ class Bib < ActiveRecord::Base
     return if table.ignore_take_over_specimen?
     table.specimens = specimens
   end
+
 
 end
