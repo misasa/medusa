@@ -33,4 +33,11 @@ Medusa::Application.configure do
 
   # Print deprecation notices to the stderr.
   config.active_support.deprecation = :stderr
+  
+  # bullet for detecting N+1
+  config.after_initialize do
+    Bullet.enable = false
+    Bullet.bullet_logger = true
+    Bullet.raise = true
+  end
 end

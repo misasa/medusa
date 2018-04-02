@@ -23,7 +23,8 @@ class RecordProperty < ActiveRecord::Base
 
   scope :readables, ->(user) {
     return all if user.admin?
-    where_clauses = owner_readables_where_clauses(user)
+    where_clauses = published_where_clauses
+    where_clauses = where_clauses.or(owner_readables_where_clauses(user))
     where_clauses = where_clauses.or(group_readables_where_clauses(user))
     where_clauses = where_clauses.or(guest_readables_where_clauses)
     includes(:user, :group).where(where_clauses).references(:user)
@@ -43,7 +44,7 @@ class RecordProperty < ActiveRecord::Base
   end
 
   def readable?(user)
-    user.admin? || (owner?(user) && owner_readable?) || (group?(user) && group_readable?) || guest_readable?
+    self.published? || user.admin? || (owner?(user) && owner_readable?) || (group?(user) && group_readable?) || guest_readable?
   end
 
   def owner?(user)
@@ -100,6 +101,11 @@ class RecordProperty < ActiveRecord::Base
   end
 
   private
+
+  def self.published_where_clauses
+    record_properties = self.arel_table
+    record_properties[:published].eq(true)
+  end
 
   def self.owner_readables_where_clauses(user)
     record_properties = self.arel_table

@@ -26,6 +26,14 @@ class Settings < Settingslogic
     end
   end
 
+  def self.autologin
+    if has_key?("autologin") && autologin.present?
+      autologin
+    else
+      nil
+    end
+  end
+
 
   def self.sesar_host
     "app.geosamples.org"

@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class ApplicationController < ActionController::Base
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -18,6 +19,8 @@ class ApplicationController < ActionController::Base
   rescue_from CanCan::AccessDenied, with: :deny_access
 
   def authenticate
+    authenticate_by_config if Settings.autologin
+
     case request.headers["HTTP_AUTHORIZATION"]
     when /^Basic\s+/
       authenticate_by_basic
@@ -70,6 +73,11 @@ class ApplicationController < ActionController::Base
 
   def set_alias_specimen
     @alias_specimen = Settings.specimen_name
+  end
+
+  def authenticate_by_config
+    resource = User.find_by(username: Settings.autologin)
+    sign_in :user, resource if resource
   end
 
   def authenticate_by_basic

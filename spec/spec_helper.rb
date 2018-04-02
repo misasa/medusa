@@ -17,7 +17,7 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # Checks for pending migrations before tests are run.
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
-
+#ActiveRecord::Base.logger = Logger.new(STDOUT)
 RSpec.configure do |config|
   # ## Mock Framework
   #
@@ -53,5 +53,16 @@ RSpec.configure do |config|
 
   config.before(:all) do
     FactoryGirl.reload
+  end
+  
+  if Bullet.enable?
+    config.before(:each) do
+      Bullet.start_request
+    end
+
+    config.after(:each) do
+      Bullet.perform_out_of_channel_notifications if Bullet.notification?
+      Bullet.end_request
+    end
   end
 end

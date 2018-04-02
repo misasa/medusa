@@ -217,7 +217,7 @@ describe Analysis do
     it { expect(subject).to eq [object_1, object_2] }
   end
 
-  describe ".set_object", :current => true do
+  describe ".set_object" do
     subject { Analysis.set_object(methods, data_array) }
     let(:methods) { ["id", "name", "description", "specimen_id", "technique_id", "device_id", "operator", row_name] }
     let(:data_array) { [id, name, description, specimen_id, technique_id, device_id, operator, data] }
@@ -465,7 +465,7 @@ describe Analysis do
       analysis.chemistries << chemistry_2
     end
 
-    context "when it exists duplicate element names," do
+    context "when it exists duplicate element names,", :current => true do
       let(:duplicate_names) { ["analysis_name_1"] }
       it "elementに<stone XXXX> が付加されてること" do
         allow(chemistry_1).to receive(:measured_value).and_return(nil)
@@ -476,6 +476,7 @@ describe Analysis do
         element_name = "analysis_name_1 <stone #{global_id}>"
         result = {
           element: element_name, sample_id: global_id,
+          lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude,
           "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
           "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
         }
@@ -493,6 +494,7 @@ describe Analysis do
         global_id = analysis.specimen.global_id
         result = {
           element: element_name, sample_id: global_id,
+          lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude,
           "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
           "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
         }
@@ -509,6 +511,42 @@ describe Analysis do
         global_id = analysis.specimen.global_id
         result = {
           element: element_name, sample_id: global_id,
+          lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude,
+          "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
+          "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
+        }
+        expect(subject).to eq(result)
+      end
+    end
+    context "when it does not exists duplicate element names," do
+      let(:duplicate_names) { ["analysis_name_2"] }
+      it "elementに<stone XXXX> が付加されていないこと" do
+        allow(chemistry_1).to receive(:measured_value).and_return(nil)
+        allow(chemistry_1).to receive(:measured_uncertainty).and_return(nil)
+        allow(chemistry_2).to receive(:measured_value).and_return(10)
+        allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
+        element_name = "analysis_name_1"
+        global_id = analysis.specimen.global_id
+        result = {
+          element: element_name, sample_id: global_id,
+          lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude,
+          "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
+          "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
+        }
+        expect(subject).to eq(result)
+      end
+    end
+    context "when it exists chemistry," do
+      it "return element info and measured values." do
+        allow(chemistry_1).to receive(:measured_value).and_return(nil)
+        allow(chemistry_1).to receive(:measured_uncertainty).and_return(nil)
+        allow(chemistry_2).to receive(:measured_value).and_return(10)
+        allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
+        element_name = "analysis_name_1"
+        global_id = analysis.specimen.global_id
+        result = {
+          element: element_name, sample_id: global_id,
+          lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude,
           "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
           "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
         }
@@ -526,7 +564,7 @@ describe Analysis do
         allow(chemistry_2).to receive(:measured_value).and_return(10)
         allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
         element_name = "analysis_name_1"
-        expect(subject).to eq({element: element_name, sample_id: global_id})
+        expect(subject).to eq({element: element_name, sample_id: global_id, lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude})
       end
     end
     context "when it does not exists specimen," do
@@ -541,6 +579,7 @@ describe Analysis do
         element_name = "analysis_name_1"
         result = {
           element: element_name, sample_id: nil,
+          lat: nil, lng: nil,
           "#{nickname_1}" => 20, "#{nickname_1}_error" => 0.2,
           "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
         }
@@ -634,4 +673,5 @@ describe Analysis do
     let(:obj) { FactoryGirl.create(:analysis)}
     it { expect(subject).to match_array([obj]) }
   end
+
 end

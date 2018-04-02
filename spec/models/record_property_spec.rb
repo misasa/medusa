@@ -64,7 +64,7 @@ describe RecordProperty do
     end
   end
 
-  describe ".datum_attributes", :current => true do
+  describe ".datum_attributes" do
     subject { record_property.datum_attributes }
     let(:record_property) { FactoryGirl.build(:record_property) }
     it { expect(subject).to include("global_id" => record_property.datum.global_id)}
@@ -241,14 +241,15 @@ describe RecordProperty do
     end
   end
 
-  describe ".readables" do
+  describe ".readables", :current => true do
     subject { RecordProperty.readables(user) }
-    let(:record_property) { FactoryGirl.create(:record_property, owner_readable: owner_readable, group_readable: group_readable, guest_readable: guest_readable, user_id: user_id, group_id: group_id) }
+    let(:record_property) { FactoryGirl.create(:record_property, owner_readable: owner_readable, group_readable: group_readable, guest_readable: guest_readable, user_id: user_id, group_id: group_id, published: published) }
     let(:user) { FactoryGirl.create(:user_foo, administrator: admin) }
     let(:admin) { false }
     let(:group) { FactoryGirl.create(:group) }
     let(:another_user) { FactoryGirl.create(:user_baa) }
     let(:another_group) { FactoryGirl.create(:group) }
+    let(:published){ false }
     before do
       GroupMember.create(user: user, group: group)
       record_property
@@ -269,6 +270,10 @@ describe RecordProperty do
           let(:admin) { true }
           it { expect(subject).to be_present }
         end
+        context "when record is published" do
+          let(:published){ true }
+          it { expect(subject).to be_present }
+        end
       end
     end
     context "when user is not record owner." do
@@ -286,6 +291,10 @@ describe RecordProperty do
           it { expect(subject).to be_blank }
           context "when user is administrator." do
             let(:admin) { true }
+            it { expect(subject).to be_present }
+          end
+          context "when record is published" do
+            let(:published){ true }
             it { expect(subject).to be_present }
           end
         end

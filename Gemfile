@@ -85,6 +85,7 @@ gem 'migration_comments'
 #gem 'dimensions'
 gem 'sidekiq', '~> 4.2'
 group :development, :test do
+  gem 'bullet'
   gem 'rak'
   gem 'pry-rails'
   gem 'pry-doc'

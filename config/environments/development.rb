@@ -26,4 +26,14 @@ Medusa::Application.configure do
   # This option may cause significant delays in view rendering with a large
   # number of complex assets.
   config.assets.debug = true
+  
+  # Bullet
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.alert = false
+    Bullet.bullet_logger = true
+    Bullet.console = false
+    Bullet.rails_logger = true
+    Bullet.add_footer = true
+  end
 end

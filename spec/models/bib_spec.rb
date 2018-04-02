@@ -188,7 +188,7 @@ describe Bib do
     end
   end
   
-  describe "#article_tex", :current => true do
+  describe "#article_tex" do
     subject { bib.article_tex }
     let(:bib) do
       FactoryGirl.create(:bib,
@@ -228,7 +228,7 @@ describe Bib do
       it { expect(subject).to eq "\tauthor = \"#{authors.map{|author| author.name }.join(' and ')}\",\n\ttitle = \"書誌情報１\",\n\tjournal = \"雑誌名１\",\n\tyear = \"2014\",\n\tnumber = \"1\",\n\tmonth = \"month\",\n\tvolume = \"1\",\n\tpages = \"1\",\n\tnote = \"note\",\n\tdoi = \"doi\",\n\tkey = \"key\"" }
     end
 
-    context "journal is 'DREAM Digital Document'", :current => true do
+    context "journal is 'DREAM Digital Document'" do
       let(:bib) do
         FactoryGirl.create(:bib,
           journal: journal,
@@ -254,7 +254,7 @@ describe Bib do
     end
   end
   
-  describe "#misc_tex", :current => true do
+  describe "#misc_tex" do
     subject { bib.misc_tex }
     let(:bib) do
       FactoryGirl.create(:bib,
@@ -346,7 +346,7 @@ describe Bib do
     it { expect(subject).to eq "can't be blank" }
   end
 
-  describe "#all_specimens", :current => true do
+  describe "#all_specimens" do
     let(:bib) { FactoryGirl.create(:bib) }
     let(:table){ FactoryGirl.create(:table) }
     let(:specimen_1){ FactoryGirl.create(:specimen) }
@@ -367,7 +367,7 @@ describe Bib do
 
   end
 
-  describe "#all_places", :current => true do
+  describe "#all_places" do
     let(:bib) { FactoryGirl.create(:bib) }
     let(:place_1){ FactoryGirl.create(:place) }
     let(:place_2){ FactoryGirl.create(:place) }
@@ -393,7 +393,7 @@ describe Bib do
     it { expect(bib.all_places).to match_array([place_1, place_2, place_3, place_4])}
   end
 
-  describe "#specimen_places", :current => true do
+  describe "#specimen_places" do
     let(:bib) { FactoryGirl.create(:bib) }
     let(:place_1){ FactoryGirl.create(:place) }
     let(:place_2){ FactoryGirl.create(:place) }
@@ -420,7 +420,7 @@ describe Bib do
   end
 
 
-  describe "#referrings_analyses" do
+  describe "#referrings_analyses", :current => true do
     let(:bib) { FactoryGirl.create(:bib) }
 
     let(:box_1){ FactoryGirl.create(:box)}
@@ -447,11 +447,11 @@ describe Bib do
     end
     it { expect(bib.analyses).to match_array([analysis_3, analysis_4])}
     it { expect(bib.referrings_analyses).to match_array([analysis_1, analysis_2, analysis_3, analysis_4])}
-    it { expect(bib.to_pml).to include("\<global_id\>#{analysis_3.global_id}") }    
-    it { expect(bib.to_pml).to include("\<global_id\>#{analysis_4.global_id}") }    
+#    it { expect(bib.to_pml).to include("\<global_id\>#{analysis_3.global_id}") }    
+#    it { expect(bib.to_pml).to include("\<global_id\>#{analysis_4.global_id}") }    
   end
 
-  describe "#publish!", :current => true do
+  describe "#publish!" do
     subject { bib.publish! }
     let(:bib) { FactoryGirl.create(:bib) }
 
