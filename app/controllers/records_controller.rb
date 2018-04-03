@@ -177,7 +177,7 @@ class RecordsController < ApplicationController
 
   def find_resource
     @record = RecordProperty.find_by!(global_id: params[:id]).datum
-    authorize!(params[:action], @record)
+    authorize!(params[:action].to_sym, @record)
   end
 
   def record_not_found(e)
