@@ -419,7 +419,6 @@ describe Bib do
     it { expect(bib.specimen_places).to match_array([place_1, place_2])}
   end
 
-
   describe "#referrings_analyses", :current => true do
     let(:bib) { FactoryGirl.create(:bib) }
 
@@ -428,12 +427,14 @@ describe Bib do
     let(:specimen_1) { FactoryGirl.create(:specimen, name: "hoge", box_id: box_1.id) }
     let(:specimen_2) { FactoryGirl.create(:specimen, name: "specimen_2", place_id: place_1.id) }
     let(:specimen_3) { FactoryGirl.create(:specimen, name: "specimen_3", box_id: box_1.id) }
-    let(:specimen_4) { FactoryGirl.create(:specimen, name: "specimen_3") }
+    let(:specimen_4) { FactoryGirl.create(:specimen, name: "specimen_4") }
+    let(:specimen_5) { FactoryGirl.create(:specimen, name: "specimen_5")}
+    let(:specimen_6) { FactoryGirl.create(:specimen, name: "specimen_6", parent_id: specimen_5.id)}
     let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen_1.id) }
     let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen_2.id) }
     let(:analysis_3) { FactoryGirl.create(:analysis, specimen_id: specimen_3.id) }
     let(:analysis_4) { FactoryGirl.create(:analysis) }
-
+    let(:analysis_5) { FactoryGirl.create(:analysis, specimen_id: specimen_6.id)}
     before do
       bib
       box_1;place_1;
@@ -447,8 +448,28 @@ describe Bib do
     end
     it { expect(bib.analyses).to match_array([analysis_3, analysis_4])}
     it { expect(bib.referrings_analyses).to match_array([analysis_1, analysis_2, analysis_3, analysis_4])}
+    it { expect(bib.referrings_analyses).not_to include(analysis_5)}
 #    it { expect(bib.to_pml).to include("\<global_id\>#{analysis_3.global_id}") }    
-#    it { expect(bib.to_pml).to include("\<global_id\>#{analysis_4.global_id}") }    
+#    it { expect(bib.to_pml).to include("\<global_id\>#{analysis_4.global_id}") } 
+    context "with linked parent specimen" do
+      before do
+        bib.specimens << specimen_5
+      end
+      it { expect(bib.referrings_analyses).not_to include(analysis_5)}    
+    end 
+    context "with table" do
+      let(:table){ FactoryGirl.create(:table, bib_id: bib.id) }
+      let(:table_specimen) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_5) }
+
+      before do
+        specimen_5
+        specimen_6
+        analysis_5
+        table
+        table_specimen
+      end
+      it { expect(bib.referrings_analyses).to match_array([analysis_1, analysis_2, analysis_3, analysis_4, analysis_5])}
+    end
   end
 
   describe "#publish!" do

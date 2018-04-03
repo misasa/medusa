@@ -64,6 +64,10 @@ class Bib < ActiveRecord::Base
     places.each do |place| 
       (ranalyses = ranalyses + place.analyses) unless place.analyses.empty?
     end
+    tables.each do |table|
+      (ranalyses = ranalyses + table.analyses) unless table.analyses.empty?
+    end
+    #p ranalyses.to_sql
     ranalyses.uniq
   end
 
