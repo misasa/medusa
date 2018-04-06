@@ -8,10 +8,10 @@ class Ability
       can :manage, :all
     end
 
-    can :manage, [Table, AttachmentFile, Bib, Box, Analysis, Chemistry, Place, Spot, Specimen] do |record|
+    can :manage, [Surface, Table, AttachmentFile, Bib, Box, Analysis, Chemistry, Place, Spot, Specimen] do |record|
       record.writable?(user)
     end
-    can :read, [Table, AttachmentFile, Bib, Box, Analysis, Chemistry, Place, Spot, Specimen] do |record|
+    can :read, [Surface, Table, AttachmentFile, Bib, Box, Analysis, Chemistry, Place, Spot, Specimen] do |record|
       record.readable?(user)
     end
 
