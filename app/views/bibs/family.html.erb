@@ -3,8 +3,8 @@
     <%= link_to(@bib.primary_picture(width: 390), attachment_file_path(@bib.attachment_files.first), class: specimen_ghost(@bib)) %>
   <% end %>
   <ul>
-    <% if @bib.abstract? %><li>abstract: <%= simple_format(@bib.abstract) %></li><% end %>
-    <% if @bib.summary? %><li>summary: <%=simple_format(@bib.summary)%></li><% end %>
+    <% if false && @bib.abstract? %><li>abstract: <%= simple_format(@bib.abstract) %></li><% end %>
+    <% if false && @bib.summary? %><li>summary: <%=simple_format(@bib.summary)%></li><% end %>
   </ul>
 </div>
 <div id="family-tree">

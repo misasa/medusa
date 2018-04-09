@@ -24,18 +24,18 @@
       <%= li_if_exist("note: ", @bib.note) %>
       <%= li_if_exist("key: ", @bib.key) %>
       <%= li_if_exist("link url: ", @bib.link_url) %>
-      <% if @bib.abstract? %><!-- <li>abstract: <%= simple_format(@bib.abstract) %></li> --><% end %>
-      <% if @bib.summary? %><!-- <li>summary: <%=simple_format(@bib.summary)%></li> --><% end %>
-      <% if !@bib.tables.empty? %>
+      <% if @bib.abstract? %><li>abstract: <%= simple_format(@bib.abstract) %></li><% end %>
+      <% if @bib.summary? %><li>summary: <%=simple_format(@bib.summary)%></li><% end %>
+      <% if false && !@bib.tables.empty? %>
         <li>table:</li>
         <% @bib.tables.each do |table| %>
           <%= table.decorate.to_link %>
         <% end %>
       <% end %>
-      <%= li_if_exist("", @bib.specimens.map{ |specimen| content_tag(:span, nil, class: specimen_ghost(specimen, "glyphicon glyphicon-cloud")) + specimen.decorate.status_icon + link_to_if(can?(:read, specimen), specimen.name, url_for(specimen), class: specimen_ghost(specimen))  }.join(" ")) %>
-      <%= li_if_exist("", @bib.boxes.map{ |box| content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + link_to_if(can?(:read, box), box.name, url_for(box)) }.join(" ")) %>
-      <%= li_if_exist("", @bib.places.map{ |place| content_tag(:span, nil, class: "glyphicon glyphicon-globe") + link_to_if(can?(:read, place), place.name, url_for(place)) }.join(" ")) %>
-      <%= li_if_exist("", @bib.analyses.map{ |analysis| content_tag(:span, nil, class: "glyphicon glyphicon-stats") + link_to_if(can?(:read, analysis), analysis.name, url_for(analysis)) }.join(" ")) %>
+      <%#= li_if_exist("", @bib.specimens.map{ |specimen| content_tag(:span, nil, class: specimen_ghost(specimen, "glyphicon glyphicon-cloud")) + specimen.decorate.status_icon + link_to_if(can?(:read, specimen), specimen.name, url_for(specimen), class: specimen_ghost(specimen))  }.join(" ")) %>
+      <%#= li_if_exist("", @bib.boxes.map{ |box| content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + link_to_if(can?(:read, box), box.name, url_for(box)) }.join(" ")) %>
+      <%#= li_if_exist("", @bib.places.map{ |place| content_tag(:span, nil, class: "glyphicon glyphicon-globe") + link_to_if(can?(:read, place), place.name, url_for(place)) }.join(" ")) %>
+      <%#= li_if_exist("", @bib.analyses.map{ |analysis| content_tag(:span, nil, class: "glyphicon glyphicon-stats") + link_to_if(can?(:read, analysis), analysis.name, url_for(analysis)) }.join(" ")) %>
       <%= li_if_exist("modified at ", difference_from_now(@bib.updated_at)) %>
       <% if @bib.attachment_pdf_files.present? %>
         <li>
@@ -46,8 +46,6 @@
         </li>
       <% end %>
     </ul>
-
-
 
   <div class="row spot-thumbnails">
     <%= @bib.decorate.related_pictures %>
