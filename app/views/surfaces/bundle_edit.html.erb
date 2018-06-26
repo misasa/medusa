@@ -4,7 +4,10 @@
   <thead>
     <tr>
       <th></th>
+      <th></th>
       <th>name</th>
+      <th>images</th>
+      <th>spots</th>
       <%= th_if_expand "owner" %>
       <th>group</th>
       <%= th_if_expand "published" %>
@@ -19,6 +22,9 @@
   <tfoot>
     <tr>
       <th><%= check_box_tag nil, nil, true, class: "select-row-all" %></th>
+      <th></th>
+      <th></th>
+      <th></th>
       <th></th>
       <%= th_if_expand do %>
         <%= f.select :user_id ,User.pluck(:username, :id), { include_blank: true }, class: "form-control input-sm" %>

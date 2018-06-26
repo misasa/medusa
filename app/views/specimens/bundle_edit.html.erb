@@ -14,6 +14,7 @@
   <thead>
     <tr>
       <th></th>
+      <th></th>
       <% @search_columns.each do |column| %>
         <th><%= column.display_name %></th>
       <% end %>
@@ -26,6 +27,7 @@
   <tfoot>
     <tr>
       <th><%= check_box_tag nil, nil, true, class: "select-row-all" %></th>
+      <th></th>
       <% @search_columns.each do |column| %>
         <th>
           <%= SpecimenDecorator.create_form(f, column, :bundle_edit) %>

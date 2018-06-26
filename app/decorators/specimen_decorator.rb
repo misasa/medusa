@@ -64,7 +64,12 @@ class SpecimenDecorator < Draper::Decorator
     surfaces.each do |surface|
       content = h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
       content += ""
-      content += h.link_to_if(h.can?(:read, surface), h.raw(surface.name), surface)
+      content += h.link_to_if(h.can?(:read, surface), h.raw(surface.name), surface.rmap_url, :title => "view map")
+      content += " "
+      content += h.link_to_if(h.can?(:read, surface), h.content_tag(:span, nil, class: "glyphicon glyphicon-edit"), surface, :title => "edit map")
+      #<%= link_to(surface, :title => "edit map") do %>
+      #<span class="glyphicon glyphicon-edit"></span>
+      #<% end %>
       content = h.content_tag(:li, content)
       contents << content
     end
