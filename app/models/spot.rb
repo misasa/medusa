@@ -94,7 +94,10 @@ class Spot < ActiveRecord::Base
 
   def to_pmlame(args = {})
     return unless attachment_file.try(:image?)
+    analysis = get_analysis
+    return unless analysis
     result = {
+      element: "#{name} <spot #{global_id}>",
       image_id: attachment_file.try!(:global_id),
       image_path: attachment_file.data.try!(:url),
       x_image: spot_x_from_center,
@@ -107,7 +110,6 @@ class Spot < ActiveRecord::Base
         }
       )
     end
-    analysis = get_analysis
     if analysis
       result.merge!(
         analysis.to_pmlame
