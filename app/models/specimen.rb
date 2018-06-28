@@ -64,6 +64,16 @@ class Specimen < ActiveRecord::Base
   validates :collection_date_precision, length: { maximum: 255 }
   validate :status_is_nomal, on: :divide
 
+
+  def self.build_bundle_label(objs)
+    CSV.generate do |csv|
+      csv << ["Id", "Name", "IGSN", "Parent-Id", "Parent-Name", "Quantity", "Physical-Form", "Classification"]
+      objs.each do |obj|
+        csv << ["#{obj.global_id}", "#{obj.name}", "#{obj.igsn}", "#{obj.parent.try!(:global_id)}","#{obj.parent.try!(:name)}","#{obj.quantity_with_unit}", "#{obj.physical_form.try!(:name)}", "#{obj.classification.try!(:full_name)}"]
+      end
+    end
+  end
+
   def as_json(options = {})
     super({ methods: [:global_id, :physical_form_name, :primary_file_thumbnail_path] }.merge(options))
   end
