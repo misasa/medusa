@@ -136,7 +136,7 @@ class SpecimensController < ApplicationController
 
   def download_bundle_label
     label = Specimen.build_bundle_label(@specimens)
-    send_data(label, filename: "specimens.tpl", type: "text/csv")
+    send_data(label, filename: "specimens.tpl", type: "text/tpl")
   end
 
   def download_bundle_list
