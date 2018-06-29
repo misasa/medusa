@@ -140,8 +140,8 @@ class SpecimensController < ApplicationController
   end
 
   def download_bundle_list
-    csv = Specimen.build_bundle_list(@specimens)
-    send_data(csv, filename: "specimens.csv", type: "text/csv")    
+    tsv = Specimen.build_bundle_list(@specimens)
+    send_data(tsv, filename: "specimens.tsv", type: "text/tsv")    
   end
   
   def sesar_upload
