@@ -26,6 +26,7 @@ Medusa::Application.routes.draw do
     collection do
       get :download_bundle_card
       get :download_bundle_label
+      get :download_bundle_list
     end
   end
 

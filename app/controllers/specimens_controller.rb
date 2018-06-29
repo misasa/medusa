@@ -1,8 +1,8 @@
 require 'histogram/array'
 class SpecimensController < ApplicationController
   respond_to :html, :xml, :json
-  before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update, :download_card, :download_bundle_card, :download_label, :download_bundle_label]
-  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label]
+  before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update, :download_card, :download_bundle_card, :download_label, :download_bundle_label, :download_bundle_list]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update, :download_bundle_card, :download_bundle_label, :download_bundle_list]
   load_and_authorize_resource
 
   def index
@@ -137,6 +137,11 @@ class SpecimensController < ApplicationController
   def download_bundle_label
     label = Specimen.build_bundle_label(@specimens)
     send_data(label, filename: "specimens.csv", type: "text/csv")
+  end
+
+  def download_bundle_list
+    csv = Specimen.build_bundle_list(@specimens)
+    send_data(csv, filename: "specimens.csv", type: "text/csv")    
   end
   
   def sesar_upload

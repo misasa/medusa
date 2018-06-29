@@ -1,11 +1,14 @@
 <% if @specimens.present? %>
   <% specimen_ids = @specimens.pluck(:id) %>
   <div class="text-right">
-    <%= link_to download_bundle_label_specimens_path(ids: specimen_ids) do %>
+    <%= link_to download_bundle_label_specimens_path(ids: specimen_ids), :title => "print labels" do %>
       <i class="glyphicon glyphicon-tag"></i>
     <% end %>
-    ,<%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_bundle_card_specimens_path(ids: specimen_ids)) %>,
-    and <%= link_to("A4", download_bundle_card_specimens_path(ids: specimen_ids, a4: true)) %>
+    ,<%= link_to download_bundle_list_specimens_path(ids: specimen_ids), :title => "download list" do %>
+      <i class="glyphicon glyphicon-list-alt"></i>
+    <% end %>
+    ,<%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_bundle_card_specimens_path(ids: specimen_ids), :title => "download cards") %>,
+    and <%= link_to("A4", download_bundle_card_specimens_path(ids: specimen_ids, a4: true), :title => "download A4") %>
   </div>
 <% end %>
 

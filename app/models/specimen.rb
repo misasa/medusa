@@ -65,8 +65,8 @@ class Specimen < ActiveRecord::Base
   validate :status_is_nomal, on: :divide
 
 
-  def self.build_bundle_label(objs)
-    CSV.generate do |csv|
+  def self.build_bundle_list(objs)
+    CSV.generate(:col_sep => "\t") do |csv|
       csv << ["Id", "Name", "IGSN", "Parent-Id", "Parent-Name", "Quantity", "Physical-Form", "Classification","Description","Group","User","Updated-at","Created-at"]
       objs.each do |obj|
         csv << ["#{obj.global_id}", "#{obj.name}", "#{obj.igsn}", "#{obj.parent.try!(:global_id)}","#{obj.parent.try!(:name)}","#{obj.quantity_with_unit}", "#{obj.physical_form.try!(:name)}", "#{obj.classification.try!(:full_name)}","#{obj.description}","#{obj.group.try!(:name)}","#{obj.user.try!(:username)}","#{obj.updated_at}","#{obj.created_at}"]
