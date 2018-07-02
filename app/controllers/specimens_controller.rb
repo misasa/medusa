@@ -131,12 +131,12 @@ class SpecimensController < ApplicationController
 
   def download_label
     specimen = Specimen.find(params[:id])
-    send_data(specimen.build_label, filename: "specimen_#{specimen.id}.csv", type: "text/csv")
+    send_data(specimen.build_label, filename: "specimen_#{specimen.id}.label", type: "text/label")
   end
 
   def download_bundle_label
     label = Specimen.build_bundle_label(@specimens)
-    send_data(label, filename: "specimens.tpl", type: "text/tpl")
+    send_data(label, filename: "specimens.label", type: "text/label")
   end
 
   def download_bundle_list

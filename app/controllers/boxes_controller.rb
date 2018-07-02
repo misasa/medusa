@@ -150,12 +150,12 @@ class BoxesController < ApplicationController
 
   def download_label
     box = Box.find(params[:id])
-    send_data(box.build_label, filename: "box_#{box.id}.csv", type: "text/csv")
+    send_data(box.build_label, filename: "box_#{box.id}.label", type: "text/label")
   end
 
   def download_bundle_label
     label = Box.build_bundle_label(@boxes)
-    send_data(label, filename: "boxes.csv", type: "text/csv")
+    send_data(label, filename: "boxes.label", type: "text/label")
   end
   
   private

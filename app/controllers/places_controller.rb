@@ -66,12 +66,12 @@ class PlacesController < ApplicationController
 
   def download_label
     place = Place.find(params[:id])
-    send_data(place.build_label, filename: "place_#{place.id}.csv", type: "text/csv")
+    send_data(place.build_label, filename: "place_#{place.id}.label", type: "text/label")
   end
 
   def download_bundle_label
     label = Place.build_bundle_label(@places)
-    send_data(label, filename: "places.csv", type: "text/csv")
+    send_data(label, filename: "places.label", type: "text/label")
   end
 
   def import

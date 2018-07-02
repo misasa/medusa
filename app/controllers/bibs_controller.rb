@@ -74,12 +74,12 @@ class BibsController < ApplicationController
 
   def download_label
     bib = Bib.find(params[:id])
-    send_data(bib.build_label, filename: "bib_#{bib.id}.csv", type: "text/csv")
+    send_data(bib.build_label, filename: "bib_#{bib.id}.label", type: "text/label")
   end
 
   def download_bundle_label
     label = Bib.build_bundle_label(@bibs)
-    send_data(label, filename: "bibs.csv", type: "text/csv")
+    send_data(label, filename: "bibs.label", type: "text/label")
   end
   
   def download_to_tex
