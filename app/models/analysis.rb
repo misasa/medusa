@@ -237,6 +237,7 @@ class Analysis < ActiveRecord::Base
     info = { element: element_name, sample_id: specimen.try(:global_id) }
     place = specimen.try(:place)
     info.merge!(lat: place.try(:latitude), lng: place.try(:longitude))
+    info.merge!(surface_id: Surface.find_by_globe(true).try(:global_id)) if place && place.latitude && place.longitude
     measurement_data = chemistries.map(&:to_pmlame).inject({}, :merge)
     info.merge(measurement_data)
   end
