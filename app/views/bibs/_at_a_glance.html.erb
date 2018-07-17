@@ -55,7 +55,24 @@
 
 
   <div class="hidden" id="display-type-data">
+    <!--script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.16/iframeResizer.min.js"></script>
+    !-->
+    <!--
+    <style>
+      iframe {
+        min-width: 100%;
+      }
+    </style>
+    !-->
     <%= rplot_iframe @bib unless @bib.referrings_analyses.empty? %>
+    <!--
+    <script>
+      iFrameResize({
+        log:true,
+        heightCalculationMethod: 'taggedElement'
+      }, '#myIframe');
+    </script>
+    !-->
   </div>
 
   <div class="hidden" id="display-type-tex">

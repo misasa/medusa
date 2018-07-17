@@ -46,12 +46,20 @@ module ApplicationHelper
       # </div>  
   end
 
+
+
   def rplot_iframe(obj, size = '800', width = 800, height = 800)
-    content_tag(:iframe, nil, src: obj.rplot_url, width: width, height: height, frameborder: "no" , class: "embed-responsive-item")
+    tag = ""
+    #tag += content_tag(:iframe, nil, src: obj.rplot_url, width: width, height: height, frameborder: "yes" , class: "embed-responsive-item")
+    tag += javascript_include_tag("https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.16/iframeResizer.min.js")
+    tag += content_tag(:style, "iframe {min-width: 100%;height: 500px;}")
+    tag += content_tag(:iframe, nil, id: "myIframe", src: obj.rplot_url, scrolling: "no", frameborder: "yes")
+    #tag += javascript_tag("iFrameResize({heightCalculationMethod: 'taggedElement'},'#myIframe');")
+    raw tag
   end
 
-  def rmap_iframe(obj, size = '800', width = 800, height = 800)
-    content_tag(:iframe, nil, src: obj.rmap_url, width: width, height: height, frameborder: "no" , class: "embed-responsive-item")
+  def rmap_iframe(obj)
+    content_tag(:iframe, nil, id: "myMapIframe", src: obj.rmap_url, frameborder: "no")
   end
 
   def format_date(date)

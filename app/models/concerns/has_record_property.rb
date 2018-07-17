@@ -96,7 +96,8 @@ module HasRecordProperty
   def rmap_url
     return unless Settings.rplot_url
 #    Settings.rplot_url + '?id=' + global_id
-    Settings.rplot_url + 'surfaces/?id=' + global_id
+#    Settings.rplot_url + 'surfaces/?id=' + global_id
+    Settings.rplot_url + 'map/?id=' + global_id
   end
 
   def form_name
