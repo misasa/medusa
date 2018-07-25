@@ -85,11 +85,14 @@ describe Spot do
     end
   end
 
-  describe ".spot_world_xy", :current => true do
+  describe ".spot_world_xy" do
     subject{ spot.spot_world_xy }
-    context "with calibrated image" do
+    context "with calibrated image", :current => true do
       let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]")}
       let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      before do
+        #p subject
+      end
       it {expect(subject).not_to be_nil}
       it {expect(subject[0]).not_to be_nil}
       it {expect(subject[1]).not_to be_nil}
@@ -161,15 +164,19 @@ describe Spot do
 
   describe "#to_pmlame" do
     subject { spot.to_pmlame }
-    let(:spot) { FactoryGirl.build(:spot, attachment_file: attachment_file) }
+    let(:spot) { FactoryGirl.build(:spot, attachment_file: attachment_file, target_uid: analysis.global_id) }
     let(:attachment_file) { FactoryGirl.create(:attachment_file, data_content_type: data_content_type, data_file_name: data_file_name) }
     let(:world_x) {}
     let(:world_y) { 60 }
+    let(:analysis) { FactoryGirl.create(:analysis, specimen_id: specimen.id) }
+    let(:specimen) {FactoryGirl.create(:specimen, place_id: nil)}
     before do
+      allow(spot).to receive(:global_id).and_return('201807181659-9876')
       allow(spot).to receive(:spot_x_from_center).and_return(10)
       allow(spot).to receive(:spot_y_from_center).and_return(20)
       allow(spot).to receive(:world_x).and_return(world_x)
       allow(spot).to receive(:world_y).and_return(world_y)
+      #allow(spot).to receive(:get_analysis).and_return(analysis)
     end
     context "when the type of the data_content_type is text/plain," do
       let(:data_content_type) { "text/plain" }
@@ -185,13 +192,18 @@ describe Spot do
         expect(subject).to be_nil
       end
     end
-    context "when the type of the data_content_type is image/jpeg," do
+    context "when the type of the data_content_type is image/jpeg,", :current => false do
       let(:data_content_type) { "image/jpeg" }
       let(:data_file_name) { "file_name_1.jpg" }
       it "return spot data" do
         result = {
+          element: "#{analysis.name} <analysis #{analysis.global_id}>",
           image_id: attachment_file.global_id,
           image_path: attachment_file.data.url,
+          lat: nil,
+          lng: nil,
+          sample_id: analysis.specimen.global_id,
+          surface_id: nil,
           x_image: 10,
           y_image: 20
         }
@@ -203,8 +215,13 @@ describe Spot do
       let(:data_file_name) { "file_name_1.bmp" }
       it "return spot data" do
         result = {
+          element: "#{analysis.name} <analysis #{analysis.global_id}>",
           image_id: attachment_file.global_id,
           image_path: attachment_file.data.url,
+          lat: nil,
+          lng: nil,
+          sample_id: analysis.specimen.global_id,
+          surface_id: nil,
           x_image: 10,
           y_image: 20
         }
@@ -217,8 +234,13 @@ describe Spot do
       let(:world_x) { 50 }
       it "return spot data" do
         result = {
+          element: "#{analysis.name} <analysis #{analysis.global_id}>",
           image_id: attachment_file.global_id,
           image_path: attachment_file.data.url,
+          lat: nil,
+          lng: nil,
+          sample_id: analysis.specimen.global_id,
+          surface_id: nil,
           x_image: 10,
           y_image: 20,
           x_vs: 50,
@@ -236,22 +258,26 @@ describe Spot do
     context "when spot has analysis," do
       let(:data_content_type) { "image/jpeg" }
       let(:data_file_name) { "file_name_1.jpg" }
-      let(:analysis) { FactoryGirl.create(:analysis) }
-      let(:analysis_to_pmlame) { {element: "name", sample_id: "id", "ana_1" => 1.0, "ana_2" => 2.0} }
+      let(:analysis) { FactoryGirl.create(:analysis, specimen_id: specimen.id) }
+      let(:specimen) { FactoryGirl.create(:specimen, place_id: nil) }
+      #let(:analysis_to_pmlame) { {element: "name", sample_id: "id", "ana_1" => 1.0, "ana_2" => 2.0} }
       before do
         allow(spot).to receive(:get_analysis).and_return(analysis)
-        allow(analysis).to receive(:to_pmlame).and_return(analysis_to_pmlame)
+        #allow(analysis).to receive(:to_pmlame).and_return(analysis_to_pmlame)
       end
       it "return spot data" do
         result = {
+          element: "#{analysis.name} <analysis #{analysis.global_id}>",
           image_id: attachment_file.global_id,
           image_path: attachment_file.data.url,
+          surface_id: nil,
           x_image: 10,
           y_image: 20,
-          element: "name",
-          sample_id: "id",
-          "ana_1" => 1.0,
-          "ana_2" => 2.0
+          lat: nil,
+          lng: nil,
+          sample_id: specimen.global_id
+#          "ana_1" => 1.0,
+#          "ana_2" => 2.0
         }
         expect(subject).to eq(result)
       end

@@ -448,9 +448,11 @@ describe Analysis do
     end
   end
 
-  describe "#to_pmlame" do
+  describe "#to_pmlame", :current => true do
     subject { analysis.to_pmlame({duplicate_names: duplicate_names}) }
-    let(:analysis) { FactoryGirl.create(:analysis,  name: "analysis_name_1") }
+    let(:analysis) { FactoryGirl.create(:analysis,  name: "analysis_name_1", specimen_id: specimen.id) }
+    let(:specimen) { FactoryGirl.create(:specimen, place_id: place.id)}
+    let(:place) { FactoryGirl.create(:place)}
     let(:chemistry_1) { FactoryGirl.create(:chemistry) }
     let(:chemistry_2) { FactoryGirl.create(:chemistry) }
     let(:measurement_item_1) { FactoryGirl.create(:measurement_item, nickname: nickname_1) }
@@ -458,46 +460,51 @@ describe Analysis do
     let(:duplicate_names) { [] }
     let(:nickname_1) { "Si" }
     let(:nickname_2) { "SiO2" }
+    let(:element_name) { "#{analysis.name} <analysis #{analysis.global_id}>" }
+    let(:basic_info){ {element: element_name, analysis_id: analysis.global_id} }
+    let(:globe){ FactoryGirl.create(:surface, name:"globe", globe:true)}
     before do
       chemistry_1.measurement_item = measurement_item_1
       chemistry_2.measurement_item = measurement_item_2
       analysis.chemistries << chemistry_1
       analysis.chemistries << chemistry_2
+      basic_info
+      globe
     end
 
     context "when it exists duplicate element names,", :current => true do
       let(:duplicate_names) { ["analysis_name_1"] }
-      it "elementに<stone XXXX> が付加されてること" do
+      it "elementに<analysis XXXX> が付加されてること" do
         allow(chemistry_1).to receive(:measured_value).and_return(nil)
         allow(chemistry_1).to receive(:measured_uncertainty).and_return(nil)
         allow(chemistry_2).to receive(:measured_value).and_return(10)
         allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
         global_id = analysis.specimen.global_id
-        element_name = "analysis_name_1 <stone #{global_id}>"
-        result = {
-          element: element_name, sample_id: global_id,
+        element_name = "analysis_name_1 <analysis #{analysis.global_id}>"
+        result = basic_info.merge!({
+          sample_id: global_id, surface_id: globe.global_id,
           lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude,
           "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
           "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
-        }
+        })
         expect(subject).to eq(result)
       end
     end
     context "when it does not exists duplicate element names," do
       let(:duplicate_names) { ["analysis_name_2"] }
-      it "elementに<stone XXXX> が付加されていないこと" do
+      it "element is <analysis XXXX>" do
         allow(chemistry_1).to receive(:measured_value).and_return(nil)
         allow(chemistry_1).to receive(:measured_uncertainty).and_return(nil)
         allow(chemistry_2).to receive(:measured_value).and_return(10)
         allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
-        element_name = "analysis_name_1"
         global_id = analysis.specimen.global_id
-        result = {
-          element: element_name, sample_id: global_id,
+        result = basic_info.merge!({
+          sample_id: global_id,
+          surface_id: globe.global_id,
           lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude,
           "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
           "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
-        }
+        })
         expect(subject).to eq(result)
       end
     end
@@ -507,32 +514,14 @@ describe Analysis do
         allow(chemistry_1).to receive(:measured_uncertainty).and_return(nil)
         allow(chemistry_2).to receive(:measured_value).and_return(10)
         allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
-        element_name = "analysis_name_1"
         global_id = analysis.specimen.global_id
-        result = {
-          element: element_name, sample_id: global_id,
+        result = basic_info.merge!({
+          sample_id: global_id,
+          surface_id: globe.global_id,
           lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude,
           "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
           "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
-        }
-        expect(subject).to eq(result)
-      end
-    end
-    context "when it does not exists duplicate element names," do
-      let(:duplicate_names) { ["analysis_name_2"] }
-      it "elementに<stone XXXX> が付加されていないこと" do
-        allow(chemistry_1).to receive(:measured_value).and_return(nil)
-        allow(chemistry_1).to receive(:measured_uncertainty).and_return(nil)
-        allow(chemistry_2).to receive(:measured_value).and_return(10)
-        allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
-        element_name = "analysis_name_1"
-        global_id = analysis.specimen.global_id
-        result = {
-          element: element_name, sample_id: global_id,
-          lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude,
-          "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
-          "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
-        }
+        })
         expect(subject).to eq(result)
       end
     end
@@ -542,14 +531,14 @@ describe Analysis do
         allow(chemistry_1).to receive(:measured_uncertainty).and_return(nil)
         allow(chemistry_2).to receive(:measured_value).and_return(10)
         allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
-        element_name = "analysis_name_1"
         global_id = analysis.specimen.global_id
-        result = {
-          element: element_name, sample_id: global_id,
+        result = basic_info.merge!({
+          sample_id: global_id,
+          surface_id: globe.global_id,
           lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude,
           "#{nickname_1}" => nil, "#{nickname_1}_error" => nil,
           "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
-        }
+        })
         expect(subject).to eq(result)
       end
     end
@@ -563,8 +552,7 @@ describe Analysis do
         allow(chemistry_1).to receive(:measured_uncertainty).and_return(0.2)
         allow(chemistry_2).to receive(:measured_value).and_return(10)
         allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
-        element_name = "analysis_name_1"
-        expect(subject).to eq({element: element_name, sample_id: global_id, lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude})
+        expect(subject).to eq(basic_info.merge!({sample_id: global_id, surface_id: globe.global_id, lat: analysis.specimen.place.latitude, lng: analysis.specimen.place.longitude}))
       end
     end
     context "when it does not exists specimen," do
@@ -576,16 +564,65 @@ describe Analysis do
         allow(chemistry_1).to receive(:measured_uncertainty).and_return(0.2)
         allow(chemistry_2).to receive(:measured_value).and_return(10)
         allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
-        element_name = "analysis_name_1"
-        result = {
-          element: element_name, sample_id: nil,
+        result = basic_info.merge!({
+          sample_id: nil,
           lat: nil, lng: nil,
           "#{nickname_1}" => 20, "#{nickname_1}_error" => 0.2,
           "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
-        }
+        })
         expect(subject).to eq(result)
       end
     end
+    context "when it does not exists specimen.place," do
+      before do
+        analysis.specimen.place = nil
+      end
+      it "return element info and measured values without sample_id." do
+        allow(chemistry_1).to receive(:measured_value).and_return(20)
+        allow(chemistry_1).to receive(:measured_uncertainty).and_return(0.2)
+        allow(chemistry_2).to receive(:measured_value).and_return(10)
+        allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
+        result = basic_info.merge!({
+          sample_id: specimen.global_id,
+          lat: nil, lng: nil,
+          "#{nickname_1}" => 20, "#{nickname_1}_error" => 0.2,
+          "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
+        })
+        expect(subject).to eq(result)
+      end
+    end
+    context "when it exists spot," do
+      let(:spot){ FactoryGirl.create(:spot, target_uid: analysis.global_id, attachment_file_id: image_file.id)}
+      #let(:attachment_file){ FactoryGirl.create(:attachment_file)}
+      let(:image_file){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]")}
+      let(:surface){ FactoryGirl.create(:surface)}
+      before do
+        analysis.specimen.place = nil
+        spot
+        image_file.surfaces << surface
+      end
+      it "return element info and measured values with image_id, x_image, y_image." do
+        allow(chemistry_1).to receive(:measured_value).and_return(20)
+        allow(chemistry_1).to receive(:measured_uncertainty).and_return(0.2)
+        allow(chemistry_2).to receive(:measured_value).and_return(10)
+        allow(chemistry_2).to receive(:measured_uncertainty).and_return(0.1)
+        #allow(spot).to receive(:spot_x_from_center).and_return(10)
+        #allow(spot).to receive(:spot_y_from_center).and_return(20)
+        result = basic_info.merge!({
+          surface_id: surface.global_id,
+          image_id: image_file.global_id,
+          x_image: spot.spot_x_from_center, y_image: spot.spot_y_from_center,
+          x_vs: spot.world_x, y_vs: spot.world_y,
+          sample_id: specimen.global_id,
+          lat: nil, lng: nil,
+          "#{nickname_1}" => 20, "#{nickname_1}_error" => 0.2,
+          "#{nickname_2}" => 10, "#{nickname_2}_error" => 0.1
+        })
+        expect(subject).to eq(result)
+      end
+    end
+
+
   end
 
   describe ".get_spot" do

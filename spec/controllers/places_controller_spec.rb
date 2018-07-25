@@ -214,7 +214,7 @@ describe PlacesController do
       allow(Place).to receive(:build_bundle_label).with(places).and_return(label)
       allow(controller).to receive(:send_data).and_return{controller.render nothing: true}
     end
-    it { expect(controller).to receive(:send_data).with(label, filename: "places.csv", type: "text/csv") }
+    it { expect(controller).to receive(:send_data).with(label, filename: "places.label", type: "text/label") }
   end
 
   describe "POST import" do

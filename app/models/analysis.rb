@@ -234,10 +234,17 @@ class Analysis < ActiveRecord::Base
   def to_pmlame(duplicate_names: [], index: nil)
     #element_name = duplicate_names.include?(name) ? "#{name} <stone #{specimen.try(:global_id)}>#{index}" : name
     element_name = "#{name} <analysis #{self.global_id}>"
-    info = { element: element_name, sample_id: specimen.try(:global_id) }
+    info = { element: element_name, analysis_id: global_id, sample_id: specimen.try(:global_id) }
     place = specimen.try(:place)
     info.merge!(lat: place.try(:latitude), lng: place.try(:longitude))
     info.merge!(surface_id: Surface.find_by_globe(true).try(:global_id)) if place && place.latitude && place.longitude
+    spot = get_spot
+    if spot
+      info.merge!(image_id: spot.attachment_file.global_id, x_image: spot.spot_x_from_center, y_image: spot.spot_y_from_center)
+      if spot.surface
+        info.merge!(surface_id: spot.surface.global_id, x_vs: spot.try(:world_x), y_vs: spot.try(:world_y))
+      end
+    end
     measurement_data = chemistries.map(&:to_pmlame).inject({}, :merge)
     info.merge(measurement_data)
   end

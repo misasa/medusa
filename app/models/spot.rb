@@ -98,6 +98,7 @@ class Spot < ActiveRecord::Base
     return unless analysis
     result = {
       element: "#{name} <spot #{global_id}>",
+      surface_id: surface.try!(:global_id),
       image_id: attachment_file.try!(:global_id),
       image_path: attachment_file.data.try!(:url),
       x_image: spot_x_from_center,
@@ -151,6 +152,14 @@ class Spot < ActiveRecord::Base
     worlds[0]
   end
 
+
+  def world_x
+    spot_world_xy[0] if spot_world_xy
+  end
+
+  def world_y
+    spot_world_xy[1] if spot_world_xy
+  end
 
   def to_svg
     "<circle #{svg_attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/>"

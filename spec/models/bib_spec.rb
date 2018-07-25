@@ -419,6 +419,51 @@ describe Bib do
     it { expect(bib.specimen_places).to match_array([place_1, place_2])}
   end
 
+  describe "build_pmlame", :current => true do
+    subject { bib.build_pmlame([]) }
+    let(:bib) { FactoryGirl.create(:bib) }
+
+    let(:box_1){ FactoryGirl.create(:box)}
+    let(:place_1){ FactoryGirl.create(:place)}
+    let(:specimen_1) { FactoryGirl.create(:specimen, name: "hoge", box_id: box_1.id) }
+    let(:specimen_2) { FactoryGirl.create(:specimen, name: "specimen_2", place_id: place_1.id) }
+    let(:specimen_3) { FactoryGirl.create(:specimen, name: "specimen_3", box_id: box_1.id) }
+    let(:specimen_4) { FactoryGirl.create(:specimen, name: "specimen_4") }
+    let(:specimen_5) { FactoryGirl.create(:specimen, name: "specimen_5")}
+    let(:specimen_6) { FactoryGirl.create(:specimen, name: "specimen_6", parent_id: specimen_5.id)}
+    let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen_1.id) }
+    let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen_2.id) }
+    let(:analysis_3) { FactoryGirl.create(:analysis, specimen_id: specimen_3.id) }
+    let(:analysis_4) { FactoryGirl.create(:analysis) }
+    let(:analysis_5) { FactoryGirl.create(:analysis, specimen_id: specimen_6.id)}
+    let(:analysis_6) { FactoryGirl.create(:analysis, name: "spot_analysis_1")}
+    let(:globe){ FactoryGirl.create(:surface, globe:true) }
+    let(:surface_1){ FactoryGirl.create(:surface)}
+    let(:surface_2){ FactoryGirl.create(:surface)}
+    let(:spot_1){ FactoryGirl.create(:spot, target_uid: analysis_6.global_id, attachment_file_id: image_file_1.id)}
+    let(:image_file_1){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]")}
+    before do
+    end
+
+    before do
+      bib
+      globe
+      box_1;place_1;
+      specimen_1;specimen_2;specimen_3;specimen_4;
+      analysis_1;analysis_2;analysis_3;analysis_4;
+      bib.boxes << box_1
+      bib.places << place_1      
+      bib.specimens << specimen_3
+      bib.analyses << analysis_3      
+      bib.analyses << analysis_4
+      bib.analyses << analysis_6
+      spot_1
+      image_file_1.surfaces << surface_1
+    end
+    it { expect(bib.analyses).to match_array([analysis_3, analysis_4, analysis_6])}
+    it { expect(bib.referrings_analyses).to match_array([analysis_1, analysis_2, analysis_3, analysis_4, analysis_6])}
+  end
+
   describe "#referrings_analyses", :current => true do
     let(:bib) { FactoryGirl.create(:bib) }
 
