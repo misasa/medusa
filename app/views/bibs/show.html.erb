@@ -43,6 +43,15 @@
   </div>
 
   <div id="show-body" class="col-lg-8">
+    <% if @bib.referrings_analyses.size > 0 %>
+    <style>
+      iframe {
+        min-width: 100%;
+        min-height: 500px;
+      }
+    </style>
+    <%= rmap_iframe(@bib) %>
+    <% end %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <li class="<%= active_if_current('at-a-glance') %>">

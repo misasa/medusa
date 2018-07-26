@@ -53,8 +53,8 @@ module ApplicationHelper
     #tag += content_tag(:iframe, nil, src: obj.rplot_url, width: width, height: height, frameborder: "yes" , class: "embed-responsive-item")
     tag += javascript_include_tag("https://cdnjs.cloudflare.com/ajax/libs/iframe-resizer/3.5.16/iframeResizer.min.js")
     tag += content_tag(:style, "iframe {min-width: 100%;height: 500px;}")
-    tag += content_tag(:iframe, nil, id: "myIframe", src: obj.rplot_url, scrolling: "no", frameborder: "yes")
-    #tag += javascript_tag("iFrameResize({heightCalculationMethod: 'taggedElement'},'#myIframe');")
+    tag += content_tag(:iframe, nil, id: "myIframe", src: obj.rplot_url, scrolling: "no", frameborder: "no")
+    tag += javascript_tag("iFrameResize({heightCalculationMethod: 'taggedElement'},'#myIframe');")
     raw tag
   end
 

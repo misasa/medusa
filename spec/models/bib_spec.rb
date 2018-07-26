@@ -442,8 +442,6 @@ describe Bib do
     let(:surface_2){ FactoryGirl.create(:surface)}
     let(:spot_1){ FactoryGirl.create(:spot, target_uid: analysis_6.global_id, attachment_file_id: image_file_1.id)}
     let(:image_file_1){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]")}
-    before do
-    end
 
     before do
       bib
@@ -459,6 +457,7 @@ describe Bib do
       bib.analyses << analysis_6
       spot_1
       image_file_1.surfaces << surface_1
+      subject
     end
     it { expect(bib.analyses).to match_array([analysis_3, analysis_4, analysis_6])}
     it { expect(bib.referrings_analyses).to match_array([analysis_1, analysis_2, analysis_3, analysis_4, analysis_6])}
