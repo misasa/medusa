@@ -235,7 +235,7 @@ class Analysis < ActiveRecord::Base
     #element_name = duplicate_names.include?(name) ? "#{name} <stone #{specimen.try(:global_id)}>#{index}" : name
     element_name = "#{name} <analysis #{self.global_id}>"
     info = { element: element_name, analysis_id: global_id, sample_id: specimen.try(:global_id) }
-    place = specimen.try(:place)
+    place = specimen.try(:rplace)
     info.merge!(lat: place.try(:latitude), lng: place.try(:longitude))
     info.merge!(surface_id: Surface.find_by_globe(true).try(:global_id)) if place && place.latitude && place.longitude
     spot = get_spot
