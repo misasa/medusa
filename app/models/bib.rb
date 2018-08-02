@@ -33,7 +33,7 @@ class Bib < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super({:methods => [:author_ids, :global_id]}.merge(options))
+    super({:methods => [:author_ids, :global_id, :pmlame_ids]}.merge(options))
   end
 
   def specimen_places

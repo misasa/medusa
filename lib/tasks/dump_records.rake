@@ -36,6 +36,14 @@ namespace :record do
 			output.close
 		end
 
+		desc "Dump records in pmlame"
+		task :pmlame => [:environment] do |t|
+		  records = Analysis.all
+		  puts [ records.uniq.map {|item| item.to_pmlame } ].to_json
+		  #p [ records.map {|item| item.build_pmlame([])}.flatten.uniq].to_json
+		  #element_names = records.map()
+		end
+
 		desc "Dump records in bib-mode"
 		task :bib => [:environment] do |t|
 			items = Box.order(updated_at: :desc)

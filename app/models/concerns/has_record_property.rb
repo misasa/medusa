@@ -46,7 +46,7 @@ module HasRecordProperty
   end
 
   def as_json(options = {})
-    super({:methods => :global_id}.merge(options))
+    super({:methods => [:global_id, :pmlame_ids]}.merge(options))
   end
 
   def to_xml(options = {})
@@ -70,6 +70,10 @@ module HasRecordProperty
       pmlame << data if data.present?
       pmlame
     end
+  end
+
+  def pmlame_ids
+    pml_elements.map(&:global_id)
   end
 
   def pml_elements

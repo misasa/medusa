@@ -75,7 +75,7 @@ class Specimen < ActiveRecord::Base
   end
 
   def as_json(options = {})
-    super({ methods: [:global_id, :physical_form_name, :primary_file_thumbnail_path] }.merge(options))
+    super({ methods: [:global_id, :physical_form_name, :primary_file_thumbnail_path, :pmlame_ids] }.merge(options))
   end
 
   def status
