@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 require 'spec_helper'
 include ActionDispatch::TestProcess
 
@@ -307,7 +308,7 @@ describe SpecimensController do
       allow(Specimen).to receive(:build_bundle_label).with(specimens).and_return(label)
       allow(controller).to receive(:send_data).and_return{controller.render nothing: true}
     end
-    it { expect(controller).to receive(:send_data).with(label, filename: "specimens.csv", type: "text/csv") }
+    it { expect(controller).to receive(:send_data).with(label, filename: "specimens.label", type: "text/label") }
   end
   
 end

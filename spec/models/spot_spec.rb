@@ -198,6 +198,7 @@ describe Spot do
       it "return spot data" do
         result = {
           element: "#{analysis.name} <analysis #{analysis.global_id}>",
+          analysis_id: analysis.global_id,
           image_id: attachment_file.global_id,
           image_path: attachment_file.data.url,
           lat: nil,
@@ -216,6 +217,7 @@ describe Spot do
       it "return spot data" do
         result = {
           element: "#{analysis.name} <analysis #{analysis.global_id}>",
+          analysis_id: analysis.global_id,
           image_id: attachment_file.global_id,
           image_path: attachment_file.data.url,
           lat: nil,
@@ -235,6 +237,7 @@ describe Spot do
       it "return spot data" do
         result = {
           element: "#{analysis.name} <analysis #{analysis.global_id}>",
+          analysis_id: analysis.global_id,
           image_id: attachment_file.global_id,
           image_path: attachment_file.data.url,
           lat: nil,
@@ -268,6 +271,7 @@ describe Spot do
       it "return spot data" do
         result = {
           element: "#{analysis.name} <analysis #{analysis.global_id}>",
+          analysis_id: analysis.global_id,
           image_id: attachment_file.global_id,
           image_path: attachment_file.data.url,
           surface_id: nil,
