@@ -1,10 +1,10 @@
 # Medusa
 
-Keep track any stones.
+Keep track any boxes.
 
 # Description
 
-Keep track any stones.  Medusa documents the origin of a rock, its
+Keep track any stones and boxes.  Medusa documents the origin of a rock, its
 current storage location, the relationship, if any between the
 original rock and any sub-samples, and correlate any and all
 geochemical datasets associated with the rock.
