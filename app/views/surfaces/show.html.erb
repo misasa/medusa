@@ -39,12 +39,16 @@
       <li class="<%= active_if_current('image') %>">
         <a href="#image" data-toggle="tab"><%= "image#{data_count(@surface.images)}" %></a>
       </li>
+      <li class="<%= active_if_current('calibration') %>">
+        <a href="#calibration" data-toggle="tab">calibration</a>
+      </li>
     </ul>
 
     <!-- Tab panes -->
     <% tab_info = [
         ["at-a-glance",nil],
         ["image",@surface.images],
+        ["calibration",nil]
     ] %>
     <div class="tab-content">
       <% tab_info.each do |key,array| %>

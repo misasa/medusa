@@ -88,9 +88,13 @@ class AttachmentFile < ActiveRecord::Base
   def check_affine_matrix
     if affine_matrix_changed?
       b, a = affine_matrix_change
-      if a.instance_of?(Array) && a.size == 9 && (a != [1,0,0,0,1,0,0,0,1])
+      if a.instance_of?(Array) && a.size == 9
         #p "rotating..."
-        RotateWorker.perform_async(id)
+        RotateWorker.perform_async(id) unless a == [1,0,0,0,1,0,0,0,1]
+        if surface_images.present?
+          surface_image = surface_images.first
+          TileWorker.perform_async(surface_image.id, transparent: surface_image.position > 1)
+        end
       end
     end
   end
@@ -254,7 +258,7 @@ class AttachmentFile < ActiveRecord::Base
   end
   
   def bounds
-    return if affine_matrix.blank?
+    return Array.new(4) { 0 } if affine_matrix.blank?
     cs = corners_on_world
     xi, yi = cs[0]
     left = xi

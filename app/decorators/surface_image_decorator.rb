@@ -84,10 +84,12 @@ class SurfaceImageDecorator < Draper::Decorator
 
 #    width_on_stage = image.transform_length(image.width / image.length * 100)
     width_on_stage = image.width_on_stage
-    scale_length_on_stage = 10 ** (Math::log10(width_on_stage).round - 1)
-    scale_length_on_image = image.transform_length(scale_length_on_stage, :world2xy).round
-    lines << "%%scale #{("%.0f" % scale_length_on_stage)}\ micro meter"
-    lines << "\\put(1,1){\\line(1,0){#{("%.1f" % scale_length_on_image)}}}"
+    if width_on_stage
+      scale_length_on_stage = 10 ** (Math::log10(width_on_stage).round - 1)
+      scale_length_on_image = image.transform_length(scale_length_on_stage, :world2xy).round
+      lines << "%%scale #{("%.0f" % scale_length_on_stage)}\ micro meter"
+      lines << "\\put(1,1){\\line(1,0){#{("%.1f" % scale_length_on_image)}}}"
+    end
 
     lines << "\\end{overpic}"
 

@@ -17,6 +17,9 @@
 //= require jquery.ui.autocomplete
 //= require jquery.ui.widget
 //= require bootstrap
+//= require svg
+//= require svg.draggable
+//= require matrix
 //= require acts_as_mappable
 //= require_tree .
 //= require highcharts/highcharts
