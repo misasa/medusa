@@ -163,9 +163,9 @@
     triangle.lines = [];
     var image = image, transform = image.transform(), color = "#f00",
         width = image.width() * transform.scaleX, height = image.height() * transform.scaleY,
-        x1 = 0, y1 = height,
-        x2 = width, y2 = height,
-        x3 = width / 2, y3 = 0,
+        x1 = 0, y1 = 0,
+        x2 = width, y2 = 0,
+        x3 = width, y3 = height,
         r = 10, d = r * 2,
         draggableOptions = { minX: -r, minY: -r, maxX: width + r, maxY: height + r };
     triangle.circles.push(svg.circle(d).fill(color).move(x1 - r, y1 -r).draggable(draggableOptions));
