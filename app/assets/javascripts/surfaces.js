@@ -167,10 +167,11 @@
         x2 = width, y2 = 0,
         x3 = width, y3 = height,
         r = 10, d = r * 2,
-        draggableOptions = { minX: -r, minY: -r, maxX: width + r, maxY: height + r };
-    triangle.circles.push(svg.circle(d).fill(color).move(x1 - r, y1 -r).draggable(draggableOptions));
-    triangle.circles.push(svg.circle(d).fill(color).move(x2 - r, y2 - r).draggable(draggableOptions));
-    triangle.circles.push(svg.circle(d).fill(color).move(x3 - r, y3 - r).draggable(draggableOptions));
+        draggableOptions = { minX: -r, minY: -r, maxX: width + r, maxY: height + r },
+	path = ["M", -r, 0, "H", r, "M", 0, -r, "V", r, "M", -r, 0, "A", r, r, 0, 1, 0, r, 0, "A", r, r, 0, 1, 0, -r, 0].join(" ");
+    triangle.circles.push(svg.path(path).attr({'fill-opacity': 0}).stroke(color).move(x1 - r, y1 - r).draggable(draggableOptions));
+    triangle.circles.push(svg.path(path).attr({'fill-opacity': 0}).stroke(color).move(x2 - r, y2 - r).draggable(draggableOptions));
+    triangle.circles.push(svg.path(path).attr({'fill-opacity': 0}).stroke(color).move(x3 - r, y3 - r).draggable(draggableOptions));
     triangle.lines.push(svg.line(x1, y1, x2, y2).stroke({ width: 1, color: color }));
     triangle.lines.push(svg.line(x2, y2, x3, y3).stroke({ width: 1, color: color }));
     triangle.lines.push(svg.line(x3, y3, x1, y1).stroke({ width: 1, color: color }));
