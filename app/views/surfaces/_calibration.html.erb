@@ -5,6 +5,9 @@
     <div class="controller overlay pull-left"></div>
   </div>
   <div class="col-lg-12">
+    <input class="opacity" type="range" min="0" max="1" step="0.1" style="width: 60px; margin: 3px;">
+  </div>
+  <div class="col-lg-12">
     <div class="row">
       <%= form_for AttachmentFile.new, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
 	<div class="form-group col-lg-10">

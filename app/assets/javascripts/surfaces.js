@@ -8,6 +8,7 @@
     calibrator.base = Calibrator.Viewer(calibrator.element.find("div.base"));
     calibrator.overlay = Calibrator.Viewer(calibrator.element.find("div.overlay"));
     calibrator.thumbnails = Calibrator.Thumbnails(calibrator.element.find("div.thumbnails"));
+    calibrator.opacity = calibrator.element.find("input.opacity");
 
     calibrator.viewer.addZoomControl().draggable();
 
@@ -42,9 +43,13 @@
 	overlayTriangle = calibrator.overlayTriangle = Calibrator.Triangle(calibrator.overlay.svg, image.image);
 	$(overlayTriangle).on('dragmove', resizeOverlay);
 	if (viewerOverlayImage) { viewerOverlayImage.remove(); }
-	viewerOverlayImage = calibrator.viewer.image(src);
+	viewerOverlayImage = calibrator.viewer.image(src).opacity(calibrator.opacity.val());
 	resizeOverlay();
       });
+    });
+
+    $(calibrator.opacity).on('input', function(event) {
+      viewerOverlayImage.opacity($(this).val());
     });
 
     return calibrator;
@@ -89,6 +94,10 @@
     },
     remove() {
       this.image.remove();
+    },
+    opacity(val) {
+      this.image.attr({opacity: val });
+      return this;
     }
   };
 
