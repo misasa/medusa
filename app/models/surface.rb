@@ -130,6 +130,12 @@ class Surface < ActiveRecord::Base
       super
     end
   end
+
+  def calibration_points(points_on_world)
+    return if points_on_world.blank?
+    images.first.world_pairs_on_pixel(points_on_world)
+  end
+
   private
 
   def make_tile_of_added_image(image)

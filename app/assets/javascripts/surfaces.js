@@ -33,8 +33,13 @@
     });
 
     $(calibrator.thumbnails).on('selected', function(event, params) {
-      var src = params.src, path = params.path;
+      var src = params.src, path = params.path, points = params.points;
       calibrator.targetPath = path;
+      if (points) {
+        calibrator.baseTriangle.set(points);
+      } else {
+        calibrator.baseTriangle.reset();
+      }
       if (overlayImage) { overlayImage.remove(); }
       overlayImage = calibrator.overlay.image(src);
       $(overlayImage).on('loaded', function(event, image) {
@@ -56,7 +61,7 @@
   };
   Calibrator.prototype = {
     affineMatrix() {
-      return Matrix.fromTriangles(this.overlayTriangle.get(), this.baseTriangle.get());
+      return Matrix.fromTriangles(this.overlayTriangle.coord(), this.baseTriangle.coord());
     },
     getTargetPath() {
       return this.targetPath;
@@ -154,7 +159,7 @@
     Object.assign(thumbnails, Calibrator.Node(element));
     thumbnails.element.on("click", function(event) {
       var div = $(event.target).parent();
-      $(thumbnails).trigger('selected', { src: div.data("src"), path: div.data("path") });
+      $(thumbnails).trigger('selected', { src: div.data("src"), path: div.data("path"), points: div.data("points") });
     });
     return thumbnails;
   };
@@ -198,6 +203,26 @@
     return triangle;
   };
   Calibrator.Triangle.prototype = {
+    set(points) {
+      var transform = this.image.transform(), scaleX = transform.scaleX, scaleY = transform.scaleY,
+          x1 = points[0][0] * scaleX, y1 = points[0][1] * scaleY,
+          x2 = points[1][0] * scaleX, y2 = points[1][1] * scaleY,
+          x3 = points[2][0] * scaleX, y3 = points[2][1] * scaleY;
+      this.circles[0].center(x1, y1);
+      this.circles[1].center(x2, y2);
+      this.circles[2].center(x3, y3);
+      this.lines[0].plot(x1, y1, x2, y2);
+      this.lines[1].plot(x2, y2, x3, y3);
+      this.lines[2].plot(x3, y3, x1, y1);
+    },
+    reset() {
+      var image = this.image, width = image.width(), height = image.height();
+      this.set([
+        [0, 0],
+        [width, 0],
+        [width, height]
+      ]);
+    },
     get() {
       var transform = this.image.transform(), scaleX = transform.scaleX, scaleY = transform.scaleY;
       return [
@@ -216,6 +241,19 @@
       for (i = 0; i < this.lines.length; i++) {
 	this.lines[i].remove();
       }
+    },
+    coord() {
+      var transform = this.image.transform(), scaleX = transform.scaleX, scaleY = transform.scaleY,
+          image = this.image, width = image.width(), height = image.height(),
+          length = width > height ? width : height;
+      return [
+        (this.circles[0].cx() / scaleX - width / 2) * 100 / length,
+        (height / 2 - this.circles[0].cy() / scaleY) * 100 / length,
+        (this.circles[1].cx() / scaleX - width / 2) * 100 / length,
+        (height / 2 - this.circles[1].cy() / scaleY) * 100 / length,
+        (this.circles[2].cx() / scaleX - width / 2) * 100 / length,
+        (height / 2 - this.circles[2].cy() / scaleY) * 100 / length
+      ];
     }
   }
 

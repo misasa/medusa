@@ -22,7 +22,7 @@
   <div class="col-lg-12">
     <div class="thumbnails pull-left">
       <% @surface.images.each_with_index do |image, index| %>
-	<%= content_tag :div, class: "thumbnail pull-left" + (index.zero? ? " hidden" : ""), data: { path: attachment_file_path(image.id, format: "json"), src: image.path } do %>
+	<%= content_tag :div, class: "thumbnail pull-left" + (index.zero? ? " hidden" : ""), data: { path: attachment_file_path(image.id, format: "json"), src: image.path, points: @surface.calibration_points(image.calibration_points_on_world) } do %>
 	  <%= image.decorate.picture(width: 70, height: 70, type: :thumb) %>
 	<% end %>
       <% end %>
