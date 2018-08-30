@@ -12,7 +12,7 @@
 
     calibrator.viewer.addZoomControl().draggable();
 
-    var baseImagePath = calibrator.thumbnails.baseImagePath(),
+    var overlayImagePath = calibrator.thumbnails.overlayImagePath(),
 	resizeOverlay = function() {
 	  var t1 = overlayTriangle.get(),
 	      t2 = baseTriangle.get().map(function(x) { return x * viewerBaseImage.scale; })
@@ -20,36 +20,46 @@
 	  $(calibrator).trigger('change');
 	};
 
-    viewerBaseImage = calibrator.viewer.image(baseImagePath);
-    $(viewerBaseImage).on('loaded', function(event, image) {
+    overlayImage = calibrator.overlay.image(overlayImagePath);
+    $(overlayImage).on('loaded', function(event, image) {
       image.fit();
-    });
-
-    baseImage = calibrator.base.image(baseImagePath);
-    $(baseImage).on('loaded', function(event, image) {
-      image.fit();
-      baseTriangle = calibrator.baseTriangle = Calibrator.Triangle(calibrator.base.svg, image.image);
-      $(baseTriangle).on('dragmove', resizeOverlay);
+      overlayTriangle = calibrator.overlayTriangle = Calibrator.Triangle(calibrator.overlay.svg, image.image);
+      $(overlayTriangle).on('dragmove', resizeOverlay);
     });
 
     $(calibrator.thumbnails).on('selected', function(event, params) {
-      var src = params.src, path = params.path, points = params.points;
-      calibrator.targetPath = path;
-      if (points) {
-        calibrator.baseTriangle.set(points);
+      var src = params.src, points = params.points;
+      if (params.affine) {
+        calibrator.baseAffine = params.affine;
       } else {
-        calibrator.baseTriangle.reset();
+        calibrator.baseAffine = [1, 0, 0, 0, 1, 0];
       }
-      if (overlayImage) { overlayImage.remove(); }
-      overlayImage = calibrator.overlay.image(src);
-      $(overlayImage).on('loaded', function(event, image) {
+      if (baseImage) { baseImage.remove(); }
+      baseImage = calibrator.base.image(src);
+      $(baseImage).on('loaded', function(event, image) {
+        calibrator.viewer.reset();
 	image.fit();
-	if (overlayTriangle) { overlayTriangle.remove(); }
-	overlayTriangle = calibrator.overlayTriangle = Calibrator.Triangle(calibrator.overlay.svg, image.image);
-	$(overlayTriangle).on('dragmove', resizeOverlay);
-	if (viewerOverlayImage) { viewerOverlayImage.remove(); }
-	viewerOverlayImage = calibrator.viewer.image(src).opacity(calibrator.opacity.val());
-	resizeOverlay();
+
+	if (baseTriangle) { baseTriangle.remove(); }
+	baseTriangle = calibrator.baseTriangle = Calibrator.Triangle(calibrator.base.svg, image.image);
+        if (points) {
+          baseTriangle.set(points);
+        } else {
+          baseTriangle.reset();
+        }
+	$(baseTriangle).on('dragmove', resizeOverlay);
+
+	if(viewerBaseImage) { viewerBaseImage.remove(); }
+	viewerBaseImage = calibrator.viewer.image(src);
+	$(viewerBaseImage).on('loaded', function(event, image) {
+	  image.fit();
+	});
+
+	if(viewerOverlayImage) { viewerOverlayImage.remove() }
+	viewerOverlayImage = calibrator.viewer.image(overlayImagePath).opacity(calibrator.opacity.val());
+	$(viewerOverlayImage).on('loaded', function(event, image) {
+	  resizeOverlay();
+	});
       });
     });
 
@@ -61,10 +71,18 @@
   };
   Calibrator.prototype = {
     affineMatrix() {
-      return Matrix.fromTriangles(this.overlayTriangle.coord(), this.baseTriangle.coord());
-    },
-    getTargetPath() {
-      return this.targetPath;
+      var overlayCoord = this.overlayTriangle.coord(),
+          baseCoord = this.baseTriangle.coord(),
+          matrix = Matrix.from(
+            this.baseAffine[0],
+            this.baseAffine[3],
+            this.baseAffine[1],
+            this.baseAffine[4],
+            this.baseAffine[2],
+            this.baseAffine[5]
+          ),
+          transformedCoord = matrix.applyToArray(baseCoord);
+      return Matrix.fromTriangles(overlayCoord, transformedCoord);
     }
   };
 
@@ -151,6 +169,11 @@
       if (this.scale <= 1) { return; }
       this.scale--;
       this.imageGroup.scale(this.scale, this.scale);
+    },
+    reset() {
+      this.scale = 1;
+      this.imageGroup.scale(this.scale, this.scale);
+      this.imageGroup.move(0, 0);
     }
   };
 
@@ -159,13 +182,17 @@
     Object.assign(thumbnails, Calibrator.Node(element));
     thumbnails.element.on("click", function(event) {
       var div = $(event.target).parent();
-      $(thumbnails).trigger('selected', { src: div.data("src"), path: div.data("path"), points: div.data("points") });
+      $(thumbnails).trigger('selected', { src: div.data("src"), points: div.data("points"), affine: div.data("affine") });
     });
     return thumbnails;
   };
   Calibrator.Thumbnails.prototype = {
     baseImagePath() {
       var div = this.element.find("div.thumbnail:first-child");
+      return div.data("src");
+    },
+    overlayImagePath() {
+      var div = this.element.find("div.thumbnail").filter(".hidden");
       return div.data("src");
     }
   };

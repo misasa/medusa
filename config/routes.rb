@@ -245,6 +245,7 @@ Medusa::Application.routes.draw do
         get :family
         post 'move_to_top'
         post 'tiles'
+        get :calibrate
       end
     end
   end

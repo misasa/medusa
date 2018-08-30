@@ -9,7 +9,7 @@
   </div>
   <div class="col-lg-12">
     <div class="row">
-      <%= form_for AttachmentFile.new, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
+      <%= form_for @image, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
 	<div class="form-group col-lg-10">
 	  <%= f.text_field :affine_matrix_in_string, readonly: true, id: "affine_matrix", class: "form-control col-lg-10" %>
 	</div>
@@ -22,11 +22,14 @@
   <div class="col-lg-12">
     <div class="thumbnails pull-left">
       <% @surface.images.each_with_index do |image, index| %>
-	<%= content_tag :div, class: "thumbnail pull-left" + (index.zero? ? " hidden" : ""), data: { path: attachment_file_path(image.id, format: "json"), src: image.path, points: @surface.calibration_points(image.calibration_points_on_world) } do %>
+	<%= content_tag :div, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " hidden" : ""), data: { src: image.path, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), affine: image.affine_matrix.presence } do %>
 	  <%= image.decorate.picture(width: 70, height: 70, type: :thumb) %>
 	<% end %>
       <% end %>
     </div>
+  </div>
+  <div class="col-lg-12">
+    <%= link_to @surface.name, surface_path(@surface, tab: "image") %>
   </div>
 </div>
 <%= javascript_tag do %>
@@ -43,8 +46,7 @@
     }
     $("#affine_matrix").val("[" + array.join(";") + "]");
   });
-  $(document).on("click", "#calibrator-button", function() {
-    var form = $("#calibrator-form");
-    form.attr("action", calibrator.getTargetPath());
+  $(document).on("succeed.ajaxForm", "#calibrator-form", function() {
+    location.reload();
   });
 <% end %>

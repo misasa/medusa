@@ -52,6 +52,10 @@ class SurfaceImagesController < ApplicationController
     respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
   end
 
+  def calibrate
+    respond_with @surface_image
+  end
+
   private
 
   def image_params

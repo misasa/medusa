@@ -324,7 +324,7 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def world_pairs_on_pixel(pairs)
-    return if affine_matrix.blank?
+    return if affine_matrix.blank? || pairs.blank?
     xys = transform_points(pairs, :world2xy)
     xys.map{|x, y| image_coord2xy(x, y).map{|z| percent2pixel(z)} }
   end
