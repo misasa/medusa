@@ -4,7 +4,7 @@ class Surface < ActiveRecord::Base
   paginates_per 10
 
   has_many :surface_images, :dependent => :destroy, :order => ("position ASC")
-  has_many :images, through: :surface_images
+  has_many :images, through: :surface_images, after_add: :make_tile_of_added_image
   has_many :spots, through: :images
 
   after_save :make_map
@@ -100,7 +100,7 @@ class Surface < ActiveRecord::Base
   end
 
   def bounds
-    return Array.new(4) { 0 } if globe?
+    return Array.new(4) { 0 } if globe? || images.blank?
     left,upper,right,bottom = images[0].bounds
     images.each do |image|
       next if image.bounds.blank?
@@ -129,5 +129,14 @@ class Surface < ActiveRecord::Base
     else
       super
     end
+  end
+
+  private
+
+  def make_tile_of_added_image(image)
+    return if image.affine_matrix.blank?
+    index = surface_images.find_index { |surface_image| surface_image.image_id == image.id }
+    return unless index
+    TileWorker.perform_async(surface_images[index].id, :transparent => index > 0)
   end
 end

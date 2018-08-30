@@ -1,0 +1,52 @@
+<div id="calibrator" class="row">
+  <div class="col-lg-12">
+    <div class="viewer pull-left"></div>
+    <div class="controller base pull-left"></div>
+    <div class="controller overlay pull-left"></div>
+  </div>
+  <div class="col-lg-12">
+    <input class="opacity" type="range" min="0" max="1" step="0.1" style="width: 60px; margin: 3px;">
+  </div>
+  <div class="col-lg-12">
+    <div class="row">
+      <%= form_for @image, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
+	<div class="form-group col-lg-10">
+	  <%= f.text_field :affine_matrix_in_string, readonly: true, id: "affine_matrix", class: "form-control col-lg-10" %>
+	</div>
+	<%= button_tag title: "update affine matrix", id: "calibrator-button", class: "btn btn-default" do %>
+	  <span class="glyphicon glyphicon-save"></span>
+	<% end %>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="thumbnails pull-left">
+      <% @surface.images.each_with_index do |image, index| %>
+	<%= content_tag :div, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " hidden" : ""), data: { src: image.path, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), affine: image.affine_matrix.presence } do %>
+	  <%= image.decorate.picture(width: 70, height: 70, type: :thumb) %>
+	<% end %>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <%= link_to @surface.name, surface_path(@surface, tab: "image") %>
+  </div>
+</div>
+<%= javascript_tag do %>
+  var calibrator = Calibrator("#calibrator");
+  $(calibrator).on('change', function() {
+    var matrix = this.affineMatrix();
+        array = [
+          [matrix.a, matrix.c, matrix.e],
+          [matrix.b, matrix.d, matrix.f],
+          [0, 0, 1]
+        ];
+    for (i = 0; i < 3; i++) {
+      array[i] = array[i].map(function(x) { return x.toExponential(3); }).join(",");
+    }
+    $("#affine_matrix").val("[" + array.join(";") + "]");
+  });
+  $(document).on("succeed.ajaxForm", "#calibrator-form", function() {
+    location.reload();
+  });
+<% end %>

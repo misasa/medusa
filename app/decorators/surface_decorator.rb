@@ -153,6 +153,7 @@ class SurfaceDecorator < Draper::Decorator
   end
 
   def base_image_url
+    return if surface_images.blank?
     si = surface_images.first
     h.raw(h.url_for_tile(si) + "#{si.image.id}/0/0_0.png")
   end
