@@ -6,15 +6,17 @@
 <div class="row">
   <div id="show-tools" class="col-lg-4">
     <div class="row btn-toolbar tool-selector" role="toolbar">
+      <% if @spot.attachment_file %>
       <div class="btn-group btn-group-sm">
         <%= link_to family_spot_path(@spot), class: "btn btn-default activate", id: "tree-conifer-button", remote: true do %>
-          <span class="glyphicon glyphicon-tree-conifer"></span>
+        <span class="glyphicon glyphicon-tree-conifer"></span>
         <% end %>
       </div>
+      <% end %>
 
       <% if can? :update, @spot %>
       <div class="btn-group btn-group-sm">
-        <%= link_to edit_spot_path(@spot), class: "btn btn-default", id: "pencil-button", remote: true do %>
+        <%= link_to edit_spot_path(@spot), class: @spot.attachment_file ? "btn btn-default": "btn btn-default activate", id: "pencil-button", remote: true do %>
           <span class="glyphicon glyphicon-pencil"></span>
         <% end %>
         <%= link_to property_spot_path(@spot), class: "btn btn-default", remote: true do  %>
@@ -30,15 +32,28 @@
 <div class="display-type">
   <div id="display-type-html">
 
+    <% if @spot.attachment_file %>
     <div class="spot-viewer">
       <%= hidden_field_tag nil, @spot.target_uid, class: "target-uid" %>
       <%= content_tag :svg, nil, class: "spot-canvas", width: 800, height: 600, "data-scale" => 2, "data-image" => attachment_file_path(@spot.attachment_file, format: :svg) %>
     </div>
     <%= rplot_iframe @spot %>
+    <% else %>
+    <div style="height:500px;">
+      <%= @spot.surface.decorate.map %>
+      <%= javascript_tag "initSurfaceMap();" %>
+    </div>
+    <% end %>
   </div>
 
   <div class="hidden" id="display-type-tex">
-    <pre><code><%= @spot.attachment_file.decorate.to_tex %></code></pre>
+    <pre><code>
+      <% if @spot.attachment_file %>
+      <%= @spot.attachment_file.decorate.to_tex %>
+      <% else %>
+      <%= @spot.surface.decorate.to_tex %>
+      <% end %>
+    </code></pre>
   </div>
 </div>
 

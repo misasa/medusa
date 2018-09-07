@@ -12,7 +12,11 @@ class NestedResources::SpotsController < ApplicationController
 
   def create
     @spot = Spot.new(spot_params)
-    @parent.spots << @spot
+    if @parent.is_a?(Surface)
+      @parent.direct_spots << @spot
+    else
+      @parent.spots << @spot
+    end
     respond_with @spot, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
@@ -36,6 +40,8 @@ class NestedResources::SpotsController < ApplicationController
       :description,
       :spot_x,
       :spot_y,
+      :world_x,
+      :world_y,
       :target_uid,
       :radius_in_percent,
       :stroke_color,
@@ -64,7 +70,11 @@ class NestedResources::SpotsController < ApplicationController
   end
 
   def find_resources
-    @parent = AttachmentFile.find(params[:attachment_file_id])
+    @parent = if params[:attachment_file_id]
+                AttachmentFile.find(params[:attachment_file_id])
+              elsif params[:surface_id]
+                Surface.find(params[:surface_id])
+              end
   end
 
 end

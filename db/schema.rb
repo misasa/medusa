@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180309025838) do
+ActiveRecord::Schema.define(version: 20180712061554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -380,9 +380,13 @@ ActiveRecord::Schema.define(version: 20180309025838) do
     t.boolean  "with_cross",         comment: "クロス表示フラグ"
     t.datetime "created_at",         comment: "作成日時"
     t.datetime "updated_at",         comment: "更新日時"
+    t.integer  "surface_id",         comment: "SurfaceID"
+    t.float    "world_x",            comment: "ワールドX座標"
+    t.float    "world_y",            comment: "ワールドY座標"
   end
 
   add_index "spots", ["attachment_file_id"], name: "index_spots_on_attachment_file_id", using: :btree
+  add_index "spots", ["surface_id"], name: "index_spots_on_surface_id", using: :btree
 
   create_table "surface_images", force: true do |t|
     t.integer  "surface_id"

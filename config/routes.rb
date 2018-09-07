@@ -248,6 +248,7 @@ Medusa::Application.routes.draw do
         get :calibrate
       end
     end
+    resources :spots, only: [:index, :create, :update, :destroy], controller: "nested_resources/spots"
   end
 
   resources :tables, except: [:new] do
