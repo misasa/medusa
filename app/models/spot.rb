@@ -28,7 +28,11 @@ class Spot < ActiveRecord::Base
 
   def generate_name
     if target_uid.blank?
-      self.name = "untitled spot #{attachment_file.spots.size + 1}"
+      if attachment_file
+        self.name = "untitled spot #{attachment_file.spots.size + 1}"
+      else
+        self.name = "untitled spot #{surface.spots.size + 1}"
+      end
     else
       record_property = RecordProperty.find_by_global_id(target_uid)
       if record_property.blank? || record_property.datum.blank?
