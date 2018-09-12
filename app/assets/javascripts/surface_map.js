@@ -38,7 +38,7 @@ L.Control.Radius = L.Control.extend({
   onAdd: function(map) {
     var layerGroup = this._layerGroup,
 	div = L.DomUtil.create('div', 'leaflet-control-layers'),
-        range = L.DomUtil.create('input');
+        range = this.range = L.DomUtil.create('input');
     range.type = 'range';
     range.min = 0.1;
     range.max = 10;
@@ -46,6 +46,9 @@ L.Control.Radius = L.Control.extend({
     range.value = 3;
     range.style = 'width:60px;margin:3px;';
     div.appendChild(range);
+    L.DomEvent.on(range, 'click', function(event) {
+      event.preventDefault();
+    });
     L.DomEvent.on(range, 'change', function() {
       layerGroup.eachLayer(function(layer) {
 	layer.setRadius(range.value);
@@ -63,6 +66,9 @@ L.Control.Radius = L.Control.extend({
       map.dragging.enable();
     });
     return div;
+  },
+  getValue: function() {
+    return this.range.value;
   }
 });
 L.control.radius = function(layerGroup, options) {
@@ -114,6 +120,8 @@ function initSurfaceMap() {
   var urlRoot = div.dataset.urlRoot;
   var global_id = div.dataset.globalId;
   var length = parseFloat(div.dataset.length);
+  var matrix = JSON.parse(div.dataset.matrix);
+  var addSpot = JSON.parse(div.dataset.addSpot);
   var attachment_files = JSON.parse(div.dataset.attachmentFiles);
   var spots = JSON.parse(div.dataset.spots);
   var layers = [];
@@ -140,17 +148,40 @@ function initSurfaceMap() {
     crs: L.CRS.Simple,
     layers: layers
   });
+  map.getSpotPoint = function() {
+    if (!addingSpot) { return; }
+    var point = map.project(addingSpot.getLatLng(), 0),
+	x = matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2],
+	y = matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2];
+    return { x: x, y: y };
+  };
 
   var spotsLayer = L.layerGroup.spots(map, spots, urlRoot);
   map.addLayer(spotsLayer);
 
   overlayMaps['grid'] = L.layerGroup.grid(map, length);
 
-  L.control.radius(spotsLayer, {position: 'bottomright'}).addTo(map);
+  var radiusControl = L.control.radius(spotsLayer, {position: 'bottomright'}).addTo(map);
+
+  var addingSpot;
+  map.on('click', function(event) {
+    if (!addSpot || event.originalEvent.defaultPrevented) { return; }
+    var self = this;
+    setTimeout( function() {
+      var x = (event.containerPoint.x + self.getPixelBounds().min.x) / self.getZoomScale(self.getZoom(), 0),
+          y = (event.containerPoint.y + self.getPixelBounds().min.y) / self.getZoomScale(self.getZoom(), 0),
+          options = L.Util.extend({}, { color: 'blue', fillColor: '#30f', fillOpacity: 0.5, radius: radiusControl.getValue() }, options);
+      if (addingSpot) { addingSpot.remove(); }
+      addingSpot = new L.circle(map.unproject([x, y], 0), options);
+      addingSpot.addTo(spotsLayer);
+    }, 100);
+  });
 
   L.control.surfaceScale({ imperial: false, length: length }).addTo(map);
 
   L.control.layers(baseMaps, overlayMaps).addTo(map);
 
   map.setView(map.unproject([256 / 2, 256 / 2], 0), zoom);
+
+  surfaceMap = map;
 }

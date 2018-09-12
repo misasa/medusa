@@ -38,31 +38,52 @@ class SurfaceDecorator < Draper::Decorator
     surface_images[0].decorate.to_tex unless surface_images.empty?
   end
 
-  def map(options = {})
+  def affine_matrix_for_map(x = 256, y = 256)
     left, top, _ = bounds
     len = length
     x_offset = (len - width) / 2
     y_offset = (len - height) / 2
+    Matrix[
+      [256 / len, 0, (x_offset - left) * 256 / len],
+      [0, -256 / len, (y_offset + top) * 256 / len],
+      [0, 0, 1]
+    ]
+  end
+
+  def map(options = {})
+    matrix = affine_matrix_for_map
     target_uids = images.inject([]) { |array, image| array + image.spots.map(&:target_uid) }.uniq
     targets = RecordProperty.where(global_id: target_uids).index_by(&:global_id)
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data: {
                     base_url: Settings.map_url,
                     url_root: "#{Rails.application.config.relative_url_root}/",
                     global_id: global_id,
-                    length: len,
+                    length: length,
+                    matrix: matrix.inv,
+                    add_spot: options[:add_spot] || false,
                     attachment_files: images.each_with_object({}) { |image, hash| hash[File.basename(image.name, ".*")] = image.id },
                     spots: images.inject([]) { |array, image|
                       array + image.spots.map { |spot|
                         target = targets[spot.target_uid]
                         worlds = spot.spot_world_xy
-                        x = (worlds[0] - left + x_offset) * 256 / len
-                        y = (top - worlds[1] + y_offset) * 256 / len
+                        x = matrix[0, 0] * worlds[0] + matrix[0, 1] * worlds[1] + matrix[0, 2]
+                        y = matrix[1, 0] * worlds[0] + matrix[1, 1] * worlds[1] + matrix[1, 2]
                         {
                           id: target.try(:global_id) || spot.global_id,
                           name: target.try(:name) || spot.name,
                           x: x,
                           y: y
                         }
+                      }
+                    } + direct_spots.map { |spot|
+                      target = targets[spot.target_uid]
+                      x = matrix[0, 0] * spot.world_x + matrix[0, 1] * spot.world_y + matrix[0, 2]
+                      y = matrix[1, 0] * spot.world_x + matrix[1, 1] * spot.world_y + matrix[1, 2]
+                      {
+                        id: target.try(:global_id) || spot.global_id,
+                        name: target.try(:name) || spot.name,
+                        x: x,
+                        y: y
                       }
                     }
                   })

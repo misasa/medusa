@@ -1,27 +1,38 @@
 class Spot < ActiveRecord::Base
   include HasRecordProperty
 
-  attr_accessor :world_x, :world_y
   belongs_to :attachment_file, inverse_of: :spots
+  belongs_to :surface
 
-  validates :attachment_file, existence: true
-  validates :spot_x, presence: true
-
-
-  validates :spot_y, presence: true
+  with_options if: -> (spot) { spot.attachment_file_id } do |opt|
+    opt.validates :attachment_file, existence: true
+    opt.validates :spot_x, presence: true
+    opt.validates :spot_y, presence: true
+  end
+  with_options if: -> (spot) { spot.surface_id } do |opt|
+    opt.validates :surface, existence: true
+    opt.validates :world_x, presence: true
+    opt.validates :world_y, presence: true
+  end
 
   before_validation :generate_name, if: "name.blank?"
   before_validation :generate_stroke_width, if: "stroke_width.blank?"
+  before_save :set_world_xy
 #  after_create :attachment_to_target
 
   def surface
-    nil if attachment_file.surfaces.blank?
-    attachment_file.surfaces[0]
+    Surface.find_by(id: surface_id) || attachment_file.surfaces[0]
+  rescue
+    nil
   end
 
   def generate_name
     if target_uid.blank?
-      self.name = "untitled spot #{attachment_file.spots.size + 1}"
+      if attachment_file
+        self.name = "untitled spot #{attachment_file.spots.size + 1}"
+      else
+        self.name = "untitled spot #{surface.spots.size + 1}"
+      end
     else
       record_property = RecordProperty.find_by_global_id(target_uid)
       if record_property.blank? || record_property.datum.blank?
@@ -36,6 +47,10 @@ class Spot < ActiveRecord::Base
     self.stroke_width = attachment_file.percent2pixel(0.5)
   end
 
+  def set_world_xy
+    return unless attachment_file_id
+    self.world_x, self.world_y = spot_world_xy
+  end
 
   def get_analysis
     target if target && target.instance_of?(Analysis)
@@ -146,7 +161,7 @@ class Spot < ActiveRecord::Base
 
   def spot_world_xy
     pixels = [[spot_x, spot_y]]
-    return unless attachment_file.affine_matrix
+    return unless attachment_file && attachment_file.affine_matrix
     return if attachment_file.affine_matrix.empty?
     worlds = attachment_file.pixel_pairs_on_world(pixels)
     worlds[0]
@@ -154,11 +169,11 @@ class Spot < ActiveRecord::Base
 
 
   def world_x
-    spot_world_xy[0] if spot_world_xy
+    super || (spot_world_xy[0] if spot_world_xy)
   end
 
   def world_y
-    spot_world_xy[1] if spot_world_xy
+    super || (spot_world_xy[1] if spot_world_xy)
   end
 
   def to_svg

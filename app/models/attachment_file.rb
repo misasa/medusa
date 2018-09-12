@@ -22,6 +22,7 @@ class AttachmentFile < ActiveRecord::Base
   after_post_process :save_geometry
 #  after_save :rotate
   after_save :check_affine_matrix
+  after_save :update_spots_world_xy
 
   serialize :affine_matrix, Array
 
@@ -127,6 +128,11 @@ class AttachmentFile < ActiveRecord::Base
     cmd = "image_in_image #{image_1} #{image_2} #{array_str} -o #{image_2}"
     logger.info(cmd)
     system(cmd)
+  end
+
+  def update_spots_world_xy
+    return unless affine_matrix_changed?
+    spots.each(&:save!)
   end
 
   def pdf?
