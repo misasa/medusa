@@ -11,6 +11,8 @@
     calibrator.opacity = calibrator.element.find("input.opacity");
 
     calibrator.viewer.addZoomControl().draggable();
+    calibrator.base.addZoomControl().draggable();
+    calibrator.overlay.addZoomControl().draggable();
 
     var overlayImagePath = calibrator.thumbnails.overlayImagePath(),
 	resizeOverlay = function() {
@@ -23,7 +25,7 @@
     overlayImage = calibrator.overlay.image(overlayImagePath);
     $(overlayImage).on('loaded', function(event, image) {
       image.fit();
-      overlayTriangle = calibrator.overlayTriangle = Calibrator.Triangle(calibrator.overlay.svg, image);
+      overlayTriangle = calibrator.overlayTriangle = Calibrator.Triangle(calibrator.overlay.imageGroup, image);
       $(overlayTriangle).on('dragmove', resizeOverlay);
     });
 
@@ -41,7 +43,7 @@
 	image.fit();
 
 	if (baseTriangle) { baseTriangle.remove(); }
-	baseTriangle = calibrator.baseTriangle = Calibrator.Triangle(calibrator.base.svg, image);
+	baseTriangle = calibrator.baseTriangle = Calibrator.Triangle(calibrator.base.imageGroup, image);
         if (points) {
           baseTriangle.set(points);
         } else {
