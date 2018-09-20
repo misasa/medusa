@@ -11,6 +11,8 @@
     calibrator.opacity = calibrator.element.find("input.opacity");
 
     calibrator.viewer.addZoomControl().draggable();
+    calibrator.base.addZoomControl().draggable();
+    calibrator.overlay.addZoomControl().draggable();
 
     var overlayImagePath = calibrator.thumbnails.overlayImagePath(),
 	resizeOverlay = function() {
@@ -23,7 +25,7 @@
     overlayImage = calibrator.overlay.image(overlayImagePath);
     $(overlayImage).on('loaded', function(event, image) {
       image.fit();
-      overlayTriangle = calibrator.overlayTriangle = Calibrator.Triangle(calibrator.overlay.svg, image.image);
+      overlayTriangle = calibrator.overlayTriangle = Calibrator.Triangle(calibrator.overlay.imageGroup, image);
       $(overlayTriangle).on('dragmove', resizeOverlay);
     });
 
@@ -41,7 +43,7 @@
 	image.fit();
 
 	if (baseTriangle) { baseTriangle.remove(); }
-	baseTriangle = calibrator.baseTriangle = Calibrator.Triangle(calibrator.base.svg, image.image);
+	baseTriangle = calibrator.baseTriangle = Calibrator.Triangle(calibrator.base.imageGroup, image);
         if (points) {
           baseTriangle.set(points);
         } else {
@@ -58,6 +60,7 @@
 	if(viewerOverlayImage) { viewerOverlayImage.remove() }
 	viewerOverlayImage = calibrator.viewer.image(overlayImagePath).opacity(calibrator.opacity.val());
 	$(viewerOverlayImage).on('loaded', function(event, image) {
+	  image.stroke({ width: 5, color: "#f00" });
 	  resizeOverlay();
 	});
       });
@@ -94,7 +97,8 @@
 
   Calibrator.Image = function(svg, src) {
     var image = Object.create(Calibrator.Image.prototype);
-    image.image = svg.image(src).loaded(function(loader) {
+    var group = image.group = svg.group();
+    image.image = group.image(src).loaded(function(loader) {
       image.width = loader.width;
       image.height = loader.height;
       var scale = 1;
@@ -110,17 +114,20 @@
   };
   Calibrator.Image.prototype = {
     fit() {
-      this.image.scale(this.scale, this.scale).translate(0, 0);
+      this.group.scale(this.scale, this.scale).translate(0, 0);
     },
     transform(matrix) {
-      this.image.transform(matrix);
+      return this.group.transform(matrix);
     },
     remove() {
-      this.image.remove();
+      this.group.remove();
     },
     opacity(val) {
       this.image.attr({opacity: val });
       return this;
+    },
+    stroke(options) {
+      this.group.rect(this.width, this.height).attr({ "fill-opacity": 0 }).stroke(options);
     }
   };
 
@@ -203,16 +210,16 @@
     triangle.circles = [];
     triangle.lines = [];
     var image = image, transform = image.transform(), color = "#f00",
-        width = image.width() * transform.scaleX, height = image.height() * transform.scaleY,
+        width = image.width * transform.scaleX, height = image.height * transform.scaleY,
         x1 = 0, y1 = 0,
         x2 = width, y2 = 0,
         x3 = width, y3 = height,
         r = 10, d = r * 2,
         draggableOptions = { minX: -r, minY: -r, maxX: width + r, maxY: height + r },
 	path = ["M", -r, 0, "H", r, "M", 0, -r, "V", r, "M", -r, 0, "A", r, r, 0, 1, 0, r, 0, "A", r, r, 0, 1, 0, -r, 0].join(" ");
-    triangle.circles.push(svg.path(path).attr({'fill-opacity': 0}).stroke(color).move(x1 - r, y1 - r).draggable(draggableOptions));
-    triangle.circles.push(svg.path(path).attr({'fill-opacity': 0}).stroke(color).move(x2 - r, y2 - r).draggable(draggableOptions));
-    triangle.circles.push(svg.path(path).attr({'fill-opacity': 0}).stroke(color).move(x3 - r, y3 - r).draggable(draggableOptions));
+    triangle.circles.push(svg.path(path).attr({'fill-opacity': 0}).stroke("#f00").move(x1 - r, y1 - r).draggable(draggableOptions));
+    triangle.circles.push(svg.path(path).attr({'fill-opacity': 0}).stroke("#0f0").move(x2 - r, y2 - r).draggable(draggableOptions));
+    triangle.circles.push(svg.path(path).attr({'fill-opacity': 0}).stroke("#00f").move(x3 - r, y3 - r).draggable(draggableOptions));
     triangle.lines.push(svg.line(x1, y1, x2, y2).stroke({ width: 1, color: color }));
     triangle.lines.push(svg.line(x2, y2, x3, y3).stroke({ width: 1, color: color }));
     triangle.lines.push(svg.line(x3, y3, x1, y1).stroke({ width: 1, color: color }));
@@ -243,7 +250,7 @@
       this.lines[2].plot(x3, y3, x1, y1);
     },
     reset() {
-      var image = this.image, width = image.width(), height = image.height();
+      var image = this.image, width = image.width, height = image.height;
       this.set([
         [0, 0],
         [width, 0],
@@ -271,7 +278,7 @@
     },
     coord() {
       var transform = this.image.transform(), scaleX = transform.scaleX, scaleY = transform.scaleY,
-          image = this.image, width = image.width(), height = image.height(),
+          image = this.image, width = image.width, height = image.height,
           length = width > height ? width : height;
       return [
         (this.circles[0].cx() / scaleX - width / 2) * 100 / length,
