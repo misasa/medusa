@@ -1,0 +1,27 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th></th>
+      <th>name</th>
+      <th></th>
+      <th>spots</th>
+      <th>global-id</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @surface_layer.surface_images.order("position ASC").each do |surface_image| %>
+      <% attachment_file = surface_image.image %>
+      <% next unless attachment_file %>
+
+      <tr>
+        <td></td>
+        <td><%= attachment_file.decorate.picture(width: 70, height: 70, type: :thumb) %></td>
+        <td><%= link_to_if can?(:read, attachment_file), attachment_file.data_file_name, attachment_file_path(attachment_file) %></td>
+        <td></td>
+        <td><%= attachment_file.spots.try!(:size) %></td>
+        <td><%= attachment_file.try!(:global_id) %></td> 
+      </tr>
+    <% end %>
+  </tbody>
+</table>

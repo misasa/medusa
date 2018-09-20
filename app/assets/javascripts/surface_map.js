@@ -122,25 +122,29 @@ function initSurfaceMap() {
   var length = parseFloat(div.dataset.length);
   var matrix = JSON.parse(div.dataset.matrix);
   var addSpot = JSON.parse(div.dataset.addSpot);
-  var attachment_files = JSON.parse(div.dataset.attachmentFiles);
+  var baseImage = JSON.parse(div.dataset.baseImage);
+  var layerGroups = JSON.parse(div.dataset.layerGroups);
+  var images = JSON.parse(div.dataset.images);
   var spots = JSON.parse(div.dataset.spots);
   var layers = [];
   var baseMaps = {};
   var overlayMaps = {};
   var zoom = 1;
 
-  var first = true;
-  for(name in attachment_files) {
-    var id = attachment_files[name];
-    var layer = L.tileLayer(baseUrl + global_id + '/' + id + '/{z}/{x}_{y}.png');
-    layers.push(layer);
-    if (first) {
-      baseMaps[name] = layer;
-      first = false;
-    } else {
-      overlayMaps[name] = layer;
+  var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png');
+  layers.push(layer);
+  baseMaps[baseImage.name] = layer;
+  layerGroups.concat([{ name: "", opacity: 100 }]).forEach(function(layerGroup) {
+    var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0;
+    if (images[name]) {
+      images[name].forEach(function(id) {
+	L.tileLayer(baseUrl + global_id + '/' + id + '/{z}/{x}_{y}.png', { opacity: opacity }).addTo(group);
+      });
+      layers.push(group);
+      if (name === "") { name = "not layered"; }
+      overlayMaps[name] = group;
     }
-  }
+  });
 
   var map = L.map('surface-map', {
     maxZoom: 8,
