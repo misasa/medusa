@@ -1,9 +1,14 @@
 class SurfaceImage < ActiveRecord::Base
   belongs_to :surface
-  belongs_to :image, class_name: AttachmentFile 
+  belongs_to :image, class_name: AttachmentFile
+  belongs_to :surface_layer
   acts_as_list :scope => :surface_id, column: :position
-  
+
+  validates :surface_layer, existence: true, allow_nil: true
   validate :check_image
+
+  scope :not_base, -> { where.not(position: minimum(:position)) }
+  scope :not_belongs_to_layer, -> { not_base.where(surface_layer_id: nil) }
   
   def tile_dir
     File.join(surface.map_dir,image.id.to_s)

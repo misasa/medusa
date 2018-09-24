@@ -79,6 +79,10 @@ class SurfacesController < ApplicationController
         :guest_writable,
         :published,
         :lost
+      ],
+      surface_images_attributes: [
+        :id,
+        :surface_layer_id
       ]
     )
   end

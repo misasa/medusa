@@ -1,0 +1,19 @@
+<%= form_for @surface_layer, url: surface_layer_path(@surface, @surface_layer, format: :json), remote: true, html: { class: "update", role: "form" } do |f| %>
+  <div class="form-group form-group-sm">
+    <%= f.label :name, class: "small" %>
+    <%= f.text_field :name, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :opacity, class: "small" %>
+    <%= f.text_field :opacity, class: "form-control input-sm" %>
+  </div>
+  <%= f.button class: "btn btn-default" do %>
+  <span class="glyphicon glyphicon-save"></span>
+  <% end %>
+<% end %>
+
+<%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", "#edit_surface_layer_<%= @surface_layer.id %>", function() {
+    location.href="<% surface_layer_path(@surface, @surface_layer) %>";
+  });
+<% end %>

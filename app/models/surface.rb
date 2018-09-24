@@ -5,8 +5,11 @@ class Surface < ActiveRecord::Base
 
   has_many :surface_images, :dependent => :destroy, :order => ("position ASC")
   has_many :images, through: :surface_images, after_add: :make_tile_of_added_image
+  has_many :surface_layers, :dependent => :destroy, :order => ("priority ASC")
   has_many :spots, through: :images
   has_many :direct_spots, class_name: "Spot", foreign_key: :surface_id
+
+  accepts_nested_attributes_for :surface_images
 
   after_save :make_map
 

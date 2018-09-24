@@ -395,7 +395,22 @@ ActiveRecord::Schema.define(version: 20180712061554) do
     t.boolean  "wall"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "surface_layer_id", comment: "レイヤID"
   end
+
+  add_index "surface_images", ["surface_layer_id"], name: "index_surface_images_on_surface_layer_id", using: :btree
+
+  create_table "surface_layers", force: true do |t|
+    t.integer  "surface_id",               null: false, comment: "SurfaceID"
+    t.string   "name",                     null: false, comment: "レイヤ名"
+    t.integer  "opacity",    default: 100, null: false, comment: "不透明度"
+    t.integer  "priority",                 null: false, comment: "優先順位"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "surface_layers", ["surface_id", "name"], name: "index_surface_layers_on_surface_id_and_name", unique: true, using: :btree
+  add_index "surface_layers", ["surface_id"], name: "index_surface_layers_on_surface_id", using: :btree
 
   create_table "surfaces", force: true do |t|
     t.string   "name"

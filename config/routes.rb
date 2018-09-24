@@ -249,6 +249,11 @@ Medusa::Application.routes.draw do
       end
     end
     resources :spots, only: [:index, :create, :update, :destroy], controller: "nested_resources/spots"
+    resources :layers, only: [:show, :create, :edit, :update, :destroy], controller: "surface_layers" do
+      member do
+        post 'move_to_top'
+      end
+    end
   end
 
   resources :tables, except: [:new] do

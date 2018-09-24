@@ -52,6 +52,8 @@ class SurfaceDecorator < Draper::Decorator
 
   def map(options = {})
     matrix = affine_matrix_for_map
+    records = surface_images.includes(:surface_layer, image: :spots)
+    images = records.map(&:image)
     target_uids = images.inject([]) { |array, image| array + image.spots.map(&:target_uid) }.uniq
     targets = RecordProperty.where(global_id: target_uids).index_by(&:global_id)
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data: {
@@ -61,7 +63,11 @@ class SurfaceDecorator < Draper::Decorator
                     length: length,
                     matrix: matrix.inv,
                     add_spot: options[:add_spot] || false,
-                    attachment_files: images.each_with_object({}) { |image, hash| hash[File.basename(image.name, ".*")] = image.id },
+                    base_image: { id: images.first.try!(:id), name: images.first.try!(:name) },
+                    layer_groups: surface_layers.map { |layer| { name: layer.name, opacity: layer.opacity } },
+                    images: surface_images[1..-1].each_with_object(Hash.new { |h, k| h[k] = [] }) { |surface_image, hash|
+                      hash[surface_image.surface_layer.try!(:name)] << surface_image.image_id
+                    },
                     spots: images.inject([]) { |array, image|
                       array + image.spots.map { |spot|
                         target = targets[spot.target_uid]

@@ -1,0 +1,96 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th></th>
+      <th>name</th>
+      <th>opacity</th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @surface.surface_layers.order("priority ASC").each do |surface_layer| %>
+      <tr>
+        <td></td>
+        <td><%= link_to_if can?(:read, surface_layer), list_title(surface_layer), surface_layer_path(@surface, surface_layer) %></td>
+	<td><%= surface_layer.opacity %></td>
+        <td>
+          <%= link_to move_to_top_surface_layer_path(@surface, surface_layer) + tab_param(__FILE__), method: :move_to_top ,title: "move to top" do %>
+            <span class="glyphicon glyphicon-arrow-up"></span>
+          <% end %>
+        </td>
+        <td>
+          <%= link_to surface_layer_path(@surface, surface_layer) + tab_param(__FILE__), method: :delete, title: "unlink image", data: {confirm: t("confirm.unlink")} do %>
+            <span class="glyphicon glyphicon-remove"></span>
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <%= form_for SurfaceLayer.new, url: surface_layers_path(@surface) do |f|%>
+        <%= hidden_tabname_tag(__FILE__) %>
+        <th></th>
+        <th>
+	  <%= f.text_field :name %>
+	  <%= f.hidden_field :priority, value: @surface.surface_layers.max_priority + 1 %>
+	</th>
+        <th colspan= "2">
+	  <%= f.text_field :opacity %>
+	</th>
+        <th>
+          <%= f.button title:"add layer", class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+        </th>
+      <% end %>
+    </tr>
+  </tfoot>
+</table>
+
+<%= form_for @surface do |f| %>
+  <ul>
+    <% @surface.surface_layers.each do |surface_layer| %>
+      <li>
+	<%= surface_layer.name %>
+	<%= content_tag :ul, class: "surface-layer", data: { id: surface_layer.id }, style: "min-height: 20px;" do %>
+	  <% surface_layer.surface_images.each do |surface_image| %>
+	    <li class="surface-image">
+	      <%= surface_image.image.name %>
+	      <%= f.fields_for :surface_images, surface_image do |si| %>
+		<%= si.hidden_field :surface_layer_id, class: "layer-id" %>
+	      <% end %>
+	    </li>
+	  <% end %>
+	<% end %>
+      </li>
+    <% end %>
+    <li>
+      Not belongs to layer
+      <%= content_tag :ul, class: "surface-layer", style: "min-height: 20px;" do %>
+	<% @surface.surface_images.not_belongs_to_layer.each do |surface_image| %>
+	  <li class="surface-image">
+	    <%= surface_image.image.name %>
+	    <%= f.fields_for :surface_images, surface_image do |si| %>
+	      <%= si.hidden_field :surface_layer_id, class: "layer-id" %>
+	    <% end %>
+	  </li>
+	<% end %>
+      <% end %>
+    </li>
+  </ul>
+  <%= f.button title:"update belongs layer", class: "btn btn-default" do %>
+    <span class="glyphicon glyphicon-save"></span>
+  <% end %>
+<% end %>
+<%= javascript_tag do %>
+  (function($) {
+    $("ul.surface-layer").sortable({
+      connectWith: ".surface-layer",
+      receive: function(event, ui) {
+        ui.item.find("input.layer-id").val($(event.target).data("id"));
+      }
+    }).disableSelection();
+  })(jQuery);
+<% end %>
