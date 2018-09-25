@@ -56,7 +56,9 @@
 	<%= surface_layer.name %>
 	<%= content_tag :ul, class: "surface-layer", data: { id: surface_layer.id }, style: "min-height: 20px;" do %>
 	  <% surface_layer.surface_images.each do |surface_image| %>
+            <% next unless surface_image.image %>
 	    <li class="surface-image">
+	      <%= surface_image.image.decorate.picture(width: 70, height: 70, type: :thumb) %>
 	      <%= surface_image.image.name %>
 	      <%= f.fields_for :surface_images, surface_image do |si| %>
 		<%= si.hidden_field :surface_layer_id, class: "layer-id" %>
@@ -70,7 +72,9 @@
       Not belongs to layer
       <%= content_tag :ul, class: "surface-layer", style: "min-height: 20px;" do %>
 	<% @surface.surface_images.not_belongs_to_layer.each do |surface_image| %>
+          <% next unless surface_image.image %>
 	  <li class="surface-image">
+	    <%= surface_image.image.decorate.picture(width: 70, height: 70, type: :thumb) %>
 	    <%= surface_image.image.name %>
 	    <%= f.fields_for :surface_images, surface_image do |si| %>
 	      <%= si.hidden_field :surface_layer_id, class: "layer-id" %>
