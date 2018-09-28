@@ -4,8 +4,22 @@
     <div class="controller base pull-left"></div>
     <div class="controller overlay pull-left"></div>
   </div>
-  <div class="col-lg-12">
+  <div class="col-lg-4">
     <input class="opacity" type="range" min="0" max="1" step="0.1" style="width: 60px; margin: 3px;">
+  </div>
+  <div class="col-lg-8" >
+    <%= button_tag title: "move to left", class: "btn btn-default move", data: { direction: "left" } do %>
+      <span class="glyphicon glyphicon-arrow-left"></span>
+    <% end %>
+    <%= button_tag title: "move to right", class: "btn btn-default move", data: { direction: "right" } do %>
+      <span class="glyphicon glyphicon-arrow-right"></span>
+    <% end %>
+    <%= button_tag title: "move to up", class: "btn btn-default move", data: { direction: "up" } do %>
+      <span class="glyphicon glyphicon-arrow-up"></span>
+    <% end %>
+    <%= button_tag title: "move to down", class: "btn btn-default move", data: { direction: "down" } do %>
+      <span class="glyphicon glyphicon-arrow-down"></span>
+    <% end %>
   </div>
   <div class="col-lg-12">
     <div class="row">

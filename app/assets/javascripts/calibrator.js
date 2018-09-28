@@ -9,6 +9,7 @@
     calibrator.overlay = Calibrator.Viewer(calibrator.element.find("div.overlay"));
     calibrator.thumbnails = Calibrator.Thumbnails(calibrator.element.find("div.thumbnails"));
     calibrator.opacity = calibrator.element.find("input.opacity");
+    calibrator.moveButton = calibrator.element.find("button.move");
 
     calibrator.viewer.addZoomControl().draggable();
     calibrator.base.addZoomControl().draggable();
@@ -68,6 +69,29 @@
 
     $(calibrator.opacity).on('input', function(event) {
       viewerOverlayImage.opacity($(this).val());
+    });
+
+    $(calibrator.moveButton).on('mousedown', function(event) {
+      var xy = {
+	left: [-1, 0],
+	right: [1, 0],
+	up: [0, -1],
+	down: [0, 1]
+      },
+	  moveFunction = function () {
+	    if (!calibrator.direction) {
+	      return;
+	    }
+	    baseTriangle.dmove(...xy[calibrator.direction]);
+	    setTimeout(moveFunction, 100);
+	  };
+
+      calibrator.direction = $(this).data("direction");
+      moveFunction();
+    });
+
+    $(calibrator.moveButton).on('mouseup', function(event) {
+      calibrator.direction = undefined;
     });
 
     return calibrator;
@@ -288,6 +312,11 @@
         (this.circles[2].cx() / scaleX - width / 2) * 100 / length,
         (height / 2 - this.circles[2].cy() / scaleY) * 100 / length
       ];
+    },
+    dmove(x, y) {
+      this.circles[0].dmove(x, y).fire('dragmove');
+      this.circles[1].dmove(x, y).fire('dragmove');
+      this.circles[2].dmove(x, y).fire('dragmove');
     }
   }
 
