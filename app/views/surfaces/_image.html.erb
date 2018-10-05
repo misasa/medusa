@@ -44,11 +44,9 @@
           </td>
 
           <td>
-	    <% if @surface.surface_images.first != surface_image %>
-              <%= link_to calibrate_surface_image_path(@surface, attachment_file) + tab_param(__FILE__) ,title: "calibrate" do %>
-		<span class="glyphicon glyphicon-cog"></span>
-              <% end %>
-	    <% end %>
+            <%= link_to calibrate_surface_image_path(@surface, attachment_file) + tab_param(__FILE__) ,title: "calibrate" do %>
+	      <span class="glyphicon glyphicon-cog"></span>
+            <% end %>
           </td>
           <td>
             <%= link_to move_to_top_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :move_to_top ,title: "move to top" do %>
