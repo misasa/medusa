@@ -223,7 +223,7 @@
       return div.data("src");
     },
     overlayImagePath() {
-      var div = this.element.find("div.thumbnail").filter(".hidden");
+      var div = this.element.find("div.thumbnail").filter(".overlay");
       return div.data("src");
     }
   };
