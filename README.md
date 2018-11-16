@@ -1,6 +1,6 @@
 # Medusa
 
-Keep track any boxes.
+Keep track any stones.
 
 # Description
 
