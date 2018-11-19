@@ -1,4 +1,4 @@
-# Medusa
+# Rails project -- Medusa
 
 Keep track any stones.
 
