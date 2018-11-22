@@ -35,6 +35,7 @@ class SurfaceDecorator < Draper::Decorator
     # end
 
   def to_tex
+    return unless surface_images[0].image
     surface_images[0].decorate.to_tex unless surface_images.empty?
   end
 
@@ -182,6 +183,7 @@ class SurfaceDecorator < Draper::Decorator
   def base_image_url
     return if surface_images.blank?
     si = surface_images.first
+    return unless si.image
     h.raw(h.url_for_tile(si) + "#{si.image.id}/0/0_0.png")
   end
 end
