@@ -1,8 +1,8 @@
 <tr class="show-map" data-url="<%= map_surface_path(surface) %>">
   <td><%= check_box_tag("ids[]", surface.id, checked, id: "ids_#{surface.id}", class: "select-row") if can?(:update, surface) %>
-    <%= link_to(surface, :title => "edit map") do %>
-      <span class="glyphicon glyphicon-edit"></span>
-    <% end %>
+    <%#= link_to(surface, :title => "edit map") do %>
+      <!-- span class="glyphicon glyphicon-edit"></span -->
+    <%# end %>
   </td>
   <td>
     <% if surface.globe? %>
@@ -12,7 +12,8 @@
     <% end %>
   </td>
   <td><%#= link_to list_title(surface), surface %>
-    <%= link_to(list_title(surface), surface.rmap_url, class: "btn radio-button-group", :title => "view map", :target => ["_blank"]) %>
+    <%= link_to(list_title(surface), surface, class: "btn radio-button-group", :title => "view map", :target => ["_blank"]) %>
+    <%#= link_to('map', surface.rmap_url, class: "btn radio-button-group", :title => "edit map", :target => ["_blank"]) %>
   </td>
   <td><%= surface.images_count %></td>
   <td><%= surface.spots_count %></td>
