@@ -53,7 +53,7 @@
   <ul>
     <% @surface.surface_layers.each do |surface_layer| %>
       <li>
-	<%= surface_layer.name %>
+	layer <%= surface_layer.name %>
 	<%= content_tag :ul, class: "surface-layer", data: { id: surface_layer.id }, style: "min-height: 20px;" do %>
 	  <% surface_layer.surface_images.each do |surface_image| %>
             <% next unless surface_image.image %>
@@ -69,7 +69,7 @@
       </li>
     <% end %>
     <li>
-      Not belongs to layer
+      default
       <%= content_tag :ul, class: "surface-layer", style: "min-height: 20px;" do %>
 	<% @surface.surface_images.not_belongs_to_layer.each do |surface_image| %>
           <% next unless surface_image.image %>
