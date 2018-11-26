@@ -21,7 +21,7 @@
     <li>
       <% @attachment_file.surface_images.each do |surface_image| %>
         <% surface = surface_image.surface %>
-        <%= link_to(surface.name, surface_path(surface)) %>
+        <%= link_to(list_title(surface), surface_path(surface)) %>
       <% end %>
     </li>
   <% end %>  
