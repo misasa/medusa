@@ -141,7 +141,7 @@ function initSurfaceMap() {
 	L.tileLayer(baseUrl + global_id + '/' + id + '/{z}/{x}_{y}.png', { opacity: opacity }).addTo(group);
       });
       layers.push(group);
-      if (name === "") { name = "default"; }
+      if (name === "") { name = "untitled"; }
       overlayMaps[name] = group;
     }
   });
