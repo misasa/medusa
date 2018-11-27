@@ -39,10 +39,24 @@
   <div class="col-lg-12">
     <div class="thumbnails pull-left">
       <% @surface.images.each_with_index do |image, index| %>
-	<%= content_tag :div, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay" : ""), data: { src: image.path, points: (image.id == @surface_image.image_id ? image.dup.tap { |i| i.affine_matrix = [1,0,0,0,1,0,0,0,1] }.world_pairs_on_pixel(@image.calibration_points_on_world) : image.world_pairs_on_pixel(@image.calibration_points_on_world)), affine: (image.id == @surface_image.image_id ? [1,0,0,0,1,0,0,0,1] : image.affine_matrix.presence) } do %>
+	<%= content_tag :div, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay" : ""), data: { src: image.path, name: image.name, points: (image.id == @surface_image.image_id ? image.dup.tap { |i| i.affine_matrix = [1,0,0,0,1,0,0,0,1] }.world_pairs_on_pixel(@image.calibration_points_on_world) : image.world_pairs_on_pixel(@image.calibration_points_on_world)), affine: (image.id == @surface_image.image_id ? [1,0,0,0,1,0,0,0,1] : image.affine_matrix.presence) } do %>
 	  <%= image.decorate.picture(width: 70, height: 70, type: :thumb) %>
 	<% end %>
       <% end %>
+    </div>
+  </div>
+  <div class="col-lg-12">
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div id="warp_cmd"></div>
+        <div id="blend_cmd"></div>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div id="overlay_cmd"></div>
+      </div>
     </div>
   </div>
   <div class="col-lg-12">
@@ -62,6 +76,46 @@
       array[i] = array[i].map(function(x) { return x.toExponential(3); }).join(",");
     }
     $("#affine_matrix").val("[" + array.join(";") + "]");
+    var matrix_ij = this.affine_ij2ij();
+        array_ij = [
+          [matrix_ij.a, matrix_ij.c, matrix_ij.e],
+          [matrix_ij.b, matrix_ij.d, matrix_ij.f],
+          [0, 0, 1]
+        ];
+    for (i = 0; i < 3; i++) {
+      array_ij[i] = array_ij[i].map(function(x) { return x.toExponential(3); }).join(",");
+    }
+    var corners_overlay = [0, 0, this.overlayTriangle.image.width, 0, this.overlayTriangle.image.width, this.overlayTriangle.image.height, 0, this.overlayTriangle.image.height];
+    var corners_overlay_on_base_image = matrix_ij.applyToArray(corners_overlay);
+    var array_corners = [
+      [corners_overlay_on_base_image[0],corners_overlay_on_base_image[1]],
+      [corners_overlay_on_base_image[2],corners_overlay_on_base_image[3]],
+      [corners_overlay_on_base_image[4],corners_overlay_on_base_image[5]],
+      [corners_overlay_on_base_image[6],corners_overlay_on_base_image[7]]
+    ];
+    for (i = 0; i < 4; i++) {
+      array_corners[i] = "[" + array_corners[i].map(function(x) { return x.toExponential(3); }).join(",") + "]";
+    }
+
+    var warp_cmd = "warp_image";
+    warp_cmd += " " + this.overlay_image_name;
+    warp_cmd += " " + "-g [" + this.baseTriangle.image.width + "," + this.baseTriangle.image.height + "]"
+    warp_cmd += " " +  " -m [" + array_ij.join(";") + "]";
+    warp_cmd += " -o output_1.png";
+    $("#warp_cmd").text("> " + warp_cmd);
+
+    blend_cmd = "blend_image " + this.base_image_name + " output_1.png";
+    blend_cmd += " 0 0 " + this.baseTriangle.image.width + " " + this.baseTriangle.image.height + " 0.5 0.5 -o output_2.png"
+    $("#blend_cmd").text("> " + blend_cmd);
+
+    var overlay_cmd = "warp_image";
+    overlay_cmd += " " + this.overlay_image_name;
+    overlay_cmd += " " + "-b " + this.base_image_name;
+    overlay_cmd += " " +  " -n [" + array_corners.join(",") + "]";
+    overlay_cmd += " -o output_3.png"; 
+    $("#overlay_cmd").text("> " + overlay_cmd);
+    
+ 
   });
   $(document).on("succeed.ajaxForm", "#calibrator-form", function() {
     location.reload();

@@ -14,7 +14,7 @@
     calibrator.viewer.addZoomControl().draggable();
     calibrator.base.addZoomControl().draggable();
     calibrator.overlay.addZoomControl().draggable();
-
+    calibrator.overlay_image_name = calibrator.thumbnails.overlayImageName();
     var overlayImagePath = calibrator.thumbnails.overlayImagePath(),
 	resizeOverlay = function() {
 	  var t1 = overlayTriangle.get(),
@@ -31,7 +31,7 @@
     });
 
     $(calibrator.thumbnails).on('selected', function(event, params) {
-      var src = params.src, points = params.points;
+      var src = params.src, name = params.name, points = params.points;
       if (params.affine) {
         calibrator.baseAffine = params.affine;
       } else {
@@ -39,6 +39,7 @@
       }
       if (baseImage) { baseImage.remove(); }
       baseImage = calibrator.base.image(src);
+      calibrator.base_image_name = params.name;
       $(baseImage).on('loaded', function(event, image) {
         calibrator.viewer.reset();
 	image.fit();
@@ -110,6 +111,25 @@
           ),
           transformedCoord = matrix.applyToArray(baseCoord);
       return Matrix.fromTriangles(overlayCoord, transformedCoord);
+    },
+    affine_ij2ij() {
+      var overlay_ij = [
+	this.overlayTriangle.circles[0].cx(),
+        this.overlayTriangle.circles[0].cy(),
+        this.overlayTriangle.circles[1].cx(),
+        this.overlayTriangle.circles[1].cy(),
+        this.overlayTriangle.circles[2].cx(),
+        this.overlayTriangle.circles[2].cy()
+      ];
+      var base_ij = [
+	this.baseTriangle.circles[0].cx(),
+        this.baseTriangle.circles[0].cy(),
+        this.baseTriangle.circles[1].cx(),
+        this.baseTriangle.circles[1].cy(),
+        this.baseTriangle.circles[2].cx(),
+        this.baseTriangle.circles[2].cy()
+      ];
+      return Matrix.fromTriangles(overlay_ij, base_ij);
     }
   };
 
@@ -213,7 +233,7 @@
     Object.assign(thumbnails, Calibrator.Node(element));
     thumbnails.element.on("click", function(event) {
       var div = $(event.target).parent();
-      $(thumbnails).trigger('selected', { src: div.data("src"), points: div.data("points"), affine: div.data("affine") });
+      $(thumbnails).trigger('selected', { src: div.data("src"), name: div.data("name"), points: div.data("points"), affine: div.data("affine") });
     });
     return thumbnails;
   };
@@ -222,9 +242,17 @@
       var div = this.element.find("div.thumbnail:first-child");
       return div.data("src");
     },
+    baseImageName() {
+      var div = this.element.find("div.thumbnail:first-child");
+      return div.data("name");
+    },
     overlayImagePath() {
       var div = this.element.find("div.thumbnail").filter(".overlay");
       return div.data("src");
+    },
+    overlayImageName() {
+      var div = this.element.find("div.thumbnail").filter(".overlay");
+      return div.data("name");
     }
   };
 
