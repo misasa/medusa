@@ -14,7 +14,8 @@
   <% if @attachment_file.image? %>
     <li>geometry: <%= sprintf("%sx%s pix, %.1fx%.1f µm",@attachment_file.original_width.to_s,@attachment_file.original_height.to_s , @attachment_file.width_in_um,@attachment_file.height_in_um) unless @attachment_file.affine_matrix.blank? %> </li>
     <% unless @attachment_file.affine_matrix.blank? %>
-      <li>affine matrix: <%= @attachment_file.affine_matrix_in_string %> <%= link_to("warped", @attachment_file.warped_url) if File.exists?(@attachment_file.local_path(:warped)) %></li>
+      <li>affine matrix: <%= @attachment_file.affine_matrix_in_string %>
+      </li>
     <% end %>
   <% end %>
   <% if @attachment_file.surface_images.present? %>

@@ -21,9 +21,11 @@ class AttachmentFileDecorator < Draper::Decorator
 
   def related_pictures
     links = []
+    links << h.content_tag(:div, warped_panel(width: 140, height: 120), class: "col-lg-3") if File.exists?(local_path(:warped))
     surfaces.each do |surface|
       links << h.content_tag(:div, surface.decorate.spots_panel(width:140, height: 120), class: "col-lg-3")
     end
+
     # related_spots.each do |spot|
     #   links << h.content_tag(:div, spot.decorate.spots_panel, class: "col-lg-3")
     # end
@@ -36,6 +38,24 @@ class AttachmentFileDecorator < Draper::Decorator
     h.content_tag(:div, h.raw( links.join ), class: "row spot-thumbnails")
   end
 
+  def warped_panel(width: 140, height: 120)
+    img = picture(width:width, height:height, type: :warped)
+    img_link = h.link_to(warped_url) do
+      img
+    end
+
+    left = h.content_tag(:div, img_link, class: "col-md-12")
+    right = h.content_tag(:div, my_tree, class: "col-md-12")
+    #row = h.content_tag(:div, left + right, class: "row")
+    row = h.content_tag(:div, left, class: "row")
+    header = h.content_tag(:div, class: "panel-heading") do
+    end
+
+    body = h.content_tag(:div, row, class: "panel-body")
+    tag = h.content_tag(:div, body, class: "panel panel-default")
+    tag
+
+  end
 
   def picture_with_spots(width: 250, height: 250, spots: [], with_cross: false)
     return unless image?
