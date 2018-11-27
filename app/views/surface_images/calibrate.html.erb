@@ -83,7 +83,7 @@
           [0, 0, 1]
         ];
     for (i = 0; i < 3; i++) {
-      array_ij[i] = array_ij[i].map(function(x) { return x.toExponential(3); }).join(",");
+      array_ij[i] = "[" + array_ij[i].map(function(x) { return x.toExponential(3); }).join(",") + "]";
     }
     var corners_overlay = [0, 0, this.overlayTriangle.image.width, 0, this.overlayTriangle.image.width, this.overlayTriangle.image.height, 0, this.overlayTriangle.image.height];
     var corners_overlay_on_base_image = matrix_ij.applyToArray(corners_overlay);
@@ -100,11 +100,11 @@
     var warp_cmd = "warp_image";
     warp_cmd += " " + this.overlay_image_name;
     warp_cmd += " " + "-g [" + this.baseTriangle.image.width + "," + this.baseTriangle.image.height + "]"
-    warp_cmd += " " +  " -m [" + array_ij.join(";") + "]";
+    warp_cmd += " " +  " -m [" + array_ij.join(",") + "]";
     warp_cmd += " -o output_1.png";
     $("#warp_cmd").text("> " + warp_cmd);
 
-    blend_cmd = "blend_image " + this.base_image_name + " output_1.png";
+    blend_cmd = "blend-image " + this.base_image_name + " output_1.png";
     blend_cmd += " 0 0 " + this.baseTriangle.image.width + " " + this.baseTriangle.image.height + " 0.5 0.5 -o output_2.png"
     $("#blend_cmd").text("> " + blend_cmd);
 

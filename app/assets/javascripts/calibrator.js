@@ -113,7 +113,7 @@
       return Matrix.fromTriangles(overlayCoord, transformedCoord);
     },
     affine_ij2ij() {
-      var overlay_ij = [
+      var _overlay_ij = [
 	this.overlayTriangle.circles[0].cx(),
         this.overlayTriangle.circles[0].cy(),
         this.overlayTriangle.circles[1].cx(),
@@ -121,7 +121,8 @@
         this.overlayTriangle.circles[2].cx(),
         this.overlayTriangle.circles[2].cy()
       ];
-      var base_ij = [
+      var overlay_ij = this.overlayTriangle.coord_ij();
+      var _base_ij = [
 	this.baseTriangle.circles[0].cx(),
         this.baseTriangle.circles[0].cy(),
         this.baseTriangle.circles[1].cx(),
@@ -129,6 +130,7 @@
         this.baseTriangle.circles[2].cx(),
         this.baseTriangle.circles[2].cy()
       ];
+      var base_ij = this.baseTriangle.coord_ij();
       return Matrix.fromTriangles(overlay_ij, base_ij);
     }
   };
@@ -339,6 +341,19 @@
         (height / 2 - this.circles[1].cy() / scaleY) * 100 / length,
         (this.circles[2].cx() / scaleX - width / 2) * 100 / length,
         (height / 2 - this.circles[2].cy() / scaleY) * 100 / length
+      ];
+    },
+    coord_ij() {
+      var transform = this.image.transform(), scaleX = transform.scaleX, scaleY = transform.scaleY,
+          image = this.image, width = image.width, height = image.height,
+          length = width > height ? width : height;
+      return [
+	(this.circles[0].cx() / scaleX),
+        (this.circles[0].cy() / scaleY),
+        (this.circles[1].cx() / scaleX),
+        (this.circles[1].cy() / scaleY),
+        (this.circles[2].cx() / scaleX),
+        (this.circles[2].cy() / scaleY)
       ];
     },
     dmove(x, y) {
