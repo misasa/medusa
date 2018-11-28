@@ -1,5 +1,8 @@
 <div id="calibrator" class="row">
   <div class="col-lg-12">
+    <%= link_to show_title(@surface), surface_path(@surface, tab: "image") %>
+  </div>
+  <div class="col-lg-12">
     <div class="viewer pull-left"></div>
     <div class="controller base pull-left"></div>
     <div class="controller overlay pull-left"></div>
@@ -22,21 +25,6 @@
     <% end %>
   </div>
   <div class="col-lg-12">
-    <div class="row">
-      <%= form_for @image, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
-        <%= link_to(edit_attachment_file_path(@image), :title => "edit affine matrix") do %>
-          <span class="glyphicon glyphicon-edit"></span>
-        <% end %>
-	<div class="form-group col-lg-10">
-	  <%= f.text_field :affine_matrix_in_string, readonly: true, id: "affine_matrix", class: "form-control col-lg-10" %>
-	</div>
-	<%= button_tag title: "update affine matrix", id: "calibrator-button", class: "btn btn-default" do %>
-	  <span class="glyphicon glyphicon-save"></span>
-	<% end %>
-      <% end %>
-    </div>
-  </div>
-  <div class="col-lg-12">
     <div class="thumbnails pull-left">
       <% @surface.images.each_with_index do |image, index| %>
 	<%= content_tag :div, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay" : ""), data: { src: image.path, name: image.name, points: (image.id == @surface_image.image_id ? image.dup.tap { |i| i.affine_matrix = [1,0,0,0,1,0,0,0,1] }.world_pairs_on_pixel(@image.calibration_points_on_world) : image.world_pairs_on_pixel(@image.calibration_points_on_world)), affine: (image.id == @surface_image.image_id ? [1,0,0,0,1,0,0,0,1] : image.affine_matrix.presence) } do %>
@@ -46,21 +34,33 @@
     </div>
   </div>
   <div class="col-lg-12">
-
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div id="warp_cmd"></div>
-        <div id="blend_cmd"></div>
-      </div>
-    </div>
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div id="overlay_cmd"></div>
-      </div>
+    <div class="row">
+      <%= form_for @image, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
+        <%= link_to(edit_attachment_file_path(@image), :title => "edit affine matrix") do %>
+          <span class="glyphicon glyphicon-edit"></span>
+        <% end %>
+	<div class="form-group col-lg-10">
+          <%= f.label "Affine Matrix" %>
+	  <%= f.text_field :affine_matrix_in_string, readonly: true, id: "affine_matrix", class: "form-control col-lg-10" %>
+	</div>
+	<%= button_tag title: "update affine matrix", id: "calibrator-button", class: "btn btn-default" do %>
+	  <span class="glyphicon glyphicon-save"></span>
+	<% end %>
+      <% end %>
     </div>
   </div>
   <div class="col-lg-12">
-    <%= link_to @surface.name, surface_path(@surface, tab: "image") %>
+
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        local commands for transformation
+      </div>
+      <div class="panel-body">
+        <div id="warp_cmd"></div>
+        <!-- div id="blend_cmd"></div -->
+        <div id="overlay_cmd"></div>
+      </div>
+    </div>
   </div>
 </div>
 <%= javascript_tag do %>
