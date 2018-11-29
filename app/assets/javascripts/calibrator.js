@@ -269,7 +269,8 @@
         x2 = width, y2 = 0,
         x3 = width, y3 = height,
         r = 10, d = r * 2,
-        draggableOptions = { minX: -r, minY: -r, maxX: width + r, maxY: height + r },
+        //draggableOptions = { minX: -r, minY: -r, maxX: width + r, maxY: height + r },
+        draggableOptions = {},
 	path = ["M", -r, 0, "H", r, "M", 0, -r, "V", r, "M", -r, 0, "A", r, r, 0, 1, 0, r, 0, "A", r, r, 0, 1, 0, -r, 0].join(" ");
     triangle.circles.push(svg.path(path).attr({'fill-opacity': 0}).stroke("#f00").move(x1 - r, y1 - r).draggable(draggableOptions));
     triangle.circles.push(svg.path(path).attr({'fill-opacity': 0}).stroke("#0f0").move(x2 - r, y2 - r).draggable(draggableOptions));
