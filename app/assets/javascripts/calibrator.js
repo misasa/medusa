@@ -43,11 +43,12 @@
       $(baseImage).on('loaded', function(event, image) {
         calibrator.viewer.reset();
 	image.fit();
-
 	if (baseTriangle) { baseTriangle.remove(); }
 	baseTriangle = calibrator.baseTriangle = Calibrator.Triangle(calibrator.base.imageGroup, image);
-        if (points) {
-          baseTriangle.set(points);
+        var calibration_points_on_world = calibrator.calibration_points_on_world();
+        var calibration_points_on_pixels = calibrator.world_pairs_on_base(calibration_points_on_world);
+        if (calibration_points_on_pixels) {
+          baseTriangle.set(calibration_points_on_pixels);
         } else {
           baseTriangle.reset();
         }
@@ -132,6 +133,40 @@
       ];
       var base_ij = this.baseTriangle.coord_ij();
       return Matrix.fromTriangles(overlay_ij, base_ij);
+    },
+    calibration_points_on_world(){
+        var overlayCoord = this.overlayTriangle.coord();
+        var overlayAffine = this.thumbnails.overlayAffine();
+        var affine_overlay = Matrix.from(overlayAffine[0],overlayAffine[3],overlayAffine[1],overlayAffine[4],overlayAffine[2],overlayAffine[5]);
+	var transformedCoord = affine_overlay.applyToArray(overlayCoord);
+        return [[transformedCoord[0],transformedCoord[1]],[transformedCoord[2],transformedCoord[3]],[transformedCoord[4],transformedCoord[5]]];
+    },
+    pixel_from_xy(image, xy){
+	return [this.pixel_from_x(image, xy[0]), this.pixel_from_y(image, xy[1])];
+    },
+    pixel_from_x(image, x){
+      var width = image.width, height = image.height;
+      var length = width > height ? width : height;
+      return x*length/100.0 + width/2.0;
+    },
+    pixel_from_y(image, y){
+      var width = image.width, height = image.height;
+      var length = width > height ? width : height;
+      return height/2.0 - y*length/100.0;
+    },
+    world_pairs_on_base(world_pairs){
+        var image = this.baseTriangle.image, width = image.width, height = image.height, length = image.length;
+        
+        baseAffine = this.baseAffine;
+        affine_base = Matrix.from(baseAffine[0],baseAffine[3],baseAffine[1],baseAffine[4],baseAffine[2],baseAffine[5]);
+        inv_affine = affine_base.inverse();
+        var world_v = [world_pairs[0][0],world_pairs[0][1],world_pairs[1][0],world_pairs[1][1],world_pairs[2][0],world_pairs[2][1]]
+        var base_v = inv_affine.applyToArray(world_v);
+        return [
+	  this.pixel_from_xy(image, [base_v[0],base_v[1]]), 
+          this.pixel_from_xy(image, [base_v[2],base_v[3]]),
+          this.pixel_from_xy(image, [base_v[4],base_v[5]])
+        ];
     }
   };
 
@@ -255,6 +290,10 @@
     overlayImageName() {
       var div = this.element.find("div.thumbnail").filter(".overlay");
       return div.data("name");
+    },
+    overlayAffine() {
+      var div = this.element.find("div.thumbnail").filter(".overlay");
+      return div.data("affine");
     }
   };
 
