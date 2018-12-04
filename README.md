@@ -16,3 +16,7 @@ As of February 27, 2018, Medusa runs with Ruby version `2.1.7`.
 Tutorial, installation guide, and operation manual for Medusa are
 available at [website of
 DREAM](http://dream.misasa.okayama-u.ac.jp/documentation/).
+
+# Dependency
+
+## [python package -- image_mosaic](https://github.com/misasa/image_mosaic)
