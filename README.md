@@ -23,4 +23,4 @@ DREAM](http://dream.misasa.okayama-u.ac.jp/documentation/).
 
 ## [gem package -- withrecursive](https://github.com/misasa/withrecursive)
 
-## [gem package -- actasmappable](https://github.com/misasa/actasmappable)
+## [gem package -- actsasmappable](https://github.com/misasa/actsasmappable)
