@@ -20,3 +20,7 @@ DREAM](http://dream.misasa.okayama-u.ac.jp/documentation/).
 # Dependency
 
 ## [python package -- image_mosaic](https://github.com/misasa/image_mosaic)
+
+## [gem package -- withrecursive](https://github.com/misasa/withrecursive)
+
+## [gem package -- actasmappable](https://github.com/misasa/actasmappable)
