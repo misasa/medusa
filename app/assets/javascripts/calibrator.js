@@ -1,7 +1,7 @@
 (function($) {
   var Calibrator = this.Calibrator = function(element) {
     var calibrator = Object.create(Calibrator.prototype), baseTriangle, overlayTriangle,
-	baseImage, overlayImage, viewerBaseImage, viewerOverlayImage;
+    baseImage, overlayImage, viewerBaseImage, viewerOverlayImage;
 
     calibrator.element = $(element);
     calibrator.viewer = Calibrator.Viewer(calibrator.element.find("div.viewer"));
@@ -10,6 +10,59 @@
     calibrator.thumbnails = Calibrator.Thumbnails(calibrator.element.find("div.thumbnails"));
     calibrator.opacity = calibrator.element.find("input.opacity");
     calibrator.moveButton = calibrator.element.find("button.move");
+    calibrator.calculate_affine_button = calibrator.element.find("#calc_affine");
+
+    calibrator.anchors_on_overlay = [];
+    calibrator.anchors_on_overlay.push(calibrator.element.find("#anchor_0"));
+    calibrator.anchors_on_overlay.push(calibrator.element.find("#anchor_1"));
+    calibrator.anchors_on_overlay.push(calibrator.element.find("#anchor_2"));
+    calibrator.anchors_on_overlay.push(calibrator.element.find("#anchor_3"));
+    calibrator.anchors_on_overlay.push(calibrator.element.find("#anchor_4"));
+    calibrator.anchors_on_overlay.push(calibrator.element.find("#anchor_5"));
+    calibrator.anchors_on_world = [];
+    calibrator.anchors_on_world.push(calibrator.element.find("#anchor_w0"));
+    calibrator.anchors_on_world.push(calibrator.element.find("#anchor_w1"));
+    calibrator.anchors_on_world.push(calibrator.element.find("#anchor_w2"));
+    calibrator.anchors_on_world.push(calibrator.element.find("#anchor_w3"));
+    calibrator.anchors_on_world.push(calibrator.element.find("#anchor_w4"));
+    calibrator.anchors_on_world.push(calibrator.element.find("#anchor_w5"));
+    calibrator.anchors_on_image = [];
+    calibrator.anchors_on_image.push(calibrator.element.find("#anchor_i0"));
+    calibrator.anchors_on_image.push(calibrator.element.find("#anchor_i1"));
+    calibrator.anchors_on_image.push(calibrator.element.find("#anchor_i2"));
+    calibrator.anchors_on_image.push(calibrator.element.find("#anchor_i3"));
+    calibrator.anchors_on_image.push(calibrator.element.find("#anchor_i4"));
+    calibrator.anchors_on_image.push(calibrator.element.find("#anchor_i5"));
+    calibrator.anchors_on_base = [];
+    calibrator.anchors_on_base.push(calibrator.element.find("#anchor_b0"));
+    calibrator.anchors_on_base.push(calibrator.element.find("#anchor_b1"));
+    calibrator.anchors_on_base.push(calibrator.element.find("#anchor_b2"));
+    calibrator.anchors_on_base.push(calibrator.element.find("#anchor_b3"));
+    calibrator.anchors_on_base.push(calibrator.element.find("#anchor_b4"));
+    calibrator.anchors_on_base.push(calibrator.element.find("#anchor_b5"));
+    $(calibrator.calculate_affine_button).removeAttr('disabled');
+    for (var i=0; i < 6; ++i ){
+	$(calibrator.anchors_on_image[i]).attr('readonly',true);
+    }
+    $(calibrator.calculate_affine_button).click(function() {
+      var imageCoord = [];
+      var worldCoord = [];
+      for (var i=0; i < 6; ++i ){
+	  imageCoord.push(Number($(calibrator.anchors_on_image[i]).val()));
+	  worldCoord.push(Number($(calibrator.anchors_on_world[i]).val()));
+      }
+      var matrix = Matrix.fromTriangles(imageCoord, worldCoord);
+      var array = [
+          [matrix.a, matrix.c, matrix.e],
+          [matrix.b, matrix.d, matrix.f],
+          [0, 0, 1]
+      ];
+      for (i = 0; i < 3; i++) {
+        array[i] = array[i].map(function(x) { return x.toExponential(3); }).join(",");
+      }
+      $(calibrator.element.find("#affine_matrix")).val("[" + array.join(";") + "]");
+
+    });
 
     calibrator.viewer.addZoomControl().draggable();
     calibrator.base.addZoomControl().draggable();
@@ -17,8 +70,33 @@
     calibrator.overlay_image_name = calibrator.thumbnails.overlayImageName();
     var overlayImagePath = calibrator.thumbnails.overlayImagePath(),
 	resizeOverlay = function() {
-	  var t1 = overlayTriangle.get(),
-	      t2 = baseTriangle.get().map(function(x) { return x * viewerBaseImage.scale; })
+	  var t1 = overlayTriangle.get();
+          var tt = calibrator.transformedCoord();
+          var overlayCoord = calibrator.overlayTriangle.coord()
+          for (var i=0; i < 6; ++i ){
+            $(calibrator.anchors_on_overlay[i]).val(t1[i])
+            $(calibrator.anchors_on_image[i]).val(overlayCoord[i])
+            $(calibrator.anchors_on_world[i]).val(tt[i])
+          }
+
+	  var tb = baseTriangle.get();
+          var baseCoord = calibrator.baseTriangle.coord();
+          var matrix = Matrix.from(
+            calibrator.baseAffine[0],
+            calibrator.baseAffine[3],
+            calibrator.baseAffine[1],
+            calibrator.baseAffine[4],
+            calibrator.baseAffine[2],
+            calibrator.baseAffine[5]
+	  );
+          var baseTransformedCoord = matrix.applyToArray(baseCoord);
+
+          for (var i=0; i < 6; ++i ){
+	      $(calibrator.anchors_on_base[i]).val(tb[i])
+	      $(calibrator.anchors_on_world[i]).val(baseTransformedCoord[i])
+          }
+
+	  var t2 = tb.map(function(x) { return x * viewerBaseImage.scale; });
 	  viewerOverlayImage.transform(Matrix.fromTriangles(t1, t2));
 	  $(calibrator).trigger('change');
 	};
@@ -28,6 +106,14 @@
       image.fit();
       overlayTriangle = calibrator.overlayTriangle = Calibrator.Triangle(calibrator.overlay.imageGroup, image);
       $(overlayTriangle).on('dragmove', resizeOverlay);
+      var t1 = overlayTriangle.get();
+      var tt = calibrator.transformedCoord();
+      var overlayCoord = calibrator.overlayTriangle.coord()
+      for (var i=0; i < 6; ++i ){
+        $(calibrator.anchors_on_overlay[i]).val(t1[i])
+        $(calibrator.anchors_on_image[i]).val(overlayCoord[i])
+        $(calibrator.anchors_on_world[i]).val(tt[i])
+      }
     });
 
     $(calibrator.thumbnails).on('selected', function(event, params) {
@@ -43,6 +129,10 @@
       $(baseImage).on('loaded', function(event, image) {
         calibrator.viewer.reset();
 	image.fit();
+        for (var i=0; i < 6; ++i ){
+          $(calibrator.anchors_on_world[i]).attr('readonly',true);
+        }
+        $(calibrator.calculate_affine_button).attr('disabled',true);
 	if (baseTriangle) { baseTriangle.remove(); }
 	baseTriangle = calibrator.baseTriangle = Calibrator.Triangle(calibrator.base.imageGroup, image);
         var calibration_points_on_world = calibrator.calibration_points_on_world();
@@ -66,6 +156,7 @@
 	  image.stroke({ width: 5, color: "#f00" });
 	  resizeOverlay();
 	});
+
       });
     });
 
@@ -134,11 +225,15 @@
       var base_ij = this.baseTriangle.coord_ij();
       return Matrix.fromTriangles(overlay_ij, base_ij);
     },
-    calibration_points_on_world(){
+    transformedCoord(){
         var overlayCoord = this.overlayTriangle.coord();
         var overlayAffine = this.thumbnails.overlayAffine();
         var affine_overlay = Matrix.from(overlayAffine[0],overlayAffine[3],overlayAffine[1],overlayAffine[4],overlayAffine[2],overlayAffine[5]);
 	var transformedCoord = affine_overlay.applyToArray(overlayCoord);
+        return transformedCoord;
+    },
+    calibration_points_on_world(){
+	var transformedCoord = this.transformedCoord();
         return [[transformedCoord[0],transformedCoord[1]],[transformedCoord[2],transformedCoord[3]],[transformedCoord[4],transformedCoord[5]]];
     },
     pixel_from_xy(image, xy){
