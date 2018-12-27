@@ -1,7 +1,7 @@
 (function($) {
   var Calibrator = this.Calibrator = function(element) {
     var calibrator = Object.create(Calibrator.prototype), baseTriangle, overlayTriangle,
-    baseImage, overlayImage, viewerBaseImage, viewerOverlayImage;
+    baseImage, overlayImage, viewerBaseImage, viewerOverlayImage, baseOverlayImage;
 
     calibrator.element = $(element);
     calibrator.viewer = Calibrator.Viewer(calibrator.element.find("div.viewer"));
@@ -42,8 +42,13 @@
     calibrator.anchors_on_base.push(calibrator.element.find("#anchor_b5"));
     $(calibrator.calculate_affine_button).removeAttr('disabled');
     for (var i=0; i < 6; ++i ){
+	$(calibrator.anchors_on_world[i]).removeAttr('disabled');
+    }
+    calibrator.moveButton.attr('disabled',true);
+    for (var i=0; i < 6; ++i ){
 	$(calibrator.anchors_on_image[i]).attr('disabled',true);
     }
+    
     $(calibrator.calculate_affine_button).click(function() {
       var imageCoord = [];
       var worldCoord = [];
@@ -98,6 +103,10 @@
 
 	  var t2 = tb.map(function(x) { return x * viewerBaseImage.scale; });
 	  viewerOverlayImage.transform(Matrix.fromTriangles(t1, t2));
+
+	  var t3 = tb.map(function(x) { return x * baseImage.scale; });
+	  baseOverlayImage.transform(Matrix.fromTriangles(t1, t3));
+
 	  $(calibrator).trigger('change');
 	};
 
@@ -133,6 +142,15 @@
           $(calibrator.anchors_on_world[i]).attr('disabled',true);
         }
         $(calibrator.calculate_affine_button).attr('disabled',true);
+        calibrator.moveButton.removeAttr('disabled');
+
+	if(baseOverlayImage) { baseOverlayImage.remove() }
+	baseOverlayImage = calibrator.base.image(overlayImagePath).opacity(calibrator.opacity.val());
+	$(baseOverlayImage).on('loaded', function(event, image) {
+	  image.stroke({ width: 1, color: "#f00" });
+	  resizeOverlay();
+	});
+
 	if (baseTriangle) { baseTriangle.remove(); }
 	baseTriangle = calibrator.baseTriangle = Calibrator.Triangle(calibrator.base.imageGroup, image);
         var calibration_points_on_world = calibrator.calibration_points_on_world();
@@ -157,11 +175,14 @@
 	  resizeOverlay();
 	});
 
+
+
       });
     });
 
     $(calibrator.opacity).on('input', function(event) {
       viewerOverlayImage.opacity($(this).val());
+      baseOverlayImage.opacity($(this).val());
     });
 
     $(calibrator.moveButton).on('mousedown', function(event) {
@@ -344,13 +365,23 @@
       return this;
     },
     zoomIn() {
-      if (this.scale >= 8) { return; }
-      this.scale++;
+      if (this.scale >= 10) { 
+        return;
+      } else if (this.scale < 1) {
+	this.scale = this.scale + 1/10;
+      } else {
+        this.scale++;
+      }
       this.imageGroup.scale(this.scale, this.scale);
     },
     zoomOut() {
-      if (this.scale <= 1) { return; }
-      this.scale--;
+      if (this.scale <= 0.1) {
+	return;
+      } else if (this.scale <= 1) {
+        this.scale = this.scale - 1/10; 
+      } else {
+        this.scale--;
+      }
       this.imageGroup.scale(this.scale, this.scale);
     },
     reset() {

@@ -3,41 +3,57 @@
     <%= link_to show_title(@surface), surface_path(@surface, tab: "image") %>
   </div>
   <div class="col-lg-12">
-    <div class="viewer pull-left"></div>
-    <div class="controller base pull-left"></div>
-    <div class="controller overlay pull-left"></div>
+    <div class="viewer pull-left" style="display:none"></div>
   </div>
-  <div class="col-lg-4">
-    <input class="opacity" type="range" min="0" max="1" step="0.1" style="width: 60px; margin: 3px;">
+  <div class="col-lg-5">
+    <div class="controller overlay"></div>
   </div>
-  <div class="col-lg-8" >
-    <%= button_tag title: "move to left", class: "btn btn-default move", data: { direction: "left" } do %>
-      <span class="glyphicon glyphicon-arrow-left"></span>
-    <% end %>
-    <%= button_tag title: "move to right", class: "btn btn-default move", data: { direction: "right" } do %>
-      <span class="glyphicon glyphicon-arrow-right"></span>
-    <% end %>
-    <%= button_tag title: "move to up", class: "btn btn-default move", data: { direction: "up" } do %>
-      <span class="glyphicon glyphicon-arrow-up"></span>
-    <% end %>
-    <%= button_tag title: "move to down", class: "btn btn-default move", data: { direction: "down" } do %>
-      <span class="glyphicon glyphicon-arrow-down"></span>
-    <% end %>
+  <div class="col-lg-5">
+    <div class="controller base"></div>
+  </div>
+  <div class="col-lg-2">
+    <input class="opacity" type="range" min="0" max="1" step="0.1" style="width: 150px; margin: 3px;">
+    <table class="table table-bordered text-center">
+      <tr>
+        <td></td>
+        <td>
+        <%= button_tag title: "move to up", class: "btn btn-default move", data: { direction: "up" } do %>
+          <span class="glyphicon glyphicon-arrow-up"></span>
+        <% end %>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+        <%= button_tag title: "move to left", class: "btn btn-default move", data: { direction: "left" } do %>
+          <span class="glyphicon glyphicon-arrow-left"></span>
+        <% end %>
+        </td>
+        <td></td>
+        <td>
+        <%= button_tag title: "move to right", class: "btn btn-default move", data: { direction: "right" } do %>
+          <span class="glyphicon glyphicon-arrow-right"></span>
+        <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+        <%= button_tag title: "move to down", class: "btn btn-default move", data: { direction: "down" } do %>
+         <span class="glyphicon glyphicon-arrow-down"></span>
+        <% end %>
+        </td>
+        <td></td>
+      </tr>
+    </table>
   </div>
 
-  <div class="col-lg-12">
-    <div class="thumbnails pull-left">
-      <% @surface.images.each_with_index do |image, index| %>
-        <%= content_tag :div, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: image.path, name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), affine: image.affine_matrix.presence } do %>
-	  <%= image.decorate.picture(width: 70, height: 70, type: :thumb) %>
-	<% end %>
-      <% end %>
-    </div>
-  </div>
-  <div class="col-lg-12">
+  <div class="col-lg-5">
       <table class="table table-bordered text-center">
-      <%= form_for @image, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
-    <thead><tr><th scope="col" class="text-right"></th><th colspan="2" scope="col" class="text-center">image</th><th colspan="2" scope="col" class="text-center">world</th></tr><tr><th scope="col"></th><th scope="col" class="text-center">x</th><th scope="col" class="text-center">y</th><th scope="col" class="text-center">x</th><th scope="col" class="text-center">y</th></tr></thead>
+    <thead>
+      <tr><th scope="col" class="text-right"></th><th colspan="2" scope="col" class="text-center">image</th></tr>
+      <tr><th scope="col"></th><th scope="col" class="text-center">x</th><th scope="col" class="text-center">y</th></tr>
+    </thead>
   <tbody>
     <tr>
       <th scope="row" class="text-right">
@@ -50,8 +66,6 @@
       </th>
       <td><input type="text" id="anchor_i0" value=""></td>
       <td><input type="text" id="anchor_i1" value=""></td>
-      <td><input type="text" id="anchor_w0" value=""></td>
-      <td><input type="text" id="anchor_w1" value=""></td>
     </tr>
     <tr>
       <th scope="row" class="text-right">
@@ -64,8 +78,6 @@
       </th>
       <td><input type="text" id="anchor_i2" value=""></td>
       <td><input type="text" id="anchor_i3" value=""></td>
-      <td><input type="text" id="anchor_w2" value=""></td>
-      <td><input type="text" id="anchor_w3" value=""></td>
     </tr>
     <tr>
       <th scope="row" class="text-right">
@@ -78,35 +90,92 @@
       </th>
       <td><input type="text" id="anchor_i4" value=""></td>
       <td><input type="text" id="anchor_i5" value=""></td>
+    </tr>
+        </tbody>
+      </table>
+  </div>
+  <div class="col-lg-5">
+      <table class="table table-bordered text-center">
+    <thead>
+      <tr><th scope="col" class="text-right"></th><th colspan="2" scope="col" class="text-center">world</th></tr>
+      <tr><th scope="col"></th><th scope="col" class="text-center">x</th><th scope="col" class="text-center">y</th></tr>
+    </thead>
+  <tbody>
+    <tr>
+      <th scope="row" class="text-right">
+       <svg width="25" height="25"  viewBox="-100 -100 200 200" style="background: #aaa" xmlns="http://www.w3.org/2000/svg">       <g stroke="#f00" stroke-width="5">
+            <line x1="-80" y1="0" x2="70" y2="0" />
+            <line x1="0" y1="-70" x2="0" y2="70" />
+            <circle cx="0" cy="0" r="70" fill="none" />
+          </g>
+        </svg>
+      </th>
+      <td><input type="text" id="anchor_w0" value=""></td>
+      <td><input type="text" id="anchor_w1" value=""></td>
+    </tr>
+    <tr>
+      <th scope="row" class="text-right">
+       <svg width="25" height="25"  viewBox="-100 -100 200 200" style="background: #aaa" xmlns="http://www.w3.org/2000/svg">       <g stroke="#0f0" stroke-width="5">
+            <line x1="-80" y1="0" x2="70" y2="0" />
+            <line x1="0" y1="-70" x2="0" y2="70" />
+            <circle cx="0" cy="0" r="70" fill="none" />
+          </g>
+        </svg>
+      </th>
+      <td><input type="text" id="anchor_w2" value=""></td>
+      <td><input type="text" id="anchor_w3" value=""></td>
+    </tr>
+    <tr>
+      <th scope="row" class="text-right">
+        <svg width="25" height="25"  viewBox="-100 -100 200 200" style="background: #aaa" xmlns="http://www.w3.org/2000/svg">       <g stroke="#00f" stroke-width="5">
+            <line x1="-80" y1="0" x2="70" y2="0" />
+            <line x1="0" y1="-70" x2="0" y2="70" />
+            <circle cx="0" cy="0" r="70" fill="none" />
+          </g>
+        </svg>
+      </th>
       <td><input type="text" id="anchor_w4" value=""></td>
       <td><input type="text" id="anchor_w5" value=""></td>
     </tr>
-    <tfoot>
+        </tbody>
+      </table>
+  </div>
+  <div class="col-lg-2">
+      <input class="btn btn-outline-secondary" id="calc_affine" type="button" value="calculate Affine">
+  </div>
+  <div class="col-lg-12">
+    <div class="thumbnails pull-left">
+      <% @surface.images.each_with_index do |image, index| %>
+        <%= content_tag :div, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: image.path, name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), affine: image.affine_matrix.presence } do %>
+	  <%= image.decorate.picture(width: 70, height: 70, type: :thumb) %>
+	<% end %>
+      <% end %>
+    </div>
+  </div>
+
+  <div class="col-lg-12">
+    <table>
+    <%= form_for @image, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
     <tr>
-      <td></td>
-      <td colspan="4">
+      <td>
            Affine Matrix
            <%= link_to(edit_attachment_file_path(@image), :title => "edit affine matrix") do %>
              <span class="glyphicon glyphicon-edit"></span>
            <% end %>
-           <input class="btn btn-outline-secondary" id="calc_affine" type="button" value="calculate">
       </td>
-    </tr>
-    <tr>
-        <th class="text-right">
+        <td class="col-lg-10">
+	  <%= f.text_field :affine_matrix_in_string, readonly: true, id: "affine_matrix", class: "form-control" %>
+        </td>
+        <td>
 	<%= button_tag title: "update affine matrix", id: "calibrator-button", class: "btn btn-default" do %>
 	  <span class="glyphicon glyphicon-save"></span>
 	<% end %>
-        </th>
-        <td colspan="4">
-	  <%= f.text_field :affine_matrix_in_string, readonly: true, id: "affine_matrix", class: "form-control col-lg-10" %>
         </td>
         </tr>
-      </tfoot>
       <% end %>
-        </tbody>
       </table>
   </div>
+
   <div class="col-lg-12">
     <div class="panel panel-default">
       <div class="panel-heading">
