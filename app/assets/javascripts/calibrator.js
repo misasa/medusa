@@ -42,7 +42,7 @@
     calibrator.anchors_on_base.push(calibrator.element.find("#anchor_b5"));
     $(calibrator.calculate_affine_button).removeAttr('disabled');
     for (var i=0; i < 6; ++i ){
-	$(calibrator.anchors_on_image[i]).attr('readonly',true);
+	$(calibrator.anchors_on_image[i]).attr('disabled',true);
     }
     $(calibrator.calculate_affine_button).click(function() {
       var imageCoord = [];
@@ -130,7 +130,7 @@
         calibrator.viewer.reset();
 	image.fit();
         for (var i=0; i < 6; ++i ){
-          $(calibrator.anchors_on_world[i]).attr('readonly',true);
+          $(calibrator.anchors_on_world[i]).attr('disabled',true);
         }
         $(calibrator.calculate_affine_button).attr('disabled',true);
 	if (baseTriangle) { baseTriangle.remove(); }
