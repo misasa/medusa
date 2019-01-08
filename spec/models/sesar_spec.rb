@@ -2,11 +2,14 @@
 require 'spec_helper'
 
 describe Sesar do
+  let(:geocoder_obj){ double(:geocoder_obj) }
   before do
     Sesar.logger = Logger.new($stderr)
+    allow(geocoder_obj).to receive(:data).and_return({"address_components" => [{"types" => ["country"], "long_name" => "Japan"}]})
+    allow(Geocoder).to receive(:search).and_return([geocoder_obj])
   end
 
-  describe ".sync", :current => true do
+  describe ".sync" do
     subject { Sesar.sync(specimen) }
     let(:specimen) { FactoryGirl.create(:specimen, igsn: igsn, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101") }
     let(:bib) { FactoryGirl.create(:bib) }
@@ -152,9 +155,12 @@ describe Sesar do
   end
   
   describe "緯度経度から場所を特定" do
-    let(:result) { Geocoder.search("35,135")[0] }
+    let(:result) { double(:geocoder_obj)}
     describe ".country_name(result)" do
       subject { Sesar.country_name(result) }
+      before do
+        allow(result).to receive(:data).and_return({"address_components" => [{"types" => ["country"], "long_name" => "Japan"}]})
+      end
       context "countryの情報が存在する場合" do
         it { expect(subject).to eq "Japan" }
       end
@@ -166,6 +172,9 @@ describe Sesar do
   
     describe ".province_name(result)" do
       subject {Sesar.province_name(result) }
+      before do
+        allow(result).to receive(:data).and_return({"address_components" => [{"types" => ["administrative_area_level_1"], "long_name" => "Hyōgo-ken"}]})
+      end
       context "provinceの情報(administrative_area_level_1)が存在する場合" do
         it { expect(subject).to eq "Hyōgo-ken" }
       end
@@ -177,6 +186,10 @@ describe Sesar do
   
     describe ".city_name(result)" do
       subject {Sesar.city_name(result) }
+      before do
+        allow(result).to receive(:data).and_return({"address_components" => [{"types" => ["locality"], "long_name" => "Nishiwaki-shi"}]})
+      end
+
       context "cityの情報(locality)が存在する場合" do
         it { expect(subject).to eq "Nishiwaki-shi" }
       end

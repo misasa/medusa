@@ -448,7 +448,7 @@ describe Analysis do
     end
   end
 
-  describe "#to_pmlame", :current => true do
+  describe "#to_pmlame" do
     subject { analysis.to_pmlame({duplicate_names: duplicate_names}) }
     let(:analysis) { FactoryGirl.create(:analysis,  name: "analysis_name_1", specimen_id: specimen.id) }
     let(:specimen) { FactoryGirl.create(:specimen, place_id: place.id)}
@@ -472,7 +472,7 @@ describe Analysis do
       globe
     end
 
-    context "when it exists duplicate element names,", :current => true do
+    context "when it exists duplicate element names," do
       let(:duplicate_names) { ["analysis_name_1"] }
       it "elementに<analysis XXXX> が付加されてること" do
         allow(chemistry_1).to receive(:measured_value).and_return(nil)
@@ -592,7 +592,7 @@ describe Analysis do
       end
     end
     context "when it exists spot," do
-      let(:spot){ FactoryGirl.create(:spot, target_uid: analysis.global_id, attachment_file_id: image_file.id)}
+      let(:spot){ FactoryGirl.create(:spot, target_uid: analysis.global_id, attachment_file_id: image_file.id, world_x: -5723.45, world_y: 2958.12)}
       #let(:attachment_file){ FactoryGirl.create(:attachment_file)}
       let(:image_file){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]")}
       let(:surface){ FactoryGirl.create(:surface)}
@@ -602,6 +602,7 @@ describe Analysis do
         image_file.surfaces << surface
       end
       it "return element info and measured values with image_id, x_image, y_image." do
+        allow(analysis).to receive(:get_spot).and_return(spot)
         allow(chemistry_1).to receive(:measured_value).and_return(20)
         allow(chemistry_1).to receive(:measured_uncertainty).and_return(0.2)
         allow(chemistry_2).to receive(:measured_value).and_return(10)

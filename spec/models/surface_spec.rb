@@ -71,6 +71,8 @@ describe Surface do
       let(:spot_2) { FactoryGirl.create(:spot, :attachment_file_id => image_2.id) }
 
       before do
+        allow(image_1).to receive(:spots).and_return([spot_1])
+        allow(image_2).to receive(:spots).and_return([spot_2])
         obj.images << image_1
         obj.images << image_2
         spot_1
@@ -109,6 +111,8 @@ describe Surface do
       let(:spot_3) { FactoryGirl.create(:spot, :attachment_file_id => image_2.id, target_uid: analysis_3.record_property.global_id)}
 
       before do
+        allow(image_1).to receive(:spots).and_return([spot_1])
+        allow(image_2).to receive(:spots).and_return([spot_2, spot_3])
         obj.images << image_1
         obj.images << image_2
         spot_1
@@ -121,7 +125,7 @@ describe Surface do
     end
   end
 
-  describe "pml_elements", :current => true do
+  describe "pml_elements" do
     let(:obj){ FactoryGirl.create(:surface, globe: globe?) }
 
     let(:spot_1){ FactoryGirl.create(:spot, name: "spot1", attachment_file_id: surface_image.image_id) }
