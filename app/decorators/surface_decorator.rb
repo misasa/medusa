@@ -35,6 +35,7 @@ class SurfaceDecorator < Draper::Decorator
     # end
 
   def to_tex
+    return unless surface_images[0]
     return unless surface_images[0].image
     surface_images[0].decorate.to_tex unless surface_images.empty?
   end
@@ -42,6 +43,7 @@ class SurfaceDecorator < Draper::Decorator
   def affine_matrix_for_map(x = 256, y = 256)
     left, top, _ = bounds
     len = length
+    return if len == 0
     x_offset = (len - width) / 2
     y_offset = (len - height) / 2
     Matrix[
@@ -53,6 +55,7 @@ class SurfaceDecorator < Draper::Decorator
 
   def map(options = {})
     matrix = affine_matrix_for_map
+    return unless matrix
     records = surface_images.includes(:surface_layer, image: :spots)
     images = records.map(&:image)
     target_uids = images.inject([]) { |array, image| array + image.spots.map(&:target_uid) }.uniq
