@@ -25,7 +25,7 @@ describe ApplicationHelper do
   describe "#difference_from_now" do
     subject { helper.difference_from_now(time) }
     before { allow(Time).to receive(:now).and_return(now) }
-    let(:now) { Time.local(2014,1,1,12,0,0) }
+    let(:now) { Time.zone.local(2014,1,1,12,0,0) }
     context "time is nil" do
       let(:time) { nil }
       it { expect(subject).to be_nil }

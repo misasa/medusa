@@ -24,18 +24,7 @@ describe Chemistry do
       chemistry_2
       #chem = Chemistry.joins(:measurement_item, :unit).where(measurement_items: {nickname: measurement_item.nickname}).select(:value, "units.name").first
       chems = Chemistry.joins(:measurement_item, :unit).where(measurement_item_id: measurement_item.id).select("chemistries.id, value, value / units.conversion as value_in_parts, units.name as unit_name ")
-      chems.each do |chem|
-        p chem.value
-        p chem.unit_name
-        p chem.value_in_parts
-      end
       summary = Chemistry.search_with_measurement_item_id(measurement_item.id).with_unit.select_summary_value_in_parts[0]
-      p "n: #{summary.count}"
-      p "max: #{summary.max}"
-      p "min: #{summary.min}"
-      p "avg: #{summary.avg}"
-
-
     end
     it {
       expect(Chemistry.with_measurement_item.all).not_to be_empty

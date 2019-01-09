@@ -4,7 +4,7 @@ describe Divide do
 
   describe "scope" do
     describe "default_scope" do
-      let(:time) { Time.new(2016, 11,12) }
+      let(:time) { Time.zone.local(2016, 11,12) }
       let!(:divide1) { FactoryGirl.create(:divide, updated_at: time + 1.day) }
       let!(:divide2) { FactoryGirl.create(:divide, updated_at: time) }
       subject { Divide.all }
@@ -38,21 +38,21 @@ describe Divide do
   end
 
   describe "chart_updated_at" do
-    let(:time) { Time.new(2016, 11,12) }
+    let(:time) { Time.zone.local(2016, 11,12) }
     let(:divide) { FactoryGirl.create(:divide, updated_at: time) }
     subject { divide.chart_updated_at }
     it { expect(subject).to eq(1478908800000) }
   end
 
   describe "updated_at_str" do
-    let(:time) { Time.new(2016, 11,12, 13, 14, 15) }
+    let(:time) { Time.zone.local(2016, 11,12, 13, 14, 15) }
     let(:divide) { FactoryGirl.create(:divide, updated_at: time) }
     subject { divide.updated_at_str }
     it { expect(subject).to eq("2016/11/12 13:14:15") }
   end
 
   describe "modify updated_at" do
-    let(:time) { Time.new(2016, 11,12, 13, 14, 15) }
+    let(:time) { Time.zone.local(2016, 11,12, 13, 14, 15) }
 
     let(:divide) { FactoryGirl.create(:divide, updated_at: time) }
     subject { divide.updated_at_str }

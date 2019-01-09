@@ -319,18 +319,18 @@ describe Path do
     let(:brought_out_at) { Date.new(2015, 12, 3) }
     before { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: brought_in_at, brought_out_at: brought_out_at) }
     context "brought_in_atが期間内" do
-      let(:src_date) { Time.new(2015, 12, 2).beginning_of_day }
-      let(:dst_date) { Time.new(2015, 12, 2).end_of_day }
+      let(:src_date) { Time.zone.local(2015, 12, 2).beginning_of_day }
+      let(:dst_date) { Time.zone.local(2015, 12, 2).end_of_day }
       it { expect(subject).to be_present }
     end
     context "brought_out_atが期間内" do
-      let(:src_date) { Time.new(2015, 12, 3).beginning_of_day }
-      let(:dst_date) { Time.new(2015, 12, 3).end_of_day }
+      let(:src_date) { Time.zone.local(2015, 12, 3).beginning_of_day }
+      let(:dst_date) { Time.zone.local(2015, 12, 3).end_of_day }
       it { expect(subject).to be_present }
     end
     context "どちらも期間外" do
-      let(:src_date) { Time.new(2015, 12, 4).beginning_of_day }
-      let(:dst_date) { Time.new(2015, 12, 4).end_of_day }
+      let(:src_date) { Time.zone.local(2015, 12, 4).beginning_of_day }
+      let(:dst_date) { Time.zone.local(2015, 12, 4).end_of_day }
       it { expect(subject).to be_blank }
     end
   end
