@@ -7,7 +7,8 @@ class SurfaceDecorator < Draper::Decorator
   end
 
   def url_for_tile
-    h.root_url + "system/maps/#{global_id}/"
+#    h.root_url + "system/maps/#{global_id}/"
+    Settings.map_url + "#{global_id}/"
   end
 
   def url_for_tiles
