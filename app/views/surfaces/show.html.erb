@@ -36,15 +36,16 @@
       <li class="<%= active_if_current('at-a-glance') %>">
         <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
       </li>
-      <li class="<%= active_if_current('layer') %>">
-        <a href="#layer" data-toggle="tab"><%= "layer#{data_count(@surface.surface_layers)}" %></a>
+      <li class="<%= active_if_current('place') %>">
+        <a href="#place" data-toggle="tab"><%= "place#{data_count(@surface.spots)}" %></a>
       </li>
       <li class="<%= active_if_current('image') %>">
         <a href="#image" data-toggle="tab"><%= "image#{data_count(@surface.images)}" %></a>
       </li>
-      <li class="<%= active_if_current('place') %>">
-        <a href="#place" data-toggle="tab"><%= "place#{data_count(@surface.spots)}" %></a>
+      <li class="<%= active_if_current('layer') %>">
+        <a href="#layer" data-toggle="tab"><%= "layer#{data_count(@surface.surface_layers)}" %></a>
       </li>
+
     </ul>
 
     <!-- Tab panes -->
