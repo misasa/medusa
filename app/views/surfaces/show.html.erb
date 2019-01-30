@@ -42,6 +42,9 @@
       <li class="<%= active_if_current('image') %>">
         <a href="#image" data-toggle="tab"><%= "image#{data_count(@surface.images)}" %></a>
       </li>
+      <li class="<%= active_if_current('place') %>">
+        <a href="#place" data-toggle="tab"><%= "place#{data_count(@surface.spots)}" %></a>
+      </li>
     </ul>
 
     <!-- Tab panes -->
@@ -49,6 +52,7 @@
         ["at-a-glance",nil],
         ["layer",@surface.surface_layers],
         ["image",@surface.images],
+        ["place",@surface.spots],
     ] %>
     <div class="tab-content">
       <% tab_info.each do |key,array| %>

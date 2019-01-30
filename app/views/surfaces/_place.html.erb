@@ -1,0 +1,23 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>coordinate</th>
+      <th>link</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @surface.spots.each do |spot| %>
+      <% spot = spot.decorate %>
+      <tr>
+        <td><%= spot.icon %> <%= link_to(spot.name, spot_path(spot)) %></td>
+        <td><%= sprintf("(%.2f, %.2f)", spot.world_x, spot.world_y) %></td>
+        <td>
+          <% if spot.target %>
+            <%= spot.target.decorate.try(:icon) %> <%= link_to(spot.target.name, spot.polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root), class: specimen_ghost(spot.target)) %>
+          <% end %>
+        </td>
+      </Tr>
+    <% end %>
+  </tbody>
+</table>
