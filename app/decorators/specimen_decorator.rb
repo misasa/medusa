@@ -101,8 +101,10 @@ class SpecimenDecorator < Draper::Decorator
       #content = h.content_tag(:li, content)
       table_links = []
       bib.tables.each do |table|
-         table_link = h.link_to(h.raw(table.caption), table ) if table.specimens && table.specimens.include?(self)
-         if table_link &&  Settings.rplot_url
+         next unless table.specimens && table.specimens.include?(self) 
+         table_link = h.link_to(h.raw(table.caption), table )
+
+         if Settings.rplot_url
            table_link += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + table.global_id, :title => 'plot online')
          end
          table_links << table_link
