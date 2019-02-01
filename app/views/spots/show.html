@@ -35,9 +35,16 @@
     <% if @spot.attachment_file %>
     <div class="spot-viewer">
       <%= hidden_field_tag nil, @spot.target_uid, class: "target-uid" %>
-      <%= content_tag :svg, nil, class: "spot-canvas", width: 800, height: 600, "data-scale" => 2, "data-image" => attachment_file_path(@spot.attachment_file, format: :svg) %>
+      <%= content_tag :svg, nil, class: "spot-canvas", width: 700, height: 500, "data-scale" => 2, "data-image" => attachment_file_path(@spot.attachment_file, format: :svg) %>
     </div>
-    <%= rplot_iframe @spot %>
+      <%= form_for @spot do |f| %>
+        <%= error_notification(@spot.errors) %>
+        <%= f.hidden_field :spot_x, class: "form-control" %>
+        <%= f.hidden_field :spot_y, class: "form-control" %>
+	<%= button_tag title: "update coordinate", id: "update-coordinate-button", class: "btn btn-default" do %>
+	  <span class="glyphicon glyphicon-refresh"></span>
+	<% end %>
+      <% end %>
     <% else %>
     <div style="height:500px;">
       <%= @spot.surface.decorate.map %>
@@ -62,7 +69,14 @@
   <a href="#display-type-tex" class="btn radio-button-group">tex</a>
 </div>
 
-    <%= javascript_tag do %>
-      $("div.spot-viewer").spotViewer();
-    <% end %>
+<%= javascript_tag do %>
+  $("div.spot-viewer").spotViewer();
+  $("#update-coordinate-button").click(function(){
+    var center = $("div.spot-viewer").spotViewer("center");
+    $("#spot_spot_x").val(center.left);
+    $("#spot_spot_y").val(center.top);
+  })
+<% end %>
+
+
  </div>
