@@ -35,7 +35,7 @@ describe AttachmentFilesController do
     it { expect(assigns(:attachment_file)).to eq attachment_file }
   end
   
-  describe "POST create", :current => true do
+  describe "POST create" do
     let(:md5hash){ Digest::MD5.hexdigest(File.open("spec/fixtures/files/test_image.jpg", 'rb').read) }    
     let(:attributes) { {data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')} }
     it { expect { post :create, attachment_file: attributes, format: 'json' }.to change(AttachmentFile, :count).by(1) }
@@ -43,6 +43,16 @@ describe AttachmentFilesController do
       before { post :create, attachment_file: attributes, format: 'json' }
       it { expect(assigns(:attachment_file)).to be_persisted }
       it { expect(assigns(:attachment_file).md5hash).to eq md5hash}
+    end
+    context "with text file", :current => true do
+      let(:attributes) { {data: fixture_file_upload("/files/test_text.txt",'text/plain')} }
+      before { post :create, attachment_file: attributes, format: 'json' }
+      it { expect(assigns(:attachment_file)).to be_persisted }
+    end
+    context "with org file", :current => true do
+      let(:attributes) { {data: fixture_file_upload("/files/spell-of-revival.txt",'text/plain')} }
+      before { post :create, attachment_file: attributes, format: 'json' }
+      it { expect(assigns(:attachment_file)).to be_persisted }
     end
   end
 
