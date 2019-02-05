@@ -264,6 +264,27 @@ describe AttachmentFile do
     end
   end
 
+  describe ".surfaces" do
+    let(:surface){ FactoryGirl.create(:surface) }
+    let(:surface_2){ FactoryGirl.create(:surface) }
+    let(:obj){ FactoryGirl.create(:attachment_file, data_content_type: data_content_type)}
+    let(:data_content_type) { "image/jpeg" }
+    before do
+      obj
+      surface
+      surface_2
+      surface.images << obj
+      surface_2.images << obj
+    end
+    it { expect(obj.surfaces.count).to eql(2)}
+    context "when surface was destroyed" do
+      before do
+        surface.destroy
+      end
+      it { expect(obj.surfaces.count).to eql(1)  }
+    end
+  end
+
   describe ".to_pml" do
     subject{[obj].to_pml}
     let(:obj){FactoryGirl.create(:attachment_file)}

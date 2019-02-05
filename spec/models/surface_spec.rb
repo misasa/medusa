@@ -40,9 +40,10 @@ describe Surface do
     it { expect{ subject }.not_to raise_error }
   end
 
+
   describe "images <<" do
     subject { obj.images << image }
-  	let(:obj){ FactoryGirl.create(:surface) }
+    let(:obj){ FactoryGirl.create(:surface) }
     let(:image){ FactoryGirl.create(:attachment_file, data_content_type: data_content_type)}
     let(:data_content_type) { "image/jpeg" }
     before do
@@ -58,6 +59,28 @@ describe Surface do
     context "not image file" do
       let(:data_content_type) { "application/pdf" }
       it { expect{subject}.to raise_error(ActiveRecord::RecordInvalid)}
+    end
+  end
+
+
+  describe "first_image" do
+    subject { obj.first_image }
+    let(:obj){ FactoryGirl.create(:surface) }
+    let(:image){ FactoryGirl.create(:attachment_file, data_content_type: data_content_type)}
+    let(:image_2){ FactoryGirl.create(:attachment_file, data_content_type: data_content_type)}
+    let(:data_content_type) { "image/jpeg" }
+    before do
+      obj
+      obj.images << image
+      obj.images << image_2  
+    end
+    it { expect(subject).to eql(image)}
+    context "when image was deleted" do
+      before do
+        image.destroy
+      end
+      it { expect(subject).to eql(image_2)}
+      it { expect(obj.surface_images.count).to eq(1) }
     end
   end
 

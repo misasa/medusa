@@ -16,7 +16,7 @@ class AttachmentFile < ActiveRecord::Base
   has_many :bibs, through: :attachings, source: :attachable, source_type: "Bib"
   has_many :analyses, through: :attachings, source: :attachable, source_type: "Analysis"
   has_many :surface_images, foreign_key: :image_id
-  has_many :surfaces, :through => :surface_images
+  has_many :surfaces, :through => :surface_images, dependent: :destroy
 
   attr_accessor :path
   after_post_process :save_geometry
