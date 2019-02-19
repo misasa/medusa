@@ -26,3 +26,7 @@ DREAM](http://dream.misasa.okayama-u.ac.jp/documentation/).
 ## [gem package -- withrecursive](https://github.com/misasa/withrecursive)
 
 ## [gem package -- actsasmappable](https://github.com/misasa/actsasmappable)
+
+# Application
+
+- [web app -- Medusa for stone](https://database.misasa.okayama-u.ac.jp/stone/)
