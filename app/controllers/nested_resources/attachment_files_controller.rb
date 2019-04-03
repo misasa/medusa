@@ -51,6 +51,7 @@ class NestedResources::AttachmentFilesController < ApplicationController
       :data,
       :original_geometry,
       :affine_matrix,
+      :affine_matrix_in_string,
       record_property_attributes: [
         :global_id,
         :user_id,

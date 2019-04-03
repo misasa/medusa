@@ -59,7 +59,8 @@ namespace :deploy do
 
   desc 'Restart application'
   task :restart do  
-    invoke 'unicorn:restart'
+    invoke 'unicorn:stop'
+    invoke 'unicorn:start'
     on roles(:web) do
       execute :sudo, :service, "#{fetch(:service_name)} restart" if fetch(:service_name)
     end
