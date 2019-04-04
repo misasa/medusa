@@ -1,3 +1,4 @@
+<% cache @bib do %>
 <div>
   <% if @bib.attachment_files.present? %>
     <%= link_to(@bib.primary_picture(width: 390), attachment_file_path(@bib.attachment_files.first), class: specimen_ghost(@bib)) %>
@@ -10,3 +11,4 @@
 <div id="family-tree">
   <%= @bib.family_tree %>
 </div>
+<% end %>

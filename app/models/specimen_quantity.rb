@@ -1,7 +1,7 @@
 class SpecimenQuantity < ActiveRecord::Base
   include HasQuantity
 
-  belongs_to :specimen
+  belongs_to :specimen, touch: true
   belongs_to :divide
   has_one :after_divide, foreign_key: "before_specimen_quantity_id", class_name: "Divide"
 

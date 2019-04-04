@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 class BibAuthor < ActiveRecord::Base
-  belongs_to :bib
+  belongs_to :bib, touch: true
   belongs_to :author
   
   #TODO bibの新規作成時にexistenceバリデーションが掛かるため一旦コメントアウト

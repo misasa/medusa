@@ -1,6 +1,6 @@
 class TableSpecimen < ActiveRecord::Base
 
-  belongs_to :table
+  belongs_to :table, touch: true
   belongs_to :specimen
 
   before_create :assign_position, :create_table_analyses

@@ -7,6 +7,10 @@ class TablesController < ApplicationController
     redirect_to bibs_path
   end
 
+  def display
+    respond_with @table, layout: !request.xhr?
+  end
+
   def show
     respond_with @table do |format|
       format.csv { send_data render_to_string, filename: "#{@table.caption}.csv", type: :csv }

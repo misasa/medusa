@@ -46,28 +46,8 @@
     </div>
   </div>
   <div id="show-body" class="col-lg-8">
-    <% tab_info = [
-        ["at-a-glance",nil],
-        ["daughter",@specimen.children],
-        ["history", @specimen.paths],
-        ["analysis",@specimen.full_analyses],
-        ["bib",@specimen.bibs],
-        ["file",@specimen.attachment_files],
-        ["quantity", @specimen.self_and_descendants]] %>
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-      <% tab_info.each do |key,array| %>
-       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= key + data_count(array) %></a></li>
-      <% end %>
-
-    </ul>
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <% tab_info.each do |key,array| %>
-        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
-      <% end %>
-    </div>
+    <% cache @specimen do %>
+      <%= render(partial: "show_body") %>
+    <% end %>
   </div>
-
-
 </div>

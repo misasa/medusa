@@ -43,59 +43,8 @@
   </div>
 
   <div id="show-body" class="col-lg-8">
-    <% if @bib.referrings_analyses.size > 0 %>
-    <style>
-      iframe {
-        min-width: 100%;
-        min-height: 500px;
-      }
-    </style>
-    <%= link_to("zoom", @bib.rmap_url) %>
-    <%= rmap_iframe(@bib) %>
+    <% cache @bib do %>
+      <%= render(partial: "show_body") %>
     <% end %>
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-      <li class="<%= active_if_current('at-a-glance') %>">
-        <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
-      </li>
-      <li class="<%= active_if_current('specimen') %>">
-        <a href="#specimen" data-toggle="tab"><%= @alias_specimen + data_count(@bib.specimens) %></a>
-      </li>
-      <li class="<%= active_if_current('box') %>">
-        <a href="#box" data-toggle="tab"><%= "box#{data_count(@bib.boxes)}" %></a>
-      </li>
-      <li class="<%= active_if_current('place') %>">
-        <a href="#place" data-toggle="tab"><%= "place#{data_count(@bib.all_places)}" %></a>
-      </li>
-      <li class="<%= active_if_current('analysis') %>">
-        <a href="#analysis" data-toggle="tab"><%= "analysis#{data_count(@bib.referrings_analyses)}" %></a>
-      </li>
-      <li class="<%= active_if_current('file') %>">
-        <a href="#file" data-toggle="tab"><%= "file#{data_count(@bib.attachment_files)}" %></a>
-      </li>
-      <li class="<%= active_if_current('table') %>">
-        <a href="#table" data-toggle="tab"><%= "table#{data_count(@bib.tables)}" %></a>
-      </li>
-      <li class="<%= active_if_current('author') %>">
-        <a href="#author" data-toggle="tab">author</a>
-      </li>
-    </ul>
-
-    <!-- Tab panes -->
-    <% tab_info = [
-        ["at-a-glance",nil],
-        ["specimen",@bib.specimens],
-        ["box",@bib.boxes],
-        ["place",@bib.places],
-        ["analysis",@bib.analyses],
-        ["file",@bib.attachment_files],
-        ["table", @bib.tables],
-        ["author", nil]
-    ] %>
-    <div class="tab-content">
-      <% tab_info.each do |key,array| %>
-        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
-      <% end %>
-    </div>
   </div>
 </div>

@@ -1,7 +1,7 @@
 class Chemistry < ActiveRecord::Base
   include HasRecordProperty
 
-  belongs_to :analysis
+  belongs_to :analysis, touch: true
   belongs_to :measurement_item
   belongs_to :unit
   delegate :specimen, to: :analysis

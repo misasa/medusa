@@ -12,7 +12,7 @@ class Table < ActiveRecord::Base
   has_many :chemistries, through: :analyses
   has_many :category_measurement_items, through: :measurement_category
   has_many :measurement_items, through: :measurement_category
-  belongs_to :bib
+  belongs_to :bib, touch: true
   belongs_to :measurement_category
 
   accepts_nested_attributes_for :table_specimens
