@@ -88,7 +88,7 @@ class RecordsController < ApplicationController
     #end 
     respond_with @records do |format|
 #      format.json { render json: [ @records.map {|item| item.build_pmlame(element_names)}.flatten.uniq ], methods: [:datum_attributes] }
-      format.json { render json: Rails.cache.fetch(@record){ [ @records.map {|item| item.build_pmlame(element_names)}.flatten.uniq ] } }
+      format.json { render json: Rails.cache.fetch("#{@record}/pmlame.json"){ [ @records.map {|item| item.build_pmlame(element_names)}.flatten.uniq ] } }
     end
   end
 
