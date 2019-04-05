@@ -8,7 +8,11 @@ class SurfacesController < ApplicationController
     @search = Surface.readables(current_user).search(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @surfaces = SurfaceDecorator.decorate_collection(@search.result)
-    respond_with @surfaces
+    respond_with @surfaces do |format|
+      format.html
+      format.json { render json: Rails.cache.fetch(@surfaces){ @surfaces.to_json }}
+      format.xml
+    end
   end
 
   def show
