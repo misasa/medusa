@@ -5,9 +5,24 @@
         min-height: 500px;
       }
     </style>
-    <%= link_to("zoom", @bib.rmap_url) %>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="col-md-2">
+       <p class="text-right">
+       <%= link_to @bib.rmap_url, class: "btn btn-default" do %>
+         <span class="glyphicon glyphicon-fullscreen"></span>
+       <% end %>
+       </p>
+      </div>
+    </div>
     <%= rmap_iframe(@bib) %>
     <% end %>
+    <div class="row">
+      <div class="col">
+        <p class="text-center">Map on Earth or specimen. Spots and analyses are shown.</p>
+      </div>
+    </div>
+
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <li class="<%= active_if_current('at-a-glance') %>">
