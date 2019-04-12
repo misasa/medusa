@@ -6,7 +6,9 @@
       }
     </style>
     <div class="row">
-      <div class="col-md-10"></div>
+      <div class="col-md-10">
+        <p class="text-left">Map on Earth or <%= @alias_specimen %>. Places and analyses are shown.</p>
+      </div>
       <div class="col-md-2">
        <p class="text-right">
        <%= link_to @bib.rmap_url, class: "btn btn-default" do %>
@@ -17,11 +19,6 @@
     </div>
     <%= rmap_iframe(@bib) %>
     <% end %>
-    <div class="row">
-      <div class="col">
-        <p class="text-center">Map on Earth or specimen. Spots and analyses are shown.</p>
-      </div>
-    </div>
 
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
