@@ -7,14 +7,14 @@ test_app:
    services:
      - postgres:latest
    variables:
-     POSTGRES_DB: medusa_test
-     POSTGRES_USER: medusa
-     POSTGRES_PASSWORD: "my_password"
+     POSTGRES_DB: test_db
+     POSTGRES_USER: runner
+     POSTGRES_PASSWORD: ""
      
    stage: test
    before_script:
      - bundle install
-     - cp config/database.yml.example config/database.yml
+     - cp config/database.yml.gitlab config/database.yml
      - RAILS_ENV=test bundle exec rake db:create
      - RAILS_ENV=test bundle exec rake db:migrate
    script:
