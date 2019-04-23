@@ -12,6 +12,9 @@ test_app:
    stage: test
    script:
      - pwd
+     - ls
+     - bundle install
+     - rails -v
 
 build_docker_image:
    services:
