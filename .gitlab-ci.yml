@@ -7,9 +7,9 @@ test_app:
    services:
      - postgres:latest
    variables:
-     POSTGRES_DB: test_db
-     POSTGRES_USER: runner
-     POSTGRES_PASSWORD: ""
+     POSTGRES_DB: medusa_test
+     POSTGRES_USER: medusa
+     POSTGRES_PASSWORD: "my_password"
      
    stage: test
    before_script:
