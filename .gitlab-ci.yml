@@ -14,7 +14,7 @@ test_app:
      - pwd
      - ls
      - bundle install
-     - rails -v
+     - bundle exec rails -v
 
 build_docker_image:
    services:
