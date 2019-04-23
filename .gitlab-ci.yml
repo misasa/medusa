@@ -1,7 +1,3 @@
-variables:
-   DOCKER_HOST: tcp://docker:2375/
-   DOCKER_DRIVER: overlay2
-   CONTAINER_IMAGE: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH
 
 stages:
   - build
@@ -9,14 +5,27 @@ stages:
 
 test_app:
    image: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH:latest
+   services:
+     - postgres:latest
+   variables:
+     POSTGRES_DB: test_db
+     POSTGRES_USER: runner
+     POSTGRES_PASSWORD: ""
+     
    stage: test
-   script:
-     - pwd
-     - ls
+   before_script:
      - bundle install
-     - bundle exec rails -v
+     - cp config/database.yml.example config/database.yml
+     - RAILS_ENV=test bundle exec rake db:create
+     - RAILS_ENV=test bundle exec rakd db:migrate
+   script:
+     - RAILS_ENV=test bundle exec rspec
 
 build_docker_image:
+   variables:
+     DOCKER_HOST: tcp://docker:2375/
+     DOCKER_DRIVER: overlay2
+     CONTAINER_IMAGE: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH
    services:
      - docker:dind
    before_script:
