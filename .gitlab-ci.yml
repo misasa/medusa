@@ -1,0 +1,23 @@
+variables:
+   DOCKER_HOST: tcp://docker:2375/
+   DOCKER_DRIVER: overlay2
+   CONTAINER_IMAGE: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH
+
+stages:
+  - build
+
+services:
+  - docker:dind
+
+before_script:
+  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.misasa.okayama-u.ac.jp:4567
+
+build_docker_image:
+   stage: build
+   script:
+     - docker build --tag $CONTAINER_IMAGE:$CI_COMMIT_SHA --tag $CONTAINER_IMAGE:latest .
+     - docker push $CONTAINER_IMAGE:$CI_COMMIT_SHA
+     - docker push $CONTAINER_IMAGE:latest
+   only:
+     - master
+    when: manual
