@@ -14,12 +14,6 @@ describe AttachmentFile do
         it { expect(obj).to be_valid }
       end
 
-      context "is presence", :current => true do
-        let(:data) { fixture_file_upload("/files/spell-of-revival.txt",'text/plain')}
-        let(:obj){AttachmentFile.new(data: data)}
-        it { expect(obj).to be_valid }
-      end
-
       context "is blank" do
         let(:obj){AttachmentFile.new()}
         it { expect(obj).not_to be_valid }
