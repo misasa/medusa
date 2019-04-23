@@ -15,6 +15,7 @@ test_app:
    before_script:
      - bundle install
      - cp config/database.yml.gitlab config/database.yml
+     - cp config/application.yml.example config/application.yml
      - RAILS_ENV=test bundle exec rake db:create
      - RAILS_ENV=test bundle exec rake db:migrate
    script:
