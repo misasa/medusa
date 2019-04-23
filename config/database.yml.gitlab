@@ -4,6 +4,16 @@ test:
   pool: 5
   timeout: 5000
   host: postgres
-  username: runner
-  password: ""
-  database: test_db
+  username: postgres
+  password: 
+  database: medusa_test
+  
+development:
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+  timeout: 5000
+  host: postgres
+  username: postgres
+  password: 
+  database: medusa_development  
