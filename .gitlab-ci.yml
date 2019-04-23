@@ -20,4 +20,4 @@ build_docker_image:
      - docker push $CONTAINER_IMAGE:latest
    only:
      - master
-    when: manual
+   when: manual
