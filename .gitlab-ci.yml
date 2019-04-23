@@ -5,14 +5,13 @@ variables:
 
 stages:
   - build
-
-services:
-  - docker:dind
-
-before_script:
-  - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.misasa.okayama-u.ac.jp:4567
+  - test
 
 build_docker_image:
+   services:
+     - docker:dind
+   before_script:
+     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.misasa.okayama-u.ac.jp:4567
    stage: build
    script:
      - docker build --tag $CONTAINER_IMAGE:$CI_COMMIT_SHA --tag $CONTAINER_IMAGE:latest .
