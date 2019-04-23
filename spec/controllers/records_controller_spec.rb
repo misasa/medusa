@@ -61,7 +61,12 @@ describe RecordsController do
         specimen
         get :show, id: specimen.record_property.global_id ,format: :json
       end
-      it { expect(response.body).to include(specimen.to_json) }
+      #it { expect(response.body).to include(specimen.to_json) }
+      it {
+        json = JSON.parse(response.body)
+        expect(json["datum_attributes"]["name"]).to eql(specimen.name)
+        expect(json["datum_attributes"]["global_id"]).to eql(specimen.global_id)        
+      }
     end
     context "record found html " do
       let(:specimen) { FactoryGirl.create(:specimen) }

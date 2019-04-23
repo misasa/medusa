@@ -1,0 +1,40 @@
+stages:
+  - build
+  - test
+
+test_app:
+   image: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH:latest
+   services:
+     - postgres:latest
+   variables:
+     POSTGRES_DB: medusa_test
+     POSTGRES_USER: postgres
+     POSTGRES_PASSWORD: ""
+     
+   stage: test
+   before_script:
+     - bundle install
+     - cp config/database.yml.docker config/database.yml
+     - cp config/application.yml.example config/application.yml
+     - RAILS_ENV=test bundle exec rake db:create
+     - RAILS_ENV=test bundle exec rake db:migrate
+   script:
+     - RAILS_ENV=test bundle exec rspec
+
+build_docker_image:
+   variables:
+     DOCKER_HOST: tcp://docker:2375/
+     DOCKER_DRIVER: overlay2
+     CONTAINER_IMAGE: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH
+   services:
+     - docker:dind
+   before_script:
+     - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN gitlab.misasa.okayama-u.ac.jp:4567
+   stage: build
+   script:
+     - docker build --tag $CONTAINER_IMAGE:$CI_COMMIT_SHA --tag $CONTAINER_IMAGE:latest .
+     - docker push $CONTAINER_IMAGE:$CI_COMMIT_SHA
+     - docker push $CONTAINER_IMAGE:latest
+   only:
+     - master
+   when: manual

@@ -15,7 +15,15 @@ RUN echo 'gem: --no-document' >> ~/.gemrc && cp ~/.gemrc /etc/gemrc && chmod uog
 RUN gem update --system 2.7.8
 RUN pip install --upgrade pip
 RUN pip install git+https://github.com/misasa/image_mosaic.git
-RUN wget https://github.com/misasa/medusa/archive/master.zip -P /srv
-RUN cd /srv && unzip master.zip
-WORKDIR /srv/medusa-master
+#RUN wget https://github.com/misasa/medusa/archive/master.zip -P /srv
+#RUN cd /srv && unzip master.zip
+#WORKDIR /srv/medusa-master
+RUN mkdir -p /usr/src/app
+WORKDIR /usr/src/app
+COPY Gemfile Gemfile.lock /usr/src/app/
 RUN bash -l -c 'bundle install'
+COPY . /usr/src/app
+
+ENV PORT 5000
+EXPOSE $PORT
+CMD ["sh", "-c", "bundle exec rails server -p ${PORT}"]
