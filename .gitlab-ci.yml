@@ -7,6 +7,12 @@ stages:
   - build
   - test
 
+test_app:
+   image: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH:latest
+   stage: test
+   script:
+     - pwd
+
 build_docker_image:
    services:
      - docker:dind
