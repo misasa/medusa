@@ -2,7 +2,7 @@ stages:
   - build
   - test
 
-test_app:
+rspec:
    image: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH:latest
    services:
      - postgres:latest
