@@ -20,7 +20,8 @@ rspec:
      - RAILS_ENV=test bundle exec rake db:migrate
    script:
      - RAILS_ENV=test bundle exec rspec
-
+#   when: manual
+     
 build_docker_image:
    variables:
      DOCKER_HOST: tcp://docker:2375/
