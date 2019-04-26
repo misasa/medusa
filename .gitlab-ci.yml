@@ -16,6 +16,9 @@ test_deploy:
      #- docker-compose run app bash -c "dropdb -U postgres medusa_development"
      - docker-compose run app bash -c "bundle exec rake db:create"
      - docker-compose run app bash -c "psql -U postgres -h postgres medusa_development < /srv/data/stone/dream.sql"
+     - docker-compose run app bash -c "ln -s /srv/data/maps public/system/maps"
+     - docker-compose run app bash -c "ln -s /srv/data/stone/shared/public/system/attachment_files public/system/attachment_files"
+     
    after_script:
      - docker-compose ps
    script:
