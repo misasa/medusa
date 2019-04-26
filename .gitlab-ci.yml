@@ -5,7 +5,7 @@ stages:
 
 test_deploy:
    variables:
-     GITSTRATEGY: none
+     GIT_STRATEGY: none
    stage: test
    tags:
      - shell_docker
