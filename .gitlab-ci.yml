@@ -1,6 +1,14 @@
 stages:
   - build
   - test
+  - deploy
+
+deploy_development:
+   stage: deploy
+   tags:
+     - shell_docker
+   script:
+     - pwd
 
 rspec:
    image: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH:latest
