@@ -8,6 +8,7 @@ test_deploy:
    tags:
      - shell_docker
    before_script:
+     - docker-compose down --rmi all -v
      - docker-compose run app bash -c "cp config/database.yml.docker config/database.yml"
      - docker-compose run app bash -c "cp config/application.yml.example config/application.yml"
      - docker-compose run app bash -c "dropdb -U postgres medusa_development"
