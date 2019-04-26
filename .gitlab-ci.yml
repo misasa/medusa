@@ -1,8 +1,26 @@
 stages:
   - build
   - test
+  - deploy
 
-test_app:
+test_deploy:
+   variables:
+     GIT_STRATEGY: none
+   stage: test
+   tags:
+     - shell_docker
+   before_script:
+     - docker-compose down
+     - docker-compose run app bash -c "cp config/database.yml.docker config/database.yml && cp config/application.yml.example config/application.yml"
+     - docker-compose run app bash -c "bundle exec rake db:create && psql -U postgres -h postgres medusa_development < /srv/data/stone/dream.sql"
+     - docker-compose run app bash -c "mkdir -p public/system && ln -s /srv/data/maps public/system/maps && ln -s /srv/data/stone/shared/public/system/attachment_files public/system/attachment_files"
+     
+   after_script:
+     - docker-compose ps
+   script:
+     - docker-compose up -d
+
+rspec:
    image: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH:latest
    services:
      - postgres:latest
@@ -20,7 +38,8 @@ test_app:
      - RAILS_ENV=test bundle exec rake db:migrate
    script:
      - RAILS_ENV=test bundle exec rspec
-
+   when: manual
+     
 build_docker_image:
    variables:
      DOCKER_HOST: tcp://docker:2375/

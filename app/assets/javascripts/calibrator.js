@@ -249,6 +249,9 @@
     transformedCoord(){
         var overlayCoord = this.overlayTriangle.coord();
         var overlayAffine = this.thumbnails.overlayAffine();
+        if (!overlayAffine) {
+	    overlayAffine = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+        }
         var affine_overlay = Matrix.from(overlayAffine[0],overlayAffine[3],overlayAffine[1],overlayAffine[4],overlayAffine[2],overlayAffine[5]);
 	var transformedCoord = affine_overlay.applyToArray(overlayCoord);
         return transformedCoord;
