@@ -8,7 +8,7 @@ test_deploy:
    tags:
      - shell_docker
    before_script:
-     - docker ps
+     - docker-compose run app pwd
      - docker-compose ps
    script:
      - pwd
