@@ -3,8 +3,8 @@ stages:
   - test
   - deploy
 
-deploy_development:
-   stage: deploy
+test_deploy:
+   stage: test
    tags:
      - shell_docker
    script:
@@ -28,7 +28,7 @@ rspec:
      - RAILS_ENV=test bundle exec rake db:migrate
    script:
      - RAILS_ENV=test bundle exec rspec
-#   when: manual
+   when: manual
      
 build_docker_image:
    variables:
