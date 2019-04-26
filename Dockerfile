@@ -1,6 +1,6 @@
 FROM valian/docker-python-opencv-ffmpeg
 RUN apt-get update
-RUN apt-get install -y libpq-dev postgresql-client rsync libssl-dev libreadline-dev imagemagick
+RUN apt-get install -y libpq-dev postgresql-client rsync libssl-dev libreadline-dev imagemagick nfs-common
 RUN git clone https://github.com/sstephenson/rbenv.git /root/.rbenv
 RUN git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build
 RUN /root/.rbenv/plugins/ruby-build/install.sh

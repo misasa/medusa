@@ -1,8 +1,16 @@
 stages:
   - build
   - test
+  - deploy
 
-test_app:
+test_deploy:
+   stage: test
+   tags:
+     - shell_docker
+   script:
+     - pwd
+
+rspec:
    image: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH:latest
    services:
      - postgres:latest
@@ -20,7 +28,8 @@ test_app:
      - RAILS_ENV=test bundle exec rake db:migrate
    script:
      - RAILS_ENV=test bundle exec rspec
-
+   when: manual
+     
 build_docker_image:
    variables:
      DOCKER_HOST: tcp://docker:2375/
