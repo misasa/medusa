@@ -7,6 +7,9 @@ test_deploy:
    stage: test
    tags:
      - shell_docker
+   before_script:
+     - docker ps
+     - docker-compose ps
    script:
      - pwd
 
