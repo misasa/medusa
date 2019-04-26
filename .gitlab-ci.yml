@@ -8,10 +8,12 @@ test_deploy:
    tags:
      - shell_docker
    before_script:
-     - docker-compose run app pwd
-     - docker-compose ps
+     - docker-compose run app bash -c "cp config/database.yml.docker config/database.yml"
+     - docker-compose run app bash -c "cp config/application.yml.example config/application.yml"
+     - docker-compose run app bash -c "bundle exec rake db:create"
+     - docker-compose run app bash -c "psql -U postgres -h postgres medusa_development < /srv/data/stone/dream.sql"
    script:
-     - pwd
+     - docker-compose ps
 
 rspec:
    image: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH:latest
