@@ -13,7 +13,7 @@ test_deploy:
      - docker-compose run app bash -c "bundle exec rake db:create"
      - docker-compose run app bash -c "psql -U postgres -h postgres medusa_development < /srv/data/stone/dream.sql"
    script:
-     - docker-compose ps
+     - docker-compose up -d
 
 rspec:
    image: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH:latest
