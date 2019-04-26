@@ -4,6 +4,8 @@ stages:
   - deploy
 
 test_deploy:
+   valiables:
+     GITSTRATEGY: none
    stage: test
    tags:
      - shell_docker
