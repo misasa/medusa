@@ -13,7 +13,7 @@ test_deploy:
      - docker-compose down --rmi all -v
      - docker-compose run app bash -c "cp config/database.yml.docker config/database.yml"
      - docker-compose run app bash -c "cp config/application.yml.example config/application.yml"
-     - docker-compose run app bash -c "dropdb -U postgres medusa_development"
+     #- docker-compose run app bash -c "dropdb -U postgres medusa_development"
      - docker-compose run app bash -c "bundle exec rake db:create"
      - docker-compose run app bash -c "psql -U postgres -h postgres medusa_development < /srv/data/stone/dream.sql"
    script:
