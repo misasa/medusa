@@ -37,7 +37,7 @@
           </td>
 
           <td>
-            <%= link_to calibrate_surface_image_path(@surface, attachment_file) + tab_param(__FILE__) ,title: "calibrate" do %>
+            <%= link_to calibrate_surface_image_path(@surface, attachment_file) + tab_param(__FILE__) ,title: "calibrate #{attachment_file.name}" do %>
 	      <span class="glyphicon glyphicon-cog"></span>
             <% end %>
           </td>
