@@ -10,6 +10,14 @@ describe SpotDecorator do
     it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-screenshot\"></span>") }
   end
 
+  describe ".spots_panel" do
+    subject{ spot.spots_panel }
+    context "attachment_file is nil" do
+      let(:spot){ FactoryGirl.create(:spot, attachment_file: nil, target_uid: nil).decorate }
+      it { expect(subject).to be_nil}
+    end
+  end
+
   describe ".taget_link" do
     subject{ spot.target_link }
     context "target_uid is nil" do
