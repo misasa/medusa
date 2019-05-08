@@ -198,9 +198,6 @@
       <% @surface.images.each_with_index do |image, index| %>
         <%= content_tag :div, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: image.path, name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), affine: image.affine_matrix.presence, path: download_attachment_file_path(image) } do %>
 	  <%= image.decorate.picture(width: 70, height: 70, type: :thumb) %>
-          <%= link_to(download_attachment_file_path(image), :title => "download #{image.name}") do %>
-             <span class="glyphicon glyphicon-download"></span>
-          <% end %>          
 	<% end %>
       <% end %>
     </div>

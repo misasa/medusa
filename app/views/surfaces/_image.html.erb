@@ -3,7 +3,7 @@
     <tr>
       <th></th>
       <th></th>
-      <th>name</th>
+      <th>name/affine matrix</th>
       <th></th>
       <th>spots</th>
       <th>global-id</th>
@@ -22,31 +22,33 @@
             <%= check_box_tag("ids[]", attachment_file.id, checked: false, id: "ids_#{attachment_file.id}", class: "select-row") if can?(:update, attachment_file) %>
           </td>
           <td><%= attachment_file.decorate.picture(width: 70, height: 70, type: :thumb) %></td>
-          <td><%= link_to_if can?(:read, attachment_file), list_title(attachment_file), attachment_file_path(attachment_file) %></td>
+          <td>
+          <%= list_title(attachment_file) %>
+          <% if can?(:read, attachment_file) %> 
+            <%= link_to(attachment_file_path(attachment_file), :title => "show #{attachment_file.name}") do %>
+              <span class="glyphicon glyphicon-info-sign"></span>
+            <% end %>
+          <% end %>
+          <br />
+          <%= attachment_file.affine_matrix %>
+          <%= link_to calibrate_surface_image_path(@surface, attachment_file) + tab_param(__FILE__) ,title: "calibrate #{attachment_file.name}" do %>
+	    <span class="glyphicon glyphicon-cog"></span>
+          <% end %>
+          </td>
           <td></td>
           <td><%= attachment_file.spots.try!(:size) %></td>
           <td><%= attachment_file.try!(:global_id) %></td>
           <td>
 	    <% if attachment_file.try!(:affine_matrix).present? %>
-              <%= link_to(tiles_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :post, title: "make world image" ) do %>
+              <%= link_to(tiles_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :post, title: "force create tiles" ) do %>
                 <span class="glyphicon glyphicon-refresh"></span>
               <% end %>
 	    <% else %>
               <span class="glyphicon glyphicon-ban-circle"></span>
 	    <% end %>
-          </td>
-
-          <td>
-            <%= link_to calibrate_surface_image_path(@surface, attachment_file) + tab_param(__FILE__) ,title: "calibrate #{attachment_file.name}" do %>
-	      <span class="glyphicon glyphicon-cog"></span>
-            <% end %>
-          </td>
-          <td>
             <%= link_to move_to_top_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :move_to_top ,title: "move to top" do %>
               <span class="glyphicon glyphicon-arrow-up"></span>
             <% end %>
-          </td>
-          <td>
             <%= link_to surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :delete, title: "unlink image", data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
             <% end %>
@@ -66,7 +68,7 @@
         <th colspan= "2">
 	  <%= f.file_field :data %>
 	  <%= f.text_field :affine_matrix_in_string, class: "form-control input-sm" %>
-	</th>
+        </th>
         <th>
           <%= f.button title:"add image", class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>
