@@ -289,7 +289,7 @@
 
     blend_cmd = "blend-image " + this.base_image_name + " deleteme.png";
     blend_cmd += " 0 0 " + this.baseTriangle.image.width + " " + this.baseTriangle.image.height
-    blend_cmd += " 0.4 0.6 -o " + this.overlay_image_name.split('.').shift() + "-on-" + this.base_image_name.split('.').shift() + ".png";
+    blend_cmd += " 0.4 0.6 -o " + basename(this.overlay_image_name) + "-on-" + basename(this.base_image_name) + ".png";
     $("#blend_cmd").text(blend_cmd);
 
     var overlay_cmd = "warp_image";
