@@ -14,7 +14,7 @@
   </thead>
   <tbody>
     <%= form_tag bundle_edit_attachment_files_path, id: "attachment-file-bundle-form" do %>
-      <% @surface.surface_images.order("position ASC").each do |surface_image| %>
+      <% @surface.surface_images.reorder("position DESC").each do |surface_image| %>
         <% next unless surface_image.image %>
         <tr>
           <% attachment_file = surface_image.image %>
@@ -23,16 +23,11 @@
           </td>
           <td><%= attachment_file.decorate.picture(width: 70, height: 70, type: :thumb) %></td>
           <td>
-          <%= list_title(attachment_file) %>
-          <% if can?(:read, attachment_file) %> 
-            <%= link_to(attachment_file_path(attachment_file), :title => "show #{attachment_file.name}") do %>
-              <span class="glyphicon glyphicon-info-sign"></span>
-            <% end %>
-          <% end %>
+          <%= link_to_if can?(:read, attachment_file), list_title(attachment_file), attachment_file_path(attachment_file), :title => "show #{attachment_file.name}" %>
           <br />
-          <%= attachment_file.affine_matrix %>
-          <%= link_to calibrate_surface_image_path(@surface, attachment_file) + tab_param(__FILE__) ,title: "calibrate #{attachment_file.name}" do %>
-	    <span class="glyphicon glyphicon-cog"></span>
+          <%= link_to attachment_file.affine_matrix, calibrate_surface_image_path(@surface, attachment_file) + tab_param(__FILE__) ,title: "calibrate #{attachment_file.name}" %>
+          <%= link_to(edit_attachment_file_path(attachment_file) ,title: "type in affine matrix for #{attachment_file.name}") do %>
+	    <span class="glyphicon glyphicon-pencil"></span>
           <% end %>
           </td>
           <td></td>
@@ -46,8 +41,8 @@
 	    <% else %>
               <span class="glyphicon glyphicon-ban-circle"></span>
 	    <% end %>
-            <%= link_to move_to_top_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :move_to_top ,title: "move to top" do %>
-              <span class="glyphicon glyphicon-arrow-up"></span>
+            <%= link_to move_to_top_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :move_to_top ,title: "move to bottom" do %>
+              <span class="glyphicon glyphicon-arrow-down"></span>
             <% end %>
             <%= link_to surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :delete, title: "unlink image", data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
