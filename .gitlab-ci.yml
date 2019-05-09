@@ -13,15 +13,17 @@ test_deploy:
      - docker-compose down
      - docker-compose run app bash -c "cp config/database.yml.docker config/database.yml && cp config/application.yml.example config/application.yml"
      - docker-compose run app bash -c "bundle exec rake db:create && psql -U postgres -h postgres medusa_development < /srv/data/stone/dream.sql"
-     #- docker-compose run app bash -c "mkdir -p public/system && ln -s /srv/data/maps public/system/maps && ln -s /srv/data/stone/shared/public/system/attachment_files public/system/attachment_files"
+     - docker-compose run app bash -c "mkdir -p public/system && ln -s /srv/data/maps public/system/maps && ln -s /srv/data/stone/shared/public/system/attachment_files public/system/attachment_files"
      
    after_script:
      - docker-compose ps
    script:
      - docker-compose up -d
-   only:
-     - master
-     - develop
+   #only:
+   #  - master
+   #  - develop
+   when: manual
+
 rspec:
    image: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH:latest
    services:
