@@ -12,29 +12,7 @@
     </a>
   </div>
 
-  <div class="col-lg-12">   
-    <%= form_for @image, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
-      <div class="row">
-        <div class="col-lg-9">
-          <div class="input-group">
-            <span class="input-group-addon">Affine matrix
-            </span>
-            <%= f.text_field :affine_matrix_in_string, readonly: true, id: "affine_matrix", class: "form-control" %>
-            <span class="input-group-btn">
-             <%= link_to(edit_attachment_file_path(@image), class: "btn btn-default", :title => "edit affine matrix", :type => "button") do %>
-               <span class="glyphicon glyphicon-edit"></span>
-             <% end %>
-            </span>
-            <span class="input-group-btn">
-	      <%= button_tag title: "update affine matrix", id: "calibrator-button", class: "btn btn-default" do %>
-	         <span class="glyphicon glyphicon-save"></span>
-	      <% end %>
-            </span>
-          </div>
-        </div>
-      </div>
-      <% end %>
-  </div>
+
   <div class="col-lg-12">
     <div class="viewer pull-left" style="display:none"></div>
   </div>
@@ -202,6 +180,32 @@
       <% end %>
     </div>
   </div>
+
+
+  <div class="col-lg-12">   
+    <%= form_for @image, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
+      <div class="row">
+        <div class="col-lg-9">
+          <div class="input-group">
+            <span class="input-group-addon">Affine matrix
+            </span>
+            <%= f.text_field :affine_matrix_in_string, readonly: true, id: "affine_matrix", class: "form-control" %>
+            <span class="input-group-btn">
+             <%= link_to(edit_attachment_file_path(@image), class: "btn btn-default", :title => "edit affine matrix", :type => "button") do %>
+               <span class="glyphicon glyphicon-edit"></span>
+             <% end %>
+            </span>
+            <span class="input-group-btn">
+	      <%= button_tag title: "update affine matrix", id: "calibrator-button", class: "btn btn-default" do %>
+	         <span class="glyphicon glyphicon-save"></span>
+	      <% end %>
+            </span>
+          </div>
+        </div>
+      </div>
+      <% end %>
+  </div>
+
 
 
   <div class="col-lg-12">
