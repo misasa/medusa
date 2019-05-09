@@ -24,6 +24,6 @@ COPY Gemfile Gemfile.lock /usr/src/app/
 RUN bash -l -c 'bundle install'
 COPY . /usr/src/app
 
-ENV PORT 5000
+ENV PORT 3000
 EXPOSE $PORT
 CMD ["sh", "-c", "bundle exec rails server -p ${PORT}"]
