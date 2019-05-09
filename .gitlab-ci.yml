@@ -19,6 +19,10 @@ test_deploy:
      - docker-compose ps
    script:
      - docker-compose up -d
+   #only:
+   #  - master
+   #  - develop
+   when: manual
 
 rspec:
    image: gitlab.misasa.okayama-u.ac.jp:4567/$CI_PROJECT_PATH:latest
@@ -56,4 +60,4 @@ build_docker_image:
      - docker push $CONTAINER_IMAGE:latest
    only:
      - master
-   when: manual
+     - develop
