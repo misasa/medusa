@@ -9,14 +9,14 @@
     </tr>
   </thead>
   <tbody>
-    <% @surface.surface_layers.order("priority ASC").each do |surface_layer| %>
+    <% @surface.surface_layers.reorder("priority DESC").each do |surface_layer| %>
       <tr>
         <td></td>
         <td><%= link_to_if can?(:read, surface_layer), list_title(surface_layer), surface_layer_path(@surface, surface_layer) %></td>
 	<td><%= surface_layer.opacity %></td>
         <td>
-          <%= link_to move_to_top_surface_layer_path(@surface, surface_layer) + tab_param(__FILE__), method: :move_to_top ,title: "move to top" do %>
-            <span class="glyphicon glyphicon-arrow-up"></span>
+          <%= link_to move_to_top_surface_layer_path(@surface, surface_layer) + tab_param(__FILE__), method: :move_to_top ,title: "move to bottom" do %>
+            <span class="glyphicon glyphicon-arrow-down"></span>
           <% end %>
         </td>
         <td>
@@ -51,7 +51,22 @@
 
 <%= form_for @surface do |f| %>
   <ul>
-    <% @surface.surface_layers.each do |surface_layer| %>
+    <li>
+      layer untitled
+      <%= content_tag :ul, class: "surface-layer", style: "min-height: 20px;" do %>
+	<% @surface.surface_images.not_belongs_to_layer.each do |surface_image| %>
+          <% next unless surface_image.image %>
+	  <li class="surface-image">
+	    <%= surface_image.image.decorate.picture(width: 70, height: 70, type: :thumb) %>
+	    <%= surface_image.image.name %>
+	    <%= f.fields_for :surface_images, surface_image do |si| %>
+	      <%= si.hidden_field :surface_layer_id, class: "layer-id" %>
+	    <% end %>
+	  </li>
+	<% end %>
+      <% end %>
+    </li>
+    <% @surface.surface_layers.reorder("priority DESC").each do |surface_layer| %>
       <li>
 	layer <%= surface_layer.name %>
 	<%= content_tag :ul, class: "surface-layer", data: { id: surface_layer.id }, style: "min-height: 20px;" do %>
@@ -68,25 +83,16 @@
 	<% end %>
       </li>
     <% end %>
-    <li>
-      layer untitled
-      <%= content_tag :ul, class: "surface-layer", style: "min-height: 20px;" do %>
-	<% @surface.surface_images.not_belongs_to_layer.each do |surface_image| %>
-          <% next unless surface_image.image %>
-	  <li class="surface-image">
-	    <%= surface_image.image.decorate.picture(width: 70, height: 70, type: :thumb) %>
-	    <%= surface_image.image.name %>
-	    <%= f.fields_for :surface_images, surface_image do |si| %>
-	      <%= si.hidden_field :surface_layer_id, class: "layer-id" %>
-	    <% end %>
-	  </li>
-	<% end %>
-      <% end %>
-    </li>
   </ul>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="pull-right">
   <%= f.button title:"update belongs layer", class: "btn btn-default" do %>
     <span class="glyphicon glyphicon-save"></span>
   <% end %>
+      </div>
+    </div>
+  </div>
 <% end %>
 <%= javascript_tag do %>
   (function($) {
