@@ -23,6 +23,7 @@ class AttachmentFile < ActiveRecord::Base
 #  after_save :rotate
   after_save :check_affine_matrix
   after_save :update_spots_world_xy
+  after_update :rename_attached_files_if_needed
 
   serialize :affine_matrix, Array
 
@@ -133,6 +134,21 @@ class AttachmentFile < ActiveRecord::Base
   def update_spots_world_xy
     return unless affine_matrix_changed?
     spots.each(&:save!)
+  end
+
+  def rename_attached_files_if_needed
+    return if !name_changed? || data_updated_at_changed?
+    logger.info("renameing...")
+    (data.styles.keys+[:original]).each do |style|
+      path = data.path(style)
+      dirname = File.dirname(path)
+      extname = File.extname(path)
+      basename = File.basename(data_file_name,'.*')
+      old_basename = File.basename(data_file_name_was, '.*')
+      old_path = File.join(dirname, File.basename(path).sub(basename, old_basename))
+      logger.info("rename_attached_files: #{old_path} ->  #{path}")
+      FileUtils.mv(old_path, path)
+    end
   end
 
   def pdf?
