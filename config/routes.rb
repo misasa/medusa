@@ -246,6 +246,7 @@ Medusa::Application.routes.draw do
         post 'move_to_top'
         post 'tiles'
         get :calibrate
+        post 'layer'
       end
     end
     resources :spots, only: [:index, :create, :update, :destroy], controller: "nested_resources/spots"

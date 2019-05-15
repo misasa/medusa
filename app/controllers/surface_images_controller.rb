@@ -52,6 +52,11 @@ class SurfaceImagesController < ApplicationController
     respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
   end
 
+  def layer
+    @surface_image.update_attributes(surface_layer_id: params["layer_id"])
+    render :nothing => true
+  end
+
   def calibrate
     respond_with @surface_image
   end
