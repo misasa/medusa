@@ -20,7 +20,7 @@
           <% end %>
         </td>
         <td>
-          <%= link_to surface_layer_path(@surface, surface_layer) + tab_param(__FILE__), method: :delete, title: "unlink image", data: {confirm: t("confirm.unlink")} do %>
+          <%= link_to surface_layer_path(@surface, surface_layer) + tab_param(__FILE__), method: :delete, title: "delete layer #{list_title(surface_layer)}", data: {confirm: "Are you sure you want to delete layer #{list_title(surface_layer)}?"} do %>
             <span class="glyphicon glyphicon-remove"></span>
           <% end %>
         </td>
