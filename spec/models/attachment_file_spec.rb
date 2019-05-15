@@ -94,12 +94,26 @@ describe AttachmentFile do
       User.current = user
       obj
       obj.affine_matrix_in_string = affine_matrix_in_string
-      #allow(obj).to receive(:rotate).and_return("hello world")
     end
     it { expect{obj.save}.not_to raise_error}
   end
 
+  describe ".rename_attached_files_if_needed" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+    let(:new_name){ "deleteme.1234.jpg" }
 
+    before do
+      User.current = user
+      obj
+    end
+    it "chage data.path" do
+      obj.update_attributes(name: new_name)
+      expect(File.exist?(obj.data.path)).to be_truthy
+    end
+  end
+
+  
 
   describe ".create" do
     let(:user) { FactoryGirl.create(:user) }
