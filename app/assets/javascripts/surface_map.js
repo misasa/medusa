@@ -141,7 +141,7 @@ function initSurfaceMap() {
 	L.tileLayer(baseUrl + global_id + '/' + id + '/{z}/{x}_{y}.png', { opacity: opacity }).addTo(group);
       });
       layers.push(group);
-      if (name === "") { name = "untitled"; }
+      if (name === "") { name = "top"; }
       overlayMaps[name] = group;
     }
   });
@@ -186,6 +186,8 @@ function initSurfaceMap() {
   L.control.layers(baseMaps, overlayMaps).addTo(map);
 
   map.setView(map.unproject([256 / 2, 256 / 2], 0), zoom);
+
+  map.addControl(new L.Control.Fullscreen());
 
   surfaceMap = map;
 }
