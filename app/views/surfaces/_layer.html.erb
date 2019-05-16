@@ -15,7 +15,7 @@
       <td>100</td>
       <td>
       <%= content_tag :ul, class: "surface-layer", style: "min-height: 20px;" do %>
-	<% @surface.surface_images.not_belongs_to_layer.each do |surface_image| %>
+	<% @surface.surface_images.not_belongs_to_layer.reorder("position DESC").each do |surface_image| %>
           <% next unless surface_image.image %>
 	  <%= content_tag :span, class: "surface-image", data: { image_id: surface_image.image.id, surface_id: @surface.id, surface_image_id: surface_image.id } do %> 
 	    <%= surface_image.image.decorate.picture(width: 70, height: 70, type: :thumb) %>
@@ -54,7 +54,7 @@
 	<td><%= surface_layer.opacity %></td>
         <td>
 	<%= content_tag :ul, class: "surface-layer", data: { id: surface_layer.id }, style: "min-height: 20px;" do %>
-	  <% surface_layer.surface_images.each do |surface_image| %>
+	  <% surface_layer.surface_images.reorder("position DESC").each do |surface_image| %>
             <% next unless surface_image.image %>
 	    <%= content_tag :span, class: "surface-image", data: { image_id: surface_image.image.id, surface_id: @surface.id, surface_image_id: surface_image.id } do %> 
 	      <%= surface_image.image.decorate.picture(width: 70, height: 70, type: :thumb) %>
