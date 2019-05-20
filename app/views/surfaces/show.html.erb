@@ -8,17 +8,17 @@
   <div id="show-tools" class="col-lg-4">
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
-        <%= link_to family_surface_path(@surface), class: "btn btn-default activate", id: "tree-conifer-button", remote: true do %>
+        <%= link_to family_surface_path(@surface), class: "btn btn-default activate", id: "tree-conifer-button", remote: true, title: "top" do %>
           <span class="glyphicon glyphicon-tree-conifer"></span>
         <% end %>
       </div>    
     
       <% if can? :update, @surface %>
       <div class="btn-group btn-group-sm">
-	     <%= link_to edit_surface_path(@surface), class: "btn btn-default", remote: true do %>
+	     <%= link_to edit_surface_path(@surface), class: "btn btn-default", remote: true, title: "edit name" do %>
 	       <span class="glyphicon glyphicon-pencil"></span>
 	     <% end %>
-	     <%= link_to property_surface_path(@surface), class: "btn btn-default", remote: true do %>
+	     <%= link_to property_surface_path(@surface), class: "btn btn-default", remote: true, title: "edit global ID" do %>
 	       <span class="glyphicon glyphicon-cog"></span>
 	     <% end %>
       </div>
