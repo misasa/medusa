@@ -11,9 +11,10 @@
       <% if box %>
           <% links = [] %>
           <% path.related_spots.each do |spot| %>
-          <% svg_link = link_to(spot_path(spot)) do %>
-            <% spot.attachment_file.decorate.picture_with_spots(width:120, height:90, spots:[spot], with_cross: true) %>
-          <% end %>
+            <% next unless spot.attachment_file%>
+            <% svg_link = link_to(spot_path(spot)) do %>
+              <% spot.attachment_file.decorate.picture_with_spots(width:120, height:90, spots:[spot], with_cross: true) %>
+            <% end %>
             <% links << content_tag(:div, svg_link, class: "col-xs-3 col-sm-3 col-md-3 col-lg-3") %>
           <% end %>
           <%= content_tag(:div, raw( links.join ), class: "row spot-thumbnails") %>
