@@ -11,7 +11,7 @@
           <span class="glyphicon glyphicon-tree-conifer"></span>
         <% end %>
         <% if @specimen.has_image? %>
-          <%= link_to picture_specimen_path(@specimen), class: "btn btn-default", id: "picture-button", remote: true do %>
+          <%= link_to picture_specimen_path(@specimen), class: "btn btn-default", id: "picture-button", remote: true, title: "show image" do %>
             <span class="glyphicon glyphicon-picture"></span>
           <% end %>
         <% end %>

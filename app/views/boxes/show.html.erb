@@ -26,7 +26,7 @@
   <div id="show-tools" class="col-lg-4">
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
-        <%= link_to family_box_path(@box), class: "btn btn-default activate",  id: "tree-conifer-button", remote: true do %>
+        <%= link_to family_box_path(@box), class: "btn btn-default activate",  id: "tree-conifer-button", remote: true, title: "top" do %>
           <span class="glyphicon glyphicon-tree-conifer"></span>
         <% end %>
         <% if @box.has_image? %>
@@ -37,19 +37,19 @@
       </div>
       <% if can? :update, @box %>
       <div class="btn-group btn-group-sm">
-        <%= link_to edit_box_path(@box), class: "btn btn-default", id: "pencil-button", remote: true do %>
+        <%= link_to edit_box_path(@box), class: "btn btn-default", id: "pencil-button", remote: true, title: "edit box information" do %>
           <span class="glyphicon glyphicon-pencil"></span>
         <% end %>
-        <%= link_to property_box_path(@box), class: "btn btn-default", id: "cog-button", remote: true do %>
+        <%= link_to property_box_path(@box), class: "btn btn-default", id: "cog-button", remote: true, title: "edit global ID" do %>
           <span class="glyphicon glyphicon-cog"></span>
         <% end %>
       </div>
       <% end %>
       <div class="btn-group btn-group-sm">
-        <%= link_to download_label_box_path(@box), class: "btn btn-default", id: "tag-button" do %>
+        <%= link_to download_label_box_path(@box), class: "btn btn-default", id: "tag-button", title: "print barcode label" do %>
           <span class="glyphicon glyphicon-tag"></span>
         <% end %>
-        <%= link_to download_card_box_path(@box), class: "btn btn-default", id: "file-button" do %>
+        <%= link_to download_card_box_path(@box), class: "btn btn-default", id: "file-button", title: "download PDF" do %>
           <span class="glyphicon glyphicon-file"></span>
         <% end %>
       </div>
