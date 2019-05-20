@@ -15,10 +15,10 @@
       </div>
       <% if can? :update, @analysis %>
       <div class="btn-group btn-group-sm">
-        <%= link_to edit_analysis_path(@analysis), class: "btn btn-default", id: "pencil-button", remote: true do %>
+        <%= link_to edit_analysis_path(@analysis), class: "btn btn-default", id: "pencil-button", remote: true, title: "edit analysis information" do %>
           <span class="glyphicon glyphicon-pencil"></span>
         <% end %>
-        <%= link_to property_analysis_path(@analysis), class: "btn btn-default", id: "cog-button", remote: true do %>
+        <%= link_to property_analysis_path(@analysis), class: "btn btn-default", id: "cog-button", remote: true, title: "edit global ID" do %>
           <span class="glyphicon glyphicon-cog"></span>
         <% end %>
       </div>
