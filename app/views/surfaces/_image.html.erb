@@ -21,19 +21,21 @@
           <td>
             <%= check_box_tag("ids[]", attachment_file.id, checked: false, id: "ids_#{attachment_file.id}", class: "select-row") if can?(:update, attachment_file) %>
           </td>
-          <td><%= attachment_file.decorate.picture(width: 70, height: 70, type: :thumb) %></td>
+          <td><%= link_to(attachment_file.decorate.picture(width: 70, height: 70, type: :thumb), calibrate_surface_image_path(@surface, surface_image), title: "calibrate #{attachment_file.name}") %></td>
           <td>
-          <%= link_to_if can?(:read, attachment_file), list_title(attachment_file), attachment_file_path(attachment_file), :title => "show #{attachment_file.name}" %>
+          <%= list_title(attachment_file) %>
           <br />
-          <%= link_to attachment_file.affine_matrix, calibrate_surface_image_path(@surface, attachment_file) + tab_param(__FILE__) ,title: "calibrate #{attachment_file.name}" %>
+          <% if attachment_file.try!(:affine_matrix).present? %>
+          <%= content_tag(:small, attachment_file.affine_matrix) %>
+          <% else %>
+          <%= link_to 'calibrate me', calibrate_surface_image_path(@surface, attachment_file) + tab_param(__FILE__) ,title: "calibrate #{attachment_file.name}" %>
+          <% end %>
           <%= link_to(edit_attachment_file_path(attachment_file) ,title: "type in affine matrix for #{attachment_file.name}") do %>
 	    <span class="glyphicon glyphicon-pencil"></span>
           <% end %>
-          </td>
-          <td></td>
-          <td><%= attachment_file.spots.try!(:size) %></td>
-          <td><%= attachment_file.try!(:global_id) %></td>
-          <td>
+          <%= link_to(calibrate_surface_image_path(@surface, attachment_file) ,title: "calibrate #{attachment_file.name}") do %>
+	    <span class="glyphicon glyphicon-cog"></span>
+          <% end %>
 	    <% if attachment_file.try!(:affine_matrix).present? %>
               <%= link_to(tiles_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :post, title: "force create tiles" ) do %>
                 <span class="glyphicon glyphicon-refresh"></span>
@@ -41,6 +43,15 @@
 	    <% else %>
               <span class="glyphicon glyphicon-ban-circle"></span>
 	    <% end %>
+
+
+          </td>
+          <td>
+	    <%= surface_image.decorate.drop_down_menu %>
+	  </td>
+          <td><%= attachment_file.spots.try!(:size) %></td>
+          <td><%= attachment_file.try!(:global_id) %></td>
+          <td>
             <%= link_to move_to_top_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :move_to_top ,title: "move to bottom" do %>
               <span class="glyphicon glyphicon-arrow-down"></span>
             <% end %>

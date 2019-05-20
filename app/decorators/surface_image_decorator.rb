@@ -11,23 +11,33 @@ class SurfaceImageDecorator < Draper::Decorator
   #     end
   #   end
 
+  def drop_down_menu
+    attachment_file = self.image
 
+    links = []
+    links << h.link_to("show #{attachment_file.name}", attachment_file, class: "dropdown-item")
+    links << h.link_to("calibrate #{attachment_file.name}", calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item")
+    button = h.content_tag(:button, h.content_tag(:span,nil,class:'caret'), class: "btn btn-default dropdown-toggle", :type => "button", :id => "dropdownMenu1", 'data-toggle' => "dropdown", 'aria-haspopup' => true, 'aria-expanded' => false)
+    menu = h.content_tag(:ul, h.raw(links.map{|link| h.content_tag(:li, link)}.join), class: "dropdown-menu", 'aria-labelledby' => "dropdownMenu1")
+    h.content_tag(:div, button + menu, class: "dropdown")
+  end
 
   def spots_panel(width: 40, height:40, spots:[])
     surface = self.surface
     file = self.image
     svg = file.decorate.picture_with_spots(width:width, height:height, spots:spots)
-    svg_link = h.link_to(h.surface_image_path(surface, file)) do
+    svg_link = h.link_to(h.surface_image_path(surface, file), title: "show #{self.surface.name}/#{file.name}") do
       svg
     end
     left = h.content_tag(:div, svg_link, class: "col-md-9", :style => "padding:0 0 0 0")
     right = h.content_tag(:div, my_tree(spots), class: "col-md-3", :style => "padding:0 0 0 0")
     row = h.content_tag(:div, left + right, class: "row", :style => "margin-left:0; margin-right:0;")
     header = h.content_tag(:div, class: "panel-heading") do
+      "#{self.image.id} (#{self.position})"
     end
 
     body = h.content_tag(:div, row, class: "panel-body", :style => 'padding: 2px')
-    tag = h.content_tag(:div, body, class: "panel panel-default")
+    tag = h.content_tag(:div, body, class: "panel panel-default surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position})
     tag
   end
 
@@ -37,7 +47,10 @@ class SurfaceImageDecorator < Draper::Decorator
     html_class = "tree-node"
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
       #attachment_file.decorate.picture_link
-      h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file)
+      links = []
+      links << h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file, title: "show #{attachment_file.name}" )
+#                         links << h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-cog"), calibrate_surface_image_path(self.surface, attachment_file), title: "calibrate #{attachment_file.name}")
+      h.raw(links.join)
     end
 
     # html += h.content_tag(:div, id: "spots-#{attachment_file.id}", class: "collapse") do
