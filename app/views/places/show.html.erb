@@ -7,22 +7,22 @@
   <div id="show-tools" class="col-lg-4">
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
-	<%= link_to map_place_path(@place), class: "btn btn-default activate", remote: true do %>
+	<%= link_to map_place_path(@place), class: "btn btn-default activate", remote: true, title: "top" do %>
 	  <span class="glyphicon glyphicon-globe"></span>
 	<% end %>
       </div>
       <% if can? :update, @place %>
       <div class="btn-group btn-group-sm">
-	<%= link_to edit_place_path(@place), class: "btn btn-default", remote: true do %>
+	<%= link_to edit_place_path(@place), class: "btn btn-default", remote: true, title: "edit locality" do %>
 	  <span class="glyphicon glyphicon-pencil"></span>
 	<% end %>
-	<%= link_to property_place_path(@place), class: "btn btn-default", remote: true do %>
+	<%= link_to property_place_path(@place), class: "btn btn-default", remote: true, title: "edit global ID" do %>
 	  <span class="glyphicon glyphicon-cog"></span>
 	<% end %>
       </div>
       <% end %>
       <div class="btn-group btn-group-sm">
-	<%= link_to place_path(@place, format: :kml), class: "btn btn-default" do %>
+	<%= link_to place_path(@place, format: :kml), class: "btn btn-default", title: "download map" do %>
 	  <span class="glyphicon glyphicon-file"></span>
 	<% end %>
       </div>
