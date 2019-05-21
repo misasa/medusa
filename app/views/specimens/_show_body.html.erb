@@ -1,15 +1,15 @@
     <% tab_info = [
-        ["at-a-glance",nil],
-        ["daughter",@specimen.children],
-        ["history", @specimen.paths],
-        ["analysis",@specimen.full_analyses],
-        ["bib",@specimen.bibs],
-        ["file",@specimen.attachment_files],
-        ["quantity", @specimen.self_and_descendants]] %>
+        ["at-a-glance",nil,""],
+        ["daughter",@specimen.children,""],
+        ["history", @specimen.paths,""],
+        ["analysis",@specimen.full_analyses,""],
+        ["bib",@specimen.bibs,""],
+        ["file",@specimen.attachment_files,""],
+        ["quantity", @specimen.self_and_descendants,""]] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
-      <% tab_info.each do |key,array| %>
-       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= key + data_count(array) %></a></li>
+      <% tab_info.each do |key,array,message| %>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= key + data_count(array) title="<= message>"%></a></li>
       <% end %>
 
     </ul>
