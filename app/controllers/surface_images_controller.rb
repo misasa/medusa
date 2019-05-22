@@ -52,6 +52,34 @@ class SurfaceImagesController < ApplicationController
     respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
   end
 
+  def move_higher
+    #@surface.surface_images.find_by_image_id(@image.id).move_to_top
+    @surface_image.move_higher
+    respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
+  end
+
+  def move_lower
+    #@surface.surface_images.find_by_image_id(@image.id).move_to_top
+    @surface_image.move_lower
+    respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
+  end
+
+
+  def move_to_bottom
+    @surface_image.move_to_bottom
+    respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
+  end
+
+  def insert_at
+    p params
+    unless params["position"].blank?
+      position = params["position"].to_i
+      p @surface_image.insert_at(position)
+      p @surface_image  
+    end 
+    respond_with @image, location: adjust_url_by_requesting_tab(request.referer)    
+  end
+
   def layer
     @surface_image.update_attributes(surface_layer_id: params["layer_id"])
     render :nothing => true
@@ -95,7 +123,7 @@ class SurfaceImagesController < ApplicationController
   end
 
   def find_resource
-  	@image = AttachmentFile.find(params[:id])
+    @image = AttachmentFile.find(params[:id])
     @surface_image = @surface.surface_images.find_by_image_id(@image.id).decorate
   end
 

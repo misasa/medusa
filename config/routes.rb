@@ -244,6 +244,10 @@ Medusa::Application.routes.draw do
       member do
         get :family
         post 'move_to_top'
+        post 'move_to_bottom'
+        post 'move_higher'
+        post 'move_lower'
+        post 'insert_at'
         post 'tiles'
         get :calibrate
         post 'layer'

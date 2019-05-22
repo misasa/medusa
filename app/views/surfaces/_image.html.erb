@@ -52,8 +52,11 @@
           <td><%= attachment_file.spots.try!(:size) %></td>
           <td><%= attachment_file.try!(:global_id) %></td>
           <td>
-            <%= link_to move_to_top_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :move_to_top ,title: "move to bottom" do %>
+            <%= link_to move_higher_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :post ,title: "move lower" do %>
               <span class="glyphicon glyphicon-arrow-down"></span>
+            <% end %>
+            <%= link_to move_lower_surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :post ,title: "move higher" do %>
+              <span class="glyphicon glyphicon-arrow-up"></span>
             <% end %>
             <%= link_to surface_image_path(@surface, attachment_file) + tab_param(__FILE__), method: :delete, title: "unlink image", data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
