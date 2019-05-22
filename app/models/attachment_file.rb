@@ -3,9 +3,11 @@ class AttachmentFile < ActiveRecord::Base
   include HasRecordProperty
 
   has_attached_file :data,
-  styles: { thumb: "160x120>", tiny: "50x50"},
-                    path: ":rails_root/public/system/:class/:id_partition/:basename_with_style.:extension",
-                    url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension"
+    styles: { thumb: "160x120>", tiny: "50x50"},
+    path: ":rails_root/public/system/:class/:id_partition/:basename_with_style.:extension",
+    url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension",
+    restricted_characters: /[&$+,\/:;=?<>\[\]\{\}\|\\\^~%# ]/
+
   alias_attribute :name, :data_file_name
 
   has_many :spots, dependent: :destroy, inverse_of: :attachment_file

@@ -18,6 +18,7 @@ describe AttachmentFile do
         let(:obj){AttachmentFile.new()}
         it { expect(obj).not_to be_valid }
       end
+      after{ obj.destroy }
     end
   end
 
@@ -52,6 +53,7 @@ describe AttachmentFile do
         let(:attachment_file_id) { 12345678 }
         it { expect(subject).to include("/system/attachment_files/1234/5678/test.jpg") }
       end
+      after { attachment_file.destroy }
     end
   end
 
@@ -73,6 +75,7 @@ describe AttachmentFile do
     let(:obj) { FactoryGirl.create(:attachment_file) }
     before{ obj.data_fingerprint = "test" }
     it {expect(obj.data_fingerprint).to eq("test")}
+    after { obj.destroy }
   end
 
   describe ".save_geometry" do
@@ -85,7 +88,7 @@ describe AttachmentFile do
     it {expect(obj.original_geometry).to eq("2352x1568")}
   end
 
-  describe ".save_affine_matrix", :current => true do
+  describe ".save_affine_matrix" do
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
     let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
@@ -96,6 +99,7 @@ describe AttachmentFile do
       obj.affine_matrix_in_string = affine_matrix_in_string
     end
     it { expect{obj.save}.not_to raise_error}
+    after { obj.destroy }
   end
 
   describe ".rename_attached_files_if_needed" do
@@ -111,9 +115,8 @@ describe AttachmentFile do
       obj.update_attributes(name: new_name)
       expect(File.exist?(obj.data.path)).to be_truthy
     end
+    after { obj.destroy }
   end
-
-  
 
   describe ".create" do
     let(:user) { FactoryGirl.create(:user) }
@@ -122,6 +125,24 @@ describe AttachmentFile do
       obj
       obj.save
     end
+    context "with filename include @", :current => true do
+      let(:obj) { AttachmentFile.new(data: fixture_file_upload(file,'image/jpeg')) }
+      let(:basename){ "test_image@1"  }
+      let(:file){"/files/#{basename}.jpg"}
+      it "shoud not replace @ with _" do
+        expect(File.basename(obj.data.path,'.*')).to eql(basename)
+      end
+    end
+
+    context "with filename include +", :current => true do
+      let(:obj) { AttachmentFile.new(data: fixture_file_upload(file,'image/jpeg')) }
+      let(:basename){ "test_image+1"  }
+      let(:file){"/files/#{basename}.jpg"}
+      it "shoud replace + with _" do
+        expect(File.basename(obj.data.path,'.*')).to eql("test_image_1")
+      end
+    end
+
 
  #   it {expect(obj.original_geometry).to eq("2352x1568")}
     context "with affine_matrix" do
@@ -133,7 +154,7 @@ describe AttachmentFile do
       let(:obj) { AttachmentFile.new(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
       it {expect(obj.affine_matrix).to be_eql([])}
     end
-
+    after { obj.destroy  } 
   end
 
 
