@@ -71,11 +71,9 @@ class SurfaceImagesController < ApplicationController
   end
 
   def insert_at
-    p params
     unless params["position"].blank?
       position = params["position"].to_i
-      p @surface_image.insert_at(position)
-      p @surface_image  
+      @surface_image.insert_at(position)
     end 
     respond_with @image, location: adjust_url_by_requesting_tab(request.referer)    
   end
