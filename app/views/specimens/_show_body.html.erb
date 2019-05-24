@@ -1,15 +1,15 @@
     <% tab_info = [
-        ["at-a-glance",nil],
-        ["daughter",@specimen.children],
-        ["history", @specimen.paths],
-        ["analysis",@specimen.full_analyses],
-        ["bib",@specimen.bibs],
-        ["file",@specimen.attachment_files],
-        ["quantity", @specimen.self_and_descendants]] %>
+        ["at-a-glance",nil,"show representative properties of a record"],
+        ["daughter",@specimen.children,"show powder or thin sample made from a sample of the record"],
+        ["history", @specimen.paths,"show the location and moving history of a sample"],
+        ["analysis",@specimen.full_analyses,"show the link to analysis data and device name used for the analysis"],
+        ["bib",@specimen.bibs,"show bibliography related to the sample"],
+        ["file",@specimen.attachment_files,"show the image files of the sample"],
+        ["quantity", @specimen.self_and_descendants,"show a line graph showing the change in quantity of the sample"]] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
-      <% tab_info.each do |key,array| %>
-       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= key + data_count(array) %></a></li>
+      <% tab_info.each do |key,array,message| %>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab" title="<%= message %>"><%= key + data_count(array) %></a></li>
       <% end %>
 
     </ul>
@@ -19,3 +19,4 @@
         <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
       <% end %>
     </div>
+ 
