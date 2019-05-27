@@ -4,8 +4,8 @@
         ["history", @specimen.paths,"show the moving history of a sample"],
         ["analysis",@specimen.full_analyses,"show data and device of the analysis of a sample"],
         ["bib",@specimen.bibs,"show bibliography related to a sample"],
-        ["file",@specimen.attachment_files,"show the image files of a sample"],
-        ["quantity", @specimen.self_and_descendants,"show the change in quantity of a sample"]] %>
+        ["file",@specimen.attachment_files,"show image files of a sample"],
+        ["quantity", @specimen.self_and_descendants,"show change in quantity of a sample"]] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <% tab_info.each do |key,array,message| %>
