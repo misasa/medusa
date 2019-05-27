@@ -9,3 +9,25 @@
 #surface-map.leaflet-container {
   background: #000000;
 }
+
+.leaflet-control-layers .leaflet-up {
+  float: right;
+  background-image: image-url('arrow-up.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 20px;
+  width: 16px;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+.leaflet-control-layers .leaflet-down {
+  float: right;
+  background-image: image-url('arrow-down.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  height: 20px;
+  width: 16px;
+  opacity: 0.75;
+  cursor: pointer;
+}
