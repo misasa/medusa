@@ -50,14 +50,14 @@
 
     <!-- Tab panes -->
     <% tab_info = [
-        ["at-a-glance",nil],
-        ["specimen",@bib.specimens],
-        ["box",@bib.boxes],
-        ["place",@bib.places],
-        ["analysis",@bib.analyses],
-        ["file",@bib.attachment_files],
-        ["table", @bib.tables],
-        ["author", nil]
+        ["at-a-glance",nil,"show representative properties of a record"],
+        ["specimen",@bib.specimens,"show samples related to a bib"],
+        ["box",@bib.boxes,"show boxes related to a bib"],
+        ["place",@bib.places,"show spots related to a bib"],
+        ["analysis",@bib.analyses,"show analyses related to a bib"],
+        ["file",@bib.attachment_files,"show images related to a bib"],
+        ["table", @bib.tables,"show tables related to a bib],
+        ["author", nil,"show name of authors of a bib]
     ] %>
     <div class="tab-content">
       <% tab_info.each do |key,array| %>
