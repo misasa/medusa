@@ -17,7 +17,7 @@
       <%= content_tag :ul, class: "surface-layer", style: "min-height: 20px;" do %>
 	<% @surface.surface_images.not_belongs_to_layer.reorder("position DESC").each do |surface_image| %>
           <% next unless surface_image.image %>
-          <%= surface_image.decorate.spots_panel %>
+          <%= surface_image.decorate.spots_panel(width: 100, options:{header: true}) %>
 	<% end %>
       <% end %>
       </td>
@@ -54,7 +54,7 @@
 	<%= content_tag :ul, class: "surface-layer", data: { id: surface_layer.id }, style: "min-height: 20px;" do %>
 	  <% surface_layer.surface_images.reorder("position DESC").each do |surface_image| %>
             <% next unless surface_image.image %>
-            <%= surface_image.decorate.spots_panel %>
+            <%= surface_image.decorate.spots_panel(width: 100, options:{header: true}) %>
 	  <% end %>
 	<% end %>
         </td>
