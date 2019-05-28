@@ -87,13 +87,13 @@
 
     <!-- Tab panes -->
     <% tab_info = [
-        ["at-a-glance",nil],
-        ["specimen",@box.specimens],
-        ["daughter",@box.children,"box"],
-        ["history", @box.paths],
-        ["analysis",@box.analyses],
-        ["bib",@box.bibs],
-        ["file",@box.attachment_files]
+        ["at-a-glance",nil,"show representative properties of a record"],
+        ["specimen",@box.specimens,"show samples in a box"],
+        ["daughter",@box.children,"box", "show boxes of a record"],
+        ["history", @box.paths,"show moving history of a box],
+        ["analysis",@box.analyses, "show analysis of samples in a box"],
+        ["bib",@box.bibs,"show bibliography related to samples in a box"],
+        ["file",@box.attachment_files,"show image files of a box"]
     ] %>
     <div class="tab-content">
       <% tab_info.each do |key,array| %>

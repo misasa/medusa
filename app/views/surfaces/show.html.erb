@@ -50,10 +50,10 @@
 
     <!-- Tab panes -->
     <% tab_info = [
-        ["at-a-glance",nil],
-        ["layer",@surface.surface_layers],
-        ["image",@surface.images],
-        ["place",@surface.spots],
+        ["at-a-glance",nil,"show representative properties of a record"],
+        ["layer",@surface.surface_layers,"show image of layers"],
+        ["image",@surface.images,"show image, name, and afine matrix of layers"],
+        ["place",@surface.spots, "show spots of layers"],
     ] %>
     <div class="tab-content">
       <% tab_info.each do |key,array| %>
