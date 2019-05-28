@@ -22,7 +22,7 @@ class SurfaceImageDecorator < Draper::Decorator
     h.content_tag(:div, button + menu, class: "dropdown")
   end
 
-  def spots_panel(width: 40, height:40, spots:[])
+  def spots_panel(width: 40, height:40, spots:[], options:{})
     surface = self.surface
     file = self.image
     svg = file.decorate.picture_with_spots(width:width, height:height, spots:spots)
@@ -33,11 +33,14 @@ class SurfaceImageDecorator < Draper::Decorator
     right = h.content_tag(:div, my_tree(spots), class: "col-md-3", :style => "padding:0 0 0 0")
     row = h.content_tag(:div, left + right, class: "row", :style => "margin-left:0; margin-right:0;")
     header = h.content_tag(:div, class: "panel-heading") do
-      "#{self.image.id} (#{self.position})"
+      h.content_tag(:small, self.image.name)
     end
 
     body = h.content_tag(:div, row, class: "panel-body", :style => 'padding: 2px')
-    tag = h.content_tag(:div, body, class: "panel panel-default surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position})
+    contents = []
+    contents << header if options[:header]
+    contents << body
+                         tag = h.content_tag(:div, h.raw(contents.join), class: "panel panel-default surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position})
     tag
   end
 
