@@ -1,90 +1,59 @@
-<table class="table table-condensed table-striped">
-  <thead>
-    <tr>
-      <th></th>
-      <th>layer name</th>
-      <th>opacity</th>
-      <th></th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td></td>
-      <td>top</td>
-      <td>100</td>
-      <td>
-      <%= content_tag :ul, class: "surface-layer", style: "min-height: 20px;" do %>
-	<% @surface.surface_images.not_belongs_to_layer.reorder("position DESC").each do |surface_image| %>
-          <% next unless surface_image.image %>
-          <%= surface_image.decorate.spots_panel(width: 100, options:{header: true}) %>
-	<% end %>
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <span class="panel-title pull-lfet">
+     <a href="#surface-layer-top", data-toggle="collapse", aria-expanded="false", aria-control="surface-layer-top", title = "show and hide images belong to top">
+      <span class="badge"><%= @surface.surface_images.not_belongs_to_layer.size %></span> Top
+    </a>
+    </span>
+  </div>
+  <div class="panel-body collapse in" id="surface-layer-top">
+    <ul class="list-inline thumbnails surface-layer">
+      <% @surface.surface_images.not_belongs_to_layer.reorder("position DESC").each do |surface_image| %>
+        <% next unless surface_image.image %>
+        <%= surface_image.decorate.li_thumbnail %>
       <% end %>
-      </td>
-      <td></td>
-    </tr>
-    <tr>
-      <%= form_for SurfaceLayer.new, url: surface_layers_path(@surface) do |f|%>
-        <%= hidden_tabname_tag(__FILE__) %>
-        <td></td>
-        <td>
-	  <%= f.text_field :name %>
-	  <%= f.hidden_field :priority, value: @surface.surface_layers.max_priority + 1 %>
-	</td>
-        <td colspan>
-	  <%= f.text_field :opacity %>
-	</td>
-        <td>
-        </td>
-        <td>
-          <%= f.button title:"add layer", class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-plus"></span>
-          <% end %>
-        </td>
+    </ul>
+  </div>
+</div>
+<div class="panel panel-default">
+  
+  <div class="panel-heading">
+    <%= form_for SurfaceLayer.new, url: surface_layers_path(@surface), class:"inline" do |f|%>
+      <%= hidden_tabname_tag(__FILE__) %>
+      <%= f.text_field :name %>
+      <%= f.hidden_field :priority, value: @surface.surface_layers.max_priority + 1 %>
+      <%= f.text_field :opacity %>
+      <%= f.button title:"add layer", class: "btn btn-default btn-sm pull-right" do %>
+        <span class="glyphicon glyphicon-plus"></span>
       <% end %>
-    </tr>
-
-
-    <% @surface.surface_layers.reorder("priority DESC").each do |surface_layer| %>
-      <tr>
-        <td></td>
-        <td><%= link_to_if can?(:read, surface_layer), list_title(surface_layer), surface_layer_path(@surface, surface_layer) %></td>
-	<td><%= surface_layer.opacity %></td>
-        <td>
-	<%= content_tag :ul, class: "surface-layer", data: { id: surface_layer.id }, style: "min-height: 20px;" do %>
-	  <% surface_layer.surface_images.reorder("position DESC").each do |surface_image| %>
-            <% next unless surface_image.image %>
-            <%= surface_image.decorate.spots_panel(width: 100, options:{header: true}) %>
-	  <% end %>
-	<% end %>
-        </td>
-        <td>
-          <%= link_to move_to_top_surface_layer_path(@surface, surface_layer) + tab_param(__FILE__), method: :move_to_top ,title: "move to bottom" do %>
-            <span class="glyphicon glyphicon-arrow-down"></span>
-          <% end %>
-          <%= link_to surface_layer_path(@surface, surface_layer) + tab_param(__FILE__), method: :delete, title: "delete layer #{list_title(surface_layer)}", data: {confirm: "Are you sure you want to delete layer #{list_title(surface_layer)}?"} do %>
-            <span class="glyphicon glyphicon-remove"></span>
-          <% end %>
-        </td>
-      </tr>
     <% end %>
-    <tr>
-    <td></td>
-    <td>base</td>
-    <td>100</td>
-    <td>
-      <ul>
-      <span>
-      <%= @surface.first_image.decorate.picture(width: 70, height: 70, type: :thumb) %>
-      </span>
-      </ul>
-    </td>
-    <td></td>
-    </tr>
-  </tbody>
-  <tfoot>
-  </tfoot>
-</table>
+  </div>
+
+</div>
+
+<% @surface.surface_layers.reorder("priority DESC").each do |surface_layer| %>
+  <%= surface_layer.decorate.panel %>
+<% end %>
+
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <span class="panel-title pull-lfet">
+     <a href="#surface-layer-base", data-toggle="collapse", aria-expanded="false", aria-control="surface-layer-top", title = "show and hide images belong to base">
+      <span class="badge">1</span>
+      Base
+     </a>
+    </span>
+    <span class="label label-primary">opacity: 100%</span>
+    <div class="clearfix"></div>
+  </div>
+  <div class="panel-body collapse in" id="surface-layer-base">
+    <ul class="list-inline thumbnails surface-layer">
+      <li>
+        <%= @surface.first_image.decorate.thumbnail %>
+      </li>
+    </ul>
+  </div>
+</div>
 
 <%= javascript_tag do %>
   (function($) {
