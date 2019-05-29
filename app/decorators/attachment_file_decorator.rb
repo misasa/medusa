@@ -131,6 +131,15 @@ class AttachmentFileDecorator < Draper::Decorator
     html
   end
 
+  def thumbnail
+    return unless File.exist?(self.data.path)
+    return unless self.image?
+    h.content_tag(:div, class:"thumbnail") do
+      h.concat h.image_tag(self.path(:thumb))
+      h.concat h.content_tag(:small, self.name)
+    end
+  end
+
   def picture_link
     picture = h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file)
     attachings.each do |attaching|

@@ -17,9 +17,33 @@ class SurfaceImageDecorator < Draper::Decorator
     links = []
     links << h.link_to("show #{attachment_file.name}", attachment_file, class: "dropdown-item")
     links << h.link_to("calibrate #{attachment_file.name}", calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item")
-    button = h.content_tag(:button, h.content_tag(:span,nil,class:'caret'), class: "btn btn-default dropdown-toggle", :type => "button", :id => "dropdownMenu1", 'data-toggle' => "dropdown", 'aria-haspopup' => true, 'aria-expanded' => false)
+    button = h.content_tag(:button, h.content_tag(:span,nil,class:'caret'), class: "btn btn-default btn-xs dropdown-toggle", :type => "button", :id => "dropdownMenu1", 'data-toggle' => "dropdown", 'aria-haspopup' => true, 'aria-expanded' => false)
     menu = h.content_tag(:ul, h.raw(links.map{|link| h.content_tag(:li, link)}.join), class: "dropdown-menu", 'aria-labelledby' => "dropdownMenu1")
     h.content_tag(:div, button + menu, class: "dropdown")
+  end
+ 
+  def li_media
+    return unless File.exist?(self.image.data.path)
+    left = h.content_tag(:a, h.image_tag(self.image.path(:tiny), class:"media-object"), class:"pull-left")
+    right = h.content_tag(:div, h.content_tag(:small, self.image.name, class: "media-heading"), class:"media-body")
+    h.content_tag(:li, h.raw(left + right), class:"media")
+  end
+
+  def li_thumbnail
+    return unless self.image
+    return unless self.image.image?
+    return unless File.exist?(self.image.data.path)
+      h.content_tag(:li, class: "surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do
+        h.concat(
+          h.content_tag(:div, class:"thumbnail") do
+            h.concat h.image_tag(self.image.path(:thumb))
+            h.concat h.content_tag(:small, self.image.name)
+            h.concat drop_down_menu
+            #h.concat h.content_tag(:small, self.image.affine_matrix)
+          end
+        )
+        #h.concat self.image.decorate.thumbnail
+      end
   end
 
   def spots_panel(width: 40, height:40, spots:[], options:{})
