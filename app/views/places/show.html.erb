@@ -61,8 +61,10 @@
         ["geoname",nil,"show names of places related to a record"]
     ] %>
     <div class="tab-content">
-      <% tab_info.each do |key,array| %>
-        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
+     <% tab_info.each do |key,array,message| %>
+     <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab" title="<%= message %>"><%= key + data_count(array) %></a></li>
+      <% end %>
+     <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
       <% end %>
     </div>
   </div>
