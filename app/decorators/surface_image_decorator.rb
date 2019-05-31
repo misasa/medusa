@@ -75,18 +75,18 @@ class SurfaceImageDecorator < Draper::Decorator
         h.content_tag(:ul, class: "dropdown-menu", 'aria-labelledby' => "dropdownMenu1") do
           h.concat h.content_tag(:li, attachment_file.name, class: "dropdown-header")
           #h.concat h.content_tag(:li, h.link_to("show #{attachment_file.name}", attachment_file, class: "dropdown-item"))
-          h.concat h.content_tag(:li, h.link_to("type in affine matrix", edit_attachment_file_path(attachment_file), class: "dropdown-item"))
-          h.concat h.content_tag(:li, h.link_to("calibrate", calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_attachment_file_path(attachment_file), class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("calibrate", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
           if attachment_file.try!(:affine_matrix).present?
-            h.concat h.content_tag(:li, h.link_to("show tiles", surface_image_path(surface, attachment_file)))
-            h.concat h.content_tag(:li, h.link_to("force create tiles", tiles_surface_image_path(surface, attachment_file), method: :post))
+            h.concat h.content_tag(:li, h.link_to("show tiles", h.surface_image_path(surface, attachment_file)))
+            h.concat h.content_tag(:li, h.link_to("force create tiles", h.tiles_surface_image_path(surface, attachment_file), method: :post))
           end
           if self.wall
-            h.concat h.content_tag(:li, h.link_to("unchoose as base", unchoose_as_base_surface_image_path(surface, attachment_file), method: :post))
+            h.concat h.content_tag(:li, h.link_to("unchoose as base", h.unchoose_as_base_surface_image_path(surface, attachment_file), method: :post))
           else
-            h.concat h.content_tag(:li, h.link_to("choose as base", choose_as_base_surface_image_path(surface, attachment_file), method: :post))
+            h.concat h.content_tag(:li, h.link_to("choose as base", h.choose_as_base_surface_image_path(surface, attachment_file), method: :post))
           end
-          h.concat h.content_tag(:li, h.link_to("unlink from #{surface.name}", surface_image_path(self.surface, attachment_file), method: :delete, data: {confirm: "Are you sure to unlink #{attachment_file.name} from #{surface.name}"}, class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("unlink from #{surface.name}", h.surface_image_path(self.surface, attachment_file), method: :delete, data: {confirm: "Are you sure to unlink #{attachment_file.name} from #{surface.name}"}, class: "dropdown-item"))
         end
       )
     end
