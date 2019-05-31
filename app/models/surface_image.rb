@@ -7,13 +7,95 @@ class SurfaceImage < ActiveRecord::Base
   validates :surface_layer, existence: true, allow_nil: true
   validate :check_image
 
+  scope :wall, -> { where(wall: true) }
+  scope :base, -> { where(position: minimum(:position)) }
   scope :not_base, -> { where.not(position: minimum(:position)) }
   scope :not_belongs_to_layer, -> { not_base.where(surface_layer_id: nil) }
-  
+
   def tile_dir
     File.join(surface.map_dir,image.id.to_s)
   end
+
+  def tile_xrange(zoom)
+    center = surface.center[0]
+    length = surface.length
+    surface_left = center - length/2
+    image_left = image.bounds[0]
+    image_right = image.bounds[2]
+    tilesize = 256
+    n = 2**zoom
+    pix = tilesize * n
+    length_per_pix = length/pix.to_f
+    dum = length_per_pix*tilesize
+    il = ((image_left - surface_left)/dum - 1).ceil
+    ir = ((image_right - surface_left)/dum).floor
+    il = 0 if il < 0
+    il..ir
+  end
+
+  def tile_yrange(zoom)
+    center = surface.center[1]
+    length = surface.length
+    surface_b = center + length/2
+    image_upper = image.bounds[1]
+    image_lower = image.bounds[3]
+    tilesize = 256
+    n = 2**zoom
+    pix = tilesize * n
+    length_per_pix = length/pix.to_f
+    dum = length_per_pix*tilesize
+    iu = ((surface_b - image_upper)/dum - 1).ceil
+    il = ((surface_b - image_lower)/dum).floor
+    iu = 0 if iu < 0
+    iu..il
+  end
+
+  def tiles_ij(zoom)
+    center = surface.center
+    length = surface.length
+    box = [center[0] - length/2, center[1] + length/2, center[0] + length/2, center[1] - length/2]
+    ibox = image.bounds
+    tilesize = 256
+    n = 2**zoom
+    pix = tilesize * n
+    length_per_pix = length/pix.to_f
+    dum = length_per_pix*tilesize
+    tiles_ij = []
+    0.upto(n-1) do |i|
+      0.upto(n-1) do |j|
+        pbox = [tilesize*i, tilesize*j, tilesize*(i+1), tilesize*(j+1)]
+        zleft = box[0] + dum*i
+        zright = zleft + dum
+
+        zupper = box[1] - dum*j
+        zlower = zupper - dum
+        cbox = [0,0,0,0]
+
+        cbox[0] = (ibox[0] >= zleft && ibox[0] <= zright) ? ibox[0] : zleft
+        cbox[2] = (ibox[2] >= zleft && ibox[2] <= zright) ? ibox[2] : zright
+
+        
+
+        cbox[1] = (ibox[1] <= zupper && ibox[1] >= zlower) ? ibox[1] : zupper
+        cbox[3] = (ibox[3] <= zupper && ibox[3] >= zlower) ? ibox[3] : zlower
+
+        tb = box_r(cbox, ibox)
+        unless tb.any?{|r| r < 0 || r > 1}
+          tiles_ij << [i,j]
+        end
+      end
+    end
+    tiles_ij
+  end
   
+  def box_r(ibox, box)
+    bx = box[0]
+    by = box[3]
+    w = box[2] - box[0]
+    h = box[1] - box[3]
+    [(ibox[0] - bx)/w, 1 - (ibox[1] - by)/h, (ibox[2] - bx)/w, 1 - (ibox[3] - by)/h]
+  end
+
   def make_tiles(options = {})
     system(make_tiles_cmd(options))
   end
@@ -36,7 +118,16 @@ class SurfaceImage < ActiveRecord::Base
     cmd += " -t" if transparent
     cmd
   end
-
+  
+  def tiles_each(zoom, &block)
+    return unless image
+    n = 2**zoom
+    self.tile_yrange(zoom).each do |y|
+      self.tile_xrange(zoom).each do |x|
+        yield [x,y]
+      end
+    end
+  end
 
   def spots
   	ss = []

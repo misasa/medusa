@@ -248,6 +248,8 @@ Medusa::Application.routes.draw do
         post 'move_higher'
         post 'move_lower'
         post 'insert_at'
+        post 'choose_as_base'
+        post 'unchoose_as_base'
         post 'tiles'
         get :calibrate
         post 'layer'

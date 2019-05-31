@@ -10,16 +10,87 @@ class SurfaceImageDecorator < Draper::Decorator
   #       object.created_at.strftime("%a %m/%d/%y")
   #     end
   #   end
+  def tile_path(zoom,x,y)
+    return unless image
+    path = h.url_for_tile(self) + "#{image.id}/#{zoom}/#{x}_#{y}.png"
+  end
+
+  def tile_carousel(zoom)
+    id = "carousel-tile-zoom-#{zoom}"
+    h.content_tag(:div, id: id, class: "carousel slide", data:{inteval:false}, style:"background-color:#333333;width:256px;height:256px;") do
+      h.concat(
+        h.content_tag(:div, class: "carousel-inner", role:"listbox") do
+          flag_active = true
+          tiles_each(zoom) do |x,y|
+            h.concat(
+                h.content_tag(:div, class: (flag_active ? "item active" : "item"), data: (flag_active ? {'url' => tile_path(zoom,x,y), 'slide-number' => 0} : {url: tile_path(zoom,x,y)})) do
+                flag_active = false
+                #h.concat h.image_tag(nil, :alt => "#{x}_#{y}")
+                h.concat h.content_tag(:div, "#{zoom}/#{x}_#{y}", class: "carousel-caption")
+              end
+            )
+          end
+        end
+      )
+      h.concat(
+        h.content_tag(:a, class:"left carousel-control", href:"##{id}", role: "button", data:{slide: "prev"}) do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-chevron-left", 'aria-hidden' => true)
+          h.concat h.content_tag(:span, "Previous", class: "sr-only")
+        end
+      )
+      h.concat(
+        h.content_tag(:a, class:"right carousel-control", href:"##{id}", role: "button", data:{slide: "next"}) do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-chevron-right", 'aria-hidden' => true)
+          h.concat h.content_tag(:span, "Next", class: "sr-only")
+        end
+      )
+
+    end
+  end
+
+  def tiles(zoom, &block)
+    return unless image
+    tiles.each(zoom)
+    n = 2**zoom
+    path = h.url_for_tile(self) + "#{image.id}/#{zoom}/"
+    aa = []
+    self.tile_yrange(zoom).each do |y|
+      self.tile_xrange(zoom).each do |x|
+        yield path + "#{x}_#{y}.png"
+      end
+    end
+  end
 
   def drop_down_menu
     attachment_file = self.image
+    surface = self.surface
+    h.content_tag(:div, class: "dropdown") do
+      h.concat(
+          h.content_tag(:button, class: "btn btn-default btn-xs dropdown-toggle", :title => "dropdown menu for #{attachment_file.name}",  :type => "button", :id => "dropdownMenu1", 'data-toggle' => "dropdown", 'aria-haspopup' => true, 'aria-expanded' => false) do
+          h.concat h.truncate(File.basename(attachment_file.name, ".*"), :length => 20)
+          h.concat h.content_tag(:span,nil,class:'caret')
+        end
+      )
+      h.concat(
+        h.content_tag(:ul, class: "dropdown-menu", 'aria-labelledby' => "dropdownMenu1") do
+          h.concat h.content_tag(:li, attachment_file.name, class: "dropdown-header")
+          #h.concat h.content_tag(:li, h.link_to("show #{attachment_file.name}", attachment_file, class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("type in affine matrix", edit_attachment_file_path(attachment_file), class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("calibrate", calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
+          if attachment_file.try!(:affine_matrix).present?
+            h.concat h.content_tag(:li, h.link_to("show tiles", surface_image_path(surface, attachment_file)))
+            h.concat h.content_tag(:li, h.link_to("force create tiles", tiles_surface_image_path(surface, attachment_file), method: :post))
+          end
+          if self.wall
+            h.concat h.content_tag(:li, h.link_to("unchoose as base", unchoose_as_base_surface_image_path(surface, attachment_file), method: :post))
+          else
+            h.concat h.content_tag(:li, h.link_to("choose as base", choose_as_base_surface_image_path(surface, attachment_file), method: :post))
+          end
+          h.concat h.content_tag(:li, h.link_to("unlink from #{surface.name}", surface_image_path(self.surface, attachment_file), method: :delete, data: {confirm: "Are you sure to unlink #{attachment_file.name} from #{surface.name}"}, class: "dropdown-item"))
+        end
+      )
+    end
 
-    links = []
-    links << h.link_to("show #{attachment_file.name}", attachment_file, class: "dropdown-item")
-    links << h.link_to("calibrate #{attachment_file.name}", calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item")
-    button = h.content_tag(:button, h.content_tag(:span,nil,class:'caret'), class: "btn btn-default btn-xs dropdown-toggle", :type => "button", :id => "dropdownMenu1", 'data-toggle' => "dropdown", 'aria-haspopup' => true, 'aria-expanded' => false)
-    menu = h.content_tag(:ul, h.raw(links.map{|link| h.content_tag(:li, link)}.join), class: "dropdown-menu", 'aria-labelledby' => "dropdownMenu1")
-    h.content_tag(:div, button + menu, class: "dropdown")
   end
  
   def li_media
@@ -37,8 +108,13 @@ class SurfaceImageDecorator < Draper::Decorator
         h.concat(
           h.content_tag(:div, class:"thumbnail") do
             h.concat h.image_tag(self.image.path(:thumb))
-            h.concat h.content_tag(:small, self.image.name)
+            #h.concat h.content_tag(:small, self.image.name)
             h.concat drop_down_menu
+            if self.wall
+              h.concat h.content_tag(:span, "Base", class:"label label-default")
+            else
+              h.concat h.content_tag(:span, "Overlay", class:"label label-primary")
+            end
             #h.concat h.content_tag(:small, self.image.affine_matrix)
           end
         )

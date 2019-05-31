@@ -14,6 +14,62 @@ describe SurfaceImage do
   	obj
   end
 
+  describe "tiles_ij", :current => true do
+    let(:zoom){ 5 }
+    before do
+      mock_surface = double('mock_surface')
+      mock_image = double('mock_image')
+      allow(mock_surface).to receive(:center).and_return([-20.28,-110.0])
+      allow(mock_surface).to receive(:length).and_return(7794.01)
+      allow(mock_image).to receive(:bounds).and_return([1243.1,2590.2,1636.2,2285.3])
+      allow(obj).to receive(:surface).and_return(mock_surface)
+      allow(obj).to receive(:image).and_return(mock_image)
+    end
+    it {expect(obj.tiles_ij(3)).not_to be_nil }
+    after do
+    end
+  end
+
+  describe "tile_xrange", :current => true do
+    let(:zoom){ 5 }
+    before do
+      mock_surface = double('mock_surface')
+      mock_image = double('mock_image')
+      allow(mock_surface).to receive(:center).and_return([-20.28,-110.0])
+      allow(mock_surface).to receive(:length).and_return(7794.01)
+      allow(mock_image).to receive(:bounds).and_return([1243.1,2590.2,1636.2,2285.3])
+      allow(obj).to receive(:surface).and_return(mock_surface)
+      allow(obj).to receive(:image).and_return(mock_image)
+    end
+
+    it {expect(obj.tile_xrange(0)).to eql(0..0) }
+    it {expect(obj.tile_xrange(1)).to eql(1..1) }
+    it {expect(obj.tile_xrange(5)).to eql(21..22) }
+    it {expect(obj.tile_xrange(6)).to eql(42..45) }
+
+    after do
+    end
+  end
+
+  describe "tile_yrange", :current => true do
+    let(:zoom){ 5 }
+    before do
+      mock_surface = double('mock_surface')
+      mock_image = double('mock_image')
+      allow(mock_surface).to receive(:center).and_return([-20.28,-110.0])
+      allow(mock_surface).to receive(:length).and_return(7794.01)
+      allow(mock_image).to receive(:bounds).and_return([1243.1,2590.2,1636.2,2285.3])
+      allow(obj).to receive(:surface).and_return(mock_surface)
+      allow(obj).to receive(:image).and_return(mock_image)
+    end
+    it {expect(obj.tile_yrange(0)).to be_eql(0..0) }
+    it {expect(obj.tile_yrange(0)).to be_eql(0..0) }
+    it {expect(obj.tile_yrange(5)).to be_eql(4..6) }
+    it {expect(obj.tile_yrange(6)).to be_eql(9..12)}
+    after do
+    end
+  end
+
   describe "spots" do
   	it { expect(obj.spots).to include(spot)}
   	context "shares same surface's spots" do

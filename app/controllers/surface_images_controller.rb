@@ -64,6 +64,15 @@ class SurfaceImagesController < ApplicationController
     respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
   end
 
+  def choose_as_base
+    @surface_image.update_attributes(wall: true)
+    respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
+  end
+
+  def unchoose_as_base
+    @surface_image.update_attributes(wall: false)
+    respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
+  end
 
   def move_to_bottom
     @surface_image.move_to_bottom
