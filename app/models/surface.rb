@@ -117,6 +117,10 @@ class Surface < ActiveRecord::Base
     [left, upper, right, bottom]
   end
 
+  def bbox
+    [center[0] - length/2, center[1] + length/2, center[0] + length/2, center[1] - length/2]
+  end
+
 #  def as_json(options = {})
 #    super({ methods: [:global_id, :image_ids, :globe, :center, :length, :bounds] }.merge(options))
 #  end

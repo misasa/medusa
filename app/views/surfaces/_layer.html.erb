@@ -48,9 +48,10 @@
   </div>
   <div class="panel-body collapse in" id="surface-layer-base">
     <ul class="list-inline thumbnails surface-layer">
-      <li>
-        <%= @surface.first_image.decorate.thumbnail %>
-      </li>
+      <% @surface.surface_images.base.concat(@surface.surface_images.wall).each do |surface_image| %>
+        <% next unless surface_image.image %>
+        <%= surface_image.decorate.li_thumbnail %>
+      <% end %>
     </ul>
   </div>
 </div>
