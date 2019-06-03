@@ -60,45 +60,27 @@
   </div>
 
   <div id="show-body" class="col-lg-8">
+    <% tab_info = [
+        ["at-a-glance",nil,"show representative properties of a record"],
+        [@alias_specimen,@box.specimens,"show samples in a box","specimen"],
+        ["box",@box.children,"show boxes of a record","daughter"],
+        ["history", @box.paths,"show moving history of a box"],
+        ["analysis",@box.analyses, "show analysis of samples in a box"],
+        ["bib",@box.bibs,"show bibliography related to samples in a box"],
+        ["file",@box.attachment_files,"show image files of a box"]
+    ] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
-      <li class="<%= active_if_current('at-a-glance') %>">
-        <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
-      </li>
-      <li class="<%= active_if_current('specimen') %>">
-        <a href="#specimen" data-toggle="tab"><%= @alias_specimen + data_count(@box.specimens) %></a>
-      </li>
-      <li class="<%= active_if_current('daughter') %>">
-        <a href="#daughter" data-toggle="tab"><%= "box#{data_count(@box.children)}" %></a>
-      </li>
-      <li class="<%= active_if_current('history') %>">
-        <a href="#history" data-toggle="tab"><%= "history#{data_count(@box.paths)}" %></a>
-      </li>
-      <li class="<%= active_if_current('analysis') %>">
-        <a href="#analysis" data-toggle="tab"><%= "analysis#{data_count(@box.analyses)}" %></a>
-      </li>
-      <li class="<%= active_if_current('bib') %>">
-        <a href="#bib" data-toggle="tab"><%= "bib#{data_count(@box.bibs)}" %></a>
-      </li>
-      <li class="<%= active_if_current('file') %>">
-        <a href="#file" data-toggle="tab"><%= "file#{data_count(@box.attachment_files)}" %></a>
-      </li>
+      <% tab_info.each do |key,array,message| %>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab" title="<%= message %>"><%= key + data_count(array) %></a></li>
+      <% end %>
     </ul>
-
     <!-- Tab panes -->
-    <% tab_info = [
-        ["at-a-glance",nil],
-        ["specimen",@box.specimens],
-        ["daughter",@box.children,"box"],
-        ["history", @box.paths],
-        ["analysis",@box.analyses],
-        ["bib",@box.bibs],
-        ["file",@box.attachment_files]
-    ] %>
     <div class="tab-content">
-      <% tab_info.each do |key,array| %>
-        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
+      <% tab_info.each do |key,array,message,partial| %>
+        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: (partial ? partial : key.underscore) %></div>
       <% end %>
     </div>
+
   </div>
 </div>

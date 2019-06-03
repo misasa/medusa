@@ -33,37 +33,26 @@
   </div>
 
   <div id="show-body" class="col-lg-8">
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-      <li class="<%= active_if_current('at-a-glance') %>">
-        <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
-      </li>
-      <li class="<%= active_if_current('specimen') %>">
-        <a href="#specimen" data-toggle="tab"><%= @alias_specimen + data_count(@place.specimens) %></a>
-      </li>
-      <li class="<%= active_if_current('neighbor') %>">
-        <a href="#neighbor" data-toggle="tab">neighbor</a>
-      </li>
-      <li class="<%= active_if_current('file') %>">
-        <a href="#file" data-toggle="tab"><%= "file#{data_count(@place.attachment_files)}" %></a>
-      </li>
-      <li class="<%= active_if_current('geoname') %>">
-        <a href="#geoname" data-toggle="tab">geoname</a>
-      </li>
-    </ul>
 
     <!-- Tab panes -->
     <% tab_info = [
-        ["at-a-glance",nil],
-        ["specimen",@place.specimens],
-        ["neighbor",nil],
-        ["file",@place.attachment_files],
-        ["geoname",nil]
+        ["at-a-glance",nil,"show representative properties of a record"],
+        [@alias_specimen,@place.specimens,"show properties of a sample","specimen"],
+        ["neighbor",nil,""],
+        ["file",@place.attachment_files,"show image files of a record"],
+        ["geoname",nil,"show names of places related to a record"]
     ] %>
-    <div class="tab-content">
-      <% tab_info.each do |key,array| %>
-        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
+      <% tab_info.each do |key,array,message| %>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab" title="<%= message %>"><%= key + data_count(array) %></a></li>
       <% end %>
-    </div>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <% tab_info.each do |key,array,message,partial| %>
+        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: (partial ? partial : key.underscore) %></div>
+      <% end %>
   </div>
 </div>

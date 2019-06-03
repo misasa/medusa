@@ -20,47 +20,25 @@
     <%= rmap_iframe(@bib) %>
     <% end %>
 
+    <% tab_info = [
+        ["at-a-glance",nil,"show representative properties of a record"],
+        [@alias_specimen,@bib.specimens,"show samples related to a bib","specimen"],
+        ["box",@bib.boxes,"show boxes related to a bib"],
+        ["place",@bib.all_places,"show spots related to a bib"],
+        ["analysis",@bib.referrings_analyses,"show analyses related to a bib"],
+        ["file",@bib.attachment_files,"show images related to a bib"],
+        ["table", @bib.tables,"show tables related to a bib"],
+        ["author", nil,"show name of authors of a bib"]
+    ] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
-      <li class="<%= active_if_current('at-a-glance') %>">
-        <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
-      </li>
-      <li class="<%= active_if_current('specimen') %>">
-        <a href="#specimen" data-toggle="tab"><%= @alias_specimen + data_count(@bib.specimens) %></a>
-      </li>
-      <li class="<%= active_if_current('box') %>">
-        <a href="#box" data-toggle="tab"><%= "box#{data_count(@bib.boxes)}" %></a>
-      </li>
-      <li class="<%= active_if_current('place') %>">
-        <a href="#place" data-toggle="tab"><%= "place#{data_count(@bib.all_places)}" %></a>
-      </li>
-      <li class="<%= active_if_current('analysis') %>">
-        <a href="#analysis" data-toggle="tab"><%= "analysis#{data_count(@bib.referrings_analyses)}" %></a>
-      </li>
-      <li class="<%= active_if_current('file') %>">
-        <a href="#file" data-toggle="tab"><%= "file#{data_count(@bib.attachment_files)}" %></a>
-      </li>
-      <li class="<%= active_if_current('table') %>">
-        <a href="#table" data-toggle="tab"><%= "table#{data_count(@bib.tables)}" %></a>
-      </li>
-      <li class="<%= active_if_current('author') %>">
-        <a href="#author" data-toggle="tab">author</a>
-      </li>
+      <% tab_info.each do |key,array,message| %>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab" title="<%= message %>"><%= key + data_count(array) %></a></li>
+      <% end %>
     </ul>
-
     <!-- Tab panes -->
-    <% tab_info = [
-        ["at-a-glance",nil],
-        ["specimen",@bib.specimens],
-        ["box",@bib.boxes],
-        ["place",@bib.places],
-        ["analysis",@bib.analyses],
-        ["file",@bib.attachment_files],
-        ["table", @bib.tables],
-        ["author", nil]
-    ] %>
     <div class="tab-content">
-      <% tab_info.each do |key,array| %>
-        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>
+      <% tab_info.each do |key,array,message,partial| %>
+        <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: (partial ? partial:key.underscore) %></div>
       <% end %>
     </div>
