@@ -16,38 +16,24 @@ class SurfaceImage < ActiveRecord::Base
     File.join(surface.map_dir,image.id.to_s)
   end
 
+  def center
+    return unless image
+    left, upper, right, bottom = image.bounds
+    [left + (right - left)/2.0, bottom + (upper - bottom)/2.0]
+  end
+
   def tile_xrange(zoom)
-    center = surface.center[0]
-    length = surface.length
-    surface_left = center - length/2
-    image_left = image.bounds[0]
-    image_right = image.bounds[2]
-    tilesize = 256
-    n = 2**zoom
-    pix = tilesize * n
-    length_per_pix = length/pix.to_f
-    dum = length_per_pix*tilesize
-    il = ((image_left - surface_left)/dum - 1).ceil
-    ir = ((image_right - surface_left)/dum).floor
-    il = 0 if il < 0
+    left, upper, right, bottom = image.bounds
+    il = surface.tile_i_at(zoom, left)
+    ir = surface.tile_i_at(zoom, right)
     il..ir
   end
 
   def tile_yrange(zoom)
-    center = surface.center[1]
-    length = surface.length
-    surface_b = center + length/2
-    image_upper = image.bounds[1]
-    image_lower = image.bounds[3]
-    tilesize = 256
-    n = 2**zoom
-    pix = tilesize * n
-    length_per_pix = length/pix.to_f
-    dum = length_per_pix*tilesize
-    iu = ((surface_b - image_upper)/dum - 1).ceil
-    il = ((surface_b - image_lower)/dum).floor
-    iu = 0 if iu < 0
-    iu..il
+    left, upper, right, bottom = image.bounds
+    iu = surface.tile_j_at(zoom, upper)
+    ib = surface.tile_j_at(zoom, bottom)
+    iu..ib
   end
 
   def tiles_ij(zoom)
