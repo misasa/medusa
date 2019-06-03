@@ -35,15 +35,14 @@
         ["file",@analysis.attachment_files,"show image of a record"]] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
-      <% tab_info.each do |key,array| %>
-       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab"><%= key + data_count(array) %></a></li>
+      <% tab_info.each do |key,array,message| %>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab" title="<%= message %>"><%= key + data_count(array) %></a></li>
       <% end %>
-
     </ul>
     <!-- Tab panes -->
     <div class="tab-content">
       <% tab_info.each do |key,array,message| %>
-       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab" title="<%= message %>"><%= key + data_count(array) %></a></li>
+       <div class="tab-pane<%= active_if_current(key)%>" id="<%= key %>"><%= render partial: key.underscore %></div>
       <% end %>
     </div>
   </div>
