@@ -62,7 +62,7 @@
   <div id="show-body" class="col-lg-8">
     <% tab_info = [
         ["at-a-glance",nil,"show representative properties of a record"],
-        ["specimen",@box.specimens,"show samples in a box"],
+        [@alias_specimen,@box.specimens,"show samples in a box","specimen"],
         ["box",@box.children,"show boxes of a record","daughter"],
         ["history", @box.paths,"show moving history of a box"],
         ["analysis",@box.analyses, "show analysis of samples in a box"],

@@ -31,33 +31,23 @@
   </div>
 
   <div id="show-body" class="col-lg-8">
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-      <li class="<%= active_if_current('at-a-glance') %>">
-        <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
-      </li>
-      <li class="<%= active_if_current('place') %>">
-        <a href="#place" data-toggle="tab"><%= "place#{data_count(@surface.spots)}" %></a>
-      </li>
-      <li class="<%= active_if_current('image') %>">
-        <a href="#image" data-toggle="tab"><%= "image#{data_count(@surface.images)}" %></a>
-      </li>
-      <li class="<%= active_if_current('layer') %>">
-        <a href="#layer" data-toggle="tab"><%= "layer#{data_count(@surface.surface_layers)}" %></a>
-      </li>
-
-    </ul>
-
     <!-- Tab panes -->
     <% tab_info = [
         ["at-a-glance",nil,"show representative properties of a record"],
+        ["place",@surface.spots, "show spots of layers"],
         ["layer",@surface.surface_layers,"show image of layers"],
         ["image",@surface.images,"show image, name, and afine matrix of layers"],
-        ["place",@surface.spots, "show spots of layers"],
     ] %>
-    <div class="tab-content">
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs">
       <% tab_info.each do |key,array,message| %>
-        <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab" title="<%= message %>"><%= key + data_count(array) %></a></li>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab" title="<%= message %>"><%= key + data_count(array) %></a></li>
+      <% end %>
+    </ul>
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <% tab_info.each do |key,array,message,partial| %>
+       <div class="tab-pane<%= active_if_current(key)%>" id="<%= key %>"><%= render partial: (partial ? partial : key.underscore ) %></div>
       <% end %>
     </div>
   </div>
