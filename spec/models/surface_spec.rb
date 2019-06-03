@@ -84,6 +84,8 @@ describe Surface do
     end
   end
 
+
+
   describe "spots" do
     #it { expect(obj.spots).to include(spot)}
     context "shares same surface's spots" do
@@ -105,6 +107,33 @@ describe Surface do
     end
   end
 
+
+  describe "tile_at", :current => true do
+    let(:obj){ FactoryGirl.create(:surface) }
+    let(:left) {-3808.472}
+    let(:upper) {3787.006}
+    let(:right) {3851.032}
+    let(:bottom) {-4007.006}
+#    let(:zoom){ 5 }
+    before do
+      allow(obj).to receive(:bounds).and_return([left, upper, right, bottom])
+    end
+
+    it {expect(obj.tile_at(1,[-3808.473,3787.007])).to eql([0,0]) }
+    it {expect(obj.tile_at(1,[-3808.471,3787.005])).to eql([0,0]) }
+    it {expect(obj.tile_at(1,[3851.031,-4007.005])).to eql([1,1])}
+    it {expect(obj.tile_at(1,[3851.033,-4007.007])).to eql([1,1])}
+    it {expect(obj.tile_at(1,[1440,2423])).to eql([1,0])}
+    it {expect(obj.tile_at(2,[1440,2423])).to eql([2,0])}
+    it {expect(obj.tile_at(3,[1440,2423])).to eql([5,1])}
+    it {expect(obj.tile_at(4,[1440,2423])).to eql([10,2])}
+    it {expect(obj.tile_at(5,[1440,2423])).to eql([21,5])}
+    it {expect(obj.tile_at(6,[1440,2423])).to eql([43,11])}
+    
+
+    after do
+    end
+  end
 
   describe "bounds" do
     #it { expect(obj.spots).to include(spot)}

@@ -121,6 +121,65 @@ class Surface < ActiveRecord::Base
     [center[0] - length/2, center[1] + length/2, center[0] + length/2, center[1] - length/2]
   end
 
+  def tilesize
+    256
+  end
+
+  def ntiles(zoom)
+    2**zoom
+  end
+
+  def length_per_pix(zoom)
+    pix = tilesize * ntiles(zoom)
+    length/pix.to_f
+  end
+
+  def tile_i_at(zoom, x)
+    n = ntiles(zoom)
+    left, upper, right, bottom = bbox
+    delta = x - left
+    #delta = 0.0 if x - left < 1E-5
+    ii = delta/(length_per_pix(zoom) * tilesize)
+    i = ii.floor
+    i = 0 if (i < 0)
+    i = n - 1 if i > n - 1
+    i
+  end
+
+  def tile_j_at(zoom, y)
+    n = ntiles(zoom)
+    left, upper, right, bottom = bbox
+    delta = upper - y
+    jj = delta/(length_per_pix(zoom) * tilesize)
+    j = jj.floor
+    j = 0 if j < 0
+    j = n - 1 if j > (n - 1)
+    j
+  end
+
+  def tile_at(zoom, xy)
+    #center = center[0]
+    #length = surface.length
+    #left, upper, right, bottom = bbox
+    #upper = bbox[1]
+    #surface_left = center - length/2
+    #image_left = image.bounds[0]
+    #image_right = image.bounds[2]
+    #tilesize = 256
+    #n = 2**zoom
+    #pix = tilesize * n
+    #length_per_pix = length/pix.to_f
+    #dum = length_per_pix * tilesize
+    #x = ((xy[0] - left)/dum).floor
+    #x = 0 if x < 0
+    #x = n - 1 if x > (n - 1)
+    #y = ((upper - xy[1])/dum).floor
+    #y = 0 if y < 0
+    #y = n - 1 if y > (n - 1)
+    #puts "xy: #{xy} bbox: #{bbox} x:#{left} <-> #{right} (#{(xy[0] - left)/dum}) y: #{upper} <-> #{bottom} (#{(upper - xy[1])/dum})"
+    [tile_i_at(zoom, xy[0]), tile_j_at(zoom, xy[1])]
+  end
+
 #  def as_json(options = {})
 #    super({ methods: [:global_id, :image_ids, :globe, :center, :length, :bounds] }.merge(options))
 #  end

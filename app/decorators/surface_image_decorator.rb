@@ -17,14 +17,18 @@ class SurfaceImageDecorator < Draper::Decorator
 
   def tile_carousel(zoom)
     id = "carousel-tile-zoom-#{zoom}"
-    h.content_tag(:div, id: id, class: "carousel slide", data:{inteval:false}, style:"background-color:#333333;width:256px;height:256px;") do
+    h.content_tag(:div, id: id, class: "carousel slide", data:{interval:false}, style:"background-color:#333333;width:256px;height:256px;") do
       h.concat(
         h.content_tag(:div, class: "carousel-inner", role:"listbox") do
-          flag_active = true
-          tiles_each(zoom) do |x,y|
+          flag_active = false
+          center = self.center
+          ij_center = surface.tile_at(zoom,center)
+          [ij_center].each do |x,y|
+          #tiles_each(zoom) do |x,y|
             h.concat(
-                h.content_tag(:div, class: (flag_active ? "item active" : "item"), data: (flag_active ? {'url' => tile_path(zoom,x,y), 'slide-number' => 0} : {url: tile_path(zoom,x,y)})) do
-                flag_active = false
+                #flag_active = if [x,y] == ij_center
+                h.content_tag(:div, class: ([x,y] == ij_center ? "item active" : "item"), data: ([x,y] == ij_center ? {'url' => tile_path(zoom,x,y), 'slide-number' => 0} : {url: tile_path(zoom,x,y)})) do
+                #flag_active = false
                 #h.concat h.image_tag(nil, :alt => "#{x}_#{y}")
                 h.concat h.content_tag(:div, "#{zoom}/#{x}_#{y}", class: "carousel-caption")
               end
