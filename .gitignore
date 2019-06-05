@@ -32,7 +32,7 @@
 public/system
 vendor/bundler
 db_dump
-
+.ruby-version
 *~
 \.\#*
 \#*\#

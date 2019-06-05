@@ -10,21 +10,71 @@ class SurfaceImageDecorator < Draper::Decorator
   #       object.created_at.strftime("%a %m/%d/%y")
   #     end
   #   end
+
+  def name_with_id
+    h.content_tag(:span, nil, class: "glyphicon glyphicon-globe") +
+    " " + 
+    h.link_to(surface.name, h.surface_path(surface)) + 
+    " / #{image.name}"
+    #h.raw(" < #{h.draggable_id(surface.global_id)} >")    
+  end
+
+  def map(options = {})
+    matrix = surface.decorate.affine_matrix_for_map
+    return unless matrix
+    left, upper, right, bottom = image.bounds
+    h.content_tag(:div, nil, id: "surface-map", class: options[:class], data:{
+                    base_url: Settings.map_url,
+                    url_root: "#{Rails.application.config.relative_url_root}/",
+                    global_id: surface.global_id,
+                    length: surface.length,
+                    matrix: matrix.inv,
+                    add_spot: true,
+                    add_radius: true,
+                    base_image: { id: surface.images.first.try!(:id), name: surface.images.first.try!(:name) },
+                    #base_image: {id: image.id, name: image.name, bounds: [] },
+                    layer_groups: [],
+                    images: {'' => [image.id]},
+                    spots: [],
+                    bounds: [[left, upper],[right, bottom]].map{|world_x, world_y|
+                      x = matrix[0, 0] * world_x + matrix[0, 1] * world_y + matrix[0, 2]
+                      y = matrix[1, 0] * world_x + matrix[1, 1] * world_y + matrix[1, 2]
+                      [x, y]
+                    }
+    })
+  end
+ 
   def tile_path(zoom,x,y)
     return unless image
     path = h.url_for_tile(self) + "#{image.id}/#{zoom}/#{x}_#{y}.png"
   end
 
-  def tile_carousel(zoom)
+  def tile_thumbnail(zoom, opts = {})
+    if opts[:active]
+      ij_center = opts[:active]
+    else
+      flag_active = false
+      center = self.center
+      ij_center = surface.tile_at(zoom,center)
+     end
+     x, y = ij_center
+     h.image_tag(tile_path(zoom,x,y), :alt => "#{x}_#{y}")
+  end
+
+  def tile_carousel(zoom, opts = {})
     id = "carousel-tile-zoom-#{zoom}"
-    h.content_tag(:div, id: id, class: "carousel slide", data:{interval:false}, style:"background-color:#333333;width:256px;height:256px;") do
+    h.content_tag(:div, id: id, class: "carousel slide", data:{interval:500}, style:"background-color:#333333;width:256px;height:256px;") do
       h.concat(
         h.content_tag(:div, class: "carousel-inner", role:"listbox") do
-          flag_active = false
-          center = self.center
-          ij_center = surface.tile_at(zoom,center)
-          [ij_center].each do |x,y|
-          #tiles_each(zoom) do |x,y|
+          if opts[:active]
+            ij_center = opts[:active]
+          else
+            flag_active = false
+            center = self.center
+            ij_center = surface.tile_at(zoom,center)
+          end
+          #[ij_center].each do |x,y|
+          tiles_each(zoom) do |x,y|
             h.concat(
                 #flag_active = if [x,y] == ij_center
                 h.content_tag(:div, class: ([x,y] == ij_center ? "item active" : "item"), data: ([x,y] == ij_center ? {'url' => tile_path(zoom,x,y), 'slide-number' => 0} : {url: tile_path(zoom,x,y)})) do
@@ -48,8 +98,8 @@ class SurfaceImageDecorator < Draper::Decorator
           h.concat h.content_tag(:span, "Next", class: "sr-only")
         end
       )
-
     end
+    #h.content_tag(:div, opts)
   end
 
   def tiles(zoom, &block)
@@ -82,7 +132,8 @@ class SurfaceImageDecorator < Draper::Decorator
           h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_attachment_file_path(attachment_file), class: "dropdown-item"))
           h.concat h.content_tag(:li, h.link_to("calibrate", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
           if attachment_file.try!(:affine_matrix).present?
-            h.concat h.content_tag(:li, h.link_to("show tiles", h.surface_image_path(surface, attachment_file)))
+            h.concat h.content_tag(:li, h.link_to("show simple map", h.map_surface_image_path(surface, attachment_file)))
+            h.concat h.content_tag(:li, h.link_to("show tiles", h.zooms_surface_image_path(surface, attachment_file)))
             h.concat h.content_tag(:li, h.link_to("force create tiles", h.tiles_surface_image_path(surface, attachment_file), method: :post))
           end
           if self.wall

@@ -2,7 +2,6 @@ class SurfaceImagesController < ApplicationController
   respond_to :html, :xml, :json, :svg
   before_action :find_surface
   before_action :find_resource, except: [:index, :new, :create, :link_by_global_id]
-
 #  load_and_authorize_resource
 
   def show
@@ -12,6 +11,18 @@ class SurfaceImagesController < ApplicationController
 
   def family
     respond_with @spot, layout: !request.xhr?
+  end
+
+  def svg
+    respond_with @spot, layout: !request.xhr?
+  end
+
+  def zooms
+    respond_with @surface_image, layout: !request.xhr?
+  end
+
+  def map
+    respond_with @surface_image, layout: !request.xhr?
   end
 
   def create

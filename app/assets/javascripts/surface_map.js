@@ -391,36 +391,56 @@ function initSurfaceMap() {
   var length = parseFloat(div.dataset.length);
   var matrix = JSON.parse(div.dataset.matrix);
   var addSpot = JSON.parse(div.dataset.addSpot);
+  var addRadius = div.dataset.addRadius;
   var baseImage = JSON.parse(div.dataset.baseImage);
   var layerGroups = JSON.parse(div.dataset.layerGroups);
   var images = JSON.parse(div.dataset.images);
   var spots = JSON.parse(div.dataset.spots);
+  if (("bounds" in div.dataset)){
+    var _bounds = JSON.parse(div.dataset.bounds);
+  }
   var layers = [];
   var baseMaps = {};
   var overlayMaps = {};
   var zoom = 1;
 
+  var map = L.map('surface-map', {
+    maxZoom: 8,
+    minZoom: 0,
+    crs: L.CRS.Simple,
+    //    layers: layers
+  });
+  
+  if (_bounds){
+    var bounds = L.latLngBounds([map.unproject(_bounds[0], 0), map.unproject(_bounds[1],0)]);
+    //var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png',{bounds: bounds});
+  } else {
+      //var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png');
+  }
   var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png');
   layers.push(layer);
   baseMaps[baseImage.name] = layer;
+  layer.addTo(map);
   layerGroups.concat([{ name: "", opacity: 100 }]).forEach(function(layerGroup) {
     var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0;
     if (images[name]) {
       images[name].forEach(function(id) {
-	L.tileLayer(baseUrl + global_id + '/' + id + '/{z}/{x}_{y}.png', { opacity: opacity }).addTo(group);
+	opts = {};
+	if (bounds){
+	    opts = {opacity: opacity, bounds: bounds};
+        } else {
+	    opts = {opacity: opacity}
+        }
+	L.tileLayer(baseUrl + global_id + '/' + id + '/{z}/{x}_{y}.png', opts).addTo(group);
       });
       layers.push(group);
+      group.addTo(map);
       if (name === "") { name = "top"; }
       overlayMaps[name] = group;
     }
   });
 
-  var map = L.map('surface-map', {
-    maxZoom: 8,
-    minZoom: 0,
-    crs: L.CRS.Simple,
-    layers: layers
-  });
+
   map.getSpotPoint = function() {
     if (!addingSpot) { return; }
     var point = map.project(addingSpot.getLatLng(), 0),
@@ -433,8 +453,9 @@ function initSurfaceMap() {
   map.addLayer(spotsLayer);
 
   //overlayMaps['grid'] = L.layerGroup.grid(map, length);
-
-  var radiusControl = L.control.radius(spotsLayer, {position: 'bottomright'}).addTo(map);
+  if (addRadius) {
+    var radiusControl = L.control.radius(spotsLayer, {position: 'bottomright'}).addTo(map);
+  }
 
   var addingSpot;
   map.on('click', function(event) {
@@ -454,8 +475,13 @@ function initSurfaceMap() {
 
   //L.control.layers(baseMaps, overlayMaps).addTo(map);
   L.control.opacityLayers(baseMaps, overlayMaps, {hideSingleBase: false}).addTo(map);
-  map.setView(map.unproject([256 / 2, 256 / 2], 0), zoom);
-
+  
+  if (bounds){
+      //var bounds = L.latLngBounds([map.unproject(_bounds[0], 0), map.unproject(_bounds[1],0)]);
+    map.fitBounds(bounds);
+  } else {
+    map.setView(map.unproject([256 / 2, 256 / 2], 0), zoom);
+  }
   map.addControl(new L.Control.Fullscreen());
 
   surfaceMap = map;

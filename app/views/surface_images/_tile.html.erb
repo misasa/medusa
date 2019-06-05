@@ -1,0 +1,36 @@
+<%= @surface_image.decorate.tile_carousel(4) %>
+<%= javascript_tag do %>
+
+$('.carousel').on('slid.bs.carousel', function (e) {
+  var url = $(this).find('.item.active').data('url');
+  var element = $(this).find('.item.active');
+  var img = new Image();
+  img.onload = function(){
+    if ($('img', $(element)).length === 0){
+      $(element).append(img);
+    }
+    $('img', $(element)).attr('src', url);
+  }
+  img.onerror = function(){
+    $(element).append("<div class='alert alert-info'><small>failed to load " + url + "</small></alert>");
+  }
+  img.src = url;
+});
+
+$('[data-slide-number=0]').each(function(index, element){
+  var url = $(element).data('url');
+  var img = new Image();
+  img.onload = function(){
+    if ($('img', $(element)).length === 0){
+      $(element).append(img);
+    }
+    $('img', $(element)).attr('src', url);  
+  };
+  img.onerror = function(){
+    $(element).append("<div class='alert alert-info'><small>failed to load " + url + "</small></alert>");
+  };
+  img.src = url;
+  
+
+});
+<% end %>
