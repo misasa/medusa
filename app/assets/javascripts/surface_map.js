@@ -405,7 +405,7 @@ function initSurfaceMap() {
   var zoom = 1;
 
   var map = L.map('surface-map', {
-    maxZoom: 8,
+    maxZoom: 14,
     minZoom: 0,
     crs: L.CRS.Simple,
     //    layers: layers
@@ -417,7 +417,7 @@ function initSurfaceMap() {
   } else {
       //var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png');
   }
-  var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png');
+  var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png',{maxNativeZoom: 6});
   layers.push(layer);
   baseMaps[baseImage.name] = layer;
   layer.addTo(map);
@@ -427,9 +427,9 @@ function initSurfaceMap() {
       images[name].forEach(function(id) {
 	opts = {};
 	if (bounds){
-	    opts = {opacity: opacity, bounds: bounds};
+	    opts = {opacity: opacity, bounds: bounds, maxNativeZoom: 6};
         } else {
-	    opts = {opacity: opacity}
+	    opts = {opacity: opacity, maxNativeZoom: 6}
         }
 	L.tileLayer(baseUrl + global_id + '/' + id + '/{z}/{x}_{y}.png', opts).addTo(group);
       });
