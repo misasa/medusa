@@ -1,3 +1,4 @@
+require 'matrix'
 class Surface < ActiveRecord::Base
   include HasRecordProperty
 
@@ -134,6 +135,72 @@ class Surface < ActiveRecord::Base
     length/pix.to_f
   end
 
+  def affine_matrix_for_map
+    x = tilesize
+    y = tilesize
+    left, top, _ = bounds
+    len = length
+    #puts "len: #{len} left: #{left} top: #{top} x: #{x} y: #{y}"
+    return if len == 0
+    x_offset = (len - width) / 2
+    y_offset = (len - height) / 2
+    Matrix[
+      [256 / len, 0, (x_offset - left) * 256 / len],
+      [0, -256 / len, (y_offset + top) * 256 / len],
+      [0, 0, 1]
+    ]
+  end
+
+
+  def coords_on_map(world_coords)
+    flag_single = true if world_coords[0].is_a?(Float)
+    if flag_single
+      world_coords = [world_coords]
+    end
+    n = Matrix.columns(world_coords)
+    n = Matrix.rows(n.to_a << Array.new(world_coords.size, 1))
+    matrix = affine_matrix_for_map
+    nn = matrix * n
+    coords = []
+    nn.t.to_a.each do |r|
+      coords << [r[0],r[1]]
+    end
+
+    flag_single ? coords[0] : coords
+  end
+
+  def tile_ij_at(zooms, x, y)
+    flag_single = true if zooms.is_a?(Integer)
+    if flag_single
+      zooms = [zooms]
+    end
+    
+    left, upper, right, bottom = bbox
+    dx = x - left
+    dy = upper - y
+
+    ijs = []
+    zooms.each do |zoom|
+      n = ntiles(zoom)
+      lpp = length_per_pix(zoom)
+
+      ii = dx/(lpp * tilesize)
+      jj = dy/(lpp * tilesize)
+
+      i = ii.floor
+      i = 0 if (i < 0)
+      i = n - 1 if i > n - 1
+      j = jj.floor
+      j = 0 if j < 0
+      j = n - 1 if j > (n - 1)
+      ijs << [i,j]
+    end
+    if flag_single 
+      ijs = ijs[0]
+    end
+    ijs
+  end
+
   def tile_i_at(zoom, x)
     n = ntiles(zoom)
     left, upper, right, bottom = bbox
@@ -145,6 +212,7 @@ class Surface < ActiveRecord::Base
     i = n - 1 if i > n - 1
     i
   end
+
 
   def tile_j_at(zoom, y)
     n = ntiles(zoom)
@@ -158,26 +226,7 @@ class Surface < ActiveRecord::Base
   end
 
   def tile_at(zoom, xy)
-    #center = center[0]
-    #length = surface.length
-    #left, upper, right, bottom = bbox
-    #upper = bbox[1]
-    #surface_left = center - length/2
-    #image_left = image.bounds[0]
-    #image_right = image.bounds[2]
-    #tilesize = 256
-    #n = 2**zoom
-    #pix = tilesize * n
-    #length_per_pix = length/pix.to_f
-    #dum = length_per_pix * tilesize
-    #x = ((xy[0] - left)/dum).floor
-    #x = 0 if x < 0
-    #x = n - 1 if x > (n - 1)
-    #y = ((upper - xy[1])/dum).floor
-    #y = 0 if y < 0
-    #y = n - 1 if y > (n - 1)
-    #puts "xy: #{xy} bbox: #{bbox} x:#{left} <-> #{right} (#{(xy[0] - left)/dum}) y: #{upper} <-> #{bottom} (#{(upper - xy[1])/dum})"
-    [tile_i_at(zoom, xy[0]), tile_j_at(zoom, xy[1])]
+    tile_ij_at(zoom, xy[0],xy[1])
   end
 
 #  def as_json(options = {})

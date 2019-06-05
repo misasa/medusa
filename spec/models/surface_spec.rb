@@ -107,6 +107,26 @@ describe Surface do
     end
   end
 
+  describe "bounds_on_map", :current => true do
+    let(:surface){ FactoryGirl.create(:surface) }
+    let(:left) {-3808.472}
+    let(:upper) {3787.006}
+    let(:right) {3851.032}
+    let(:bottom) {-4007.006}
+    before do
+      allow(surface).to receive(:bounds).and_return([left, upper, right, bottom])
+    end
+
+    it { expect(surface.coords_on_map([1058.244, 2720.475])[0]).to be_within(0.1).of(162.06)}
+    it { expect(surface.coords_on_map([1058.244, 2720.475])[1]).to be_within(0.1).of(35.03)}
+    it { expect(surface.coords_on_map([[1058.244, 2720.475], [1821.756, 2125.525]])[0][0]).to be_within(0.1).of(162.06)}
+    it { expect(surface.coords_on_map([[1058.244, 2720.475], [1821.756, 2125.525]])[0][1]).to be_within(0.1).of(35.03)}
+   it { expect(surface.coords_on_map([[1058.244, 2720.475], [1821.756, 2125.525]])[1][0]).to be_within(0.1).of(187.13)}
+    it { expect(surface.coords_on_map([[1058.244, 2720.475], [1821.756, 2125.525]])[1][1]).to be_within(0.1).of(54.57)}
+
+
+    
+  end
 
   describe "tile_at", :current => true do
     let(:obj){ FactoryGirl.create(:surface) }
@@ -129,11 +149,15 @@ describe Surface do
     it {expect(obj.tile_at(4,[1440,2423])).to eql([10,2])}
     it {expect(obj.tile_at(5,[1440,2423])).to eql([21,5])}
     it {expect(obj.tile_at(6,[1440,2423])).to eql([43,11])}
-    
+    context "with zooms" do
+      it {expect(obj.tile_at(1.upto(6),[1440,2423])).to eql([[1,0],[2,0],[5,1],[10,2],[21,5],[43,11]])}
+    end
 
     after do
     end
   end
+
+
 
   describe "bounds" do
     #it { expect(obj.spots).to include(spot)}

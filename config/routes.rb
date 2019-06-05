@@ -243,6 +243,9 @@ Medusa::Application.routes.draw do
     resources :images, concerns: [:link_by_global_id], only: [:index, :show, :create, :update, :destroy], controller: "surface_images" do
       member do
         get :family
+        get :svg
+        get :zooms
+        get :map
         post 'move_to_top'
         post 'move_to_bottom'
         post 'move_higher'
