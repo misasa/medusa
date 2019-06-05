@@ -41,17 +41,13 @@ class SurfaceDecorator < Draper::Decorator
     surface_images[0].decorate.to_tex unless surface_images.empty?
   end
 
-  def affine_matrix_for_map(x = 256, y = 256)
-    left, top, _ = bounds
-    len = length
-    return if len == 0
-    x_offset = (len - width) / 2
-    y_offset = (len - height) / 2
-    Matrix[
-      [256 / len, 0, (x_offset - left) * 256 / len],
-      [0, -256 / len, (y_offset + top) * 256 / len],
-      [0, 0, 1]
-    ]
+  def bounds_on_map(image)
+    left, upper, right, bottom = image.bounds
+    [[left, upper], [right, bottom]].map{|world_x, world_y|
+      x = matrix[0, 0] * world_x + matrix[0, 1] * world_y + matrix[0, 2]
+      y = matrix[1, 0] * world_x + matrix[1, 1] * world_y + matrix[1, 2]
+      [x, y]
+    }
   end
 
   def map(options = {})

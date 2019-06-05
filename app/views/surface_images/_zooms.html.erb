@@ -1,0 +1,49 @@
+<% center = @surface_image.center %>
+<% ijs = @surface.tile_at(0.upto(6), center ) %>
+<ul class="list-unstyled list-inline">
+  <% 0.upto(6).each_with_index do |zoom, idx|%>
+    <li>
+      <%= content_tag(:div, class:"thumbnail") do %>
+        <% x,y = ijs[idx] %>
+        <%= image_tag(@surface_image.decorate.tile_path(zoom, x, y), :alt => "#{zoom}/#{x}_#{y}", style:"background-color: #333333") %>
+        zoom level: <%= zoom %> ij: <%= ijs[idx] %>
+      <% end %>
+    </li>
+  <% end %>
+</ul>
+
+<%= javascript_tag do %>
+
+$('.carousel').on('slid.bs.carousel', function (e) {
+  var url = $(this).find('.item.active').data('url');
+  var element = $(this).find('.item.active');
+  var img = new Image();
+  img.onload = function(){
+    if ($('img', $(element)).length === 0){
+      $(element).append(img);
+    }
+    $('img', $(element)).attr('src', url);
+  }
+  img.onerror = function(){
+    $(element).append("<div class='alert alert-info'><small>failed to load " + url + "</small></alert>");
+  }
+  img.src = url;
+});
+
+$('[data-slide-number=0]').each(function(index, element){
+  var url = $(element).data('url');
+  var img = new Image();
+  img.onload = function(){
+    if ($('img', $(element)).length === 0){
+      $(element).append(img);
+    }
+    $('img', $(element)).attr('src', url);  
+  };
+  img.onerror = function(){
+    $(element).append("<div class='alert alert-info'><small>failed to load " + url + "</small></alert>");
+  };
+  img.src = url;
+  
+
+});
+<% end %>
