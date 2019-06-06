@@ -2,6 +2,6 @@
   <%= ActsAsMappable::Mappable::HtmlGenerator.generate(lat: 0, lng: 0, zoom: 0, width: "auto", height: 500) %>
   <%= javascript_tag "actsAsMappable.initToMap();" %>
 <% else %>
-  <%= @surface.map %>
+  <%= @surface.map(class: "large-map")%>
   <%= javascript_tag "initSurfaceMap();" %>
 <% end  %>

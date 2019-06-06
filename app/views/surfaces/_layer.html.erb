@@ -14,6 +14,50 @@
       <% end %>
     </ul>
   </div>
+  <div class="panel-footer">
+    <div class="row">
+      <div class="form-inline col-sm-6">
+      <%= form_for AttachmentFile.new, url: surface_images_path(@surface), multipart: true, class: "form-inline" do |f|%>
+        <%= hidden_tabname_tag(__FILE__) %>
+        <%= f.fields_for :record_property_attributes do |r| %>
+          <%= r.hidden_field :user_id ,value: @current_user.id %>
+        <% end %>
+        <%#= check_box_tag nil, nil, false, class: "select-row-all" %>
+          <div class="input-group">
+            <label class="input-group-btn">
+              <span class="btn btn-primary" title="choose file">
+                Browse...<%= f.file_field :data, style:"display:none" %>
+              </span>
+            </label>
+            <%= f.text_field :affine_matrix_in_string, class: "form-control", value:"", placeholder:"[1,0,0;0,1,0;0,0,1]" %>
+            <div class="input-group-btn">
+              <%= f.button title:"add image to #{@surface.name} with affine matrix", class: "btn btn-default" do %>
+                <span class="glyphicon glyphicon-save"></span>
+              <% end %>
+            </div>
+          </div>
+      <% end %>
+    </div>
+    <div class="col-sm-6">
+      <%= form_tag link_by_global_id_surface_images_path(@surface), method: :post do %>
+        <%= hidden_tabname_tag(__FILE__) %>
+	  <div class="input-group">
+	    <span class="input-group-addon">
+	      <%= link_to attachment_files_path(per_page: 5, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#attachment-file-global-id", title: "search files and input global-ID" do %>
+	        <span class="glyphicon glyphicon-search"></span>
+	      <% end %>
+	    </span>
+	    <%= text_field_tag :global_id, nil, id: "attachment-file-global-id", class: "form-control", placeholder:"global-ID" %>
+            <div class="input-group-btn">
+              <%= button_tag title: "link image to #{@surface.name} by global id", class: "btn btn-default" do %>
+                <span class="glyphicon glyphicon-save"></span>
+              <% end %>
+            </div>
+	  </div>
+      <% end %>
+    </div>
+    </div>
+  </div>
 </div>
 <div class="panel panel-default">
   
@@ -48,13 +92,23 @@
   </div>
   <div class="panel-body collapse in" id="surface-layer-base">
     <ul class="list-inline thumbnails surface-layer">
-      <% @surface.surface_images.base.concat(@surface.surface_images.wall).each do |surface_image| %>
+      <% @surface.surface_images.wall.each do |surface_image| %>
         <% next unless surface_image.image %>
         <%= surface_image.decorate.li_thumbnail %>
       <% end %>
     </ul>
   </div>
 </div>
+
+<%= javascript_tag do %>
+  $(document).on('change', ':file', function(){
+  var input = $(this),
+  numFiles = input.get(0).files ? input.get(0).files.length : 1,
+  label = input.val().replace(/\\/g,'/').replace(/.*\//,'');
+  input.parent().text(label);
+  //input.parent().parent().next('span.input-group-addon').text(label);
+});
+<% end %>
 
 <%= javascript_tag do %>
   (function($) {

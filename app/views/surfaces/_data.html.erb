@@ -1,0 +1,19 @@
+<div class="btn-group">
+  <%#= display_type_for 'data' %>
+  <%#= display_type_for 'tex' %>
+  <%#= display_type_for 'plot' if Settings.rplot_url %>
+  <%#= link_to('map', @surface.rmap_url, class: "btn radio-button-group", :title => "view map", :target => ["_blank"]) %>
+</div>
+<div class="display-type">
+  <div id="display-type-data">
+    <%= rplot_iframe @surface %>
+  </div>
+  <div class="hidden" id="display-type-tex">
+    <pre><code><%= @surface.to_tex %></code></pre>
+  </div>
+  <%#= display_plot @surface if Settings.rplot_url %>
+</div>
+
+<%= javascript_tag do %>
+  $("div.surface-viewer").surfaceViewer();
+<% end %>

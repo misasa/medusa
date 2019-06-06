@@ -31,10 +31,10 @@ class SurfaceImageDecorator < Draper::Decorator
                     matrix: matrix.inv,
                     add_spot: true,
                     add_radius: true,
-                    base_image: { id: surface.images.first.try!(:id), name: surface.images.first.try!(:name) },
+                    base_images: surface.surface_images.wall.map{|s_image| {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.decorate.bounds_on_map } },
                     #base_image: {id: image.id, name: image.name, bounds: [] },
-                    layer_groups: [],
-                    images: {'' => [image.id]},
+                    layer_groups: [{name: image.name, opacity: 100 }],
+                    images: {image.name => [{id: image.id, bounds: self.bounds_on_map}]},
                     spots: [],
                     bounds: [[left, upper],[right, bottom]].map{|world_x, world_y|
                       x = matrix[0, 0] * world_x + matrix[0, 1] * world_y + matrix[0, 2]
@@ -102,6 +102,11 @@ class SurfaceImageDecorator < Draper::Decorator
     #h.content_tag(:div, opts)
   end
 
+  def bounds_on_map
+    left, upper, right, bottom = image.bounds
+    surface.coords_on_map([[left, upper],[right, bottom]])
+  end
+
   def tiles(zoom, &block)
     return unless image
     tiles.each(zoom)
@@ -132,7 +137,7 @@ class SurfaceImageDecorator < Draper::Decorator
           h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_attachment_file_path(attachment_file), class: "dropdown-item"))
           h.concat h.content_tag(:li, h.link_to("calibrate", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
           if attachment_file.try!(:affine_matrix).present?
-            h.concat h.content_tag(:li, h.link_to("show simple map", h.map_surface_image_path(surface, attachment_file)))
+            h.concat h.content_tag(:li, h.link_to("show on map", h.map_surface_image_path(surface, attachment_file)))
             h.concat h.content_tag(:li, h.link_to("show tiles", h.zooms_surface_image_path(surface, attachment_file)))
             h.concat h.content_tag(:li, h.link_to("force create tiles", h.tiles_surface_image_path(surface, attachment_file), method: :post))
           end

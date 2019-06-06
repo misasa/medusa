@@ -392,7 +392,7 @@ function initSurfaceMap() {
   var matrix = JSON.parse(div.dataset.matrix);
   var addSpot = JSON.parse(div.dataset.addSpot);
   var addRadius = div.dataset.addRadius;
-  var baseImage = JSON.parse(div.dataset.baseImage);
+  var baseImages = JSON.parse(div.dataset.baseImages);
   var layerGroups = JSON.parse(div.dataset.layerGroups);
   var images = JSON.parse(div.dataset.images);
   var spots = JSON.parse(div.dataset.spots);
@@ -417,21 +417,30 @@ function initSurfaceMap() {
   } else {
       //var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png');
   }
-  var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png',{maxNativeZoom: 6});
-  layers.push(layer);
-  baseMaps[baseImage.name] = layer;
-  layer.addTo(map);
+  baseImages.forEach(function(baseImage) {
+    var opts = {};
+    if (baseImage.bounds){
+      opts = {bounds: L.latLngBounds([map.unproject(baseImage.bounds[0], 0), map.unproject(baseImage.bounds[1],0)]), maxNativeZoom: 6};
+    } else {
+      opts = {maxNativeZoom: 6}
+    }
+
+    var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png',opts);
+    layers.push(layer);
+    baseMaps[baseImage.name] = layer;
+    layer.addTo(map);
+  });
   layerGroups.concat([{ name: "", opacity: 100 }]).forEach(function(layerGroup) {
     var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0;
     if (images[name]) {
-      images[name].forEach(function(id) {
+      images[name].forEach(function(image) {
 	opts = {};
-	if (bounds){
-	    opts = {opacity: opacity, bounds: bounds, maxNativeZoom: 6};
+	if (image.bounds){
+	    opts = {opacity: opacity, bounds: L.latLngBounds([map.unproject(image.bounds[0], 0), map.unproject(image.bounds[1],0)]), maxNativeZoom: 6};
         } else {
 	    opts = {opacity: opacity, maxNativeZoom: 6}
         }
-	L.tileLayer(baseUrl + global_id + '/' + id + '/{z}/{x}_{y}.png', opts).addTo(group);
+	L.tileLayer(baseUrl + global_id + '/' + image.id + '/{z}/{x}_{y}.png', opts).addTo(group);
       });
       layers.push(group);
       group.addTo(map);

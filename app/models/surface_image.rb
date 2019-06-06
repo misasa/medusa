@@ -8,9 +8,11 @@ class SurfaceImage < ActiveRecord::Base
   validate :check_image
 
   scope :wall, -> { where(wall: true) }
-  scope :base, -> { where(position: minimum(:position)) }
-  scope :not_base, -> { where.not(position: minimum(:position)) }
-  scope :not_belongs_to_layer, -> { not_base.where(surface_layer_id: nil) }
+  scope :base, -> { where(wall: true) }
+  scope :not_base, -> { where.not(wall: true) }
+#  scope :base, -> { where(position: minimum(:position)) }
+#  scope :not_base, -> { where.not(position: minimum(:position)) }
+  scope :not_belongs_to_layer, -> { where(surface_layer_id: nil) }
 
   def tile_dir
     File.join(surface.map_dir,image.id.to_s)

@@ -64,10 +64,10 @@ class SurfaceDecorator < Draper::Decorator
                     length: length,
                     matrix: matrix.inv,
                     add_spot: options[:add_spot] || false,
-                    base_image: { id: images.first.try!(:id), name: images.first.try!(:name) },
+                    base_images: surface_images.wall.map{|s_image| {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.decorate.bounds_on_map } },
                     layer_groups: surface_layers.map { |layer| { name: layer.name, opacity: layer.opacity } },
                     images: surface_images[1..-1].each_with_object(Hash.new { |h, k| h[k] = [] }) { |surface_image, hash|
-                      hash[surface_image.surface_layer.try!(:name)] << surface_image.image_id
+                        hash[surface_image.surface_layer.try!(:name)] << {id: surface_image.image_id, bounds: surface_image.decorate.bounds_on_map}
                     },
                     spots: images.inject([]) { |array, image|
                       array + image.spots.map { |spot|
