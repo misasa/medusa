@@ -1,7 +1,7 @@
 <% if @surface.globe? %>
   <%= ActsAsMappable::Mappable::HtmlGenerator.generate(lat: 0, lng: 0, zoom: 0, width: 300, height: 300) %>
 <% else %>
-  <%= @surface.map(class: "small-map", add_spot: true) %>
+  <%= @surface.map(class: "large-map", add_spot: true) %>
 
   <%= form_for Spot.new, url: surface_spots_path(@surface) do |f|%>
     <%= hidden_field_tag :tab,"" %>
@@ -39,7 +39,6 @@
 <div id="family-tree">
   <%= @surface.family_tree %>
 </div>
-<%= @surface.related_pictures %>
 
 <% if @surface.globe? %>
   <%= javascript_tag "actsAsMappable.initToMap();" %>
