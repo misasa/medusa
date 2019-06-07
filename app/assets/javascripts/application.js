@@ -25,7 +25,6 @@
 //= require highcharts/highcharts
 //= require highcharts/highcharts-more
 //= require highcharts/highstock
-
 function basename(path) {
   return path.substr(0, path.lastIndexOf("."));
 }
