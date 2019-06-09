@@ -1,16 +1,20 @@
 <div class="row">
   <div id="show-caption" class="col-lg-12">
-    <%= @surface.name_with_id %>
+    <%= @surface_layer.name_with_id %>
   </div>
-
 </div>
 
 <div class="row">
-  <div id="show-tools" class="col-lg-4">
+  <div id="show-tools" class="col-lg-6">
     <div class="row btn-toolbar tool-selector" role="toolbar">
+      <div class="btn-group btn-group-sm">
+        <%= link_to map_surface_layer_path(@surface,@surface_layer), class: "btn btn-default activate", id: "tree-conifer-button", remote: true, title: "top" do %>
+          <span class="glyphicon glyphicon-globe"></span>
+        <% end %>
+      </div>
       <% if can? :update, @surface %>
       <div class="btn-group btn-group-sm">
-	<%= link_to edit_surface_layer_path(@surface, @surface_layer), class: "btn btn-default activate", remote: true do %>
+	<%= link_to edit_surface_layer_path(@surface, @surface_layer), class: "btn btn-default", remote: true do %>
 	  <span class="glyphicon glyphicon-pencil"></span>
 	<% end %>
       </div>
@@ -21,22 +25,18 @@
     </div>
   </div>
 
-  <div id="show-body" class="col-lg-8">
+  <div id="show-body" class="col-lg-6">
+    <% tab_info = [
+        ["at-a-glance",nil,"show map"],
+        #["image",@surface_layer.images,"show image"],
+    ] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
-      <li class="<%= active_if_current('at-a-glance') %>">
-        <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
-      </li>
-      <li class="<%= active_if_current('image') %>">
-        <a href="#image" data-toggle="tab"><%= "image#{data_count(@surface_layer.images)}" %></a>
-      </li>
+      <% tab_info.each do |key,array,message| %>
+       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab" title="<%= message %>"><%= key + data_count(array) %></a></li>
+      <% end %>
     </ul>
-
     <!-- Tab panes -->
-    <% tab_info = [
-        ["at-a-glance",nil],
-        ["image",@surface_layer.images],
-    ] %>
     <div class="tab-content">
       <% tab_info.each do |key,array| %>
         <div class="tab-pane<%= active_if_current(key) %>" id="<%= key %>"><%= render partial: key.underscore %></div>

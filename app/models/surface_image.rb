@@ -9,6 +9,7 @@ class SurfaceImage < ActiveRecord::Base
 
   scope :wall, -> { where(wall: true) }
   scope :base, -> { where(wall: true) }
+  scope :overlay, -> { where(wall: [false, nil])  }
   scope :not_base, -> { where.not(wall: true) }
 #  scope :base, -> { where(position: minimum(:position)) }
 #  scope :not_base, -> { where.not(position: minimum(:position)) }

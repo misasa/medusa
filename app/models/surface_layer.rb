@@ -13,4 +13,18 @@ class SurfaceLayer < ActiveRecord::Base
   def self.max_priority
     all.maximum(:priority) || 0
   end
+
+  def bounds
+    return Array.new(4) { 0 } if surface.globe? || images.blank?
+    left,upper,right,bottom = images[0].bounds
+    images.each do |image|
+      next if image.bounds.blank?
+      l,u,r,b = image.bounds
+      left = l if l < left
+      upper = u if u > upper
+      right = r if r > right
+      bottom = b if b < bottom
+    end
+    [left, upper, right, bottom]
+  end
 end
