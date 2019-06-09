@@ -3,6 +3,10 @@ class SurfaceLayersController < ApplicationController
   before_action :find_surface
   before_action :find_resource, except: [:index, :new, :create, :link_by_global_id]
 
+  def map
+    respond_with @surface_layer, layout: !request.xhr?
+  end
+
   def show
     respond_with @surface_layer
   end
