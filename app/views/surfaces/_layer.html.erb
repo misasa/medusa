@@ -1,14 +1,15 @@
+<% not_belongs_to_layer = @surface.not_belongs_to_layer_surface_images %>
 <div class="panel panel-default">
   <div class="panel-heading">
     <span class="panel-title pull-lfet">
      <a href="#surface-layer-top", data-toggle="collapse", aria-expanded="false", aria-control="surface-layer-top", title = "show and hide images belong to top">
-      <span class="badge"><%= @surface.surface_images.not_belongs_to_layer.size %></span> Top
+      <span class="badge"><%= not_belongs_to_layer.size %></span> Top
     </a>
     </span>
   </div>
   <div class="panel-body collapse in" id="surface-layer-top">
     <ul class="list-inline thumbnails surface-layer">
-      <% @surface.surface_images.not_belongs_to_layer.reorder("position DESC").each do |surface_image| %>
+      <% not_belongs_to_layer.each do |surface_image| %>
         <% next unless surface_image.image %>
         <%= surface_image.decorate.li_thumbnail %>
       <% end %>
@@ -71,7 +72,7 @@
 
 </div>
 
-<% @surface.surface_layers.reorder("priority DESC").each do |surface_layer| %>
+<% @surface.surface_layers.each do |surface_layer| %>
   <%= surface_layer.decorate.panel %>
 <% end %>
 
@@ -88,7 +89,7 @@
   </div>
   <div class="panel-body collapse in" id="surface-layer-base">
     <ul class="list-inline thumbnails surface-layer">
-      <% @surface.surface_images.wall.each do |surface_image| %>
+      <% @surface.wall_surface_images.each do |surface_image| %>
         <% next unless surface_image.image %>
         <%= surface_image.decorate.li_thumbnail %>
       <% end %>

@@ -255,6 +255,8 @@ GEM
       binding_of_caller (>= 0.7)
       pry (>= 0.9.11)
     rack (1.5.5)
+    rack-mini-profiler (0.10.7)
+      rack (>= 1.2.0)
     rack-protection (2.0.0)
       rack
     rack-test (0.6.3)
@@ -441,6 +443,7 @@ DEPENDENCIES
   pry-doc
   pry-rails
   pry-stack_explorer
+  rack-mini-profiler (~> 0.10)
   rails (= 4.0.2)
   rak
   ransack

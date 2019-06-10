@@ -48,10 +48,10 @@ class SurfaceLayersController < ApplicationController
   end
 
   def find_surface
-    @surface = Surface.find(params[:surface_id]).decorate
+    @surface = Surface.includes(:record_property, {surface_images: :image}).find(params[:surface_id]).decorate
   end
 
   def find_resource
-    @surface_layer = @surface.surface_layers.find(params[:id]).decorate
+    @surface_layer = @surface.surface_layers.includes({surface: {surface_images: :image}}, {surface_images: :image}).find(params[:id]).decorate
   end
 end

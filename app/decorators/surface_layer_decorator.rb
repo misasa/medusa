@@ -9,10 +9,35 @@ class SurfaceLayerDecorator < Draper::Decorator
     #h.raw(" < #{h.draggable_id(surface.global_id)} >")    
   end
 
-  def map(options = {})
-    matrix = surface.decorate.affine_matrix_for_map
+  def published
+    false
+  end
+
+  def map(options)
+    matrix = surface.affine_matrix_for_map
     return unless matrix
-    left, upper, right, bottom = bounds
+    s_images = surface_images.reverse
+    a_bounds = s_images.map{|s_image| l, u, r, b = s_image.image.bounds; [[l,u],[r,b]] }
+    lus = a_bounds.map{|a| a[0]}
+    rbs = a_bounds.map{|a| a[1]}
+    a_bounds_on_map = surface.coords_on_map(lus).zip(surface.coords_on_map(rbs))
+
+    left = a_bounds_on_map.map{|v| v[0][0]}.min
+    upper = a_bounds_on_map.map{|v| v[0][1]}.min
+    right = a_bounds_on_map.map{|v| v[1][0]}.max
+    bottom = a_bounds_on_map.map{|v| v[1][1]}.max
+    m_bounds = [[left, upper],[right,bottom]]
+    layer_groups = []
+    base_images = []
+    h_images = Hash.new
+    s_images.each_with_index do |s_image, index|
+      if s_image.wall
+        base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: a_bounds_on_map[index]}
+      else
+        layer_groups << {name: s_image.image.try!(:name), opacity: 100 }
+        h_images[s_image.image.try!(:name)] = [{id: s_image.image.try!(:id), bounds: a_bounds_on_map[index]}]
+      end
+    end
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data:{
                     base_url: Settings.map_url,
                     url_root: "#{Rails.application.config.relative_url_root}/",
@@ -21,21 +46,12 @@ class SurfaceLayerDecorator < Draper::Decorator
                     matrix: matrix.inv,
                     add_spot: true,
                     add_radius: true,
-                    base_images: surface_images.wall.map{|s_image| {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.decorate.bounds_on_map } },
-                    #base_image: {id: image.id, name: image.name, bounds: [] },
-                    layer_groups: surface_images.overlay.map{|s_image| {name: s_image.image.name, opacity: 100 }},
-                      images: surface_images.overlay.each_with_object(Hash.new {|h, k| h[k] = []}) {|s_image, hash|  hash[s_image.image.name] << {id: s_image.image.id, bounds: s_image.decorate.bounds_on_map}},
+                    base_images: base_images,
+                    layer_groups: layer_groups,
+                    images: h_images,
                     spots: [],
-                    bounds: [[left, upper],[right, bottom]].map{|world_x, world_y|
-                      x = matrix[0, 0] * world_x + matrix[0, 1] * world_y + matrix[0, 2]
-                      y = matrix[1, 0] * world_x + matrix[1, 1] * world_y + matrix[1, 2]
-                      [x, y]
-                    }
+                    bounds: m_bounds
     })
-  end
-
-  def published
-    false
   end
 
   def panel_head
@@ -78,7 +94,8 @@ class SurfaceLayerDecorator < Draper::Decorator
 
   def thumbnails_list
     h.content_tag(:ul, class: "list-inline thumbnails surface-layer", data: {id: self.id}, style: "min-height: 100px;" ) do
-      self.surface_images.reorder("position DESC").each do |surface_image|
+      #self.surface_images.reorder("position DESC").each do |surface_image|
+      surface_images.each do |surface_image|
         next unless surface_image.image
         h.concat surface_image.decorate.li_thumbnail
       end

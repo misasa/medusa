@@ -4,9 +4,11 @@ class Surface < ActiveRecord::Base
 
   paginates_per 10
 
-  has_many :surface_images, :dependent => :destroy, :order => ("position ASC")
+  has_many :surface_images, :dependent => :destroy, :order => ("position DESC")
+  has_many :not_belongs_to_layer_surface_images, -> { not_belongs_to_layer }, class_name: 'SurfaceImage'
+  has_many :wall_surface_images, -> { wall }, class_name: 'SurfaceImage'
   has_many :images, through: :surface_images
-  has_many :surface_layers, :dependent => :destroy, :order => ("priority ASC")
+  has_many :surface_layers, :dependent => :destroy, :order => ("priority DESC")
   has_many :spots, through: :images
   has_many :direct_spots, class_name: "Spot", foreign_key: :surface_id
 
@@ -105,9 +107,10 @@ class Surface < ActiveRecord::Base
   end
 
   def bounds
-    return Array.new(4) { 0 } if globe? || images.blank?
-    left,upper,right,bottom = images[0].bounds
-    images.each do |image|
+    return Array.new(4) { 0 } if globe? || surface_images.blank?
+    left,upper,right,bottom = surface_images[0].image.bounds
+    surface_images.each do |s_image|
+      image = s_image.image
       next if image.bounds.blank?
       l,u,r,b = image.bounds
       left = l if l < left

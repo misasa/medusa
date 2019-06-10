@@ -18,11 +18,19 @@ class SurfaceImageDecorator < Draper::Decorator
     " / #{image.name}"
     #h.raw(" < #{h.draggable_id(surface.global_id)} >")    
   end
+ 
+  def tile_path(zoom,x,y)
+    return unless image
+    path = h.url_for_tile(self) + "#{image.id}/#{zoom}/#{x}_#{y}.png"
+  end
 
   def map(options = {})
-    matrix = surface.decorate.affine_matrix_for_map
+    matrix = surface.affine_matrix_for_map
     return unless matrix
-    left, upper, right, bottom = image.bounds
+    #image = simage
+    return unless image
+    l, u, r, b = image.bounds
+    bounds_on_map = surface.coords_on_map([[l,u],[r,b]])
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data:{
                     base_url: Settings.map_url,
                     url_root: "#{Rails.application.config.relative_url_root}/",
@@ -31,22 +39,12 @@ class SurfaceImageDecorator < Draper::Decorator
                     matrix: matrix.inv,
                     add_spot: true,
                     add_radius: true,
-                    base_images: surface.surface_images.wall.map{|s_image| {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.decorate.bounds_on_map } },
-                    #base_image: {id: image.id, name: image.name, bounds: [] },
-                    layer_groups: [{name: image.name, opacity: 100 }],
-                    images: {image.name => [{id: image.id, bounds: self.bounds_on_map}]},
+                    base_images: [],
+                    layer_groups: [{name: image.try!(:name), opacity: 100 }],
+                    images: {image.try!(:name) => [{id: image.try!(:id), bounds: bounds_on_map}]},
                     spots: [],
-                    bounds: [[left, upper],[right, bottom]].map{|world_x, world_y|
-                      x = matrix[0, 0] * world_x + matrix[0, 1] * world_y + matrix[0, 2]
-                      y = matrix[1, 0] * world_x + matrix[1, 1] * world_y + matrix[1, 2]
-                      [x, y]
-                    }
+                    bounds: bounds_on_map
     })
-  end
- 
-  def tile_path(zoom,x,y)
-    return unless image
-    path = h.url_for_tile(self) + "#{image.id}/#{zoom}/#{x}_#{y}.png"
   end
 
   def tile_thumbnail(zoom, opts = {})
@@ -175,6 +173,7 @@ class SurfaceImageDecorator < Draper::Decorator
             else
               h.concat h.content_tag(:span, "Overlay", class:"label label-primary")
             end
+            h.concat h.content_tag(:small, "(#{position})" )
             #h.concat h.content_tag(:small, self.image.affine_matrix)
           end
         )
