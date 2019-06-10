@@ -53,6 +53,32 @@ class SurfaceDecorator < Draper::Decorator
   def map(options = {})
     matrix = affine_matrix_for_map
     return unless matrix
+    s_images = surface_images.reverse
+    a_bounds = s_images.map{|s_image| l, u, r, b = s_image.image.bounds; [[l,u],[r,b]] }
+    lus = a_bounds.map{|a| a[0]}
+    rbs = a_bounds.map{|a| a[1]}
+    a_bounds_on_map = coords_on_map(lus).zip(coords_on_map(rbs))
+
+    left = a_bounds_on_map.map{|v| v[0][0]}.min
+    upper = a_bounds_on_map.map{|v| v[0][1]}.min
+    right = a_bounds_on_map.map{|v| v[1][0]}.max
+    bottom = a_bounds_on_map.map{|v| v[1][1]}.max
+    m_bounds = [[left, upper],[right,bottom]]
+    layer_groups = []
+    base_images = []
+    h_images = Hash.new
+    s_images.each_with_index do |s_image, index|
+      if s_image.wall
+        base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: a_bounds_on_map[index]}
+      else
+        layer_group = s_image.surface_layer
+        layer_group_name = s_image.surface_layer.try!(:name)
+        #layer_groups << {name: s_image.image.try!(:name), opacity: 100 }
+        h_images[layer_group_name] = [] unless h_images.has_key?(layer_group_name)
+        h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: a_bounds_on_map[index]}
+      end
+    end
+
     records = surface_images.includes(:surface_layer, image: :spots)
     images = records.map(&:image)
     target_uids = images.inject([]) { |array, image| array + image.spots.map(&:target_uid) }.uniq
@@ -64,11 +90,14 @@ class SurfaceDecorator < Draper::Decorator
                     length: length,
                     matrix: matrix.inv,
                     add_spot: options[:add_spot] || false,
-                    base_images: surface_images.wall.map{|s_image| {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.decorate.bounds_on_map } },
-                    layer_groups: surface_layers.map { |layer| { name: layer.name, opacity: layer.opacity } },
-                    images: surface_images[1..-1].each_with_object(Hash.new { |h, k| h[k] = [] }) { |surface_image, hash|
-                        hash[surface_image.surface_layer.try!(:name)] << {id: surface_image.image_id, bounds: surface_image.decorate.bounds_on_map}
-                    },
+                    #base_images: surface_images.wall.map{|s_image| {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.decorate.bounds_on_map } },
+                    base_images: base_images,
+                    layer_groups: surface_layers.reverse.map { |layer| { name: layer.name, opacity: layer.opacity } },
+                    #layer_groups: layer_groups,
+                    #images: surface_images[1..-1].each_with_object(Hash.new { |h, k| h[k] = [] }) { |surface_image, hash|
+                    #    hash[surface_image.surface_layer.try!(:name)] << {id: surface_image.image_id, bounds: surface_image.decorate.bounds_on_map}
+#                    },
+                    images: h_images,
                     spots: images.inject([]) { |array, image|
                       array + image.spots.map { |spot|
                         target = targets[spot.target_uid]

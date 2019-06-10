@@ -1,6 +1,6 @@
 class SurfaceLayer < ActiveRecord::Base
   belongs_to :surface
-  has_many :surface_images, :dependent => :nullify
+  has_many :surface_images, :dependent => :nullify, :order => ("position DESC")
   has_many :images, through: :surface_images
   acts_as_list :scope => :surface_id, column: :priority
 

@@ -137,12 +137,12 @@ class SurfaceImagesController < ApplicationController
   end
 
   def find_surface
-  	@surface = Surface.find(params[:surface_id]).decorate
+    @surface = Surface.includes(:record_property, {surface_images: :image}).find(params[:surface_id]).decorate
   end
 
   def find_resource
     @image = AttachmentFile.find(params[:id])
-    @surface_image = @surface.surface_images.find_by_image_id(@image.id).decorate
+    @surface_image = @surface.surface_images.includes({surface: [:record_property, {surface_images: :image}]}).find_by_image_id(@image.id).decorate
   end
 
 
