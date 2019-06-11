@@ -71,9 +71,7 @@ class SurfaceDecorator < Draper::Decorator
       if s_image.wall
         base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: a_bounds_on_map[index]}
       else
-        layer_group = s_image.surface_layer
         layer_group_name = s_image.surface_layer.try!(:name)
-        #layer_groups << {name: s_image.image.try!(:name), opacity: 100 }
         h_images[layer_group_name] = [] unless h_images.has_key?(layer_group_name)
         h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: a_bounds_on_map[index]}
       end
