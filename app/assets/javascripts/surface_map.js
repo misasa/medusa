@@ -33,7 +33,7 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
           layer.on('add remove', this._onLayerChange, this);
         }
 
-        this._layers.unshift({
+        this._layers.push({
           layer: layer,
           name: name,
           overlay: overlay
@@ -147,8 +147,8 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
         }
 
         var container = obj.overlay ? this._overlaysList : this._baseLayersList;
-        container.appendChild(label);
-
+        //container.appendChild(label);
+        container.prependChild(label);
         this._checkDisabledLayers();
 
 
