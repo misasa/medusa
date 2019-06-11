@@ -1,7 +1,12 @@
 class SurfaceImageDecorator < Draper::Decorator
   include Rails.application.routes.url_helpers	
   delegate_all
+  delegate :as_json
 
+
+  def as_json(options = {})
+    super({ methods: [:image]}.merge(options))
+  end
   # Define presentation-specific methods here. Helpers are accessed through
   # `helpers` (aka `h`). You can override attributes, for example:
   #
