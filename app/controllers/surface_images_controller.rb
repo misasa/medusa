@@ -4,6 +4,11 @@ class SurfaceImagesController < ApplicationController
   before_action :find_resource, except: [:index, :new, :create, :link_by_global_id]
 #  load_and_authorize_resource
 
+  def index
+    @surface_images = SurfaceImageDecorator.decorate_collection(@surface.surface_images)
+    respond_with @surface_images
+  end
+
   def show
     #@surface_image = @surface.surface_images.find_by_image_id(@image.id)
     respond_with @surface_image
