@@ -15,6 +15,11 @@ class SurfaceImage < ActiveRecord::Base
 #  scope :not_base, -> { where.not(position: minimum(:position)) }
   scope :not_belongs_to_layer, -> { where(surface_layer_id: nil) }
 
+  def original_zoom_level
+    return unless image
+    Math.log(surface.length/image.length_in_um * image.length/surface.tilesize, 2).ceil
+  end
+
   def tile_dir
     File.join(surface.map_dir,image.id.to_s)
   end
@@ -90,8 +95,9 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def make_tiles_cmd(options = {})
-    maxzoom = options[:maxzoom] || 6
-    transparent = options.has_key?(:transparent) ? options[:transparent] : false 
+    maxzoom = options[:maxzoom] || original_zoom_level
+    transparent = options.has_key?(:transparent) ? options[:transparent] : true
+    transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
     image_path = image.local_path(:warped)
     unless File.exists?(image_path)
       image.rotate
@@ -105,6 +111,7 @@ class SurfaceImage < ActiveRecord::Base
       cmd = "make_tiles #{image_path} #{bounds_str} #{length_str} #{center_str} -o #{tile_dir} -z #{maxzoom}"
     end
     cmd += " -t" if transparent
+    cmd += " #{transparent_color}" if transparent_color
     cmd
   end
   
