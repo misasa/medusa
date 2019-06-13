@@ -418,11 +418,13 @@ function initSurfaceMap() {
       //var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png');
   }
   baseImages.forEach(function(baseImage) {
-    var opts = {};
+    var opts = {maxNativeZoom: 6}
+
     if (baseImage.bounds){
-      opts = {bounds: L.latLngBounds([map.unproject(baseImage.bounds[0], 0), map.unproject(baseImage.bounds[1],0)]), maxNativeZoom: 6};
-    } else {
-      opts = {maxNativeZoom: 6}
+	opts = Object.assign(opts, {bounds: L.latLngBounds([map.unproject(baseImage.bounds[0], 0), map.unproject(baseImage.bounds[1],0)])});
+    }
+    if (baseImage.max_zoom){
+	opts = Object.assign(opts, {maxNativeZoom: baseImage.max_zoom});
     }
 
     var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png',opts);
@@ -434,11 +436,12 @@ function initSurfaceMap() {
     var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0;
     if (images[name]) {
       images[name].forEach(function(image) {
-	opts = {};
+        opts = {opacity: opacity, maxNativeZoom: 6};
 	if (image.bounds){
-	    opts = {opacity: opacity, bounds: L.latLngBounds([map.unproject(image.bounds[0], 0), map.unproject(image.bounds[1],0)]), maxNativeZoom: 6};
-        } else {
-	    opts = {opacity: opacity, maxNativeZoom: 6}
+          opts = Object.assign(opts, {bounds: L.latLngBounds([map.unproject(image.bounds[0], 0), map.unproject(image.bounds[1],0)])})
+        }
+        if (image.max_zoom){
+	    opts = Object.assign(opts, {maxNativeZoom: image.max_zoom})
         }
 	L.tileLayer(baseUrl + global_id + '/' + image.id + '/{z}/{x}_{y}.png', opts).addTo(group);
       });

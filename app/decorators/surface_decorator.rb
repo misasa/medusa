@@ -53,7 +53,12 @@ class SurfaceDecorator < Draper::Decorator
   def map(options = {})
     matrix = affine_matrix_for_map
     return unless matrix
+
+    surface_length = self.length
+    tilesize = self.tilesize
     s_images = surface_images.reverse
+    a_zooms = s_images.map{|s_image| Math.log(surface_length/s_image.image.length_in_um * s_image.image.length/tilesize, 2).ceil }
+
     a_bounds = s_images.map{|s_image| l, u, r, b = s_image.image.bounds; [[l,u],[r,b]] }
     lus = a_bounds.map{|a| a[0]}
     rbs = a_bounds.map{|a| a[1]}
@@ -69,11 +74,11 @@ class SurfaceDecorator < Draper::Decorator
     h_images = Hash.new
     s_images.each_with_index do |s_image, index|
       if s_image.wall
-        base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: a_bounds_on_map[index]}
+        base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: a_bounds_on_map[index], max_zoom: a_zooms[index]}
       else
         layer_group_name = s_image.surface_layer.try!(:name)
         h_images[layer_group_name] = [] unless h_images.has_key?(layer_group_name)
-        h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: a_bounds_on_map[index]}
+        h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: a_bounds_on_map[index], max_zoom: a_zooms[index]}
       end
     end
 
