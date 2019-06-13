@@ -46,7 +46,7 @@ class SurfaceImageDecorator < Draper::Decorator
                     add_radius: true,
                     base_images: [],
                     layer_groups: [{name: image.try!(:name), opacity: 100 }],
-                    images: {image.try!(:name) => [{id: image.try!(:id), bounds: bounds_on_map}]},
+                    images: {image.try!(:name) => [{id: image.try!(:id), bounds: bounds_on_map, max_zoom: original_zoom_level}]},
                     spots: [],
                     bounds: bounds_on_map
     })

@@ -1,7 +1,8 @@
 <% center = @surface_image.center %>
-<% ijs = @surface.tile_at(0.upto(6), center ) %>
+<% max_zoom = @surface_image.original_zoom_level %>
+<% ijs = @surface.tile_at(0.upto(max_zoom), center ) %>
 <ul class="list-unstyled list-inline">
-  <% 0.upto(6).each_with_index do |zoom, idx|%>
+  <% 0.upto(max_zoom).each_with_index do |zoom, idx|%>
     <li>
       <%= content_tag(:div, class:"thumbnail") do %>
         <% x,y = ijs[idx] %>
