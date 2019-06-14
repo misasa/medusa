@@ -57,9 +57,9 @@
   </div>
 </div>
 <div class="panel panel-default">
-  
   <div class="panel-heading">
     <%= form_for SurfaceLayer.new, url: surface_layers_path(@surface), class:"inline" do |f|%>
+      <%= mantra "To upload and link a layer to surface, use interface at the below." %> 
       <%= hidden_tabname_tag(__FILE__) %>
       <%= f.text_field :name %>
       <%= f.hidden_field :priority, value: @surface.surface_layers.max_priority + 1 %>
@@ -151,4 +151,3 @@
     }).disableSelection();
   })(jQuery);
 <% end %>
-To upload and link a layer to surface, use interface at the bottom. 

@@ -1,4 +1,31 @@
 module ApplicationHelper
+  def mantra(msg, opts = {})
+    popover_button("guide", msg, opts)
+  end
+
+  def tooltip_info_sign(msg, opts = {})
+    content_tag(:a, title: msg, data:{toggle: "tooltip", placement: "right"}) do
+      content_tag(:span, nil, class:"glyphicon glyphicon-info-sign")
+    end
+  end
+
+  def popover_info_sign(title, msg, opts = {})
+    content_tag(:a, title: title, data:{toggle: "popover", content: msg, placement: "right"}) do
+      content_tag(:span, nil, class:"glyphicon glyphicon-info-sign")
+    end
+  end
+
+  def popover_button(title, msg, opts = {})
+    data = {toggle: "popover", content: msg, placement: "auto", trigger: "hover"}.merge(opts)
+    content_tag(:button, type: "button", class: "btn btn-info btn-xs", title: title, data:data) do
+      title
+    end
+  end
+
+  def show_info_with_label(label, msg, opts = {})
+    content_tag(:span, label, class: "label label-info") + content_tag(:small, msg, style:"margin-left:0.5rem;" )  
+  end
+
   def published_label(obj)
     if obj.published
       content_tag(:span, "pub", class: "label label-danger")
