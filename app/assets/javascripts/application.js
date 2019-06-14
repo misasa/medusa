@@ -28,7 +28,3 @@
 function basename(path) {
   return path.substr(0, path.lastIndexOf("."));
 }
-$(function(){
-	$('[data-toggle="tooltip"]').tooltip();
-        $('[data-toggle="popover"]').popover();
-});
