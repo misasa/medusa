@@ -57,7 +57,7 @@ describe AttachmentFile do
     end
   end
 
-  describe ".md5hash" do
+  describe ".md5hash", :current => true do
     let(:user) { FactoryGirl.create(:user) }
     let(:md5hash){ Digest::MD5.hexdigest(File.open("spec/fixtures/files/test_image.jpg", 'rb').read) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
@@ -125,7 +125,7 @@ describe AttachmentFile do
       obj
       obj.save
     end
-    context "with filename include @", :current => true do
+    context "with filename include @" do
       let(:obj) { AttachmentFile.new(data: fixture_file_upload(file,'image/jpeg')) }
       let(:basename){ "test_image@1"  }
       let(:file){"/files/#{basename}.jpg"}
@@ -134,7 +134,7 @@ describe AttachmentFile do
       end
     end
 
-    context "with filename include +", :current => true do
+    context "with filename include +" do
       let(:obj) { AttachmentFile.new(data: fixture_file_upload(file,'image/jpeg')) }
       let(:basename){ "test_image+1"  }
       let(:file){"/files/#{basename}.jpg"}
