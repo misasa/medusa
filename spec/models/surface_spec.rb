@@ -74,7 +74,7 @@ describe Surface do
       obj.images << image
       obj.images << image_2  
     end
-    it { expect(subject).to eql(image)}
+    it { expect(subject).to eql(image_2)}
     context "when image was deleted" do
       before do
         image.destroy

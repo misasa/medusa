@@ -96,7 +96,7 @@ describe SurfaceImagesController do
     end
     context "present child" do
       before { method }
-      it { expect(parent.surface_images.order("position ASC").first.image).to eq child_2}
+      it { expect(parent.surface_images.last.image).to eq child_2}
     end
     context "none child" do
       let(:child_id){0}
