@@ -25,7 +25,7 @@ describe "get pmlame.json with autologin" do
       before do
         #puts response
         #puts response.body
-        puts response.body
+        #puts response.body
       end
       it "show link to records" do
         expect(response).to be_success
@@ -56,6 +56,10 @@ describe "with autologin" do
     let(:attachment_file) { FactoryGirl.create(:attachment_file, data_file_name: "file_name", data_content_type: "application/pdf") }
     let(:specimen){ FactoryGirl.create(:specimen) }
     context "with Config.autologin" do
+      before do
+        #puts page.status_code
+        #puts page.html
+      end
       it "show link to records" do
         expect(page).to have_link(nil, :href => attachment_files_path(@attachment_file))
         expect(page).to have_link(nil, :href => attachment_files_path(@specimen))

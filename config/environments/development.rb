@@ -37,4 +37,7 @@ Medusa::Application.configure do
   #  Bullet.rails_logger = true
   #  Bullet.add_footer = false
   #end
+  
+  #RackLineprf
+  config.middleware.use Rack::Lineprof
 end

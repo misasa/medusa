@@ -7,7 +7,7 @@ gem 'rails', '4.0.2'
 gem 'pg'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.0'
+gem 'sass-rails', '~> 4.0.2'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 4.1.18'
@@ -85,6 +85,9 @@ gem 'migration_comments'
 #gem 'dimensions'
 gem 'sidekiq', '~> 4.2'
 group :development, :test do
+  gem 'rack-lineprof'
+  gem 'stackprof'
+  gem 'stackprof-webnav'
   gem 'rack-mini-profiler', '~> 0.10', require: false
   gem 'bullet'
   gem 'rak'
