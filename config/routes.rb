@@ -239,6 +239,8 @@ Medusa::Application.routes.draw do
       get :picture
       get :property
       get :map
+      get :layer
+      get :image
     end
     resources :images, concerns: [:link_by_global_id], only: [:index, :show, :create, :update, :destroy], controller: "surface_images" do
       member do
