@@ -1,6 +1,6 @@
 class SurfacesController < ApplicationController
   respond_to :html, :xml, :json, :svg
-  before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update, :family]
+  before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update]
   before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
 
@@ -40,9 +40,21 @@ class SurfacesController < ApplicationController
   end
 
   def family
-    @surface = Surface.preload(images: :spots).find(params[:id]).decorate
+    #@surface = Surface.preload(images: :spots).find(params[:id]).decorate
     respond_with @surface, layout: !request.xhr?
   end
+
+  def layer
+    respond_with @surface, layour: !request.xhr?
+  end
+
+  def image
+    respond_with @surface, layour: !request.xhr?
+  end
+
+  
+
+  
 
   def picture
     respond_with @surface, layout: !request.xhr?
@@ -92,7 +104,11 @@ class SurfacesController < ApplicationController
   end
 
   def find_resource
-    @surface = Surface.includes(:record_property, {surface_layers: [:surface, {surface_images: [:image, :surface]}]}, {surface_images: [:surface, {image: :record_property}]}, {not_belongs_to_layer_surface_images: [:image, :surface]}, {wall_surface_images: [:image, :surface]}).find(params[:id]).decorate
+    @surface = Surface.includes(:record_property, 
+      {surface_layers: [:surface, {surface_images: [:image, :surface]}]}, 
+      {surface_images: [:surface, {image: [:record_property, :spots]}]}, 
+      {not_belongs_to_layer_surface_images: [:image, :surface]}, 
+      {wall_surface_images: [:image, :surface]}).find(params[:id]).decorate
     #@surface_layers = SurfaceLayer.where(surface_id: params[:id]).includes({surface_images: [:image,:surface]})
     @image = @surface.first_image
   end
