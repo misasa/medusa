@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180712061554) do
+ActiveRecord::Schema.define(version: 20190618025832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -396,6 +396,10 @@ ActiveRecord::Schema.define(version: 20180712061554) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "surface_layer_id", comment: "レイヤID"
+    t.float    "left"
+    t.float    "right"
+    t.float    "upper"
+    t.float    "bottom"
   end
 
   add_index "surface_images", ["surface_layer_id"], name: "index_surface_images_on_surface_layer_id", using: :btree

@@ -93,11 +93,14 @@ class AttachmentFile < ActiveRecord::Base
     if affine_matrix_changed?
       b, a = affine_matrix_change
       if a.instance_of?(Array) && a.size == 9
-        #p "rotating..."
         RotateWorker.perform_async(id) unless a == [1,0,0,0,1,0,0,0,1]
         if surface_images.present?
-          surface_image = surface_images.first
-          TileWorker.perform_async(surface_image.id, transparent: surface_image.position > 1)
+          p bounds
+          left,upper,right,bottom = bounds
+          surface_images.each do |surface_image|
+            surface_image.update(left: left, upper: upper, right: right, bottom: bottom)
+            TileWorker.perform_async(surface_image.id)
+          end
         end
       end
     end
