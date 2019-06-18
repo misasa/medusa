@@ -17,11 +17,41 @@ class SurfaceImage < ActiveRecord::Base
 
   def original_zoom_level
     return unless image
-    Math.log(surface.length/image.length_in_um * image.length/surface.tilesize, 2).ceil
+#    Math.log(surface.length/image.length_in_um * image.length/surface.tilesize, 2).ceil
+    Math.log(surface.length/surface.tilesize * resolution, 2).ceil
+  end
+
+  def width
+    return right - left if left && right
+    return unless image
+    image.width_in_um
+  end
+
+  def height
+    return upper - bottom if upper && bottom
+    return unless image
+    image.height_in_um
+  end
+
+  def length
+    l = width
+    h = height
+    l = h if h > l
+    l
+  end
+
+  def resolution
+    image.length/length
   end
 
   def tile_dir
     File.join(surface.map_dir,image.id.to_s)
+  end
+
+  def bounds
+    return [left, upper, right, bottom] if left && upper && right && bottom
+    return unless image
+    image.bounds
   end
 
   def center

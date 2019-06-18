@@ -3,8 +3,114 @@ require 'spec_helper'
 describe SurfaceImage do
   let(:surface) { FactoryGirl.create(:surface) }
   let(:image) { FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
-
   let(:obj) { FactoryGirl.create(:surface_image, :surface_id => surface.id, :image_id => image.id)}
+
+  describe "#width" do
+    subject { obj.width }
+    context "with left and right attributes" do
+      let(:obj) {FactoryGirl.create(:surface_image, :surface_id => surface.id, left: left, right: right)}
+      let(:left) {-3808.472}
+      let(:right) {3851.032}
+      before do
+        image_mock = double('Image')
+        image_mock.should_not_receive(:width_in_um)
+        allow(obj).to receive(:image).and_return(image_mock)
+      end
+      it { expect(subject).to eq(right - left)}
+    end
+    context "without left and right attributes" do
+      before do
+        image_mock = double('Image')
+        image_mock.should_receive(:width_in_um).and_return(1000)
+        allow(obj).to receive(:image).and_return(image_mock)
+      end
+      it { expect(subject).to eq(1000)}
+    end
+
+  end
+
+  describe "#height" do
+    subject { obj.height }
+    context "with upper and bottom attributes" do
+      let(:obj) {FactoryGirl.create(:surface_image, :surface_id => surface.id, upper: upper, bottom: bottom)}
+      let(:upper) {3787.006}
+      let(:bottom) {-4007.006}
+
+      before do
+        image_mock = double('Image')
+        image_mock.should_not_receive(:height_in_um)
+        allow(obj).to receive(:image).and_return(image_mock)
+      end
+      it { expect(subject).to eq(upper - bottom)}
+    end
+    context "without upper and bottom attributes" do
+      before do
+        image_mock = double('Image')
+        image_mock.should_receive(:height_in_um).and_return(1000)
+        allow(obj).to receive(:image).and_return(image_mock)
+      end
+      it { expect(subject).to eq(1000)}
+    end
+
+  end
+
+
+  describe "#bonds" do
+    subject { obj.bounds }
+    let(:obj) { FactoryGirl.create(:surface_image, :surface_id => surface.id)}
+    let(:left) {-3808.472}
+    let(:upper) {3787.006}
+    let(:right) {3851.032}
+    let(:bottom) {-4007.006}
+    context "with attributes" do
+      let(:obj) {FactoryGirl.create(:surface_image, :surface_id => surface.id, left: left, upper: upper, right: right, bottom: bottom)}
+      before do
+        image_mock = double('Image')
+        image_mock.should_not_receive(:bounds)
+        allow(obj).to receive(:image).and_return(image_mock)
+      end      
+      it { expect(subject).to eq([left,upper,right,bottom])}
+    end
+    context "without attributes" do
+      before do
+        image_mock = double('Image')
+        image_mock.should_receive(:bounds).and_return([left,upper,right,bottom])
+        allow(obj).to receive(:image).and_return(image_mock)
+      end
+      it { expect(subject).to eq([left,upper,right,bottom])}
+    end
+  end
+
+  describe "#original_zoom_level" do
+    subject { obj.original_zoom_level }
+    it {expect(subject).to eq(5)}
+    context "with large image" do
+      let(:image) { FactoryGirl.create(:attachment_file, :original_geometry => "40960x34150", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
+      it { expect(subject).to eq(8)  }
+    end
+
+    context "with small image" do
+      let(:image) { FactoryGirl.create(:attachment_file, :original_geometry => "410x342", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
+      it { expect(subject).to eq(1)  }
+    end
+
+
+    context "without image" do
+      before do
+        obj.image = nil
+      end
+      it { expect(subject).to be_nil  }
+    end
+    
+  end
+
+  describe "#resolution" do
+    subject { obj.resolution }
+    it { expect(subject).to be_within(0.01).of(0.42)}
+  end
+
+  context "with spot" do
+
   let(:spot) { FactoryGirl.create(:spot, :attachment_file_id => image.id) }
 
   before do
@@ -14,8 +120,6 @@ describe SurfaceImage do
   	obj
   end
 
-
-
   describe "spots" do
   	it { expect(obj.spots).to include(spot)}
   	context "shares same surface's spots" do
@@ -24,13 +128,13 @@ describe SurfaceImage do
 	    let(:spot_1) { FactoryGirl.create(:spot, :attachment_file_id => image_1.id) }
 	    let(:spot_2) { FactoryGirl.create(:spot, :attachment_file_id => image_2.id) }
 
-	  	before do
+	    before do
 	      surface.images << image_1
 	      surface.images << image_2
 	      spot_1
 	      spot_2
 	    end
-	  	it { expect(obj.spots).to include(spot_1)}
+	    it { expect(obj.spots).to include(spot_1)}
     end
   end
 
@@ -70,5 +174,5 @@ describe SurfaceImage do
     end
   end
 
-
+  end
 end

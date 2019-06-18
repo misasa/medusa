@@ -32,9 +32,8 @@ class SurfaceImageDecorator < Draper::Decorator
   def map(options = {})
     matrix = surface.affine_matrix_for_map
     return unless matrix
-    #image = simage
     return unless image
-    l, u, r, b = image.bounds
+    l, u, r, b = bounds
     bounds_on_map = surface.coords_on_map([[l,u],[r,b]])
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data:{
                     base_url: Settings.map_url,

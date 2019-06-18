@@ -53,22 +53,21 @@ class SurfaceDecorator < Draper::Decorator
   def map(options = {})
     matrix = affine_matrix_for_map
     return unless matrix
-
     surface_length = self.length
     tilesize = self.tilesize
     s_images = surface_images.reverse
-    a_zooms = s_images.map{|s_image| Math.log(surface_length/s_image.image.length_in_um * s_image.image.length/tilesize, 2).ceil }
-
-    a_bounds = s_images.map{|s_image| l, u, r, b = s_image.image.bounds; [[l,u],[r,b]] }
+    a_zooms = s_images.map{|s_image| Math.log(surface_length/tilesize * s_image.resolution, 2).ceil }
+    a_bounds = s_images.map{|s_image| l, u, r, b = s_image.bounds; [[l,u],[r,b]] }
     lus = a_bounds.map{|a| a[0]}
     rbs = a_bounds.map{|a| a[1]}
-    a_bounds_on_map = coords_on_map(lus).zip(coords_on_map(rbs))
-
-    left = a_bounds_on_map.map{|v| v[0][0]}.min
-    upper = a_bounds_on_map.map{|v| v[0][1]}.min
-    right = a_bounds_on_map.map{|v| v[1][0]}.max
-    bottom = a_bounds_on_map.map{|v| v[1][1]}.max
-    m_bounds = [[left, upper],[right,bottom]]
+    if lus.size >0 && rbs.size > 0
+      a_bounds_on_map = coords_on_map(lus).zip(coords_on_map(rbs))
+      left = a_bounds_on_map.map{|v| v[0][0]}.min
+      upper = a_bounds_on_map.map{|v| v[0][1]}.min
+      right = a_bounds_on_map.map{|v| v[1][0]}.max
+      bottom = a_bounds_on_map.map{|v| v[1][1]}.max
+      m_bounds = [[left, upper],[right,bottom]]
+    end
     layer_groups = []
     base_images = []
     h_images = Hash.new
@@ -81,7 +80,6 @@ class SurfaceDecorator < Draper::Decorator
         h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: a_bounds_on_map[index], max_zoom: a_zooms[index]}
       end
     end
-
     records = surface_images.includes(:surface_layer, image: :spots)
     images = records.map(&:image)
     target_uids = images.inject([]) { |array, image| array + image.spots.map(&:target_uid) }.uniq
