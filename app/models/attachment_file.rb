@@ -108,10 +108,9 @@ class AttachmentFile < ActiveRecord::Base
 
   def rotate
     logger.info("in rotate")
-    return unless bounds
-    logger.info(local_path)
-    return unless File.exists?(local_path)
-    return unless image?
+    raise "bounds does not exist." unless bounds
+    raise "#{local_path} does not exist." unless File.exists?(local_path)
+    raise "#{local_path} is not a image."unless image?
     logger.info("generating...")
     left, upper, right, bottom = bounds
     bb = bounds
@@ -131,11 +130,12 @@ class AttachmentFile < ActiveRecord::Base
     png = ChunkyPNG::Image.new(new_geometry[0], new_geometry[1])
     png.save(image_2)
     array_str = corners_on_new_image.to_s.gsub(/\s+/,"")
-    cmd = "image_in_image #{image_1} #{image_2} #{array_str} -o #{image_2}"
-    logger.info(cmd)
-    system(cmd)
+    
+    line = Terrapin::CommandLine.new("image_in_image", "#{image_1} #{image_2} #{array_str} -o #{image_2}", logger: logger)
+    line.run
   end
 
+ 
   def update_spots_world_xy
     return unless affine_matrix_changed?
     spots.each(&:save!)

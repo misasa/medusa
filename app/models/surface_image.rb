@@ -48,6 +48,11 @@ class SurfaceImage < ActiveRecord::Base
     File.join(surface.map_dir,image.id.to_s)
   end
 
+  def warped_image_path
+    return unless image
+    image.local_path(:warped)
+  end
+
   def bounds
     return [left, upper, right, bottom] if left && upper && right && bottom
     return unless image
@@ -121,7 +126,28 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def make_tiles(options = {})
-    system(make_tiles_cmd(options))
+    make_warped_image unless File.exists?(warped_image_path)
+    raise "#{warped_image_path} does not exists." unless File.exists?(warped_image_path)
+    line = make_tiles_cmd(options)
+    line.run
+  end
+
+  def clean_tiles(options = {})
+    if Dir.exists?(tile_dir)
+      line = Terrapin::CommandLine.new("rm", "-r :tile_dir", logger: logger)
+      line.run(tile_dir: tile_dir)
+    end
+  end
+
+  def clean_warped_image(options = {})
+    if File.exists?(warped_image_path)
+      line = Terrapin::CommandLine.new("rm", "-f :image_path", logger: logger)
+      line.run(image_path: warped_image_path)  
+    end
+  end
+
+  def make_warped_image(options = {})
+    image.rotate
   end
 
   def make_tiles_cmd(options = {})
@@ -129,20 +155,18 @@ class SurfaceImage < ActiveRecord::Base
     transparent = options.has_key?(:transparent) ? options[:transparent] : true
     transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
     image_path = image.local_path(:warped)
-    unless File.exists?(image_path)
-      image.rotate
-    end
     bs = image.bounds
     ce = surface.center
     if bs && bs.size == 4 && ce && ce.size == 2
       bounds_str = sprintf("[%.2f,%.2f,%.2f,%.2f]", bs[0], bs[1], bs[2], bs[3])
       center_str = sprintf("[%.2f,%.2f]", ce[0], ce[1])
       length_str = sprintf("%.2f", surface.length)
-      cmd = "make_tiles #{image_path} #{bounds_str} #{length_str} #{center_str} -o #{tile_dir} -z #{maxzoom}"
+      cmd = "#{image_path} #{bounds_str} #{length_str} #{center_str} -o #{tile_dir} -z #{maxzoom}"
     end
     cmd += " -t" if transparent
     cmd += " #{transparent_color}" if transparent_color
     cmd
+    line = Terrapin::CommandLine.new("make_tiles", cmd, logger: logger)
   end
   
   def tiles_each(zoom, &block)
