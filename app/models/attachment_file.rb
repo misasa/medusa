@@ -111,6 +111,7 @@ class AttachmentFile < ActiveRecord::Base
     return unless image?
     logger.info("generating...")
     left, upper, right, bottom = bounds
+    logger.info(bounds)
     bb = bounds
     b_w = right - left
     b_h = upper - bottom

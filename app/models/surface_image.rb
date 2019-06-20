@@ -91,7 +91,29 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def make_tiles(options = {})
-    system(make_tiles_cmd(options))
+    return if image.affine_matrix.blank?
+    make_warped_image unless File.exists?(warped_image_path)
+    raise "#{warped_image_path} does not exists." unless File.exists?(warped_image_path)
+    line = make_tiles_cmd(options)
+    line.run
+  end
+
+  def clean_tiles(options = {})
+    if Dir.exists?(tile_dir)
+      line = Terrapin::CommandLine.new("rm", "-r :tile_dir", logger: logger)
+      line.run(tile_dir: tile_dir)
+    end
+  end
+
+  def clean_warped_image(options = {})
+    if File.exists?(warped_image_path)
+      line = Terrapin::CommandLine.new("rm", "-f :image_path", logger: logger)
+      line.run(image_path: warped_image_path)  
+    end
+  end
+
+  def make_warped_image(options = {})
+    image.rotate
   end
 
   def make_tiles_cmd(options = {})
