@@ -113,6 +113,7 @@ class AttachmentFile < ActiveRecord::Base
     raise "#{local_path} is not a image."unless image?
     logger.info("generating...")
     left, upper, right, bottom = bounds
+    logger.info(bounds)
     bb = bounds
     b_w = right - left
     b_h = upper - bottom
