@@ -32,6 +32,11 @@ class SurfaceLayersController < ApplicationController
     respond_with @surface_layer
   end
 
+  def tiles
+    LayerTileWorker.perform_async(@surface_layer.id)
+    respond_with @surface_layer, location: adjust_url_by_requesting_tab(request.referer)
+  end
+
   def move_to_top
     SurfaceLayer.transaction { @surface_layer.move_to_top }
     respond_with @surface_layer, location: adjust_url_by_requesting_tab(request.referer)

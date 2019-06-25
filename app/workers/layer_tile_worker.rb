@@ -9,6 +9,7 @@ class LayerTileWorker
     surface_layer.surface_images.each_with_index do |surface_image, index|
       at index, "#{surface_layer.name}/#{surface_image.image.name} ... #{index + 1}/#{n}"
       surface_image.clean_tiles
+      surface_image.clean_warped_image
       surface_image.make_tiles(opts)
     end
     at n, "Tile making job for #{surface_layer.name} is done."

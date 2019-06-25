@@ -53,6 +53,11 @@ class SurfaceImage < ActiveRecord::Base
     image.local_path(:warped)
   end
 
+  def tile_image_path(z,x,y, opts = {})
+    extension = opts[:extension] || 'png'
+    File.join(tile_dir,z.to_s,"#{x}_#{y}.#{extension}")
+  end
+
   def bounds
     return [left, upper, right, bottom] if left && upper && right && bottom
     return unless image
