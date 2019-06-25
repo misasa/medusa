@@ -77,6 +77,11 @@ class SurfacesController < ApplicationController
     respond_with @surface, layout: !request.xhr?
   end
 
+  def tiles
+    SurfaceTileWorker.perform_async(@surface.id)
+    respond_with @surface, location: adjust_url_by_requesting_tab(request.referer)
+  end
+
   private
 
   def surface_params

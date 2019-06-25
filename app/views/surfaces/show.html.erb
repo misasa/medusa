@@ -14,11 +14,15 @@
         <%#= link_to map_surface_path(@surface), class: "btn btn-default", id: "tree-conifer-button", remote: true, title: "top" do %>
           <!-- <span class="glyphicon glyphicon-globe"></span> -->
         <%# end %>
+        <%= link_to tiles_surface_path(@surface), class: "btn btn-default", id: "tree-conifer-button", method: :post, title: "force create tiles" do %>
+          <span class="glyphicon glyphicon-refresh"></span>
+        <% end %>
+
       </div>    
     
       <% if can? :update, @surface %>
       <div class="btn-group btn-group-sm">
-	     <%= link_to edit_surface_path(@surface), class: "btn btn-default", remote: true, title: "edit name" do %>
+	     <%= link_to edit_surface_path(@surface), class: "btn btn-default", remote:true, title: "edit name" do %>
 	       <span class="glyphicon glyphicon-pencil"></span>
 	     <% end %>
 	     <%= link_to property_surface_path(@surface), class: "btn btn-default", remote: true, title: "edit global ID" do %>

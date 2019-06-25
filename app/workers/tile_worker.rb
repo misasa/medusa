@@ -6,6 +6,7 @@ class TileWorker
     # Do something
     surface_image = SurfaceImage.find(surface_image_id)
     surface_image.clean_tiles
+    surface_image.clean_warped_image
     surface_image.make_tiles(opts)
   end
 end

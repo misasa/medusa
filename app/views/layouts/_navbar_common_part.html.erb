@@ -1,4 +1,5 @@
 <ul class="nav navbar-nav navbar-right">
+  <li><%= link_to "job", sidekiq_path %></li>
   <li>
   <% if current_user.box %>
   <%= link_to box_path(current_user.box) do %>

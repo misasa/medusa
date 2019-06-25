@@ -1,6 +1,7 @@
 Medusa::Application.routes.draw do
   require 'sidekiq/web'
-  mount Sidekiq::Web => '/sidekiq'
+  require 'sidekiq-status/web'
+  mount Sidekiq::Web, at:'/sidekiq', as: 'sidekiq'
   get "surfaces/index"
   get "surfaces/show"
   devise_for :users, controllers: {
@@ -241,6 +242,7 @@ Medusa::Application.routes.draw do
       get :map
       get :layer
       get :image
+      post 'tiles'
     end
     resources :images, concerns: [:link_by_global_id], only: [:index, :show, :create, :update, :destroy], controller: "surface_images" do
       member do
@@ -265,6 +267,7 @@ Medusa::Application.routes.draw do
       member do
         get :map
         post 'move_to_top'
+        post 'tiles'
       end
     end
   end
