@@ -87,8 +87,6 @@ class SurfacesController < ApplicationController
   def surface_params
     params.require(:surface).permit(
       :name,
-      record_property_attributes: [
-        :id,
         :global_id,
         :user_id,
         :group_id,
@@ -99,8 +97,7 @@ class SurfacesController < ApplicationController
         :guest_readable,
         :guest_writable,
         :published,
-        :lost
-      ],
+        :lost,
       surface_images_attributes: [
         :id,
         :surface_layer_id

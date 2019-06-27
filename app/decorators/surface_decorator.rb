@@ -56,7 +56,7 @@ class SurfaceDecorator < Draper::Decorator
     surface_length = self.length
     tilesize = self.tilesize
     s_images = surface_images.reverse
-    a_zooms = s_images.map{|s_image| Math.log(surface_length/tilesize * s_image.resolution, 2).ceil }
+    a_zooms = s_images.map{|s_image| Math.log(surface_length/tilesize * s_image.resolution, 2).ceil if s_image.resolution }
     a_bounds = s_images.map{|s_image| l, u, r, b = s_image.bounds; [[l,u],[r,b]] }
     lus = a_bounds.map{|a| a[0]}
     rbs = a_bounds.map{|a| a[1]}

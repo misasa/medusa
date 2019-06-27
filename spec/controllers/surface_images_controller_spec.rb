@@ -14,6 +14,7 @@ describe SurfaceImagesController do
     child
     parent.images << child
   end
+  after { AttachmentFile.destroy_all }
 
   describe "GET show" do
     #let(:method){get :show, surface_id: parent, id: child_id}
