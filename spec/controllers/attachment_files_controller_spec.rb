@@ -4,7 +4,7 @@ include ActionDispatch::TestProcess
 describe AttachmentFilesController do
   let(:user) { FactoryGirl.create(:user) }
   before { sign_in user }
-
+  after { AttachmentFile.destroy_all }
   describe "GET index" do
     let(:attachment_file_1) { FactoryGirl.create(:attachment_file, name: "hoge") }
     let(:attachment_file_2) { FactoryGirl.create(:attachment_file, name: "attachment_file_2") }

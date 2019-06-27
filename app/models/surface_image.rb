@@ -41,6 +41,7 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def resolution
+    return if length == 0
     image.length/length
   end
 

@@ -14,7 +14,7 @@ describe NestedResources::AttachmentFilesController do
   before { sign_in user }
   before { parent }
   before { child }
-
+  after { AttachmentFile.destroy_all }
   describe "GET index", :current => true do
     subject { method }
     context "with format json" do

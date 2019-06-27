@@ -85,5 +85,26 @@ describe SurfacesController do
     it { expect(assigns(:surface)).to eq obj }
   end
 
+  describe "POST bundle_update", :current => true do
+    let(:group) { FactoryGirl.create(:group, name: "group1")}
+    let(:obj3name){"obj3"}
+    let(:obj1) { FactoryGirl.create(:surface, name: "obj1") }
+    let(:obj2) { FactoryGirl.create(:surface, name: "obj2") }
+    let(:obj3) { FactoryGirl.create(:surface, name: obj3name) }
+    let(:attributes) { {group_id: group.id} }
+    let(:ids){[obj1.id,obj2.id]}
+    before do
+      obj1
+      obj2
+      obj3
+      post :bundle_update, ids: ids,surface: attributes
+      obj1.reload
+      obj2.reload
+      obj3.reload
+    end
+    it {expect(obj1.group).to eq group}
+    it {expect(obj2.group).to eq group}
+    it {expect(obj3.group).not_to eq group}
+  end
 
 end

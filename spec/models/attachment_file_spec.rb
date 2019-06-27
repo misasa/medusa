@@ -304,7 +304,7 @@ describe AttachmentFile do
 
     context "affine_matrix is blank" do
       before {obj.affine_matrix = nil}
-      it { expect(subject).to eq [0, 0, 0, 0] }
+      it { expect(subject).to eq [nil, nil, nil, nil] }
     end
     context "affine_matrix is not blank" do
       let(:left){ -5200.24 }

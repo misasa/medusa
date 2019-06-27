@@ -95,7 +95,6 @@ class AttachmentFile < ActiveRecord::Base
       if a.instance_of?(Array) && a.size == 9
         RotateWorker.perform_async(id) unless a == [1,0,0,0,1,0,0,0,1]
         if surface_images.present?
-          p bounds
           left,upper,right,bottom = bounds
           surface_images.each do |surface_image|
             surface_image.update(left: left, upper: upper, right: right, bottom: bottom)
@@ -286,7 +285,7 @@ class AttachmentFile < ActiveRecord::Base
   end
   
   def bounds
-    return Array.new(4) { 0 } if affine_matrix.blank?
+    return Array.new(4) { nil } if affine_matrix.blank?
     cs = corners_on_world
     xi, yi = cs[0]
     left = xi
