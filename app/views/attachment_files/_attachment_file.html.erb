@@ -9,7 +9,7 @@
   </td>
   <td><%= attachment_file.data_content_type %></td>
   <td><%= attachment_file.data_file_size %></td>
-  <td><small><%= attachment_file.affine_matrix_in_string %></small></td>
+  <td><small><%= attachment_file.affine_matrix_in_string if attachment_file.image? %></small></td>
   <%= td_if_expand attachment_file.user.try!(:username) %>
   <td><%= attachment_file.group.try!(:name) %></td>
   <%= td_if_expand difference_from_now(attachment_file.published_at) %>
