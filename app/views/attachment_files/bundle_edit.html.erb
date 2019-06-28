@@ -3,10 +3,10 @@
   <thead>
     <tr>
       <th></th>
-      <th></th>
       <th>name</th>
       <th>type</th>
       <th>size</th>
+      <th>affine matrix</th>
       <%= th_if_expand "owner" %>
       <th>group</th>
       <%= th_if_expand "published" %>
@@ -24,7 +24,7 @@
       <th></th>
       <th></th>
       <th></th>
-      <th></th>
+      <th><%= f.text_field :affine_matrix_in_string %></th>
       <%= th_if_expand do %>
         <%= f.select :user_id ,User.pluck(:username, :id), { include_blank: true }, class: "form-control input-sm" %>
       <% end %>

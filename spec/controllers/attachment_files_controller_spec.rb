@@ -99,10 +99,11 @@ describe AttachmentFilesController do
 
   describe "POST bundle_update" do
     let(:obj3description){"obj3"}
+    #let(:obj3affine){"[]"}
     let(:obj1) { FactoryGirl.create(:attachment_file, description: "obj1") }
     let(:obj2) { FactoryGirl.create(:attachment_file, description: "obj2") }
     let(:obj3) { FactoryGirl.create(:attachment_file, description: obj3description) }
-    let(:attributes) { {description: "update_description"} }
+    let(:attributes) { {description: "update_description", affine_matrix_in_string: "[1.000e+00,0.000e+00,0.000e+00;0.000e+00,1.000e+00,0.000e+00;0.000e+00,0.000e+00,1.000e+00]"} }
     let(:ids){[obj1.id,obj2.id]}
     before do
       obj1
@@ -115,6 +116,9 @@ describe AttachmentFilesController do
     end
     it {expect(obj1.description).to eq attributes[:description]}
     it {expect(obj2.description).to eq attributes[:description]}
+    it {expect(obj3.description).to eq obj3description}
+    it {expect(obj1.affine_matrix_in_string).to eq attributes[:affine_matrix_in_string]}
+    it {expect(obj2.affine_matrix_in_string).to eq attributes[:affine_matrix_in_string]}
     it {expect(obj3.description).to eq obj3description}
   end
 
