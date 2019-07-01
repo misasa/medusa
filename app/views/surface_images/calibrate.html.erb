@@ -257,7 +257,7 @@
           [0, 0, 1]
         ];
     for (i = 0; i < 3; i++) {
-      array[i] = array[i].map(function(x) { return x.toExponential(3); }).join(",");
+      array[i] = array[i].map(function(x) { return x.toExponential(5); }).join(",");
     }
     $("#affine_matrix").val("[" + array.join(";") + "]");
     var matrix_ij = this.affine_ij2ij();
@@ -267,7 +267,7 @@
           [0, 0, 1]
         ];
     for (i = 0; i < 3; i++) {
-      array_ij[i] = "[" + array_ij[i].map(function(x) { return x.toExponential(3); }).join(",") + "]";
+      array_ij[i] = "[" + array_ij[i].map(function(x) { return x.toExponential(5); }).join(",") + "]";
     }
     var corners_overlay = [0, 0, this.overlayTriangle.image.width, 0, this.overlayTriangle.image.width, this.overlayTriangle.image.height, 0, this.overlayTriangle.image.height];
     var corners_overlay_on_base_image = matrix_ij.applyToArray(corners_overlay);
@@ -278,7 +278,7 @@
       [corners_overlay_on_base_image[6],corners_overlay_on_base_image[7]]
     ];
     for (i = 0; i < 4; i++) {
-      array_corners[i] = "[" + array_corners[i].map(function(x) { return x.toExponential(3); }).join(",") + "]";
+      array_corners[i] = "[" + array_corners[i].map(function(x) { return x.toExponential(5); }).join(",") + "]";
     }
 
     var warp_cmd = "warp_image";
