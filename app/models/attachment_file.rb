@@ -245,7 +245,7 @@ class AttachmentFile < ActiveRecord::Base
     a.in_groups_of(3, false) do |row|
       vals = Array.new
       row.each do |val|
-        vals.push sprintf("%.3e",val) if val
+        vals.push sprintf("%.5e",val) if val
       end
       str += vals.join(',')
       str += ';'

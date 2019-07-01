@@ -63,7 +63,7 @@
           [0, 0, 1]
       ];
       for (i = 0; i < 3; i++) {
-        array[i] = array[i].map(function(x) { return x.toExponential(3); }).join(",");
+        array[i] = array[i].map(function(x) { return x.toExponential(5); }).join(",");
       }
       $(calibrator.element.find("#affine_matrix")).val("[" + array.join(";") + "]");
 
