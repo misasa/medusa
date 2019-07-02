@@ -36,11 +36,11 @@
 
     <!-- Tab panes -->
     <% tab_info = [
-        ["at-a-glance",nil,"show representative properties of a record"],
-        [@alias_specimen,@place.specimens,"show properties of a sample","specimen"],
+        ["at-a-glance",nil,"show representative properties of the locality"],
+        [@alias_specimen,@place.specimens,"show samples collected from the locality","specimen"],
         ["neighbor",nil,""],
-        ["file",@place.attachment_files,"show image files of a record"],
-        ["geoname",nil,"show names of places related to a record"]
+        ["file",@place.attachment_files,"show data files of the locality"],
+        ["geoname",nil,"show names of places related to the locality"]
     ] %>
 
     <!-- Nav tabs -->
