@@ -73,6 +73,7 @@ class ApplicationController < ActionController::Base
 
   def set_alias_specimen
     @alias_specimen = Settings.specimen_name
+    @alias_specimens = @alias_specimen.pluralize
   end
 
   def authenticate_by_config
