@@ -31,6 +31,14 @@ class SurfaceDecorator < Draper::Decorator
     tag    
   end
 
+  def link_with_id
+    tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-globe") + h.raw(" ") + h.link_to(name, h.surface_path(self)) + h.raw(" < #{h.draggable_id(global_id)} >")
+    if false && Settings.rplot_url
+      tag += h.link_to("map", rmap_url, :title => 'map online', :target=>["_blank"])
+    end
+    tag  
+  end
+
     # def rplot_iframe(size = '600')
     #   tag = h.content_tag(:iframe, nil, src: rplot_url, width: size, height: size, frameborder: "no", class: "embed-responsive-item")
     # end

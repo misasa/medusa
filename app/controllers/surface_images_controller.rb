@@ -1,4 +1,5 @@
 class SurfaceImagesController < ApplicationController
+  layout 'fluid'
   respond_to :html, :xml, :json, :svg
   before_action :find_surface
   before_action :find_resource, except: [:index, :new, :create, :link_by_global_id]
