@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <%= render partial: "layouts/head" %>
+</head>
+<body>
+  <%= render partial: "layouts/navbar_default" if user_signed_in? %>
+  <div class="container-fluid">
+    <%= yield %>
+  </div>
+  <%= render partial: "layouts/notification_modal" %>
+  <%= render partial: "layouts/search_modal" %>
+  <%= render partial: "layouts/show_modal" %>
+</body>
+</html>

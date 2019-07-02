@@ -1,4 +1,5 @@
 class SurfacesController < ApplicationController
+  layout 'fluid'
   respond_to :html, :xml, :json, :svg
   before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update]
   before_action :find_resources, only: [:bundle_edit, :bundle_update]

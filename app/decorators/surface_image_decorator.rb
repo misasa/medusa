@@ -169,7 +169,7 @@ class SurfaceImageDecorator < Draper::Decorator
       h.content_tag(:li, class: "surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do
         h.concat(
           h.content_tag(:div, class:"thumbnail") do
-            h.concat h.image_tag(self.image.path(:thumb))
+            h.concat h.image_tag(self.image.path(:tiny))
             #h.concat h.content_tag(:small, self.image.name)
             h.concat drop_down_menu
             if self.wall

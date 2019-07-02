@@ -22,7 +22,7 @@
     
       <% if can? :update, @surface %>
       <div class="btn-group btn-group-sm">
-	     <%= link_to edit_surface_path(@surface), class: "btn btn-default", remote:true, title: "edit name" do %>
+	     <%= link_to edit_surface_path(@surface), class: "btn btn-default", title: "edit name, layers, and images" do %>
 	       <span class="glyphicon glyphicon-pencil"></span>
 	     <% end %>
 	     <%= link_to property_surface_path(@surface), class: "btn btn-default", remote: true, title: "edit global ID" do %>
