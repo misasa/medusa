@@ -1,11 +1,11 @@
     <% tab_info = [
-        ["at-a-glance",nil,"show representative properties of a record"],
-        ["daughter",@specimen.children,"show sub sample made from a sample"],
-        ["history", @specimen.paths,"show the moving history of a sample"],
-        ["analysis",@specimen.full_analyses,"show data and device of the analysis of a sample"],
-        ["bib",@specimen.bibs,"show bibliography related to a sample"],
-        ["file",@specimen.attachment_files,"show image files of a sample"],
-        ["quantity", @specimen.self_and_descendants,"show change in quantity of a sample"]] %>
+        ["at-a-glance",nil,"show representative properties of the sample"],
+        ["daughter",@specimen.children,"show sub-samples made from the sample"],
+        ["history", @specimen.paths,"show boxes which contains the sample"],
+        ["analysis",@specimen.full_analyses,"show analysis information of the sample"],
+        ["bib",@specimen.bibs,"show bibliography related to the sample"],
+        ["file",@specimen.attachment_files,"show data files of the sample"],
+        ["quantity", @specimen.self_and_descendants,"show quantity history of the sample"]] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
       <% tab_info.each do |key,array,message| %>
