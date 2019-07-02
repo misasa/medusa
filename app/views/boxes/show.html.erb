@@ -61,13 +61,13 @@
 
   <div id="show-body" class="col-lg-8">
     <% tab_info = [
-        ["at-a-glance",nil,"show representative properties of a record"],
-        [@alias_specimen,@box.specimens,"show samples in a box","specimen"],
-        ["box",@box.children,"show boxes of a record","daughter"],
-        ["history", @box.paths,"show moving history of a box"],
-        ["analysis",@box.analyses, "show analysis of samples in a box"],
-        ["bib",@box.bibs,"show bibliography related to samples in a box"],
-        ["file",@box.attachment_files,"show image files of a box"]
+        ["at-a-glance",nil,"show representative properties of the box"],
+        [@alias_specimen,@box.specimens,"show samples contained in the box","specimen"],
+        ["box",@box.children,"show boxes related to the box","daughter"],
+        ["history", @box.paths,"show moving history of the box"],
+        ["analysis",@box.analyses, "show analysis of the samples in the box"],
+        ["bib",@box.bibs,"show bibliography related to the samples in the box"],
+        ["file",@box.attachment_files,"show data files related to the box"]
     ] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">
