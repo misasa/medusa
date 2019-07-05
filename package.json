@@ -1,0 +1,11 @@
+{
+  "name": "medusa",
+  "version": "1.0.0",
+  "main": "app/assets/javascripts/application.js",
+  "repository": "https://github.com/yyachi/medusa.git",
+  "author": "Yusuke Yachi <yusuke.yachi@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "Leaflet.ZoomLabel": "https://github.com/yyachi/Leaflet.ZoomLabel"
+  }
+}

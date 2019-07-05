@@ -25,6 +25,7 @@
 //= require highcharts/highcharts
 //= require highcharts/highcharts-more
 //= require highcharts/highstock
+//= require Leaflet.ZoomLabel/src/L.Control.ZoomLabel
 function basename(path) {
   return path.substr(0, path.lastIndexOf("."));
 }
