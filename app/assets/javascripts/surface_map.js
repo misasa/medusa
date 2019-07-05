@@ -495,6 +495,8 @@ function initSurfaceMap() {
     map.setView(map.unproject([256 / 2, 256 / 2], 0), zoom);
   }
   map.addControl(new L.Control.Fullscreen());
-
+  if (("zoomlabel" in div.dataset)){
+    L.control.zoomLabel().addTo(map);
+  }
   surfaceMap = map;
 }

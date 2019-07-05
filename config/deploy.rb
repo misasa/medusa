@@ -48,6 +48,9 @@ set :rails_env, fetch(:stage)
 # Setting for shibboleth.
 # set :shib_uid, "eppn"
 
+set :yarn_flags, "--prefer-offline --production --no-progress"
+set :yarn_roles, :app
+
 namespace :site do
   desc 'Setup site'
   task :setup do
