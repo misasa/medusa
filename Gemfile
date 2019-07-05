@@ -107,6 +107,7 @@ group :development, :test do
   gem 'capistrano-rbenv'
   gem 'capistrano-bundler'
   gem 'capistrano-sidekiq'
+  gem 'capistrano-yarn'
   gem 'capistrano-db-tasks', require: false
 end
 
