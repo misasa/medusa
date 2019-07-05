@@ -79,7 +79,7 @@
 <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#bundle-form').submit();", class: "btn btn-default" %>
 
 <div id="csv-control">
-  <%= mantra "Show all localities. To create new locality, fill in the template downloaded from <%= link_to "here", new_place_path(format: :csv) %>, and upload from the following interface. 
+  <%= mantra "Show all places. To create new place, fill in the template downloaded from <%= link_to "here", new_place_path(format: :csv) %>, and upload from the following interface. 
   To edit multiple record, select the checkbox targeted for edit and tap the pencil button." %> 
   <%= link_to "template", new_place_path(format: :csv) %>,
   and modify, then upload.
