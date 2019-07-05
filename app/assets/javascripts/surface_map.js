@@ -1,3 +1,4 @@
+//= require Leaflet.ZoomLabel/src/L.Control.ZoomLabel
 // OpacityLayerControl
 L.Control.OpacityLayers = L.Control.Layers.extend({
     onAdd: function (map) {
