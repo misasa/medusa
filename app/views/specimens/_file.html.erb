@@ -84,4 +84,4 @@
   </tfoot>
 </table>
 <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#attachment-file-bundle-form').submit();", class: "btn btn-default", title: "open multi-edit page with checked items" %>
-<%= mantra "Show data files related to the #{@alias_specimen}. To upload and link an attachement file to #{@alias_specimen}, use the interface." %>
+<%= mantra "Files related to <#{@specimen.name}>. To link an existing file to <#{@specimen.name}>, select the file in the selection dialog or fill in the column with the ID." %>

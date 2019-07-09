@@ -77,8 +77,8 @@
 <div id="csv-control">
   <% template = MeasurementCategory.first %>
   <% if template %>
-    To create analysis records at once, download a <%= link_to "template", new_analysis_path(format: :csv, measurement_category_id: template.id) %> and modify, then upload.
-  <% end %>
+   <%= mantra "Show all analyses. To create new analysis, fill in the template downloaded from the link, and upload from the following interface. 
+  To edit multiple record, select the checkbox targeted for edit and tap the pencil button." %> <%= link_to "template", new_analysis_path(format: :csv, measurement_category_id: template.id) %> <% end %>
   <%= form_tag(import_analyses_path, method: :post, multipart: true) do %>
     <%= file_field_tag :data %>
     <%= submit_tag :upload %>

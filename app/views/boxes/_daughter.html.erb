@@ -65,4 +65,4 @@
 </table>
 <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#box-bundle-form').submit();", class: "btn btn-default" %>
 
-<%= mantra "Show boxes rerated to the box.To upload and link other boxes to the box, use the interface." %> 
+<%= mantra "Boxes rerated to <#{@box.name}>. To upload a new box, fill in the columns of name and box-type. To link an existing box to <#{@box.name}>, fill in the column with the ID." %> 
