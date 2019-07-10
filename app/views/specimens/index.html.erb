@@ -43,7 +43,7 @@
 </table>
 <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#bundle-form').submit();", class: "btn btn-default" %>
 
-<%= mantra "Show all #{@alias_specimen}s. To edit multiple record, select the checkbox targeted for edit and tap the pencil button." %> 
+<%= mantra "Show all #{@alias_specimen}s. To edit multiple records simulteneously, select the checkbox targeted for edit and click the pencil button." %> 
 
 <%= javascript_tag do %>
   $(document).on("succeed.ajaxForm", "#new_specimen", function() {
