@@ -78,7 +78,7 @@
 </table>
 <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#bundle-form').submit();", class: "btn btn-default" %>
 
-<%= mantra "Show all boxes. To edit multiple record, select the checkbox targeted for edit and tap the pencil button." %> 
+<%= mantra "Show all boxes. To create a new box, fill in the neccessary columns and click the save button. To edit multiple record simulteneously, select the checkbox targeted for edit and click the pencil button." %> 
 
 <%= javascript_tag do %>
   $(document).on("succeed.ajaxForm", "#new_box", function() {
