@@ -1,0 +1,308 @@
+<div id="calibrator" class="row">
+  <div class="col-lg-12">
+    <%= link_to show_title(@surface), surface_path(@surface, tab: "image") %><br/>
+    <span id="overlay_info">
+    <%= @image.name %> <%= link_to(download_attachment_file_path(@image), :title => "download #{@image.name}") do %>
+             <span class="glyphicon glyphicon-download"></span>
+    <% end %>
+    <span id="base_info">
+    </span>
+    <a id="base_image_download_link" hidden> 
+      <span class="glyphicon glyphicon-download"></span>
+    </a>
+  </div>
+
+
+  <div class="col-lg-12">
+    <div class="viewer pull-left" style="display:none"></div>
+  </div>
+  <div class="col-lg-5">
+    <div class="controller base">
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="controller overlay">
+    </div>
+  </div>
+  <div class="col-lg-2">
+    <input class="opacity" type="range" min="0" max="1" step="0.1" style="width: 150px; margin: 3px;">
+    <table class="table table-bordered text-center">
+      <tr>
+        <td></td>
+        <td>
+        <%= button_tag title: "move to up", class: "btn btn-default move", data: { direction: "up" } do %>
+          <span class="glyphicon glyphicon-arrow-up"></span>
+        <% end %>
+        </td>
+        <td></td>
+      </tr>
+      <tr>
+        <td>
+        <%= button_tag title: "move to left", class: "btn btn-default move", data: { direction: "left" } do %>
+          <span class="glyphicon glyphicon-arrow-left"></span>
+        <% end %>
+        </td>
+        <td></td>
+        <td>
+        <%= button_tag title: "move to right", class: "btn btn-default move", data: { direction: "right" } do %>
+          <span class="glyphicon glyphicon-arrow-right"></span>
+        <% end %>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>
+        <%= button_tag title: "move to down", class: "btn btn-default move", data: { direction: "down" } do %>
+         <span class="glyphicon glyphicon-arrow-down"></span>
+        <% end %>
+        </td>
+        <td></td>
+      </tr>
+    </table>
+  </div>
+
+  <div class="col-lg-5"  style="display:none">
+  <table class="table table-bordered text-center">
+    <thead>
+      <tr><th scope="col" class="text-right"></th><th colspan="2" scope="col" class="text-center">image</th></tr>
+      <tr><th scope="col"></th><th scope="col" class="text-center">x</th><th scope="col" class="text-center">y</th></tr>
+    </thead>
+  <tbody>
+    <tr>
+      <th scope="row" class="text-right">
+       <svg width="25" height="25"  viewBox="-100 -100 200 200" style="background: #aaa" xmlns="http://www.w3.org/2000/svg">       <g stroke="#f00" stroke-width="5">
+            <line x1="-80" y1="0" x2="70" y2="0" />
+            <line x1="0" y1="-70" x2="0" y2="70" />
+            <circle cx="0" cy="0" r="70" fill="none" />
+          </g>
+        </svg>
+      </th>
+      <td><input type="text" id="anchor_i0" value=""></td>
+      <td><input type="text" id="anchor_i1" value=""></td>
+    </tr>
+    <tr>
+      <th scope="row" class="text-right">
+       <svg width="25" height="25"  viewBox="-100 -100 200 200" style="background: #aaa" xmlns="http://www.w3.org/2000/svg">       <g stroke="#0f0" stroke-width="5">
+            <line x1="-80" y1="0" x2="70" y2="0" />
+            <line x1="0" y1="-70" x2="0" y2="70" />
+            <circle cx="0" cy="0" r="70" fill="none" />
+          </g>
+        </svg>
+      </th>
+      <td><input type="text" id="anchor_i2" value=""></td>
+      <td><input type="text" id="anchor_i3" value=""></td>
+    </tr>
+    <tr>
+      <th scope="row" class="text-right">
+        <svg width="25" height="25"  viewBox="-100 -100 200 200" style="background: #aaa" xmlns="http://www.w3.org/2000/svg">       <g stroke="#00f" stroke-width="5">
+            <line x1="-80" y1="0" x2="70" y2="0" />
+            <line x1="0" y1="-70" x2="0" y2="70" />
+            <circle cx="0" cy="0" r="70" fill="none" />
+          </g>
+        </svg>
+      </th>
+      <td><input type="text" id="anchor_i4" value=""></td>
+      <td><input type="text" id="anchor_i5" value=""></td>
+    </tr>
+        </tbody>
+      </table>
+  </div>
+  <div class="col-lg-2">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="input-group">
+          <span class="input-group-addon">
+            <svg width="15" height="15"  viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg">       
+              <g stroke="#f00" stroke-width="5">
+                <line x1="-80" y1="0" x2="70" y2="0" />
+                <line x1="0" y1="-70" x2="0" y2="70" />
+                <circle cx="0" cy="0" r="70" fill="none" />
+              </g>
+            </svg>
+          </span>
+          <input type="text" class="form-control" id="anchor_w0" value="">
+          <div class="input-group-btn"></div>
+          <input type="text" class="form-control" id="anchor_w1" value="">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="input-group">
+          <span class="input-group-addon">
+            <svg width="15" height="15"  viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg">       
+              <g stroke="#0f0" stroke-width="5">
+                <line x1="-80" y1="0" x2="70" y2="0" />
+                <line x1="0" y1="-70" x2="0" y2="70" />
+                <circle cx="0" cy="0" r="70" fill="none" />
+              </g>
+            </svg>
+          </span>
+          <input type="text" class="form-control" id="anchor_w2" value="">
+          <div class="input-group-btn"></div>
+          <input type="text" class="form-control" id="anchor_w3" value="">
+        </div>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="input-group">
+          <span class="input-group-addon">
+            <svg width="15" height="15"  viewBox="-100 -100 200 200" xmlns="http://www.w3.org/2000/svg">       
+              <g stroke="#00f" stroke-width="5">
+                <line x1="-80" y1="0" x2="70" y2="0" />
+                <line x1="0" y1="-70" x2="0" y2="70" />
+                <circle cx="0" cy="0" r="70" fill="none" />
+              </g>
+            </svg>
+          </span>
+          <input type="text" class="form-control" id="anchor_w4" value="">
+          <div class="input-group-btn"></div>
+          <input type="text" class="form-control" id="anchor_w5" value="">
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="pull-right">
+          <input class="btn btn-outline-secondary" id="calc_affine" type="button" value="calculate Affine">
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-12">
+    <div class="thumbnails pull-left">
+      <% @surface.images.each_with_index do |image, index| %>
+        <%= content_tag :div, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: image.path, name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), affine: image.affine_matrix.presence, path: download_attachment_file_path(image) } do %>
+	  <%= image.decorate.picture(width: 70, height: 70, type: :thumb) %>
+	<% end %>
+      <% end %>
+    </div>
+  </div>
+
+
+  <div class="col-lg-12">   
+    <%= form_for @image, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
+      <div class="row">
+        <div class="col-lg-9">
+          <div class="input-group">
+            <span class="input-group-addon">Affine matrix
+            </span>
+            <%= f.text_field :affine_matrix_in_string, readonly: true, id: "affine_matrix", class: "form-control" %>
+            <span class="input-group-btn">
+             <%= link_to(edit_attachment_file_path(@image), class: "btn btn-default", :title => "edit affine matrix", :type => "button") do %>
+               <span class="glyphicon glyphicon-edit"></span>
+             <% end %>
+            </span>
+            <span class="input-group-btn">
+	      <%= button_tag title: "update affine matrix", id: "calibrator-button", class: "btn btn-default" do %>
+	         <span class="glyphicon glyphicon-save"></span>
+	      <% end %>
+            </span>
+          </div>
+        </div>
+      </div>
+      <% end %>
+  </div>
+
+
+
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        local commands for transformation
+      </div>
+      <div class="panel-body">
+        <div id="warp_cmd"></div>
+        <div id="blend_cmd"></div>
+        <div id="overlay_cmd"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-lg-3" style="display:none">
+    <input type="text" id="anchor_b0" value="">
+    <input type="text" id="anchor_b2" value="">
+    <input type="text" id="anchor_b4" value="">
+  </div>
+  <div class="col-lg-3" style="display:none">
+    <input type="text" id="anchor_b1" value="">
+    <input type="text" id="anchor_b3" value="">
+    <input type="text" id="anchor_b5" value="">
+  </div>
+  <div class="col-lg-3" style="display:none">
+    <div class="anchors">
+      <input type="text" id="anchor_0" value="">
+      <input type="text" id="anchor_2" value="">
+      <input type="text" id="anchor_4" value="">
+    </div>
+  </div>
+  <div class="col-lg-3" style="display:none">
+    <div class="anchors">
+      <input type="text" id="anchor_1" value="">
+      <input type="text" id="anchor_3" value="">
+      <input type="text" id="anchor_5" value="">
+    </div>
+  </div>
+
+</div>
+<%= javascript_tag do %>
+  var calibrator = Calibrator("#calibrator");
+  $(calibrator).on('change', function() {
+    var matrix = this.affineMatrix();
+        array = [
+          [matrix.a, matrix.c, matrix.e],
+          [matrix.b, matrix.d, matrix.f],
+          [0, 0, 1]
+        ];
+    for (i = 0; i < 3; i++) {
+      array[i] = array[i].map(function(x) { return x.toExponential(5); }).join(",");
+    }
+    $("#affine_matrix").val("[" + array.join(";") + "]");
+    var matrix_ij = this.affine_ij2ij();
+        array_ij = [
+          [matrix_ij.a, matrix_ij.c, matrix_ij.e],
+          [matrix_ij.b, matrix_ij.d, matrix_ij.f],
+          [0, 0, 1]
+        ];
+    for (i = 0; i < 3; i++) {
+      array_ij[i] = "[" + array_ij[i].map(function(x) { return x.toExponential(5); }).join(",") + "]";
+    }
+    var corners_overlay = [0, 0, this.overlayTriangle.image.width, 0, this.overlayTriangle.image.width, this.overlayTriangle.image.height, 0, this.overlayTriangle.image.height];
+    var corners_overlay_on_base_image = matrix_ij.applyToArray(corners_overlay);
+    var array_corners = [
+      [corners_overlay_on_base_image[0],corners_overlay_on_base_image[1]],
+      [corners_overlay_on_base_image[2],corners_overlay_on_base_image[3]],
+      [corners_overlay_on_base_image[4],corners_overlay_on_base_image[5]],
+      [corners_overlay_on_base_image[6],corners_overlay_on_base_image[7]]
+    ];
+    for (i = 0; i < 4; i++) {
+      array_corners[i] = "[" + array_corners[i].map(function(x) { return x.toExponential(5); }).join(",") + "]";
+    }
+
+    var warp_cmd = "warp_image";
+    warp_cmd += " " + this.overlay_image_name;
+    warp_cmd += " " + "-g [" + this.baseTriangle.image.width + "," + this.baseTriangle.image.height + "]"
+    warp_cmd += " " +  " -m [" + array_ij.join(",") + "]";
+    warp_cmd += " -o deleteme.png";
+    $("#warp_cmd").text(warp_cmd);
+
+    blend_cmd = "blend-image " + this.base_image_name + " deleteme.png";
+    blend_cmd += " 0 0 " + this.baseTriangle.image.width + " " + this.baseTriangle.image.height
+    blend_cmd += " 0.4 0.6 -o " + basename(this.overlay_image_name) + "-on-" + basename(this.base_image_name) + ".png";
+    $("#blend_cmd").text(blend_cmd);
+
+    var overlay_cmd = "warp_image";
+    overlay_cmd += " " + this.overlay_image_name;
+    overlay_cmd += " " + "-b " + this.base_image_name;
+    overlay_cmd += " " +  " -n [" + array_corners.join(",") + "]";
+    overlay_cmd += " -o " + this.overlay_image_name.split('.').shift() + "-on-" + this.base_image_name.split('.').shift() + ".png";
+    //$("#overlay_cmd").text("2> " + overlay_cmd);
+    
+    //$("#base_info").text(this.base_image_name);
+  });
+  $(document).on("succeed.ajaxForm", "#calibrator-form", function() {
+    location.reload();
+  });
+<% end %>

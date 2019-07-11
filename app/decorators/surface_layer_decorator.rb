@@ -153,6 +153,11 @@ class SurfaceLayerDecorator < Draper::Decorator
         end
       )
       h.concat(
+               h.link_to(h.calibrate_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "calibrate images on map (tentative)") do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-adjust")
+        end
+      )
+      h.concat(
                h.link_to(h.map_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "show images on map") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
         end
