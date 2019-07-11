@@ -266,6 +266,7 @@ Medusa::Application.routes.draw do
     resources :layers, only: [:show, :create, :edit, :update, :destroy], controller: "surface_layers" do
       member do
         get :map
+        get :calibrate
         post 'move_to_top'
         post 'tiles'
       end

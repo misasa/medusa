@@ -9,8 +9,17 @@
  * compiled file, but it's generally better to create a new file per style scope.
  *
  *= require_self
- *= require_tree .
  *= require jquery.ui.datepicker
  *= require jquery.ui.autocomplete
- *= require Leaflet.ZoomLabel/src/L.Control.ZoomLabel
+ *= require leaflet/dist/leaflet.css
+ *= require leaflet-fullscreen/dist/leaflet.fullscreen.css
+ *= require Leaflet.ZoomLabel/src/L.Control.ZoomLabel.css
+ *= require leaflet-toolbar/dist/leaflet.toolbar.css
+ *= require leaflet-distortableimage/dist/leaflet.distortableimage.css
+ *= require_tree .
  */
+
+.material-icons {
+  font-size: 18px;
+  color: pink;
+}

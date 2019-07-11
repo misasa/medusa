@@ -1,4 +1,3 @@
-//= require Leaflet.ZoomLabel/src/L.Control.ZoomLabel
 // OpacityLayerControl
 L.Control.OpacityLayers = L.Control.Layers.extend({
     onAdd: function (map) {
@@ -486,8 +485,8 @@ function initSurfaceMap() {
 
   L.control.surfaceScale({ imperial: false, length: length }).addTo(map);
 
-  //L.control.layers(baseMaps, overlayMaps).addTo(map);
-  L.control.opacityLayers(baseMaps, overlayMaps, {hideSingleBase: false}).addTo(map);
+  L.control.layers(baseMaps, overlayMaps).addTo(map);
+  //L.control.opacityLayers(baseMaps, overlayMaps, {hideSingleBase: false}).addTo(map);
   
   if (bounds){
       //var bounds = L.latLngBounds([map.unproject(_bounds[0], 0), map.unproject(_bounds[1],0)]);

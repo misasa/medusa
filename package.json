@@ -6,6 +6,10 @@
   "author": "Yusuke Yachi <yusuke.yachi@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "Leaflet.ZoomLabel": "https://github.com/yyachi/Leaflet.ZoomLabel"
+    "Leaflet.ZoomLabel": "https://github.com/yyachi/Leaflet.ZoomLabel",
+    "leaflet": "https://github.com/Leaflet/Leaflet#^1.0.0",
+    "leaflet-distortableimage": "yyachi/Leaflet.DistortableImage#develop",
+    "leaflet-fullscreen": "Leaflet/Leaflet.fullscreen",
+    "leaflet-toolbar": "Leaflet/Leaflet.Toolbar"
   }
 }
