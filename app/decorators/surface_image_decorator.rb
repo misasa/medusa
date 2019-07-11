@@ -29,6 +29,45 @@ class SurfaceImageDecorator < Draper::Decorator
     path = h.url_for_tile(self) + "#{image.id}/#{zoom}/#{x}_#{y}.png"
   end
 
+  def calibrator(options)
+    matrix = surface.affine_matrix_for_map
+    return unless matrix
+    surface_length = surface.length
+    tilesize = surface.tilesize
+    return unless image
+
+    b_images = surface.surface_images.base
+    unless b_images.empty?
+      b_zooms = b_images.map{|b_image| Math.log(surface_length/tilesize * b_image.resolution, 2).ceil}
+      b_bounds = b_images.map{|b_image| l, u, r, b = b_image.bounds; [[l,u],[r,b]] }
+      lus = b_bounds.map{|a| a[0]}
+      rbs = b_bounds.map{|a| a[1]}
+      b_bounds_on_map = surface.coords_on_map(lus).zip(surface.coords_on_map(rbs))
+    end
+    base_images = []
+    b_images.each_with_index do |b_image, index|
+      base_images << {id: b_image.image.try!(:id), name: b_image.image.try!(:name), bounds: b_bounds_on_map[index], max_zoom: b_zooms[index]}
+    end
+
+    l, u, r, b = bounds
+    bounds_on_map = surface.coords_on_map([[l,u],[r,b]])
+    corners_on_map = surface.coords_on_map(image.corners_on_world)
+    h.content_tag(:div, nil, id: "surface-map", class: options[:class], data:{
+                    base_url: Settings.map_url,
+                    url_root: "#{Rails.application.config.relative_url_root}/",
+                    global_id: surface.global_id,
+                    length: surface.length,
+                    matrix: matrix.inv,
+                    add_spot: true,
+                    add_radius: true,
+                    base_images: base_images,
+                    layer_groups: [{name: image.try!(:name), opacity: 100 }],
+                    images: {image.try!(:name) => [{id: image.try!(:id), bounds: bounds_on_map, corners: corners_on_map, max_zoom: original_zoom_level, path: image.path}]},
+                    spots: [],
+                    bounds: bounds_on_map
+    })
+  end
+
   def map(options = {})
     matrix = surface.affine_matrix_for_map
     return unless matrix
