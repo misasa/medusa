@@ -1,0 +1,26 @@
+<%= @surface_layer.calibrator(class: "large-map") %>
+
+<script>
+  if (true){
+    initMapImageCalibrator();
+  } else {
+  map = L.map('surface-map').setView([51.505,-0.09],13);
+  //L.tileLayer('http://172.24.1.149:3000/system/maps/20190426194547-039018/55132/{z}/{x}_{y}.png', {
+  //  maxNativeZoom: 6,
+  //}).addTo(map);
+  L.tileLayer('https://{s}.tiles.mapbox.com/v3/anishshah101.ipm9j6em/{z}/{x}/{y}.png',{
+    maxZoom: 18,
+  }).addTo(map);
+  img = L.distortableImageOverlay(
+    '/system/attachment_files/0005/5175/mtx-mcs4a@785.jpg?1558918394', {
+      corners: [
+        L.latLng(176.63,41,48),
+        L.latLng(179.37,41.57),
+        L.latLng(179.26,43.65),
+        L.latLng(176.52,43.55)
+      ],
+    }
+  ).addTo(map);
+  //L.DomEvent.on(img._image, 'load', img.editing.enable, img.editing);
+  }
+</script>

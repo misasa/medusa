@@ -42,6 +42,10 @@ class SurfaceLayersController < ApplicationController
     respond_with @surface_layer, location: adjust_url_by_requesting_tab(request.referer)
   end
 
+  def calibrate
+    respond_with @surface_layer
+  end
+
   private
 
   def surface_layer_params

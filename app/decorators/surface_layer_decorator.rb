@@ -13,6 +13,66 @@ class SurfaceLayerDecorator < Draper::Decorator
     false
   end
 
+  def calibrator(options)
+    matrix = surface.affine_matrix_for_map
+    return unless matrix
+    surface_length = surface.length
+    tilesize = surface.tilesize
+
+    b_images = surface.surface_images.base
+    unless b_images.empty?
+      b_zooms = b_images.map{|b_image| Math.log(surface_length/tilesize * b_image.resolution, 2).ceil}
+      b_bounds = b_images.map{|b_image| l, u, r, b = b_image.bounds; [[l,u],[r,b]] }
+      lus = b_bounds.map{|a| a[0]}
+      rbs = b_bounds.map{|a| a[1]}
+      b_bounds_on_map = surface.coords_on_map(lus).zip(surface.coords_on_map(rbs))
+    end
+    s_images = surface_images.reverse
+    a_zooms = s_images.map{|s_image| Math.log(surface_length/tilesize * s_image.resolution, 2).ceil}
+    a_bounds = s_images.map{|s_image| l, u, r, b = s_image.bounds; [[l,u],[r,b]] }
+    lus = a_bounds.map{|a| a[0]}
+    rbs = a_bounds.map{|a| a[1]}
+    a_bounds_on_map = surface.coords_on_map(lus).zip(surface.coords_on_map(rbs))
+
+    left = a_bounds_on_map.map{|v| v[0][0]}.min
+    upper = a_bounds_on_map.map{|v| v[0][1]}.min
+    right = a_bounds_on_map.map{|v| v[1][0]}.max
+    bottom = a_bounds_on_map.map{|v| v[1][1]}.max
+    m_bounds = [[left, upper],[right,bottom]]
+    a_corners_on_map = []
+    s_images.each do |s_image|
+      a_corners_on_map << surface.coords_on_map(s_image.image.corners_on_world)
+    end
+    layer_groups = []
+    base_images = []
+    b_images.each_with_index do |b_image, index|
+      base_images << {id: b_image.image.try!(:id), name: b_image.image.try!(:name), bounds: b_bounds_on_map[index], max_zoom: b_zooms[index]}
+    end
+    h_images = Hash.new
+    s_images.each_with_index do |s_image, index|
+      if s_image.wall
+        base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: a_bounds_on_map[index], corners: a_corners_on_map[index], max_zoom: a_zooms[index]}
+      else
+        layer_groups << {name: s_image.image.try!(:name), opacity: 100 }
+        h_images[s_image.image.try!(:name)] = [{id: s_image.image.try!(:id), bounds: a_bounds_on_map[index], corners: a_corners_on_map[index], max_zoom: a_zooms[index], path: s_image.image.path}]
+      end
+    end
+    h.content_tag(:div, nil, id: "surface-map", class: options[:class], data:{
+                    base_url: Settings.map_url,
+                    url_root: "#{Rails.application.config.relative_url_root}/",
+                    global_id: surface.global_id,
+                    length: surface.length,
+                    matrix: matrix.inv,
+                    add_spot: true,
+                    add_radius: true,
+                    base_images: base_images,
+                    layer_groups: layer_groups,
+                    images: h_images,
+                    spots: [],
+                    bounds: m_bounds
+    })    
+  end
+
   def map(options)
     matrix = surface.affine_matrix_for_map
     return unless matrix
