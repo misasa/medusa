@@ -17,6 +17,10 @@
 //= require jquery.ui.autocomplete
 //= require jquery.ui.widget
 //= require bootstrap
+//= require leaflet/dist/leaflet
+//= require leaflet-toolbar/dist/leaflet.toolbar.js
+//= require leaflet-distortableimage/dist/leaflet.distortableimage.js
+//= require leaflet-fullscreen/dist/Leaflet.fullscreen.js
 //= require svg
 //= require svg.draggable
 //= require matrix
