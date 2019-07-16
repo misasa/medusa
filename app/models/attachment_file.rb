@@ -267,15 +267,26 @@ class AttachmentFile < ActiveRecord::Base
     a = affine_matrix
     return unless a
     return if a.blank?
-    xyi = Array.new
-    xi = a[0] * xs + a[1] * ys + a[2]
-    yi = a[3] * xs + a[4] * ys + a[5]
-    return [xi, yi]
+    #xyi = Array.new
+    #xi = a[0] * xs + a[1] * ys + a[2]
+    #yi = a[3] * xs + a[4] * ys + a[5]
+    #return [xi, yi]
+    return transform_points([[xs,ys]])[0]
   end
 
   def corners_on_image
-    return if affine_matrix.blank?
+    #return if affine_matrix.blank?
     [image_xy2image_coord(0,0), image_xy2image_coord(x_max,0), image_xy2image_coord(x_max,y_max), image_xy2image_coord(0,y_max)]
+  end
+
+  def corners_on_world=(_corners)
+    corners_on_world_str = "[" + _corners.map{|_corner| _corner.join(',')}.join('],[') + "]"
+    corners_on_image_str = "[" + self.corners_on_image.map{|_corner| _corner.join(',')}.join('],[') + "]"
+    line = Terrapin::CommandLine.new("H_from_points", "#{corners_on_image_str} #{corners_on_world_str} -f yaml", logger: logger)
+    line.run
+    _out = line.output.output.chomp
+    a = YAML.load(_out)
+    self.affine_matrix = a.flatten
   end
 
   def corners_on_world
@@ -414,12 +425,12 @@ class AttachmentFile < ActiveRecord::Base
     num_points = points.size
     src_points = Matrix[points.map{|p| p[0]}, points.map{|p| p[1]}, Array.new(points.size, 1.0)]
     warped_points = (affine * src_points).to_a
-
     xt = warped_points[0]
     yt = warped_points[1]
+    wt = warped_points[2]
     dst_points = []
     num_points.times do |i|
-      dst_points << [xt[i], yt[i]]
+      dst_points << [xt[i]/wt[i], yt[i]/wt[i]]
     end
     return dst_points
   end

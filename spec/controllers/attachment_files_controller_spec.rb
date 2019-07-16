@@ -103,7 +103,7 @@ describe AttachmentFilesController do
     let(:obj1) { FactoryGirl.create(:attachment_file, description: "obj1") }
     let(:obj2) { FactoryGirl.create(:attachment_file, description: "obj2") }
     let(:obj3) { FactoryGirl.create(:attachment_file, description: obj3description) }
-    let(:attributes) { {description: "update_description", affine_matrix_in_string: "[1.000e+00,0.000e+00,0.000e+00;0.000e+00,1.000e+00,0.000e+00;0.000e+00,0.000e+00,1.000e+00]"} }
+    let(:attributes) { {description: "update_description", affine_matrix_in_string: "[1.00000e+00,0.00000e+00,0.00000e+00;0.00000e+00,1.00000e+00,0.00000e+00;0.00000e+00,0.00000e+00,1.00000e+00]"} }
     let(:ids){[obj1.id,obj2.id]}
     before do
       obj1

@@ -57,7 +57,7 @@ describe AttachmentFile do
     end
   end
 
-  describe ".md5hash", :current => true do
+  describe ".md5hash" do
     let(:user) { FactoryGirl.create(:user) }
     let(:md5hash){ Digest::MD5.hexdigest(File.open("spec/fixtures/files/test_image.jpg", 'rb').read) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
@@ -88,6 +88,19 @@ describe AttachmentFile do
     it {expect(obj.original_geometry).to eq("2352x1568")}
   end
 
+  describe "corners_on_world=" do
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+    let(:corners_on_world){ [[1492.8272, 2371.039],[1576.2872, 2368.185],[1573.1728, 2304.961],[1489.7128, 2307.815]]}
+    before do
+      User.current = user
+      obj
+      obj.corners_on_world = corners_on_world
+    end
+    it { expect{obj.save}.not_to raise_error}
+    after { obj.destroy }
+  end
+
   describe ".save_affine_matrix" do
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
@@ -102,7 +115,7 @@ describe AttachmentFile do
     after { obj.destroy }
   end
 
-  describe ".check_affine_matrix", :current => true do
+  describe ".check_affine_matrix" do
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
     let(:new_name){ "deleteme.1234.jpg" }
@@ -272,15 +285,56 @@ describe AttachmentFile do
     end
   end
 
-  describe ".affine_transform" do
-    subject { obj.affine_transform(x, y)}
+  describe ".transform_points", :current => true do
+    subject { obj.send(:transform_points, points)  }
     let(:obj){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
-    let(:point_1){ [0, 0] }
-    let(:x){ 0 }
-    let(:y){ 0 }
-    let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
-    let(:points){ obj.send(:image_xy2image_coord, *point_1) }
-    it {expect(subject).not_to be_empty} 
+
+    context "apply points with affine_matrix" do
+      let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
+      let(:points){[[-50,40],[50,-40]]}
+      it {expect(obj.send(:transform_points, points)[0][0]).to be_within(0.01).of(-5694.6)}
+      it {expect(obj.send(:transform_points, points)[0][1]).to be_within(0.01).of(2800.919)}
+      it {expect(obj.send(:transform_points, points)[1][0]).to be_within(0.01).of(5297.4)}
+      it {expect(obj.send(:transform_points, points)[1][1]).to be_within(0.01).of(-2868.48)}
+
+    end
+
+    context "apply points with perspective transform matrix" do
+      let(:affine_matrix_in_string){ "[1.50767e+00,4.33427e-01,1.53261e+03;1.00274e+00,1.37592e+00,2.33891e+03;4.47704e-04,2.50842e-04,1.00000e+00]" }
+      let(:points){[[-50,40],[50,-40]]}
+      it {expect(obj.send(:transform_points, points)[0][0]).to be_within(0.01).of(1493.008)}
+      it {expect(obj.send(:transform_points, points)[0][1]).to be_within(0.01).of(2373.12)}
+      it {expect(obj.send(:transform_points, points)[1][0]).to be_within(0.01).of(1571.25)}
+      it {expect(obj.send(:transform_points, points)[1][1]).to be_within(0.01).of(2305.53)}
+    end
+  end
+
+  describe ".affine_transform", :current => true do
+#    subject { obj.affine_transform(x,y)}
+    let(:obj){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
+    context "with affine_matrix apply (-50,40)" do
+      let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
+      let(:x){ -50 }
+      let(:y){ 40 }
+      it {expect(obj.affine_transform(x,y)[0]).to be_within(0.01).of(-5694.6)}
+      it {expect(obj.affine_transform(x,y)[1]).to be_within(0.01).of(2800.919)}
+    end
+    context "with affine_matrix apply (50,-40)" do
+      let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
+      let(:x){ 50 }
+      let(:y){ -40 }
+      it {expect(obj.affine_transform(x,y)[0]).to be_within(0.01).of(5297.4)}
+      it {expect(obj.affine_transform(x,y)[1]).to be_within(0.01).of(-2868.48)}
+    end
+    context "with perspective transform matrix" do
+      let(:affine_matrix_in_string){ "[1.50767e+00,4.33427e-01,1.53261e+03;1.00274e+00,1.37592e+00,2.33891e+03;4.47704e-04,2.50842e-04,1.00000e+00]" }
+      let(:x){ -50 }
+      let(:y){ 40 }
+
+      it {expect(obj.affine_transform(x,y)[0]).to be_within(0.01).of(1493.008)}
+      it {expect(obj.affine_transform(x,y)[1]).to be_within(0.01).of(2373.1236)}
+    end
+
   end
 
 
@@ -326,7 +380,8 @@ describe AttachmentFile do
       it {expect(subject).to eq nil}
     end
     context "affine_matrix is not blank" do
-      it {expect(subject).to eq "[1.000e+00,0.000e+00,0.000e+00;0.000e+00,1.000e+00,0.000e+00;0.000e+00,0.000e+00,1.000e+00]" }
+
+      it {expect(subject).to eq "[1.00000e+00,0.00000e+00,0.00000e+00;0.00000e+00,1.00000e+00,0.00000e+00;0.00000e+00,0.00000e+00,1.00000e+00]" }
     end
   end
 

@@ -71,11 +71,11 @@ describe SurfaceImagesController do
 
 
   describe "PUT update" do
-    let(:method){put :update, surface_id: parent, id: child_id}
+    let(:method){put :update, surface_id: parent, id: child_id, surface_image: {corners_on_map: [[-50,40],[50,40],[50,-40],[-50,-40]]}}
     let(:child_id){child.id}
     it { expect {method}.to change(AttachmentFile, :count).by(0) }
     context "present child" do
-      before { method }
+      before { put :update, surface_id: parent, id: child_id, attachment_file: attributes, "surface_image" => {hello:'world'} }
       it { expect(parent.images.exists?(id: child.id)).to eq true}
     end
     context "none child" do

@@ -21,6 +21,32 @@ class SurfaceImage < ActiveRecord::Base
     Math.log(surface.length/surface.tilesize * resolution, 2).ceil
   end
 
+  def corners_on_map
+    return unless image
+    surface.coords_on_map(image.corners_on_world)
+  end
+
+  def corners_on_map=(_corners)
+    if _corners.is_a?(String)
+      corners = _corners.split(':').map{|xy| xy.split(',').map{|v| v.to_f}}
+    else
+      corners = _corners
+    end
+    self.corners_on_world = surface.coords_on_world(corners)
+  end
+
+  def corners_on_world=(_corners)
+    if _corners.is_a?(String)
+      corners = _corners.split(':').map{|xy| xy.split(',').map{|v| v.to_f}}
+    else
+      corners = _corners
+    end
+    if image
+      image.corners_on_world = corners
+      image.save
+    end
+  end
+
   def width
     return right - left if left && right
     return unless image
