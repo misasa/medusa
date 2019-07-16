@@ -108,6 +108,30 @@ describe SurfaceImage do
     subject { obj.resolution }
     it { expect(subject).to be_within(0.01).of(0.42)}
   end
+  
+  describe "#corners_on_map" do
+    subject { obj.corners_on_map }
+    it { expect{ subject }.not_to raise_error }
+  end
+  
+  describe "#corners_on_map=" do
+    subject { obj.corners_on_map = corners_on_map }
+    before do
+      image_mock = double('Image')
+      image_mock.should_receive(:corners_on_world=)
+      image_mock.should_receive(:save)
+      allow(obj).to receive(:image).and_return(image_mock)
+    end
+    context "with string" do
+      let(:corners_on_map){ "176.33,46.50:179.07,46.60:178.97,48.67:176.23,48.58"  }
+      it { expect(subject).to eql(corners_on_map)  }
+    end
+    context "with array" do
+      let(:corners_on_map){ [[176.33,46.50],[179.07,46.60],[178.97,48.67],[176.23,48.58]] }
+      it { expect(subject).to eql([[176.33,46.50],[179.07,46.60],[178.97,48.67],[176.23,48.58]])  }
+    end
+  end
+
 
   context "with spot" do
 

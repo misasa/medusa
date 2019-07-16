@@ -46,8 +46,9 @@ class SurfaceImagesController < ApplicationController
 
   def update
     @image = AttachmentFile.find(params[:id])
-    @surface.images << @image
-    respond_with @image
+    @surface_image.update_attributes(surface_image_params) unless params[:surface_image].blank?
+    #@surface.images << @image
+    respond_with @surface_image, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def link_by_global_id
@@ -114,6 +115,10 @@ class SurfaceImagesController < ApplicationController
   end
 
   private
+
+  def surface_image_params
+    params.require(:surface_image).permit(:corners_on_map)
+  end
 
   def image_params
     params.require(:attachment_file).permit(

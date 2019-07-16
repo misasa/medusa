@@ -94,20 +94,69 @@ function initMapImageCalibrator() {
     L.control.zoomLabel().addTo(map);
   }
 
+  imgActionArray = function(){
+      return [ToggleTransparency, ToggleOutline, ToggleLock, ToggleRotateScale, ToggleOrder, Restore, SaveImageAction];
+  };
+
+  
+  var SaveImageAction = L.EditAction.extend({
+	  initialize: function (map, overlay, options){
+	      var href = '<use xlink:href="/assets/icons/symbol/sprite.symbol.svg#get_app"></use>';
+              options = options || {};
+              options.toolbarIcon = {
+		  html: '<svg>' + href + '</svg>',
+		  tooltip: 'Save Image'
+	      };
+	      L.EditAction.prototype.initialize.call(this, map, overlay, options);
+	  },
+	  addHooks: function(){
+	      var img = this._overlay;
+              saveImage.bind(img)();
+	  }
+  });
+ 
+  saveImage = function(){
+      var img = this;
+      var corners_on_map = [];
+      img._corners.forEach(function(_corner){
+        corners_on_map.push(map.project(_corner,0))
+      });
+      $.ajax(img.resource_url + ".json",{
+        type: 'PUT',
+	data: {surface_image: 
+		  {corners_on_map:
+		      corners_on_map[0].x + ',' + corners_on_map[0].y + ':' +
+		      corners_on_map[1].x + ',' + corners_on_map[1].y + ':' +
+		      corners_on_map[3].x + ',' + corners_on_map[3].y + ':' +
+		      corners_on_map[2].x + ',' + corners_on_map[2].y,
+		  }
+	},
+	beforeSend: function(e){ console.log('saving...')},
+        complete: function(e){ 'ok' },
+	error: function(e) {console.log(e)}
+      })
+  }; 
   var imgs = [];
   layerGroups.concat([{ name: "", opacity: 100 }]).forEach(function(layerGroup) {
     var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0;
     if (images[name]) {
       image = images[name][0];
-      opts = {corners: [L.latLng(map.unproject(image.corners[0],0)),L.latLng(map.unproject(image.corners[1],0)),L.latLng(map.unproject(image.corners[3],0)),L.latLng(map.unproject(image.corners[2],0))]}
+      opts = {actions: imgActionArray(), corners: [L.latLng(map.unproject(image.corners[0],0)),L.latLng(map.unproject(image.corners[1],0)),L.latLng(map.unproject(image.corners[3],0)),L.latLng(map.unproject(image.corners[2],0))]}
       img = L.distortableImageOverlay(image.path,opts).addTo(map);
+      
       //L.DomEvent.on(img._image, 'load', img.editing.enable, img.editing);
       imgs.push(img);
+      img.warpable_id = image.id
+      img.resource_url = image.resource_url
+      img.addTo(map)
     }
   });
   imgGroup = L.distortableCollection().addTo(map);
   imgs.forEach(function(img){
-	  imgGroup.addLayer(img);
+    imgGroup.addLayer(img);
   });
+
+
+
   surfaceMap = map;
 }

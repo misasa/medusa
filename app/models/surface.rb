@@ -172,6 +172,25 @@ class Surface < ActiveRecord::Base
     flag_single ? coords[0] : coords
   end
 
+  def coords_on_world(map_coords)
+    flag_single = true if map_coords[0].is_a?(Float)
+    if flag_single
+      map_coords = [map_coords]
+    end
+    n = Matrix.columns(map_coords)
+    n = Matrix.rows(n.to_a << Array.new(map_coords.size, 1))
+    matrix = affine_matrix_for_map.inv
+    nn = matrix * n
+    coords = []
+    nn.t.to_a.each do |r|
+      coords << [r[0],r[1]]
+    end
+
+    flag_single ? coords[0] : coords
+  end
+
+
+
   def tile_ij_at(zooms, x, y)
     flag_single = true if zooms.is_a?(Integer)
     if flag_single
