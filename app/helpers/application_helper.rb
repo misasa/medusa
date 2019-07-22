@@ -1,5 +1,6 @@
 module ApplicationHelper
   def mantra(msg, opts = {})
+    title = opts[:title] || "guide"
     popover_button("guide", msg, opts)
   end
 
@@ -17,7 +18,7 @@ module ApplicationHelper
 
   def popover_button(title, msg, opts = {})
     data = {toggle: "popover", content: msg, placement: "auto", trigger: "hover"}.merge(opts)
-    content_tag(:button, type: "button", class: "btn btn-info btn-xs", title: title, data:data) do
+    content_tag(:button, type: "button", class: "btn btn-info btn-xs", title: opts[:title], data:data) do
       title
     end
   end

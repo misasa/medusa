@@ -2,6 +2,16 @@ require 'spec_helper'
 
 describe ApplicationHelper do
 
+  describe "#mantra", :current => true do
+    subject { helper.mantra msg }
+    let(:msg) { "hello world"  }
+    it { expect(subject).to match "title=\"guide\""}
+    context "with title" do
+      let(:my_title){ "greeting"  }
+      it {expect(helper.mantra msg, :title => my_title).to match "title=\"greeting\""}      
+    end
+  end
+
   describe "#format_date" do
     subject { helper.format_date(date) }
     context "date is nil" do
