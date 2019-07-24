@@ -108,10 +108,14 @@ class Surface < ActiveRecord::Base
 
   def bounds
     return Array.new(4) { 0 } if globe? || surface_images.blank?
-    left,upper,right,bottom = surface_images[0].bounds
+    if surface_images[0].bounds.include?(nil)
+      left, upper, right, bottom = Array.new(4){ 0 }
+    else
+      left,upper,right,bottom = surface_images[0].bounds
+    end
     surface_images.each do |s_image|
       image = s_image.image
-      next if s_image.bounds.blank?
+      next if s_image.bounds.include?(nil)
       l,u,r,b = s_image.bounds
       left = l if l < left
       upper = u if u > upper
