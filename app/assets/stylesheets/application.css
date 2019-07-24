@@ -19,6 +19,12 @@
  *= require_tree .
  */
 
+.svg-icons {
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+}
+
 .material-icons {
   font-size: 18px;
   color: pink;

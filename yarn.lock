@@ -524,7 +524,7 @@ kind-of@^6.0.0, kind-of@^6.0.2:
 
 leaflet-distortableimage@yyachi/Leaflet.DistortableImage#develop:
   version "0.6.0"
-  resolved "https://codeload.github.com/yyachi/Leaflet.DistortableImage/tar.gz/7fc55e059825cd1efe14d9b3517e586b6b28f67a"
+  resolved "https://codeload.github.com/yyachi/Leaflet.DistortableImage/tar.gz/db5e9a485ab5df43fe489db9b69e05382bfb07bd"
   dependencies:
     grunt-cli "^1.2.0"
     leaflet-toolbar "0.4.0-alpha.2"
