@@ -110,6 +110,10 @@ class SurfaceImagesController < ApplicationController
     render :nothing => true
   end
 
+  def calibrate_svg
+    respond_with @surface_image
+  end
+
   def calibrate
     respond_with @surface_image
   end
