@@ -259,6 +259,7 @@ Medusa::Application.routes.draw do
         post 'unchoose_as_base'
         post 'tiles'
         get :calibrate
+        get :calibrate_svg
         post 'layer'
       end
     end
