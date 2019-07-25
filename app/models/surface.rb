@@ -5,6 +5,7 @@ class Surface < ActiveRecord::Base
   paginates_per 10
 
   has_many :surface_images, :dependent => :destroy, :order => ("position DESC")
+  has_many :calibrated_surface_images, -> { calibrated }, class_name: 'SurfaceImage'
   has_many :not_belongs_to_layer_surface_images, -> { not_belongs_to_layer }, class_name: 'SurfaceImage'
   has_many :wall_surface_images, -> { wall }, class_name: 'SurfaceImage'
   has_many :images, through: :surface_images
