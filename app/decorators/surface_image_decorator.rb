@@ -176,7 +176,7 @@ class SurfaceImageDecorator < Draper::Decorator
         h.content_tag(:ul, class: "dropdown-menu", 'aria-labelledby' => "dropdownMenu1") do
           h.concat h.content_tag(:li, attachment_file.name, class: "dropdown-header")
           #h.concat h.content_tag(:li, h.link_to("show #{attachment_file.name}", attachment_file, class: "dropdown-item"))
-          h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_attachment_file_path(attachment_file), class: "dropdown-item"))
+                                 h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.calibrate_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
           h.concat h.content_tag(:li, h.link_to("calibrate on canvas", h.calibrate_svg_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
           h.concat h.content_tag(:li, h.link_to("calibrate on map", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
           if attachment_file.try!(:affine_matrix).present?

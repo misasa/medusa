@@ -1,5 +1,5 @@
 class AttachmentFilesController < ApplicationController
-  respond_to :html, :xml, :json, :svg
+  respond_to :html, :xml, :json, :svg, :js
   before_action :find_resource, except: [:index, :create, :download, :bundle_edit, :bundle_update]
   before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
@@ -13,6 +13,10 @@ class AttachmentFilesController < ApplicationController
 
   def show
     respond_with @attachment_file
+  end
+
+  def calibrate
+    respond_with @attachment_file, layout: !request.xhr?
   end
 
   def edit
@@ -29,6 +33,7 @@ class AttachmentFilesController < ApplicationController
         format.html { redirect_to ({action: :index}.merge(Marshal.restore(Base64.decode64(params[:page_params]))))}
       end
       format.json { render json: @attachment_file }
+      format.js { render :success }
       format.xml { render xml: @attachment_file }
     end
   end

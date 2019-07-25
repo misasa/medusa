@@ -1,0 +1,26 @@
+<div class="modal-header alert">
+  <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+  <h4 class="modal-title" id="notification-modal-label">
+    <%= @attachment_file.name %>
+  </h4>
+</div>
+<%= form_for @attachment_file, remote: true, format: :js, html: { class: "update", role: "form" } do |f| %>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-lg-2">
+	<%= image_tag @attachment_file.path(:thumb) %>
+      </div>
+      <div class="col-lg-10">
+        <%= f.label :affine_matrix, class: "small" -%>
+        ex.) [1, 0, 0; 0, 1, 0; 0, 0, 1]
+        <%= f.text_field :affine_matrix_in_string, class: "form-control input-sm" %>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <%= f.button class: "btn btn-default" do %>
+      <span class="glyphicon glyphicon-save"></span>
+    <% end %>
+  </div>
+<% end %>
+

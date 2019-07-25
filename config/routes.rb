@@ -288,6 +288,7 @@ Medusa::Application.routes.draw do
       get :property
       get :picture
       get :download
+      get :calibrate
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "attachment_file" } do
       member do
