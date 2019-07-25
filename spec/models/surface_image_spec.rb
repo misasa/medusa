@@ -4,6 +4,53 @@ describe SurfaceImage do
   let(:surface) { FactoryGirl.create(:surface) }
   let(:image) { FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
   let(:obj) { FactoryGirl.create(:surface_image, :surface_id => surface.id, :image_id => image.id)}
+  
+  describe "scope", :current => true do
+    describe "wall" do
+      let(:image_1){ FactoryGirl.create(:attachment_file) }
+      let(:wall_image){ FactoryGirl.create(:surface_image, :wall => true, :surface_id => surface.id, :image_id => image_1.id) }
+      let(:image_2){ FactoryGirl.create(:attachment_file) }
+      let(:overlay_image){ FactoryGirl.create(:surface_image, :surface_id => surface.id, :image_id => image_2.id) }
+      subject { SurfaceImage.wall }
+      it { expect(subject).to include(wall_image) }
+      it { expect(subject).not_to include(overlay_image) }
+    end
+
+    describe "base" do
+      let(:image_1){ FactoryGirl.create(:attachment_file) }
+      let(:wall_image){ FactoryGirl.create(:surface_image, :wall => true, :surface_id => surface.id, :image_id => image_1.id) }
+      let(:image_2){ FactoryGirl.create(:attachment_file) }
+      let(:overlay_image){ FactoryGirl.create(:surface_image, :surface_id => surface.id, :image_id => image_2.id) }
+      subject { SurfaceImage.base }
+      it { expect(subject).to include(wall_image) }
+      it { expect(subject).not_to include(overlay_image) }
+    end
+
+    describe "overlay" do
+      let(:image_1){ FactoryGirl.create(:attachment_file) }
+      let(:wall_image){ FactoryGirl.create(:surface_image, :wall => true, :surface_id => surface.id, :image_id => image_1.id) }
+      let(:image_2){ FactoryGirl.create(:attachment_file) }
+      let(:overlay_image){ FactoryGirl.create(:surface_image, :surface_id => surface.id, :image_id => image_2.id) }
+      subject { SurfaceImage.overlay }
+      it { expect(subject).not_to include(wall_image) }
+      it { expect(subject).to include(overlay_image) }
+    end
+
+    describe "calibrated" do
+      subject { SurfaceImage.calibrated }
+      let(:image_1){ FactoryGirl.create(:attachment_file) }
+      let(:calibrated_image){ FactoryGirl.create(:surface_image, :wall => true, :surface_id => surface.id, :image_id => image_1.id) }
+      let(:image_2){ FactoryGirl.create(:attachment_file, :affine_matrix => nil) }
+      let(:uncalibrated_image){ FactoryGirl.create(:surface_image, :surface_id => surface.id, :image_id => image_2.id) }
+      let(:image_3){ FactoryGirl.create(:attachment_file, :affine_matrix => []) }
+      let(:uncalibrated_image_2){ FactoryGirl.create(:surface_image, :surface_id => surface.id, :image_id => image_3.id) }
+      it { expect(subject).to include(calibrated_image) }
+      it { expect(subject).not_to include(uncalibrated_image) }
+      it { expect(subject).not_to include(uncalibrated_image_2) }
+    end
+
+  end
+
 
   describe "#width" do
     subject { obj.width }

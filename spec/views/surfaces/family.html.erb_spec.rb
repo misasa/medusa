@@ -28,6 +28,22 @@ describe "surfaces/family.html.erb" do
     end
   end
 
+  context "with calibrated image and uncalibrated images" do
+    let(:image_1) { FactoryGirl.create(:attachment_file, :name => 'fuga_1') }
+    let(:image_2) { FactoryGirl.create(:attachment_file, :name => 'fuga_2', :affine_matrix => nil) }
+    let(:image_3) { FactoryGirl.create(:attachment_file, :name => 'fuga_3', :affine_matrix => []) }
+
+    before do
+      obj_1.images << image_1
+      obj_1.images << image_2
+      obj_1.images << image_3
+    end
+    it 'works' do
+      render
+      expect(rendered).to have_css('div.large-map')
+    end
+  end
+
   context "with calibrated image" do
     let(:image_1) { FactoryGirl.create(:attachment_file, :name => 'fuga') }
     before do

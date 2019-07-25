@@ -7,6 +7,7 @@ class SurfaceImage < ActiveRecord::Base
   validates :surface_layer, existence: true, allow_nil: true
   validate :check_image
 
+  scope :calibrated, -> { joins(:image).where('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :wall, -> { where(wall: true) }
   scope :base, -> { where(wall: true) }
   scope :overlay, -> { where(wall: [false, nil])  }
@@ -60,6 +61,8 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def length
+    return unless width
+    return unless height
     l = width
     h = height
     l = h if h > l
@@ -67,6 +70,7 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def resolution
+    return unless length
     return if length == 0
     image.length/length
   end
