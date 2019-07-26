@@ -289,6 +289,10 @@ Medusa::Application.routes.draw do
       get :picture
       get :download
       get :calibrate
+      get :edit_affine_matrix
+      put :update_affine_matrix
+      get :edit_corners
+      put :update_corners
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "attachment_file" } do
       member do

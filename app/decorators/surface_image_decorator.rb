@@ -176,7 +176,8 @@ class SurfaceImageDecorator < Draper::Decorator
         h.content_tag(:ul, class: "dropdown-menu", 'aria-labelledby' => "dropdownMenu1") do
           h.concat h.content_tag(:li, attachment_file.name, class: "dropdown-header")
           #h.concat h.content_tag(:li, h.link_to("show #{attachment_file.name}", attachment_file, class: "dropdown-item"))
-                                 h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.calibrate_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
+                                 h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_affine_matrix_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
+                                 h.concat h.content_tag(:li, h.link_to("type in coordinates of 4 corners", h.edit_corners_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
           h.concat h.content_tag(:li, h.link_to("calibrate on canvas", h.calibrate_svg_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
           h.concat h.content_tag(:li, h.link_to("calibrate on map", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
           if attachment_file.try!(:affine_matrix).present?
@@ -213,12 +214,12 @@ class SurfaceImageDecorator < Draper::Decorator
             h.concat h.image_tag(self.image.path(:tiny))
             #h.concat h.content_tag(:small, self.image.name)
             h.concat drop_down_menu
-            if self.wall
-              h.concat h.content_tag(:span, "Base", class:"label label-default")
+            if self.calibrated?
+              h.concat h.content_tag(:span, "calibrated", class:"label label-success")
             else
-              h.concat h.content_tag(:span, "Overlay", class:"label label-primary")
+              h.concat h.content_tag(:span, "not calibrated", class:"label label-default")
             end
-            h.concat h.content_tag(:small, "(#{position})" )
+            #h.concat h.content_tag(:small, "(#{position})" )
             #h.concat h.content_tag(:small, self.image.affine_matrix)
           end
         )
