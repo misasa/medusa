@@ -34,6 +34,31 @@ describe AttachmentFilesController do
     before { get :edit, id: attachment_file.id }
     it { expect(assigns(:attachment_file)).to eq attachment_file }
   end
+
+  describe "GET calibrate" do
+    render_views
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    before { get :calibrate, id: attachment_file.id, format: 'modal' }
+    it { expect(assigns(:attachment_file)).to eq attachment_file }
+    it { expect(response.body).to have_selector("h4.modal-title") }
+  end
+
+
+  describe "GET edit_affine_matrix" do
+    render_views
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    before { get :edit_affine_matrix, id: attachment_file.id, format: 'modal' }
+    it { expect(assigns(:attachment_file)).to eq attachment_file }
+    it { expect(response).to render_template("attachment_files/edit_affine_matrix") }
+  end
+
+  describe "GET edit_corners" do
+    render_views
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    before { get :edit_corners, id: attachment_file.id, format: 'modal' }
+    it { expect(assigns(:attachment_file)).to eq attachment_file }
+    it { expect(response).to render_template("attachment_files/edit_corners") }
+  end
   
   describe "POST create" do
     let(:md5hash){ Digest::MD5.hexdigest(File.open("spec/fixtures/files/test_image.jpg", 'rb').read) }    
@@ -48,6 +73,63 @@ describe AttachmentFilesController do
 
   
   describe "PUT update" do
+    render_views
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    let(:attributes){ { description: 'hello world'  }  }
+    before { put :update, id: attachment_file.id, attachment_file: attributes, format: format }
+
+    context "format json" do
+      let(:format){ 'json' }
+      it { expect(attachment_file.reload.description).to eq 'hello world' }
+      it { expect(response).not_to render_template('attachment_files/update') }
+    end
+
+    context "format js" do
+      let(:format){ 'js' }
+      it { expect(attachment_file.reload.description).to eq 'hello world' }
+      it { expect(response).to render_template('attachment_files/update') }
+    end
+  end
+
+  describe "PUT update_affine_matrix", :current => true do
+    render_views
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    let(:format){ 'js' }
+
+    before { put :update_affine_matrix, id: attachment_file.id, affine_matrix: array , format: format }
+
+    context "with valid values" do
+      let(:array){ ["40.5412", "-0.334872", "9192.7", "1.0072", "41.6419", "-2824.46", "0.0", "0.0", "1.0"]  }
+      it { expect(attachment_file.reload.affine_matrix).to eq [40.5412, -0.334872, 9192.7, 1.0072, 41.6419, -2824.46, 0.0, 0.0, 1.0] }
+      it { expect(response).to render_template('attachment_files/update_affine_matrix') }
+    end
+
+    context "with blank values" do
+      let(:array){ ["40.5412", "", "9192.7", "1.0072", "41.6419", "-2824.46", "0.0", "0.0", "1.0"]  }
+      it { expect(response).to render_template('attachment_files/error') }
+    end
+  end
+
+  describe "PUT update_corners", :current => true do
+    render_views
+    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    let(:format){ 'js' }
+    before { put :update_corners, id: attachment_file.id, corners_on_world: corners, format: format }
+
+    context "with valid corners" do
+      let(:corners){ { "lu" => ["1492.8272", "2371.039"], "ru" => ["1576.2872", "2368.185"], "rb" => ["1573.1728", "2304.961"], "lb" => ["1489.7128", "2307.815"]} }
+
+      it { expect(attachment_file.reload.corners_on_world[0][0]).to be_within(0.01).of(1492.8272) }
+      it { expect(response).to render_template('attachment_files/update_corners') }
+    end
+
+    context "with blank" do
+      let(:corners){ { "lu" => ["", "2371.039"], "ru" => ["1576.2872", "2368.185"], "rb" => ["1573.1728", "2304.961"], "lb" => ["1489.7128", "2307.815"]} }
+
+      #it { expect(attachment_file.reload.corners_on_world[0][0]).to be_within(0.01).of(1492.8272) }
+      it { expect(response).to render_template('attachment_files/error') }
+    end
+
   end
 
   describe "GET property" do

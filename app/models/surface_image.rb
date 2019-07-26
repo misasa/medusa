@@ -8,6 +8,7 @@ class SurfaceImage < ActiveRecord::Base
   validate :check_image
 
   scope :calibrated, -> { joins(:image).where('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
+  scope :uncalibrated, -> { joins(:image).where.not('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :wall, -> { where(wall: true) }
   scope :base, -> { where(wall: true) }
   scope :overlay, -> { where(wall: [false, nil])  }
@@ -15,6 +16,14 @@ class SurfaceImage < ActiveRecord::Base
 #  scope :base, -> { where(position: minimum(:position)) }
 #  scope :not_base, -> { where.not(position: minimum(:position)) }
   scope :not_belongs_to_layer, -> { where(surface_layer_id: nil) }
+  scope :top, -> { joins(:image).where('(surface_images.surface_layer_id is null) and (wall is not true) and (attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
+
+  def calibrated?
+    return unless image
+    return unless image.affine_matrix
+    return if image.affine_matrix.blank?
+    true
+  end
 
   def original_zoom_level
     return unless image

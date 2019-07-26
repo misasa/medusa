@@ -6,7 +6,10 @@ class Surface < ActiveRecord::Base
 
   has_many :surface_images, :dependent => :destroy, :order => ("position DESC")
   has_many :calibrated_surface_images, -> { calibrated }, class_name: 'SurfaceImage'
+  has_many :uncalibrated_surface_images, -> { uncalibrated }, class_name: 'SurfaceImage'
   has_many :not_belongs_to_layer_surface_images, -> { not_belongs_to_layer }, class_name: 'SurfaceImage'
+  has_many :top_surface_images, -> { top }, class_name: 'SurfaceImage'
+
   has_many :wall_surface_images, -> { wall }, class_name: 'SurfaceImage'
   has_many :images, through: :surface_images
   has_many :surface_layers, :dependent => :destroy, :order => ("priority DESC")

@@ -1,4 +1,4 @@
-<% not_belongs_to_layer = @surface.not_belongs_to_layer_surface_images %>
+<% not_belongs_to_layer = @surface.top_surface_images%>
 <div class="panel panel-default">
   <div class="panel-heading">
     <span class="panel-title pull-lfet">
@@ -16,8 +16,14 @@
     </ul>
   </div>
   <div class="panel-footer">
+    <ul class="list-inline thumbnails surface-layer">
+      <% @surface.uncalibrated_surface_images.each do |surface_image| %>
+        <% next unless surface_image.image %>
+        <%= surface_image.decorate.li_thumbnail %>
+      <% end %>
+    </ul>    
     <div class="row">
-      <div class="form-inline col-sm-6">
+     <div class="form-inline col-sm-6">
       <%= form_for AttachmentFile.new, url: surface_images_path(@surface), multipart: true, class: "form-inline", builder: ApplicationFormBuilder do |f|%>
         <%#= hidden_tabname_tag(__FILE__) %>
         <%= f.fields_for :record_property_attributes do |r| %>
@@ -60,7 +66,6 @@
   <div class="panel-heading">
     <%= form_for SurfaceLayer.new, url: surface_layers_path(@surface), class:"inline" do |f|%>
       <%= mantra "To upload and link a layer to surface, use interface at the below." %> 
-      <%= hidden_tabname_tag(__FILE__) %>
       <%= f.text_field :name %>
       <%= f.hidden_field :priority, value: @surface.surface_layers.max_priority + 1 %>
       <%= f.text_field :opacity %>

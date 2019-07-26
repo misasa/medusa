@@ -19,6 +19,14 @@ class AttachmentFilesController < ApplicationController
     respond_with @attachment_file, layout: !request.xhr?
   end
 
+  def edit_affine_matrix
+    respond_with @attachment_file, layout: !request.xhr?
+  end
+
+  def edit_corners
+    respond_with @attachment_file, layout: !request.xhr?
+  end
+
   def edit
     respond_with @attachment_file, layout: !request.xhr?
   end
@@ -41,6 +49,35 @@ class AttachmentFilesController < ApplicationController
   def update
     @attachment_file.update_attributes(attachment_file_params)
     respond_with @attachment_file
+  end
+
+  def update_affine_matrix
+    m = params["affine_matrix"]
+    if m.any?{|w| w.blank?}
+      render :error
+    else
+      @attachment_file.update_attributes({affine_matrix: m.map(&:to_f)})
+      respond_with @attachment_file
+    end
+  end
+
+  def update_corners
+    m = params["corners_on_world"]
+    a = []
+    flag = true
+    ["lu", "ru", "rb", "lb"].each do |key|
+      if m[key].any?{|w| w.blank? }
+        flag = false
+        break
+      end
+      a << m[key].map(&:to_f)  
+    end
+    if flag
+      @attachment_file.update_attributes({corners_on_world: a})
+      respond_with @attachment_file
+    else
+      render :error
+    end
   end
 
   def property
