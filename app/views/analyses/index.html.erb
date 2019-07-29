@@ -78,7 +78,7 @@
   <% template = MeasurementCategory.first %>
   <% if template %>
    <%= mantra "To create a new analysis, fill in the neccessary columns and fill in the template, and upload from the following interface.
-  To edit multiple record simultaneously, select the checkbox targeted for edit and tap the pencil button.", title => "All registered analyses. " %> Download the template from <%= link_to "here", new_analysis_path(format: :csv, measurement_category_id: template.id) %>. <% end %>
+  To edit multiple record simultaneously, select the checkbox targeted for edit and tap the pencil button.", :title => "All registered analyses. " %> Download the template from <%= link_to "here", new_analysis_path(format: :csv, measurement_category_id: template.id) %>. <% end %>
   <%= form_tag(import_analyses_path, method: :post, multipart: true) do %>
     <%= file_field_tag :data %>
     <%= submit_tag :upload %>
