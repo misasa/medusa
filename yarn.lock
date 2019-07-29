@@ -537,6 +537,10 @@ leaflet-toolbar@0.4.0-alpha.2, leaflet-toolbar@Leaflet/Leaflet.Toolbar:
   version "0.4.0-alpha.2"
   resolved "https://codeload.github.com/Leaflet/Leaflet.Toolbar/tar.gz/0a080860542dbd1cc5fb3a543f68c4a799d9c88c"
 
+"leaflet.coordinates@https://github.com/yyachi/Leaflet.Coordinates#develop":
+  version "0.1.5"
+  resolved "https://github.com/yyachi/Leaflet.Coordinates#09ffcfdfa2bee2a7cee24a9653baef0ec0abc660"
+
 "leaflet@https://github.com/Leaflet/Leaflet#^1.0.0":
   version "1.5.1"
   resolved "https://github.com/Leaflet/Leaflet#2e3e0ffbe87f246eb76d86d2633ddd59b262830b"

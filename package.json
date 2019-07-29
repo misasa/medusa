@@ -10,6 +10,7 @@
     "leaflet": "https://github.com/Leaflet/Leaflet#^1.0.0",
     "leaflet-distortableimage": "yyachi/Leaflet.DistortableImage#develop",
     "leaflet-fullscreen": "Leaflet/Leaflet.fullscreen",
-    "leaflet-toolbar": "Leaflet/Leaflet.Toolbar"
+    "leaflet-toolbar": "Leaflet/Leaflet.Toolbar",
+    "leaflet.coordinates": "https://github.com/yyachi/Leaflet.Coordinates#develop"
   }
 }

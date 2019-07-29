@@ -16,6 +16,7 @@
  *= require Leaflet.ZoomLabel/src/L.Control.ZoomLabel.css
  *= require leaflet-toolbar/dist/leaflet.toolbar.css
  *= require leaflet-distortableimage/dist/leaflet.distortableimage.css
+ *= require leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.css
  *= require_tree .
  */
 
