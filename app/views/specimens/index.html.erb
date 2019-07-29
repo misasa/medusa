@@ -43,7 +43,7 @@
 </table>
 <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#bundle-form').submit();", class: "btn btn-default" %>
 
-<%= mantra "Show all #{@alias_specimens}. To create a new #{@alias_specimen}, fill in the necessary columns and click the save button. To edit multiple record simultaneously, select the checkbox targeted for edit and click the pencil button." %> 
+<%= mantra "To create a new #{@alias_specimen}, fill in the necessary columns and click the save button. To edit multiple record simultaneously, select the checkbox targeted for edit and click the pencil button.", title => "All #{@alias_specimens}s." %> 
 
 <%= javascript_tag do %>
   $(document).on("succeed.ajaxForm", "#new_specimen", function() {
