@@ -19,7 +19,7 @@ function initMapImageCalibrator() {
   var baseMaps = {};
   var overlayMaps = {};
   var zoom = 1;
-
+  var g_opacity = 0.5;
   var map = L.map('surface-map', {
     maxZoom: 14,
     minZoom: 0,
@@ -47,39 +47,6 @@ function initMapImageCalibrator() {
     baseMaps[baseImage.name] = layer;
     layer.addTo(map);
   });
-
-
-  map.getSpotPoint = function() {
-    if (!addingSpot) { return; }
-    var point = map.project(addingSpot.getLatLng(), 0),
-	x = matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2],
-	y = matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2];
-    return { x: x, y: y };
-  };
-
-  var spotsLayer = L.layerGroup.spots(map, spots, urlRoot);
-  map.addLayer(spotsLayer);
-
-  //overlayMaps['grid'] = L.layerGroup.grid(map, length);
-  if (addRadius) {
-    var radiusControl = L.control.radius(spotsLayer, {position: 'bottomright'}).addTo(map);
-  }
-
-  var addingSpot;
-  map.on('click', function(event) {
-    if (!addSpot || event.originalEvent.defaultPrevented) { return; }
-    var self = this;
-    setTimeout( function() {
-      var x = (event.containerPoint.x + self.getPixelBounds().min.x) / self.getZoomScale(self.getZoom(), 0),
-          y = (event.containerPoint.y + self.getPixelBounds().min.y) / self.getZoomScale(self.getZoom(), 0),
-          options = L.Util.extend({}, { color: 'blue', fillColor: '#30f', fillOpacity: 0.5, radius: radiusControl.getValue() }, options);
-      if (addingSpot) { addingSpot.remove(); }
-      addingSpot = new L.circle(map.unproject([x, y], 0), options);
-      addingSpot.addTo(spotsLayer);
-    }, 100);
-  });
-
-  //L.control.surfaceScale({ imperial: false, length: length }).addTo(map);
 
   L.control.layers(baseMaps,{}).addTo(map);
   
@@ -127,7 +94,13 @@ function initMapImageCalibrator() {
       addHooks: function () {
 	var editing = this._overlay.editing;
 
-	editing._toggleTransparency();
+	//editing._toggleTransparency();
+        var image = editing._overlay._image, opacity;
+        editing._transparent = !editing._transparent;
+        opacity = editing._transparent ? 0 : g_opacity;
+        L.DomUtil.setOpacity(image, opacity);
+        image.setAttribute("opacity", opacity);
+        editing._showToolbar();
       }
   });  
 
@@ -351,8 +324,10 @@ function initMapImageCalibrator() {
     var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0;
     if (images[name]) {
       image = images[name][0];
-      opts = {actions: imgActionArray(), corners: [L.latLng(map.unproject(image.corners[0],0)),L.latLng(map.unproject(image.corners[1],0)),L.latLng(map.unproject(image.corners[3],0)),L.latLng(map.unproject(image.corners[2],0))]}
+      opts = {mode: "rotateScale", actions: imgActionArray(), corners: [L.latLng(map.unproject(image.corners[0],0)),L.latLng(map.unproject(image.corners[1],0)),L.latLng(map.unproject(image.corners[3],0)),L.latLng(map.unproject(image.corners[2],0))]}
       img = L.distortableImageOverlay(image.path,opts).addTo(map);
+      L.DomUtil.setOpacity(img._image, g_opacity);
+      img._image.setAttribute("opacity", g_opacity);
       
       //L.DomEvent.on(img._image, 'load', img.editing.enable, img.editing);
       imgs.push(img);
@@ -366,7 +341,17 @@ function initMapImageCalibrator() {
     imgGroup.addLayer(img);
   });
 
+  var map_LabelFcn = function(ll, opts){
+    point = map.project(ll,0)
+    x = matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2],
+    y = matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2];
+    xx =L.NumberFormatter.round(x, opts.decimals, opts.decimalSeperator);
+    yy = L.NumberFormatter.round(y, opts.decimals, opts.decimalSeperator);
 
+    return "x:" + xx + " y:" + yy;
+  };
+
+  map.addControl(new L.Control.Coordinates({customLabelFcn:map_LabelFcn}));
 
   surfaceMap = map;
 }

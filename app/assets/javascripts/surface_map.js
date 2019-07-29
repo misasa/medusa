@@ -498,5 +498,18 @@ function initSurfaceMap() {
   if (("zoomlabel" in div.dataset)){
     L.control.zoomLabel().addTo(map);
   }
+
+  var map_LabelFcn = function(ll, opts){
+    point = map.project(ll,0)
+    x = matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2],
+    y = matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2];
+    xx =L.NumberFormatter.round(x, opts.decimals, opts.decimalSeperator);
+    yy = L.NumberFormatter.round(y, opts.decimals, opts.decimalSeperator);
+
+    return "x:" + xx + " y:" + yy;
+  };
+
+  map.addControl(new L.Control.Coordinates({customLabelFcn:map_LabelFcn}));
+
   surfaceMap = map;
 }

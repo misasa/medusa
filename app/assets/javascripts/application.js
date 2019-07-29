@@ -21,6 +21,7 @@
 //= require leaflet-toolbar/dist/leaflet.toolbar.js
 //= require leaflet-distortableimage/dist/leaflet.distortableimage.js
 //= require leaflet-fullscreen/dist/Leaflet.fullscreen.js
+//= require leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.src.js
 //= require svg
 //= require svg.draggable
 //= require matrix
