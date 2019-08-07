@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190618025832) do
+ActiveRecord::Schema.define(version: 20190805072944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -395,11 +395,15 @@ ActiveRecord::Schema.define(version: 20190618025832) do
     t.boolean  "wall"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.integer  "surface_layer_id", comment: "レイヤID"
+    t.integer  "surface_layer_id",  comment: "レイヤID"
     t.float    "left"
     t.float    "right"
     t.float    "upper"
     t.float    "bottom"
+    t.string   "data_file_name"
+    t.string   "data_content_type"
+    t.integer  "data_file_size"
+    t.datetime "data_updated_at"
   end
 
   add_index "surface_images", ["surface_layer_id"], name: "index_surface_images_on_surface_layer_id", using: :btree
@@ -421,6 +425,10 @@ ActiveRecord::Schema.define(version: 20190618025832) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "globe",      default: false, null: false, comment: "地球表面フラグ"
+    t.float    "center_x"
+    t.float    "center_y"
+    t.float    "width"
+    t.float    "height"
   end
 
   create_table "table_analyses", force: true, comment: "表内分析情報" do |t|

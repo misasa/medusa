@@ -129,7 +129,7 @@ describe AttachmentFile do
       User.current = user
       surface_image = double("SurfaceImage")
       allow(surface_image).to receive(:id).and_return(10)
-      RotateWorker.should_receive(:perform_async).with(obj.id)
+      #RotateWorker.should_receive(:perform_async).with(obj.id)
       TileWorker.should_receive(:perform_async).with(10)
       surface_image.should_receive(:update).with(hash_including(:left => left, :upper => upper, :right => right, :bottom => bottom))
       allow(obj).to receive(:surface_images).and_return([surface_image])
@@ -285,7 +285,7 @@ describe AttachmentFile do
     end
   end
 
-  describe ".transform_points", :current => true do
+  describe ".transform_points" do
     subject { obj.send(:transform_points, points)  }
     let(:obj){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
 
@@ -309,7 +309,7 @@ describe AttachmentFile do
     end
   end
 
-  describe ".affine_transform", :current => true do
+  describe ".affine_transform" do
 #    subject { obj.affine_transform(x,y)}
     let(:obj){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
     context "with affine_matrix apply (-50,40)" do
@@ -334,7 +334,6 @@ describe AttachmentFile do
       it {expect(obj.affine_transform(x,y)[0]).to be_within(0.01).of(1493.008)}
       it {expect(obj.affine_transform(x,y)[1]).to be_within(0.01).of(2373.1236)}
     end
-
   end
 
 
@@ -423,7 +422,16 @@ describe AttachmentFile do
     end
   end
 
-
+  describe "rotate" do
+    subject{obj.rotate}
+    let(:obj){FactoryGirl.create(:attachment_file, affine_matrix: [9.5e+01,-1.8e+01,-2.0e+02,1.8e+01,9.4e+01,-3.3e+01,0,0,1])}
+    before do
+      allow(obj).to receive(:local_path).and_return(File.join(fixture_path, "/files/test_image.jpg"))
+    end
+    it { expect{subject}.not_to raise_error }
+    it { expect(subject).to be_instance_of(Tempfile) }
+    it { expect(File.exists?(subject.path)).to be_truthy}
+  end
 
 end
 

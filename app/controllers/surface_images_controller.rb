@@ -121,7 +121,7 @@ class SurfaceImagesController < ApplicationController
   private
 
   def surface_image_params
-    params.require(:surface_image).permit(:corners_on_map)
+    params.require(:surface_image).permit(:corners_on_map, :corners_on_world)
   end
 
   def image_params
@@ -158,6 +158,10 @@ class SurfaceImagesController < ApplicationController
   def find_resource
     @image = AttachmentFile.find(params[:id])
     @surface_image = @surface.surface_images.includes({surface: [:record_property, {surface_images: :image}]}).find_by_image_id(@image.id).decorate
+    if params[:base_id]
+      @base_image = @surface.surface_images.includes({surface: [:record_property, {surface_images: :image}]}).find_by_image_id(params[:base_id])
+
+    end 
   end
 
 

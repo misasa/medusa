@@ -9,6 +9,7 @@ class Surface < ActiveRecord::Base
   has_many :uncalibrated_surface_images, -> { uncalibrated }, class_name: 'SurfaceImage'
   has_many :not_belongs_to_layer_surface_images, -> { not_belongs_to_layer }, class_name: 'SurfaceImage'
   has_many :top_surface_images, -> { top }, class_name: 'SurfaceImage'
+  has_many :base_surface_images, -> { base }, class_name: 'SurfaceImage'
 
   has_many :wall_surface_images, -> { wall }, class_name: 'SurfaceImage'
   has_many :images, through: :surface_images
@@ -84,47 +85,68 @@ class Surface < ActiveRecord::Base
   end
 
   def center
-    return if bounds.blank?
-    left, upper, right, bottom = bounds
+    x = 0.0
+    y = 0.0
+    x, y = image_bounds_center if image_bounds_center
+    x = center_x unless center_x.blank?
+    y = center_y unless center_y.blank?
+    [x,y]
+  end
+
+  def image_bounds_center
+    return if image_bounds.blank? || image_bounds.include?(nil)
+    left, upper, right, bottom = image_bounds
     x = left + (right - left)/2
     y = bottom + (upper - bottom)/2
     [x, y]
   end
 
-  def width
-    return if bounds.blank?
-    left, upper, right, bottom = bounds
+  def image_bounds_width
+    return if image_bounds.blank?
+    left, upper, right, bottom = image_bounds
+    return if [right,left].include?(nil)
     right - left
   end
 
-  def height
-    return if bounds.blank?
-    left, upper, right, bottom = bounds
+  def image_bounds_height
+    return if image_bounds.blank?
+    left, upper, right, bottom = image_bounds
+    return if [upper, bottom].include?(nil)
     upper - bottom
   end
 
-  def length
-    return if bounds.blank?
-    l = width
-    l = height if height > width
+  def image_bounds_length
+    return if [image_bounds_width, image_bounds_height].include?(nil)
+    l = image_bounds_width
+    l = image_bounds_height if image_bounds_height > image_bounds_width
     l
   end
 
-  def bounds
-    return Array.new(4) { 0 } if globe? || surface_images.blank?
-    if surface_images[0].bounds.include?(nil)
-      left, upper, right, bottom = Array.new(4){ 0 }
+  def length
+    if width.blank? && height.blank?
+      l = 100000
+      l = image_bounds_length if image_bounds_length
+    elsif width.blank?
+      l = height
     else
-      left,upper,right,bottom = surface_images[0].bounds
+      l = width
     end
+
+    l = width if width > l unless width.blank?
+    l = height if height > l unless height.blank?
+    l
+  end
+
+  def image_bounds
+    return Array.new(4) { nil } if globe? || surface_images.blank?
+    left,upper,right,bottom = [nil,nil,nil,nil]
     surface_images.each do |s_image|
-      image = s_image.image
-      next if s_image.bounds.include?(nil)
+      next if s_image.bounds.blank? || s_image.bounds.include?(nil)
       l,u,r,b = s_image.bounds
-      left = l if l < left
-      upper = u if u > upper
-      right = r if r > right
-      bottom = b if b < bottom
+      left = l if (left.blank? || l < left)
+      upper = u if (upper.blank? || u > upper)
+      right = r if (right.blank? || r > right)
+      bottom = b if (bottom.blank? || b < bottom)
     end
     [left, upper, right, bottom]
   end
@@ -147,12 +169,15 @@ class Surface < ActiveRecord::Base
   end
 
   def affine_matrix_for_map
+    return if bbox.blank?
+    left, top, _ = bbox
+    width = image_bounds_width unless width
+    height = image_bounds_height  unless height
+    return if [left, top, length, width, height].include?(nil)
     x = tilesize
     y = tilesize
-    left, top, _ = bounds
     len = length
     #puts "len: #{len} left: #{left} top: #{top} x: #{x} y: #{y}"
-    return if len == 0
     x_offset = (len - width) / 2
     y_offset = (len - height) / 2
     Matrix[
@@ -161,7 +186,18 @@ class Surface < ActiveRecord::Base
       [0, 0, 1]
     ]
   end
-
+ 
+  def initial_corners_for(image, opts = {})
+    ratio = length/image.length/4
+    width = image.width * ratio
+    height = image.height * ratio
+    cx, cy = center
+    l = cx - width/2
+    r = cx + width/2
+    u = cy + height/2
+    b = cy - height/2
+    return [[l,u],[r,u],[r,b],[l,b]]
+  end
 
   def coords_on_map(world_coords)
     flag_single = true if world_coords[0].is_a?(Float)
@@ -204,7 +240,6 @@ class Surface < ActiveRecord::Base
     if flag_single
       zooms = [zooms]
     end
-    
     left, upper, right, bottom = bbox
     dx = x - left
     dy = upper - y

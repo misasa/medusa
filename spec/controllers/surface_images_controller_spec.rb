@@ -33,6 +33,33 @@ describe SurfaceImagesController do
     end
   end
 
+
+  describe "GET calibrate" do
+    render_views
+    let(:image_1) { FactoryGirl.create(:attachment_file) }
+    let(:image_2) { FactoryGirl.create(:attachment_file) }
+    before do
+      image_1;image_2;
+      parent.images << image_1
+      parent.images << image_2
+    end
+    context "with calibrated" do    
+      before{get :calibrate ,surface_id:parent.id, id: image_2.id, base_id: image_1.id }
+      it{expect(assigns(:surface)).to eq parent}
+      it{expect(assigns(:image)).to eq image_2}
+      it{expect(assigns(:base_image)).to eq parent.surface_images.where(image_id: image_1.id)[0]}
+      it{expect(response).to render_template("calibrate") }
+    end
+
+    context "with uncalibrated", :current => true do    
+      let(:image_2) { FactoryGirl.create(:attachment_file, :affine_matrix => nil) }
+      before{get :calibrate ,surface_id:parent.id, id: image_2.id, base_id: image_1.id }
+      #it{expect(assigns(:surface)).to eq parent}
+      #it{expect(assigns(:image)).to eq image_2}
+      it{expect(response).to render_template("calibrate") }
+    end
+  end
+
   describe "POST create" do
     let(:method){post :create, surface_id: parent, attachment_file: attributes}
     before{child}
@@ -70,8 +97,8 @@ describe SurfaceImagesController do
   end
 
 
-  describe "PUT update" do
-    let(:method){put :update, surface_id: parent, id: child_id, surface_image: {corners_on_map: [[-50,40],[50,40],[50,-40],[-50,-40]]}}
+  describe "PUT update", :current => true do
+    let(:method){put :update, surface_id: parent, id: child_id, surface_image: {corners_on_world: [[-50,40],[50,40],[50,-40],[-50,-40]]}}
     let(:child_id){child.id}
     it { expect {method}.to change(AttachmentFile, :count).by(0) }
     context "present child" do

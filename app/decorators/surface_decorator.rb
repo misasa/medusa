@@ -81,11 +81,11 @@ class SurfaceDecorator < Draper::Decorator
     h_images = Hash.new
     s_images.each_with_index do |s_image, index|
       if s_image.wall
-        base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: a_bounds_on_map[index], max_zoom: a_zooms[index]}
+        base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.image.bounds, max_zoom: a_zooms[index]}
       else
         layer_group_name = s_image.surface_layer.try!(:name)
         h_images[layer_group_name] = [] unless h_images.has_key?(layer_group_name)
-        h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: a_bounds_on_map[index], max_zoom: a_zooms[index]}
+        h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: s_image.image.bounds, max_zoom: a_zooms[index]}
       end
     end
     records = surface_images.includes(:surface_layer, image: :spots)
@@ -97,6 +97,7 @@ class SurfaceDecorator < Draper::Decorator
                     url_root: "#{Rails.application.config.relative_url_root}/",
                     global_id: global_id,
                     length: length,
+                    center: center,
                     matrix: matrix.inv,
                     add_spot: options[:add_spot] || false,
                     #base_images: surface_images.wall.map{|s_image| {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.decorate.bounds_on_map } },

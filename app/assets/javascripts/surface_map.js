@@ -389,7 +389,8 @@ function initSurfaceMap() {
   var urlRoot = div.dataset.urlRoot;
   var global_id = div.dataset.globalId;
   var length = parseFloat(div.dataset.length);
-  var matrix = JSON.parse(div.dataset.matrix);
+  var center = JSON.parse(div.dataset.center);
+  //var matrix = JSON.parse(div.dataset.matrix);
   var addSpot = JSON.parse(div.dataset.addSpot);
   var addRadius = div.dataset.addRadius;
   var baseImages = JSON.parse(div.dataset.baseImages);
@@ -407,12 +408,48 @@ function initSurfaceMap() {
   var map = L.map('surface-map', {
     maxZoom: 14,
     minZoom: 0,
-    crs: L.CRS.Simple,
+    //crs: L.CRS.Simple,
     //    layers: layers
   });
+
+  var latLng2world = function(latLng){
+    point = map.project(latLng,0)
+    ratio = 2*20037508.34/length
+    x = center[0] - length/2.0 + point.x * length/256;
+    y = center[1] + length/2.0 - point.y * length/256;
+    return [x, y]
+  };
+
+  var world2latLng = function(world){
+      x_w = world[0];
+      y_w = world[1];
+      x = (x_w - center[0] + length/2.0)*256/length
+      y = (-y_w + center[1] + length/2.0)*256/length
+      latLng = map.unproject([x,y],0)
+      return latLng;
+  };
+
+  var worldBounds = function(world_bounds){
+      return L.latLngBounds([world2latLng([world_bounds[0], world_bounds[1]]),world2latLng([world_bounds[2], world_bounds[3]])]);
+  };
+
+  var map_LabelFcn = function(ll, opts){
+    lng =L.NumberFormatter.round(ll.lng, opts.decimals, opts.decimalSeperator);
+    lat = L.NumberFormatter.round(ll.lat, opts.decimals, opts.decimalSeperator);
+    point = map.project(ll,0)
+    xy_str = "x: " + point.x + " y: " + point.y;
+    world = latLng2world(ll);
+    gxy_str = "x_vs: " + world[0] + " y_vs: " + world[1];
+    lngLat_str = "lng:" + lng + " lat:" + lat;
+    str = gxy_str + " " + xy_str + " " + lngLat_str;
+    return str;
+  };
+  map.addControl(new L.Control.Coordinates({position: 'topright', customLabelFcn:map_LabelFcn}));
+
   
   if (_bounds){
-    var bounds = L.latLngBounds([map.unproject(_bounds[0], 0), map.unproject(_bounds[1],0)]);
+      //var bounds = L.latLngBounds([map.unproject(_bounds[0], 0), map.unproject(_bounds[1],0)]);
+      var bounds = worldBounds(_bounds);
     //var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png',{bounds: bounds});
   } else {
       //var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png');
@@ -421,7 +458,8 @@ function initSurfaceMap() {
     var opts = {maxNativeZoom: 6}
 
     if (baseImage.bounds){
-	opts = Object.assign(opts, {bounds: L.latLngBounds([map.unproject(baseImage.bounds[0], 0), map.unproject(baseImage.bounds[1],0)])});
+	//opts = Object.assign(opts, {bounds: L.latLngBounds([map.unproject(baseImage.bounds[0], 0), map.unproject(baseImage.bounds[1],0)])});
+	opts = Object.assign(opts, {bounds: worldBounds(baseImage.bounds)});
     }
     if (baseImage.max_zoom){
 	opts = Object.assign(opts, {maxNativeZoom: baseImage.max_zoom});
@@ -438,7 +476,7 @@ function initSurfaceMap() {
       images[name].forEach(function(image) {
         opts = {opacity: opacity, maxNativeZoom: 6};
 	if (image.bounds){
-          opts = Object.assign(opts, {bounds: L.latLngBounds([map.unproject(image.bounds[0], 0), map.unproject(image.bounds[1],0)])})
+            opts = Object.assign(opts, {bounds: worldBounds(image.bounds)});
         }
         if (image.max_zoom){
 	    opts = Object.assign(opts, {maxNativeZoom: image.max_zoom})
@@ -452,7 +490,6 @@ function initSurfaceMap() {
     }
   });
 
-
   map.getSpotPoint = function() {
     if (!addingSpot) { return; }
     var point = map.project(addingSpot.getLatLng(), 0),
@@ -465,9 +502,9 @@ function initSurfaceMap() {
   map.addLayer(spotsLayer);
 
   //overlayMaps['grid'] = L.layerGroup.grid(map, length);
-  if (addRadius) {
-    var radiusControl = L.control.radius(spotsLayer, {position: 'bottomright'}).addTo(map);
-  }
+  //if (addRadius) {
+  //  var radiusControl = L.control.radius(spotsLayer, {position: 'bottomright'}).addTo(map);
+  //}
 
   var addingSpot;
   map.on('click', function(event) {
@@ -495,21 +532,21 @@ function initSurfaceMap() {
     map.setView(map.unproject([256 / 2, 256 / 2], 0), zoom);
   }
   map.addControl(new L.Control.Fullscreen());
-  if (("zoomlabel" in div.dataset)){
-    L.control.zoomLabel().addTo(map);
-  }
+  //if (("zoomlabel" in div.dataset)){
+  //  L.control.zoomLabel().addTo(map);
+  //}
 
-  var map_LabelFcn = function(ll, opts){
-    point = map.project(ll,0)
-    x = matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2],
-    y = matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2];
-    xx =L.NumberFormatter.round(x, opts.decimals, opts.decimalSeperator);
-    yy = L.NumberFormatter.round(y, opts.decimals, opts.decimalSeperator);
-
-    return "x:" + xx + " y:" + yy;
-  };
-
-  map.addControl(new L.Control.Coordinates({customLabelFcn:map_LabelFcn}));
+  //var map_LabelFcn = function(ll, opts){
+  //  lng =L.NumberFormatter.round(ll.lng, opts.decimals, opts.decimalSeperator);
+  //  lat = L.NumberFormatter.round(ll.lat, opts.decimals, opts.decimalSeperator);
+  //  point = map.project(ll,0)
+  //  x = matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2],
+  //  y = matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2];
+  //  xx =L.NumberFormatter.round(x, opts.decimals, opts.decimalSeperator);
+  //  yy = L.NumberFormatter.round(y, opts.decimals, opts.decimalSeperator);
+  //  return "x:" + xx + " y:" + yy + "\n(" + lng + ", " + lat + ")";
+  //};
+  //map.addControl(new L.Control.Coordinates({position: 'bottomright', customLabelFcn: map_LabelFcn}));
 
   surfaceMap = map;
 }
