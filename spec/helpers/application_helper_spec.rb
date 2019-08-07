@@ -5,7 +5,7 @@ describe ApplicationHelper do
   describe "#mantra", :current => true do
     subject { helper.mantra msg }
     let(:msg) { "hello world"  }
-    it { expect(subject).to match "title=\"guide\""}
+    it { expect(subject).to match "guide"}
     context "with title" do
       let(:my_title){ "greeting"  }
       it {expect(helper.mantra msg, :title => my_title).to match "title=\"greeting\""}      

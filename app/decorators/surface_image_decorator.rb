@@ -29,64 +29,37 @@ class SurfaceImageDecorator < Draper::Decorator
     path = h.url_for_tile(self) + "#{image.id}/#{zoom}/#{x}_#{y}.png"
   end
 
-  def calibrator(options)
-    matrix = surface.affine_matrix_for_map
-    return unless matrix
+  def calibrator(b_images, options)
     surface_length = surface.length
     tilesize = surface.tilesize
-    return unless image
-
-    b_images = surface.surface_images.base
-    unless b_images.empty?
-      b_zooms = b_images.map{|b_image| Math.log(surface_length/tilesize * b_image.resolution, 2).ceil}
-      b_bounds = b_images.map{|b_image| l, u, r, b = b_image.bounds; [[l,u],[r,b]] }
-      lus = b_bounds.map{|a| a[0]}
-      rbs = b_bounds.map{|a| a[1]}
-      b_bounds_on_map = surface.coords_on_map(lus).zip(surface.coords_on_map(rbs))
-    end
-    base_images = []
-    b_images.each_with_index do |b_image, index|
-      base_images << {id: b_image.image.try!(:id), name: b_image.image.try!(:name), bounds: b_bounds_on_map[index], max_zoom: b_zooms[index]}
-    end
-
-    l, u, r, b = bounds
-    bounds_on_map = surface.coords_on_map([[l,u],[r,b]])
-    corners_on_map = surface.coords_on_map(image.corners_on_world)
+    return unless image   
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data:{
                     base_url: Settings.map_url,
                     url_root: "#{Rails.application.config.relative_url_root}/",
                     global_id: surface.global_id,
                     length: surface.length,
-                    matrix: matrix.inv,
-                    add_spot: true,
-                    add_radius: true,
-                    base_images: base_images,
+                    center: surface.center,
+                    base_image: {path: b_images[0].data.url, width: b_images[0].image.width, height: b_images[0].image.height, id: b_images[0].image.try!(:id), bounds: b_images[0].bounds},
                     layer_groups: [{name: image.try!(:name), opacity: 100 }],
-                    images: {image.try!(:name) => [{id: image.try!(:id), bounds: bounds_on_map, corners: corners_on_map, max_zoom: original_zoom_level, path: image.path, resource_url: h.surface_image_path(surface, image)}]},
-                    spots: [],
-                    bounds: bounds_on_map
+                    images: {image.try!(:name) => [{id: image.try!(:id), corners: self.corners_on_world, path: image.path, resource_url: h.surface_image_path(surface, image)}]},
     })
   end
 
   def map(options = {})
-    matrix = surface.affine_matrix_for_map
-    return unless matrix
     return unless image
-    l, u, r, b = bounds
-    bounds_on_map = surface.coords_on_map([[l,u],[r,b]])
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data:{
                     base_url: Settings.map_url,
                     url_root: "#{Rails.application.config.relative_url_root}/",
                     global_id: surface.global_id,
                     length: surface.length,
-                    matrix: matrix.inv,
+                    center: surface.center,
                     add_spot: true,
                     add_radius: true,
-                    base_images: [],
+                    base_images: surface.base_surface_images.map{ |b_image| {name: b_image.image.name, path: b_image.data.url, width: b_image.image.width, height: b_image.image.height, id: b_image.image.try!(:id), bounds: b_image.bounds} },
                     layer_groups: [{name: image.try!(:name), opacity: 100 }],
-                    images: {image.try!(:name) => [{id: image.try!(:id), bounds: bounds_on_map, max_zoom: original_zoom_level}]},
+                    images: {image.try!(:name) => [{id: image.try!(:id), bounds: image.bounds, max_zoom: original_zoom_level}]},
                     spots: [],
-                    bounds: bounds_on_map,
+                    bounds: bounds,
                     zoomlabel: []
     })
   end
@@ -179,7 +152,9 @@ class SurfaceImageDecorator < Draper::Decorator
                                  h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_affine_matrix_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
                                  h.concat h.content_tag(:li, h.link_to("type in coordinates of 4 corners", h.edit_corners_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
           h.concat h.content_tag(:li, h.link_to("calibrate on canvas", h.calibrate_svg_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
-          h.concat h.content_tag(:li, h.link_to("calibrate on map", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
+          surface.base_surface_images.each do |base_image|
+                   h.concat h.content_tag(:li, h.link_to("calibrate on #{base_image.image.name}", h.calibrate_surface_image_path(self.surface, attachment_file, base_id: base_image.image.id), class: "dropdown-item"))
+          end
           if attachment_file.try!(:affine_matrix).present?
             h.concat h.content_tag(:li, h.link_to("show on map", h.map_surface_image_path(surface, attachment_file)))
             h.concat h.content_tag(:li, h.link_to("show tiles", h.zooms_surface_image_path(surface, attachment_file)))

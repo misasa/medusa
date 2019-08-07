@@ -19,7 +19,7 @@ describe SurfaceDecorator do
     let(:bottom) {-4007.006}
     let(:map_url){"https://dream.misasa.okayama-u.ac.jp/pub/system/maps/"}
     before do
-      allow(surface).to receive(:bounds).and_return([left, upper, right, bottom])
+      allow(surface).to receive(:image_bounds).and_return([left, upper, right, bottom])
       allow(Settings).to receive(:map_url).and_return(map_url)
     end
 

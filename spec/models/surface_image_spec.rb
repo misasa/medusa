@@ -1,9 +1,23 @@
 require 'spec_helper'
+include ActionDispatch::TestProcess
 
 describe SurfaceImage do
   let(:surface) { FactoryGirl.create(:surface) }
-  let(:image) { FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
   let(:obj) { FactoryGirl.create(:surface_image, :surface_id => surface.id, :image_id => image.id)}
+
+  describe "with real file", :current => true do
+    let(:image) { FactoryGirl.create(:attachment_file, affine_matrix: [9.5e+01,-1.8e+01,-2.0e+02,1.8e+01,9.4e+01,-3.3e+01,0,0,1]) }
+    describe "make_warped_image" do
+      subject {obj.make_warped_image}
+      before do
+        allow(image).to receive(:local_path).and_return(File.join(fixture_path, "/files/test_image.jpg"))
+        allow(obj).to receive(:image).and_return(image)
+      end
+      it { expect{subject}.not_to raise_error }
+    end
+  end
+
+  let(:image) { FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
   
   describe "scope", :current => true do
     describe "wall" do
@@ -102,7 +116,7 @@ describe SurfaceImage do
   end
 
 
-  describe "#bonds" do
+  describe "#bounds" do
     subject { obj.bounds }
     let(:obj) { FactoryGirl.create(:surface_image, :surface_id => surface.id)}
     let(:left) {-3808.472}
@@ -151,10 +165,12 @@ describe SurfaceImage do
     
   end
 
+
   describe "#resolution" do
     subject { obj.resolution }
     it { expect(subject).to be_within(0.01).of(0.42)}
   end
+
   
   describe "#corners_on_map" do
     subject { obj.corners_on_map }
@@ -179,6 +195,41 @@ describe SurfaceImage do
     end
   end
 
+  describe "#corners_on_world=", :current => true do
+    subject { obj.corners_on_world = corners_on_world }
+    before do
+      image_mock = double('Image')
+      image_mock.should_receive(:corners_on_world=)
+      image_mock.should_receive(:save)
+      allow(obj).to receive(:image).and_return(image_mock)
+    end
+    context "with string" do
+      let(:corners_on_world){ "176.33,46.50:179.07,46.60:178.97,48.67:176.23,48.58"  }
+      it { expect(subject).to eql(corners_on_world)  }
+    end
+    context "with array" do
+      let(:corners_on_world){ [[176.33,46.50],[179.07,46.60],[178.97,48.67],[176.23,48.58]] }
+      it { expect(subject).to eql([[176.33,46.50],[179.07,46.60],[178.97,48.67],[176.23,48.58]])  }
+    end
+  end
+
+
+  describe "#corners_on_world" do
+    subject {obj.corners_on_world}
+    context "with calibrated image" do
+      it { expect(subject).to eql(obj.image.corners_on_world)}
+    end
+    context "with uncalibrated image" do
+      let(:image) { FactoryGirl.create(:attachment_file, affine_matrix: nil) }
+      let(:corners) {[[0,0],[760,0],[760,-700],[0,-700]]}
+      before do
+        allow(surface).to receive(:initial_corners_for).with(image).and_return(corners)
+        allow(obj).to receive(:surface).and_return(surface)
+        allow(obj).to receive(:image).and_return(image)
+      end
+      it { expect(subject).to eql(corners)}
+    end
+  end
 
   context "with spot" do
 

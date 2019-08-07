@@ -1,4 +1,12 @@
 class SurfaceImage < ActiveRecord::Base
+  has_attached_file :data,
+  styles: { thumb: "160x120>", tiny: "50x50"},
+  path: ":rails_root/public/system/:class/:id_partition/:basename_with_style.:extension",
+  url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension",
+  restricted_characters: /[&$+,\/:;=?<>\[\]\{\}\|\\\^~%# ]/
+  
+  alias_attribute :name, :data_file_name
+
   belongs_to :surface
   belongs_to :image, class_name: AttachmentFile
   belongs_to :surface_layer
@@ -10,13 +18,20 @@ class SurfaceImage < ActiveRecord::Base
   scope :calibrated, -> { joins(:image).where('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :uncalibrated, -> { joins(:image).where.not('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :wall, -> { where(wall: true) }
-  scope :base, -> { where(wall: true) }
   scope :overlay, -> { where(wall: [false, nil])  }
   scope :not_base, -> { where.not(wall: true) }
 #  scope :base, -> { where(position: minimum(:position)) }
 #  scope :not_base, -> { where.not(position: minimum(:position)) }
   scope :not_belongs_to_layer, -> { where(surface_layer_id: nil) }
   scope :top, -> { joins(:image).where('(surface_images.surface_layer_id is null) and (wall is not true) and (attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
+  scope :base, -> { joins(:image).where('(wall is true) and (attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
+
+
+  def local_path(style = :original)
+    return unless data.path
+    _path = data.path(style)
+    _path.sub(/\?\d+$/,"")
+  end
 
   def calibrated?
     return unless image
@@ -30,6 +45,8 @@ class SurfaceImage < ActiveRecord::Base
 #    Math.log(surface.length/image.length_in_um * image.length/surface.tilesize, 2).ceil
     Math.log(surface.length/surface.tilesize * resolution, 2).ceil
   end
+
+
 
   def corners_on_map
     return unless image
@@ -55,6 +72,13 @@ class SurfaceImage < ActiveRecord::Base
       image.corners_on_world = corners
       image.save
     end
+  end
+
+
+  def corners_on_world
+    return unless image
+    return image.corners_on_world if calibrated?
+    return surface.initial_corners_for(image)
   end
 
   def width
@@ -89,8 +113,9 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def warped_image_path
-    return unless image
-    image.local_path(:warped)
+    #return unless image
+    #image.local_path(:warped)
+    local_path
   end
 
   def tile_image_path(z,x,y, opts = {})
@@ -172,7 +197,7 @@ class SurfaceImage < ActiveRecord::Base
 
   def make_tiles(options = {})
     return if image.affine_matrix.blank?
-    make_warped_image unless File.exists?(warped_image_path)
+    make_warped_image
     raise "#{warped_image_path} does not exists." unless File.exists?(warped_image_path)
     line = make_tiles_cmd(options)
     line.run
@@ -186,21 +211,28 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def clean_warped_image(options = {})
-    if File.exists?(warped_image_path)
+    if warped_image_path && File.exists?(warped_image_path)
       line = Terrapin::CommandLine.new("rm", "-f :image_path", logger: logger)
       line.run(image_path: warped_image_path)  
     end
   end
 
-  def make_warped_image(options = {})
+  def make_warped_image_old(options = {})
     image.rotate
+  end
+
+  def make_warped_image(options = {})
+    return unless image.bounds
+    self.left, self.upper, self.right, self.bottom = image.bounds
+    self.data = File.open(image.rotate.path)
+    save
   end
 
   def make_tiles_cmd(options = {})
     maxzoom = options[:maxzoom] || original_zoom_level
     transparent = options.has_key?(:transparent) ? options[:transparent] : true
     transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
-    image_path = image.local_path(:warped)
+    image_path = warped_image_path
     bs = image.bounds
     ce = surface.center
     if bs && bs.size == 4 && ce && ce.size == 2

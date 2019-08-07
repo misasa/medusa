@@ -1,8 +1,8 @@
-<%= link_to show_title(@surface), surface_path(@surface, tab: "image") %> <%= @image.name %> <%= link_to(download_attachment_file_path(@image), :title => "download #{@image.name}") do %>
+<%= link_to show_title(@surface), surface_path(@surface) %> <%= @image.name %> <%= link_to(download_attachment_file_path(@image), :title => "download #{@image.name}") do %>
              <span class="glyphicon glyphicon-download"></span>
     <% end %>
 
-<%= @surface_image.calibrator(class: "large-map") %>
+<%= @surface_image.calibrator([@base_image], class: "large-map") %>
 
 <script>
   initMapImageCalibrator();

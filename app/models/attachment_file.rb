@@ -6,7 +6,7 @@ class AttachmentFile < ActiveRecord::Base
     styles: { thumb: "160x120>", tiny: "50x50"},
     path: ":rails_root/public/system/:class/:id_partition/:basename_with_style.:extension",
     url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension",
-    restricted_characters: /[&$+,\/:;=?<>\[\]\{\}\|\\\^~%# ]/
+    restricted_characters: /[&$+,x\/:;=?<>\[\]\{\}\|\\\^~%# ]/
 
   alias_attribute :name, :data_file_name
 
@@ -90,10 +90,12 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def check_affine_matrix
+    p "check_affine_matrix..."
+    p affine_matrix
     if affine_matrix_changed?
       b, a = affine_matrix_change
       if a.instance_of?(Array) && a.size == 9
-        RotateWorker.perform_async(id) unless a == [1,0,0,0,1,0,0,0,1]
+        #RotateWorker.perform_async(id) unless a == [1,0,0,0,1,0,0,0,1]
         if surface_images.present?
           left,upper,right,bottom = bounds
           surface_images.each do |surface_image|
@@ -126,13 +128,15 @@ class AttachmentFile < ActiveRecord::Base
       corners_on_new_image << pixs
     end
     image_1 = local_path
-    image_2 = local_path(:warped)
+    #image_2 = local_path(:warped)
+    image_2 = Tempfile.new(['warped-','.png'], "#{Rails.root.to_s}/tmp/")
     png = ChunkyPNG::Image.new(new_geometry[0], new_geometry[1])
     png.save(image_2)
     array_str = corners_on_new_image.to_s.gsub(/\s+/,"")
     
-    line = Terrapin::CommandLine.new("image_in_image", "#{image_1} #{image_2} #{array_str} -o #{image_2}", logger: logger)
+    line = Terrapin::CommandLine.new("image_in_image", "#{image_1} #{image_2.path} #{array_str} -o #{image_2.path}", logger: logger)
     line.run
+    return image_2
   end
 
  
@@ -287,6 +291,7 @@ class AttachmentFile < ActiveRecord::Base
     _out = line.output.output.chomp
     a = YAML.load(_out)
     self.affine_matrix = a.flatten
+    p self.affine_matrix
   end
 
   def corners_on_world
