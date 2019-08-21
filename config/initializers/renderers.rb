@@ -11,10 +11,11 @@ class Array
           array << obj
 #          obj.to_pml(xml)
         elsif obj.instance_of?(Table)
-          obj.selected_analyses.each do |analysis|
-            array << analysis
+#          obj.selected_analyses.each do |analysis|
+#            array << analysis
 #            analysis.to_pml(xml)
-          end
+#          end
+          array << obj
         elsif obj.instance_of?(Bib)
           obj.referrings_analyses.each do |analysis|
             array << analysis
