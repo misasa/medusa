@@ -68,7 +68,7 @@ describe "Table" do
     end
   end
 
-  describe "recursive" do
+  describe "recursive", :current => true do
     before do
       specimen
       analysis
@@ -85,7 +85,7 @@ describe "Table" do
     it { expect(table.chemistries.count).to be_eql 2}
   end
 
-  describe "publish!", :current => true do
+  describe "publish!" do
     subject { table.publish! }
     before do
       specimen
@@ -103,7 +103,7 @@ describe "Table" do
     it { expect{ subject }.to change{table.published}.from(be_falsey).to(be_truthy) }
   end
 
-  describe "selected_analyses" do
+  describe "selected_analyses", :current => true do
     before do
       specimen
       analysis
@@ -111,6 +111,9 @@ describe "Table" do
       sub_specimen
       sub_analysis
       sub_chemistry
+      #measurement_category
+      #measurement_item
+      #category_measurement_item
       table
       table_specimen
    end

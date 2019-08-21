@@ -179,18 +179,53 @@ class Table < ActiveRecord::Base
     anys
   end
 
-#  def to_pml(xml=nil)
-#    p "Table#to_pml"
-#    unless xml
-#      xml = ::Builder::XmlMarkup.new(indent: 2)
-#      xml.instruct!
-#    end
-#    selected_analyses.each do |analysis|
-#      analysis.to_pml(xml)
-#    end
-#    xml
-#  end
+  def to_pml(xml=nil)
+    aa = []
+    table_specimens.each_with_index do |ts, index|
+      aa[index] = []
+    end
+    self.each do |row|
+      row.each_with_index do |cell, index|
+        if cell.value
+          chemistry = cell.send(:chemistry)
+          aa[index] << chemistry
+        end
+      end
+    end  
 
+    unless xml
+      xml = ::Builder::XmlMarkup.new(indent: 2)
+      xml.instruct!
+    end
+
+    self.table_specimens.each_with_index do |ts, index|
+      gid = self.global_id + "-#{index}"
+      xml.acquisition do
+        xml.global_id(gid)
+        xml.name(ts.specimen.name)
+        xml.device(nil)
+        xml.technique(nil)
+        xml.operator(nil)
+        xml.sample_global_id(ts.specimen.try!(:global_id))
+        xml.sample_name(ts.specimen.try!(:name))
+        xml.description(nil)
+        unless aa[index].empty?
+          xml.chemistries do
+            aa[index].each do |chemistry|
+              xml.analysis do
+                xml.nickname(chemistry.measurement_item.try!(:nickname))
+                xml.value(chemistry.value)
+                xml.unit(chemistry.unit.try!(:text))
+                xml.uncertainty(chemistry.uncertainty)
+                xml.label(chemistry.label)
+                xml.info(chemistry.info)
+              end
+            end
+          end
+        end
+      end
+    end
+  end
 
   def each(&block)
     category_measurement_items.includes(:measurement_item).each do |category_measurement_item|
