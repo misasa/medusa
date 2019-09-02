@@ -96,6 +96,7 @@ class Sesar < ActiveResource::Base
     attributes[:latitude] = model.place.try!(:latitude)
     attributes[:longitude] = model.place.try!(:longitude)
     attributes[:elevation] = model.place.try!(:elevation)
+    attributes[:elevation_unit] = "meters" if model.place.try!(:elevation)
     result = Geocoder.search("#{attributes[:latitude]},#{attributes[:longitude]}")
     attributes[:country] = country_name(result[0])
     attributes[:province] = province_name(result[0])
