@@ -199,7 +199,7 @@ class Table < ActiveRecord::Base
     end
 
     self.table_specimens.each_with_index do |ts, index|
-      gid = "merged--" + self.global_id + "--row-#{index}"
+      gid = "temporary--row-#{index}--" + self.global_id
       xml.acquisition do
         xml.global_id(gid)
         xml.name(ts.specimen.name)
