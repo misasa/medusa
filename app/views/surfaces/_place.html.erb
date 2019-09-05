@@ -3,6 +3,7 @@
     <tr>
       <th>name</th>
       <th>coordinate</th>
+      <th>image</th>
       <th>link</th>
     </tr>
   </thead>
@@ -12,6 +13,11 @@
       <tr>
         <td><%= spot.icon %> <%= link_to(spot.name, spot_path(spot)) %></td>
         <td><%= sprintf("(%.2f, %.2f)", spot.world_x, spot.world_y) %></td>
+        <td>
+          <% if spot.attachment_file %>
+            <%= link_to(spot.attachment_file.name, attachment_file_path(spot.attachment_file)) %>
+	  <% end %>
+        </td>
         <td>
           <% if spot.target %>
             <%= spot.target.decorate.try(:icon) %> <%= link_to(spot.target.name, spot.polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root), class: specimen_ghost(spot.target)) %>

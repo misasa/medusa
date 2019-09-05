@@ -49,6 +49,13 @@ class Surface < ActiveRecord::Base
 
   def spots
     ss = []
+    ss.concat(direct_spots) unless direct_spots.blank?
+    ss.concat(indirect_spots) unless indirect_spots.blank?
+    ss
+  end
+
+  def indirect_spots
+    ss = []
     image = first_image
     surface_images.each do |osurface_image|
       oimage = osurface_image.image

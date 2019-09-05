@@ -2,11 +2,15 @@ class NestedResources::SpotsController < ApplicationController
 
   respond_to :html, :xml, :json, :svg
   before_action :find_resource, except: [:index, :create]
-  before_action :find_resources, only: [:create, :update, :destroy]
+  before_action :find_resources, only: [:index, :create, :update, :destroy]
   load_and_authorize_resource
 
   def index
-    @spots = AttachmentFile.find(params[:attachment_file_id]).spots
+    if @parent.is_a?(Surface)
+      @spots = @parent.spots
+    else
+      @spots = AttachmentFile.find(params[:attachment_file_id]).spots
+    end
     respond_with @spots
   end
 
@@ -22,7 +26,11 @@ class NestedResources::SpotsController < ApplicationController
 
   def update
     @spot = Spot.find(params[:id])
-    @parent.spots << @spot
+    if @parent.is_a?(Surface)
+      @parent.direct_spots << @spot
+    else
+      @parent.spots << @spot
+    end
     respond_with @spot, location: adjust_url_by_requesting_tab(request.referer)
   end
 

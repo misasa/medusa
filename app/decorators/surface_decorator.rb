@@ -94,45 +94,18 @@ class SurfaceDecorator < Draper::Decorator
     targets = RecordProperty.where(global_id: target_uids).index_by(&:global_id)
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data: {
                     base_url: Settings.map_url,
+                    resource_url: h.surface_path(surface),
                     url_root: "#{Rails.application.config.relative_url_root}/",
                     global_id: global_id,
                     length: length,
                     center: center,
                     matrix: matrix.inv,
-                    add_spot: options[:add_spot] || false,
+                    #add_spot: options[:add_spot] || false,
                     #base_images: surface_images.wall.map{|s_image| {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.decorate.bounds_on_map } },
                     base_images: base_images,
                     layer_groups: surface_layers.reverse.map { |layer| { name: layer.name, opacity: layer.opacity } },
-                    #layer_groups: layer_groups,
-                    #images: surface_images[1..-1].each_with_object(Hash.new { |h, k| h[k] = [] }) { |surface_image, hash|
-                    #    hash[surface_image.surface_layer.try!(:name)] << {id: surface_image.image_id, bounds: surface_image.decorate.bounds_on_map}
-#                    },
                     images: h_images,
-                    spots: images.inject([]) { |array, image|
-                      array + image.spots.map { |spot|
-                        target = targets[spot.target_uid]
-                        worlds = spot.spot_world_xy
-                        x = matrix[0, 0] * worlds[0] + matrix[0, 1] * worlds[1] + matrix[0, 2]
-                        y = matrix[1, 0] * worlds[0] + matrix[1, 1] * worlds[1] + matrix[1, 2]
-                        {
-                          id: target.try(:global_id) || spot.global_id,
-                          name: target.try(:name) || spot.name,
-                          x: x,
-                          y: y
-                        }
-                      }
-                    } + direct_spots.map { |spot|
-                      target = targets[spot.target_uid]
-                      x = matrix[0, 0] * spot.world_x + matrix[0, 1] * spot.world_y + matrix[0, 2]
-                      y = matrix[1, 0] * spot.world_x + matrix[1, 1] * spot.world_y + matrix[1, 2]
-                      {
-                        id: target.try(:global_id) || spot.global_id,
-                        name: target.try(:name) || spot.name,
-                        x: x,
-                        y: y
-                      }
-                    }
-                  })
+                 })
   end
 
   def family_tree(current_spot = nil)
