@@ -90,8 +90,6 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def check_affine_matrix
-    p "check_affine_matrix..."
-    p affine_matrix
     if affine_matrix_changed?
       b, a = affine_matrix_change
       if a.instance_of?(Array) && a.size == 9

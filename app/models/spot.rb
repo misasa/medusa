@@ -44,7 +44,8 @@ class Spot < ActiveRecord::Base
   end
 
   def generate_stroke_width
-    self.stroke_width = attachment_file.percent2pixel(0.5)
+    self.stroke_width = 1.0
+    self.stroke_width = attachment_file.percent2pixel(0.5) if attachment_file
   end
 
   def set_world_xy

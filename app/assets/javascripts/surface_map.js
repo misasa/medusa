@@ -287,7 +287,7 @@ L.control.surfaceScale = function(options) {
 
 // Customized circle for spot.
 L.circle.spot = function(map, spot, urlRoot, options) {
-  var options = L.Util.extend({}, { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 3 }, options),
+    var options = L.Util.extend({}, { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 3 }, options),
       marker = new L.circle(map.unproject([spot.x, spot.y], 0), options);
   marker.on('click', function() {
     var latlng = this.getLatLng(),
@@ -386,17 +386,18 @@ function initSurfaceMap() {
   var div = document.getElementById("surface-map");
   var radiusSelect = document.getElementById("spot-radius");
   var baseUrl = div.dataset.baseUrl;
+  var resourceUrl = div.dataset.resourceUrl;
   var urlRoot = div.dataset.urlRoot;
   var global_id = div.dataset.globalId;
   var length = parseFloat(div.dataset.length);
   var center = JSON.parse(div.dataset.center);
   //var matrix = JSON.parse(div.dataset.matrix);
-  var addSpot = JSON.parse(div.dataset.addSpot);
-  var addRadius = div.dataset.addRadius;
+  //var addSpot = JSON.parse(div.dataset.addSpot);
+  //var addRadius = div.dataset.addRadius;
   var baseImages = JSON.parse(div.dataset.baseImages);
   var layerGroups = JSON.parse(div.dataset.layerGroups);
   var images = JSON.parse(div.dataset.images);
-  var spots = JSON.parse(div.dataset.spots);
+  //var spots = JSON.parse(div.dataset.spots);
   if (("bounds" in div.dataset)){
     var _bounds = JSON.parse(div.dataset.bounds);
   }
@@ -448,17 +449,13 @@ function initSurfaceMap() {
 
   
   if (_bounds){
-      //var bounds = L.latLngBounds([map.unproject(_bounds[0], 0), map.unproject(_bounds[1],0)]);
       var bounds = worldBounds(_bounds);
-    //var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png',{bounds: bounds});
-  } else {
-      //var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png');
   }
+
   baseImages.forEach(function(baseImage) {
     var opts = {maxNativeZoom: 6}
 
     if (baseImage.bounds){
-	//opts = Object.assign(opts, {bounds: L.latLngBounds([map.unproject(baseImage.bounds[0], 0), map.unproject(baseImage.bounds[1],0)])});
 	opts = Object.assign(opts, {bounds: worldBounds(baseImage.bounds)});
     }
     if (baseImage.max_zoom){
@@ -490,63 +487,98 @@ function initSurfaceMap() {
     }
   });
 
-  map.getSpotPoint = function() {
-    if (!addingSpot) { return; }
-    var point = map.project(addingSpot.getLatLng(), 0),
-	x = matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2],
-	y = matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2];
-    return { x: x, y: y };
-  };
-
-  var spotsLayer = L.layerGroup.spots(map, spots, urlRoot);
+  var spotsLayer = L.layerGroup();
   map.addLayer(spotsLayer);
-
-  //overlayMaps['grid'] = L.layerGroup.grid(map, length);
-  //if (addRadius) {
-  //  var radiusControl = L.control.radius(spotsLayer, {position: 'bottomright'}).addTo(map);
-  //}
-
-  var addingSpot;
-  map.on('click', function(event) {
-    if (!addSpot || event.originalEvent.defaultPrevented) { return; }
-    var self = this;
-    setTimeout( function() {
-      var x = (event.containerPoint.x + self.getPixelBounds().min.x) / self.getZoomScale(self.getZoom(), 0),
-          y = (event.containerPoint.y + self.getPixelBounds().min.y) / self.getZoomScale(self.getZoom(), 0),
-          options = L.Util.extend({}, { color: 'blue', fillColor: '#30f', fillOpacity: 0.5, radius: radiusControl.getValue() }, options);
-      if (addingSpot) { addingSpot.remove(); }
-      addingSpot = new L.circle(map.unproject([x, y], 0), options);
-      addingSpot.addTo(spotsLayer);
-    }, 100);
-  });
+  loadMarkers();
 
   L.control.surfaceScale({ imperial: false, length: length }).addTo(map);
 
   L.control.layers(baseMaps, overlayMaps).addTo(map);
-  //L.control.opacityLayers(baseMaps, overlayMaps, {hideSingleBase: false}).addTo(map);
   
   if (bounds){
-      //var bounds = L.latLngBounds([map.unproject(_bounds[0], 0), map.unproject(_bounds[1],0)]);
     map.fitBounds(bounds);
   } else {
     map.setView(map.unproject([256 / 2, 256 / 2], 0), zoom);
   }
   map.addControl(new L.Control.Fullscreen());
-  //if (("zoomlabel" in div.dataset)){
-  //  L.control.zoomLabel().addTo(map);
-  //}
 
-  //var map_LabelFcn = function(ll, opts){
-  //  lng =L.NumberFormatter.round(ll.lng, opts.decimals, opts.decimalSeperator);
-  //  lat = L.NumberFormatter.round(ll.lat, opts.decimals, opts.decimalSeperator);
-  //  point = map.project(ll,0)
-  //  x = matrix[0][0] * point.x + matrix[0][1] * point.y + matrix[0][2],
-  //  y = matrix[1][0] * point.x + matrix[1][1] * point.y + matrix[1][2];
-  //  xx =L.NumberFormatter.round(x, opts.decimals, opts.decimalSeperator);
-  //  yy = L.NumberFormatter.round(y, opts.decimals, opts.decimalSeperator);
-  //  return "x:" + xx + " y:" + yy + "\n(" + lng + ", " + lat + ")";
-  //};
-  //map.addControl(new L.Control.Coordinates({position: 'bottomright', customLabelFcn: map_LabelFcn}));
+  function loadMarkers() {
+      var url = resourceUrl + '/spots.json';
+      $.get(url, { some_var: ""}, function(data){
+             spotsLayer.clearLayers();
+	      $(data).each(function(){
+		var spot = this; 
+                var pos = world2latLng([spot.world_x, spot.world_y]);
+                var options = { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 3 };
+                var marker = new L.circle(pos, options);
+                marker.addTo(spotsLayer);
+	      });
+      });
+  }
 
+  var marker;
+  var toolbarAction = L.Toolbar2.Action.extend({
+	  options: {
+	      toolbarIcon: {
+		  html: '<svg class="svg-icons"><use xlink:href="#restore"></use><symbol id="restore" viewBox="0 0 18 18"><path d="M18 7.875h-1.774c-0.486-3.133-2.968-5.615-6.101-6.101v-1.774h-2.25v1.774c-3.133 0.486-5.615 2.968-6.101 6.101h-1.774v2.25h1.774c0.486 3.133 2.968 5.615 6.101 6.101v1.774h2.25v-1.774c3.133-0.486 5.615-2.968 6.101-6.101h1.774v-2.25zM13.936 7.875h-1.754c-0.339-0.959-1.099-1.719-2.058-2.058v-1.754c1.89 0.43 3.381 1.921 3.811 3.811zM9 10.125c-0.621 0-1.125-0.504-1.125-1.125s0.504-1.125 1.125-1.125c0.621 0 1.125 0.504 1.125 1.125s-0.504 1.125-1.125 1.125zM7.875 4.064v1.754c-0.959 0.339-1.719 1.099-2.058 2.058h-1.754c0.43-1.89 1.921-3.381 3.811-3.811zM4.064 10.125h1.754c0.339 0.959 1.099 1.719 2.058 2.058v1.754c-1.89-0.43-3.381-1.921-3.811-3.811zM10.125 13.936v-1.754c0.959-0.339 1.719-1.099 2.058-2.058h1.754c-0.43 1.89-1.921 3.381-3.811 3.811z"></path></symbol></svg>',
+		  tooltip: 'Add spot'
+	      }
+	  },
+	  addHooks: function (){
+	      if(marker !== undefined){
+		  map.removeLayer(marker);
+	      }
+	      var pos = map.getCenter();
+	      var icon = L.icon({
+		iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAHVJREFUWMPt1rENgDAMRNEPi3gERmA0RmAERgmjsAEjhMY0dOBIWHCWTulOL5UN8VmACpRoUdcAU1v19SQaYYQRRhhhhMmIMV//9WGuG/xudmA6C+YApGUGgNF1b0KKjithhBFGGGGE+Rtm9XfL8CHzS8340hzaXWaR1yQVAAAAAABJRU5ErkJggg==',
+		iconSize:     [32, 32],
+		iconAnchor:   [16, 16]
+	      });
+              var world = latLng2world(pos);
+	      marker = new L.marker(pos,{icon: icon, draggable:true}).addTo(map);
+	      var popupContent = '<form role="form" id="addspot-form" class="form" enctype="multipart/form-data">' +
+	        '<div class="form-group">' +
+	        '<label class="control-label">Name:</label>' +
+	        '<input type="string" placeholder="untitled spot" id="name"/>' +
+	        '</div>' +
+	        '<div class="form-group">' +
+	        '<label class="control-label">link ID:</label>' +
+	        '<input type="string" placeholder="type here" id="target_uid"/>' +
+	        '</div>' +
+	        '<div class="form-group">' +
+	        '<div style="text-align:center;">' +
+	        '<button type="submit">Save</button></div>' +
+	        '</div>' +
+	        '</form>';
+              marker.bindPopup(popupContent, {
+			  maxWidth: "auto",
+		      }).openPopup();
+              //marker.getPopup().setContent(popupContent);
+              //marker.getPopup().update();
+              $('body').on('submit', '#addspot-form', mySubmitFunction);
+              function mySubmitFunction(e){
+		      e.preventDefault();
+		      console.log("didnt submit");
+		      var form = document.querySelector('#addspot-form');
+                      var ll = marker.getLatLng();
+                      var world = latLng2world(ll);
+                      var url = resourceUrl + '/spots.json';
+		      $.ajax(url,{
+			      type: 'POST',
+				  data: {spot:{name: form['name'].value, target_uid: form['target_uid'].value, world_x: world[0], world_y: world[1]}},
+			      beforeSend: function(e) {console.log('saving...')},
+			      complete: function(e){ 
+				  marker.remove();
+				  loadMarkers();
+			      },
+			      error: function(e) {console.log(e)}
+		      })
+	      }
+	  }
+  });
+  new L.Toolbar2.Control({
+    position: 'topleft',
+    actions: [toolbarAction]
+  }).addTo(map);
   surfaceMap = map;
 }
