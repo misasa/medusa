@@ -25,6 +25,15 @@ class SpotDecorator < Draper::Decorator
     self.class.icon
   end
 
+  def as_json(options = {})
+    super({:methods => [:name_with_id, :attachment_file_name, :target_link]}.merge(options))
+  end
+
+  def attachment_file_name
+    return unless attachment_file
+    attachment_file.name
+  end
+
   def target_link
     record_property = RecordProperty.find_by_global_id(target_uid)
     return name if record_property.blank? || record_property.datum.blank?

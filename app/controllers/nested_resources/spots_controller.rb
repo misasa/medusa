@@ -11,7 +11,7 @@ class NestedResources::SpotsController < ApplicationController
     else
       @spots = AttachmentFile.find(params[:attachment_file_id]).spots
     end
-    respond_with @spots
+    respond_with SpotDecorator.decorate_collection(@spots)
   end
 
   def create

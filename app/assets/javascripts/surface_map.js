@@ -504,14 +504,27 @@ function initSurfaceMap() {
 
   function loadMarkers() {
       var url = resourceUrl + '/spots.json';
-      $.get(url, { some_var: ""}, function(data){
-             spotsLayer.clearLayers();
+      $.get(url, {}, function(data){
+        spotsLayer.clearLayers();
 	      $(data).each(function(){
-		var spot = this; 
-                var pos = world2latLng([spot.world_x, spot.world_y]);
-                var options = { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 3 };
-                var marker = new L.circle(pos, options);
-                marker.addTo(spotsLayer);
+		      var spot = this; 
+          var pos = world2latLng([spot.world_x, spot.world_y]);
+          //var options = { draggable: true, color: 'blue', fillColor: '#f03', fillOpacity: 0.5, radius: 200 };
+          var options = { draggable: true, title: spot['name'] };
+          var marker = new L.marker(pos, options).addTo(spotsLayer);
+          var popupContent = [];
+          popupContent.push("<nobr>" + spot['name_with_id'] + "</nobr>");
+          popupContent.push("<nobr>coordinate: (" + spot['world_x'] + ", " + spot["world_y"] + ")</nobr>");
+          if (spot['attachment_file_id']){
+            var image_url = resourceUrl + '/images/' + spot['attachment_file_id'];
+            popupContent.push("<nobr>image: <a href=" + image_url + ">" + spot['attachment_file_name'] +  "</a>"+ "</nobr>");
+          }
+          if (spot['target_uid']){
+            popupContent.push("<nobr>link: " + spot['target_link'] +  "</nobr>");
+          }
+          marker.bindPopup(popupContent.join("<br/>"), {
+            maxWidth: "auto",
+          });  
 	      });
       });
   }
@@ -519,22 +532,22 @@ function initSurfaceMap() {
   var marker;
   var toolbarAction = L.Toolbar2.Action.extend({
 	  options: {
-	      toolbarIcon: {
-		  html: '<svg class="svg-icons"><use xlink:href="#restore"></use><symbol id="restore" viewBox="0 0 18 18"><path d="M18 7.875h-1.774c-0.486-3.133-2.968-5.615-6.101-6.101v-1.774h-2.25v1.774c-3.133 0.486-5.615 2.968-6.101 6.101h-1.774v2.25h1.774c0.486 3.133 2.968 5.615 6.101 6.101v1.774h2.25v-1.774c3.133-0.486 5.615-2.968 6.101-6.101h1.774v-2.25zM13.936 7.875h-1.754c-0.339-0.959-1.099-1.719-2.058-2.058v-1.754c1.89 0.43 3.381 1.921 3.811 3.811zM9 10.125c-0.621 0-1.125-0.504-1.125-1.125s0.504-1.125 1.125-1.125c0.621 0 1.125 0.504 1.125 1.125s-0.504 1.125-1.125 1.125zM7.875 4.064v1.754c-0.959 0.339-1.719 1.099-2.058 2.058h-1.754c0.43-1.89 1.921-3.381 3.811-3.811zM4.064 10.125h1.754c0.339 0.959 1.099 1.719 2.058 2.058v1.754c-1.89-0.43-3.381-1.921-3.811-3.811zM10.125 13.936v-1.754c0.959-0.339 1.719-1.099 2.058-2.058h1.754c-0.43 1.89-1.921 3.381-3.811 3.811z"></path></symbol></svg>',
-		  tooltip: 'Add spot'
-	      }
+	    toolbarIcon: {
+		    html: '<svg class="svg-icons"><use xlink:href="#restore"></use><symbol id="restore" viewBox="0 0 18 18"><path d="M18 7.875h-1.774c-0.486-3.133-2.968-5.615-6.101-6.101v-1.774h-2.25v1.774c-3.133 0.486-5.615 2.968-6.101 6.101h-1.774v2.25h1.774c0.486 3.133 2.968 5.615 6.101 6.101v1.774h2.25v-1.774c3.133-0.486 5.615-2.968 6.101-6.101h1.774v-2.25zM13.936 7.875h-1.754c-0.339-0.959-1.099-1.719-2.058-2.058v-1.754c1.89 0.43 3.381 1.921 3.811 3.811zM9 10.125c-0.621 0-1.125-0.504-1.125-1.125s0.504-1.125 1.125-1.125c0.621 0 1.125 0.504 1.125 1.125s-0.504 1.125-1.125 1.125zM7.875 4.064v1.754c-0.959 0.339-1.719 1.099-2.058 2.058h-1.754c0.43-1.89 1.921-3.381 3.811-3.811zM4.064 10.125h1.754c0.339 0.959 1.099 1.719 2.058 2.058v1.754c-1.89-0.43-3.381-1.921-3.811-3.811zM10.125 13.936v-1.754c0.959-0.339 1.719-1.099 2.058-2.058h1.754c-0.43 1.89-1.921 3.381-3.811 3.811z"></path></symbol></svg>',
+		    tooltip: 'Add spot'
+	    }
 	  },
 	  addHooks: function (){
 	      if(marker !== undefined){
-		  map.removeLayer(marker);
+		      map.removeLayer(marker);
 	      }
 	      var pos = map.getCenter();
 	      var icon = L.icon({
-		iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAHVJREFUWMPt1rENgDAMRNEPi3gERmA0RmAERgmjsAEjhMY0dOBIWHCWTulOL5UN8VmACpRoUdcAU1v19SQaYYQRRhhhhMmIMV//9WGuG/xudmA6C+YApGUGgNF1b0KKjithhBFGGGGE+Rtm9XfL8CHzS8340hzaXWaR1yQVAAAAAABJRU5ErkJggg==',
-		iconSize:     [32, 32],
-		iconAnchor:   [16, 16]
+		      iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAHVJREFUWMPt1rENgDAMRNEPi3gERmA0RmAERgmjsAEjhMY0dOBIWHCWTulOL5UN8VmACpRoUdcAU1v19SQaYYQRRhhhhMmIMV//9WGuG/xudmA6C+YApGUGgNF1b0KKjithhBFGGGGE+Rtm9XfL8CHzS8340hzaXWaR1yQVAAAAAABJRU5ErkJggg==',
+		      iconSize:     [32, 32],
+		      iconAnchor:   [16, 16]
 	      });
-              var world = latLng2world(pos);
+        var world = latLng2world(pos);
 	      marker = new L.marker(pos,{icon: icon, draggable:true}).addTo(map);
 	      var popupContent = '<form role="form" id="addspot-form" class="form" enctype="multipart/form-data">' +
 	        '<div class="form-group">' +
@@ -550,30 +563,28 @@ function initSurfaceMap() {
 	        '<button type="submit">Save</button></div>' +
 	        '</div>' +
 	        '</form>';
-              marker.bindPopup(popupContent, {
-			  maxWidth: "auto",
-		      }).openPopup();
-              //marker.getPopup().setContent(popupContent);
-              //marker.getPopup().update();
-              $('body').on('submit', '#addspot-form', mySubmitFunction);
-              function mySubmitFunction(e){
+        marker.bindPopup(popupContent, {
+			    maxWidth: "auto",
+		    }).openPopup();
+        $('body').on('submit', '#addspot-form', mySubmitFunction);
+        function mySubmitFunction(e){
 		      e.preventDefault();
 		      console.log("didnt submit");
 		      var form = document.querySelector('#addspot-form');
-                      var ll = marker.getLatLng();
-                      var world = latLng2world(ll);
-                      var url = resourceUrl + '/spots.json';
+          var ll = marker.getLatLng();
+          var world = latLng2world(ll);
+          var url = resourceUrl + '/spots.json';
 		      $.ajax(url,{
 			      type: 'POST',
-				  data: {spot:{name: form['name'].value, target_uid: form['target_uid'].value, world_x: world[0], world_y: world[1]}},
+				    data: {spot:{name: form['name'].value, target_uid: form['target_uid'].value, world_x: world[0], world_y: world[1]}},
 			      beforeSend: function(e) {console.log('saving...')},
 			      complete: function(e){ 
-				  marker.remove();
-				  loadMarkers();
+				      marker.remove();
+				      loadMarkers();
 			      },
 			      error: function(e) {console.log(e)}
 		      })
-	      }
+        }
 	  }
   });
   new L.Toolbar2.Control({
