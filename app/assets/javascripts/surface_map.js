@@ -526,15 +526,15 @@ function initSurfaceMap() {
 	  },
 	  addHooks: function (){
 	      if(marker !== undefined){
-		  map.removeLayer(marker);
+		      map.removeLayer(marker);
 	      }
 	      var pos = map.getCenter();
 	      var icon = L.icon({
-		iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAHVJREFUWMPt1rENgDAMRNEPi3gERmA0RmAERgmjsAEjhMY0dOBIWHCWTulOL5UN8VmACpRoUdcAU1v19SQaYYQRRhhhhMmIMV//9WGuG/xudmA6C+YApGUGgNF1b0KKjithhBFGGGGE+Rtm9XfL8CHzS8340hzaXWaR1yQVAAAAAABJRU5ErkJggg==',
-		iconSize:     [32, 32],
-		iconAnchor:   [16, 16]
+		      iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAHVJREFUWMPt1rENgDAMRNEPi3gERmA0RmAERgmjsAEjhMY0dOBIWHCWTulOL5UN8VmACpRoUdcAU1v19SQaYYQRRhhhhMmIMV//9WGuG/xudmA6C+YApGUGgNF1b0KKjithhBFGGGGE+Rtm9XfL8CHzS8340hzaXWaR1yQVAAAAAABJRU5ErkJggg==',
+		      iconSize:     [32, 32],
+		      iconAnchor:   [16, 16]
 	      });
-              var world = latLng2world(pos);
+        var world = latLng2world(pos);
 	      marker = new L.marker(pos,{icon: icon, draggable:true}).addTo(map);
 	      var popupContent = '<form role="form" id="addspot-form" class="form" enctype="multipart/form-data">' +
 	        '<div class="form-group">' +
@@ -550,30 +550,28 @@ function initSurfaceMap() {
 	        '<button type="submit">Save</button></div>' +
 	        '</div>' +
 	        '</form>';
-              marker.bindPopup(popupContent, {
-			  maxWidth: "auto",
-		      }).openPopup();
-              //marker.getPopup().setContent(popupContent);
-              //marker.getPopup().update();
-              $('body').on('submit', '#addspot-form', mySubmitFunction);
-              function mySubmitFunction(e){
+        marker.bindPopup(popupContent, {
+			    maxWidth: "auto",
+		    }).openPopup();
+        $('body').on('submit', '#addspot-form', mySubmitFunction);
+        function mySubmitFunction(e){
 		      e.preventDefault();
 		      console.log("didnt submit");
 		      var form = document.querySelector('#addspot-form');
-                      var ll = marker.getLatLng();
-                      var world = latLng2world(ll);
-                      var url = resourceUrl + '/spots.json';
+          var ll = marker.getLatLng();
+          var world = latLng2world(ll);
+          var url = resourceUrl + '/spots.json';
 		      $.ajax(url,{
 			      type: 'POST',
-				  data: {spot:{name: form['name'].value, target_uid: form['target_uid'].value, world_x: world[0], world_y: world[1]}},
+				    data: {spot:{name: form['name'].value, target_uid: form['target_uid'].value, world_x: world[0], world_y: world[1]}},
 			      beforeSend: function(e) {console.log('saving...')},
 			      complete: function(e){ 
-				  marker.remove();
-				  loadMarkers();
+				      marker.remove();
+				      loadMarkers();
 			      },
 			      error: function(e) {console.log(e)}
 		      })
-	      }
+        }
 	  }
   });
   new L.Toolbar2.Control({
