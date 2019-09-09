@@ -178,7 +178,7 @@ class Spot < ActiveRecord::Base
   end
 
   def to_svg
-    "<circle #{svg_attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/>"
+    "<g><title>#{title}</title><circle #{svg_attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/></g>"
   end
 
   def svg_attributes
