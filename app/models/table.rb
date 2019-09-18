@@ -49,9 +49,26 @@ class Table < ActiveRecord::Base
     end
 
     def each(&block)
-      table.table_specimens.each do |table_specimen|
-        yield Cell.new(self, chemistries_hash[table_specimen.specimen_id])
+#      table.table_specimens.each do |table_specimen|
+#        yield Cell.new(self, chemistries_hash[table_specimen.specimen_id])
+#      end
+      to_a.each do |c|
+        yield c
       end
+    end
+
+    def map(&block)
+      to_a.each do |c|
+        yield c
+      end
+    end
+
+    def to_a
+      a = []
+      table.table_specimens.each do |table_specimen|
+        a << Cell.new(self, chemistries_hash[table_specimen.specimen_id])
+      end
+      a
     end
 
     def symbol
@@ -95,7 +112,11 @@ class Table < ActiveRecord::Base
       category_measurement_item.unit || table.measurement_category.unit || category_measurement_item.measurement_item.unit || Unit.first
     end
 
-    private
+    def cells
+      @cells ||= chemistries_hash.values.find_all(&:present?).map { |chemistries| Cell.new(self, chemistries) }
+    end
+
+#    private
 
     def category_measurement_item
       @category_measurement_item
@@ -115,9 +136,6 @@ class Table < ActiveRecord::Base
       end
     end
 
-    def cells
-      @cells ||= chemistries_hash.values.find_all(&:present?).map { |chemistries| Cell.new(self, chemistries) }
-    end
 
   end
 
@@ -227,11 +245,23 @@ class Table < ActiveRecord::Base
     end
   end
 
-  def each(&block)
+  def rows
+    rs = []
     category_measurement_items.includes(:measurement_item).each do |category_measurement_item|
-      yield Row.new(self, category_measurement_item, chemistries_hash[category_measurement_item.measurement_item_id])
+      rs << Row.new(self, category_measurement_item, chemistries_hash[category_measurement_item.measurement_item_id])
+    end
+    rs
+  end
+
+  def each(&block)
+#    category_measurement_items.includes(:measurement_item).each do |category_measurement_item|
+#      yield Row.new(self, category_measurement_item, chemistries_hash[category_measurement_item.measurement_item_id])
+#    end
+    rows.each do |row|
+      yield row
     end
   end
+
 
   def method_descriptions
     methods_hash.values.each_with_object({}) { |value, hash| hash[value[:sign]] = value[:description] }

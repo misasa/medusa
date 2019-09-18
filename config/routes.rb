@@ -279,8 +279,10 @@ Medusa::Application.routes.draw do
       get :property
       put :publish
     end
+    resources :analyses, controller: "table_analyses"
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }
-    resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "table", association_name: "specimens" }
+    resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "table_specimens", defaults: { parent_resource: "table", association_name: "specimens" }
+    #resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "table", association_name: "specimens" }
   end
 
   resources :attachment_files, concerns: :bundleable , except: [:new] do
