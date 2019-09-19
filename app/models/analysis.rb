@@ -8,6 +8,8 @@ class Analysis < ActiveRecord::Base
   has_many :chemistries, inverse_of: :analysis
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
+  has_many :table_analyses, dependent: :destroy
+  has_many :tables, through: :table_analyses
   belongs_to :specimen, touch: true
   belongs_to :device
   belongs_to :technique

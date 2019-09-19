@@ -17,14 +17,28 @@
           <td>
             <%= check_box_tag("ids[]", analysis.id, false, {id: "ids_#{analysis.id}", class: "select-row"}) if can?(:update, analysis) %>
           </td>
-          <td><%= link_to_if can?(:read, analysis), list_title(analysis), analysis %></td>
+          <td>
+          <%= link_to_if can?(:read, analysis), list_title(analysis), analysis %>
+          <% unless analysis.specimen == @specimen %>
+           on <%= link_to list_title(analysis.specimen), specimen_path(analysis.specimen) %>
+          <% end %>
+          <% unless analysis.tables.blank? %>
+          (
+          <% analysis.tables.each do |table| %>
+            <%= link_to(table.caption, table_path(table)) %>
+          <% end %>
+          )
+          <% end %>
+          </td>
           <td><%= analysis.device.try!(:name) %></td>
           <td></td>
           <td><%= analysis.chemistries.size %></td>
           <td><%= analysis.try!(:global_id) %></td> 
           <td>
+            <% if analysis.specimen == @specimen %>
             <%= link_to specimen_analysis_path(@specimen, analysis) + tab_param(__FILE__), method: :delete, title: "unlink analysis", data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
+            <% end %>
             <% end %>
           </td>
         </tr>
