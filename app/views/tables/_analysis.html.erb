@@ -36,9 +36,39 @@
 	  <div class="col-lg-1">
       <%= table_analysis.priority %>
     </div>
-    
-
   </li>
+      <% end %>
+    </ul>
+  <% end %>
+
+  <% (@table.table_analyses.pluck(:specimen_id).uniq - @table.specimens_hash.keys).each do |specimen_id| %>
+  <b><%= link_to Specimen.find(specimen_id).name, specimen_path(specimen_id) %> Please delete following links!</b> 
+    <ul class="table-analyses">
+      <% @table.table_analyses.where(specimen_id: specimen_id).includes(analysis: [:technique, :device]).each_with_index do |table_analysis, idx| %>
+        <% next unless table_analysis.analysis %>
+        <li class="row list-unstyled">
+          <div class="col-lg-3">
+            <%= link_to table_analysis_path(@table, table_analysis) + tab_param(__FILE__), method: :delete ,title: "unlink analysis",data: {confirm: t("confirm.unlink")} do %>
+              <span class="glyphicon glyphicon-remove"></span>
+            <% end %>
+            <%= f.fields_for :table_analyses, table_analysis do |g| %>
+            <%= link_to list_title(g.object.analysis), analysis_path(table_analysis.analysis) %> on <%= link_to list_title(g.object.analysis.specimen), specimen_path(table_analysis.analysis.specimen) %>
+              <%= g.hidden_field :priority, class: "priority" %>
+            <% end %>
+          </div>
+          <div class="col-lg-2">
+            <%= table_analysis.analysis.chemistries.size %>
+          </div>
+          <div class="col-lg-3">
+            <%= table_analysis.analysis.technique.try!(:name) %>
+          </div>
+          <div class="col-lg-3">
+            <%= table_analysis.analysis.device.try!(:name) %>
+          </div>
+          <div class="col-lg-1">
+            <%= table_analysis.priority %>
+          </div>
+        </li>
       <% end %>
     </ul>
   <% end %>
