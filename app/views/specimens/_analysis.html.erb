@@ -5,7 +5,6 @@
       <th>name</th>
       <th>device</th>
       <th></th>
-      <th>size</th>
       <th>global-id</th>
       <th></th>
     </tr>
@@ -18,21 +17,14 @@
             <%= check_box_tag("ids[]", analysis.id, false, {id: "ids_#{analysis.id}", class: "select-row"}) if can?(:update, analysis) %>
           </td>
           <td>
-          <%= link_to_if can?(:read, analysis), list_title(analysis), analysis %>
+          <%= link_to_if(can?(:read, analysis), list_title(analysis), analysis_path(analysis)) %>
+          <%= link_to_if(can?(:read, analysis), content_tag(:span, analysis.chemistries.size, class:"badge"), analysis_path(analysis, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal") %>
           <% unless analysis.specimen == @specimen %>
            on <%= link_to list_title(analysis.specimen), specimen_path(analysis.specimen) %>
-          <% end %>
-          <% unless analysis.tables.blank? %>
-          (
-          <% analysis.tables.each do |table| %>
-            <%= link_to(table.caption, table_path(table)) %>
-          <% end %>
-          )
           <% end %>
           </td>
           <td><%= analysis.device.try!(:name) %></td>
           <td></td>
-          <td><%= analysis.chemistries.size %></td>
           <td><%= analysis.try!(:global_id) %></td> 
           <td>
             <% if analysis.specimen == @specimen %>
@@ -57,7 +49,6 @@
             <span class="glyphicon glyphicon-save"></span>
           <% end %>
         </th>
-        <th></th>
       <% end %>
       <%= form_tag link_by_global_id_specimen_analyses_path(@specimen),method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
