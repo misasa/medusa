@@ -22,57 +22,6 @@
   <%= @box.decorate.related_pictures %>
 </div>
 
-<%= search_form_for @contents_search, url: box_path(@box), id: "contents_search" do |f| %>
-
-  <div class="row">
-    <div class="col-lg-2">
-      <%= text_field_tag 'dst_date', format_date(@dst_date), class: "form-control input-sm datepicker", maxlength: 10 %>
-    </div>
-
-    <div class="col-lg-4">
-      <%= select_tag 'button_action', options_for_select(@button_action_selection_items, params["button_action"]), class: "form-control input-sm" %>
-    </div>
-
-  </div>
-  <div>
-        <%= paginate @contents %>
-  </div>
-
-  <table class="table table-condensed table-striped">
-    <thead>
-
-      <tr>
-  <th>
-    <%= f.button class: "btn btn-default" do %><span class="glyphicon glyphicon-refresh"></span><% end %>
-  </th>
-  <th><%= sort_link @contents_search, :path, "path" %></th>
-  <th>type</th>
-  <th><%= sort_link @contents_search, :brought_in_at, "moved-in-at" %></th>
-  <th><%= sort_link @contents_search, :checked_at, "checked-at" %></th>
-  <th><%= sort_link @contents_search, :brought_out_at, "moved-out-at" %></th>
-      </tr>
-      <tr>
-        <th><%= text_field_tag :per_page, (params[:per_page] || Box.default_per_page), class: "form-control input-sm", size: 1 %></th>
-        <th></th>
-        <th>
-          <%= f.select :datum_type_eq, [[@alias_specimen, "Specimen"], ["box", "Box"]], { include_blank: true }, class: "form-control input-sm" %>
-        </th>
-      </tr>
-
-    </thead>
-    <tbody>
-      <% @contents.each do |path| %>
-        <tr>
-          <td><%= path.try(:sign) %></td>
-          <td><%= path_entry_under(path, @box) %>
-          <td><%= path.datum.is_a?(Specimen) ? @alias_specimen : path.datum_type.downcase %></td>
-          <td><%= path.brought_in_at.strftime("%Y-%m-%d %H:%M") %></td> 
-          <td><%= path.checked_at && path.checked_at.strftime("%Y-%m-%d %H:%M") %></td> 
-          <td><%= path.brought_out_at && path.brought_out_at.strftime("%Y-%m-%d %H:%M") %></td> 
-        </tr>
-      <% end %>
-    </tbody>
-  </table>
-<% end %>
+<%= render :partial => "contents" %>
 <%= mantra "Representative properties of <#{@box.name}>.", :title => "Representative properties of <#{@box.name}>" %> 
 

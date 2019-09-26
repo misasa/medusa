@@ -15,7 +15,7 @@ class Surface < ActiveRecord::Base
   has_many :images, through: :surface_images
   has_many :surface_layers, :dependent => :destroy, :order => ("priority DESC")
 #  has_many :spots, through: :images
-  has_many :spots, class_name: "Spot", foreign_key: :surface_id
+#  has_many :spots, class_name: "Spot", foreign_key: :surface_id
 
   accepts_nested_attributes_for :surface_images
 
@@ -47,6 +47,9 @@ class Surface < ActiveRecord::Base
     end
   end
 
+  def spots
+    Spot.where("surface_id = ? or attachment_file_id IN (?)", self.id, self.image_ids)
+  end
 #  def spots
 #    ss = []
 #    ss.concat(direct_spots) unless direct_spots.blank?
