@@ -18,7 +18,11 @@ class SpotDecorator < Draper::Decorator
   end
 
   def name_with_id
-    icon + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
+#    icon + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
+	  contents = []
+    contents << icon
+    contents << h.link_to("#{name}", self)
+    h.raw( contents.compact.join(' ') )
   end
 
   def icon
@@ -41,7 +45,26 @@ class SpotDecorator < Draper::Decorator
 	  contents = []
 	  if datum
     	contents << datum.try(:icon)
-    	contents << h.link_to( datum.name, datum)
+      contents << h.link_to( datum.name, datum)
+      if datum.is_a? Analysis
+        analysis = datum
+        contents << analysis.badge_link
+        #contents << h.link_to(h.content_tag(:span, analysis.chemistries.size, class:"badge"), analysis_path(analysis, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal")
+      elsif datum.respond_to?(:full_analyses)
+        datum.full_analyses.each do |analysis|
+          analysis  = analysis.decorate
+          contents << analysis.try(:icon)
+          contents << h.link_to( analysis.name, analysis)    
+          contents << analysis.badge_link
+        end
+      elsif datum.respond_to?(:analyses)
+        datum.analyses.each do |analysis|
+          analysis = analysis.decorate
+          contents << analysis.try(:icon)
+          contents << h.link_to( analysis.name, analysis)    
+          contents << analysis.badge_link
+        end
+      end
 	  else
 		  contents << h.link_to(record_property.datum.name, record_property.datum)
 	  end
