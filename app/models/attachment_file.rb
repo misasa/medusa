@@ -127,12 +127,14 @@ class AttachmentFile < ActiveRecord::Base
     end
     image_1 = local_path
     #image_2 = local_path(:warped)
-    image_2 = Tempfile.new(['warped-','.png'], "#{Rails.root.to_s}/tmp/")
+    temp_image = Tempfile.new(['warped-','.png'], "#{Rails.root.to_s}/tmp/")
+    image_2 = temp_image.path
+    temp_image.close!
     png = ChunkyPNG::Image.new(new_geometry[0], new_geometry[1])
     png.save(image_2)
     array_str = corners_on_new_image.to_s.gsub(/\s+/,"")
     
-    line = Terrapin::CommandLine.new("image_in_image", "#{image_1} #{image_2.path} #{array_str} -o #{image_2.path}", logger: logger)
+    line = Terrapin::CommandLine.new("image_in_image", "#{image_1} #{image_2} #{array_str} -o #{image_2}", logger: logger)
     line.run
     return image_2
   end

@@ -14,8 +14,8 @@ class Surface < ActiveRecord::Base
   has_many :wall_surface_images, -> { wall }, class_name: 'SurfaceImage'
   has_many :images, through: :surface_images
   has_many :surface_layers, :dependent => :destroy, :order => ("priority DESC")
-  has_many :spots, through: :images
-  has_many :direct_spots, class_name: "Spot", foreign_key: :surface_id
+#  has_many :spots, through: :images
+  has_many :spots, class_name: "Spot", foreign_key: :surface_id
 
   accepts_nested_attributes_for :surface_images
 
@@ -47,14 +47,14 @@ class Surface < ActiveRecord::Base
     end
   end
 
-  def spots
-    ss = []
-    ss.concat(direct_spots) unless direct_spots.blank?
-    ss.concat(indirect_spots) unless indirect_spots.blank?
-    ss
-  end
+#  def spots
+#    ss = []
+#    ss.concat(direct_spots) unless direct_spots.blank?
+#    ss.concat(indirect_spots) unless indirect_spots.blank?
+#    ss
+#  end
 
-  def indirect_spots
+  def indirect_spots_old
     ss = []
     image = first_image
     surface_images.each do |osurface_image|
