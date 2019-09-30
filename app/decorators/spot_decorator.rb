@@ -39,36 +39,26 @@ class SpotDecorator < Draper::Decorator
   end
 
   def target_link
-    record_property = RecordProperty.find_by_global_id(target_uid)
-    return name if record_property.blank? || record_property.datum.blank?
-    datum = record_property.datum.try(:decorate)
-	  contents = []
-	  if datum
-    	contents << datum.try(:icon)
-      contents << h.link_to( datum.name, datum)
-      if datum.is_a? Analysis
-        analysis = datum
+#    record_property = RecordProperty.find_by_global_id(target_uid)
+    return nil if target_property.blank?
+    contents = []
+    if target_property.analysis
+      analysis = target_property.analysis.decorate
+    	contents << analysis.try(:icon)
+      contents << h.link_to( analysis.name, analysis)
+      contents << analysis.badge_link
+    elsif target_property.specimen
+      specimen = target_property.specimen.decorate
+    	contents << specimen.try(:icon)
+      contents << h.link_to( specimen.name, specimen)
+      specimen.analyses.each do |analysis|
+        analysis  = analysis.decorate
+        contents << analysis.try(:icon)
+        contents << h.link_to( analysis.name, analysis)    
         contents << analysis.badge_link
-        #contents << h.link_to(h.content_tag(:span, analysis.chemistries.size, class:"badge"), analysis_path(analysis, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal")
-      elsif datum.respond_to?(:full_analyses)
-        datum.full_analyses.each do |analysis|
-          analysis  = analysis.decorate
-          contents << analysis.try(:icon)
-          contents << h.link_to( analysis.name, analysis)    
-          contents << analysis.badge_link
-        end
-      elsif datum.respond_to?(:analyses)
-        datum.analyses.each do |analysis|
-          analysis = analysis.decorate
-          contents << analysis.try(:icon)
-          contents << h.link_to( analysis.name, analysis)    
-          contents << analysis.badge_link
-        end
       end
-	  else
-		  contents << h.link_to(record_property.datum.name, record_property.datum)
-	  end
-    h.raw( contents.compact.join(' ') )
+    end
+    return h.raw( contents.compact.join(' ') )
   end
 
   def cross_tag(length: 100)

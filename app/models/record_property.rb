@@ -2,6 +2,16 @@ class RecordProperty < ActiveRecord::Base
   belongs_to :user
   belongs_to :group
   belongs_to :datum, polymorphic: true
+  has_one :self_ref, :class_name => self, :foreign_key => :id
+  has_one :spot, :through => :self_ref, :source => :datum, source_type: 'Spot'
+  has_one :place, :through => :self_ref, :source => :datum, source_type: 'Place'
+  has_one :analysis, :through => :self_ref, :source => :datum, source_type: 'Analysis'
+  has_one :specimen, :through => :self_ref, :source => :datum, source_type: 'Specimen'
+  has_one :attachment_file, :through => :self_ref, :source => :datum, source_type: 'AttachmentFile'
+  has_one :bib, :through => :self_ref, :source => :datum, source_type: 'Bib'
+  has_one :box, :through => :self_ref, :source => :datum, source_type: 'Box'
+  has_one :surface, :through => :self_ref, :source => :datum, source_type: 'Surface'
+
   has_one :global_qr
   delegate :ghost?, to: :datum, allow_nil: true
 
@@ -29,7 +39,7 @@ class RecordProperty < ActiveRecord::Base
     where_clauses = where_clauses.or(guest_readables_where_clauses)
     includes(:user, :group).where(where_clauses).references(:user)
   }
-
+  
   def datum_attributes
     return unless datum
 

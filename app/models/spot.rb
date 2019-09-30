@@ -3,6 +3,7 @@ class Spot < ActiveRecord::Base
 
   belongs_to :attachment_file, inverse_of: :spots
   belongs_to :surface
+  belongs_to :target_property, class_name: 'RecordProperty', foreign_key: "target_uid", primary_key: "global_id"
 
   with_options if: -> (spot) { spot.attachment_file_id } do |opt|
     opt.validates :attachment_file, existence: true

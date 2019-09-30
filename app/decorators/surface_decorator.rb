@@ -65,17 +65,6 @@ class SurfaceDecorator < Draper::Decorator
     tilesize = self.tilesize
     s_images = surface_images.calibrated.reverse
     a_zooms = s_images.map{|s_image| Math.log(surface_length/tilesize * s_image.resolution, 2).ceil if s_image.resolution }
-    a_bounds = s_images.map{|s_image| l, u, r, b = s_image.bounds; [[l,u],[r,b]] }
-    lus = a_bounds.map{|a| a[0]}
-    rbs = a_bounds.map{|a| a[1]}
-    if lus.size >0 && rbs.size > 0
-      a_bounds_on_map = coords_on_map(lus).zip(coords_on_map(rbs))
-      left = a_bounds_on_map.map{|v| v[0][0]}.min
-      upper = a_bounds_on_map.map{|v| v[0][1]}.min
-      right = a_bounds_on_map.map{|v| v[1][0]}.max
-      bottom = a_bounds_on_map.map{|v| v[1][1]}.max
-      m_bounds = [[left, upper],[right,bottom]]
-    end
     layer_groups = []
     base_images = []
     h_images = Hash.new
@@ -88,10 +77,6 @@ class SurfaceDecorator < Draper::Decorator
         h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: s_image.image.bounds, max_zoom: a_zooms[index]}
       end
     end
-    records = surface_images.includes(:surface_layer, image: :spots)
-    images = records.map(&:image)
-    target_uids = images.inject([]) { |array, image| array + image.spots.map(&:target_uid) }.uniq
-    targets = RecordProperty.where(global_id: target_uids).index_by(&:global_id)
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data: {
                     base_url: Settings.map_url,
                     resource_url: h.surface_path(surface),
@@ -100,8 +85,6 @@ class SurfaceDecorator < Draper::Decorator
                     length: length,
                     center: center,
                     matrix: matrix.inv,
-                    #add_spot: options[:add_spot] || false,
-                    #base_images: surface_images.wall.map{|s_image| {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.decorate.bounds_on_map } },
                     base_images: base_images,
                     layer_groups: surface_layers.reverse.map { |layer| { name: layer.name, opacity: layer.opacity } },
                     images: h_images,
