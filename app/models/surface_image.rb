@@ -224,7 +224,7 @@ class SurfaceImage < ActiveRecord::Base
   def make_warped_image(options = {})
     return unless image.bounds
     self.left, self.upper, self.right, self.bottom = image.bounds
-    self.data = File.open(image.rotate.path)
+    self.data = File.open(image.rotate)
     save
   end
 
