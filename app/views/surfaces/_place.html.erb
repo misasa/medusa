@@ -19,9 +19,7 @@
 	  <% end %>
         </td>
         <td>
-          <% if spot.target %>
-            <%= spot.target.decorate.try(:icon) %> <%= link_to(spot.target.name, spot.polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root), class: specimen_ghost(spot.target)) %>
-          <% end %>
+          <%= spot.target_link %>
         </td>
       </Tr>
     <% end %>
