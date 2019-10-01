@@ -5,7 +5,7 @@ function initMapImageCalibrator() {
   var global_id = div.dataset.globalId;
   var length = parseFloat(div.dataset.length);
   var center = JSON.parse(div.dataset.center);
-  var baseImage = JSON.parse(div.dataset.baseImage);
+  var baseImages = JSON.parse(div.dataset.baseImages);
   var layerGroups = JSON.parse(div.dataset.layerGroups);
   var images = JSON.parse(div.dataset.images);
   //var spots = JSON.parse(div.dataset.spots);
@@ -18,8 +18,7 @@ function initMapImageCalibrator() {
   var zoom = 1;
   var g_opacity = 0.5;
 
-  var map = L.map('surface-map').setView([0,0],0);
-
+  var map = L.map('surface-map', { loadingControl: true }).setView([0,0],0);
   var latLng2world = function(latLng){
     point = map.project(latLng,0)
     ratio = 2*20037508.34/length
@@ -49,12 +48,13 @@ function initMapImageCalibrator() {
     return str;
   };
 
-  var b_bounds = L.latLngBounds([
-    world2latLng([baseImage.bounds[0], baseImage.bounds[1]]),
-    world2latLng([baseImage.bounds[2], baseImage.bounds[3]])
-  ]);
-
-  L.imageOverlay(baseImage.path, b_bounds, {opacity: 0.5, attribute: baseImage.path}).addTo(map);
+  baseImages.forEach(function(baseImage){
+    var b_bounds = L.latLngBounds([
+      world2latLng([baseImage.bounds[0], baseImage.bounds[1]]),
+      world2latLng([baseImage.bounds[2], baseImage.bounds[3]])
+    ]);
+    L.imageOverlay(baseImage.path, b_bounds, {opacity: 0.5, attribute: baseImage.path}).addTo(map);
+  });
 
   map.addControl(new L.Control.Coordinates({position: 'topright', customLabelFcn:map_LabelFcn}));
 
@@ -315,9 +315,9 @@ function initMapImageCalibrator() {
 		      corners_on_world[2][0] + ',' + corners_on_world[2][1],
 		  }
 	},
-	beforeSend: function(e){ console.log('saving...')},
-        complete: function(e){ 'ok' },
-	error: function(e) {console.log(e)}
+	beforeSend: function(e){ map.spin(true, {color: '#ffffff'}); console.log('saving...') },
+  complete: function(e){ console.log('ok'); map.spin(false); },
+	error: function(e) { console.log(e); map.spin(false); }
       })
   }; 
   var imgs = [];
@@ -345,6 +345,5 @@ function initMapImageCalibrator() {
   imgs.forEach(function(img){
     imgGroup.addLayer(img);
   });
-
   surfaceMap = map;
 }

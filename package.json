@@ -11,6 +11,7 @@
     "leaflet-distortableimage": "yyachi/Leaflet.DistortableImage#develop",
     "leaflet-fullscreen": "Leaflet/Leaflet.fullscreen",
     "leaflet-toolbar": "Leaflet/Leaflet.Toolbar",
+    "Leaflet.Spin": "makinacorpus/Leaflet.Spin",
     "leaflet.coordinates": "https://github.com/yyachi/Leaflet.Coordinates#develop"
   }
 }
