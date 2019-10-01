@@ -46,15 +46,15 @@ class SurfaceLayerDecorator < Draper::Decorator
     layer_groups = []
     base_images = []
     b_images.each_with_index do |b_image, index|
-      base_images << {id: b_image.image.try!(:id), name: b_image.image.try!(:name), bounds: b_bounds_on_map[index], max_zoom: b_zooms[index]}
+      base_images << {id: b_image.image.try!(:id), name: b_image.image.try!(:name), bounds: b_image.image.bounds, path: b_image.data.url, width: b_image.image.width, height: b_image.image.height}
     end
     h_images = Hash.new
     s_images.each_with_index do |s_image, index|
       if s_image.wall
-        base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: a_bounds_on_map[index], corners: a_corners_on_map[index], max_zoom: a_zooms[index]}
+        base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.image.bounds, path: s_image.data.url, width: s_image.image.width, height: s_image.image.height}
       else
         layer_groups << {name: s_image.image.try!(:name), opacity: 100 }
-        h_images[s_image.image.try!(:name)] = [{id: s_image.image.try!(:id), bounds: a_bounds_on_map[index], corners: a_corners_on_map[index], max_zoom: a_zooms[index], path: s_image.image.path}]
+        h_images[s_image.image.try!(:name)] = [{id: s_image.image.try!(:id), corners: s_image.image.corners_on_world, path: s_image.image.path, resource_url: h.surface_image_path(surface, s_image.image)}]
       end
     end
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data:{
@@ -62,14 +62,10 @@ class SurfaceLayerDecorator < Draper::Decorator
                     url_root: "#{Rails.application.config.relative_url_root}/",
                     global_id: surface.global_id,
                     length: surface.length,
-                    matrix: matrix.inv,
-                    add_spot: true,
-                    add_radius: true,
+                    center: surface.center,
                     base_images: base_images,
                     layer_groups: layer_groups,
                     images: h_images,
-                    spots: [],
-                    bounds: m_bounds
     })    
   end
 

@@ -374,6 +374,8 @@ GEM
     simplecov-rcov (0.2.3)
       simplecov (>= 0.4.1)
     slop (3.4.7)
+    spinjs-rails (1.4)
+      rails (>= 3.1)
     spring (1.0.0)
     sprockets (2.12.5)
       hike (~> 1.2)
@@ -502,6 +504,7 @@ DEPENDENCIES
   sidekiq-status
   simplecov
   simplecov-rcov
+  spinjs-rails
   spring
   stackprof
   stackprof-webnav

@@ -2,6 +2,12 @@
 # yarn lockfile v1
 
 
+Leaflet.Spin@makinacorpus/Leaflet.Spin:
+  version "1.1.0"
+  resolved "https://codeload.github.com/makinacorpus/Leaflet.Spin/tar.gz/321db91ddcc2e78e561bd04446f4e458180f8d3d"
+  dependencies:
+    spin.js "^2.3.1"
+
 "Leaflet.ZoomLabel@https://github.com/yyachi/Leaflet.ZoomLabel":
   version "0.0.0"
   resolved "https://github.com/yyachi/Leaflet.ZoomLabel#b6dae220dc021fd366c0652f9dffd1141f8eb6ad"
@@ -852,6 +858,11 @@ source-map@^0.5.6:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
+
+spin.js@^2.3.1:
+  version "2.3.2"
+  resolved "https://registry.yarnpkg.com/spin.js/-/spin.js-2.3.2.tgz#6caa56d520673450fd5cfbc6971e6d0772c37a1a"
+  integrity sha1-bKpW1SBnNFD9XPvGlx5tB3LDeho=
 
 split-string@^3.0.1, split-string@^3.0.2:
   version "3.1.0"

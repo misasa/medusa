@@ -39,7 +39,7 @@ class SurfaceImageDecorator < Draper::Decorator
                     global_id: surface.global_id,
                     length: surface.length,
                     center: surface.center,
-                    base_image: {path: b_images[0].data.url, width: b_images[0].image.width, height: b_images[0].image.height, id: b_images[0].image.try!(:id), bounds: b_images[0].bounds},
+                    base_images: [{path: b_images[0].data.url, width: b_images[0].image.width, height: b_images[0].image.height, id: b_images[0].image.try!(:id), bounds: b_images[0].bounds}],
                     layer_groups: [{name: image.try!(:name), opacity: 100 }],
                     images: {image.try!(:name) => [{id: image.try!(:id), corners: self.corners_on_world, path: image.path, resource_url: h.surface_image_path(surface, image)}]},
     })
