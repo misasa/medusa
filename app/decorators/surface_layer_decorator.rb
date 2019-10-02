@@ -129,32 +129,32 @@ class SurfaceLayerDecorator < Draper::Decorator
       )
       h.concat h.content_tag(:span, "opacity: #{self.opacity}%", class: "label label-primary pull-left")
       h.concat(
-        h.link_to(h.surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :delete, title: "delete layer #{self.name}", data: {confirm: "Are you sure you want to delete layer #{self.name}"}) do
+        h.link_to(h.surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :delete, title: "delete a layer", data: {confirm: "Are you sure you want to delete a layer"}) do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-remove")
         end
       )
       h.concat(
-        h.link_to(h.move_to_top_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "move to bottom") do
+        h.link_to(h.move_to_top_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "move a layer down") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-down")
         end
       )
       h.concat(
-               h.link_to(h.edit_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "edit name or opacity layer") do
+               h.link_to(h.edit_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "edit name and opacity of a layer") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-pencil")
         end
       )
       h.concat(
-               h.link_to(h.tiles_surface_layer_path(self.surface, self), method: :post, class: "btn btn-default btn-sm pull-right", title: "force create tiles") do
+               h.link_to(h.tiles_surface_layer_path(self.surface, self), method: :post, class: "btn btn-default btn-sm pull-right", title: "reload images in a layer") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-refresh")
         end
       )
       h.concat(
-               h.link_to(h.calibrate_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "calibrate images on map (tentative)") do
+               h.link_to(h.calibrate_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "align images in a layer") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-adjust")
         end
       )
       h.concat(
-               h.link_to(h.map_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "show images on map") do
+               h.link_to(h.map_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "show images in a layer") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
         end
       )

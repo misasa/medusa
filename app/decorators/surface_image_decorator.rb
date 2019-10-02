@@ -32,14 +32,21 @@ class SurfaceImageDecorator < Draper::Decorator
   def calibrator(b_images, options)
     surface_length = surface.length
     tilesize = surface.tilesize
-    return unless image   
+    return unless image
+    base_images = []
+    b_images = surface.wall_surface_images if b_images.empty?
+    b_images.each do |b_image|
+      base_images << {path: b_image.data.url, width: b_image.image.width, height: b_image.image.height, id: b_image.image.try!(:id), bounds: b_image.bounds}
+    end
+
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data:{
                     base_url: Settings.map_url,
                     url_root: "#{Rails.application.config.relative_url_root}/",
                     global_id: surface.global_id,
                     length: surface.length,
                     center: surface.center,
-                    base_images: [{path: b_images[0].data.url, width: b_images[0].image.width, height: b_images[0].image.height, id: b_images[0].image.try!(:id), bounds: b_images[0].bounds}],
+                    #base_images: [{path: b_images[0].data.url, width: b_images[0].image.width, height: b_images[0].image.height, id: b_images[0].image.try!(:id), bounds: b_images[0].bounds}],
+                    base_images: base_images,
                     layer_groups: [{name: image.try!(:name), opacity: 100 }],
                     images: {image.try!(:name) => [{id: image.try!(:id), corners: self.corners_on_world, path: image.path, resource_url: h.surface_image_path(surface, image)}]},
     })
@@ -148,17 +155,18 @@ class SurfaceImageDecorator < Draper::Decorator
       h.concat(
         h.content_tag(:ul, class: "dropdown-menu", 'aria-labelledby' => "dropdownMenu1") do
           h.concat h.content_tag(:li, attachment_file.name, class: "dropdown-header")
-          h.concat h.content_tag(:li, h.link_to("show image", h.attachment_file_path(attachment_file), class: "dropdown-item"))
-                                 h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_affine_matrix_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
-                                 h.concat h.content_tag(:li, h.link_to("type in coordinates of 4 corners", h.edit_corners_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
-          h.concat h.content_tag(:li, h.link_to("calibrate on canvas", h.calibrate_svg_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
-          surface.base_surface_images.each do |base_image|
-                   h.concat h.content_tag(:li, h.link_to("calibrate on #{base_image.image.name}", h.calibrate_surface_image_path(self.surface, attachment_file, base_id: base_image.image.id), class: "dropdown-item"))
-          end
+          #h.concat h.content_tag(:li, h.link_to("show image", h.attachment_file_path(attachment_file), class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_affine_matrix_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
+          h.concat h.content_tag(:li, h.link_to("type in coordinates of 4 corners", h.edit_corners_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
+          h.concat h.content_tag(:li, h.link_to("align and export", h.calibrate_svg_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("align on map", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
+#          surface.base_surface_images.each do |base_image|
+#                   h.concat h.content_tag(:li, h.link_to("calibrate on #{base_image.image.name}", h.calibrate_surface_image_path(self.surface, attachment_file, base_id: base_image.image.id), class: "dropdown-item"))
+#          end
           if attachment_file.try!(:affine_matrix).present?
             h.concat h.content_tag(:li, h.link_to("show on map", h.map_surface_image_path(surface, attachment_file)))
-            h.concat h.content_tag(:li, h.link_to("show tiles", h.zooms_surface_image_path(surface, attachment_file)))
-            h.concat h.content_tag(:li, h.link_to("force create tiles", h.tiles_surface_image_path(surface, attachment_file), method: :post))
+            h.concat h.content_tag(:li, h.link_to("show tile images", h.zooms_surface_image_path(surface, attachment_file)))
+            h.concat h.content_tag(:li, h.link_to("reload tile images", h.tiles_surface_image_path(surface, attachment_file), method: :post))
           end
           if self.wall
             h.concat h.content_tag(:li, h.link_to("unchoose as base", h.unchoose_as_base_surface_image_path(surface, attachment_file), method: :post))
@@ -186,12 +194,12 @@ class SurfaceImageDecorator < Draper::Decorator
       h.content_tag(:li, class: "surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do
         h.concat(
           h.content_tag(:div, class:"thumbnail") do
-            h.concat h.image_tag(self.image.path(:tiny))
+            h.concat h.link_to(h.image_tag(self.image.path(:tiny)), h.attachment_file_path(self.image))
             #h.concat h.content_tag(:small, self.image.name)
             h.concat drop_down_menu
-            if self.calibrated?
-              h.concat h.content_tag(:span, "calibrated", class:"label label-success")
-            else
+            unless self.calibrated?
+#              h.concat h.content_tag(:span, "calibrated", class:"label label-success")
+#            else
               h.concat h.content_tag(:span, "not calibrated", class:"label label-default")
             end
             #h.concat h.content_tag(:small, "(#{position})" )
