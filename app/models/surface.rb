@@ -16,7 +16,7 @@ class Surface < ActiveRecord::Base
   has_many :surface_layers, :dependent => :destroy, :order => ("priority DESC")
 #  has_many :spots, through: :images
 #  has_many :spots, class_name: "Spot", foreign_key: :surface_id
-
+  has_many :direct_spots, class_name: "Spot", foreign_key: :surface_id
   accepts_nested_attributes_for :surface_images
 
   #after_save :make_map

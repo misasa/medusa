@@ -57,6 +57,10 @@ class SpotDecorator < Draper::Decorator
         contents << h.link_to( analysis.name, analysis)    
         contents << analysis.badge_link
       end
+    else
+      datum = target_property.datum.decorate
+    	contents << datum.try(:icon)
+      contents << h.link_to( datum.name, datum)
     end
     return h.raw( contents.compact.join(' ') )
   end
