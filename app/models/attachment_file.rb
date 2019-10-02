@@ -291,7 +291,6 @@ class AttachmentFile < ActiveRecord::Base
     _out = line.output.output.chomp
     a = YAML.load(_out)
     self.affine_matrix = a.flatten
-    p self.affine_matrix
   end
 
   def corners_on_world
