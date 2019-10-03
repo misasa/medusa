@@ -177,7 +177,11 @@ class SurfaceDecorator < Draper::Decorator
 
   def base_image_url
     return if surface_images.blank?
-    si = surface_images.first
+    if wall_surface_images.blank?
+      si = surface_images.last
+    else
+      si = wall_surface_images.first
+    end
     return unless si.image
     h.raw(h.url_for_tile(si) + "#{si.image.id}/0/0_0.png")
   end

@@ -3,22 +3,20 @@
   <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
   <th></th>
   <th><%= f.text_field :name,class: "form-control input-sm", class: "form-control input-sm", size: 15 %></th>
-  <th></th>
-  <th></th>
   <%= f.fields_for :record_property_attributes do |r| %>
   <%= th_if_expand @current_user.username %>
-  <th>
+  <%= th_if_expand do %>
     <%= r.select :group_id ,Group.pluck(:name, :id), { include_blank: true },class: "form-control input-sm" %>
     <%= r.hidden_field :user_id ,value: @current_user.id %>
-  </th>
   <% end %>
+  <% end %>
+  <%= th_if_expand nil %>
+  <%= th_if_expand nil %>
+  <%= th_if_expand nil %>
   <th>
     <%= f.button class: "btn btn-default" do %>
-    <span class="glyphicon glyphicon-save"></span>
+      <span class="glyphicon glyphicon-save"></span>
     <% end %>
-  </th>
-      <%= th_if_expand nil %>
-      <%= th_if_expand nil %>
-</tr>
+  </th>  
+  </tr>
 <% end %>
-

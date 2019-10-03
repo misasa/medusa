@@ -1,59 +1,36 @@
 <div class="row">
-  <div id="show-caption" class="col-lg-12">
-    <%= show_title(@surface) %>
+  <div id="map" class="col-lg-9">
+    <div class="row tool-content">
+    </div>
   </div>
-</div>
-
-<div class="row">
-  <div id="show-tools" class="col-lg-6">
-    <div class="row btn-toolbar tool-selector" role="toolbar">
+  <div id="index-list" class="col-lg-3">
+    <nav class="navbar navbar-default" role="navigation">
+      <div class="collapse navbar-collapse" id="menubar">
+        <%= render partial: "layouts/navbar_common_part" %>
+      </div>
+    </nav>
+    <%= link_to('/', surfaces_path) %>
+    <%= show_title(@surface) %>
+    <div class="btn-toolbar tool-selector" role="toolbar">
+      <div class="btn-group btn-group-sm">
+      </div>
       <div class="btn-group btn-group-sm">
         <%= link_to map_surface_path(@surface), class: "btn btn-default activate", id: "tree-conifer-button", remote: true, title: "top" do %>
           <span class="glyphicon glyphicon-globe"></span>
         <% end %>
-        <%#= link_to map_surface_path(@surface), class: "btn btn-default", id: "tree-conifer-button", remote: true, title: "top" do %>
-          <!-- <span class="glyphicon glyphicon-globe"></span> -->
-        <%# end %>
         <%= link_to tiles_surface_path(@surface), class: "btn btn-default", id: "tree-conifer-button", method: :post, title: "reload all images" do %>
           <span class="glyphicon glyphicon-refresh"></span>
         <% end %>
-
       </div>    
-    
       <% if can? :update, @surface %>
-      <div class="btn-group btn-group-sm">
-	     <%= link_to edit_surface_path(@surface), class: "btn btn-default", title: "edit name, layers, and images" do %>
-	       <span class="glyphicon glyphicon-pencil"></span>
-	     <% end %>
-	     <%= link_to property_surface_path(@surface), class: "btn btn-default", remote: true, title: "edit global ID" do %>
-	       <span class="glyphicon glyphicon-cog"></span>
-	     <% end %>
-      </div>
-      <% end %>
-    </div>
-    <div class="row tool-content">
-    </div>
-
-  </div>
-
-  <div id="show-body" class="col-lg-6">
-
-    <!-- Tab panes -->
-    <% tab_info = [
-        ["at-a-glance",nil,"show representative properties of the surface"],
-        ["data",nil,"show VisualAnalysis","data"],
-        ["place",@surface.spots, "show spots of layers"],
-    ] %>
-    <!-- Nav tabs -->
-    <ul class="nav nav-tabs">
-      <% tab_info.each do |key,array,message| %>
-       <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab" title="<%= message %>"><%= key + data_count(array) %></a></li>
-      <% end %>
-    </ul>
-    <!-- Tab panes -->
-    <div class="tab-content">
-      <% tab_info.each do |key,array,message,partial| %>
-       <div class="tab-pane<%= active_if_current(key)%>" id="<%= key %>"><%= render partial: (partial ? partial : key.underscore ) %></div>
+        <div class="btn-group btn-group-sm">
+	        <%= link_to edit_surface_path(@surface, :format => :modal), class: "btn btn-default", title: "edit name, layers, and images", "data-toggle" => "modal", "data-target" => "#show-modal"  do %>
+	          <span class="glyphicon glyphicon-pencil"></span>
+	        <% end %>
+	        <%= link_to property_surface_path(@surface, :format => :modal), class: "btn btn-default", title: "edit global ID", "data-toggle" => "modal", "data-target" => "#show-modal" do %>
+	          <span class="glyphicon glyphicon-cog"></span>
+	        <% end %>
+        </div>
       <% end %>
     </div>
   </div>

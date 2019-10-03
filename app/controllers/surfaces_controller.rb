@@ -1,5 +1,5 @@
 class SurfacesController < ApplicationController
-  layout 'fluid'
+  layout 'map'
   respond_to :html, :xml, :json, :svg
   before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update]
   before_action :find_resources, only: [:bundle_edit, :bundle_update]
@@ -8,7 +8,8 @@ class SurfacesController < ApplicationController
   def index
     @search = Surface.readables(current_user).search(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
-    @surfaces = SurfaceDecorator.decorate_collection(@search.result)
+    @surfaces = @search.result.page(params[:page]).per(params[:per_page])
+    #@surfaces = SurfaceDecorator.decorate_collection(@search.result)
     respond_with @surfaces do |format|
       format.html
       format.json { render json: Rails.cache.fetch(@surfaces){ @surfaces.to_json }}
@@ -17,11 +18,11 @@ class SurfacesController < ApplicationController
   end
 
   def show
-    respond_with @surface, layout: !request.xhr?  	
+    respond_with @surface
   end
 
   def edit
-    respond_with @surface, layout: !request.xhr?
+    respond_with @surface
   end
 
   def create
@@ -62,7 +63,7 @@ class SurfacesController < ApplicationController
   end
   
   def property
-    respond_with @surface, layout: !request.xhr?
+    respond_with @surface
   end
 
   def bundle_edit

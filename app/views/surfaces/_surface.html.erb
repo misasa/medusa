@@ -1,25 +1,24 @@
 <tr class="show-map" data-url="<%= map_surface_path(surface) %>">
   <td><%= check_box_tag("ids[]", surface.id, checked, id: "ids_#{surface.id}", class: "select-row") if can?(:update, surface) %>
-    <%#= link_to(surface, :title => "edit map") do %>
-      <!-- span class="glyphicon glyphicon-edit"></span -->
-    <%# end %>
-  </td>
-  <td>
     <% if surface.globe? %>
       <img src="http://a.tile.openstreetmap.org/0/0/0.png" width="50" height="50">
     <% else %>
       <%= image_tag(surface.base_image_url, width:50, height:50 )  %>
     <% end %>
   </td>
+  <td>
+  </td>
   <td><%#= link_to list_title(surface), surface %>
     <%= link_to(list_title(surface), surface, class: "btn radio-button-group", :title => "view map", :target => ["_blank"]) %>
+    <%= link_to(edit_surface_path(surface, :format => :modal), title: "edit name, layers, and images", "data-toggle" => "modal", "data-target" => "#show-modal") do %>
+      <span class="glyphicon glyphicon-edit"></span>
+    <% end %>
     <%#= link_to('map', surface.rmap_url, class: "btn radio-button-group", :title => "edit map", :target => ["_blank"]) %>
   </td>
-  <td><%= surface.images_count %></td>
-  <td><%= surface.spots_count %></td>
   <%= td_if_expand surface.user.try!(:username) %>
-  <td><%= surface.group.try!(:name) %></td>
+  <%= td_if_expand surface.group.try!(:name) %>
   <%= td_if_expand difference_from_now(surface.published_at) %>
-  <td><%= difference_from_now(surface.updated_at) %></td>
+  <%= td_if_expand difference_from_now(surface.updated_at) %>
   <%= td_if_expand difference_from_now(surface.created_at) %>
+  <td></td>
 </tr>
