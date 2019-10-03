@@ -429,8 +429,8 @@ describe AttachmentFile do
       allow(obj).to receive(:local_path).and_return(File.join(fixture_path, "/files/test_image.jpg"))
     end
     it { expect{subject}.not_to raise_error }
-    it { expect(subject).to be_instance_of(Tempfile) }
-    it { expect(File.exists?(subject.path)).to be_truthy}
+    it { expect(subject).to be_instance_of(String) }
+    it { expect(File.exists?(subject)).to be_truthy}
   end
 
 end

@@ -1,46 +1,27 @@
 <table class="table table-condensed table-striped">
-  <thead>
-    <tr>
-      <th></th>
-      <th>link</th>
-      <th>spot</th>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @attachment_file.attachings.each do |attaching| %>
-       <% attachable = attaching.attachable %>
-       <% if attachable %>
-         <% controller = attaching.attachable.class.to_s.downcase.pluralize %>
-         <% spots = @attachment_file.spots.find_all_by_target_uid(attachable.global_id) %>
-         <% if spots.empty? %>
-        <tr>
-          <td></td>
-          <td>
-          <%= attachable.decorate.try(:icon) %>
-          <%=link_to_if can?(:read, attachable), attachable.name, {controller: controller, action: :show , id: attachable.id}, class: specimen_ghost(attachable) %>
-          </td>
-          <td></td>
-        </tr>
-        <% else %>
-      <% SpotDecorator.decorate_collection(spots).each do |spot| %>
-        <tr>
-          <td></td>
-          <td><%= spot.target_link %></td> 
-          <td><%= icon_tag("screenshot") %> <%= link_to spot.xy_to_text, spot_path(spot) %>
-          </td>
-        </tr>
-      <% end %>        
-        <% end %>
-      <% end %>
-    <% end %>
-    <% SpotDecorator.decorate_collection(@attachment_file.spots.where("target_uid is null or target_uid = ''")).each do |spot| %>
-        <tr>
-          <td></td>
-          <td></td> 
-          <td><%= icon_tag("screenshot") %> <%= link_to spot.xy_to_text, spot_path(spot) %>
-          </td>
-        </tr>
-    <% end %>
-  </tbody>
+<thead>
+<tr>
+  <th>name</th>
+  <th>coordinate</th>
+  <th>image</th>
+  <th>link</th>
+</tr>
+</thead>
+<tbody>
+<% @attachment_file.surface_spots_within_bounds_converted.each do |spot| %>
+  <% spot = spot.decorate %>
+  <tr>
+    <td><%= spot.icon %> <%= link_to(spot.name, spot_path(spot)) %></td>
+    <td><%= sprintf("(%.2f, %.2f)", spot.world_x, spot.world_y) %><%= sprintf("(%.2f, %.2f)", spot.spot_x, spot.spot_y) %></td>
+    <td>
+      <% if spot.attachment_file %>
+        <%= link_to(spot.attachment_file.name, attachment_file_path(spot.attachment_file)) %>
+<% end %>
+    </td>
+    <td>
+      <%= spot.target_link %>
+    </td>
+  </tr>
+<% end %>
+</tbody>
 </table>

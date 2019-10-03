@@ -39,6 +39,25 @@ class AttachmentFile < ActiveRecord::Base
     super({:methods => [:bounds, :corners_on_world, :width_in_um, :height_in_um, :original_path, :thumbnail_path, :tiny_path, :global_id]}.merge(options))
   end
 
+  def surface_spots
+    Spot.with_surfaces(self.surfaces)
+  end
+
+  def surface_spots_within_bounds
+    surface_spots.within_bounds(self.bounds)
+  end
+
+  def surface_spots_within_bounds_converted
+    ospots = surface_spots_within_bounds
+    spot_xys = self.world_pairs_on_pixel(ospots.pluck(:world_x, :world_y))
+    ospots.each_with_index do |spot, index|
+      spot.attachment_file_id = self.id if spot.attachment_file_id != self.id
+      spot.spot_x = spot_xys[index][0]
+      spot.spot_y = spot_xys[index][1]
+    end
+    ospots
+  end  
+
   def original_path
     path
   end
@@ -78,7 +97,6 @@ class AttachmentFile < ActiveRecord::Base
     basename = File.basename(_url, ".*")
     File.join([dirname, basename + "_warped.png"])
     #File.join([Rails.root.to_s, "public", dirname, basename + "_warped.png"])
-
   end
 
   def local_path(style = :original)
@@ -291,7 +309,6 @@ class AttachmentFile < ActiveRecord::Base
     _out = line.output.output.chomp
     a = YAML.load(_out)
     self.affine_matrix = a.flatten
-    p self.affine_matrix
   end
 
   def corners_on_world

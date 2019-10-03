@@ -21,6 +21,18 @@ class Spot < ActiveRecord::Base
   before_save :set_world_xy
 #  after_create :attachment_to_target
 
+  scope :with_surfaces, -> (surfaces){
+    where("surface_id IN (?) or attachment_file_id IN (?)", surfaces.map(&:id).uniq, surfaces.map(&:image_ids).flatten.uniq)
+  }
+
+  scope :with_surface, -> (surface){
+    where("surface_id = ? or attachment_file_id IN (?)", surface.id, surface.image_ids)
+  }
+
+  scope :within_bounds, -> (bounds){
+    where("world_x >= ? and world_x <= ? and world_y >= ? and world_y <= ?",bounds[0],bounds[2],bounds[3],bounds[1])
+  }
+
   def surface
     Surface.find_by(id: surface_id) || attachment_file.surfaces[0]
   rescue
