@@ -29,7 +29,12 @@ class Array
             array.concat(obj.analyses)
           end
 
-          if obj.respond_to?(:spots)
+          if obj.respond_to?(:surface_spots_within_bounds_converted)
+            obj.surface_spots_within_bounds_converted.each do |spot|
+              array.delete(spot.target) if spot.target && spot.target.instance_of?(Analysis)
+              array << spot
+            end              
+          elsif obj.respond_to?(:spots)
             obj.spots.each do |spot|
 #              analyses.delete(spot.target) if spot.target && spot.target.instance_of?(Analysis)
 #              analyses << spot

@@ -2,6 +2,7 @@
   <a href="#display-type-html" class="btn radio-button-group">info</a>
   <a href="#display-type-rplot" class="btn radio-button-group">data</a>
   <a href="#display-type-tex" class="btn radio-button-group">tex</a>
+  <a href="#display-type-casteml" class="btn radio-button-group">casteml</a>
 </div>
 
 <div class="display-type">
@@ -50,5 +51,9 @@
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @attachment_file.to_tex %></code></pre>
   </div>
+
+  <div class="hidden" id="display-type-casteml">
+    <pre><code><%= @attachment_file.to_pml %></code></pre>
+  </div>  
 </div>
 <%= mantra "Representative properties of <#{@attachment_file.name}>.", :title => "Representative properties of <#{@attachment_file.name}>" %> 
