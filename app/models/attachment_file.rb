@@ -375,7 +375,7 @@ class AttachmentFile < ActiveRecord::Base
 
 
     image = %Q|<image xlink:href="#{path}" x="0" y="0" width="#{original_width}" height="#{original_height}" data-id="#{id}"/>|
-    spots.inject(image) { |svg, spot| svg + spot.to_svg }
+    surface_spots_within_bounds_converted.inject(image) { |svg, spot| svg + spot.to_svg }
   end
 
   def pixel_pairs_on_world(pairs)
