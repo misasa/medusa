@@ -1,5 +1,5 @@
 class AttachmentFilesController < ApplicationController
-  respond_to :html, :xml, :json, :svg, :js
+  respond_to :html, :xml, :json, :svg
   before_action :find_resource, except: [:index, :create, :download, :bundle_edit, :bundle_update]
   before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
@@ -28,6 +28,8 @@ class AttachmentFilesController < ApplicationController
   end
 
   def edit
+    logger.info("in edit")
+    logger.info(request)    
     respond_with @attachment_file, layout: !request.xhr?
   end
 
