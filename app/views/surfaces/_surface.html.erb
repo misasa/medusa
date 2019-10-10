@@ -10,7 +10,7 @@
   </td>
   <td><%#= link_to list_title(surface), surface %>
     <%= link_to(list_title(surface), surface, class: "btn radio-button-group", :title => "view map", :target => ["_blank"]) %>
-    <%= link_to(edit_surface_path(surface, :format => :modal), title: "edit name, layers, and images", "data-toggle" => "modal", "data-target" => "#show-modal") do %>
+    <%= link_to(edit_surface_path(surface), title: "edit name, layers, and images", :target => ["_blank"]) do %>
       <span class="glyphicon glyphicon-edit"></span>
     <% end %>
     <%#= link_to('map', surface.rmap_url, class: "btn radio-button-group", :title => "edit map", :target => ["_blank"]) %>

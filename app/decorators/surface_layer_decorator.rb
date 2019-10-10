@@ -134,7 +134,7 @@ class SurfaceLayerDecorator < Draper::Decorator
         end
       )
       h.concat(
-        h.link_to(h.move_to_top_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "move a layer down") do
+        h.link_to(h.move_to_top_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move a layer down") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-down")
         end
       )
