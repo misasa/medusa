@@ -269,6 +269,7 @@ Medusa::Application.routes.draw do
         get :map
         get :calibrate
         post 'move_to_top'
+        post 'move_to_bottom'
         post 'tiles'
       end
     end

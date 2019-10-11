@@ -24,7 +24,7 @@
       </div>    
       <% if can? :update, @surface %>
         <div class="btn-group btn-group-sm">
-	        <%= link_to edit_surface_path(@surface, :format => :modal), class: "btn btn-default", title: "edit name, layers, and images", "data-toggle" => "modal", "data-target" => "#show-modal"  do %>
+	        <%= link_to edit_surface_path(@surface), class: "btn btn-default", title: "edit name, layers, and images", target: "_new"  do %>
 	          <span class="glyphicon glyphicon-pencil"></span>
 	        <% end %>
 	        <%= link_to property_surface_path(@surface, :format => :modal), class: "btn btn-default", title: "edit global ID", "data-toggle" => "modal", "data-target" => "#show-modal" do %>

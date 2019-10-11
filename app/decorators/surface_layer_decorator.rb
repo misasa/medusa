@@ -139,6 +139,11 @@ class SurfaceLayerDecorator < Draper::Decorator
         end
       )
       h.concat(
+        h.link_to(h.move_to_bottom_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move a layer up") do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-up")
+        end
+      )
+      h.concat(
                h.link_to(h.edit_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "edit name and opacity of a layer") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-pencil")
         end
