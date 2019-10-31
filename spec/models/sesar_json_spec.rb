@@ -2,11 +2,10 @@
 require 'spec_helper'
 require 'webmock/rspec'
 
-WebMock.enable! 
-
 describe SesarJson do
   let(:specimen) { FactoryGirl.create(:specimen, igsn: igsn, collector: "採集者", collector_detail: "採集者詳細") }
   let(:igsn) { "IEIMA0005" }
+  let(:user_code) { Settings.sesar.user_code }
 
   before do
     Sesar.logger = Logger.new($stderr)
@@ -66,7 +65,7 @@ describe SesarJson do
       context "レスポンスに各属性の定義がある場合" do
         it "@attributesに値が設定される" do
           expect(subject.attributes["classification"].attributes).to eq SesarJson::Classification.new(@response_json["classification"]).attributes
-          expect(subject.attributes["user_code"]).to eq nil
+          expect(subject.attributes["user_code"]).to eq user_code
           expect(subject.attributes["name"]).to eq @response_json["name"]
           expect(subject.attributes["sample_type"]).to eq @response_json["sample_type"]
           expect(subject.attributes["description"]).to eq @response_json["description"]
@@ -95,7 +94,7 @@ describe SesarJson do
         let(:response_body_file) { "#{Rails.root}/spec/fixtures/files/stub_sesar_response_missing_attribute.json" }
         it "@attributesに値が設定される（存在しない属性はnil）" do
           expect(subject.attributes["classification"]).to eq nil
-          expect(subject.attributes["user_code"]).to eq nil
+          expect(subject.attributes["user_code"]).to eq user_code
           expect(subject.attributes["name"]).to eq @response_json["name"]
           expect(subject.attributes["sample_type"]).to eq @response_json["sample_type"]
           expect(subject.attributes["description"]).to eq @response_json["description"]
@@ -168,7 +167,7 @@ describe SesarJson do
       @sesar_json = SesarJson.new()
       attributes = {}
       attributes["classification"] = classification_obj
-      attributes["user_code"] = nil
+      attributes["user_code"] = user_code
       attributes["name"] = name
       attributes["sample_type"] = sample_type
       attributes["description"] = description
@@ -553,3 +552,5 @@ describe SesarJson do
     end
   end
 end
+
+WebMock.allow_net_connect!
