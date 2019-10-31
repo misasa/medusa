@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20190805072944) do
+ActiveRecord::Schema.define(version: 20191028042214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -359,6 +359,7 @@ ActiveRecord::Schema.define(version: 20190805072944) do
     t.string   "collector_detail",                                                 comment: "採取詳細情報"
     t.boolean  "fixed_in_box",                        default: false, null: false, comment: "固定格納フラグ"
     t.integer  "abs_age",                   limit: 8,                              comment: "絶対年代"
+    t.datetime "collected_end_at",                                                 comment: "採取終了日時"
   end
 
   add_index "specimens", ["classification_id"], name: "index_specimens_on_classification_id", using: :btree

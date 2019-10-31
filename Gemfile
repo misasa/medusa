@@ -109,6 +109,7 @@ group :development, :test do
   gem 'capistrano-sidekiq'
   gem 'capistrano-yarn'
   gem 'capistrano-db-tasks', require: false
+  gem 'webmock'
 end
 
 group :test do

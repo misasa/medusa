@@ -250,6 +250,64 @@ describe Place do
     end
   end
 
+  describe ".latitude_dms_changed?" do
+    subject { place.latitude_dms_changed? }
+    let(:place){ FactoryGirl.create(:place, latitude: latitude) }
+    before do
+      place.latitude_dms_direction = "N"
+      place.latitude_dms_deg = "5"
+      place.latitude_dms_min = "37"
+      place.latitude_dms_sec = "30.0"
+    end
+
+    context "no change" do
+      let(:latitude){ 5.625 }
+      it { expect(subject).to eq false }
+    end
+
+    context "with change" do
+      let(:latitude){ 1.0 }
+      it { expect(subject).to eq true }
+    end
+  end
+
+  describe ".longitude_dms_changed?" do
+    subject { place.longitude_dms_changed? }
+    let(:place){ FactoryGirl.create(:place, longitude: longitude) }
+    before do
+      place.longitude_dms_direction = "E"
+      place.longitude_dms_deg = "5"
+      place.longitude_dms_min = "37"
+      place.longitude_dms_sec = "30.0"
+    end
+
+    context "no change" do
+      let(:longitude){ 5.625 }
+      it { expect(subject).to eq false }
+    end
+
+    context "with change" do
+      let(:longitude){ 1.0 }
+      it { expect(subject).to eq true }
+    end
+  end
+
+  describe ".dms_value_to_f" do
+    subject { place.dms_value_to_f(dms_hash) }
+    let(:place){ FactoryGirl.create(:place) }
+
+    context "dms hash is nil" do
+      let(:dms_hash) { nil }
+      it { expect(subject).to eq nil }
+    end
+
+    context "dms hash is not nil" do
+      let(:dms_hash) { {:deg=>"82", :min=>"38", :sec=>"0.3", :direction=>"S"} }
+      let(:dms_hash_float) { {:deg=>82.0, :min=>38.0, :sec=>0.3, :direction=>"S"} }
+      it { expect(subject).to eq dms_hash_float }
+    end
+  end
+
   describe ".to_dms" do
     subject {Place.to_dms(degree) }
     let(:degree){ 5.625 }

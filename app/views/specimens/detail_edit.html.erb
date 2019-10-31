@@ -40,6 +40,10 @@
     <%= f.text_field :collected_at, class: "form-control input-sm", placeholder: "yyyy-mm-dd hh:mm:ss" %>
   </div>
   <div class="form-group form-group-sm">
+    <%= f.label :collected_end_at, class: "small" %>
+    <%= f.text_field :collected_end_at, class: "form-control input-sm", placeholder: "yyyy-mm-dd hh:mm:ss" %>
+  </div>
+  <div class="form-group form-group-sm">
     <%= f.label :collection_date_precision, class: "small" %>
     <%= f.select :collection_date_precision, ["year","month","day","time"].map{|n| [n,n]}, { include_blank: true }, class: "form-control input-sm" %>
   </div>
@@ -56,11 +60,14 @@
     <%= f.label :description, class: "small" %>
     <%= f.text_area :description, class: "form-control input-sm", row: 3 %>
   </div>
-  <%= f.button class: "btn btn-default" do %>
+  <%= f.button class: "btn btn-default btn-sm" do %>
   <span class="glyphicon glyphicon-save"></span>
   <% end %>
   <%= f.button name: "sesar_upload", id: "sesar_upload", class: "btn btn-default", disabled: true do %>
     Sesar upload
+  <% end %>
+  <%= f.button name: "sesar_download", id: "sesar_download", class: "btn btn-default", disabled: true, data: {confirm: "Are you sure you want to sync IGSN '#{@specimen.igsn}' from Sesar?"} do %>
+    Sesar download
   <% end %>
   <%= f.button id: "sesar_unlink", class: "btn btn-default", disabled: true, data: {confirm: "Are you sure you want to unlink an IGSN '#{@specimen.igsn}'?"} do %>
     Sesar unlink
@@ -82,6 +89,7 @@
     $(document).ready(function() {
       if ("<%= @specimen.igsn %>"){
         $("#sesar_unlink").prop("disabled", false);
+        $("#sesar_download").prop("disabled", false);
       }else{
         $("#sesar_upload").prop("disabled", false);
       }
