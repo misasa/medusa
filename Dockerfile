@@ -1,10 +1,18 @@
 FROM valian/docker-python-opencv-ffmpeg
-RUN apt-get update
-RUN apt-get install -y libpq-dev postgresql-client rsync libssl-dev libreadline-dev imagemagick nfs-common apt-transport-https curl
+RUN apt-get update && apt-get install -y \
+apt-transport-https \
+curl \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/*
 RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
 RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
 RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-RUN apt-get update && apt-get install -y nodejs yarn
+RUN apt-get update && apt-get install -y \
+libpq-dev postgresql-client rsync libssl-dev \
+libreadline-dev imagemagick nfs-common \
+nodejs yarn \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/*
 RUN git clone https://github.com/sstephenson/rbenv.git /root/.rbenv
 RUN git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build
 RUN /root/.rbenv/plugins/ruby-build/install.sh
