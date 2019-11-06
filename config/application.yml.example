@@ -1,11 +1,13 @@
 defaults: &defaults
   site_name: "Medusa"
+  alias_specimen: "stone"
   help_url: http://dream.misasa.okayama-u.ac.jp/documentation/
   rplot_url: http://dream.misasa.okayama-u.ac.jp/R/chelyabinsk/
   map_url: http://dream.misasa.okayama-u.ac.jp/R/chelyabinsk/system/maps/
   admin:
     email: medusa@example.com
     initial_password: vQxPIFMZ
+  autologin: "guest"  
   barcode:
     prefix:
     type: 2D
@@ -14,7 +16,7 @@ defaults: &defaults
       dir_path: "/tmp/medusa/backup/files"
     db:
       dir_path: "/tmp/medusa/backup/db"
-  sesar:
+  sesar: &2
     user: # Set GeoPass ID
     password: # Set GeoPass password
     user_code: # Set Sesar user_code (5 digits alphanumeric string)
@@ -31,10 +33,8 @@ defaults: &defaults
     alias_shibboleth: "okayama-u"    
 development:
   <<: *defaults
-
 test:
   <<: *defaults
-
 production:
   <<: *defaults
 
