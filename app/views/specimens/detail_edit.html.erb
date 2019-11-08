@@ -63,7 +63,7 @@
   <%= f.button class: "btn btn-default btn-sm" do %>
   <span class="glyphicon glyphicon-save"></span>
   <% end %>
-  <%= f.button name: "sesar_upload", id: "sesar_upload", class: "btn btn-default", disabled: true do %>
+  <%= f.button name: "sesar_upload", id: "sesar_upload", class: "btn btn-default" do %>
     Sesar upload
   <% end %>
   <%= f.button name: "sesar_download", id: "sesar_download", class: "btn btn-default", disabled: true, data: {confirm: "Are you sure you want to sync IGSN '#{@specimen.igsn}' from Sesar?"} do %>
@@ -90,8 +90,6 @@
       if ("<%= @specimen.igsn %>"){
         $("#sesar_unlink").prop("disabled", false);
         $("#sesar_download").prop("disabled", false);
-      }else{
-        $("#sesar_upload").prop("disabled", false);
       }
       $("#abs-age").change();
     });

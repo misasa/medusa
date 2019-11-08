@@ -96,9 +96,11 @@ class Sesar < ActiveResource::Base
     attributes[:latitude] = model.place.try!(:latitude)
     attributes[:longitude] = model.place.try!(:longitude)
     attributes[:elevation] = model.place.try!(:elevation)
-    attributes[:elevation_unit] = "meters" if model.place.try!(:elevation)
+    attributes[:elevation_unit] = model.place.try!(:elevation) ? "meters" : ""
     result = Geocoder.search("#{attributes[:latitude]},#{attributes[:longitude]}")
     attributes[:country] = country_name(result[0])
+    # 空で更新する場合、country属性ではSesarに反映されないためid属性を追加
+    attributes[:country_id] = "" if attributes[:country].blank?
     attributes[:province] = province_name(result[0])
     attributes[:city] = city_name(result[0])
     attributes[:locality] = model.place.try!(:name)
@@ -106,11 +108,11 @@ class Sesar < ActiveResource::Base
     attributes[:collector] = model.collector
     attributes[:collector_detail] = model.collector_detail
     attributes[:collection_start_date] = model.collected_at.try!(:strftime, "%Y-%m-%dT%H:%M:%SZ")
-    attributes[:collection_end_date] = model.collected_at.try!(:strftime, "%Y-%m-%dT%H:%M:%SZ")
+    attributes[:collection_end_date] = model.collected_end_at.try!(:strftime, "%Y-%m-%dT%H:%M:%SZ")
     attributes[:collection_date_precision] = model.collection_date_precision
     attributes[:current_archive] = Settings.sesar.archive_name
     attributes[:current_archive_contact] = Settings.sesar.archive_contact
-    attributes[:external_urls] =external_url(model)
+    attributes[:external_urls] = external_url(model)
     attributes[:description] = model.description
     associate_specimen_custom_attributes(model).each do |sca|
       if sca.custom_attribute.sesar_name == "sample_other_names"
@@ -119,7 +121,7 @@ class Sesar < ActiveResource::Base
         attributes[sca.custom_attribute.sesar_name] = sca.value
       end
     end
-    attributes.delete_if { |_, value| value.blank? }
+    attributes.delete_if { |_, value| value.blank? } if model.igsn.blank?
     new(attributes)
   end
 
@@ -172,8 +174,13 @@ class Sesar < ActiveResource::Base
     super
   end
 
+  def igsn_registered?
+    attributes[:igsn].present?
+  end
+
   def save
-    response = connection.post("/webservices/upload.php", post_params, post_headers)
+    post_path = igsn_registered? ? "/webservices/update.php" : "/webservices/upload.php"
+    response = connection.post(post_path, post_params, post_headers)
     self.igsn = Hash.from_xml(response.body)["results"]["sample"]["igsn"]
     true
   rescue ActiveResource::BadRequest => e
@@ -182,6 +189,8 @@ class Sesar < ActiveResource::Base
   end
 
   def to_xml(options ={})
+    samples_schema = igsn_registered? ? update_samples_schema : upload_samples_schema
+
     xml = ""
     builder = Builder::XmlMarkup.new(target: xml)
     xml.clear
@@ -198,6 +207,8 @@ class Sesar < ActiveResource::Base
             sample_other_names_xml(sample, values)
           when "external_urls"
             external_urls_xml(sample, values)
+          when "user_code"
+            sample.tag!(attr, values) unless igsn_registered?
           else
             sample.tag!(attr, values)
           end
@@ -285,27 +296,37 @@ class Sesar < ActiveResource::Base
     }
   end
 
-  def samples_schema
+  def upload_samples_schema
     {
       "xmlns" => "http://app.geosamples.org",
       "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance",
-      "xsi:schemaLocation" => "http://app.geosamples.org/samplev2.xsd"
+      "xsi:schemaLocation" => "http://app.geosamples.org/4.0/sample.xsd"
     }
   end
-  
+
+  def update_samples_schema
+    {
+      "xmlns" => "http://app.geosamples.org",
+      "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance",
+      "xsi:schemaLocation" => "http://app.geosamples.org/4.0/updateSample.xsd"
+    }
+  end
+
   def classification_schema
     {
       "xmlns" => "http://app.geosamples.org",
       "xmlns:xs" => "http://www.w3.org/2001/XMLSchema",
       "xmlns:xsi" => "http://www.w3.org/2001/XMLSchema-instance",
-      "xsi:schemaLocation" => "http://app.geosamples.org/samplev2.xsd"
+      "xsi:schemaLocation" => "http://app.geosamples.org/classifications.xsd"
     }
   end
   
   def classification_xml(builder, sample, values)
     builder.classification(classification_schema) do
       build_classification_part(sample, values) do |values|
-        if values[0].end_with?("Type")
+        if values.blank?
+          ""
+        elsif values[0].end_with?("Type")
           sample.tag!(values[0], values[1])
         else
           sample.tag!(values[0]) do
