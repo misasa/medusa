@@ -401,7 +401,7 @@
       var div = $(event.target).parent();
       var base_link = $("#base_image_download_link");
       if (div.data("name")) {
-        $("#base_info").text(" / " + div.data("name"));
+        $("#base_info").text(div.data("name"));
         base_link.attr('href', div.data("path"));
         base_link.attr('title', "download " + div.data("name"));
         base_link.show();
