@@ -47,11 +47,11 @@ class Array
 #            analysis.to_pml(xml)
 #          end
         end # if
-        array = array.uniq.compact
-        array.each do |el|
-          el.to_pml(xml)
-        end
       end # each
+      array = array.uniq.compact
+      array.each do |el|
+        el.to_pml(xml)
+      end
     end # xml.acquisitions
   end # def
 end # class
