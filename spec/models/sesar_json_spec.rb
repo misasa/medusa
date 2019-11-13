@@ -289,7 +289,7 @@ describe SesarJson do
     end
 
     describe "#get_physical_form_model" do
-      subject { @sesar_json.get_physical_form_model(specimen) }
+      subject { @sesar_json.get_physical_form_model }
 
       context "sample_typeがnilの場合" do
         let(:sample_type) { nil }
@@ -323,7 +323,7 @@ describe SesarJson do
     end
 
     describe "#get_classification_model" do
-      subject { @sesar_json.get_classification_model(specimen) }
+      subject { @sesar_json.get_classification_model }
 
       context "レスポンスにclassification属性が存在しない場合" do
         let(:classification_obj) { nil }

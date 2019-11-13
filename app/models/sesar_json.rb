@@ -123,8 +123,8 @@ class SesarJson < ActiveResource::Base
 
   def update_specimen(specimen)
     specimen.place = get_place_model(specimen)
-    specimen.physical_form = get_physical_form_model(specimen)
-    specimen.classification = get_classification_model(specimen)
+    specimen.physical_form = get_physical_form_model
+    specimen.classification = get_classification_model
     specimen.save
     
     params = {}
@@ -143,20 +143,18 @@ class SesarJson < ActiveResource::Base
     specimen.update_attributes(params)
 
     associate_specimen_custom_attributes(specimen).each do |sca|
-      specimen_custom_attributes = SpecimenCustomAttribute.find_by(specimen_id: sca.specimen_id, custom_attribute_id: sca.custom_attribute_id)
-      specimen_custom_attributes.update(value: @attributes[sca.custom_attribute.sesar_name])
+      specimen_custom_attribute = SpecimenCustomAttribute.find_by(specimen_id: sca.specimen_id, custom_attribute_id: sca.custom_attribute_id)
+      specimen_custom_attribute.update(value: @attributes[sca.custom_attribute.sesar_name])
     end
   end
 
   def associate_specimen_custom_attributes(model)
     SpecimenCustomAttribute.joins(:custom_attribute).includes(:custom_attribute)\
       .where(specimen_id: model.id)\
-      .where.not(custom_attributes: {sesar_name: nil})\
-      .where.not(custom_attributes: {sesar_name: ''})\
-      .where.not(custom_attributes: {sesar_name: 'sample_other_names'})
+      .merge(CustomAttribute.where.not(sesar_name: [ nil, '', 'sample_other_names' ]))
   end
 
-  def get_classification_model(specimen)
+  def get_classification_model
     material = @attributes["material"]
     classification_obj = @attributes["classification"]
 
@@ -182,7 +180,7 @@ class SesarJson < ActiveResource::Base
     classification
   end
 
-  def get_physical_form_model(specimen)
+  def get_physical_form_model
     sample_type = @attributes["sample_type"]
     return if sample_type.nil?
 
