@@ -115,11 +115,12 @@ describe AttachmentFile do
     after { obj.destroy }
   end
 
-  describe ".check_affine_matrix" do
+  describe ".check_affine_matrix", :current => true do
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
     let(:new_name){ "deleteme.1234.jpg" }
     let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
+    let(:affine_matrix_1_in_string){ "[1,0,0;0,1,0;0,0.0,1]" }
     let(:left) {-3808.472}
     let(:upper) {3787.006}
     let(:right) {3851.032}
@@ -129,17 +130,20 @@ describe AttachmentFile do
       User.current = user
       surface_image = double("SurfaceImage")
       allow(surface_image).to receive(:id).and_return(10)
-      #RotateWorker.should_receive(:perform_async).with(obj.id)
       TileWorker.should_receive(:perform_async).with(10)
       surface_image.should_receive(:update).with(hash_including(:left => left, :upper => upper, :right => right, :bottom => bottom))
       allow(obj).to receive(:surface_images).and_return([surface_image])
       allow(obj).to receive(:bounds).and_return([left,upper,right,bottom])
-      #obj.affine_matrix_in_string = affine_matrix_in_string
-      #obj.save
     end
+
     it "change affine_matrix" do
       obj.update_attributes(affine_matrix_in_string: affine_matrix_in_string)
     end
+
+    it "change affine_matrix to one" do
+      obj.update_attributes(affine_matrix_in_string: affine_matrix_1_in_string)
+    end
+
     after { obj.destroy }
   end
 

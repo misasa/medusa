@@ -30,7 +30,7 @@ class SpotDecorator < Draper::Decorator
   end
 
   def as_json(options = {})
-    super({:methods => [:name_with_id, :attachment_file_name, :target_link]}.merge(options))
+    super({:methods => [:global_id, :name_with_id, :attachment_file_name, :target_link]}.merge(options))
   end
 
   def attachment_file_name
