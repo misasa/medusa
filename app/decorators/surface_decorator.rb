@@ -59,8 +59,8 @@ class SurfaceDecorator < Draper::Decorator
   end
 
   def map(options = {})
-    matrix = affine_matrix_for_map
-    return unless matrix
+#    matrix = affine_matrix_for_map
+#    return unless matrix
     surface_length = self.length
     tilesize = self.tilesize
     s_images = surface_images.calibrated.reverse
@@ -84,7 +84,6 @@ class SurfaceDecorator < Draper::Decorator
                     global_id: global_id,
                     length: length,
                     center: center,
-                    matrix: matrix.inv,
                     base_images: base_images,
                     layer_groups: surface_layers.reverse.map { |layer| { name: layer.name, opacity: layer.opacity } },
                     images: h_images,
