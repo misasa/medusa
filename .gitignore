@@ -31,6 +31,8 @@
 # Ignore eclipse files.
 .project
 public/system
+public/system_ro
+public/system_rw
 vendor/bundler
 db_dump
 .ruby-version

@@ -5,10 +5,12 @@ describe "surfaces/show.html.erb" do
   let(:obj_1){ FactoryGirl.create(:surface, name: 'hoge')  }
   before do
     assign(:surface, obj_1.decorate)
-    assign(:current_user, user)
+    #assign(:current_user, user)
+    assign(:records_search, RecordProperty.search)
     @ability = Object.new
     @ability.extend(CanCan::Ability)
     controller.stub(:current_ability) { @ability }
+    controller.stub(:current_user){ user }
   end
   context "without image" do
     it 'works' do

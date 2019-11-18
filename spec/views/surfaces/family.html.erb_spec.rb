@@ -13,7 +13,7 @@ describe "surfaces/family.html.erb" do
   context "without image" do
     it 'works' do
       render
-      expect(rendered).not_to have_css('div.large-map')
+      expect(rendered).to have_css('div.large-map')
     end
   end
 
@@ -24,7 +24,7 @@ describe "surfaces/family.html.erb" do
     end
     it 'works' do
       render
-      expect(rendered).not_to have_css('div.large-map')
+      expect(rendered).to have_css('div.large-map')
     end
   end
 

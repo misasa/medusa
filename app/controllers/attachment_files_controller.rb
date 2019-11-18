@@ -56,10 +56,15 @@ class AttachmentFilesController < ApplicationController
   def update_affine_matrix
     m = params["affine_matrix"]
     if m.any?{|w| w.blank?}
-      render :error
+      respond_with @attachment_file do |format|
+        format.json { render status: 400}
+      end
     else
       @attachment_file.update_attributes({affine_matrix: m.map(&:to_f)})
-      respond_with @attachment_file
+      #respond_with @attachment_file
+      respond_with @attachment_file do |format|
+        format.json { render json: @attachment_file }
+      end
     end
   end
 
@@ -76,9 +81,14 @@ class AttachmentFilesController < ApplicationController
     end
     if flag
       @attachment_file.update_attributes({corners_on_world: a})
-      respond_with @attachment_file
+#      respond_with @attachment_file
+      respond_with @attachment_file do |format|
+        format.json { render json: @attachment_file }
+      end
     else
-      render :error
+      respond_with @attachment_file do |format|
+        format.json { render status: 204}
+      end
     end
   end
 
