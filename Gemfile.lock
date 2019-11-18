@@ -149,7 +149,7 @@ GEM
       multipart-post (>= 1.2, < 3)
     ffi (1.9.3)
     formatador (0.2.4)
-    geocoder (1.2.11)
+    geocoder (1.5.2)
     geonames (0.3.3)
     guard (2.2.5)
       formatador (>= 0.2.4)

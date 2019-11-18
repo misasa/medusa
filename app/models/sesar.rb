@@ -97,7 +97,7 @@ class Sesar < ActiveResource::Base
     attributes[:longitude] = model.place.try!(:longitude)
     attributes[:elevation] = model.place.try!(:elevation)
     attributes[:elevation_unit] = model.place.try!(:elevation) ? "meters" : ""
-    result = Geocoder.search("#{attributes[:latitude]},#{attributes[:longitude]}")
+    result = Geocoder.search([attributes[:latitude], attributes[:longitude]])
     attributes[:country] = country_name(result[0])
     # 空で更新する場合、country属性ではSesarに反映されないためid属性を追加
     attributes[:country_id] = "" if attributes[:country].blank?
@@ -229,29 +229,18 @@ class Sesar < ActiveResource::Base
   end
   
   def self.country_name(result)
-    return "" if result.blank?
-    country = result.data["address_components"].select{ |n| n["types"].include?("country") }
-    country.present? ? country[0]["long_name"] : ""
+    return "" if result.blank? || result.address.blank?
+    result.country
   end
   
   def self.province_name(result)
-    return "" if result.blank?
-    province = result.data["address_components"].select{ |n| n["types"].include?("administrative_area_level_1") }
-    province.present? ? province[0]["long_name"] : ""
+    return "" if result.blank? || result.address.blank?
+    result.state
   end
   
   def self.city_name(result)
-    return "" if result.blank?
-    city = result.data["address_components"].select{ |n| n["types"].include?("locality") }
-    if city.present?
-      name = []
-      city.each do |n|
-       name.unshift(n["long_name"])
-      end
-      name.join
-    else
-      ""
-    end
+    return "" if result.blank? || result.address.blank?
+    result.city
   end
   
   def self.external_url(model)

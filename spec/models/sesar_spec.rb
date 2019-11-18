@@ -3,9 +3,14 @@ require 'spec_helper'
 
 describe Sesar do
   let(:geocoder_obj){ double(:geocoder_obj) }
+  let(:geocoder_response) { {"display_name"=>"Nishiwaki, Hyogo Prefecture, Kinki Region, Japan", "address"=>{"city"=>"Nishiwaki", "state"=>"Kinki Region", "country"=>"Japan"}} }
+
   before do
     Sesar.logger = Logger.new($stderr)
-    allow(geocoder_obj).to receive(:data).and_return({"address_components" => [{"types" => ["country"], "long_name" => "Japan"}]})
+    allow(geocoder_obj).to receive(:address).and_return(geocoder_response['display_name'])
+    allow(geocoder_obj).to receive(:country).and_return(geocoder_response['address']['country'])
+    allow(geocoder_obj).to receive(:state).and_return(geocoder_response['address']['state'])
+    allow(geocoder_obj).to receive(:city).and_return(geocoder_response['address']['city'])
     allow(Geocoder).to receive(:search).and_return([geocoder_obj])
   end
 
@@ -224,50 +229,62 @@ describe Sesar do
   end
   
   describe "緯度経度から場所を特定" do
-    let(:result) { double(:geocoder_obj)}
     describe ".country_name(result)" do
       subject { Sesar.country_name(result) }
-      before do
-        allow(result).to receive(:data).and_return({"address_components" => [{"types" => ["country"], "long_name" => "Japan"}]})
-      end
       context "countryの情報が存在する場合" do
+        let(:result) { geocoder_obj }
         it { expect(subject).to eq "Japan" }
       end
       context "countryの情報が存在しない場合" do
-        let(:result) { "" }
+        let(:result) { nil }
+        it { expect(subject).to eq "" }
+      end
+      context "countryの情報が存在しない場合(geocoderのレスポンスがエラー)" do
+        before do
+          geocoder_error = {"error"=>"Unable to geocode"}
+          allow(geocoder_obj).to receive(:address).and_return(geocoder_error['display_name'])
+        end
+        let(:result) { geocoder_obj }
         it { expect(subject).to eq "" }
       end
     end
   
     describe ".province_name(result)" do
-      subject {Sesar.province_name(result) }
-      before do
-        allow(result).to receive(:data).and_return({"address_components" => [{"types" => ["administrative_area_level_1"], "long_name" => "Hyōgo-ken"}]})
+      subject { Sesar.province_name(result) }
+      context "provinceの情報(state)が存在する場合" do
+        let(:result) { geocoder_obj }
+        it { expect(subject).to eq "Kinki Region" }
       end
-      context "provinceの情報(administrative_area_level_1)が存在する場合" do
-        it { expect(subject).to eq "Hyōgo-ken" }
+      context "provinceの情報が存在しない場合" do
+        let(:result) { nil }
+        it { expect(subject).to eq "" }
       end
-      context "provinceの情報(administrative_area_level_1)が存在しない場合" do
-        let(:result) { "" }
+      context "provinceの情報が存在しない場合(geocoderのレスポンスがエラー)" do
+        before do
+          geocoder_error = {"error"=>"Unable to geocode"}
+          allow(geocoder_obj).to receive(:address).and_return(geocoder_error['display_name'])
+        end
+        let(:result) { geocoder_obj }
         it { expect(subject).to eq "" }
       end
     end
   
     describe ".city_name(result)" do
-      subject {Sesar.city_name(result) }
-      before do
-        allow(result).to receive(:data).and_return({"address_components" => [{"types" => ["locality"], "long_name" => "Nishiwaki-shi"}]})
+      subject { Sesar.city_name(result) }
+      context "cityの情報が存在する場合" do
+        let(:result) { geocoder_obj }
+        it { expect(subject).to eq "Nishiwaki" }
       end
-
-      context "cityの情報(locality)が存在する場合" do
-        it { expect(subject).to eq "Nishiwaki-shi" }
-      end
-#      context "cityの情報(locality)が複数存在する場合" do
-#        let(:result) { Geocoder.search("38,141")[0] }
-#        it { expect(subject).to eq "Watari-chō" }
-#      end
       context "cityの情報が存在しない場合" do
-        let(:result) { "" }
+        let(:result) { nil }
+        it { expect(subject).to eq "" }
+      end
+      context "cityの情報が存在しない場合(geocoderのレスポンスがエラー)" do
+        before do
+          geocoder_error = {"error"=>"Unable to geocode"}
+          allow(geocoder_obj).to receive(:address).and_return(geocoder_error['display_name'])
+        end
+        let(:result) { geocoder_obj }
         it { expect(subject).to eq "" }
       end
     end
