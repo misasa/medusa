@@ -4,6 +4,8 @@ class Place < ActiveRecord::Base
   include OutputCsv
   include HasAttachmentFile
 
+  attr_accessor :skip_conversion
+
   TEMPLATE_HEADER = "name,latitude(decimal degree),longitude(decimal degree),elevation(m),description\n"
   PERMIT_IMPORT_TYPES = ["text/plain", "text/csv", "application/csv", "application/vnd.ms-excel"]
 
@@ -14,7 +16,7 @@ class Place < ActiveRecord::Base
   has_many :bibs, through: :referrings
 
   validates :name, presence: true, length: { maximum: 255 }
-  before_save :dms_to_degree
+  before_save :dms_to_degree, unless: :skip_conversion?
 
 
   def self.from_dms(deg, min = 0.0, sec = 0.0)
@@ -64,36 +66,41 @@ class Place < ActiveRecord::Base
     end
   end
 
+  def dms_value_to_f(dms_hash)
+    return if dms_hash.nil?
+    dms_hash.map { |k, v| k == :direction ? [k, v] : [k, v.to_f] }.to_h
+  end
+
+  def _latitude_dms
+    return {} if latitude.blank?
+
+    latitude_dms = self.class.to_dms(latitude.abs)
+    latitude_dms[:direction] = latitude < 0 ? "S" : "N"
+    latitude_dms
+  end
+
   def latitude_dms
-    unless @latitude_dms
-      if latitude.blank?
-        @latitude_dms = {}
-      else
-        @latitude_dms = self.class.to_dms(latitude.abs)
-        direction = "N"
-        if latitude < 0
-          direction = "S"
-        end
-        @latitude_dms[:direction] = direction
-      end
-    end
-    @latitude_dms
+    @latitude_dms ||= _latitude_dms
+  end
+
+  def latitude_dms_changed?
+    dms_value_to_f(@latitude_dms) != _latitude_dms
+  end
+
+  def _longitude_dms
+    return {} if longitude.blank?
+
+    longitude_dms = self.class.to_dms(longitude.abs)
+    longitude_dms[:direction] = longitude < 0 ? "W" : "E"
+    longitude_dms
   end
 
   def longitude_dms
-    unless @longitude_dms
-      if longitude.blank?
-        @longitude_dms = {}
-      else
-        @longitude_dms = self.class.to_dms(longitude.abs)
-        direction = "E"
-        if longitude < 0
-          direction = "W"
-        end
-        @longitude_dms[:direction] = direction
-      end
-    end
-    @longitude_dms
+    @longitude_dms ||= _longitude_dms
+  end
+
+  def longitude_dms_changed?
+    dms_value_to_f(@longitude_dms) != _longitude_dms
   end
 
   def to_html
@@ -167,24 +174,28 @@ class Place < ActiveRecord::Base
     end
   end
 
+  def skip_conversion?
+    skip_conversion
+  end
+
   protected
   def dms_to_degree
     #unless self.latitude
+    if latitude_dms_changed?
       if self.latitude_dms_deg
-        degree = self.class.from_dms(self.latitude_dms_deg, self.latitude_dms_min,self.latitude_dms_sec)
+        degree = self.class.from_dms(self.latitude_dms_deg, self.latitude_dms_min, self.latitude_dms_sec)
         degree = -1.0 * degree if self.latitude_dms_direction == 'S' || self.latitude_dms_direction == 'south'
         self.latitude = degree
       end
-    #end
+    end
     #unless self.longitude
+    if longitude_dms_changed?
       if self.longitude_dms_deg
-        degree = self.class.from_dms(self.longitude_dms_deg, self.longitude_dms_min,self.longitude_dms_sec)
+        degree = self.class.from_dms(self.longitude_dms_deg, self.longitude_dms_min, self.longitude_dms_sec)
         degree = -1.0 * degree if self.longitude_dms_direction == 'W' || self.longitude_dms_direction == 'west'
         self.longitude = degree
       end
-    #end
-
-
+    end
   end
 
 end

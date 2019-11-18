@@ -3,9 +3,14 @@ require 'spec_helper'
 
 describe Sesar do
   let(:geocoder_obj){ double(:geocoder_obj) }
+  let(:geocoder_response) { {"display_name"=>"Nishiwaki, Hyogo Prefecture, Kinki Region, Japan", "address"=>{"city"=>"Nishiwaki", "state"=>"Kinki Region", "country"=>"Japan"}} }
+
   before do
     Sesar.logger = Logger.new($stderr)
-    allow(geocoder_obj).to receive(:data).and_return({"address_components" => [{"types" => ["country"], "long_name" => "Japan"}]})
+    allow(geocoder_obj).to receive(:address).and_return(geocoder_response['display_name'])
+    allow(geocoder_obj).to receive(:country).and_return(geocoder_response['address']['country'])
+    allow(geocoder_obj).to receive(:state).and_return(geocoder_response['address']['state'])
+    allow(geocoder_obj).to receive(:city).and_return(geocoder_response['address']['city'])
     allow(Geocoder).to receive(:search).and_return([geocoder_obj])
   end
 
@@ -41,22 +46,23 @@ describe Sesar do
   end
 
   describe ".from_active_record(model)" do
-    let(:specimen) { FactoryGirl.create(:specimen, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101") }
+    subject { Sesar.from_active_record(specimen) }
+    let(:specimen) { FactoryGirl.create(:specimen, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101", collected_end_at: "20150202") }
     let(:bib) { FactoryGirl.create(:bib) }
     let(:material) {"Rock"}
     let(:sesar_classification) {"Igneous"}
 
     before do
-        specimen.bibs << bib
-        specimen.physical_form.name = "asteroid"
-        specimen.classification.sesar_material = material
-        specimen.classification.sesar_classification = sesar_classification
-        specimen.place.latitude = 35
-        specimen.place.longitude = 135      
+      specimen.bibs << bib
+      specimen.physical_form.name = "asteroid"
+      specimen.classification.sesar_material = material
+      specimen.classification.sesar_classification = sesar_classification
+      specimen.place.latitude = 35
+      specimen.place.longitude = 135
     end
 
     it "正しく値が設定される" do
-      sesar = Sesar.from_active_record(specimen)
+      sesar = subject
       expect(sesar.attributes["sample_type"]).to eq "Other"
       expect(sesar.attributes["name"]).to eq specimen.name
       expect(sesar.attributes["material"]).to eq specimen.classification.sesar_material
@@ -74,17 +80,85 @@ describe Sesar do
       expect(sesar.attributes["collector"]).to eq specimen.collector
       expect(sesar.attributes["collector_detail"]).to eq specimen.collector_detail
       expect(sesar.attributes["collection_start_date"]).to eq "2015-01-01T00:00:00Z"
-      expect(sesar.attributes["collection_end_date"]).to eq "2015-01-01T00:00:00Z"
+      expect(sesar.attributes["collection_end_date"]).to eq "2015-02-02T00:00:00Z"
       expect(sesar.attributes["collection_date_precision"]).to eq specimen.collection_date_precision
       expect(sesar.attributes["current_archive"]).to eq "Institute for Study of the Earth's Interior Okayama University"
       expect(sesar.attributes["current_archive_contact"]).to eq "tkk@misasa.okayama-u.ac.kp"
       expect(sesar.attributes["description"]).to eq specimen.description
       expect(sesar.attributes["sample_other_names"]).to eq [specimen.global_id]
     end
+
+    context "elevation is blank" do
+      before do
+        specimen.place.elevation = nil
+      end
+      it { expect(subject.attributes[:elevation_unit]).to be_blank }
+    end
+    context "elevation is not blank" do
+      it { expect(subject.attributes[:elevation_unit]).to eq "meters" }
+    end
+    context "classification is blank" do
+      before do
+        specimen.classification = nil
+      end
+      it { expect(subject.attributes[:classification]).to be_blank }
+    end
+    context "classification is not blank" do
+      it { expect(subject.attributes[:classification]).to eq ["Rock", "Igneous"] }
+    end
+    context "place is blank" do
+      before do
+        specimen.place = nil
+      end
+      it { expect(subject.attributes[:country_id]).to be_blank }
+    end
+    context "place is not blank" do
+      it { expect(subject.attributes.has_key?(:country_id)).to eq false }
+    end
+
     describe "to_xml" do
       before do
         sesar = Sesar.from_active_record(specimen)
         @xml = sesar.to_xml
+      end
+      context "Specimen レコードがIGSN属性を持たない" do
+        let(:specimen) { FactoryGirl.create(:specimen, igsn: nil) }
+        it { expect(@xml).to include "xsi:schemaLocation=\"http://app.geosamples.org/4.0/sample.xsd\"" }
+        it { expect(@xml).to include "<user_code>#{Settings.sesar.user_code}</user_code>" }
+        it { expect(@xml).not_to include "<igsn>" }
+
+        context "classification is blank" do
+          before do
+            specimen.classification = nil
+            sesar = Sesar.from_active_record(specimen)
+            @xml = sesar.to_xml
+          end
+          it { expect(@xml).not_to include "<material>" }
+          it { expect(@xml).not_to include "<classification>" }
+        end
+      end
+      context "Specimen レコードがIGSN属性を持つ" do
+        it { expect(@xml).to include "xsi:schemaLocation=\"http://app.geosamples.org/4.0/updateSample.xsd\"" }
+        it { expect(@xml).not_to include "<user_code>" }
+        it { expect(@xml).to include "<igsn>" }
+
+        context "attributes value is blank" do
+          before do
+            specimen.collected_end_at = nil
+            sesar = Sesar.from_active_record(specimen)
+            @xml = sesar.to_xml
+          end
+          it { expect(@xml).to include "<collection_end_date/>" }
+        end
+        context "classification is blank" do
+          before do
+            specimen.classification = nil
+            sesar = Sesar.from_active_record(specimen)
+            @xml = sesar.to_xml
+          end
+          it { expect(@xml).to include "<material></material>" }
+          it { expect(@xml).to include "xsi:schemaLocation=\"http://app.geosamples.org/classifications.xsd\"></classification>" }
+        end
       end
       context "materialが>を含む" do
         let(:material) {"Liquid>aqueous"}
@@ -155,50 +229,62 @@ describe Sesar do
   end
   
   describe "緯度経度から場所を特定" do
-    let(:result) { double(:geocoder_obj)}
     describe ".country_name(result)" do
       subject { Sesar.country_name(result) }
-      before do
-        allow(result).to receive(:data).and_return({"address_components" => [{"types" => ["country"], "long_name" => "Japan"}]})
-      end
       context "countryの情報が存在する場合" do
+        let(:result) { geocoder_obj }
         it { expect(subject).to eq "Japan" }
       end
       context "countryの情報が存在しない場合" do
-        let(:result) { "" }
+        let(:result) { nil }
+        it { expect(subject).to eq "" }
+      end
+      context "countryの情報が存在しない場合(geocoderのレスポンスがエラー)" do
+        before do
+          geocoder_error = {"error"=>"Unable to geocode"}
+          allow(geocoder_obj).to receive(:address).and_return(geocoder_error['display_name'])
+        end
+        let(:result) { geocoder_obj }
         it { expect(subject).to eq "" }
       end
     end
   
     describe ".province_name(result)" do
-      subject {Sesar.province_name(result) }
-      before do
-        allow(result).to receive(:data).and_return({"address_components" => [{"types" => ["administrative_area_level_1"], "long_name" => "Hyōgo-ken"}]})
+      subject { Sesar.province_name(result) }
+      context "provinceの情報(state)が存在する場合" do
+        let(:result) { geocoder_obj }
+        it { expect(subject).to eq "Kinki Region" }
       end
-      context "provinceの情報(administrative_area_level_1)が存在する場合" do
-        it { expect(subject).to eq "Hyōgo-ken" }
+      context "provinceの情報が存在しない場合" do
+        let(:result) { nil }
+        it { expect(subject).to eq "" }
       end
-      context "provinceの情報(administrative_area_level_1)が存在しない場合" do
-        let(:result) { "" }
+      context "provinceの情報が存在しない場合(geocoderのレスポンスがエラー)" do
+        before do
+          geocoder_error = {"error"=>"Unable to geocode"}
+          allow(geocoder_obj).to receive(:address).and_return(geocoder_error['display_name'])
+        end
+        let(:result) { geocoder_obj }
         it { expect(subject).to eq "" }
       end
     end
   
     describe ".city_name(result)" do
-      subject {Sesar.city_name(result) }
-      before do
-        allow(result).to receive(:data).and_return({"address_components" => [{"types" => ["locality"], "long_name" => "Nishiwaki-shi"}]})
+      subject { Sesar.city_name(result) }
+      context "cityの情報が存在する場合" do
+        let(:result) { geocoder_obj }
+        it { expect(subject).to eq "Nishiwaki" }
       end
-
-      context "cityの情報(locality)が存在する場合" do
-        it { expect(subject).to eq "Nishiwaki-shi" }
-      end
-#      context "cityの情報(locality)が複数存在する場合" do
-#        let(:result) { Geocoder.search("38,141")[0] }
-#        it { expect(subject).to eq "Watari-chō" }
-#      end
       context "cityの情報が存在しない場合" do
-        let(:result) { "" }
+        let(:result) { nil }
+        it { expect(subject).to eq "" }
+      end
+      context "cityの情報が存在しない場合(geocoderのレスポンスがエラー)" do
+        before do
+          geocoder_error = {"error"=>"Unable to geocode"}
+          allow(geocoder_obj).to receive(:address).and_return(geocoder_error['display_name'])
+        end
+        let(:result) { geocoder_obj }
         it { expect(subject).to eq "" }
       end
     end
@@ -334,6 +420,25 @@ describe Sesar do
           it { expect(subject).to be_blank }
         end
       end
+    end
+  end
+
+  describe ".igsn_registered?" do
+    subject { sesar.igsn_registered? }
+    let(:sesar) { Sesar.from_active_record(specimen) }
+    let(:specimen) { FactoryGirl.create(:specimen, igsn: igsn) }
+    let(:igsn) { "IEAAA0001" }
+
+    context "specimenレコードがigsn属性を持つ" do
+      it { expect(subject).to eq true }
+    end
+    context "specimenレコードがigsn属性を持たない" do
+      let(:igsn) { nil }
+      it { expect(subject).to eq false }
+    end
+    context "specimenレコードのigsn属性が空" do
+      let(:igsn) { "" }
+      it { expect(subject).to eq false }
     end
   end
 

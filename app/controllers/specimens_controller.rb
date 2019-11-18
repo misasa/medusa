@@ -41,6 +41,8 @@ class SpecimensController < ApplicationController
     @specimen.update_attributes(specimen_params)
     if params[:sesar_upload] && @specimen.errors.blank?
       sesar_upload
+    elsif params[:sesar_download] && @specimen.errors.blank?
+      sesar_download
     else
       respond_with @specimen
     end
@@ -156,6 +158,16 @@ class SpecimensController < ApplicationController
     respond_with @specimen
   end
 
+  def sesar_download
+    @sesar_json = SesarJson.sync(@specimen)
+    if @sesar_json.errors.messages.blank?
+      @sesar_json.update_specimen(@specimen)
+    else
+      @specimen.errors.add(:sesar_download, @sesar_json.errors.messages)
+    end
+    respond_with @specimen
+  end
+
   private
 
   def specimen_params
@@ -189,6 +201,7 @@ class SpecimensController < ApplicationController
       :collector,
       :collector_detail,
       :collected_at,
+      :collected_end_at,
       :collection_date_precision,
       :fixed_in_box,
       record_property_attributes: [

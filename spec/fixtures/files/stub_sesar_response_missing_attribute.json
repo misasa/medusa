@@ -1,0 +1,110 @@
+{
+  "sample": {
+    "qrcode_img_src": "https://app.geosamples.org/barcode/image.php?igsn=ODP000002&sample_id=Core 1-1*-1M",
+    "user_code": "ODP",
+    "igsn": "ODP000002",
+    "name": "Core 1-1*-1M",
+    "sample_type": "Core",
+    "parent_igsn": "ODP000001",
+    "publish_date": "2010-12-10",
+    "collection_method": "Coring",
+    "collection_method_descr": "M: This represents material that could not be labeled with a standard core type.  This category includes limited numbers of cores which are recovered using experimental drilling methods which, once they are established, are assigned their own core type.",
+    "latitude": "25.8583",
+    "longitude": "-92.1833",
+    "elevation": "-2827",
+    "elevation_unit": "meters",
+    "cruise_field_prgrm": "DSDP Leg 1",
+    "platform_type": "Ship",
+    "platform_name": "Glomar Challenger",
+    "collector": "Curator",
+    "collector_detail": "Texas A&M University, Integrated Ocean Drilling Program, College Station, TX, 77845, USA",
+    "current_archive": "Integrated Ocean Drilling Program (IODP)",
+    "current_archive_contact": "Curator",
+    "original_archive": "Texas A&M University, Integrated Ocean Drilling Program, College Station, TX, 77845, USA",
+    "original_archive_contact": "Curator",
+    "parents": {
+      "samples": {
+        "sample": {
+          "igsn": "ODP000001",
+          "name": "Hole 1-1*"
+        }
+      }
+    },
+    "siblings": {
+      "samples": {
+        "sample": [
+          {
+            "igsn": "ODP000003",
+            "name": "Core 1-1*-1R"
+          },
+          {
+            "igsn": "ODP000004",
+            "name": "Core 1-1*-2R"
+          },
+          {
+            "igsn": "ODP000005",
+            "name": "Core 1-1*-3R"
+          },
+          {
+            "igsn": "ODP000006",
+            "name": "Core 1-1*-40"
+          },
+          {
+            "igsn": "ODP000007",
+            "name": "Core 1-1*-5R"
+          },
+          {
+            "igsn": "ODP000008",
+            "name": "Core 1-1*-6R"
+          },
+          {
+            "igsn": "ODP000009",
+            "name": "Core 1-1*-7R"
+          },
+          {
+            "igsn": "ODP000010",
+            "name": "Core 1-1*-8R"
+          },
+          {
+            "igsn": "ODP000011",
+            "name": "Core 1-1*-9R"
+          }
+        ]
+      }
+    },
+    "children": {
+      "samples": {
+        "sample": [
+          {
+            "igsn": "ODP01133U",
+            "name": "Section 1-1*-1M-1"
+          },
+          {
+            "igsn": "ODP01133Y",
+            "name": "Section 1-1*-1M-2"
+          },
+          {
+            "igsn": "ODP011342",
+            "name": "Section 1-1*-1M-3"
+          },
+          {
+            "igsn": "ODP011346",
+            "name": "Section 1-1*-1M-4"
+          },
+          {
+            "igsn": "ODP01134A",
+            "name": "Section 1-1*-1M-5"
+          },
+          {
+            "igsn": "ODP01134E",
+            "name": "Section 1-1*-1M-6"
+          },
+          {
+            "igsn": "ODP01134I",
+            "name": "Section 1-1*-1M-7"
+          }
+        ]
+      }
+    }
+  }
+}

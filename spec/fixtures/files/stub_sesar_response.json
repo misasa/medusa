@@ -1,0 +1,35 @@
+{
+  "sample": {
+    "qrcode_img_src": "",
+    "user_code": "IEIMA",
+    "igsn": "IEIMA0005",
+    "name": "sample001",
+    "sample_type": "Individual Sample",
+    "description": "for test",
+    "sample_subtype": "Specimen",
+    "publish_date": "2020-01-01",
+    "material": "Rock",
+    "classification": {
+      "Rock": {
+        "Igneous": []
+      }
+    },
+    "age_min": "1",
+    "age_max": "10",
+    "age_unit": "million years (Ma)",
+    "size": "100",
+    "size_unit": "kg",
+    "latitude": "-82.63343",
+    "longitude": "-53.26808",
+    "elevation_unit": [],
+    "locality": "test",
+    "locality_description": "for test",
+    "publish_date": "2019/10/31",
+    "sample_subtype": "sample",
+    "collection_start_date": "2019/10/31T10:00:00Z",
+    "collection_end_date": "2019/11/01T10:00:00Z",
+    "collection_date_precision": "time",
+    "collector": "sumita",
+    "collector_detail": "tester"
+  }
+}
