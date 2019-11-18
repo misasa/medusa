@@ -64,15 +64,19 @@ describe AttachmentFileDecorator do
       it {expect(subject).not_to include "{\\footnotesize \\circle{0.7} \\url{"}
     end
     context "spots is not empty " do
-      let(:spot){FactoryGirl.create(:spot)}
-      before{attachment_file.spots << spot }
-      it {expect(subject).to include "{\\footnotesize \\circle{0.7} \\nolinkurl{"}
+      let(:spot){FactoryGirl.create(:spot, :target_uid => nil)}
+      let(:surface){FactoryGirl.create(:surface)}
+      before do
+        attachment_file.spots << spot
+        surface.images << attachment_file
+      end
+      it {expect(subject).to include "{\\footnotesize \\circle{0.7} \\href{"}
       context "target_uid is empty" do
-        before{attachment_file.spots[0].target_uid = ""}
+        before{spot.target_uid = ""; spot.save}
         it {expect(subject).not_to include " % target_uid"}
       end
       context "target_uid is not empty" do
-        before{attachment_file.spots[0].target_uid = "target_uid"}
+        before{spot.target_uid = "target_uid"; spot.save}
         it {expect(subject).to include " % target_uid"}
       end
       context "affine_matrix is empty" do

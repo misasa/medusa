@@ -84,50 +84,53 @@ describe AttachmentFilesController do
       it { expect(response).not_to render_template('attachment_files/update') }
     end
 
-    context "format js" do
-      let(:format){ 'js' }
-      it { expect(attachment_file.reload.description).to eq 'hello world' }
-      it { expect(response).to render_template('attachment_files/update') }
-    end
+#    context "format js" do
+#      let(:format){ 'js' }
+#      it { expect(attachment_file.reload.description).to eq 'hello world' }
+#      it { expect(response).to render_template('attachment_files/update') }
+#    end
   end
 
   describe "PUT update_affine_matrix", :current => true do
     render_views
     let(:attachment_file) { FactoryGirl.create(:attachment_file) }
-    let(:format){ 'js' }
+    let(:format){ 'json' }
 
     before { put :update_affine_matrix, id: attachment_file.id, affine_matrix: array , format: format }
 
     context "with valid values" do
       let(:array){ ["40.5412", "-0.334872", "9192.7", "1.0072", "41.6419", "-2824.46", "0.0", "0.0", "1.0"]  }
       it { expect(attachment_file.reload.affine_matrix).to eq [40.5412, -0.334872, 9192.7, 1.0072, 41.6419, -2824.46, 0.0, 0.0, 1.0] }
-      it { expect(response).to render_template('attachment_files/update_affine_matrix') }
+      it { expect(response.status).to eq 200 }
+      #it { expect(response).to render_template('attachment_files/update_affine_matrix') }
     end
 
     context "with blank values" do
       let(:array){ ["40.5412", "", "9192.7", "1.0072", "41.6419", "-2824.46", "0.0", "0.0", "1.0"]  }
-      it { expect(response).to render_template('attachment_files/error') }
+      it { expect(response.status).to eq 204 }
+      #it { expect(response).to render_template('attachment_files/error') }
     end
   end
 
   describe "PUT update_corners", :current => true do
     render_views
     let(:attachment_file) { FactoryGirl.create(:attachment_file) }
-    let(:format){ 'js' }
+    let(:format){ 'json' }
     before { put :update_corners, id: attachment_file.id, corners_on_world: corners, format: format }
 
     context "with valid corners" do
       let(:corners){ { "lu" => ["1492.8272", "2371.039"], "ru" => ["1576.2872", "2368.185"], "rb" => ["1573.1728", "2304.961"], "lb" => ["1489.7128", "2307.815"]} }
 
       it { expect(attachment_file.reload.corners_on_world[0][0]).to be_within(0.01).of(1492.8272) }
-      it { expect(response).to render_template('attachment_files/update_corners') }
+      it { expect(response.status).to eq 200 }
     end
 
     context "with blank" do
       let(:corners){ { "lu" => ["", "2371.039"], "ru" => ["1576.2872", "2368.185"], "rb" => ["1573.1728", "2304.961"], "lb" => ["1489.7128", "2307.815"]} }
 
       #it { expect(attachment_file.reload.corners_on_world[0][0]).to be_within(0.01).of(1492.8272) }
-      it { expect(response).to render_template('attachment_files/error') }
+      #it { expect(response).to render_template('attachment_files/error') }
+      it { expect(response.status).to eq 204 }
     end
 
   end
