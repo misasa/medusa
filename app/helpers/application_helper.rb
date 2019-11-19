@@ -47,6 +47,7 @@ module ApplicationHelper
     else
       tag = obj.name
     end
+    tag += raw(" ") + content_tag(:small, "<" + obj.global_id + ">" )
     tag += raw(" ") + published_label(obj) if obj.published
     tag
   end
