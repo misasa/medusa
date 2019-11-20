@@ -20,7 +20,7 @@
 /config/application.yml
 /config/database.yml
 /config/google.yml
-
+docker-compose.yml
 # Ignore deproy configration files.
 /config/deploy/*.rb
 
