@@ -115,6 +115,28 @@ describe Sesar do
     context "place is not blank" do
       it { expect(subject.attributes.has_key?(:country_id)).to eq false }
     end
+    context "size and size_unit are blank" do
+      before do
+        specimen.size = nil
+        specimen.size_unit = nil
+      end
+      it { expect(subject.attributes[:size]).to eq specimen.quantity }
+      it { expect(subject.attributes[:size_unit]).to eq specimen.quantity_unit }
+    end
+    context "only size is blank" do
+      before do
+        specimen.size = nil
+      end
+      it { expect(subject.attributes[:size]).to eq specimen.size }
+      it { expect(subject.attributes[:size_unit]).to eq specimen.size_unit }
+    end
+    context "only size_unit is blank" do
+      before do
+        specimen.size_unit = nil
+      end
+      it { expect(subject.attributes[:size]).to eq specimen.size }
+      it { expect(subject.attributes[:size_unit]).to eq specimen.size_unit }
+    end
 
     describe "to_xml" do
       before do

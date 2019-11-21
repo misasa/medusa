@@ -91,8 +91,8 @@ class Sesar < ActiveResource::Base
     attributes[:age_min] = model.age_min
     attributes[:age_max] = model.age_max
     attributes[:age_unit] = age_unit_conversion(model.age_unit)
-    attributes[:size] = model.size
-    attributes[:size_unit] = model.size_unit
+    attributes[:size] = model.size.present? || model.size_unit.present? ? model.size : model.quantity
+    attributes[:size_unit] = model.size.present? || model.size_unit.present? ? model.size_unit : model.quantity_unit
     attributes[:latitude] = model.place.try!(:latitude)
     attributes[:longitude] = model.place.try!(:longitude)
     attributes[:elevation] = model.place.try!(:elevation)
