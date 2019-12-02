@@ -273,10 +273,8 @@ class Sesar < ActiveResource::Base
     return "" if age_unit.blank?
     age_unit_list = YAML.load(File.read("#{Rails.root}/config/age_unit.yml"))
 
-    if age_unit == "a"
-      "years"
-    elsif age_unit_list.has_key?(age_unit)
-      "#{age_unit_list[age_unit]} (#{age_unit})"
+    if age_unit_list.has_key?(age_unit)
+      age_unit == "a" ? age_unit_list[age_unit] : "#{age_unit_list[age_unit]} (#{age_unit})"
     else
       age_unit
     end
