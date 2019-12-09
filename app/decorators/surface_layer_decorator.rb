@@ -149,7 +149,7 @@ class SurfaceLayerDecorator < Draper::Decorator
         end
       )
       h.concat(
-               h.link_to(h.tiles_surface_layer_path(self.surface, self), method: :post, class: "btn btn-default btn-sm pull-right", title: "refresh tiles in layer '#{self.name}'") do
+               h.link_to(h.tiles_surface_layer_path(self.surface, self), method: :post, class: "btn btn-default btn-sm pull-right", title: "refresh tiles for images in layer '#{self.name}'") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-refresh")
         end
       )
