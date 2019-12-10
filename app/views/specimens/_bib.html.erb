@@ -9,7 +9,7 @@
   </thead>
   <tbody>
     <%= form_tag bundle_edit_bibs_path, id: "bib-bundle-form" do %>
-      <% @specimen.bibs.each do |bib| %>
+      <% @specimen.full_bibs.each do |bib| %>
         <tr>
           <td>
               <%= check_box_tag("ids[]", bib.id, checked: false, id: "ids_#{bib.id}", class: "select-row") if can?(:update, bib) %>
@@ -17,8 +17,10 @@
           <td colspan="2"><%= link_to_if can?(:read, bib), list_title(bib), bib %></td>
           <td><%= bib.try!(:global_id) %></td>
           <td>
+            <% if @specimen.bibs.include?(bib) %>
             <%= link_to specimen_bib_path(@specimen,bib) + tab_param(__FILE__), method: :delete ,title: "unlink bib",data: {confirm: t("confirm.unlink")} do %>
               <span class="glyphicon glyphicon-remove"></span>
+            <% end %>
             <% end %>
           </td>
         </tr>
