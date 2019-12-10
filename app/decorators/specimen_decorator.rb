@@ -90,7 +90,7 @@ class SpecimenDecorator < Draper::Decorator
 
   def bibs_with_link
     contents = []
-    bibs.each do |bib| 
+    full_bibs.each do |bib| 
       content = h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
       content += ""
       content += h.link_to_if(h.can?(:read, bib), h.raw(bib.to_html), bib)
@@ -101,17 +101,18 @@ class SpecimenDecorator < Draper::Decorator
       #content = h.content_tag(:li, content)
       table_links = []
       bib.tables.each do |table|
-         next unless table.specimens && table.specimens.include?(self) 
+         next unless full_tables.include?(table) 
          table_link = h.link_to(h.raw(table.caption), table )
 
-         if Settings.rplot_url
-           table_link += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + table.global_id, :title => 'plot online')
-         end
-         table_links << table_link
+         #if Settings.rplot_url
+         #  table_link += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + table.global_id, :title => 'plot online')
+         #end
+         table_links << h.content_tag(:li, table_link)
          #table_links << h.link_to_if(true, h.raw(table.description), table )
       end
       unless table_links.empty?
-        content += h.raw " (" + table_links.join(", ") + ")"
+        content += h.content_tag(:ul, h.raw(table_links.join(" ")))
+        #content += h.raw " (" + table_links.join(", ") + ")"
       end
       content = h.content_tag(:li, content)
       contents << content
