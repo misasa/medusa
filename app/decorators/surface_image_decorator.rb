@@ -157,6 +157,7 @@ class SurfaceImageDecorator < Draper::Decorator
           h.concat h.content_tag(:li, attachment_file.name, class: "dropdown-header")
           #h.concat h.content_tag(:li, h.link_to("show image", h.attachment_file_path(attachment_file), class: "dropdown-item"))
           h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_affine_matrix_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
+          h.concat h.content_tag(:li, h.link_to("open affine matrix editor", h.edit_affine_matrix_attachment_file_path(attachment_file), class: "dropdown-item", title: "#{attachment_file.name}"))
           h.concat h.content_tag(:li, h.link_to("type in coordinates of 4 corners", h.edit_corners_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
           h.concat h.content_tag(:li, h.link_to("align and export", h.calibrate_svg_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
           h.concat h.content_tag(:li, h.link_to("align on layer 'Base'", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))

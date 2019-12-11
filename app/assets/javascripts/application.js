@@ -26,6 +26,7 @@
 //= require leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.src.js
 //= require Leaflet.Spin/leaflet.spin.min.js
 //= require perspective-transform/dist/perspective-transform.min.js
+//= require handsontable/dist/handsontable.full.min.js
 //= require svg
 //= require svg.draggable
 //= require matrix
