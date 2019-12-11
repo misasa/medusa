@@ -13,6 +13,7 @@
     "leaflet-toolbar": "Leaflet/Leaflet.Toolbar",
     "Leaflet.Spin": "makinacorpus/Leaflet.Spin",
     "leaflet.coordinates": "https://github.com/yyachi/Leaflet.Coordinates#develop",
-    "perspective-transform": "https://github.com/jlouthan/perspective-transform"
+    "perspective-transform": "https://github.com/jlouthan/perspective-transform",
+    "handsontable": "https://github.com/handsontable/handsontable"
   }
 }
