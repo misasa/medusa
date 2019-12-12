@@ -4,7 +4,8 @@
     <%= f.label :affine_matrix, class: "small" -%>
     ex.) [1, 0, 0; 0, 1, 0; 0, 0, 1]
     <%= f.text_field :affine_matrix_in_string, class: "form-control input-sm" %>
-  </div>
+    <div id="affine_editor"></div>
+    </div>
   <div class="form-group form-group-sm">
     <%= f.label :name, class: "small" %>
     <%= f.text_field :name, class: "form-control input-sm" %>
@@ -22,4 +23,24 @@
   $(document).on("succeed.ajaxForm", "#edit_attachment_file_<%= @attachment_file.id %>", function() {
     location.href="<% attachment_file_path(@attachment_file) %>";
   });
-<% end %>
+
+  <% m = @attachment_file.affine_matrix %>
+const data = [
+  [<%= m[0] %>, <%= m[1] %>, <%= m[2] %>],
+  [<%= m[3] %>, <%= m[4] %>, <%= m[5] %>],
+  [<%= m[6] %>, <%= m[7] %>, <%= m[8] %>]
+];
+const container = document.getElementById('affine_editor');
+const hot = new Handsontable(container, {
+  data: data,
+  licenseKey: 'non-commercial-and-evaluation'
+});
+Handsontable.hooks.add('afterChange', function() {
+    console.log(arguments);
+    m = hot.getData();
+    str = '[' + m[0].join(',') + ';' + m[1].join(',') + ';' + m[2].join(',') + ']'
+    $('#attachment_file_affine_matrix_in_string').val(str);
+    console.log(str);
+});
+  <% end %>
+
