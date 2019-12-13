@@ -136,7 +136,7 @@ class BibsController < ApplicationController
   end
 
   def find_resource
-    @bib = Bib.includes({analyses: [:record_property, :device, :chemistries]}, {tables: {analyses: [:device, :record_property, :chemistries]}}, {boxes: {analyses: [:device, :record_property, :chemistries]}}, {specimens: [:tags, :record_property, :attachment_files, :classification, :physical_form, :specimen_custom_attributes, {box: [:record_property]}, {analyses: [:device, :record_property, :chemistries]}]}).find(params[:id]).decorate
+    @bib = Bib.includes({places: [:record_property]}, {analyses: [:record_property, :device, :chemistries]}, {tables: {analyses: [:device, :record_property, :chemistries]}}, {specimens: [:tags, :record_property, :attachment_files, :classification, :physical_form, :specimen_custom_attributes, {place: [:record_property]}, {box: [:record_property]}, {analyses: [:device, :record_property, :chemistries]}]}).find(params[:id]).decorate
   end
 
   def find_resources
