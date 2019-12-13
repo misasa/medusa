@@ -15,6 +15,10 @@ class BibsController < ApplicationController
     respond_with @bib
   end
 
+  def specimens_detail
+    respond_with @bib
+  end
+
   def edit
     respond_with @bib, layout: !request.xhr?
   end
@@ -132,7 +136,7 @@ class BibsController < ApplicationController
   end
 
   def find_resource
-    @bib = Bib.find(params[:id]).decorate
+    @bib = Bib.includes({analyses: [:record_property, :device, :chemistries]}, {tables: {analyses: [:device, :record_property, :chemistries]}}, {boxes: {analyses: [:device, :record_property, :chemistries]}}, {specimens: [:tags, :record_property, :attachment_files, :classification, :physical_form, :specimen_custom_attributes, {box: [:record_property]}, {analyses: [:device, :record_property, :chemistries]}]}).find(params[:id]).decorate
   end
 
   def find_resources
