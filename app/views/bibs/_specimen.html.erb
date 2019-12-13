@@ -7,19 +7,20 @@
 <% specimen_groups = @bib.specimens.group_by{|specimen| specimen.box} %>
 <% specimen_groups.each do |box, specimens| %>
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-  <div class="panel panel-default">
+<%= link_to 'print out', specimens_detail_bib_path(@bib) %>
+<div class="panel panel-default">
     <div class="panel-heading">
     <% if box %>
-        <%= box.decorate.box_path_with_id %>
+        <%= link_to box.decorate.name_with_id, box_path(box) %>
         <%# links = [content_tag(:div, qrcode(box.global_id, size: "80x80"), class: "col-xs-2 col-sm-2 col-md-2 col-lg-2") ] %>
         <% links = [] %>
-        <% box.related_spots.each do |spot| %>
-        <% svg_link = link_to(spot_path(spot)) do %>
-          <% spot.attachment_file.decorate.picture_with_spots(width:120, height:90, spots:[spot]) %>
-        <% end %>
-          <% links << content_tag(:div, svg_link, class: "col-xs-2 col-sm-2 col-md-2 col-lg-2") %>
-        <% end %>
-        <%= content_tag(:div, raw( links.join ), class: "row spot-thumbnails") %>
+        <%# box.related_spots.each do |spot| %>
+        <%# svg_link = link_to(spot_path(spot)) do %>
+          <%# spot.attachment_file.decorate.picture_with_spots(width:120, height:90, spots:[spot]) %>
+        <%# end %>
+          <%# links << content_tag(:div, svg_link, class: "col-xs-2 col-sm-2 col-md-2 col-lg-2") %>
+        <%# end %>
+        <%#= content_tag(:div, raw( links.join ), class: "row spot-thumbnails") %>
     <% end %>
     </div>
     <table class="table table-condensed">
@@ -61,7 +62,7 @@
           <%= li_if_exist("quantity (#{specimen.quantity_unit}): ", specimen.quantity) %>
           <%= content_tag(:li, "status: #{specimen.status_icon} (#{specimen.status_name})", {}, false) if specimen.status_name.present? %>
           <%= li_if_exist("age (#{specimen.age_unit}): ", specimen.age_in_text) %>
-          <%= li_if_exist("tag list: ", specimen.tag_list) %>
+          <%#= li_if_exist("tag list: ", specimen.tags.pluck(:name).join(', ')) %>
           <%= li_if_exist("description: ", specimen.description) %>
           <% specimen.specimen_custom_attributes.each do |specimen_custom_attribute| %>
             <%= li_if_exist("#{specimen_custom_attribute.custom_attribute.name}: ", specimen_custom_attribute.value ) %>

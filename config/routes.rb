@@ -209,6 +209,7 @@ Medusa::Application.routes.draw do
       get :picture
       get :map
       get :property
+      get :specimens_detail
       put :publish
     end
     collection do
