@@ -16,8 +16,8 @@ class BibDecorator < Draper::Decorator
 
   def name_with_id
     tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
-    tag += h.raw(" #{to_html} < #{h.draggable_id(global_id)} >")
-    #tag += h.raw(" #{name} < #{h.draggable_id(global_id)} >")
+    tag += h.raw(" ") + to_html
+    tag += h.raw(" ") + h.raw("< #{h.draggable_id(global_id)} >")
     # if Settings.rplot_url
     #   tag += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
     # end
@@ -63,15 +63,17 @@ class BibDecorator < Draper::Decorator
   # end
 
   def to_html
-    html = author_short
-    html += " (#{year})" unless year.blank?
+#    html = author_short
+#    html += " (#{year})" unless year.blank?
+    link_txt = author_short
+    link_txt += " (#{year})" unless year.blank?
+    html = h.link_to_unless_current(link_txt, h.bib_path(self))
     html += " #{name}" unless name.blank?
-    html += ", <i>#{journal}</i>" unless journal.blank?
-    html += ", <b>#{volume}</b>" unless volume.blank?
-    html += ", #{pages}" unless pages.blank?
-#    html += " at " + updated_at.strftime("%Y-%m-%d %H:%M")
-    html += ", doi: " + h.link_to(doi, doi_link_url) unless doi.blank?
-    html += "."
+    html += h.raw(", ") + h.content_tag(:i, journal) unless journal.blank?
+    html += h.raw(", ") + h.content_tag(:b, volume) unless volume.blank?
+    html += h.raw(", #{pages}") unless pages.blank?
+    html += h.raw(", doi: ") + h.link_to(doi, doi_link_url) unless doi.blank?
+    html += h.raw(".")
     html
   end
 

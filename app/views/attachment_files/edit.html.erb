@@ -2,11 +2,12 @@
 <%= form_for @attachment_file, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
   <div class="form-group form-group-sm">
     <%= f.label :affine_matrix, class: "small" -%>
-    ex.) [1, 0, 0; 0, 1, 0; 0, 0, 1]
-    <%= f.text_field :affine_matrix_in_string, class: "form-control input-sm" %>
+    <p class:"small">in matrix form</p>
     <div id="affine_editor"></div>
+    <p class:"small"> or in string form (example: [1, 0, 0; 0, 1, 0; 0, 0, 1])</p>
+    <%= f.text_field :affine_matrix_in_string, class: "form-control input-sm" %>
     </div>
-  <div class="form-group form-group-sm">
+    <div class="form-group form-group-sm">
     <%= f.label :name, class: "small" %>
     <%= f.text_field :name, class: "form-control input-sm" %>
   </div>

@@ -1,13 +1,15 @@
-
 <div class="row">
-
-
-
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">        
+  <div class="pull-right">
+    <%= link_to 'more', specimens_detail_bib_path(@bib) %>
+  </div>
+</div>
+</div>
+<div class="row">
 <%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
 <% specimen_groups = @bib.specimens.group_by{|specimen| specimen.box} %>
 <% specimen_groups.each do |box, specimens| %>
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-<%= link_to 'print out', specimens_detail_bib_path(@bib) %>
 <div class="panel panel-default">
     <div class="panel-heading">
     <% if box %>
@@ -28,17 +30,14 @@
       <% specimen = specimen.decorate %>
       <tr>
       <td class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-          <%= qrcode specimen.global_id, size: "80x80" %>
+          <%#= qrcode specimen.global_id, size: "80x80" %>
+          <%= link_to specimen.attachment_files.first.decorate.picture(width: 160, height: 160, type: :tiny), specimen, class: specimen_ghost(specimen) if specimen.attachment_files.present? %>
           <%= check_box_tag("ids[]", specimen.id, true, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
           <%= link_to bib_specimen_path(@bib, specimen) + tab_param(__FILE__), method: :delete, title: "unlink specimen", data: {confirm: t("confirm.unlink")} do %>
             <span class="glyphicon glyphicon-remove"></span>
           <% end %>
       </td>
-      <td class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-        <%= link_to specimen.attachment_files.first.decorate.picture(width: 160, height: 160, type: :thumb), specimen, class: specimen_ghost(specimen) if specimen.attachment_files.present? %>
-      </td>
-
-      <td class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
+      <td class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
 
         <%= specimen.name_with_id(true) %>
         <ul>

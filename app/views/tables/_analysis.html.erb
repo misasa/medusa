@@ -50,7 +50,6 @@
             <% end %>
             <%= f.fields_for :table_analyses, table_analysis do |g| %>
             <%= link_to list_title(g.object.analysis), analysis_path(table_analysis.analysis) %> <%= link_to_if(can?(:read, table_analysis.analysis), content_tag(:span, table_analysis.analysis.chemistries.size, class:"badge"), analysis_path(table_analysis.analysis, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal") %>
-            on <%= link_to list_title(g.object.analysis.specimen), specimen_path(table_analysis.analysis.specimen) %>
               <%= g.hidden_field :priority, class: "priority" %>
             <% end %>
           </div>

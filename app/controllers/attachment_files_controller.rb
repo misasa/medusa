@@ -50,7 +50,7 @@ class AttachmentFilesController < ApplicationController
 
   def update
     @attachment_file.update_attributes(attachment_file_params)
-    respond_with @attachment_file
+    respond_with @attachment_file, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
   def update_affine_matrix
