@@ -289,9 +289,20 @@ class AttachmentFileDecorator < Draper::Decorator
   end
 
 
+  def matrix_form
+    h.form_for(self) do |form|
+      h.concat(h.content_tag(:div,nil,id:"affine_editor_#{self.id}"))
+      h.concat form.hidden_field :affine_matrix_in_string
+      h.concat(form.button(class: "btn btn-default") do
+        h.concat h.content_tag(:span, nil, class:"glyphicon glyphicon-save")
+      end)
+    end
+  end
+
   private
 
   def icon_with_count(klass, count)
     "#{klass}Decorator".constantize.icon + h.content_tag(:span, count) if count.nonzero?
   end
+
 end

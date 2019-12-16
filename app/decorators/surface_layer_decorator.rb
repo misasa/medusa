@@ -114,7 +114,7 @@ class SurfaceLayerDecorator < Draper::Decorator
     })
   end
 
-  def panel_head
+  def panel_head(tokens)
     h.content_tag(:div, class: "panel-heading") do
       h.concat(
         h.content_tag(:span, class: "panel-title pull-left") do
@@ -128,6 +128,9 @@ class SurfaceLayerDecorator < Draper::Decorator
         end
       )
       h.concat h.content_tag(:span, "opacity: #{self.opacity}%", class: "label label-primary pull-left")
+      tokens.each do |token|
+        h.concat h.content_tag(:span, token, class: "label label-success pull-left")
+      end
       h.concat(
         h.link_to(h.surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :delete, title: "delete layer '#{self.name}'", data: {confirm: "Are you sure you want to delete layer '#{self.name}'"}) do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-remove")
@@ -167,25 +170,35 @@ class SurfaceLayerDecorator < Draper::Decorator
     end
   end
 
-  def thumbnails_list
+  def thumbnails_list(tokens)
     h.content_tag(:ul, class: "list-inline thumbnails surface-layer", data: {id: self.id}, style: "min-height: 100px;" ) do
       #self.surface_images.reorder("position DESC").each do |surface_image|
       surface_images.each do |surface_image|
         next unless surface_image.image
-        h.concat surface_image.decorate.li_thumbnail
+        h.concat surface_image.decorate.li_thumbnail(tokens)
       end
     end
   end
 
-  def panel_body
+  def panel_body(tokens)
     h.content_tag(:div, class: "panel-body collapse in", id: "surface-layer-#{self.id}") do
-      thumbnails_list
+      thumbnails_list(tokens)
     end
   end
 
   def panel
+    layer_tokens = []
+    self.surface_images.each do |surface_image|
+      image = surface_image.image
+      tokens = File.basename(image.name, ".*").split('-')
+      if layer_tokens.empty?
+        layer_tokens = tokens
+      else
+        layer_tokens = layer_tokens & tokens
+      end
+    end
     h.content_tag(:div, class: "panel panel-default") do
-      panel_head + panel_body
+      panel_head(layer_tokens) + panel_body(layer_tokens)
     end
   end
 end

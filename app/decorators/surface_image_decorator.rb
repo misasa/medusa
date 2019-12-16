@@ -157,7 +157,8 @@ class SurfaceImageDecorator < Draper::Decorator
           h.concat h.content_tag(:li, attachment_file.name, class: "dropdown-header")
           #h.concat h.content_tag(:li, h.link_to("show image", h.attachment_file_path(attachment_file), class: "dropdown-item"))
 #          h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_affine_matrix_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
-          h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_attachment_file_path(attachment_file), class: "dropdown-item", title: "#{attachment_file.name}", :target => ["_blank"] ))
+          h.concat h.content_tag(:li, h.content_tag(:a, "type in affine matrix", href: "#collapseAffine-#{attachment_file.id}", class: "dropdown-item", title: "#{attachment_file.name}", data: {toggle:"collapse"}))
+#          h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_attachment_file_path(attachment_file), class: "dropdown-item", title: "#{attachment_file.name}", :target => ["_blank"] ))
           h.concat h.content_tag(:li, h.link_to("type in coordinates of 4 corners", h.edit_corners_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
           h.concat h.content_tag(:li, h.link_to("align and export", h.calibrate_svg_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
           h.concat h.content_tag(:li, h.link_to("align on layer 'Base'", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
@@ -188,14 +189,14 @@ class SurfaceImageDecorator < Draper::Decorator
     h.content_tag(:li, h.raw(left + right), class:"media")
   end
 
-  def li_thumbnail
+  def li_thumbnail(ptokens = [])
     return unless self.image
     return unless self.image.image?
     return unless File.exist?(self.image.data.path)
       h.content_tag(:li, class: "surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do
         h.concat(
           h.content_tag(:div, class:"thumbnail") do
-            h.concat h.link_to(h.image_tag(self.image.path(:tiny)), h.attachment_file_path(self.image))
+            h.concat h.link_to(h.image_tag(self.image.path(:thumb)), h.attachment_file_path(self.image))
             #h.concat h.content_tag(:small, self.image.name)
             h.concat drop_down_menu
             unless self.calibrated?
@@ -203,8 +204,12 @@ class SurfaceImageDecorator < Draper::Decorator
 #            else
               h.concat h.content_tag(:span, "not calibrated", class:"label label-default")
             end
+            tokens = File.basename(self.image.name, ".*").split('-')
+            (tokens - ptokens).each do |token|
+              h.concat h.content_tag(:span, token, class:"label label-success")
+            end
             #h.concat h.content_tag(:small, "(#{position})" )
-            #h.concat h.content_tag(:small, self.image.affine_matrix)
+            h.concat h.content_tag(:div, self.image.decorate.matrix_form, class:"collapse", id:"collapseAffine-#{self.image.id}")
           end
         )
         #h.concat self.image.decorate.thumbnail
