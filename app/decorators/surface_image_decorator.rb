@@ -24,6 +24,10 @@ class SurfaceImageDecorator < Draper::Decorator
     #h.raw(" < #{h.draggable_id(surface.global_id)} >")    
   end
  
+  def tokenize
+    File.basename(self.image.name, ".*").split(/-|_|@/)
+  end
+
   def tile_path(zoom,x,y)
     return unless image
     path = h.url_for_tile(self) + "#{image.id}/#{zoom}/#{x}_#{y}.png"
@@ -196,6 +200,10 @@ class SurfaceImageDecorator < Draper::Decorator
       h.content_tag(:li, class: "surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do
         h.concat(
           h.content_tag(:div, class:"thumbnail") do
+            tokens = self.tokenize
+            (tokens - ptokens).each do |token|
+              h.concat h.content_tag(:span, token, class:"label label-success")
+            end
             h.concat h.link_to(h.image_tag(self.image.path(:thumb)), h.attachment_file_path(self.image))
             #h.concat h.content_tag(:small, self.image.name)
             h.concat drop_down_menu
@@ -203,10 +211,6 @@ class SurfaceImageDecorator < Draper::Decorator
 #              h.concat h.content_tag(:span, "calibrated", class:"label label-success")
 #            else
               h.concat h.content_tag(:span, "not calibrated", class:"label label-default")
-            end
-            tokens = File.basename(self.image.name, ".*").split('-')
-            (tokens - ptokens).each do |token|
-              h.concat h.content_tag(:span, token, class:"label label-success")
             end
             #h.concat h.content_tag(:small, "(#{position})" )
             h.concat h.content_tag(:div, self.image.decorate.matrix_form, class:"collapse", id:"collapseAffine-#{self.image.id}")

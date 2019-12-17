@@ -127,9 +127,11 @@ class SurfaceLayerDecorator < Draper::Decorator
           )
         end
       )
-      h.concat h.content_tag(:span, "opacity: #{self.opacity}%", class: "label label-primary pull-left")
+      h.concat h.raw("&nbsp;")
+      h.concat h.content_tag(:span, "opacity: #{self.opacity}%", class: "label label-primary")
+      h.concat h.raw("&nbsp;")
       tokens.each do |token|
-        h.concat h.content_tag(:span, token, class: "label label-success pull-left")
+        h.concat h.content_tag(:span, token, class: "label label-success")
       end
       h.concat(
         h.link_to(h.surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :delete, title: "delete layer '#{self.name}'", data: {confirm: "Are you sure you want to delete layer '#{self.name}'"}) do
@@ -190,7 +192,8 @@ class SurfaceLayerDecorator < Draper::Decorator
     layer_tokens = []
     self.surface_images.each do |surface_image|
       image = surface_image.image
-      tokens = File.basename(image.name, ".*").split('-')
+      #tokens = File.basename(image.name, ".*").split('-')
+      tokens = surface_image.decorate.tokenize
       if layer_tokens.empty?
         layer_tokens = tokens
       else
