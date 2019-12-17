@@ -190,7 +190,8 @@ class SurfaceLayerDecorator < Draper::Decorator
     layer_tokens = []
     self.surface_images.each do |surface_image|
       image = surface_image.image
-      tokens = File.basename(image.name, ".*").split('-')
+      #tokens = File.basename(image.name, ".*").split('-')
+      tokens = surface_image.decorate.tokenize
       if layer_tokens.empty?
         layer_tokens = tokens
       else

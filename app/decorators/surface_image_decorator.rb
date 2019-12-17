@@ -24,6 +24,10 @@ class SurfaceImageDecorator < Draper::Decorator
     #h.raw(" < #{h.draggable_id(surface.global_id)} >")    
   end
  
+  def tokenize
+    File.basename(self.image.name, ".*").split(/-|_|@/)
+  end
+
   def tile_path(zoom,x,y)
     return unless image
     path = h.url_for_tile(self) + "#{image.id}/#{zoom}/#{x}_#{y}.png"
@@ -204,7 +208,8 @@ class SurfaceImageDecorator < Draper::Decorator
 #            else
               h.concat h.content_tag(:span, "not calibrated", class:"label label-default")
             end
-            tokens = File.basename(self.image.name, ".*").split('-')
+            tokens = self.tokenize
+            #tokens = File.basename(self.image.name, ".*").split('-')
             (tokens - ptokens).each do |token|
               h.concat h.content_tag(:span, token, class:"label label-success")
             end
