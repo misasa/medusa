@@ -82,13 +82,13 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def width
-    return right - left if left && right
+    return (right - left).abs if left && right
     return unless image
     image.width_in_um
   end
 
   def height
-    return upper - bottom if upper && bottom
+    return (upper - bottom).abs if upper && bottom
     return unless image
     image.height_in_um
   end
