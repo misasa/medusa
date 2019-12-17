@@ -145,11 +145,11 @@ class Specimen < ActiveRecord::Base
   end
 
   def full_bibs
-    Bib.find(Referring.where(referable_type: "Specimen").where(referable_id: self_and_descendants).pluck(:bib_id))
+    Bib.where(id: Referring.where(referable_type: "Specimen").where(referable_id: self_and_descendants).pluck(:bib_id))
   end
 
   def full_tables
-    Table.find(TableSpecimen.where(specimen_id: self_and_descendants).pluck(:table_id))
+    Table.where(id: TableSpecimen.where(specimen_id: self_and_descendants).pluck(:table_id))
   end
 
   def whole_family_analyses
