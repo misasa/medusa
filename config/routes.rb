@@ -85,6 +85,7 @@ Medusa::Application.routes.draw do
 
   resources :specimens, concerns: [:bundleable, :reportable, :sesar_upload], except: [:new] do
     member do
+      get :quantity_history
       get :family
       get :picture
       get :map
