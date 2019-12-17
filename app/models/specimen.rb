@@ -141,11 +141,11 @@ class Specimen < ActiveRecord::Base
   end
 
   def full_analyses
-    Analysis.where(specimen_id: self_and_descendants)
+    Analysis.includes(:chemistries, :record_property, :device, {specimen: [:record_property]}).where(specimen_id: self_and_descendants)
   end
 
   def full_bibs
-    Bib.where(id: Referring.where(referable_type: "Specimen").where(referable_id: self_and_descendants).pluck(:bib_id))
+    Bib.includes(:record_property, :tables, :referrings).where(id: Referring.where(referable_type: "Specimen").where(referable_id: self_and_descendants).pluck(:bib_id))
   end
 
   def full_tables
