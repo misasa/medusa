@@ -445,16 +445,20 @@ class SpecimenDecorator < Draper::Decorator
     # relatives = families.select{|e| list.include?(e) }
 #    h.tree(relatives_for_tree.group_by(&:parent_id)) do |obj|
     in_list = [object, nil].concat(ancestors)
-    h.tree(current_specimen_hash, classes: [Specimen], in_list: in_list) do |obj|
-      obj.decorate.tree_node(current: object == obj, current_type: (object.class == obj.class), in_list_include: in_list.include?(obj))
+    hash = current_specimen_hash
+    h.tree(hash, classes: [Specimen], in_list: in_list) do |obj|
+      obj.decorate.tree_node(current: object == obj, current_type: (object.class == obj.class), in_list_include: in_list.include?(obj), hash: hash)
     end
   end
 
   def current_specimen_hash
     h = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = Array.new } }
-    h[nil][Specimen] = [root]
-    families.each_with_object(h) do |specimen, hash|
+    h[nil][Specimen] = [root_with_includes]
+    families_with_includes.each_with_object(h) do |specimen, hash|
       hash[specimen.record_property_id][Specimen] = specimen.children
+      hash[specimen.record_property_id][Analysis] = specimen.analyses
+      hash[specimen.record_property_id][Bib] = specimen.bibs
+      hash[specimen.record_property_id][AttachmentFile] = specimen.attachment_files
     end
   end
 
@@ -478,47 +482,52 @@ class SpecimenDecorator < Draper::Decorator
     end
   end
 
-  def tree_node(current: false, current_type: false, in_list_include: false)
+  def tree_node(current: false, current_type: false, in_list_include: false, hash: nil)
     name_str = name.presence || "[no name]"
     link = current ? h.content_tag(:strong, name_str, class: "text-primary bg-primary") : name_str
     html = icon(in_list_include) + h.link_to_if(h.can?(:read, self), link, self)
     html += status_icon(in_list_include)
-    html += children_count(current_type, in_list_include)
-    html += analyses_count(current_type, in_list_include)
-    html += bibs_count(current_type, in_list_include)
-    html += files_count(current_type, in_list_include)
+    html += children_count(current_type, in_list_include, hash)
+    html += analyses_count(current_type, in_list_include, hash)
+    html += bibs_count(current_type, in_list_include, hash)
+    html += files_count(current_type, in_list_include, hash)
     html
   end
 
-  def children_count(current_type=false, in_list_include=false)
+  def children_count(current_type=false, in_list_include=false, hash=nil)
+    count = ( hash && hash[self.record_property_id][Specimen]) ? hash[self.record_property_id][Specimen].size : children.size
+
     if current_type
-      icon_with_badge_count(Specimen, children.size, in_list_include)
+      icon_with_badge_count(Specimen, count, in_list_include)
     else
       ""
     end
   end
 
-  def analyses_count(current_type=false, in_list_include=false)
+  def analyses_count(current_type=false, in_list_include=false, hash=nil)
+    count = ( hash && hash[self.record_property_id][Analysis] ) ? hash[self.record_property_id][Analysis].size : analyses.count
     if current_type
-      icon_with_count(Analysis, analyses.count)
+      icon_with_badge_count(Analysis, count, in_list_include)
     else
-      icon_with_badge_count(Analysis, analyses.count, in_list_include)
+      icon_with_badge_count(Analysis, count, in_list_include)
     end
   end
 
-  def bibs_count(current_type=false, in_list_include=false)
+  def bibs_count(current_type=false, in_list_include=false, hash=nil)
+    count = ( hash && hash[self.record_property_id][Bib] ) ? hash[self.record_property_id][Bib].size : bibs.count
     if current_type
-      icon_with_count(Bib, bibs.count)
+      icon_with_count(Bib, count)
     else
-      icon_with_badge_count(Bib, bibs.count, in_list_include)
+      icon_with_badge_count(Bib, count, in_list_include)
     end
   end
 
-  def files_count(current_type=false, in_list_include=false)
+  def files_count(current_type=false, in_list_include=false, hash=nil)
+    count = ( hash && hash[self.record_property_id][AttachmentFile] ) ? hash[self.record_property_id][AttachmentFile].size : attachment_files.count
     if current_type
-      icon_with_count(AttachmentFile, attachment_files.count)
+      icon_with_count(AttachmentFile, count)
     else
-      icon_with_badge_count(AttachmentFile, attachment_files.count, in_list_include)
+      icon_with_badge_count(AttachmentFile, count, in_list_include)
     end
   end
 

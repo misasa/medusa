@@ -64,7 +64,6 @@ class Specimen < ActiveRecord::Base
   validates :collection_date_precision, length: { maximum: 255 }
   validate :status_is_nomal, on: :divide
 
-
   def self.build_bundle_list(objs)
     CSV.generate do |csv|
       csv << ["Id", "Name", "IGSN", "Parent-Id", "Parent-Name", "Quantity", "Physical-Form", "Classification","Description","Group","User","Updated-at","Created-at"]
@@ -72,6 +71,14 @@ class Specimen < ActiveRecord::Base
         csv << ["#{obj.global_id}", "#{obj.name}", "#{obj.igsn}", "#{obj.parent.try!(:global_id)}","#{obj.parent.try!(:name)}","#{obj.quantity_with_unit}", "#{obj.physical_form.try!(:name)}", "#{obj.classification.try!(:full_name)}","#{obj.description}","#{obj.group.try!(:name)}","#{obj.user.try!(:username)}","#{obj.updated_at}","#{obj.created_at}"]
       end
     end
+  end
+
+  def root_with_includes
+    Specimen.includes({children: [:record_property]}).find(root.id)
+  end
+
+  def families_with_includes
+    Specimen.includes(:record_property, {children:[:record_property]}, {analyses:[:record_property, :chemistries]}, {bibs:[:record_property]}, {attachment_files:[:record_property]}).where(id: families.map(&:id))
   end
 
   def as_json(options = {})

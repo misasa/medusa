@@ -30,7 +30,7 @@ class BibDecorator < Draper::Decorator
     end
   end
 
-  def tree_node(current: false, current_type: false, in_list_include: false)
+  def tree_node(current: false, current_type: false, in_list_include: false, hash: nil)
     link = current ? h.content_tag(:strong, name) : name
     icon + h.link_to_if(h.can?(:read, self), link, self)
   end
