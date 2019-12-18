@@ -19,9 +19,9 @@ class AnalysisDecorator < Draper::Decorator
     h.link_to(h.content_tag(:span, self.chemistries.size, class:"badge"), h.analysis_path(self, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal")
   end
 
-  def tree_node(current: false, current_type: false, in_list_include: false)
+  def tree_node(current: false, current_type: false, in_list_include: false, hash: nil)
     link = current ? h.content_tag(:strong, name) : name
-    icon + h.link_to_if(h.can?(:read, self), link, self)
+    icon + h.link_to_if(h.can?(:read, self), link, self) + badge_link
   end
 
   def publish_badge
