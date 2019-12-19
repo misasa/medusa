@@ -16,16 +16,21 @@ class DivideSpecimensController < ApplicationController
         parent_quantity: @specimen.quantity.to_s,
         parent_quantity_unit: @specimen.quantity_unit
       }
+      render json: json
     else
       decimal_quantity = @specimen.divided_parent_quantity
-      json = {
-        loss_quantity: "0.0",
-        loss_quantity_unit: "g",
-        parent_quantity: Quantity.quantity(decimal_quantity).to_s,
-        parent_quantity_unit: Quantity.quantity_unit(decimal_quantity)
-      }
+      if decimal_quantity > 0
+        json = {
+          loss_quantity: "0.0",
+          loss_quantity_unit: "g",
+          parent_quantity: Quantity.quantity(decimal_quantity).to_s,
+          parent_quantity_unit: Quantity.quantity_unit(decimal_quantity)
+        }
+        render json: json
+      else
+        response_bad_request
+      end
     end
-    render json: json
   end
 
   private
