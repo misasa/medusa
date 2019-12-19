@@ -80,14 +80,15 @@
       </div>
       <div class="row">
         <div class="col-sm-offset-1 col-sm-10 form-inline">
-          Quantity <span id="original">(<%= (@specimen.quantity ? @specimen.quantity_with_unit : 'nil') %>)<span> is 
-          <%= f.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", size: 5, readonly: true %>
+          Quantity <%=@specimen.name %> is
           <div class="btn-group" data-toggle="buttons">
             <%= label_tag :manual, class: "btn btn-default btn-sm" do %>
               <%= check_box_tag :manual, true, false, autocomplete: "off" %>
-              <span class="glyphicon glyphicon-minus"></span>
+              <span class="glyphicon glyphicon-pencil"></span>
             <% end %>
           </div>
+          <%= f.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", size: 5, readonly: true %>
+          <span id="original">(was <%= (@specimen.quantity ? @specimen.quantity_with_unit : 'unknown') %>)<span> 
           and loss is
           <span id="divided_loss">0.0 g</span>
           after operation <%= f.text_field :comment, placeholder: "cut by saw", class: "form-control input-sm", size: 12 %>.
@@ -109,6 +110,7 @@
   //ロスの計算
   function quantity_change_check() {
     var $form = $("form#divide_specimen");
+    var data = $form.serialize(); 
     $.ajax({
       url: '<%= loss_divide_specimen_path %>',
       type: 'put',
