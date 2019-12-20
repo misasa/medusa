@@ -428,22 +428,6 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def family_tree
-    # list = [self].concat(children)
-    # #list = [root].concat(root.children)
-    # ans = ancestors
-    # depth = ans.size
-    # if depth > 0
-    #   list.concat(siblings)
-    #   list.concat(ans)
-    #   ans.each do |an|
-    #     list.concat(an.siblings)
-    #   end
-    # # elsif depth > 1
-    # #   list.concat(ans[1].descendants)
-    # end
-    # list.uniq!
-    # relatives = families.select{|e| list.include?(e) }
-#    h.tree(relatives_for_tree.group_by(&:parent_id)) do |obj|
     in_list = [object, nil].concat(ancestors)
     hash = current_specimen_hash
     h.tree(hash, classes: [Specimen], in_list: in_list) do |obj|
