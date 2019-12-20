@@ -78,7 +78,7 @@ class Specimen < ActiveRecord::Base
   end
 
   def families_with_includes
-    Specimen.includes(:record_property, {children:[:record_property]}, {analyses:[:record_property, :chemistries]}, {bibs:[:record_property]}, {attachment_files:[:record_property]}).where(id: families.map(&:id))
+    Specimen.includes(:record_property, {children:[:record_property]}, {analyses:[:record_property, :chemistries]}, {bibs:[:record_property]}, {attachment_files:[:record_property]}).where(id: family_ids)
   end
 
   def as_json(options = {})
