@@ -29,7 +29,6 @@ class DivideSpecimensController < ApplicationController
         render json: json
       else
         render json: nil
-        #render status: :bad_request
       end
     end
   end
