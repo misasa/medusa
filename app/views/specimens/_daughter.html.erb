@@ -80,7 +80,7 @@
       </div>
       <div class="row">
         <div class="col-sm-offset-1 col-sm-10 form-inline">
-          Quantity <%=@specimen.name %> is
+          Quantity of <%=@specimen.name %> is
           <div class="btn-group" data-toggle="buttons">
             <%= label_tag :manual, class: "btn btn-default btn-sm" do %>
               <%= check_box_tag :manual, true, false, autocomplete: "off" %>
@@ -135,18 +135,15 @@
   $(document).on("change", "#manual", function() {
     if ($(this).prop('checked')) {
       $("input.parent.quantity").attr("readonly", false);
-      $(this).next().removeClass("glyphicon-minus");
-      $(this).next().addClass("glyphicon-ok");
     } else {
       $("input.parent.quantity").attr("readonly", true);
-      $(this).next().removeClass("glyphicon-ok");
-      $(this).next().addClass("glyphicon-minus");
+
     }
     quantity_change_check();
   });
 
   $(document).on("succeed.ajaxForm", "#divide_specimen", function() {
-    location.href="<%= specimen_path(@specimen) %>";
+    location.href="<%= specimen_path(@specimen, tab: 'daughter') %>";
   });
 
   $(document).on("click", "input.select-row-all-div", function() {
