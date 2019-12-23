@@ -62,6 +62,12 @@ class BibDecorator < Draper::Decorator
   #   super({:methods => [:author_ids, :global_id]}.merge(options))
   # end
 
+  def author_short_year
+    txt = author_short
+    txt += " (#{year})" unless year.blank?
+    txt
+  end
+
   def to_html
 #    html = author_short
 #    html += " (#{year})" unless year.blank?
