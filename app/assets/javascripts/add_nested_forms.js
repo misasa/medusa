@@ -6,11 +6,11 @@
 
   //ネストフォームのボタン活性チェック
   function children_disabled_check() {
-    if ($("div.child").length <= 1) {
-      $("a.remove-child").attr("disabled", true);
-    } else {
-      $("a.remove-child").attr("disabled", false);
-    }
+    //if ($("div.child").length <= 1) {
+    //  $("a.remove-child").attr("disabled", true);
+    //} else {
+    //  $("a.remove-child").attr("disabled", false);
+    //}
   }
 
   //ネストフォーム削除
@@ -25,6 +25,8 @@
   $(document).on("click", "a.add-child", function() {
     $element = $("div.child").last().clone();
     $element.find("div.alert").remove();
+    $element.find("a.add-child").remove();
+    $element.find("a.remove-child").attr("disabled", false);
     $element.find(".input-sm").each(function(){
       $input = $(this);
       var val = +$input.prop("name").match(/\[(\d*)\]/)[1] + 1;
