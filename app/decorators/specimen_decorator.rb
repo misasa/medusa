@@ -508,7 +508,7 @@ class SpecimenDecorator < Draper::Decorator
   def analyses_count(current_type=false, in_list_include=false, hash=nil)
     count = ( hash && hash[self.record_property_id][Analysis] ) ? hash[self.record_property_id][Analysis].size : analyses.count
     if current_type
-      icon_with_badge_count(Analysis, count, in_list_include)
+      icon_with_count(Analysis, count)
     else
       icon_with_badge_count(Analysis, count, in_list_include)
     end
@@ -517,7 +517,7 @@ class SpecimenDecorator < Draper::Decorator
   def bibs_count(current_type=false, in_list_include=false, hash=nil)
     count = ( hash && hash[self.record_property_id][Bib] ) ? hash[self.record_property_id][Bib].size : bibs.count
     if current_type
-      icon_with_badge_count(Bib, count, in_list_include)
+      icon_with_count(Bib, count)
     else
       icon_with_badge_count(Bib, count, in_list_include)
     end
@@ -526,7 +526,7 @@ class SpecimenDecorator < Draper::Decorator
   def files_count(current_type=false, in_list_include=false, hash=nil)
     count = ( hash && hash[self.record_property_id][AttachmentFile] ) ? hash[self.record_property_id][AttachmentFile].size : attachment_files.count
     if current_type
-      icon_with_badge_count(AttachmentFile, count, in_list_include)
+      icon_with_count(AttachmentFile, count)
     else
       icon_with_badge_count(AttachmentFile, count, in_list_include)
     end

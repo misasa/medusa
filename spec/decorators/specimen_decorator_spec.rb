@@ -1148,6 +1148,7 @@ describe SpecimenDecorator do
           + "<div class=\"tree-node\" data-depth=\"10\">"\
           + "<span class=\"glyphicon glyphicon-stats\"></span>"\
           + "<a href=\"/analyses/#{analysis.id}\">test_2</a>"\
+          + "<a data-target=\"#show-modal\" data-toggle=\"modal\" href=\"/analyses/#{analysis.id}.modal\"><span class=\"badge\">0</span></a>"\
           + "</div>"\
           + "</div>"
         )
