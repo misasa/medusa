@@ -127,11 +127,12 @@ class SpecimenDecorator < Draper::Decorator
     contents = []
     full_tables.each do |table|
       #next unless full_tables.include?(table) 
-      table_link = h.link_to(h.raw(table.caption), table )
+      table_link = h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list") + h.raw("") + h.link_to(h.raw(table.caption), table )
       table_link += h.raw(" ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
       #table_link += h.raw(" ")
       table_link += h.link_to_if(h.can?(:read, table.bib), h.raw(table.bib.decorate.author_short_year), table.bib)
       contents << h.content_tag(:li, table_link)
+      contents << h.content_tag(:div,nil,id:"table_#{table.id}")
     end
     unless contents.empty?
       h.content_tag(:ul, h.raw(contents.join(" ")) )
@@ -508,7 +509,7 @@ class SpecimenDecorator < Draper::Decorator
   def analyses_count(current_type=false, in_list_include=false, hash=nil)
     count = ( hash && hash[self.record_property_id][Analysis] ) ? hash[self.record_property_id][Analysis].size : analyses.count
     if current_type
-      icon_with_badge_count(Analysis, count, in_list_include)
+      icon_with_count(Analysis, count)
     else
       icon_with_badge_count(Analysis, count, in_list_include)
     end
@@ -517,7 +518,7 @@ class SpecimenDecorator < Draper::Decorator
   def bibs_count(current_type=false, in_list_include=false, hash=nil)
     count = ( hash && hash[self.record_property_id][Bib] ) ? hash[self.record_property_id][Bib].size : bibs.count
     if current_type
-      icon_with_badge_count(Bib, count, in_list_include)
+      icon_with_count(Bib, count)
     else
       icon_with_badge_count(Bib, count, in_list_include)
     end
@@ -526,7 +527,7 @@ class SpecimenDecorator < Draper::Decorator
   def files_count(current_type=false, in_list_include=false, hash=nil)
     count = ( hash && hash[self.record_property_id][AttachmentFile] ) ? hash[self.record_property_id][AttachmentFile].size : attachment_files.count
     if current_type
-      icon_with_badge_count(AttachmentFile, count, in_list_include)
+      icon_with_count(AttachmentFile, count)
     else
       icon_with_badge_count(AttachmentFile, count, in_list_include)
     end

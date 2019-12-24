@@ -62,7 +62,7 @@ describe BibDecorator do
           obj.authors << FactoryGirl.create(:author, name: "Test_1")
           obj.authors << FactoryGirl.create(:author, name: "Test_2")
         end
-        it{expect(subject).to include "Test_1 & Test_2"}
+        it{expect(subject).to include "Test_1 &amp; Test_2"}
       end
       context "is not blank 2" do
         before do

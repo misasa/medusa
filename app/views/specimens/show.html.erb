@@ -51,3 +51,14 @@
     <% end %>
   </div>
 </div>
+
+
+<%= javascript_tag do %>
+  <% @specimen.full_tables.each do |table| %>
+    <% m = table.decorate.data %>
+    var thot_<%= table.id %> = new Handsontable(document.getElementById("table_<%= table.id %>"), {
+      data: <%= raw(m.to_json) %>,
+      licenseKey: 'non-commercial-and-evaluation'
+    });
+  <% end %>
+<% end %>

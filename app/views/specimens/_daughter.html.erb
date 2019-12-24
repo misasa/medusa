@@ -89,7 +89,7 @@
           </div>
           <%= f.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", size: 5, readonly: true %>
           <span id="original">(was <%= (@specimen.quantity ? @specimen.quantity_with_unit : 'unknown') %>)<span> 
-          and loss is
+          and loss was
           <span id="divided_loss">0.0 g</span>
           after operation <%= f.text_field :comment, placeholder: "cut by saw", class: "form-control input-sm", size: 12 %>.
         </div>
