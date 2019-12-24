@@ -132,6 +132,7 @@ class SpecimenDecorator < Draper::Decorator
       #table_link += h.raw(" ")
       table_link += h.link_to_if(h.can?(:read, table.bib), h.raw(table.bib.decorate.author_short_year), table.bib)
       contents << h.content_tag(:li, table_link)
+      contents << h.content_tag(:div,nil,id:"table_#{table.id}")
     end
     unless contents.empty?
       h.content_tag(:ul, h.raw(contents.join(" ")) )

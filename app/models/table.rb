@@ -22,6 +22,7 @@ class Table < ActiveRecord::Base
   #validates :age_scale, presence: true, if: -> { with_age.present? }
 #  attr_accessor :ignore_take_over_specimen?
 
+  serialize :data, Array
 
   class Row
 
@@ -166,6 +167,9 @@ class Table < ActiveRecord::Base
 
     def present?
       chemistries.present?
+    end
+
+    def serialize
     end
 
     private
@@ -356,6 +360,25 @@ class Table < ActiveRecord::Base
 
   def pml_elements
     self.selected_analyses.flatten.compact.uniq
+  end
+
+
+  def refresh_data
+    a = []
+    l = ["",""]
+    table_specimens.each do |table_specimen|
+      l << table_specimen.specimen.name
+    end
+    a << l
+    self.each do |row|
+      #self.data << [row.name(:html), row.unit.try!(:html)]
+      l = []
+      l << row.name
+      l << row.unit.name
+      row.each{|cell| l << cell.value };nil
+      a << l
+    end
+    self.data = a
   end
 
   private

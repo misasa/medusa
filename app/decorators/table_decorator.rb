@@ -1,5 +1,6 @@
 class TableDecorator < Draper::Decorator
   delegate_all
+  delegate :as_json
 
   def self.icon
       h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list")
@@ -43,5 +44,11 @@ class TableDecorator < Draper::Decorator
 
   def icon
     self.class.icon
+  end
+
+
+
+  def as_json(options = {})
+    super({ methods: [:global_id] }.merge(options))
   end
 end
