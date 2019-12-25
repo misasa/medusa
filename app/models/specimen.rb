@@ -156,7 +156,7 @@ class Specimen < ActiveRecord::Base
   end
 
   def full_tables
-    Table.where(id: TableSpecimen.where(specimen_id: self_and_descendants).pluck(:table_id))
+    Table.where(id: TableSpecimen.where(specimen_id: family_ids).pluck(:table_id)).includes({table_specimens: [:specimen]})
   end
 
   def whole_family_analyses

@@ -127,15 +127,18 @@ class SpecimenDecorator < Draper::Decorator
     contents = []
     full_tables.each do |table|
       #next unless full_tables.include?(table) 
-      table_link = h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list") + h.raw("") + h.link_to(h.raw(table.caption), table )
-      table_link += h.raw(" ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+      #table_link = h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list") + h.raw("") + h.link_to(h.raw(table.caption), table )
+      #table_link += h.raw(" ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
       #table_link += h.raw(" ")
-      table_link += h.link_to_if(h.can?(:read, table.bib), h.raw(table.bib.decorate.author_short_year), table.bib)
-      contents << h.content_tag(:li, table_link)
-      contents << h.content_tag(:div,nil,id:"table_#{table.id}")
+      #table_link += h.link_to_if(h.can?(:read, table.bib), h.raw(table.bib.decorate.author_short_year), table.bib)
+      #contents << h.content_tag(:li, table_link)
+      #contents << h.content_tag(:div, table_link)
+      #contents << h.content_tag(:div,nil,id:"table_#{table.id}")
+      contents << table.decorate.panel(self.family_ids)
     end
     unless contents.empty?
-      h.content_tag(:ul, h.raw(contents.join(" ")) )
+      #h.content_tag(:ul, h.raw(contents.join(" ")) )
+      h.raw(contents.join(" "))
     end
   end
 
