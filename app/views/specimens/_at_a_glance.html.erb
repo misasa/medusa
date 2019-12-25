@@ -41,7 +41,7 @@
       <li>modified at <%= difference_from_now(@specimen.updated_at) %></li>
       <%= li_if_exist("surface:", @specimen.surfaces_with_link) %>
       <%#= li_if_exist("bib:", @specimen.bibs_with_link) %>
-      <%= li_if_exist("table:", @specimen.tables_with_link) %>
+      <%#= li_if_exist("table:", @specimen.tables_with_link) %>
       <% if @specimen.attachment_pdf_files.present? %>
         <li>
           <% @specimen.attachment_pdf_files.each do |attachment_pdf_file| %>
@@ -55,7 +55,7 @@
     <div class="row spot-thumbnails">
       <%= @specimen.decorate.related_pictures %>
     </div>
-
+    <%= @specimen.tables_with_link %>
    <%= mantra "Representative properties of <#{@specimen.name}>.", :title => "Representative properties of <#{@specimen.name}>" %> 
 
 
