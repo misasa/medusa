@@ -30,6 +30,17 @@ class BibDecorator < Draper::Decorator
     end
   end
 
+
+  def tables_with_link
+    contents = []
+    tables.each do |table|
+      contents << table.decorate.panel
+    end
+    unless contents.empty?
+      h.raw(contents.join(" "))
+    end
+  end
+
   def tree_node(current: false, current_type: false, in_list_include: false, hash: nil)
     link = current ? h.content_tag(:strong, name) : name
     icon + h.link_to_if(h.can?(:read, self), link, self)

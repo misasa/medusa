@@ -52,10 +52,9 @@ class TableDecorator < Draper::Decorator
     super({ methods: [:global_id] }.merge(options))
   end
 
-
   def panel(fids = [])
     h.content_tag(:div, class: "panel panel-default") do
-      panel_head + panel_body(fids) + panel_foot
+      panel_head + panel_body(fids) + table_js
     end
   end
 
@@ -65,12 +64,10 @@ class TableDecorator < Draper::Decorator
         h.content_tag(:span, class: "panel-title pull-left") do
           h.concat(
               h.content_tag(:a, href: "#tableAccordionCollapse-#{self.id}", data: {toggle: "collapse"}, 'aria-expanded' => false, 'aria-control' => "tableAccordionCollapse-#{self.id}", title: "fold table '#{self.caption}'") do
-              #h.concat h.content_tag(:span, self.table.data[0].length ,class: "badge")
               h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list")
               h.concat h.raw(" ")
               h.concat self.caption
               h.concat h.raw(" ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
-              #table_link += h.raw(" ")
               h.concat h.raw(" ") + h.link_to_if(h.can?(:read, self.bib), h.raw(self.bib.decorate.author_short_year), self.bib)
             end
           )
@@ -82,7 +79,6 @@ class TableDecorator < Draper::Decorator
 
   def panel_foot
     h.content_tag(:div, class: "panel-footer") do
-      #h.concat h.raw(l.join(" "))
       h.concat h.raw("")
     end
   end
@@ -92,21 +88,45 @@ class TableDecorator < Draper::Decorator
     self.table_specimens.each.with_index(1) do |ts, idx|
       specimen = ts.specimen
       if fids.include?(specimen.id)
-        l << h.link_to(h.content_tag(:span, "#{idx};" + specimen.name, class: "badge badge-success"), h.specimen_path(specimen))
+        l << h.link_to(h.content_tag(:span, "#{idx}: " + specimen.name, class: "label label-primary"), h.specimen_path(specimen))
       else
-        l << h.link_to(h.content_tag(:span, "#{idx};" + specimen.name), h.specimen_path(specimen))
+        l << h.link_to(h.content_tag(:span, "#{idx}: " + specimen.name, class: "label label-default"), h.specimen_path(specimen))
       end
     end
     h.content_tag(:div, class: "panel-body collapse in", id: "tableAccordionCollapse-#{self.id}") do
+      h.concat h.content_tag(:div, h.raw(l.join(" ")))
+      h.concat h.content_tag(:br, nil)
       h.concat h.content_tag(:div,nil,id:"table_#{self.id}")
-      #self.table_specimens.each do |table_specimen|
-      #  specimen = table_specimen.specimen
-      #  h.concat h.raw("#{specimen.name}")
-      #end
-      #h.concat h.raw("#{self.method_descriptions.keys.join(', ')}")
-      h.concat h.raw(l.join(" "))
+      if self.data[:methods]
+        self.data[:methods].each do |m|
+          h.concat h.content_tag(:div, h.content_tag(:span, h.raw("(#{m[:sign]}) #{m[:description]}")))
+        end
+      end
     end
   end
   
+  def table_js
+    m = self.data[:m]
+    return unless m
+    m[0] = ["",""].concat( self.table_specimens.map.with_index(1){|ts, idx| h.link_to(h.content_tag(:span, "#{idx}", class:"label label-default"), h.specimen_path(ts.specimen), title: "#{ts.specimen.name}") } ) if m
+    h.javascript_tag do
+      code = <<EOS
+      var thot_#{self.id} = new Handsontable(document.getElementById("table_#{self.id}"), {
+        data: #{m.to_json},
+        columns: [#{ "{ renderer: 'html'}," * m[0].length }],
+        licenseKey: 'non-commercial-and-evaluation',
+        width: '100%',
+        height: #{((m.length + 1) * 25)},
+        rowHeights: 25,
+        fixedRowsTop: 1,
+        fixedColumnsLeft: 2      
+        //rowHeaders: true,
+        //colHeaders: true
+      });      
+EOS
+      h.concat h.raw(code)
+      h.concat h.raw("console.log('hello table');")  
+    end
+  end
 
 end
