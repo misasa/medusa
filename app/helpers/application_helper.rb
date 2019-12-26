@@ -1,7 +1,7 @@
 module ApplicationHelper
   def mantra(msg, opts = {})
     title = opts[:title] || "guide"
-    popover_button("guide", msg, opts)
+    popover_button(title, msg, opts)
   end
 
   def tooltip_info_sign(msg, opts = {})

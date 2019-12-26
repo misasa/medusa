@@ -196,7 +196,7 @@ class SurfaceImageDecorator < Draper::Decorator
   def li_thumbnail(ptokens = [])
     return unless self.image
     return unless self.image.image?
-    return unless File.exist?(self.image.data.path)
+    #return unless File.exist?(self.image.data.path)
       h.content_tag(:li, class: "surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do
         h.concat(
           h.content_tag(:div, class:"thumbnail") do
@@ -204,7 +204,7 @@ class SurfaceImageDecorator < Draper::Decorator
             (tokens - ptokens).each do |token|
               h.concat h.content_tag(:span, token, class:"label label-success")
             end
-            h.concat h.link_to(h.image_tag(self.image.path(:thumb)), h.attachment_file_path(self.image))
+            h.concat h.link_to(h.image_tag(self.image.path(:thumb)), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
             #h.concat h.content_tag(:small, self.image.name)
             h.concat drop_down_menu
             unless self.calibrated?
