@@ -16,7 +16,7 @@
     </ul>
   </div>
   <div class="panel-footer">
-    <ul class="list-inline thumbnails surface-layer">
+    <ul class="list-inline thumbnails">
       <% @surface.uncalibrated_surface_images.each do |surface_image| %>
         <% next unless surface_image.image %>
         <%= surface_image.decorate.li_thumbnail %>
@@ -119,7 +119,7 @@
     <% image = surface_image.image %>
     <% m = image.affine_matrix %>
     var thot_<%= image.id %> = new Handsontable(document.getElementById("affine_editor_<%= image.id %>"), {
-      data: [[<%= m[0] %>, <%= m[1] %>, <%= m[2] %>],[<%= m[3] %>, <%= m[4] %>, <%= m[5] %>],[<%= m[6] %>, <%= m[7] %>, <%= m[8] %>]],
+      data: [[<%= m[0] %>, <%= m[1] %>, <%= m[2] %>, ],[<%= m[3] %>, <%= m[4] %>, <%= m[5] %>, ],[<%= m[6] %>, <%= m[7] %>, <%= m[8] %>, ]],
       licenseKey: 'non-commercial-and-evaluation'
     });
     Handsontable.hooks.add('afterChange', function() {
