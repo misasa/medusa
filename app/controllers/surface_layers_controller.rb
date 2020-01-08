@@ -42,8 +42,18 @@ class SurfaceLayersController < ApplicationController
     respond_with @surface_layer, location: adjust_url_by_requesting_tab(request.referer)
   end
 
+  def move_higher
+    @surface_layer.move_higher
+    respond_with @surface_layer, location: adjust_url_by_requesting_tab(request.referer)
+  end
+
   def move_to_bottom
     SurfaceLayer.transaction { @surface_layer.move_to_bottom }
+    respond_with @surface_layer, location: adjust_url_by_requesting_tab(request.referer)
+  end
+
+  def move_lower
+    @surface_layer.move_lower
     respond_with @surface_layer, location: adjust_url_by_requesting_tab(request.referer)
   end
 
