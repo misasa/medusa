@@ -8,7 +8,7 @@ class SurfaceLayer < ActiveRecord::Base
   validates :surface, existence: true, allow_nil: true
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :surface_id }
   validates :opacity, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: 100 }
-  validates :priority, presence: true, numericality: { greater_than_or_equal_to: 1 }, uniqueness: { scope: :surface_id }
+  validates :priority, presence: true, numericality: { greater_than_or_equal_to: 1 }
 
   def self.max_priority
     all.maximum(:priority) || 0
