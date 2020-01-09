@@ -102,7 +102,11 @@ class SurfaceImagesController < ApplicationController
       position = params["position"].to_i
       @surface_image.insert_at(position)
     end 
-    respond_with @image, location: adjust_url_by_requesting_tab(request.referer)    
+    #respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
+    ret = {
+      order: @surface_image.surface.surface_images.pluck(:image_id, :position)
+    }
+    render json: ret.to_json
   end
 
   def layer

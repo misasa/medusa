@@ -176,10 +176,23 @@
             $.ajax({
               url: 'images/' + image_id + '/insert_at.json',
               type: 'POST',
-              dataType: 'text',
+              dataType: 'json',
               data: { "position": insert_position },
-              success: function(){},
-              error: function(){}
+              success: function(data){ 
+                console.log(data)
+                for(let [k, v] of data.order.entries()){
+                  image_id = v[0]
+                  position = v[1]
+                  selector = 'li.surface-image[data-image-id="' + String(image_id) + '"]'
+                  elem = $(selector)
+                  if (!(elem.data("position") == position) ){
+                    console.log("update position!")
+                    elem.attr("data-position", String(position))
+                  }
+                }
+
+              },
+              error: function(){ console.log("error")}
             });
           }
         }
@@ -195,7 +208,8 @@
           type: 'POST',
           dataType: 'text',
           data: { "layer_id": $(event.target).data("id") },
-          success: function(){}
+          success: function(data){ console.log(data)},
+          error: function(){ console.log("error")}
         });
       }
     }).disableSelection();
