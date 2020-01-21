@@ -16,9 +16,13 @@ class SurfaceDecorator < Draper::Decorator
   end
 
   def as_json(options = {})
-    super({ methods: [:global_id, :image_ids, :globe, :center, :length, :bounds, :url_for_tiles] }.merge(options))
+    super({ methods: [:global_id, :image_ids, :layers, :globe, :center, :length, :bounds, :url_for_tiles] }.merge(options))
   end
-  # def rplot_url
+
+  def layers
+    surface_layers.pluck(:id, :name)
+  end
+    # def rplot_url
   #   return unless Settings.rplot_url
   #   Settings.rplot_url + '?id=' + global_id
   # end
