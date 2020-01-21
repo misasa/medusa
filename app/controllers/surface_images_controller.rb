@@ -125,7 +125,7 @@ class SurfaceImagesController < ApplicationController
   private
 
   def surface_image_params
-    params.require(:surface_image).permit(:corners_on_map, :corners_on_world)
+    params.require(:surface_image).permit(:corners_on_map, :corners_on_world, :surface_layer_id)
   end
 
   def image_params
