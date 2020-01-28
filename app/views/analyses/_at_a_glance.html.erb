@@ -52,6 +52,7 @@
       <th>value</th>
       <th>uncertainty</th>
       <th>unit</th>
+      <th>description</th>
       <th></th>
     </tr>
   </thead>
@@ -62,6 +63,7 @@
         <td><%= chemistry.value %></td>
         <td><%= chemistry.uncertainty %></td>
         <td><%== chemistry.unit.try!(:html) %></td>
+        <td><%== chemistry.description %></td>
         <td>
           <%= link_to analysis_chemistry_path(@analysis,chemistry), method: :delete ,title: "delete chemistory",data: {confirm: t("confirm.delete",:recordname => chemistry.measurement_item.nickname)} do %>
               <span class="glyphicon glyphicon-remove"></span>
@@ -77,6 +79,7 @@
         <th><%= f.text_field :value, class: "form-control input-sm" %></th>
         <th><%= f.text_field :uncertainty, class: "form-control input-sm" %></th>
         <th><%= f.select :unit_id, Unit.all.map { |unit| [raw(unit.html), unit.id] }, class: "form-control input-sm" %></th>
+        <th><%= f.text_field :description, class: "form-control input-sm" %></th>
         <th>
           <%= f.button title:"add chemistry",class: "btn btn-default" do %>
             <span class="glyphicon glyphicon-save"></span>

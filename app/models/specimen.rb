@@ -18,7 +18,8 @@ class Specimen < ActiveRecord::Base
   after_initialize :calculate_rel_age
   before_save :build_specimen_quantity,
     if: -> (s) { !s.divide_flg && (s.quantity_changed? || s.quantity_unit_was.presence != s.quantity_unit.presence) }
-
+  before_save :build_age,
+    if: -> (s) { s.instance_variable_defined?(:@age_mean) }
   has_many :analyses, before_remove: :delete_table_analysis
   has_many :children, -> { order(:name) }, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify
   has_many :specimens, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify
@@ -199,9 +200,25 @@ class Specimen < ActiveRecord::Base
     (age_min + age_max) / 2.0
   end
 
+  def age_mean=(age)
+    if age.blank?
+      @age_mean = nil
+    else
+      @age_mean = age.to_f
+    end
+  end
+
   def age_error
     return unless ( age_min && age_max )
     (age_max - age_min) / 2.0
+  end
+
+  def age_error=(error)
+    if error.blank?
+      @age_error = nil
+    else
+      @age_error = error.to_f
+    end
   end
 
   def age_in_text(opts = {})
@@ -328,6 +345,13 @@ class Specimen < ActiveRecord::Base
     specimen_quantity
   end
 
+  def build_age
+    if @age_mean
+      error = @age_error || 0.0
+      self.age_min = @age_mean - error
+      self.age_max = @age_mean + error
+    end
+  end
   private
 
   def new_children

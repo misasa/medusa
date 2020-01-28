@@ -18,10 +18,11 @@
       <% @specimen.children.each do |specimen| %>
         <div class="row">
           <div  class="col-sm-1">
-            <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
+          <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
           </div>
           <div class="col-sm-2">
-            <%= specimen.decorate.status_icon %>
+          <%= link_to specimen.attachment_image_files.first.decorate.picture(width: 15, height: 15, type: :tiny), specimen.attachment_image_files.first, class: specimen_ghost(specimen) if specimen.attachment_image_files.present? %>
+          <%= specimen.decorate.status_icon %>
             <%= link_to_if can?(:read, specimen), list_title(specimen), specimen, class: specimen_ghost(specimen) %>
           </div>
           <div class="col-sm-2">

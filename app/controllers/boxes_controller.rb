@@ -108,6 +108,10 @@ class BoxesController < ApplicationController
     respond_with @box
   end
 
+  def list_for_print
+    respond_with @box, layout: !request.xhr?
+  end
+
   def family
     respond_with @box, layout: !request.xhr?
   end
