@@ -36,7 +36,7 @@
       $input.prop("name", name);
       $input.val("");
     });
-    $("div.child").last().after($element);
+    $("div.child").first().after($element);
     children_disabled_check();
   });
 }) (jQuery);
