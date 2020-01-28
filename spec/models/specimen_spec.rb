@@ -5,7 +5,7 @@ describe Specimen do
   let(:user) { FactoryGirl.create(:user) }
   before { User.current = user }
 
-  describe "publish!", :current => true do
+  describe "publish!" do
     subject { specimen.publish!  }
     let(:specimen){ FactoryGirl.create(:specimen, parent_id: specimen_root.id)}
     let(:specimen_root) { FactoryGirl.create(:specimen, parent_id: nil, place_id: place.id) }
@@ -71,7 +71,7 @@ describe Specimen do
     end
   end
 
-  describe ".full_analyses", :current => true do
+  describe ".full_analyses" do
     let(:specimen){ FactoryGirl.create(:specimen) }
     let(:specimen1) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
     let(:specimen2) { FactoryGirl.create(:specimen, parent_id: specimen1.id) }
@@ -178,6 +178,64 @@ describe Specimen do
     context "when abs_age is less than 0." do
       let(:abs_age) { -1 }
       it { expect(subject).to eq "BC 1" }
+    end
+  end
+
+  describe "#build_age", :current => true do
+    let(:specimen){ FactoryGirl.build(:specimen) } 
+    let(:age) { 10.0 }
+    let(:error) { 0.5 }
+    before do
+      specimen
+      specimen.age_mean = age
+    end
+
+    context "with age_max" do
+      let(:max){ 50.0 }
+      before do
+        specimen.age_mean = nil
+        specimen.age_max = max
+        specimen.build_age
+      end
+      #it { expect(specimen.age_min).to be_eql(age)}
+      it { expect(specimen.age_max).to be_eql(max)}
+      #it { expect(specimen.age_error).to be_eql(0.0)}  
+    end
+
+    context "with age_mean=" do
+      before { specimen.build_age }
+      it { expect(specimen.age_min).to be_eql(age)}
+      it { expect(specimen.age_max).to be_eql(age)}
+      it { expect(specimen.age_error).to be_eql(0.0)}  
+    end
+
+    context "with age_mean= and age_error=" do
+      before do
+        specimen.age_error = error
+        specimen.build_age
+      end
+      it { expect(specimen.age_min).to be_eql(age - error)}
+      it { expect(specimen.age_max).to be_eql(age + error)}
+      it { expect(specimen.age_error).to be_eql(error)}  
+    end
+
+  end
+
+  describe "#age_mean=", :current => true do
+    let(:specimen){ FactoryGirl.build(:specimen) } 
+    let(:age) { "10.0" }
+    before do
+      specimen
+      specimen.age_mean = age
+    end
+    it do
+      expect(specimen.instance_variable_get(:@age_mean)).to be_eql(10.0)
+    end
+    context "with nil" do
+      let(:age){ nil }
+      it do
+        expect(specimen.instance_variable_get(:@age_mean)).to be_nil
+      end
     end
   end
 
@@ -342,7 +400,7 @@ describe Specimen do
     end
   end
 
-  describe "#quantity_history_with_current", :current => true do
+  describe "#quantity_history_with_current" do
     let(:time) { Time.new(2016, 11,12) }
     let!(:specimen1) { FactoryGirl.create(:specimen, divide_flg: true) }
     let!(:specimen2) { FactoryGirl.create(:specimen, divide_flg: true, parent_id: specimen1.id) }
@@ -653,7 +711,7 @@ describe Specimen do
   end
 
 
-  describe "quantity_with_unit= for children", :current => true do
+  describe "quantity_with_unit= for children" do
     before do
       @specimen = FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg")
       @specimen.quantity = quantity
@@ -725,7 +783,7 @@ describe Specimen do
     end
   end
 
-  describe "#ghost", :current => true do
+  describe "#ghost" do
     let(:specimen) { FactoryGirl.build(:specimen, quantity: quantity) }
     context "quantity is null" do
       let(:quantity) { nil }
@@ -789,6 +847,25 @@ describe Specimen do
 
 
   describe "before_save" do
+    describe "build_age", :current => true do
+      let(:age) { 10 }
+      before do
+        @specimen = FactoryGirl.build(:specimen)
+      end
+      context "with age_mean=" do
+        before { @specimen.age_mean = age }
+        it do
+          expect(@specimen).to receive(:build_age)
+          @specimen.save!
+        end  
+      end
+      context "without age_mean=" do
+        it do
+          expect(@specimen).not_to receive(:build_age)
+          @specimen.save!
+        end  
+      end
+    end
     describe "build_specimen_quantity" do
       let(:user) { FactoryGirl.create(:user) }
       let(:specimen) { FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg") }

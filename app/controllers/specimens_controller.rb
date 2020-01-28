@@ -197,6 +197,8 @@ class SpecimensController < ApplicationController
       :lost,
       :igsn,
       :abs_age,
+      :age_mean,
+      :age_error,
       :age_min,
       :age_max,
       :age_unit,
