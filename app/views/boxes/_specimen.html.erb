@@ -7,56 +7,12 @@
 	  </div>
 	  <table class="table table-condensed">
 	    <tbody>
-              <%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
-		<% @box.specimens.each do |specimen| %>
-		  <% specimen = specimen.decorate %>
-		  <tr>
-		    <td class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-		      <%= qrcode specimen.global_id, size: "80x80" %>
-		      <%= check_box_tag("ids[]", specimen.id, true, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
-		      <%= link_to box_specimen_path(@box, specimen) + tab_param(__FILE__), method: :delete, title: "unlink specimen", data: {confirm: t("confirm.unlink")} do %>
-			<span class="glyphicon glyphicon-remove"></span>
-		      <% end %>
-		    </td>
-		    <td class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
-		      <%= link_to specimen.attachment_files.first.decorate.picture(width: 160, height: 160, type: :thumb), specimen, class: specimen_ghost(specimen) if specimen.attachment_files.present? %>
-		    </td>
-
-		    <td class="col-xs-7 col-sm-7 col-md-7 col-lg-7">
-
-		      <%= specimen.name_with_id(true) %>
-		      <ul>
-			<% unless specimen.igsn.blank? %>
-			  <li>
-			    IGSN: <%= link_to specimen.igsn, Settings.sesar_url(igsn: specimen.igsn) %>
-			    <%= link_to Settings.sesar_url(igsn: specimen.igsn, edit: true), title: "edit on SESAR" do %>
-			      <span class="glyphicon glyphicon-pencil"></span>
-			    <% end %>
-
-			  </li>
+          <%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
+		    <% @box.specimens.each do |specimen| %>
+			  <% specimen = specimen.decorate %>
+		  	  <%= render partial: "list_specimen", :locals => { specimen: specimen } %>
 			<% end %>
-			<% if specimen.place %>
-			  <% place = specimen.place.decorate %>
-			  <li>
-			    place: <%= raw(place.try!(:latitude_to_html)) + ", " + raw(place.try!(:longitude_to_html)) %> <%= link_to "more", place_path(place) %>
-			  </li>
-			<% end %>
-			<%= li_if_exist("classification: ", specimen.classification.try!(:full_name)) %>
-			<%= li_if_exist("physical-form: ", specimen.physical_form.try!(:name)) %>
-			<%= li_if_exist("quantity (#{specimen.quantity_unit}): ", specimen.quantity) %>
-			<%= content_tag(:li, "status: #{specimen.status_icon} (#{specimen.status_name})", {}, false) if specimen.status_name.present? %>
-			<%= li_if_exist("age (#{specimen.age_unit}): ", specimen.age_in_text) %>
-			<%= li_if_exist("tag list: ", specimen.tag_list) %>
-			<%= li_if_exist("description: ", specimen.description) %>
-			<% specimen.specimen_custom_attributes.each do |specimen_custom_attribute| %>
-			  <%= li_if_exist("#{specimen_custom_attribute.custom_attribute.name}: ", specimen_custom_attribute.value ) %>
-			<% end %>
-			<li>modified at <%= difference_from_now(specimen.updated_at) %></li>
-		      </ul>
-		    </td>
-		  </tr>
-		<% end %>
-              <% end %>
+          <% end %>
 	    </tbody>
 	  </table>
 	</div>
@@ -111,5 +67,6 @@
 <div class="btn-group">
   <a href="#display-type-html" class="btn radio-button-group">html</a>
   <a href="#display-type-tex" class="btn radio-button-group">tex</a>
+  <%= link_to "list", list_for_print_box_path(@box), class:"btn radio-button-group" %>
 </div>
 <%= mantra "To link an existing #{@alias_specimen} to <#{@box.name}>, fill in the column of ID. To upload a new #{@alias_specimen}, fill in the columns of name, physical-form, and quantity.", :title => "#{@alias_specimens} contained in <#{@box.name}>" %> 

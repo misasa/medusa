@@ -132,6 +132,7 @@ Medusa::Application.routes.draw do
       get :picture
       get :property
       get :tree_node
+      get :list_for_print
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "box" } do
       member do
