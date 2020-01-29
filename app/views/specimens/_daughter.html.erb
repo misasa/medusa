@@ -21,7 +21,7 @@
           <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
           </div>
           <div class="col-sm-2">
-          <%= link_to specimen.attachment_image_files.first.decorate.picture(width: 15, height: 15, type: :tiny), specimen.attachment_image_files.first, class: specimen_ghost(specimen) if specimen.attachment_image_files.present? %>
+          <%= link_to(specimen.attachment_image_files.first.decorate.picture(width: 15, height: 15, type: :tiny), attachment_file_path(specimen.attachment_image_files.first, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: specimen_ghost(specimen)) if specimen.attachment_image_files.present? %>
           <%= specimen.decorate.status_icon %>
             <%= link_to_if can?(:read, specimen), list_title(specimen), specimen, class: specimen_ghost(specimen) %>
           </div>

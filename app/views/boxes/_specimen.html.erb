@@ -1,3 +1,8 @@
+<div class="btn-group">
+  <a href="#display-type-html" class="btn radio-button-group">html</a>
+  <a href="#display-type-tex" class="btn radio-button-group">tex</a>
+  <%= link_to "list", list_for_print_box_path(@box), class:"btn radio-button-group" %>
+</div>
 <div class="display-type">
   <div id="display-type-html">
     <div class="row">
@@ -63,10 +68,5 @@
   <div class="hidden" id="display-type-tex">
     <pre><code><%= @box.to_tex(@alias_specimen) %></code></pre>
   </div>
-</div>
-<div class="btn-group">
-  <a href="#display-type-html" class="btn radio-button-group">html</a>
-  <a href="#display-type-tex" class="btn radio-button-group">tex</a>
-  <%= link_to "list", list_for_print_box_path(@box), class:"btn radio-button-group" %>
 </div>
 <%= mantra "To link an existing #{@alias_specimen} to <#{@box.name}>, fill in the column of ID. To upload a new #{@alias_specimen}, fill in the columns of name, physical-form, and quantity.", :title => "#{@alias_specimens} contained in <#{@box.name}>" %> 
