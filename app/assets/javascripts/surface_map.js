@@ -469,21 +469,36 @@ function initSurfaceMap() {
   });
   layerGroups.concat([{ name: "", opacity: 100 }]).forEach(function(layerGroup) {
     var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0;
-    if (images[name]) {
-      images[name].forEach(function(image) {
-        opts = {opacity: opacity, maxNativeZoom: 6};
-	if (image.bounds){
-            opts = Object.assign(opts, {bounds: worldBounds(image.bounds)});
-        }
-        if (image.max_zoom){
-	    opts = Object.assign(opts, {maxNativeZoom: image.max_zoom})
-        }
-	L.tileLayer(baseUrl + global_id + '/' + image.id + '/{z}/{x}_{y}.png', opts).addTo(group);
-      });
+    opts = {opacity: opacity, maxNativeZoom: 6};
+
+    if (layerGroup.tiled){
+      if (layerGroup.bounds){
+        opts = Object.assign(opts, {bounds: worldBounds(layerGroup.bounds)});
+      }
+      if (layerGroup.max_zoom){
+        opts = Object.assign(opts, {maxNativeZoom: layerGroup.max_zoom})
+      }
+      L.tileLayer(baseUrl + global_id + '/layers/' + layerGroup.id + '/{z}/{x}_{y}.png', opts).addTo(group);
       layers.push(group);
       group.addTo(map);
       if (name === "") { name = "top"; }
       overlayMaps[name] = group;
+    } else {
+      if (images[name]) {
+        images[name].forEach(function(image) {
+	        if (image.bounds){
+            opts = Object.assign(opts, {bounds: worldBounds(image.bounds)});
+          }
+          if (image.max_zoom){
+	          opts = Object.assign(opts, {maxNativeZoom: image.max_zoom})
+          }
+	        L.tileLayer(baseUrl + global_id + '/' + image.id + '/{z}/{x}_{y}.png', opts).addTo(group);
+        });
+        layers.push(group);
+        group.addTo(map);
+        if (name === "") { name = "top"; }
+        overlayMaps[name] = group;
+      }
     }
   });
 
