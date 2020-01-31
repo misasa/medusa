@@ -187,6 +187,7 @@ class SurfaceLayerDecorator < Draper::Decorator
       #self.surface_images.reorder("position DESC").each do |surface_image|
       surface_images.each do |surface_image|
         next unless surface_image.image
+        next if surface_image.wall
         h.concat surface_image.decorate.li_thumbnail(tokens)
       end
     end

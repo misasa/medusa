@@ -112,6 +112,25 @@ class SurfaceImage < ActiveRecord::Base
     File.join(surface.map_dir,image.id.to_s)
   end
 
+  def tiled?
+    File.exist?(tile_dir)
+  end
+
+  def zooms
+    return unless tiled?
+    (Dir.entries(tile_dir) - [".", ".."]).map{|e| e.to_i }
+  end
+
+  def maxzoom
+    return unless tiled?
+    zooms.max
+  end
+
+  def minzoom
+    return unless tiled?
+    zooms.min
+  end
+
   def warped_image_path
     #return unless image
     #image.local_path(:warped)
@@ -201,6 +220,30 @@ class SurfaceImage < ActiveRecord::Base
     raise "#{warped_image_path} does not exists." unless File.exists?(warped_image_path)
     line = make_tiles_cmd(options)
     line.run
+  end
+
+  def merge_tiles(options = {})
+    layer = surface_layer
+    return unless layer
+    return unless tiled?
+    0.upto(maxzoom) do |zoom|
+      target_dir = File.join(layer.tile_dir, "#{zoom}")
+      unless Dir.exists?(target_dir)
+        line = Terrapin::CommandLine.new("mkdir", "-p :dir", logger: logger)
+        line.run(dir: File.join(target_dir))
+      end  
+      tiles_each(zoom) do |x, y|
+        src_path = tile_image_path(zoom,x,y)
+        dest_path = layer.tile_image_path(zoom,x,y)
+        if File.exists?(dest_path)
+          line = Terrapin::CommandLine.new("composite", "-compose over :dest :src :dest")
+          line.run(src: src_path, dest: dest_path)
+        else
+          line = Terrapin::CommandLine.new("cp", ":src :dest", logger: logger)
+          line.run(src: src_path, dest: dest_path)
+        end
+      end
+    end
   end
 
   def clean_tiles(options = {})

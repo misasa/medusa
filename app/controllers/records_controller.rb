@@ -19,7 +19,7 @@ class RecordsController < ApplicationController
       format.html { redirect_to @record }
       format.pml { render pml: [@record] }
       #format.json { render json: @record.record_property, methods: [:datum_attributes] }
-      format.json { render json: Rails.cache.fetch(@record) { @record.record_property.to_json(methods: [:datum_attributes]) } }
+      format.json { render json: @record.record_property.to_json(methods: [:datum_attributes]) }
       format.xml { render xml: @record.record_property, methods: [:datum_attributes] }
     end
   end
