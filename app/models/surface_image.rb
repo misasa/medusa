@@ -15,6 +15,7 @@ class SurfaceImage < ActiveRecord::Base
   validates :surface_layer, existence: true, allow_nil: true
   validate :check_image
 
+  after_save :refresh_parent
   scope :calibrated, -> { joins(:image).where('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :uncalibrated, -> { joins(:image).where.not('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :wall, -> { where(wall: true) }
@@ -467,6 +468,12 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   private
+  def refresh_parent
+    if surface
+      surface.reload.save
+    end
+  end
+
   def check_image
 	errors.add(:image_id, " must be image.") unless image.image?
   end
