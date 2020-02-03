@@ -19,6 +19,7 @@ class Surface < ActiveRecord::Base
   has_many :direct_spots, class_name: "Spot", foreign_key: :surface_id
   accepts_nested_attributes_for :surface_images
 
+  before_save :check_image_bounds
   #after_save :make_map
 
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: true
@@ -323,6 +324,12 @@ class Surface < ActiveRecord::Base
   end
 
   private
+
+  def check_image_bounds
+    self.center_x, self.center_y = image_bounds_center if image_bounds_center
+    self.width = image_bounds_width if image_bounds_width
+    self.height = image_bounds_height if image_bounds_height
+  end
 
   def make_tile_of_added_image(image)
     return if image.affine_matrix.blank?
