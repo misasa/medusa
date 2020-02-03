@@ -227,6 +227,14 @@ class SurfaceImage < ActiveRecord::Base
     layer = surface_layer
     return unless layer
     return unless tiled?
+    line = merge_tiles_cmd(options)
+    line.run
+  end
+
+  def merge_tiles_with_cp(options = {})
+    layer = surface_layer
+    return unless layer
+    return unless tiled?
     minzoom.upto(maxzoom) do |zoom|
       target_dir = File.join(layer.tile_dir, "#{zoom}")
       unless Dir.exists?(target_dir)
@@ -291,6 +299,26 @@ class SurfaceImage < ActiveRecord::Base
     line = Terrapin::CommandLine.new("make_tiles", cmd, logger: logger)
   end
   
+  def merge_tiles_cmd(options = {})
+    maxzoom = options[:maxzoom] || original_zoom_level
+    transparent = options.has_key?(:transparent) ? options[:transparent] : true
+    transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
+    image_path = warped_image_path
+    bs = image.bounds
+    ce = surface.center
+    if bs && bs.size == 4 && ce && ce.size == 2
+      bounds_str = sprintf("[%.2f,%.2f,%.2f,%.2f]", bs[0], bs[1], bs[2], bs[3])
+      center_str = sprintf("[%.2f,%.2f]", ce[0], ce[1])
+      length_str = sprintf("%.2f", surface.length)
+      cmd = "#{image_path} #{bounds_str} #{length_str} #{center_str} -o #{surface_layer.tile_dir} -z #{maxzoom}"
+    end
+    cmd += " -t" if transparent
+    cmd += " #{transparent_color}" if transparent_color
+    cmd += " --compose"
+    cmd
+    line = Terrapin::CommandLine.new("make_tiles", cmd, logger: logger)
+  end
+
   def tiles_each(zoom, &block)
     return unless image
     n = 2**zoom
