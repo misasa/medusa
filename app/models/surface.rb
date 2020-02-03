@@ -98,7 +98,7 @@ class Surface < ActiveRecord::Base
   def center
     x = 0.0
     y = 0.0
-    x, y = image_bounds_center if image_bounds_center
+    #x, y = image_bounds_center if image_bounds_center
     x = center_x unless center_x.blank?
     y = center_y unless center_y.blank?
     [x,y]
