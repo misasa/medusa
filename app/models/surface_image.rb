@@ -226,10 +226,10 @@ class SurfaceImage < ActiveRecord::Base
     layer = surface_layer
     return unless layer
     return unless tiled?
-    0.upto(maxzoom) do |zoom|
+    minzoom.upto(maxzoom) do |zoom|
       target_dir = File.join(layer.tile_dir, "#{zoom}")
       unless Dir.exists?(target_dir)
-        line = Terrapin::CommandLine.new("mkdir", "-p :dir", logger: logger)
+        line = Terrapin::CommandLine.new("mkdir", "-p :dir")
         line.run(dir: File.join(target_dir))
       end  
       tiles_each(zoom) do |x, y|
@@ -239,7 +239,7 @@ class SurfaceImage < ActiveRecord::Base
           line = Terrapin::CommandLine.new("composite", "-compose over :dest :src :dest")
           line.run(src: src_path, dest: dest_path)
         else
-          line = Terrapin::CommandLine.new("cp", ":src :dest", logger: logger)
+          line = Terrapin::CommandLine.new("cp", ":src :dest")
           line.run(src: src_path, dest: dest_path)
         end
       end
