@@ -107,7 +107,7 @@ describe Surface do
     end
   end
 
-  describe "initial_corners_for", :current => true do
+  describe "initial_corners_for" do
     subject { surface.initial_corners_for(image)  }
     let(:surface){ FactoryGirl.create(:surface) }
     let(:center) {[6800,-350]}
@@ -176,7 +176,7 @@ describe Surface do
     it {expect(obj.tile_at(4,[1440,2423])).to eql([10,2])}
     it {expect(obj.tile_at(5,[1440,2423])).to eql([21,5])}
     it {expect(obj.tile_at(6,[1440,2423])).to eql([43,11])}
-    context "with zooms", :current => true do
+    context "with zooms" do
       it {expect(obj.tile_at(1.upto(6),[1440,2423])).to eql([[1,0],[2,0],[5,1],[10,2],[21,5],[43,11]])}
     end
 
@@ -185,7 +185,7 @@ describe Surface do
   end
 
 
-  describe "length", :current => true do
+  describe "length" do
     subject {obj.length}
     let(:obj){ FactoryGirl.create(:surface, width: width, height: height) }
     let(:width){ 80000 }
@@ -208,8 +208,9 @@ describe Surface do
     end
   end
 
-  describe "center", :current => true do
+  describe "center" do
     subject {obj.center}
+
     let(:obj){ FactoryGirl.create(:surface, center_x: center_x, center_y: center_y) }
     let(:center_x){ 2.0 }
     let(:center_y){ 5.0 }
@@ -234,11 +235,34 @@ describe Surface do
       let(:center_y){ ""}
       it { expect(subject).to match_array([0.0,0.0])}
     end
+    context "without init" do
+      subject {obj.center}
+      let(:obj){ FactoryGirl.create(:surface) }
+      it { expect(subject).to match_array([0.0,0.0])}      
+    end
+
+    context "with calibrated images", :current => true do
+      subject {obj.center}
+      let(:obj){ FactoryGirl.create(:surface) }
+      before do
+        p "a"
+        s_image_1 = double('surface_image_1', :bounds => [-100,100,100,-100])
+        s_image_2 = double('surface_image_2', :bounds => [-120,120,-20,20])
+        s_image_3 = double('surface_image_2', :bounds => [-10,10,110,-110])
+        allow(obj).to receive(:surface_images).and_return([s_image_1,s_image_2,s_image_3])
+        p "b"
+        obj.save
+        p "c"
+      end
+      it { expect(subject).to eql([-120,110])}
+    end
+
+
   end
 
 
 
-  describe "bbox", :current => true do
+  describe "bbox" do
     subject{ obj.bbox }
     let(:obj){ FactoryGirl.create(:surface, center_x: center_x, center_y: center_y, width: width, height: height) }
     let(:center_x){ 10000.0 }
@@ -258,7 +282,7 @@ describe Surface do
     end
   end
 
-  describe "image_bounds", :current => true do
+  describe "image_bounds" do
     #it { expect(obj.spots).to include(spot)}
       let(:obj){ FactoryGirl.create(:surface) }
       context "with calibrated images" do
