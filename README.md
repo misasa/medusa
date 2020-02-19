@@ -16,8 +16,7 @@ As of February 27, 2018, Medusa runs with Ruby version `2.1.7`.
 # Documentation
 
 Tutorial, installation guide, and operation manual for Medusa are
-available at [website of
-DREAM](http://dream.misasa.okayama-u.ac.jp/documentation/).
+available at http://dream.misasa.okayama-u.ac.jp/documentation/.
 
 # Dependency
 
@@ -31,4 +30,4 @@ DREAM](http://dream.misasa.okayama-u.ac.jp/documentation/).
 
 - [web app -- Medusa for stone](https://database.misasa.okayama-u.ac.jp/stone/)
 - [web app -- Medusa for demo](https://dream.misasa.okayama-u.ac.jp/demo)
-- [web app -- Medusa for GFZ-Potsdam](https://rz-vm169.gfz-potsdam.de/medusa/)
+- [web app -- Medusa for GFZ-Potsdam](http://rz-vm169.gfz-potsdam.de/medusa)
