@@ -79,7 +79,7 @@
 <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#bundle-form').submit();", class: "btn btn-default" %>
 
 <div id="csv-control">
-  <%= mantra "<p>To create new,press OK button without any input.</p><p>Or you can edit template and register with buttons of browse and upload.</p><p>To edit,click desired checkbox and press pencil button.Next, fill field and press OK button.</p>", :title => "All places" %> 
+  <%= mantra "To create new, press OK button without any input. Or you can edit template and register with buttons of browse and upload. To edit, click desired checkbox and press pencil button. Next, fill field and press OK button.", :title => "All places" %> 
   Download template from <%= link_to "template", new_place_path(format: :csv) %>.
   <%= form_tag(import_places_path, method: :post, multipart: true) do %>
     <%= file_field_tag :data %>
