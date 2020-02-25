@@ -25,7 +25,7 @@
   $(document).on("click", "a.add-child", function() {
     $element = $("div.child").last().clone();
     $element.find("div.alert").remove();
-    $element.find("a.add-child").remove();
+    //$element.find("a.add-child").remove();
     $element.find("a.remove-child").attr("disabled", false);
     $element.find(".input-sm").each(function(){
       $input = $(this);
@@ -36,7 +36,7 @@
       $input.prop("name", name);
       $input.val("");
     });
-    $("div.child").first().after($element);
+    $("div.child").last().after($element);
     children_disabled_check();
   });
 }) (jQuery);
