@@ -77,7 +77,7 @@
 <div id="csv-control">
   <% template = MeasurementCategory.first %>
   <% if template %>
-   <%= mantra "To create new, press OK button without any input. Or you can edit template and register with buttons of browse and upload. To edit, click desired checkbox and press pencil button. Next, fill field and press OK button.", :title => "All registered analyses" %> Download the template from <%= link_to "here", new_analysis_path(format: :csv, measurement_category_id: template.id) %>. <% end %>
+   <%= mantra "To create new, fill fields and press OK button. Or you can edit template and register with buttons of browse and upload.  To edit, click desired checkbox and press pencil button. Next, fill field and press OK button.", :title => "All registered analyses" %> Download the template from <%= link_to "here", new_analysis_path(format: :csv, measurement_category_id: template.id) %>. <% end %>
   <%= form_tag(import_analyses_path, method: :post, multipart: true) do %>
     <%= file_field_tag :data %>
     <%= submit_tag :upload %>
