@@ -140,22 +140,22 @@ class SurfaceLayerDecorator < Draper::Decorator
       )
       h.concat(
         h.link_to(h.move_to_top_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' bottom") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-down")
-        end
-      )
-      h.concat(
-        h.link_to(h.move_higher_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' down") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-circle-arrow-down")
         end
       )
       h.concat(
+        h.link_to(h.move_higher_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' down") do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-down")
+        end
+      )
+      h.concat(
         h.link_to(h.move_lower_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' up") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-circle-arrow-up")
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-up")
         end
       )
       h.concat(
         h.link_to(h.move_to_bottom_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' top") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-up")
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-circle-arrow-up")
         end
       )
       h.concat(
@@ -194,7 +194,7 @@ class SurfaceLayerDecorator < Draper::Decorator
   end
 
   def panel_body(tokens)
-    h.content_tag(:div, class: "panel-body collapse in", id: "surface-layer-#{self.id}") do
+    h.content_tag(:div, class: "panel-body collapse", id: "surface-layer-#{self.id}") do
       thumbnails_list(tokens)
     end
   end

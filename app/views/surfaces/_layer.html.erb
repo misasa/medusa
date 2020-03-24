@@ -1,3 +1,4 @@
+Left image is up in each layer.
 <% not_belongs_to_layer = @surface.top_surface_images%>
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -7,7 +8,7 @@
     </a>
     </span>
   </div>
-  <div class="panel-body collapse in" id="surface-layer-top">
+  <div class="panel-body collapse" id="surface-layer-top">
     <ul class="list-inline thumbnails surface-layer">
       <% not_belongs_to_layer.each do |surface_image| %>
         <% next unless surface_image.image %>
@@ -101,7 +102,7 @@
     <span class="label label-primary">opacity: 100%</span>
     <div class="clearfix"></div>
   </div>
-  <div class="panel-body collapse in" id="surface-layer-base">
+  <div class="panel-body collapse" id="surface-layer-base">
     <ul class="list-inline thumbnails surface-layer">
       <% @surface.wall_surface_images.each do |surface_image| %>
         <% next unless surface_image.image %>
