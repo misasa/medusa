@@ -69,4 +69,4 @@
     <pre><code><%= @box.to_tex(@alias_specimen) %></code></pre>
   </div>
 </div>
-<%= mantra "To link an existing #{@alias_specimen} to <#{@box.name}>, fill in the column of ID. To upload a new #{@alias_specimen}, fill in the columns of name, physical-form, and quantity.", :title => "#{@alias_specimens} contained in <#{@box.name}>" %> 
+<%= mantra "To let join, fill ID field and press save button.  To create new, fill fields and press save button.", :title => "#{@alias_specimens.capitalize} contained in <#{@box.name}>" %> 
