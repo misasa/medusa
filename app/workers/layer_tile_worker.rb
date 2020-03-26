@@ -6,9 +6,9 @@ class LayerTileWorker
     surface_layer = SurfaceLayer.find(surface_layer_id)
     surface = surface_layer.surface
     n = surface_layer.surface_images.count
-    n_pos = surface_layer.surface_images.pluck(:position).count 
+    n_pos = surface_layer.surface_images.pluck(:position).uniq.count 
     total n
-    if n =! n_pos
+    if n_pos < n
       at 0, "reordering images..."
       surface.reorder_images
     end
