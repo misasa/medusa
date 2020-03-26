@@ -323,6 +323,19 @@ class Surface < ActiveRecord::Base
     end
   end
 
+
+  def reorder_images
+    id_positions = surface_images.pluck(:id, :position)
+    first_position = surface_images.first.position
+    surface_images.each{|surface_image|
+      tmp_position = first_position + surface_image.position
+      surface_image.update_attribute(:position, tmp_position)
+    }
+    surface_images.reverse.each_with_index{|surface_image, index|
+      surface_image.update_attribute(:position, index + 1)
+    }
+  end
+
   private
 
   def check_image_bounds
