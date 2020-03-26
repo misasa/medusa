@@ -1,5 +1,6 @@
 <% center = @surface_image.center %>
 <% max_zoom = @surface_image.original_zoom_level %>
+<% max_zoom = @surface_image.surface_layer.maxzoom %>
 <% ijs = @surface.tile_at(0.upto(max_zoom), center ) %>
 <ul class="list-unstyled list-inline">
   <% 0.upto(max_zoom).each_with_index do |zoom, idx|%>

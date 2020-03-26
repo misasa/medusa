@@ -5,7 +5,13 @@ class SurfaceTileWorker
   def perform(surface_id, opts = {})
     surface = Surface.find(surface_id)
     n = surface.surface_images.size
+    n_pos = surface.surface_images.pluck(:position).uniq.count 
+
     total n
+    if n_pos < n
+      at 0, "reordering images..."
+      surface.reorder_images
+    end
     surface.surface_layers.each do |surface_layer|
       surface_layer.clean_tiles
     end

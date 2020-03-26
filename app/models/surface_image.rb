@@ -220,6 +220,7 @@ class SurfaceImage < ActiveRecord::Base
     make_warped_image
     raise "#{warped_image_path} does not exists." unless File.exists?(warped_image_path)
     line = make_tiles_cmd(options)
+    logger.info(line)
     line.run
   end
 
@@ -281,7 +282,11 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def make_tiles_cmd(options = {})
-    maxzoom = options[:maxzoom] || original_zoom_level
+    if surface_layer
+      maxzoom = options[:maxzoom] || surface_layer.original_zoom_level
+    else
+      maxzoom = options[:maxzoom] || original_zoom_level
+    end
     transparent = options.has_key?(:transparent) ? options[:transparent] : true
     transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
     image_path = warped_image_path
@@ -300,7 +305,12 @@ class SurfaceImage < ActiveRecord::Base
   end
   
   def merge_tiles_cmd(options = {})
-    maxzoom = options[:maxzoom] || original_zoom_level
+    if surface_layer
+      maxzoom = options[:maxzoom] || surface_layer.original_zoom_level
+    else
+      maxzoom = options[:maxzoom] || original_zoom_level
+    end
+
     transparent = options.has_key?(:transparent) ? options[:transparent] : true
     transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
     image_path = warped_image_path

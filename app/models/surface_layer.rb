@@ -39,6 +39,10 @@ class SurfaceLayer < ActiveRecord::Base
     File.exist?(tile_dir)
   end
 
+  def original_zoom_level
+    surface_images.map(&:original_zoom_level).max
+  end
+
   def zooms
     return unless tiled?
     (Dir.entries(tile_dir) - [".", ".."]).map{|e| e.to_i }
