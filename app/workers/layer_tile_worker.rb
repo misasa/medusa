@@ -13,6 +13,8 @@ class LayerTileWorker
       surface.reorder_images
     end
     surface_layer.clean_tiles
+    #maxzoom = surface_layer.surface_images.map(&:original_zoom_level).max
+    #opts = opts.merge({:maxzoom => maxzoom})
     surface_layer.surface_images.reverse.each_with_index do |surface_image, index|
       if surface_image.wall
         at index, "#{surface_layer.name}/#{surface_image.image.name} ... (skipped)"
