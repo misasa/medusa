@@ -11,7 +11,7 @@ class SurfaceLayer < ActiveRecord::Base
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :surface_id }
   validates :opacity, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: 100 }
   validates :priority, presence: true, numericality: { greater_than_or_equal_to: 1 }
-
+  validates :max_zoom_level, allow_nil: true, allow_blank: true, numericality: { greater_than_or_equal_to: 0, less_than_or_equal_to: 14}
   def self.max_priority
     all.maximum(:priority) || 0
   end
@@ -40,6 +40,9 @@ class SurfaceLayer < ActiveRecord::Base
   end
 
   def original_zoom_level
+  #  surface_images.each do |surface_image|
+  #    p surface_image.original_zoom_level
+  #  end
     surface_images.map(&:original_zoom_level).max
   end
 

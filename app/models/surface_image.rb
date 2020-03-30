@@ -283,7 +283,7 @@ class SurfaceImage < ActiveRecord::Base
 
   def make_tiles_cmd(options = {})
     if surface_layer
-      maxzoom = options[:maxzoom] || surface_layer.original_zoom_level
+      maxzoom = options[:maxzoom] || surface_layer.max_zoom_level || surface_layer.original_zoom_level
     else
       maxzoom = options[:maxzoom] || original_zoom_level
     end
@@ -305,11 +305,8 @@ class SurfaceImage < ActiveRecord::Base
   end
   
   def merge_tiles_cmd(options = {})
-    if surface_layer
-      maxzoom = options[:maxzoom] || surface_layer.original_zoom_level
-    else
-      maxzoom = options[:maxzoom] || original_zoom_level
-    end
+    return unless surface_layer
+    maxzoom = options[:maxzoom] || surface_layer.max_zoom_level || surface_layer.original_zoom_level
 
     transparent = options.has_key?(:transparent) ? options[:transparent] : true
     transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
@@ -343,6 +340,7 @@ class SurfaceImage < ActiveRecord::Base
   	ss = []
     surface.surface_images.each do |osurface_image|
       oimage = osurface_image.image
+      p oimage
       #image_region
       opixels = oimage.spots.map{|spot| [spot.spot_x, spot.spot_y]}
       worlds = oimage.pixel_pairs_on_world(opixels)
