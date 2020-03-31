@@ -1,6 +1,6 @@
 <%= form_for @surface_layer, url: surface_layer_path(@surface, @surface_layer, format: :json), remote: true, html: { class: "update", role: "form" } do |f| %>
   <div class="form-group form-group-sm">
-    <%= f.label 'layer name', class: "small" %>
+    <%= f.label 'name', class: "small" %>
     <%= f.text_field :name, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
@@ -8,12 +8,13 @@
     <%= f.text_field :opacity, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
-    <%= f.label :max_zoom_level, class: "small" %> ( original zoom level: <%= @surface_layer.original_zoom_level %> )
+    <%= f.label 'max zoom', class: "small" %> ( default: <%= @surface_layer.original_zoom_level %> )
     <%= f.text_field :max_zoom_level, class: "form-control input-sm" %>
   </div>
   <%= f.button class: "btn btn-default" do %>
   <span class="glyphicon glyphicon-save"></span>
   <% end %>
+  <%= mantra "When an image is coarse, feed large max zoom to avoid bluring. Leave empty to be default.", :title => "Layer preferences" %> 
 <% end %>
 
 <%= javascript_tag do %>
