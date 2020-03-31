@@ -65,4 +65,4 @@
 </table>
 <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#box-bundle-form').submit();", class: "btn btn-default" %>
 
-<%= mantra "Boxes rerated to <#{@box.name}>. To upload a new box, fill in the columns of name and box-type. To link an existing box to <#{@box.name}>, fill in the column of ID." %> 
+<%= mantra "To let join, fill ID field and press save button.  To create new, fill fields and press save button.", :title => "Small box included in <#{@box.name}>" %> 
