@@ -117,33 +117,32 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
           var up = L.DomUtil.create('div','leaflet-up');
           L.DomEvent.on(up, 'click', this._onUpClick, this);
           up.layerId = input.layerId;
-          holder.appendChild(up);
+          //holder.appendChild(up);
           var down = L.DomUtil.create('div','leaflet-down');
           L.DomEvent.on(down, 'click', this._onDownClick, this);
           down.layerId = input.layerId;
-          holder.appendChild(down);
+          //holder.appendChild(down);
 
           input = document.createElement('input');
           input.type = 'range';
           input.min = 0;
           input.max = 100;
           if (obj.layer && obj.layer.getLayers() && obj.layer.getLayers()[0]){
-	      input.value = 100 * obj.layer.getLayers()[0].options.opacity
+	          input.value = 100 * obj.layer.getLayers()[0].options.opacity
           } else {
             input.value = 100;
           }
+          this._layerControlInputs.push(input);
           input.layerId = L.stamp(obj.layer);
           if (this._map.hasLayer(obj.layer)) {
-              input.style.display = 'block';
+            input.style.display = 'block';
           } else {
-              input.style.display = 'none';
+            input.style.display = 'none';
           }
 
           L.DomEvent.on(input, 'change', this._onInputClick, this);
 
           label.appendChild(input);
-
-          
         }
 
         var container = obj.overlay ? this._overlaysList : this._baseLayersList;
@@ -209,7 +208,8 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
     },
     _onInputClick: function () {
         var i, input, obj,
-	inputs = this._form.getElementsByTagName('input');
+        //inputs = this._form.getElementsByTagName('input');
+        inputs = this._layerControlInputs;
         inputsLen = inputs.length;
 
         this._handlingClick = true;
@@ -218,19 +218,19 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
             input = inputs[i];
 
             //obj = this._layers[input.layerId];
-	    obj = this._getLayer(input.layerId);
+	          obj = this._getLayer(input.layerId);
             
             if (input.type == 'range' && this._map.hasLayer(obj.layer)) {
                 input.style.display = 'block';
                 opacity = input.value / 100.0;
-		group_layers = obj.layer.getLayers();
-		for (var j = 0; j < group_layers.length; j++){
-		    var _layer = group_layers[j];
-		    if (typeof _layer._url === 'undefined'){
-		    } else {
-			_layer.setOpacity(opacity);
-		    }
-		}
+		            group_layers = obj.layer.getLayers();
+		            for (var j = 0; j < group_layers.length; j++){
+		              var _layer = group_layers[j];
+		              if (typeof _layer._url === 'undefined'){
+		              } else {
+			              _layer.setOpacity(opacity);
+		              }
+		            }
                 continue;
             } else if (input.type == 'range' && !this._map.hasLayer(obj.layer)) {
                 input.style.display = 'none';
@@ -508,8 +508,8 @@ function initSurfaceMap() {
 
   L.control.surfaceScale({ imperial: false, length: length }).addTo(map);
 
-  L.control.layers(baseMaps, overlayMaps).addTo(map);
-  
+  //L.control.layers(baseMaps, overlayMaps).addTo(map);
+  L.control.opacityLayers(baseMaps, overlayMaps).addTo(map);
   if (bounds){
     map.fitBounds(bounds);
   } else {
