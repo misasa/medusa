@@ -276,6 +276,9 @@ Medusa::Application.routes.draw do
         post 'move_higher'
         post 'move_lower'
         post 'tiles'
+        put 'check'
+        put 'uncheck'
+        put 'toggle_visible'
       end
     end
   end

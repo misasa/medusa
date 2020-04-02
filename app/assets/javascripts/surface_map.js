@@ -63,8 +63,8 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
         for (i = 0; i < this._layers.length; i++) {
           obj = this._layers[i];
           this._addItem(obj);
-	  overlaysPresent = overlaysPresent || obj.overlay;
-	  baseLayersPresent = baseLayersPresent || !obj.overlay;
+	        overlaysPresent = overlaysPresent || obj.overlay;
+	        baseLayersPresent = baseLayersPresent || !obj.overlay;
           baseLayersCount += !obj.overlay ? 1 : 0;
         }
 
@@ -82,10 +82,14 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
             checked = this._map.hasLayer(obj.layer),
             input;
 
+
         if (obj.overlay) {
           input = document.createElement('input');
           input.type = 'checkbox';
           input.className = 'leaflet-control-layers-selector';
+          if (obj.layer && obj.layer.getLayers() && obj.layer.getLayers()[0]){
+	          checked  = obj.layer.getLayers()[0].options.visible;
+          }
           input.defaultChecked = checked;
         } else {
           input = this._createRadioElement('leaflet-base-layers', checked);
@@ -206,6 +210,34 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
         this._map.fire('changeorder', obj, this);
       }
     },
+    _onLayerChecked: function (obj){
+      //console.log("LayerChecked.");
+      if (obj.layer && obj.layer.getLayers() && obj.layer.getLayers()[0]){
+        url = obj.layer.getLayers()[0].options.resource_url + '/check.json';
+        console.log('PUT ' + url);
+        $.ajax(url,{
+          type: 'PUT',
+          data: {},
+          //beforeSend: function(e){ map.spin(true, {color: '#ffffff'}); console.log('saving...') },
+          complete: function(e){ console.log('ok'); },
+          error: function(e) { console.log(e); }
+        });
+      }
+    },
+    _onLayerUnChecked: function (obj){
+      //console.log("LayerUnChecked.");
+      if (obj.layer && obj.layer.getLayers() && obj.layer.getLayers()[0]){
+        url = obj.layer.getLayers()[0].options.resource_url + '/uncheck.json';
+        console.log('PUT ' + url);
+        $.ajax(url,{
+          type: 'PUT',
+          data: {},
+          //beforeSend: function(e){ map.spin(true, {color: '#ffffff'}); console.log('saving...') },
+          complete: function(e){ console.log('ok'); },
+          error: function(e) { console.log(e); }
+        });
+      }
+    },
     _onInputClick: function () {
         var i, input, obj,
         //inputs = this._form.getElementsByTagName('input');
@@ -239,10 +271,11 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
 
             if (input.checked && !this._map.hasLayer(obj.layer)) {
                 this._map.addLayer(obj.layer);
-
+                this._onLayerChecked(obj);
             } else if (!input.checked && this._map.hasLayer(obj.layer)) {
                 this._map.removeLayer(obj.layer);
-            } //end if
+                this._onLayerUnChecked(obj);
+              } //end if
         } //end loop
 
         this._handlingClick = false;
@@ -250,15 +283,15 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
         this._refocusOnMap();
 	},
         _getZIndex: function(ly){
-	  var zindex = 9999999999;
+	        var zindex = 9999999999;
           if(ly.layer.options && ly.layer.options.zIndex){
-	      zindex = ly.layer.options.zIndex;
+	          zindex = ly.layer.options.zIndex;
           } else if (ly.layer.getLayers && ly.layer.eachLayer){
-              ly.layer.eachLayer(function(lay){
-	        if(lay.options && lay.options.zIndex){
-		    zindex = Math.min(lay.options.zIndex, zindex);
-                }
-              });
+            ly.layer.eachLayer(function(lay){
+	            if(lay.options && lay.options.zIndex){
+		            zindex = Math.min(lay.options.zIndex, zindex);
+              }
+            });
           }
           return zindex;
         } 
@@ -456,10 +489,10 @@ function initSurfaceMap() {
     var opts = {maxNativeZoom: 6}
 
     if (baseImage.bounds){
-	opts = Object.assign(opts, {bounds: worldBounds(baseImage.bounds)});
+	    opts = Object.assign(opts, {bounds: worldBounds(baseImage.bounds)});
     }
     if (baseImage.max_zoom){
-	opts = Object.assign(opts, {maxNativeZoom: baseImage.max_zoom});
+	    opts = Object.assign(opts, {maxNativeZoom: baseImage.max_zoom});
     }
 
     var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png',opts);
@@ -468,8 +501,8 @@ function initSurfaceMap() {
     layer.addTo(map);
   });
   layerGroups.concat([{ name: "", opacity: 100 }]).forEach(function(layerGroup) {
-    var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0;
-    opts = {opacity: opacity, maxNativeZoom: 6};
+    var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0, visible = layerGroup.visible, resource_url = layerGroup.resource_url;
+    opts = {opacity: opacity, maxNativeZoom: 6, visible: visible, resource_url: resource_url};
 
     if (layerGroup.tiled){
       if (layerGroup.bounds){
@@ -480,9 +513,11 @@ function initSurfaceMap() {
       }
       L.tileLayer(baseUrl + global_id + '/layers/' + layerGroup.id + '/{z}/{x}_{y}.png', opts).addTo(group);
       layers.push(group);
-      group.addTo(map);
+      if (visible){
+        group.addTo(map);
+      }
       if (name === "") { name = "top"; }
-      overlayMaps[name] = group;
+        overlayMaps[name] = group;
     } else {
       if (images[name]) {
         images[name].forEach(function(image) {
@@ -495,7 +530,9 @@ function initSurfaceMap() {
 	        L.tileLayer(baseUrl + global_id + '/' + image.id + '/{z}/{x}_{y}.png', opts).addTo(group);
         });
         layers.push(group);
-        group.addTo(map);
+        if (visible){
+          group.addTo(map);
+        }
         if (name === "") { name = "top"; }
         overlayMaps[name] = group;
       }
