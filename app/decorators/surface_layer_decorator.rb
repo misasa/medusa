@@ -129,6 +129,26 @@ class SurfaceLayerDecorator < Draper::Decorator
       )
       h.concat h.raw("&nbsp;")
       h.concat h.content_tag(:span, "opacity: #{self.opacity}%", class: "label label-primary")
+      if self.visible?
+        h.concat h.content_tag(:span, "visible", class: "label label-primary")
+#        h.concat(
+#          h.link_to(h.uncheck_surface_layer_path(self.surface, self, :format => :json), method: :put, remote: true, class: "btn btn-default btn-sm", title: "toggle visibility of '#{self.name}'") do
+#            h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-refresh")
+#          end
+#        )
+      else
+        h.concat h.content_tag(:span, "hidden", class: "label label-default")
+#        h.concat(
+#          h.link_to(h.check_surface_layer_path(self.surface, self, :format => :json), method: :put, remote: true, class: "btn btn-default btn-sm", title: "toggle visibility of '#{self.name}'") do
+#            h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-refresh")
+#          end
+#        )
+      end
+#      h.concat(
+#        h.link_to(h.toggle_visible_surface_layer_path(self.surface, self, :format => :json), method: :put, remote: true, class: "toggle_visible btn btn-default btn-sm", title: "toggle visibility of '#{self.name}'") do
+#          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-refresh")
+#        end
+#      )
       h.concat h.raw("&nbsp;")
       tokens.each do |token|
         h.concat h.content_tag(:span, token, class: "label label-success")

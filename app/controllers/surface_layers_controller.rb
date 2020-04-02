@@ -61,6 +61,37 @@ class SurfaceLayersController < ApplicationController
     respond_with @surface_layer
   end
 
+  def check
+    @surface_layer.update_attributes(visible: true)
+    #respond_with @surface_layer, location: adjust_url_by_requesting_tab(request.referer)
+    ret = {
+      visible: @surface_layer.visible
+    }
+    render json: ret.to_json
+  end
+
+  def uncheck
+    @surface_layer.update_attributes(visible: false)
+    ret = {
+      visible: @surface_layer.visible
+    }
+    render json: ret.to_json
+    #respond_with @surface_layer, location: adjust_url_by_requesting_tab(request.referer)
+  end
+
+  def toggle_visible
+    if @surface_layer.visible?
+      @surface_layer.update_attributes(visible: false)
+    else
+      @surface_layer.update_attributes(visible: true)
+    end
+    ret = {
+      visible: @surface_layer.reload.visible
+    }
+    render json: ret.to_json
+#    respond_with @surface_layer, location: adjust_url_by_requesting_tab(request.referer)
+  end
+
   private
 
   def surface_layer_params
@@ -68,6 +99,7 @@ class SurfaceLayersController < ApplicationController
       :name,
       :opacity,
       :max_zoom_level,
+      :visible,
       :priority
     )
   end

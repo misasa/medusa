@@ -11,6 +11,12 @@
     <%= f.label 'max zoom', class: "small" %> ( default: <%= @surface_layer.original_zoom_level %> )
     <%= f.text_field :max_zoom_level, class: "form-control input-sm" %>
   </div>
+  <div class="form-group form-group-sm">
+    <label class="small">Visible</label>
+    <%= f.label :visible, class: "checkbox-inline" do %>
+    <%= f.check_box :visible %>
+    <% end %>
+  </div>
   <%= f.button class: "btn btn-default" do %>
   <span class="glyphicon glyphicon-save"></span>
   <% end %>
