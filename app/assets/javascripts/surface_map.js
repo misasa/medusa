@@ -269,10 +269,13 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
       }
     },
     _onInputClick: function () {
-        var i, input, obj,
+        var i, input, obj;
         //inputs = this._form.getElementsByTagName('input');
-        inputs = this._layerControlInputs;
-        inputsLen = inputs.length;
+        var inputs = this._layerControlInputs;
+        var inputsLen = inputs.length;
+        var addedLayers = [],
+        removedLayers = [];
+
         this._handlingClick = true;
 
         for (i = 0; i < inputsLen; i++) {
@@ -304,15 +307,43 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
 
             if (input.checked && !this._map.hasLayer(obj.layer)) {
                 this._map.addLayer(obj.layer);
-                this._onLayerChecked(obj);
+                if (obj.overlay){
+                  obj.layer.getLayers()[0].options.visible = true;
+                  this._onLayerChecked(obj);
+                }
             } else if (!input.checked && this._map.hasLayer(obj.layer)) {
                 this._map.removeLayer(obj.layer);
-                this._onLayerUnChecked(obj);
+                if (obj.overlay){
+                  obj.layer.getLayers()[0].options.visible = false;
+                  this._onLayerUnChecked(obj);
+                }
               } //end if
         } //end loop
 
-        this._handlingClick = false;
+        for (var i = inputs.length - 1; i >= 0; i--) {
+          input = inputs[i];
+          layer = this._getLayer(input.layerId).layer;
+    
+          if (input.checked) {
+            addedLayers.push(layer);
+          } else if (!input.checked) {
+            removedLayers.push(layer);
+          }
+        }        
 
+		    // Bugfix issue 2318: Should remove all old layers before readding new ones
+		    for (i = 0; i < removedLayers.length; i++) {
+			    if (this._map.hasLayer(removedLayers[i])) {
+				    this._map.removeLayer(removedLayers[i]);
+			    }
+		    }
+		    for (i = 0; i < addedLayers.length; i++) {
+			    if (!this._map.hasLayer(addedLayers[i])) {
+				    this._map.addLayer(addedLayers[i]);
+			    }
+		    }
+
+        this._handlingClick = false;
         this._refocusOnMap();
 	},
         _getZIndex: function(ly){
@@ -517,7 +548,7 @@ function initSurfaceMap() {
   if (_bounds){
       var bounds = worldBounds(_bounds);
   }
-
+  var baseCount = 0;
   baseImages.forEach(function(baseImage) {
     var opts = {maxNativeZoom: 6}
 
@@ -531,8 +562,12 @@ function initSurfaceMap() {
     var layer = L.tileLayer(baseUrl + global_id + '/' + baseImage.id + '/{z}/{x}_{y}.png',opts);
     layers.push(layer);
     baseMaps[baseImage.name] = layer;
-    layer.addTo(map);
+    baseCount += 1;
+    //layer.addTo(map);
   });
+  if (baseCount > 0){
+    layers[baseCount - 1].addTo(map);
+  }
   layerGroups.concat([{ name: "", opacity: 100 }]).forEach(function(layerGroup) {
     var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0, visible = layerGroup.visible, resource_url = layerGroup.resource_url;
     opts = {opacity: opacity, maxNativeZoom: 6, visible: visible, resource_url: resource_url};
