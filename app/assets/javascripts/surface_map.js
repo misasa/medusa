@@ -238,12 +238,25 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
         });
       }
     },
+    _onOpacityChanged: function (obj, opacity){
+      //console.log("OpacityChanged.");
+      opacity = parseFloat(opacity) * 100;
+      if (obj.layer && obj.layer.getLayers() && obj.layer.getLayers()[0]){
+        url = obj.layer.getLayers()[0].options.resource_url + '.json';
+        console.log('PUT ' + url);
+        $.ajax(url,{
+          type: 'PUT',
+          data: {surface_layer: {opacity: opacity}},
+          complete: function(e){ console.log('ok'); },
+          error: function(e) { console.log(e); }
+        });
+      }
+    },
     _onInputClick: function () {
         var i, input, obj,
         //inputs = this._form.getElementsByTagName('input');
         inputs = this._layerControlInputs;
         inputsLen = inputs.length;
-
         this._handlingClick = true;
 
         for (i = 0; i < inputsLen; i++) {
@@ -260,7 +273,11 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
 		              var _layer = group_layers[j];
 		              if (typeof _layer._url === 'undefined'){
 		              } else {
-			              _layer.setOpacity(opacity);
+                    _opacity = _layer.options.opacity;
+                    if (_opacity != opacity){
+                      _layer.setOpacity(opacity);
+                      this._onOpacityChanged(obj,opacity);
+                    }
 		              }
 		            }
                 continue;
