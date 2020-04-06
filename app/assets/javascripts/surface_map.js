@@ -121,11 +121,11 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
           var up = L.DomUtil.create('div','leaflet-up');
           L.DomEvent.on(up, 'click', this._onUpClick, this);
           up.layerId = input.layerId;
-          //holder.appendChild(up);
+          holder.appendChild(up);
           var down = L.DomUtil.create('div','leaflet-down');
           L.DomEvent.on(down, 'click', this._onDownClick, this);
           down.layerId = input.layerId;
-          //holder.appendChild(down);
+          holder.appendChild(down);
 
           input = document.createElement('input');
           input.type = 'range';
@@ -178,8 +178,16 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
       if(replaceLayer){
         obj.layer.setZIndex(newZIndex);
         replaceLayer.layer.setZIndex(newZIndex - 1);
-        this._layers.splice(i,1);
-        this._layers.splice(i+1,0,replaceLayer);
+        var removed = this._layers.splice(zidx,1);
+        this._layers.splice(zidx-1,0,replaceLayer);
+        url = obj.layer.getLayers()[0].options.resource_url + '/move_lower.json';
+        console.log('POST ' + url);
+        $.ajax(url,{
+          type: 'POST',
+          data: {},
+          complete: function(e){ console.log('ok'); },
+          error: function(e) { console.log(e); }
+        });
         this._map.fire('changeorder', obj, this);
       }
     },
@@ -205,8 +213,16 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
       if(replaceLayer){
         obj.layer.setZIndex(newZIndex);
         replaceLayer.layer.setZIndex(newZIndex + 1);
-        this._layers.splice(i,1);
-        this._layers.splice(i-1,0,replaceLayer);
+        var removed = this._layers.splice(newZIndex-1,1);
+        this._layers.splice(newZIndex,0,replaceLayer);
+        url = obj.layer.getLayers()[0].options.resource_url + '/move_higher.json';
+        console.log('POST ' + url);
+        $.ajax(url,{
+          type: 'POST',
+          data: {},
+          complete: function(e){ console.log('ok'); },
+          error: function(e) { console.log(e); }
+        });
         this._map.fire('changeorder', obj, this);
       }
     },
