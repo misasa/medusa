@@ -122,6 +122,7 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
           L.DomEvent.on(up, 'click', this._onUpClick, this);
           up.layerId = input.layerId;
           holder.appendChild(up);
+
           var down = L.DomUtil.create('div','leaflet-down');
           L.DomEvent.on(down, 'click', this._onDownClick, this);
           down.layerId = input.layerId;
@@ -174,8 +175,8 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
          }
       }
 
-      var newZIndex = zidx + 1;
       if(replaceLayer){
+        var newZIndex = zidx + 1;
         obj.layer.setZIndex(newZIndex);
         replaceLayer.layer.setZIndex(newZIndex - 1);
         var removed = this._layers.splice(zidx,1);
@@ -188,8 +189,9 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
           complete: function(e){ console.log('ok'); },
           error: function(e) { console.log(e); }
         });
-        this._map.fire('changeorder', obj, this);
+        //this._map.fire('changeorder', obj, this);
       }
+      this._map.fire('changeorder', obj, this);
     },
     _onDownClick: function(e){
       var layerId = e.currentTarget.layerId;
@@ -209,8 +211,8 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
          }
       }
 
-      var newZIndex = zidx - 1;
       if(replaceLayer){
+        var newZIndex = zidx - 1;
         obj.layer.setZIndex(newZIndex);
         replaceLayer.layer.setZIndex(newZIndex + 1);
         var removed = this._layers.splice(newZIndex-1,1);
@@ -223,8 +225,9 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
           complete: function(e){ console.log('ok'); },
           error: function(e) { console.log(e); }
         });
-        this._map.fire('changeorder', obj, this);
+        //this._map.fire('changeorder', obj, this);
       }
+      this._map.fire('changeorder', obj, this);
     },
     _onLayerChecked: function (obj){
       //console.log("LayerChecked.");
@@ -479,6 +482,198 @@ L.layerGroup.grid = function(map, length) {
 };
 
 
+L.Control.ViewMeta = L.Control.extend({
+  options: {
+      position: `topright`,
+      placeholderHTML: `-----`
+  },
+
+  onRemove: function () {
+    L.DomUtil.remove(this.container);
+  },
+
+  onAdd: function (map) {
+    this.map = map;
+
+    this.container = L.DomUtil.create(`div`, `leaflet-view-meta`);  
+    L.DomEvent.disableClickPropagation(this.container);
+    L.DomEvent.on(this.container, `control_container`, function (e) {
+        L.DomEvent.stopPropagation(e);
+    });
+    L.DomEvent.disableScrollPropagation(this.container);
+
+    let table = L.DomUtil.create(
+        `table`,
+        `leaflet-view-meta-table`,
+        this.container
+    );
+
+    // map center
+    this.addDividerRow(table, `Zoom`);
+    this.z_e = this.addDataRow(table, `Level`);
+    this.m_e = this.addDataRow(table, `Magnification`);
+    this.addDividerRow(table, `Center`);
+    //this.lat_e = this.addDataRow(table, `Latitude`);
+    //this.lng_e = this.addDataRow(table, `Longitude`);
+    this.x_e = this.addDataRow(table, `X`);
+    this.y_e = this.addDataRow(table, `Y`);
+    this.addDividerRow(table, `Dimension`);
+    this.w_e = this.addDataRow(table, `Width`);
+    this.h_e = this.addDataRow(table, `Height`);
+    this.addDividerRow(table, `Bounds`);
+    //this.nb_e = this.addDataRow(table, `Northern Bound`);
+    //this.sb_e = this.addDataRow(table, `Southern Bound`);
+    //this.eb_e = this.addDataRow(table, `Eastern Bound`);
+    //this.wb_e = this.addDataRow(table, `Western Bound`);
+    this.lb_e = this.addDataRow(table, `Left`);
+    this.rb_e = this.addDataRow(table, `Right`);
+    this.bb_e = this.addDataRow(table, `Bottom`);
+    this.tb_e = this.addDataRow(table, `Top`);
+
+    this.map.on(`resize`, () => this.update());
+    this.map.on(`zoomend`, () => this.update());
+    this.map.on(`dragend`, () => this.update());
+
+    this.urlParams = new URLSearchParams(window.location.search);
+    this.parseParams();
+
+    return this.container;
+  },    
+
+  addDividerRow: function (tableElement, labelString) {
+    let tr = tableElement.insertRow();
+    let tdDivider = tr.insertCell();
+    tdDivider.colSpan = 2;
+    tdDivider.innerText = labelString;
+},
+
+addDataRow: function (tableElement, labelString) {
+    let tr = tableElement.insertRow();
+    let tdLabel = tr.insertCell();
+    tdLabel.innerText = labelString;
+    let tdData = tr.insertCell();
+    tdData.innerHTML = this.options.placeholderHTML;
+    return tdData;
+},
+
+parseParams: function () {
+    var opts = this.options;
+    let x, y, z, lat, lng, nb, wb, sb, eb, nw_bound, se_bound, bounds;
+    try {
+        x = +this.urlParams.get("x").replace(/,/g, '');
+        y = +this.urlParams.get("y").replace(/,/g, '');
+        z = +this.urlParams.get("z");
+
+
+        if (x && y && opts.world2latLng){
+          ll = opts.world2latLng([x, y])
+          this.map.setView(ll, z);
+        } else { 
+          lat = +this.urlParams.get("lat");
+          lng = +this.urlParams.get("lng");          
+          if (lat && lng) {
+            this.map.panTo(new L.LatLng(lat, lng));
+          }
+
+          nb = +this.urlParams.get("nb");
+          wb = +this.urlParams.get("wb");
+          sb = +this.urlParams.get("sb");
+          eb = +this.urlParams.get("eb");
+
+          if (nb && sb && eb && wb) {
+            nw_bound = L.latLng(nb, wb);
+            se_bound = L.latLng(sb, eb);
+
+            bounds = L.latLngBounds(nw_bound, se_bound);
+
+            this.map.fitBounds(bounds);
+          }
+        }
+    } catch (e) {
+        console.log(e);
+    }
+  },  
+  update: function () {
+    var opts = this.options;
+    var center_xy;
+    let center = this.map.getCenter();
+    let bounds = this.map.getBounds();
+    let zoom = this.map.getZoom();
+    let latStr = this.formatNumber(center.lat);
+    let lngStr = this.formatNumber(center.lng);
+
+    let nbStr = this.formatNumber(bounds.getNorth());
+    let sbStr = this.formatNumber(bounds.getSouth());
+    let ebStr = this.formatNumber(bounds.getEast());
+    let wbStr = this.formatNumber(bounds.getWest());
+    let zStr = String(zoom);
+    this.z_e.innerText = zStr;
+    //this.lat_e.innerText = latStr;
+    //this.lng_e.innerText = lngStr;
+
+    //this.nb_e.innerText = nbStr;
+    //this.sb_e.innerText = sbStr;
+    //this.eb_e.innerText = ebStr;
+    //this.wb_e.innerText = wbStr;
+
+    //this.urlParams.set("lat", latStr);
+    //this.urlParams.set("lng", lngStr);
+
+    //this.urlParams.set("nb", nbStr);
+    //this.urlParams.set("sb", sbStr);
+    //this.urlParams.set("eb", ebStr);
+    //this.urlParams.set("wb", wbStr);
+
+    if (opts.latLng2world){
+      world_c = opts.latLng2world(center);
+      ne = {lat: bounds.getNorth(), lng: bounds.getEast()};
+      sw = {lat: bounds.getSouth(), lng: bounds.getWest()};
+      world_ne = opts.latLng2world(ne);
+      world_sw = opts.latLng2world(sw);
+      world_w = world_ne[0] - world_sw[0];
+      world_h = world_ne[1] - world_sw[1];
+      mag = 120000/world_w;
+      let xStr = this.formatNumber(world_c[0]);
+      let yStr = this.formatNumber(world_c[1]);
+      let tbStr = this.formatNumber(world_ne[1]);
+      let rbStr = this.formatNumber(world_ne[0]);
+      let bbStr = this.formatNumber(world_sw[1]);
+      let lbStr = this.formatNumber(world_sw[0]);
+      let hStr = this.formatNumber(world_h);
+      let wStr = this.formatNumber(world_w);
+      let mStr = this.formatNumber(mag);
+      this.m_e.innerText = mStr;
+      this.x_e.innerText = xStr;
+      this.y_e.innerText = yStr;  
+      this.w_e.innerText = wStr;
+      this.h_e.innerText = hStr;  
+      this.tb_e.innerText = tbStr;
+      this.bb_e.innerText = bbStr;  
+      this.rb_e.innerText = rbStr;
+      this.lb_e.innerText = lbStr;  
+      this.urlParams.set("x", xStr.replace(/,/g, ''));
+      this.urlParams.set("y", yStr.replace(/,/g, ''));
+      this.urlParams.set("z", zStr);
+    }
+    window.history.replaceState(
+        {},
+        "",
+        `?${this.urlParams.toString()}`
+    );
+  },
+
+  formatNumber: function (num) {
+    return num.toLocaleString({
+        minimumFractionDigits: 3,
+        maximumFractionDigits: 3
+    });
+  }  
+});  
+
+L.control.viewMeta = function (options) {
+  return new L.Control.ViewMeta(options);
+};
+
 function initSurfaceMap() {
   var div = document.getElementById("surface-map");
   var radiusSelect = document.getElementById("spot-radius");
@@ -542,7 +737,7 @@ function initSurfaceMap() {
     str = gxy_str + " " + xy_str + " " + lngLat_str;
     return str;
   };
-  map.addControl(new L.Control.Coordinates({position: 'topright', customLabelFcn:map_LabelFcn}));
+  //map.addControl(new L.Control.Coordinates({position: 'topright', customLabelFcn:map_LabelFcn}));
 
   
   if (_bounds){
@@ -711,5 +906,10 @@ function initSurfaceMap() {
     position: 'topleft',
     actions: [toolbarAction]
   }).addTo(map);
+  var myFcn = function(center){
+    console.log("hello myFcn");
+    return [0,0]
+  }
+  L.control.viewMeta({position: `bottomleft`, latLng2world: latLng2world, world2latLng: world2latLng, customLabelFcn: map_LabelFcn}).addTo(map);
   surfaceMap = map;
 }

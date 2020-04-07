@@ -38,3 +38,33 @@
   opacity: 0.75;
   cursor: pointer;
 }
+
+.leaflet-view-meta {
+       
+  border-radius: 5px;
+  background: #fff;
+  border: 2px solid rgba(0, 0, 0, 0.2);
+  background-clip: padding-box;
+  
+  padding: 5px;
+}
+
+.leaflet-view-meta td {
+  font-size: 10px;
+}
+
+.leaflet-view-meta td[colspan="2"] {
+  text-align: left;
+  font-weight: bold;
+}
+
+.leaflet-view-meta td:not([colspan]):first-child {
+  padding-left: 5px;
+  width: 77.5px;
+  text-align: left;
+}
+
+.leaflet-view-meta td:not([colspan]):last-child {
+  width: 75px;
+  text-align: right;
+}
