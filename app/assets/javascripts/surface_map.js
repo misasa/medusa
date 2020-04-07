@@ -122,6 +122,7 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
           L.DomEvent.on(up, 'click', this._onUpClick, this);
           up.layerId = input.layerId;
           holder.appendChild(up);
+
           var down = L.DomUtil.create('div','leaflet-down');
           L.DomEvent.on(down, 'click', this._onDownClick, this);
           down.layerId = input.layerId;
@@ -174,8 +175,8 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
          }
       }
 
-      var newZIndex = zidx + 1;
       if(replaceLayer){
+        var newZIndex = zidx + 1;
         obj.layer.setZIndex(newZIndex);
         replaceLayer.layer.setZIndex(newZIndex - 1);
         var removed = this._layers.splice(zidx,1);
@@ -188,8 +189,9 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
           complete: function(e){ console.log('ok'); },
           error: function(e) { console.log(e); }
         });
-        this._map.fire('changeorder', obj, this);
+        //this._map.fire('changeorder', obj, this);
       }
+      this._map.fire('changeorder', obj, this);
     },
     _onDownClick: function(e){
       var layerId = e.currentTarget.layerId;
@@ -209,8 +211,8 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
          }
       }
 
-      var newZIndex = zidx - 1;
       if(replaceLayer){
+        var newZIndex = zidx - 1;
         obj.layer.setZIndex(newZIndex);
         replaceLayer.layer.setZIndex(newZIndex + 1);
         var removed = this._layers.splice(newZIndex-1,1);
@@ -223,8 +225,9 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
           complete: function(e){ console.log('ok'); },
           error: function(e) { console.log(e); }
         });
-        this._map.fire('changeorder', obj, this);
+        //this._map.fire('changeorder', obj, this);
       }
+      this._map.fire('changeorder', obj, this);
     },
     _onLayerChecked: function (obj){
       //console.log("LayerChecked.");
