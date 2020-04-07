@@ -19,7 +19,7 @@
 
 .leaflet-control-layers .leaflet-up {
   float: right;
-  background-image: image-url('arrow-up.png');
+  background-image: url('arrow-up.png');
   background-repeat: no-repeat;
   background-position: center;
   height: 20px;
@@ -30,7 +30,7 @@
 
 .leaflet-control-layers .leaflet-down {
   float: right;
-  background-image: image-url('arrow-down.png');
+  background-image: url('arrow-down.png');
   background-repeat: no-repeat;
   background-position: center;
   height: 20px;
