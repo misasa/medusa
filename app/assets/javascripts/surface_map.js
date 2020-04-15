@@ -502,6 +502,8 @@ L.Control.ViewMeta = L.Control.extend({
     });
     L.DomEvent.disableScrollPropagation(this.container);
 
+
+    
     let table = L.DomUtil.create(
         `table`,
         `leaflet-view-meta-table`,
@@ -509,27 +511,41 @@ L.Control.ViewMeta = L.Control.extend({
     );
 
     // map center
-    this.addDividerRow(table, `Zoom`);
-    this.z_e = this.addDataRow(table, `Level`);
+    this.addDividerRow(table, `Current View`);
+    if (this.options.enableUserInput){
+      this.ix_e = this.addInputRow(table, `X (μm)`, "inputX");
+      this.iy_e = this.addInputRow(table, `Y (μm)`,"inputY");
+    } else {
+      this.x_e = this.addDataRow(table, `X (μm)`);
+      this.y_e = this.addDataRow(table, `Y (μm)`);  
+    }
+    //this.addDividerRow(table, `Zoom`);
+    if (this.options.enableUserInput){
+      this.iz_e = this.addInputRow(table, `Zoom (level)`, "inputZ");
+    } else {
+      this.z_e = this.addDataRow(table, `Zoom (level)`);
+    }
+    this.w_e = this.addDataRow(table, `Width (μm)`);
+    this.h_e = this.addDataRow(table, `Height (μm)`);
     this.m_e = this.addDataRow(table, `Magnification`);
-    this.addDividerRow(table, `Center`);
-    //this.lat_e = this.addDataRow(table, `Latitude`);
-    //this.lng_e = this.addDataRow(table, `Longitude`);
-    this.x_e = this.addDataRow(table, `X`);
-    this.y_e = this.addDataRow(table, `Y`);
-    this.addDividerRow(table, `Dimension`);
-    this.w_e = this.addDataRow(table, `Width`);
-    this.h_e = this.addDataRow(table, `Height`);
-    this.addDividerRow(table, `Bounds`);
+    //this.addDividerRow(table, `Dimension`);
+    //this.addDividerRow(table, `Bounds`);
     //this.nb_e = this.addDataRow(table, `Northern Bound`);
     //this.sb_e = this.addDataRow(table, `Southern Bound`);
     //this.eb_e = this.addDataRow(table, `Eastern Bound`);
     //this.wb_e = this.addDataRow(table, `Western Bound`);
-    this.lb_e = this.addDataRow(table, `Left`);
-    this.rb_e = this.addDataRow(table, `Right`);
-    this.bb_e = this.addDataRow(table, `Bottom`);
-    this.tb_e = this.addDataRow(table, `Top`);
-
+    //this.lb_e = this.addDataRow(table, `Left`);
+    //this.rb_e = this.addDataRow(table, `Right`);
+    //this.bb_e = this.addDataRow(table, `Bottom`);
+    //this.tb_e = this.addDataRow(table, `Top`);
+    if (this.options.enableUserInput){
+      L.DomEvent.on(this.iz_e, 'keyup', this._handleKeypress, this);
+      L.DomEvent.on(this.iz_e, 'blur', this._handleSubmit, this);
+      L.DomEvent.on(this.ix_e, 'keyup', this._handleKeypress, this);
+      L.DomEvent.on(this.ix_e, 'blur', this._handleSubmit, this);
+      L.DomEvent.on(this.iy_e, 'keyup', this._handleKeypress, this);  
+      L.DomEvent.on(this.iy_e, 'blur', this._handleSubmit, this);
+    }
     this.map.on(`resize`, () => this.update());
     this.map.on(`zoomend`, () => this.update());
     this.map.on(`dragend`, () => this.update());
@@ -556,6 +572,58 @@ addDataRow: function (tableElement, labelString) {
     return tdData;
 },
 
+addInputRow: function (tableElement, labelString, classname) {
+  let tr = tableElement.insertRow();
+  let tdLabel = tr.insertCell();
+  tdLabel.innerText = labelString;
+  let tdData = tr.insertCell();
+  _inputcontainer = L.DomUtil.create("span", "uiElement input", tdData);
+	var input = L.DomUtil.create("input", classname, _inputcontainer);
+	input.type = "text";
+	L.DomEvent.disableClickPropagation(input);
+  input.value = this.options.placeholderHTML;
+  return input;
+},
+
+_handleKeypress: function(e) {
+  console.log("handleKeypress")
+  switch (e.keyCode) {
+    case 27: //Esc
+      break;
+    case 13: //Enter
+      this._handleSubmit();
+      break;
+    default: //All keys
+      //this._handleSubmit();
+      break;
+  }
+},
+
+_handleSubmit: function() {
+  var opts = this.options;
+  let x, y, z, lat, lng;
+  try {
+      x = +this.ix_e.value.replace(/,/g, '');
+      y = +this.iy_e.value.replace(/,/g, '');
+      z = +this.iz_e.value
+
+      if (x && y && z && opts.world2latLng){
+        ll = opts.world2latLng([x, y])
+        this.map.setView(ll, z);
+        this.urlParams.set("x", x);
+        this.urlParams.set("y", y);
+        this.urlParams.set("z", z);
+        window.history.replaceState(
+          {},
+          "",
+          `?${this.urlParams.toString()}`
+        );
+      }
+  } catch (e) {
+      console.log(e);
+  }
+},
+
 parseParams: function () {
     var opts = this.options;
     let x, y, z, lat, lng, nb, wb, sb, eb, nw_bound, se_bound, bounds;
@@ -564,31 +632,11 @@ parseParams: function () {
         y = +this.urlParams.get("y").replace(/,/g, '');
         z = +this.urlParams.get("z");
 
-
         if (x && y && opts.world2latLng){
           ll = opts.world2latLng([x, y])
           this.map.setView(ll, z);
-        } else { 
-          lat = +this.urlParams.get("lat");
-          lng = +this.urlParams.get("lng");          
-          if (lat && lng) {
-            this.map.panTo(new L.LatLng(lat, lng));
-          }
-
-          nb = +this.urlParams.get("nb");
-          wb = +this.urlParams.get("wb");
-          sb = +this.urlParams.get("sb");
-          eb = +this.urlParams.get("eb");
-
-          if (nb && sb && eb && wb) {
-            nw_bound = L.latLng(nb, wb);
-            se_bound = L.latLng(sb, eb);
-
-            bounds = L.latLngBounds(nw_bound, se_bound);
-
-            this.map.fitBounds(bounds);
-          }
         }
+
     } catch (e) {
         console.log(e);
     }
@@ -607,22 +655,11 @@ parseParams: function () {
     let ebStr = this.formatNumber(bounds.getEast());
     let wbStr = this.formatNumber(bounds.getWest());
     let zStr = String(zoom);
-    this.z_e.innerText = zStr;
-    //this.lat_e.innerText = latStr;
-    //this.lng_e.innerText = lngStr;
-
-    //this.nb_e.innerText = nbStr;
-    //this.sb_e.innerText = sbStr;
-    //this.eb_e.innerText = ebStr;
-    //this.wb_e.innerText = wbStr;
-
-    //this.urlParams.set("lat", latStr);
-    //this.urlParams.set("lng", lngStr);
-
-    //this.urlParams.set("nb", nbStr);
-    //this.urlParams.set("sb", sbStr);
-    //this.urlParams.set("eb", ebStr);
-    //this.urlParams.set("wb", wbStr);
+    if (this.options.enableUserInput){
+      this.iz_e.value = zStr;
+    } else {
+      this.z_e.innerText = zStr;
+    }
 
     if (opts.latLng2world){
       world_c = opts.latLng2world(center);
@@ -643,14 +680,19 @@ parseParams: function () {
       let wStr = this.formatNumber(world_w);
       let mStr = this.formatNumber(mag);
       this.m_e.innerText = mStr;
-      this.x_e.innerText = xStr;
-      this.y_e.innerText = yStr;  
+      if (this.options.enableUserInput){  
+        this.ix_e.value = xStr;
+        this.iy_e.value = yStr;    
+      } else {
+        this.x_e.innerText = xStr;
+        this.y_e.innerText = yStr;  
+      }
       this.w_e.innerText = wStr;
       this.h_e.innerText = hStr;  
-      this.tb_e.innerText = tbStr;
-      this.bb_e.innerText = bbStr;  
-      this.rb_e.innerText = rbStr;
-      this.lb_e.innerText = lbStr;  
+      //this.tb_e.innerText = tbStr;
+      //this.bb_e.innerText = bbStr;  
+      //this.rb_e.innerText = rbStr;
+      //this.lb_e.innerText = lbStr;
       this.urlParams.set("x", xStr.replace(/,/g, ''));
       this.urlParams.set("y", yStr.replace(/,/g, ''));
       this.urlParams.set("z", zStr);
@@ -906,10 +948,6 @@ function initSurfaceMap() {
     position: 'topleft',
     actions: [toolbarAction]
   }).addTo(map);
-  var myFcn = function(center){
-    console.log("hello myFcn");
-    return [0,0]
-  }
-  L.control.viewMeta({position: `bottomleft`, latLng2world: latLng2world, world2latLng: world2latLng, customLabelFcn: map_LabelFcn}).addTo(map);
+  L.control.viewMeta({position: `bottomleft`, enableUserInput: true, latLng2world: latLng2world, world2latLng: world2latLng, customLabelFcn: map_LabelFcn}).addTo(map);
   surfaceMap = map;
 }
