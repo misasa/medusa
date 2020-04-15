@@ -68,3 +68,20 @@
   width: 75px;
   text-align: right;
 }
+
+.leaflet-view-meta .uiElement input {
+/*	-webkit-border-radius:5px;
+	-moz-border-radius:5px;
+  border-radius:5px;
+  */
+  width: 100%;
+  text-align: right;
+}
+
+.leaflet-view-meta .uiElement {
+	margin:1px;
+}
+
+.leaflet-view-meta .uiHidden{
+	display:none;
+}
