@@ -74,7 +74,7 @@ class SurfaceDecorator < Draper::Decorator
       if s_image.wall
         base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.image.bounds, max_zoom: a_zooms[index]}
       else
-        layer_group_name = s_image.surface_layer.try!(:name)
+        layer_group_name = s_image.surface_layer.try!(:name) || 'top'
         h_images[layer_group_name] = [] unless h_images.has_key?(layer_group_name)
         h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: s_image.image.bounds, max_zoom: a_zooms[index]}
       end
