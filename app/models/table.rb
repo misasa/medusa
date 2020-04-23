@@ -24,6 +24,16 @@ class Table < ActiveRecord::Base
 
   serialize :data, Hash
 
+  def self.refresh_data
+    self.all.each do |table|
+      msg = "refresh data for #{table.caption}..."
+      p msg
+      logger.debug(msg)
+      table.refresh_data
+      table.save
+    end
+  end
+
   class Row
 
     include Enumerable
