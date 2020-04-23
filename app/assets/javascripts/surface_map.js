@@ -805,7 +805,7 @@ function initSurfaceMap() {
   if (baseCount > 0){
     layers[baseCount - 1].addTo(map);
   }
-  layerGroups.concat([{ name: "", opacity: 100 }]).forEach(function(layerGroup) {
+  layerGroups.concat([{ name: "top", opacity: 100 }]).forEach(function(layerGroup) {
     var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0, visible = layerGroup.visible, resource_url = layerGroup.resource_url;
     opts = {opacity: opacity, maxNativeZoom: 6, visible: visible, resource_url: resource_url};
 
