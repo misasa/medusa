@@ -16,7 +16,7 @@ class SurfaceDecorator < Draper::Decorator
   end
 
   def as_json(options = {})
-    super({ methods: [:global_id, :image_ids, :layers, :globe, :center, :length, :bounds, :url_for_tiles] }.merge(options))
+    super({ methods: [:global_id, :image_ids, :layers, :globe, :center, :length, :bounds, :url_for_tiles, :map_data] }.merge(options))
   end
 
   def layers
@@ -40,7 +40,7 @@ class SurfaceDecorator < Draper::Decorator
     if false && Settings.rplot_url
       tag += h.link_to("map", rmap_url, :title => 'map online', :target=>["_blank"])
     end
-    tag  
+    tag
   end
 
     # def rplot_iframe(size = '600')
@@ -62,9 +62,7 @@ class SurfaceDecorator < Draper::Decorator
     }
   end
 
-  def map(options = {})
-#    matrix = affine_matrix_for_map
-#    return unless matrix
+  def map_data(options = {})
     surface_length = self.length
     tilesize = self.tilesize
     s_images = surface_images.calibrated.reverse
@@ -81,17 +79,22 @@ class SurfaceDecorator < Draper::Decorator
         h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: s_image.image.bounds, max_zoom: a_zooms[index]}
       end
     end
-    h.content_tag(:div, nil, id: "surface-map", class: options[:class], data: {
-                    base_url: Settings.map_url,
-                    resource_url: h.surface_path(surface),
-                    url_root: "#{Rails.application.config.relative_url_root}/",
-                    global_id: global_id,
-                    length: length,
-                    center: center,
-                    base_images: base_images,
-                    layer_groups: surface_layers.reverse.map { |layer| { id: layer.id, name: layer.name, opacity: layer.opacity, tiled: layer.tiled?, bounds: layer.bounds, max_zoom: layer.maxzoom, visible: layer.visible, resource_url: h.surface_layer_path(surface, layer) } },
-                    images: h_images,
-                 })
+    {
+      base_url: Settings.map_url,
+      resource_url: h.surface_path(surface),
+      url_root: "#{Rails.application.config.relative_url_root}/",
+      global_id: global_id,
+      length: length,
+      center: center,
+      base_images: base_images,
+      layer_groups: surface_layers.reverse.map { |layer| { id: layer.id, name: layer.name, opacity: layer.opacity, tiled: layer.tiled?, bounds: layer.bounds, max_zoom: layer.maxzoom, visible: layer.visible, resource_url: h.surface_layer_path(surface, layer) } },
+      images: h_images,
+    }
+  end
+
+
+  def map(options = {})
+    h.content_tag(:div, nil, id: "surface-map", class: options[:class], data: map_data)
   end
 
   def family_tree(current_spot = nil)
