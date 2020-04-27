@@ -11,8 +11,9 @@ place&nbsp;<%= link_to('quantity', quantity_history_specimen_path(@specimen))%>
       <%= content_tag(:h3, history_title(path), class: "panel-title" ) %> 
     </div>
     <div class="panel-body">
-      <%= timeline(path.brought_in_at, path.brought_out_at) %>
-      <br/>Note: <%= path.note %>
+      <div><%= timeline(path.brought_in_at, path.brought_out_at) %></div>
+      <div>note: <%= best_in_place path, :note, :as => :input, :place_holder => 'Clik me to edit.' %></div>
+
       <% if box %>
           <% links = [] %>
           <% path.related_spots.each do |spot| %>

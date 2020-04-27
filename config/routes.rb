@@ -126,6 +126,8 @@ Medusa::Application.routes.draw do
     end
   end
 
+  resources :paths, only: [:update]
+    
   resources :boxes, concerns: [:bundleable, :reportable], except: [:new] do
     member do
       get :family
@@ -375,6 +377,7 @@ Medusa::Application.routes.draw do
       post 'move_to_top'
     end
   end
+ 
   resources :units, except: [:new]
   resources :techniques, except: [:new]
   resources :authors, except: [:new]
