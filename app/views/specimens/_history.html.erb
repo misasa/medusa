@@ -12,7 +12,7 @@ place&nbsp;<%= link_to('quantity', quantity_history_specimen_path(@specimen))%>
     </div>
     <div class="panel-body">
       <%= timeline(path.brought_in_at, path.brought_out_at) %>
-
+      <br/>Note: <%= path.note %>
       <% if box %>
           <% links = [] %>
           <% path.related_spots.each do |spot| %>
