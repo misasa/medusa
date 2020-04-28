@@ -1,0 +1,10 @@
+<tr>
+  <td>
+    <%= button_tag class: "btn btn-default btn-xs determine", "data-id" => surface.global_id do %>
+    <span class="glyphicon glyphicon-link"></span>
+    <% end %>
+  </td>
+  <td><%= surface.name %></td>
+  <td><%= surface.group.try!(:name) %></td>
+  <td><%= difference_from_now(surface.updated_at) %></td>
+</tr>

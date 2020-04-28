@@ -112,6 +112,7 @@ Medusa::Application.routes.draw do
     resources :daughters, concerns: [:link_by_global_id], only: [:index, :create,:update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "specimen", association_name: "children" }
     resources :specimens, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "specimen", association_name: "children" }
     resources :analyses, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "specimen" }
+    resources :surfaces, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/surfaces", defaults: { parent_resource: "specimen" }
   end
 
   resources :divide_specimens, only: [:update] do
@@ -237,6 +238,7 @@ Medusa::Application.routes.draw do
     resources :analyses, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "bib", association_name: "analyses" }
     resources :attachment_files, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/attachment_files", defaults: { parent_resource: "bib" }
     resources :tables, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/tables", defaults: { parent_resource: "bib" }
+    resources :surfaces, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/surfaces", defaults: { parent_resource: "bib" }
   end
 
   resources :surfaces, concerns: [:bundleable, :reportable] do
@@ -283,6 +285,8 @@ Medusa::Application.routes.draw do
         put 'toggle_visible'
       end
     end
+    resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "surface" }
+    resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "surface" }
   end
 
   resources :tables, except: [:new] do
@@ -331,7 +335,7 @@ Medusa::Application.routes.draw do
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "chemistry" }
   end
 
-  resources :spots, only: [:index, :show, :edit, :update] do
+  resources :spots, only: [:index, :show, :edit, :update], concerns: [:bundleable] do
     member do
       get :family
       get :property

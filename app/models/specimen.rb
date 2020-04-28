@@ -25,6 +25,8 @@ class Specimen < ActiveRecord::Base
   has_many :specimens, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
+  has_many :specimen_surfaces, dependent: :destroy
+  has_many :surfaces, through: :specimen_surfaces
   has_many :chemistries, through: :analyses
   has_many :specimen_custom_attributes, dependent: :destroy
   has_many :custom_attributes, through: :specimen_custom_attributes
@@ -152,6 +154,10 @@ class Specimen < ActiveRecord::Base
     Analysis.includes(:chemistries, :record_property, :device, {specimen: [:record_property]}).where(specimen_id: self_and_descendants)
   end
 
+  def full_surfaces
+    Surface.includes(:record_property).where(id: SpecimenSurface.where(specimen_id: self_and_descendants).pluck(:surface_id))
+  end
+
   def full_bibs
     Bib.includes(:record_property, :tables, :referrings).where(id: Referring.where(referable_type: "Specimen").where(referable_id: self_and_descendants).pluck(:bib_id))
   end
@@ -164,7 +170,7 @@ class Specimen < ActiveRecord::Base
     Analysis.where(specimen_id: families)
   end
 
-  def surfaces
+  def candidate_surfaces
     sfs = []
     attachment_image_files.each do |image|
       sfs.concat(image.surfaces) if image.surfaces
