@@ -3,6 +3,8 @@ class Surface < ActiveRecord::Base
   include HasRecordProperty
 
   paginates_per 10
+  has_many :referrings, as: :referable, dependent: :destroy
+  has_many :bibs, through: :referrings
 
   has_many :surface_images, :dependent => :destroy, :order => ("position DESC")
   has_many :calibrated_surface_images, -> { calibrated }, class_name: 'SurfaceImage'

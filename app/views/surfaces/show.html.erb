@@ -33,6 +33,24 @@
         </div>
       <% end %>
     </div>
+    <div id="show-body" class="col-lg-12">
+    <% tab_info = [
+         ["bib",@surface.bibs,"show bibliography related to a record"],
+          ] %>
+     <!-- Nav tabs -->
+     <ul class="nav nav-tabs">
+       <% tab_info.each do |key,array,message| %>
+        <li class="<%= active_if_current(key) %>" ><a href="#<%= key %>" data-toggle="tab" title="<%= message %>"><%= key + data_count(array) %></a></li>
+       <% end %>
+     </ul>
+     <!-- Tab panes -->
+     <div class="tab-content">
+       <% tab_info.each do |key,array,message| %>
+        <div class="tab-pane<%= active_if_current(key)%>" id="<%= key %>"><%= render partial: key.underscore %></div>
+       <% end %>
+     </div>
+   </div>
+ 
   </div>
 </div>
 

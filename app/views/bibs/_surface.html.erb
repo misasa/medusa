@@ -1,0 +1,76 @@
+<% @bib.surfaces.each do |surface| %>
+  <div class="panel panel-default">
+    <div class="panel-heading">
+        <%= link_to(list_title(surface), surface, :title => "view map") %>
+        <%= link_to bib_surface_path(@bib, surface) + tab_param(__FILE__), method: :delete, title: "unlink surface", data: {confirm: t("confirm.unlink")} do %>
+            <span class="glyphicon glyphicon-remove" style="float:right"></span>
+        <% end %>
+    </div>
+
+    <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th></th>
+        <th>name</th>
+        <th>x</th>
+        <th>y</th>
+        <th></th>
+        <th>global-id</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+        <% surface.spots.each do |spot| %>
+          <% next unless spot %>
+          <tr>
+            <td>
+            </td>
+            <td><%= link_to_if can?(:read, spot), list_title(spot), spot %></td>
+            <td><%= spot.decorate.world_x %></td>
+            <td><%= spot.decorate.world_y %></td>
+            <td></td>
+            <td><%= spot.try!(:global_id) %></td> 
+            <td>
+            </td>
+          </tr>
+        <% end %>
+    </tbody>
+  </table>
+  </div>
+<% end %>
+
+<div class="panel panel-default">
+<div class="panel-heading">
+</div>
+<table class="table table-condensed">
+  <tr>
+  <td class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+    <%= form_tag link_by_global_id_bib_surfaces_path(@bib),method: :post do %>
+      <%= hidden_tabname_tag(__FILE__) %>
+        <div class="input-group"> 
+        <%= text_field_tag :global_id, nil, id: "surface-global-id", :placeholder => "input ID", class: "form-control input-sm" %>
+        <span class="input-group-addon">
+          <%= link_to surfaces_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#surface-global-id" do %>
+            <span class="glyphicon glyphicon-search"></span>
+          <% end %>
+        </span>
+
+        </div>
+          <%= button_tag title: "link surface by global id", class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+    <% end %>
+  </td>
+  <td class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+
+      <%= form_for Surface.new, url: bib_surfaces_path(@bib) do |f|%>
+        <%= hidden_tabname_tag(__FILE__) %>
+        <%= f.text_field :name, :placeholder => "input name", class: "form-control input-sm" %>
+          <%= f.button title:"add surface", class: "btn btn-default" do %>
+            <span class="glyphicon glyphicon-save"></span>
+          <% end %>
+      <% end %>
+  </td>
+  </tr>
+</table>
+</div>

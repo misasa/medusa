@@ -1,6 +1,8 @@
 class SpotsController < ApplicationController
   respond_to :html, :xml, :json, :svg
-  before_action :find_resource, except: [:index]
+  before_action :find_resource, except: [:index, :bundle_edit, :bundle_update]
+  before_action :find_resources, only: [:bundle_edit, :bundle_update]
+
   load_and_authorize_resource
 
   def index
@@ -43,6 +45,14 @@ class SpotsController < ApplicationController
     render json: @spot.get_analysis.to_json(include: { chemistries: { include: [:measurement_item, :unit] } })
   end
 
+  def bundle_edit
+    respond_with @spots
+  end
+
+  def bundle_update
+    @spots.each { |spot| spot.update_attributes(spot_params.only_presence) }
+    render :bundle_edit
+  end
 
   private
 
@@ -78,6 +88,10 @@ class SpotsController < ApplicationController
 
   def find_resource
     @spot = Spot.find(params[:id]).decorate
+  end
+
+  def find_resources
+    @spots = Spot.where(id: params[:ids])
   end
 
 end
