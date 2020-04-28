@@ -7,7 +7,7 @@
     </div>
     <div class="panel-body">
       <div><%= timeline(path.brought_in_at, path.brought_out_at) %></div>
-      <div>note: <%= best_in_place path, :note, :as => :input, :place_holder => 'Clik me to edit.' %></div>
+      <div>description: <%= best_in_place path, :note, :as => :input, :place_holder => 'Clik me to edit.' %></div>
       <% if box %>
       <div>
           <% links = [] %>
