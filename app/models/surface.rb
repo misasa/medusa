@@ -6,6 +6,8 @@ class Surface < ActiveRecord::Base
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
 
+  has_many :specimen_surfaces, dependent: :destroy
+  has_many :specimens, through: :specimen_surfaces
   has_many :surface_images, :dependent => :destroy, :order => ("position DESC")
   has_many :calibrated_surface_images, -> { calibrated }, class_name: 'SurfaceImage'
   has_many :uncalibrated_surface_images, -> { uncalibrated }, class_name: 'SurfaceImage'
@@ -83,7 +85,7 @@ class Surface < ActiveRecord::Base
     ss
   end
 
-  def specimens
+  def candidate_specimens
     sps = []
     images.each do |image|
       next unless image

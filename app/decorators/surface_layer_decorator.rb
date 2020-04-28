@@ -119,7 +119,7 @@ class SurfaceLayerDecorator < Draper::Decorator
       h.concat(
         h.content_tag(:span, class: "panel-title pull-left") do
           h.concat(
-                   h.content_tag(:a, href: "#surface-layer-#{self.id}", data: {toggle: "collapse"}, 'aria-expanded' => false, 'aria-control' => "surface-layer-#{self.id}", title: "fold layer '#{self.name}'") do
+              h.content_tag(:a, href: "#surface-layer-#{self.id}", data: {toggle: "collapse"}, 'aria-expanded' => false, 'aria-control' => "surface-layer-#{self.id}", title: "fold layer '#{self.name}'") do
               h.concat h.content_tag(:span, self.surface_images.size ,class: "badge")
               h.concat " "
               h.concat self.name

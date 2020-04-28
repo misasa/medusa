@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200427062434) do
+ActiveRecord::Schema.define(version: 20200428060059) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -334,6 +334,16 @@ ActiveRecord::Schema.define(version: 20200427062434) do
 
   add_index "specimen_quantities", ["divide_id"], name: "index_specimen_quantities_on_divide_id", using: :btree
   add_index "specimen_quantities", ["specimen_id"], name: "index_specimen_quantities_on_specimen_id", using: :btree
+
+  create_table "specimen_surfaces", force: true do |t|
+    t.integer  "specimen_id"
+    t.integer  "surface_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "specimen_surfaces", ["specimen_id"], name: "index_specimen_surfaces_on_specimen_id", using: :btree
+  add_index "specimen_surfaces", ["surface_id"], name: "index_specimen_surfaces_on_surface_id", using: :btree
 
   create_table "specimens", force: true, comment: "標本" do |t|
     t.string   "name",                                                             comment: "名称"

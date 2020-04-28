@@ -61,7 +61,7 @@ class SpecimenDecorator < Draper::Decorator
 
   def surfaces_with_link
     contents = []
-    surfaces.each do |surface|
+    full_surfaces.each do |surface|
       content = h.raw("")
       content += h.link_to_if(h.can?(:read, surface), h.content_tag(:span, nil, class: "glyphicon glyphicon-edit"), surface, :title => "edit map")
       content += h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")

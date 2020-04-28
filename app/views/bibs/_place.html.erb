@@ -1,5 +1,12 @@
 <div class="panel panel-default">
-<div class="panel-heading">globe</div>
+<div class="panel-heading">
+  globe
+<a href="#surface-globe", data-toggle="collapse", aria-expanded="false", aria-control="surface-globe", title = "show and hide places belong to the globe">
+  <span class="badge" style="float:right"><%= @bib.all_places.size %></span>
+</a>
+
+</div>
+<div class="panel-body collapse" id="surface-globe">
 <table class="table table-condensed table-striped">
   <thead>
     <tr>
@@ -71,4 +78,5 @@
 </table>
 <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#place-bundle-form').submit();", class: "btn btn-default", title: "open multi-edit page with checked items" %>
 <%= mantra "To let join, fill ID field and press save button.  To create new, fill fields and press save button.", :title => "Places related to bibliography" %>
+</div>
 </div>

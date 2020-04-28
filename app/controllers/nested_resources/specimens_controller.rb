@@ -2,17 +2,18 @@ class NestedResources::SpecimensController < ApplicationController
 
   respond_to  :html, :xml, :json
   before_action :find_resource
+  before_action :set_association_name
   load_and_authorize_resource
 
   def index
-    @specimens = @parent.send(params[:association_name])
+    @specimens = @parent.send(@association_name)
     respond_with @specimens
   end
 
   def create
     @specimen = Specimen.new(specimen_params)
     ActiveRecord::Base.transaction do
-    	 succeed = @parent.send(params[:association_name]) << @specimen if @specimen.save
+    	succeed = @parent.send(@association_name) << @specimen if @specimen.save
       raise ActiveRecord::Rollback unless succeed
     end
     respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer), action: "error" 
@@ -20,19 +21,19 @@ class NestedResources::SpecimensController < ApplicationController
 
   def update
     @specimen = Specimen.find(params[:id])
-    @parent.send(params[:association_name]) << @specimen
+    @parent.send(@association_name) << @specimen
     respond_with @specimen
   end
 
   def destroy
     @specimen = Specimen.find(params[:id])
-    @parent.send(params[:association_name]).delete(@specimen)
+    @parent.send(@association_name).delete(@specimen)
     respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def link_by_global_id
     @specimen = Specimen.joins(:record_property).where(record_properties: {global_id: params[:global_id]}).readonly(false).first
-    @parent.send(params[:association_name]) << @specimen if @specimen
+    @parent.send(@association_name) << @specimen if @specimen
     respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   rescue
     duplicate_global_id
@@ -98,4 +99,7 @@ class NestedResources::SpecimensController < ApplicationController
     end
   end
 
+  def set_association_name
+    @association_name = (params[:association_name] ? params[:association_name] : :specimens) 
+  end
 end

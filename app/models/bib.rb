@@ -55,7 +55,7 @@ class Bib < ActiveRecord::Base
   end
 
   def all_spots
-    all_places
+    surfaces.map(&:spots).flatten
   end
   
   def referrings_analyses

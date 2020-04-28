@@ -1,12 +1,16 @@
 <% @bib.surfaces.each do |surface| %>
   <div class="panel panel-default">
     <div class="panel-heading">
-        <%= link_to(list_title(surface), surface, :title => "view map") %>
+      <%= link_to(list_title(surface), surface, :title => "view map") %>
         <%= link_to bib_surface_path(@bib, surface) + tab_param(__FILE__), method: :delete, title: "unlink surface", data: {confirm: t("confirm.unlink")} do %>
-            <span class="glyphicon glyphicon-remove" style="float:right"></span>
+          <span class="glyphicon glyphicon-remove"></span>
         <% end %>
-    </div>
+        <a href="#surface-<%= surface.id %>", data-toggle="collapse", aria-expanded="false", aria-control="surface-<%= surface.id %>", title = "show and hide spots belong to the surface">
+          <span class="badge" style="float:right"><%= surface.spots.size %></span>
+        </a>
 
+        </div>
+    <div class="panel-body collapse" id="surface-<%= surface.id %>">
     <table class="table table-condensed table-striped">
     <thead>
       <tr>
@@ -36,6 +40,7 @@
         <% end %>
     </tbody>
   </table>
+  </div>
   </div>
 <% end %>
 

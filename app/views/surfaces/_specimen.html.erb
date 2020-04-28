@@ -1,0 +1,119 @@
+<div class="row">
+<%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
+<% specimen_groups = @surface.specimens.group_by{|specimen| specimen.box} %>
+<% specimen_groups.each do |box, specimens| %>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<div class="panel panel-default">
+    <div class="panel-heading">
+    <% if box %>
+        <%= link_to box.decorate.name_with_id, box_path(box) %>
+        <%# links = [content_tag(:div, qrcode(box.global_id, size: "80x80"), class: "col-xs-2 col-sm-2 col-md-2 col-lg-2") ] %>
+        <% links = [] %>
+        <%# box.related_spots.each do |spot| %>
+        <%# svg_link = link_to(spot_path(spot)) do %>
+          <%# spot.attachment_file.decorate.picture_with_spots(width:120, height:90, spots:[spot]) %>
+        <%# end %>
+          <%# links << content_tag(:div, svg_link, class: "col-xs-2 col-sm-2 col-md-2 col-lg-2") %>
+        <%# end %>
+        <%#= content_tag(:div, raw( links.join ), class: "row spot-thumbnails") %>
+    <% end %>
+    </div>
+    <table class="table table-condensed">
+      <% specimens.each do |specimen| %>
+      <% specimen = specimen.decorate %>
+      <tr>
+      <td class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+          <%#= qrcode specimen.global_id, size: "80x80" %>
+          <%= link_to specimen.attachment_files.first.decorate.picture(width: 160, height: 160, type: :thumb), specimen, class: specimen_ghost(specimen) if specimen.attachment_files.present? %>
+          <%= check_box_tag("ids[]", specimen.id, true, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
+          <%= link_to surface_specimen_path(@surface, specimen) + tab_param(__FILE__), method: :delete, title: "unlink specimen", data: {confirm: t("confirm.unlink")} do %>
+            <span class="glyphicon glyphicon-remove"></span>
+          <% end %>
+      </td>
+      <td class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
+
+        <%= specimen.name_with_id(true) %>
+        <ul>
+          <% unless specimen.igsn.blank? %>
+            <li>
+              IGSN: <%= link_to specimen.igsn, Settings.sesar_url(igsn: specimen.igsn) %>
+          <%= link_to Settings.sesar_url(igsn: specimen.igsn, edit: true), title: "edit on SESAR" do %>
+            <span class="glyphicon glyphicon-pencil"></span>
+          <% end %>
+
+            </li>
+          <% end %>
+          <% if specimen.place %>
+            <% place = specimen.place.decorate %>
+            <li>
+              place: <%= raw(place.try!(:latitude_to_html)) + ", " + raw(place.try!(:longitude_to_html)) %> <%= link_to "more", place_path(place) %>
+            </li>
+          <% end %>
+          <%= li_if_exist("classification: ", specimen.classification.try!(:full_name)) %>
+          <%= li_if_exist("physical-form: ", specimen.physical_form.try!(:name)) %>
+          <%= li_if_exist("quantity (#{specimen.quantity_unit}): ", specimen.quantity) %>
+          <%= content_tag(:li, "status: #{specimen.status_icon} (#{specimen.status_name})", {}, false) if specimen.status_name.present? %>
+          <%= li_if_exist("age (#{specimen.age_unit}): ", specimen.age_in_text) %>
+          <%#= li_if_exist("tag list: ", specimen.tags.pluck(:name).join(', ')) %>
+          <%= li_if_exist("description: ", specimen.description) %>
+          <% specimen.specimen_custom_attributes.each do |specimen_custom_attribute| %>
+            <%= li_if_exist("#{specimen_custom_attribute.custom_attribute.name}: ", specimen_custom_attribute.value ) %>
+          <% end %> 
+          <li>modified at <%= difference_from_now(specimen.updated_at) %></li>
+        </ul>      
+      </td>
+      </tr>
+      <% end %>
+    </table>
+  </div>
+</div>
+<% end %>
+<% end %>
+
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#specimen-bundle-form').submit();", class: "btn btn-default", title: "open multi-edit page with checked items" %>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+    </div>
+    <table class="table table-condensed">
+      <tr>
+      <td class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+        <%= form_tag link_by_global_id_surface_specimens_path(@surface),method: :post do %>
+          <%= hidden_tabname_tag(__FILE__) %>
+            <div class="input-group"> 
+            <%= text_field_tag :global_id, nil, id: "specimen-global-id", :placeholder => "input ID", class: "form-control input-sm" %>
+            <span class="input-group-addon">
+              <%= link_to specimens_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#specimen-global-id" do %>
+                <span class="glyphicon glyphicon-search"></span>
+              <% end %>
+            </span>
+
+            </div>
+              <%= button_tag title: "link specimen by global id", class: "btn btn-default" do %>
+                <span class="glyphicon glyphicon-save"></span>
+              <% end %>
+        <% end %>
+      </td>
+      <td class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+
+          <%= form_for Specimen.new, url: surface_specimens_path(@surface) do |f|%>
+            <%= hidden_tabname_tag(__FILE__) %>
+            <%= f.text_field :name, :placeholder => "input name", class: "form-control input-sm" %>
+            <%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), { prompt: "select physical form" }, class: "form-control input-sm" %>
+            <%= f.text_field :quantity, :placeholder => "input quantity", class: "form-control input-sm" %>
+            <%= f.text_field :quantity_unit, :placeholder => "input quantity unit", class: "form-control input-sm" %>
+              <%= f.button title:"add specimen file", class: "btn btn-default" do %>
+                <span class="glyphicon glyphicon-save"></span>
+              <% end %>
+          <% end %>
+      </td>
+      </tr>
+    </table>
+  </div>
+</div>
+
+</div>
+<%= mantra "To let join, fill ID field and press save button.  To create new, fill fields and press save button.
+", :title => "#{@alias_specimen.capitalize}s related to surface" %>

@@ -112,6 +112,7 @@ Medusa::Application.routes.draw do
     resources :daughters, concerns: [:link_by_global_id], only: [:index, :create,:update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "specimen", association_name: "children" }
     resources :specimens, concerns: [:link_by_global_id], only: [:index, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "specimen", association_name: "children" }
     resources :analyses, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/analyses", defaults: { parent_resource: "specimen" }
+    resources :surfaces, concerns: [:link_by_global_id], only: [:index,:create, :update, :destroy], controller: "nested_resources/surfaces", defaults: { parent_resource: "specimen" }
   end
 
   resources :divide_specimens, only: [:update] do
@@ -285,6 +286,7 @@ Medusa::Application.routes.draw do
       end
     end
     resources :bibs, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/bibs", defaults: { parent_resource: "surface" }
+    resources :specimens, concerns: [:link_by_global_id], only: [:index, :create, :update, :destroy], controller: "nested_resources/specimens", defaults: { parent_resource: "surface" }
   end
 
   resources :tables, except: [:new] do
