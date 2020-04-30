@@ -17,23 +17,20 @@
         <tr>
           <th></th>
           <th>name</th>
-          <th>x</th>
-          <th>y</th>
-          <th></th>
+          <th>coordinate</th>
           <th>global-id</th>
           <th></th>
         </tr>
       </thead>
       <tbody>
           <% surface.spots.each do |spot| %>
+            <% spot = spot.decorate %>
             <% next unless spot %>
             <tr>
               <td>
               </td>
               <td><%= link_to_if can?(:read, spot), list_title(spot), spot %></td>
-              <td><%= spot.decorate.world_x %></td>
-              <td><%= spot.decorate.world_y %></td>
-              <td></td>
+              <td><%= spot.decorate.world_xy_to_text %></td>
               <td><%= spot.try!(:global_id) %></td> 
               <td>
               </td>

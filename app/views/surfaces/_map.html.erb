@@ -1,5 +1,5 @@
 <% if @surface.globe? %>
-  <%= ActsAsMappable::Mappable::HtmlGenerator.generate(lat: 0, lng: 0, zoom: 0, width: 300, height: 300) %>
+  <%= ActsAsMappable::Mappable::HtmlGenerator.generate(lat: 0, lng: 0, zoom: 0, width: '100%', height: 900) %>
   <%= javascript_tag "actsAsMappable.initToMap();" %>
 <% else %>
   <%= @surface.map(class: "large-map", add_spot: true) %>
