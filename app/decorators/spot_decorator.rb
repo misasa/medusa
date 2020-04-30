@@ -12,6 +12,10 @@ class SpotDecorator < Draper::Decorator
   	"(#{format(fmt, spot_x)}, #{format(fmt, spot_y)})"
   end
 
+  def world_xy_to_text(fmt = "%.2f")
+  	"(#{format(fmt, world_x)}, #{format(fmt, world_y)})"
+  end
+
   def file_with_id
     return unless attachment_file
     attachment_file.decorate.icon + h.link_to_if(h.can?(:read, attachment_file), " #{attachment_file.name}", attachment_file)

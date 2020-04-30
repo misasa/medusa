@@ -6,40 +6,111 @@
           <span class="glyphicon glyphicon-remove"></span>
         <% end %>
         <a href="#surface-<%= surface.id %>", data-toggle="collapse", aria-expanded="false", aria-control="surface-<%= surface.id %>", title = "show and hide spots belong to the surface">
-          <span class="badge" style="float:right"><%= surface.spots.size %></span>
+          <span class="badge" style="float:right"><%= (surface.globe ? @bib.all_places.size : surface.spots.size) %></span>
         </a>
 
         </div>
     <div class="panel-body collapse" id="surface-<%= surface.id %>">
-    <table class="table table-condensed table-striped">
-    <thead>
-      <tr>
-        <th></th>
-        <th>name</th>
-        <th>x</th>
-        <th>y</th>
-        <th></th>
-        <th>global-id</th>
-        <th></th>
-      </tr>
-    </thead>
-    <tbody>
+    <% if surface.globe? %>
+      <table class="table table-condensed table-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <th>name</th>
+            <th>latitude</th>
+            <th>longitude</th>
+            <th></th>
+            <th>global-id</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        <%= form_tag bundle_edit_places_path, id: "place-bundle-form" do %>
+          <% @bib.all_places.each do |place| %>
+          <% next unless place %>
+          <tr>
+            <td>
+              <%= check_box_tag("ids[]", place.id, false, {id: "ids_#{place.id}", class: "select-row"}) if can?(:update, place) %>
+            </td>
+            <td><%= link_to_if can?(:read, place), list_title(place), place %></td>
+            <td><%= place.decorate.latitude_to_text %></td>
+            <td><%= place.decorate.longitude_to_text %></td>
+            <td></td>
+            <td><%= place.try!(:global_id) %></td> 
+            <td>
+              <%= link_to bib_place_path(@bib, place) + tab_param(__FILE__), method: :delete, title: "unlink place", data: {confirm: t("confirm.unlink")} do %>
+                <span class="glyphicon glyphicon-remove"></span>
+              <% end %>
+            </td>
+          </tr>
+          <% end %>
+        <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+          <%= form_for Place.new, url: bib_places_path(@bib) do |f|%>
+          <%= hidden_tabname_tag(__FILE__) %>
+            <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
+            <th><%= f.text_field :name, class: "form-control input-sm" %></th>
+            <th><%= f.text_field :latitude, class: "form-control input-sm" %></th>
+            <th><%= f.text_field :longitude, class: "form-control input-sm" %></th>
+            <th>
+              <%= f.button title:"add box file", class: "btn btn-default" do %>
+                <span class="glyphicon glyphicon-save"></span>
+              <% end %>
+            </th>
+          <% end %>
+          <%= form_tag link_by_global_id_bib_places_path(@bib),method: :post do %>
+            <%= hidden_tabname_tag(__FILE__) %>
+            <th>
+            <div class="input-group">
+              <%= text_field_tag :global_id, nil, id: "place-global-id", class: "form-control input-sm" %>
+              <span class="input-group-addon">
+                <%= link_to places_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#place-global-id" do %>
+                  <span class="glyphicon glyphicon-search"></span>
+                <% end %>
+              </span>
+            </div>
+            </th>
+            <th>
+            <%= button_tag title: "link place by global id",class: "btn btn-default" do %>
+              <span class="glyphicon glyphicon-save"></span>
+            <% end %>
+            </th>
+          <% end %>
+          </tr>
+        </tfoot>
+      </table>
+      <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#place-bundle-form').submit();", class: "btn btn-default", title: "open multi-edit page with checked items" %>
+      <%= mantra "To let join, fill ID field and press save button.  To create new, fill fields and press save button.", :title => "Places related to bibliography" %>
+    <% else %>
+      <table class="table table-condensed table-striped">
+      <thead>
+        <tr>
+          <th></th>
+          <th>name</th>
+          <th>coordinate</th>
+          <th>global-id</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
         <% surface.spots.each do |spot| %>
           <% next unless spot %>
+          <% spot = spot.decorate %>
           <tr>
             <td>
             </td>
             <td><%= link_to_if can?(:read, spot), list_title(spot), spot %></td>
-            <td><%= spot.decorate.world_x %></td>
-            <td><%= spot.decorate.world_y %></td>
-            <td></td>
+            <td><%= spot.decorate.world_xy_to_text %></td>
             <td><%= spot.try!(:global_id) %></td> 
             <td>
             </td>
           </tr>
         <% end %>
-    </tbody>
-  </table>
+      </tbody>
+    </table>
+  <% end %>
   </div>
   </div>
 <% end %>

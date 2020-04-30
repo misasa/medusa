@@ -3,7 +3,7 @@
     <% if surface.globe? %>
       <img src="http://a.tile.openstreetmap.org/0/0/0.png" width="50" height="50">
     <% else %>
-      <%= image_tag(surface.base_image_url, width:50, height:50 )  %>
+      <%= image_tag(surface.base_image_url, width:50, height:50, style: 'background-color:black')  %>
     <% end %>
   </td>
   <td>
