@@ -249,6 +249,8 @@ Medusa::Application.routes.draw do
       get :map
       get :layer
       get :image
+      get :show_bibs
+      get :show_specimens
       post 'tiles'
     end
     resources :images, concerns: [:link_by_global_id], only: [:index, :show, :create, :update, :destroy], controller: "surface_images" do

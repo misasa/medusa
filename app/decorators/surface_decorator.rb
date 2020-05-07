@@ -94,8 +94,22 @@ class SurfaceDecorator < Draper::Decorator
 
 
   def map(options = {})
-    h.content_tag(:div, nil, id: "surface-map", class: options[:class], data: map_data)
+    if self.globe?
+      lat = 0
+      lng = 0
+      zoom = 2
+      specimens = options[:specimens]
+      if !specimens.empty?
+        place = specimens[0].place
+        lat = place.latitude
+        lng = place.longitude
+      end
+      ActsAsMappable::Mappable::HtmlGenerator.generate(lat: lat, lng: lng, zoom: zoom, width: '100%', height: 900)
+    else
+      h.content_tag(:div, nil, id: "surface-map", class: options[:class], data: map_data)
+    end
   end
+
 
   def family_tree(current_spot = nil)
     html_class = "tree-node"

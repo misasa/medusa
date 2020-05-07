@@ -1,6 +1,6 @@
 class SurfacesController < ApplicationController
   layout 'map'
-  respond_to :html, :xml, :json, :svg
+  respond_to :html, :xml, :js, :json, :svg
   before_action :find_resource, except: [:index, :create, :bundle_edit, :bundle_update]
   before_action :find_resources, only: [:bundle_edit, :bundle_update]
   load_and_authorize_resource
@@ -19,6 +19,18 @@ class SurfacesController < ApplicationController
 
   def show
     respond_with @surface
+  end
+
+  def show_bibs
+    respond_with @bibs do |format|
+      format.js
+    end
+  end
+
+  def show_specimens
+    respond_with @specimens do |format|
+      format.js
+    end
   end
 
   def edit
@@ -115,6 +127,10 @@ class SurfacesController < ApplicationController
       {wall_surface_images: [:image, :surface]}).find(params[:id]).decorate
     #@surface_layers = SurfaceLayer.where(surface_id: params[:id]).includes({surface_images: [:image,:surface]})
     @image = @surface.first_image
+    bibs_per_page = 5
+    specimens_per_page = 5
+    @bibs = Bib.where(id: Referring.where(referable_type: "Surface").where(referable_id: @surface.id).pluck(:bib_id)).order("updated_at DESC").page(params[:page]).per(bibs_per_page)
+    @specimens = @surface.specimens.order("updated_at DESC").page(params[:page]).per(specimens_per_page)
   end
 
   def find_resources
