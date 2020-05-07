@@ -6,12 +6,46 @@
             <span class="glyphicon glyphicon-remove"></span>
           <% end %>
           <a href="#surface-<%= surface.id %>", data-toggle="collapse", aria-expanded="false", aria-control="surface-<%= surface.id %>", title = "show and hide spots belong to the surface">
-            <span class="badge" style="float:right"><%= surface.spots.size %></span>
+            <span class="badge" style="float:right"><%= (surface.globe? ? 1 : surface.spots.size) %></span>
           </a>
   
           </div>
       <div class="panel-body collapse" id="surface-<%= surface.id %>">
-      <% if true %>
+      <% if surface.globe? %>
+      <table class="table table-condensed table-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <th>name</th>
+            <th>latitude</th>
+            <th>longitude</th>
+            <th></th>
+            <th>global-id</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+        <%= form_tag bundle_edit_places_path, id: "place-bundle-form" do %>
+          <% place = @specimen.place %>
+          <tr>
+            <td>
+            </td>
+            <td><%= link_to_if can?(:read, place), list_title(place), place %></td>
+            <td><%= place.decorate.latitude_to_text %></td>
+            <td><%= place.decorate.longitude_to_text %></td>
+            <td></td>
+            <td><%= place.try!(:global_id) %></td> 
+            <td>
+            </td>
+          </tr>
+        <% end %>
+        </tbody>
+        <tfoot>
+          <tr>
+          </tr>
+        </tfoot>
+      </table>
+    <% else %>
       <table class="table table-condensed table-striped">
       <thead>
         <tr>

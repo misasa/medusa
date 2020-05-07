@@ -2,6 +2,7 @@
   <div id="map" class="col-lg-9">
     <div class="row tool-content">
     </div>
+    <%= render(partial: "map") %>
   </div>
   <div id="index-list" class="col-lg-3">
     <nav class="navbar navbar-default" role="navigation">
@@ -11,7 +12,7 @@
     </nav>
     <%= link_to('/', surfaces_path) %>
     <%= show_title(@surface) %>
-    <div class="btn-toolbar tool-selector" role="toolbar">
+    <div class="btn-toolbar tool-selector-js" role="toolbar">
       <div class="btn-group btn-group-sm">
       </div>
       <div class="btn-group btn-group-sm">
