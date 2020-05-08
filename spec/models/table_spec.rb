@@ -204,7 +204,7 @@ describe "Table" do
     end
   end
 
-  describe "#method_sign" do
+  describe "#method_sign", :current => true do
     context "method call once" do
       subject { table.method_sign(technique, device) }
       let(:technique) { FactoryGirl.create(:technique) }
@@ -217,18 +217,18 @@ describe "Table" do
         end
         context "device is present" do
           it { expect(subject).to eq "a" }
-          it { subject; expect(table.send(:methods_hash)).to eq({ [nil, device.id] => {:sign => "a", :description => "on #{device.name}"} }) }
+          it { subject; expect(table.send(:methods_hash)).to eq({ [nil, device.id] => {:sign => "a", :technique_id => nil, :device_id=> device.id, :description => "on #{device.name}"} }) }
         end
       end
       context "technique is present" do
         context "device is nil" do
           let(:device) { nil }
           it { expect(subject).to eq "a" }
-          it { subject; expect(table.send(:methods_hash)).to eq({ [technique.id, nil] => {:sign => "a", :description => "#{technique.name} "} }) }
+          it { subject; expect(table.send(:methods_hash)).to eq({ [technique.id, nil] => {:sign => "a", :technique_id => technique.id, :device_id => nil, :description => "#{technique.name} "} }) }
         end
         context "device is present" do
           it { expect(subject).to eq "a" }
-          it { subject; expect(table.send(:methods_hash)).to eq({ [technique.id, device.id] => {:sign => "a", :description => "#{technique.name} on #{device.name}"} }) }
+          it { subject; expect(table.send(:methods_hash)).to eq({ [technique.id, device.id] => {:sign => "a", :technique_id => technique.id, :device_id => device.id, :description => "#{technique.name} on #{device.name}"} }) }
         end
       end
     end
@@ -243,8 +243,8 @@ describe "Table" do
       it do
         subject
         expect(table.send(:methods_hash)).to eq({
-          [technique_1.id, device_1.id] => {:sign => "a", :description => "#{technique_1.name} on #{device_1.name}"},
-          [technique_2.id, device_2.id] => {:sign => "b", :description => "#{technique_2.name} on #{device_2.name}"}
+          [technique_1.id, device_1.id] => {:sign => "a", :technique_id => technique_1.id, :device_id => device_1.id, :description => "#{technique_1.name} on #{device_1.name}"},
+          [technique_2.id, device_2.id] => {:sign => "b", :technique_id => technique_2.id, :device_id => device_2.id, :description => "#{technique_2.name} on #{device_2.name}"}
         })
       end
     end
