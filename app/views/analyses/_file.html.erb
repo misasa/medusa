@@ -13,7 +13,7 @@
   </thead>
   <tbody>
   <%= form_tag bundle_edit_attachment_files_path, id: "attachment-file-bundle-form" do %>
-    <%= render(partial: "attachment_file", locals: {attachment_file: @analysis.fits_file, attaching: nil}) %>
+    <%= render(partial: "attachment_file", locals: {attachment_file: @analysis.fits_file, attaching: nil}) if @analysis.fits_file %>
     <% @analysis.attachings.where(attachable_type: "Analysis").order("position ASC").each do |attaching| %>
         <% attachment_file = attaching.attachment_file %>
         <%= render(partial: "attachment_file", locals: {attachment_file: attaching.attachment_file, attaching: attaching}) %>
