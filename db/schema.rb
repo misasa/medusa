@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200428060059) do
+ActiveRecord::Schema.define(version: 20200513040306) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20200428060059) do
     t.datetime "updated_at",   comment: "更新日時"
     t.integer  "technique_id", comment: "分析手法ID"
     t.integer  "device_id",    comment: "分析機器ID"
+    t.integer  "fits_file_id"
   end
 
   add_index "analyses", ["device_id"], name: "index_analyses_on_device_id", using: :btree

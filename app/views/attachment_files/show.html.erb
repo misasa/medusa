@@ -42,7 +42,7 @@
         ["box",@attachment_file.boxes],
 #        ["spot",@attachment_file.surface_spots_within_bounds],
         ["place",@attachment_file.places],
-        ["analysis",@attachment_file.analyses],
+        ["analysis",[@attachment_file.analysis].concat(@attachment_file.analyses).compact],
         ["bib",@attachment_file.bibs]] %>
     <!-- Nav tabs -->
     <ul class="nav nav-tabs">

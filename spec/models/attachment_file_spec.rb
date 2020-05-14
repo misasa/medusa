@@ -115,7 +115,7 @@ describe AttachmentFile do
     after { obj.destroy }
   end
 
-  describe ".check_affine_matrix", :current => true do
+  describe ".check_affine_matrix" do
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
     let(:new_name){ "deleteme.1234.jpg" }
@@ -148,6 +148,7 @@ describe AttachmentFile do
   end
 
   describe ".rename_attached_files_if_needed" do
+    pending("") do
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
     let(:new_name){ "deleteme.1234.jpg" }
@@ -156,11 +157,12 @@ describe AttachmentFile do
       User.current = user
       obj
     end
-    it "chage data.path" do
+    it "change data.path" do
       obj.update_attributes(name: new_name)
       expect(File.exist?(obj.data.path)).to be_truthy
     end
     after { obj.destroy }
+    end
   end
 
   describe ".create" do
@@ -202,6 +204,71 @@ describe AttachmentFile do
     after { obj.destroy  } 
   end
 
+  describe "#fits?" do
+    subject { obj.fits_file? }
+    let(:obj) { FactoryGirl.build(:attachment_file, data_content_type: data_content_type, data_file_name: data_file_name) }
+    context "data_content_type is octet-stream" do
+      let(:data_content_type) { "application/octet-stream" }
+      let(:data_file_name) { "test.fits" }
+      it { expect(subject).to eq true }
+    end
+
+    context "data_content_type is octet-stream" do
+      let(:data_content_type) { "application/octet-stream" }
+      let(:data_file_name) { "test.ext" }
+      it { expect(subject).to eq false }
+    end
+
+    context "data_content_type is pdf" do
+      let(:data_content_type) { "application/pdf" }
+      let(:data_file_name) { "test.pdf" }
+      it { expect(subject).to eq false }
+    end
+    context "data_content_type is jpeg" do
+      let(:data_content_type) { "image/jpeg" }
+      let(:data_file_name) { "test.jpg" }
+      it { expect(subject).to eq false }
+    end
+    context "data_content_type is excel" do
+      let(:data_content_type) { "application/vnd.ms-excel" }
+      let(:data_file_name) { "test.xsl" }
+      it { expect(subject).to eq false }
+    end
+  end
+
+  describe "generate_analysis" do
+    subject { obj.analysis }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    before do
+      User.current = user
+      obj
+    end
+    it { expect(subject).not_to be_nil }
+
+  end
+
+  describe "fits_data" do
+    subject { obj.fits_data }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    before do
+      User.current = user
+      obj
+    end
+    it { expect(subject).to be_an_instance_of(Array) }
+  end
+
+  describe "fits_image" do
+    subject { obj.fits_image }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    before do
+      User.current = user
+      obj
+    end
+    it { expect(subject).to be_an_instance_of(ChunkyPNG::Image) }
+  end
 
   describe "#pdf?" do
     subject { obj.pdf? }

@@ -33,7 +33,7 @@ gem 'jbuilder', '~> 1.2'
 
 gem 'lazy_high_charts'
 gem 'histogram'
-
+gem 'narray'
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -62,6 +62,7 @@ gem 'paperclip'
 gem 'barby'
 gem 'rqrcode'
 gem 'chunky_png'
+gem 'color_code'
 gem 'alchemist', github: 'halogenandtoast/alchemist'
 gem 'geonames'
 gem 'rubyzip'

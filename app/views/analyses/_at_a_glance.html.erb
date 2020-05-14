@@ -40,10 +40,15 @@
 </ul>
 
 
+
 <div class="row spot-thumbnails">
   <%= @analysis.decorate.related_pictures %>
 </div>
 
+<% if @analysis.fits_file %>
+  <div><%= @analysis.fits_file.data_file_name %></div>
+  <%= image_tag(fits_image_attachment_file_path(@analysis.fits_file), :size => '256x256') %>  
+<% else %>
 
 <table class="table table-condensed table-striped">
   <thead>
@@ -86,9 +91,7 @@
           <% end %>
         </th>
       <% end %>
-    <tr>
-  </tfoot>
-
+    </tr>
   </tfoot>
 </table>
 <% if @analysis.chemistries.empty? %>
@@ -97,13 +100,13 @@
   <% MeasurementCategory.pluck(:name, :id).each do |name, id| %>
     <%= link_to name,multiple_new_analysis_chemistries_path(@analysis,measurement_category_id: id) %>
   <% end %>
-</div>
+  </div>
+  <%= mantra "To add data, fill fields and press save button.", :title => "Data of <#{@analysis.name}>" %> 
+  <% end %>
 <% end %>
 </div>
-
 
   <div class="hidden" id="display-type-data">
     <%= rplot_iframe @analysis %>
   </div>
 </div>
-<%= mantra "To add data, fill fields and press save button.", :title => "Data of <#{@analysis.name}>" %> 
