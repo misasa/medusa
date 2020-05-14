@@ -96,8 +96,12 @@ class AttachmentFilesController < ApplicationController
     respond_with @attachment_file, layout: !request.xhr?
   end
 
-  def picture 
+  def picture
     respond_with @attachment_file, layout: !request.xhr?
+  end
+
+  def fits_image
+    send_data(@attachment_file.fits_image.to_blob, :type => 'image/png', :disposition => 'inline')
   end
 
   def destroy

@@ -340,7 +340,6 @@ class SurfaceImage < ActiveRecord::Base
   	ss = []
     surface.surface_images.each do |osurface_image|
       oimage = osurface_image.image
-      p oimage
       #image_region
       opixels = oimage.spots.map{|spot| [spot.spot_x, spot.spot_y]}
       worlds = oimage.pixel_pairs_on_world(opixels)

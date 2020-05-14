@@ -115,6 +115,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.6.3)
+    color_code (0.4.0)
     columnize (0.8.9)
     comma (3.2.0)
       activesupport (>= 3.0.0)
@@ -207,6 +208,7 @@ GEM
     multi_json (1.13.1)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
+    narray (0.6.1.2)
     net-scp (1.1.2)
       net-ssh (>= 2.6.5)
     net-ssh (2.8.0)
@@ -474,6 +476,7 @@ DEPENDENCIES
   chunky_png
   ci_reporter
   coffee-rails (~> 4.0.0)
+  color_code
   comma
   devise
   draper
@@ -489,6 +492,7 @@ DEPENDENCIES
   kaminari
   lazy_high_charts
   migration_comments
+  narray
   omniauth
   omniauth-google-oauth2
   omniauth-shibboleth

@@ -305,6 +305,7 @@ Medusa::Application.routes.draw do
   resources :attachment_files, concerns: :bundleable , except: [:new] do
     member do
       get :property
+      get :fits_image
       get :picture
       get :download
       get :calibrate

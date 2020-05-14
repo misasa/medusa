@@ -12,7 +12,7 @@
   </thead>
   <tbody>
     <%= form_tag bundle_edit_analyses_path, id: "analysis-bundle-form" do %>
-      <% @attachment_file.analyses.each do |analysis| %>
+      <% [@attachment_file.analysis].concat(@attachment_file.analyses).compact.each do |analysis| %>
         <tr>
           <td>
             <%= check_box_tag("ids[]", analysis.id, false, {id: "ids_#{analysis.id}", class: "select-row"}) if can?(:update, analysis) %>

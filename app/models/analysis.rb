@@ -13,6 +13,7 @@ class Analysis < ActiveRecord::Base
   belongs_to :specimen, touch: true
   belongs_to :device
   belongs_to :technique
+  belongs_to :fits_file, class_name: 'AttachmentFile'
 
   validates :specimen, existence: true, allow_nil: true
   validates :device, existence: true, allow_nil: true

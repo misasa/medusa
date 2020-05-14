@@ -358,7 +358,7 @@ describe Analysis do
         end
       end
     end
-    context "with existing chemistry", :current => true do
+    context "with existing chemistry" do
       let(:chemistry){ FactoryGirl.create(:chemistry, analysis_id: analysis.id, measurement_item_id: measurement_item.id, value: 6.0, uncertainty: nil) }
       before do
         User.current = user
