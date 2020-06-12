@@ -10,6 +10,7 @@
   <tbody>
     <%= form_tag bundle_edit_bibs_path, id: "bib-bundle-form" do %>
       <% @specimen.full_bibs.each do |bib| %>
+        <% bib = bib.decorate %>
         <tr>
           <td>
               <%= check_box_tag("ids[]", bib.id, checked: false, id: "ids_#{bib.id}", class: "select-row") if can?(:update, bib) %>

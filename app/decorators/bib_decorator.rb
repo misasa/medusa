@@ -89,7 +89,7 @@ class BibDecorator < Draper::Decorator
     html += h.raw(", ") + h.content_tag(:i, journal) unless journal.blank?
     html += h.raw(", ") + h.content_tag(:b, volume) unless volume.blank?
     html += h.raw(", #{pages}") unless pages.blank?
-    html += h.raw(", doi: ") + h.link_to(doi, doi_link_url) unless doi.blank?
+    html += h.raw(", doi:") + h.link_to(doi, doi_link_url) unless doi.blank?
     html += h.raw(".")
     html
   end
@@ -118,7 +118,8 @@ class BibDecorator < Draper::Decorator
     elsif (author_names.length == 2)
       author_names.join(' & ')
     elsif (author_names.length > 2)
-      author_names[0] + " et al."
+      first_author_name = author_names[0]
+      first_author_name.split(/,/)[0] + " et al."
     else
       ""
     end
