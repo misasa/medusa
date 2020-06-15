@@ -59,6 +59,8 @@ class AttachmentFileDecorator < Draper::Decorator
 
   def picture_with_spots(width: 250, height: 250, spots: [], with_cross: false)
     return unless image?
+    return unless original_height
+    return unless original_width
     height_rate = original_height.to_f / height
     width_rate = original_width.to_f / width
     scale = (width_rate >= height_rate) ? 1.to_f/width_rate : 1.to_f/height_rate
