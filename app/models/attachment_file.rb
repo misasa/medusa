@@ -450,7 +450,8 @@ class AttachmentFile < ActiveRecord::Base
 
   private
   def skip_for_fits
-    !File.extname(data_file_name) == '.fits'
+    flag = !(File.extname(data_file_name) == '.fits')
+    flag
   end
 
   def generate_analysis
