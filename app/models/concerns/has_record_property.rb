@@ -146,6 +146,11 @@ module HasRecordProperty
     "http://dream.misasa.okayama-u.ac.jp/?q=#{self.global_id}"
   end
 
+  def escape_for_bibtex(str)
+    str = str.try(:gsub, /"/, "''")
+    str = str.try(:gsub,/\#/, '\#')
+  end
+
   def to_bibtex(options = {})
     if self.instance_of?(Bib)
       to_tex
@@ -153,8 +158,8 @@ module HasRecordProperty
       dream_url = "http://dream.misasa.okayama-u.ac.jp/?q=#{self.global_id}"
       items = []
       items << self.global_id
-      my_author = self.name.try(:gsub, /"/, "''") # TK January 22, 2014 (Wed)
-      my_bib_title = self.bib_title.gsub(/"/,"''")
+      my_author = escape_for_bibtex(self.name)
+      my_bib_title = escape_for_bibtex(self.bib_title)
       items << " author={{#{my_author}}}"
       items << " title={#{my_bib_title}}"
       items << " journal={\\href{#{dream_url}}{DREAM}}"
