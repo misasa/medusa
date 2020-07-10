@@ -47,3 +47,55 @@
     </div>
   </div>
 </div>
+
+<script>
+  var FITS = astro.FITS;
+  console.log(FITS);
+  // Define a callback function for when the FITS file is received
+  var callback = function() {
+    // Get the first header-dataunit containing a dataunit
+    var hdu = this.getHDU();
+    // Get the first header
+    var header = this.getHeader();
+    // or we can do
+    var header = hdu.header;
+    // Read a card from the header
+    var bitpix = header.get('BITPIX');
+    // Get the dataunit object
+    var dataunit = hdu.data;
+    // or we can do
+    var dataunit = this.getDataUnit();
+    // Do some wicked client side processing ...
+    var height = hdu.data.height;
+    var width = hdu.data.width;
+    var buf = dataunit.buffer;
+    var dataview = new DataView(buf);
+    var exampledata = new Float64Array(height * width);
+    byteOffset = 0;
+    for (y = 0; y < height; y++) {
+      for (x = 0; x < width; x++) {
+        exampledata[(y*width)+x] = dataview.getFloat64(byteOffset);
+        byteOffset += 8;
+      }
+    }
+
+    const canvas = document.getElementById("plot-fits");
+    const plot = new plotty.plot({
+      canvas,
+      data: exampledata,
+      width: width,
+      height: height,
+      domain: [0, 25],
+      colorScale: "viridis"
+    });
+    plot.render();        
+  }    
+  // Set path to FITS file
+  //var url = "/some/FITS/file/on/your/server.fits";
+  var url = "<%= @analysis.fits_file.path %>";
+  // Initialize a new FITS File object
+  var fits = new FITS(url, callback); 
+  console.log(fits); 
+</script>
+
+

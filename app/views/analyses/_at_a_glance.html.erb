@@ -39,15 +39,13 @@
   <% end %>
 </ul>
 
-
-
 <div class="row spot-thumbnails">
   <%= @analysis.decorate.related_pictures %>
 </div>
 
 <% if @analysis.fits_file %>
   <div><%= @analysis.fits_file.data_file_name %></div>
-  <%= image_tag(fits_image_attachment_file_path(@analysis.fits_file), :size => '256x256') %>  
+  <canvas id="plot-fits"></canvas>
 <% else %>
 
 <table class="table table-condensed table-striped">

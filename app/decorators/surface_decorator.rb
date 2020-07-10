@@ -76,7 +76,7 @@ class SurfaceDecorator < Draper::Decorator
       else
         layer_group_name = s_image.surface_layer.try!(:name) || 'top'
         h_images[layer_group_name] = [] unless h_images.has_key?(layer_group_name)
-        h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: s_image.image.bounds, max_zoom: a_zooms[index]}
+        h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: s_image.image.bounds, max_zoom: a_zooms[index], fits_file: s_image.image.fits_file?, corners: s_image.corners_on_world, path: h.asset_url(s_image.image.data.url)}
       end
     end
     {
@@ -87,7 +87,7 @@ class SurfaceDecorator < Draper::Decorator
       length: length,
       center: center,
       base_images: base_images,
-      layer_groups: surface_layers.reverse.map { |layer| { id: layer.id, name: layer.name, opacity: layer.opacity, tiled: layer.tiled?, bounds: layer.bounds, max_zoom: layer.maxzoom, visible: layer.visible, resource_url: h.surface_layer_path(surface, layer) } },
+      layer_groups: surface_layers.reverse.map { |layer| { id: layer.id, name: layer.name, opacity: layer.opacity, tiled: layer.tiled?, bounds: layer.bounds, max_zoom: layer.maxzoom, visible: layer.visible, resource_url: h.surface_layer_path(surface, layer) }},
       images: h_images,
     }
   end

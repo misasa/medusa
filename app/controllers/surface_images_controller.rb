@@ -59,6 +59,10 @@ class SurfaceImagesController < ApplicationController
     duplicate_global_id
   end
 
+  def fits_image
+    send_data(@image.fits_image.to_blob, :type => 'image/png', :disposition => 'inline')
+  end
+
   def tiles
     TileWorker.perform_async(@surface_image.id)
     respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
