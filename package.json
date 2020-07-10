@@ -6,14 +6,18 @@
   "author": "Yusuke Yachi <yusuke.yachi@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "Leaflet.Spin": "makinacorpus/Leaflet.Spin",
     "Leaflet.ZoomLabel": "https://github.com/yyachi/Leaflet.ZoomLabel",
+    "d3": "^5.16.0",
+    "fitsjs": "^0.6.6",
+    "handsontable": "https://github.com/handsontable/handsontable",
     "leaflet": "https://github.com/Leaflet/Leaflet#^1.0.0",
     "leaflet-distortableimage": "yyachi/Leaflet.DistortableImage#develop",
     "leaflet-fullscreen": "Leaflet/Leaflet.fullscreen",
     "leaflet-toolbar": "Leaflet/Leaflet.Toolbar",
-    "Leaflet.Spin": "makinacorpus/Leaflet.Spin",
     "leaflet.coordinates": "https://github.com/yyachi/Leaflet.Coordinates#develop",
     "perspective-transform": "https://github.com/jlouthan/perspective-transform",
-    "handsontable": "https://github.com/handsontable/handsontable"
+    "plotty": "^0.4.3",
+    "wcs.js": "https://github.com/astrojs/wcsjs.git"
   }
 }

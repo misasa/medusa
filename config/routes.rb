@@ -259,6 +259,7 @@ Medusa::Application.routes.draw do
         get :svg
         get :zooms
         get :map
+        get :fits_image
         post 'move_to_top'
         post 'move_to_bottom'
         post 'move_higher'

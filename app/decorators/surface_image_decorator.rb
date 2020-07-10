@@ -67,8 +67,8 @@ class SurfaceImageDecorator < Draper::Decorator
                     add_spot: true,
                     add_radius: true,
                     base_images: surface.base_surface_images.map{ |b_image| {name: b_image.image.name, path: b_image.data.url, width: b_image.image.width, height: b_image.image.height, id: b_image.image.try!(:id), bounds: b_image.bounds} },
-                    layer_groups: [{name: image.try!(:name), opacity: 100 }],
-                    images: {image.try!(:name) => [{id: image.try!(:id), bounds: image.bounds, max_zoom: original_zoom_level}]},
+                    layer_groups: [{name: image.try!(:name), opacity: 100, visible:true, displayMin:0, displayMax:25, colorScale:'rainbow' }],
+                    images: {image.try!(:name) => [{id: image.try!(:id), bounds: image.bounds, max_zoom: original_zoom_level, fits_file: image.fits_file?, corners: self.corners_on_world, path: h.asset_url(image.data.url), resource_url: h.surface_image_path(surface, image) }]},
                     spots: [],
                     bounds: bounds,
                     zoomlabel: []
@@ -186,6 +186,36 @@ class SurfaceImageDecorator < Draper::Decorator
 
   end
  
+
+  def drop_down_menu_fits
+    attachment_file = self.image
+    surface = self.surface
+    h.content_tag(:div, class: "dropdown") do
+      h.concat(
+          h.content_tag(:button, class: "btn btn-default btn-xs dropdown-toggle", :title => "dropdown menu for #{attachment_file.name}",  :type => "button", :id => "dropdownMenu1", 'data-toggle' => "dropdown", 'aria-haspopup' => true, 'aria-expanded' => false) do
+          h.concat h.truncate(File.basename(attachment_file.name, ".*"), :length => 20)
+          h.concat h.content_tag(:span,nil,class:'caret')
+        end
+      )
+      h.concat(
+        h.content_tag(:ul, class: "dropdown-menu", 'aria-labelledby' => "dropdownMenu1") do
+          h.concat h.content_tag(:li, attachment_file.name, class: "dropdown-header")
+          h.concat h.content_tag(:li, h.content_tag(:a, "type in affine matrix", href: "#collapseAffine-#{attachment_file.id}", class: "dropdown-item", title: "#{attachment_file.name}", data: {toggle:"collapse"}))
+          h.concat h.content_tag(:li, h.link_to("type in coordinates of 4 corners", h.edit_corners_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
+          #h.concat h.content_tag(:li, h.link_to("align and export", h.calibrate_svg_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
+          #h.concat h.content_tag(:li, h.link_to("align on layer 'Base'", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
+          if attachment_file.try!(:affine_matrix).present?
+            h.concat h.content_tag(:li, h.link_to("show on layer 'Base'", h.map_surface_image_path(surface, attachment_file)))
+          #  h.concat h.content_tag(:li, h.link_to("show tiles", h.zooms_surface_image_path(surface, attachment_file)))
+          #  h.concat h.content_tag(:li, h.link_to("refresh tiles", h.tiles_surface_image_path(surface, attachment_file), method: :post))
+          end
+          h.concat h.content_tag(:li, h.link_to("unlink from #{surface.name}", h.surface_image_path(self.surface, attachment_file), method: :delete, data: {confirm: "Are you sure to unlink #{attachment_file.name} from #{surface.name}"}, class: "dropdown-item"))
+        end
+      )
+    end
+
+  end
+
   def li_media
     return unless File.exist?(self.image.data.path)
     left = h.content_tag(:a, h.image_tag(self.image.path(:tiny), class:"media-object"), class:"pull-left")
@@ -193,8 +223,30 @@ class SurfaceImageDecorator < Draper::Decorator
     h.content_tag(:li, h.raw(left + right), class:"media")
   end
 
+  def li_fits_file(ptokens = [])
+    h.content_tag(:li, class: "surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do
+      h.concat(
+        h.content_tag(:div, class:"thumbnail") do
+          tokens = self.tokenize
+          (tokens - ptokens).each do |token|
+            h.concat h.content_tag(:span, token, class:"label label-success")
+          end
+          #h.concat h.link_to(h.image_tag(self.image.path(:thumb)), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
+          h.concat drop_down_menu_fits
+          h.concat h.content_tag(:span, "Fits", class:"label label-warning")
+          unless self.calibrated?
+            h.concat h.content_tag(:span, "not calibrated", class:"label label-default")
+          end
+          h.concat h.content_tag(:div, self.image.decorate.matrix_form, class:"collapse", id:"collapseAffine-#{self.image.id}")
+        end
+      )
+      #h.concat self.image.decorate.thumbnail
+    end
+  end
+
   def li_thumbnail(ptokens = [])
     return unless self.image
+    return li_fits_file(ptokens) if self.image.fits_file?
     return unless self.image.image?
     #return unless File.exist?(self.image.data.path)
       h.content_tag(:li, class: "surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do

@@ -32,6 +32,10 @@
 //= require svg.draggable
 //= require matrix
 //= require acts_as_mappable
+//= require d3/dist/d3.min.js
+//= require plotty/dist/plotty.min.js
+//= require fitsjs/lib/fits.js
+//= require wcs.js/wcs.js
 //= require_tree .
 //= require highcharts/highcharts
 //= require highcharts/highcharts-more

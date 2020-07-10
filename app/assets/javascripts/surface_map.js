@@ -127,9 +127,20 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
           L.DomEvent.on(down, 'click', this._onDownClick, this);
           down.layerId = input.layerId;
           holder.appendChild(down);
+          var detail = document.createElement('div');
+          label.appendChild(detail);
+          detail.className = 'leaflet-control-layers-detail';
+          detail.setAttribute('leaflet_id', obj.layer._leaflet_id);
+          if (this._map.hasLayer(obj.layer)) {
+            detail.style.display = 'block';
+          } else {
+            detail.style.display = 'none';
+          }
 
           input = document.createElement('input');
           input.type = 'range';
+          input.className = 'leaflet-control-layers-opacity';
+          input.setAttribute('leaflet_id', obj.layer._leaflet_id);
           input.min = 0;
           input.max = 100;
           if (obj.layer && obj.layer.getLayers() && obj.layer.getLayers()[0]){
@@ -139,15 +150,74 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
           }
           this._layerControlInputs.push(input);
           input.layerId = L.stamp(obj.layer);
-          if (this._map.hasLayer(obj.layer)) {
-            input.style.display = 'block';
-          } else {
-            input.style.display = 'none';
-          }
-
           L.DomEvent.on(input, 'change', this._onInputClick, this);
 
-          label.appendChild(input);
+          detail.appendChild(input);
+          glayers = Object.values(obj.layer._layers);
+          if (glayers.some(layer => typeof layer.setColorScale === "function")){
+            fits_layres = glayers.filter(layer => typeof layer.options.renderer !== 'undefined');
+            var ploty_options = fits_layres[0].options.renderer.options;
+            var select = document.createElement("select");
+            select.layerId = L.stamp(obj.layer);
+            select.className = 'leaflet-control-layers-colorScale';
+            select.setAttribute('leaflet_id', obj.layer._leaflet_id);  
+            select.add( (new Option("Rainbow","rainbow")) );
+            select.add( (new Option("Viridis","viridis")) );
+            select.add( (new Option("Greys","greys")) );
+            select.value = ploty_options.colorScale;
+            //L.DomEvent.on(select, 'change', this._onSelectClick, this);
+            select.onchange = function (e){
+              var value = select.value;
+              //obj.layer.getLayers(select.layerId)[0].setColorScale(value);
+              glayers =  obj.layer.getLayers(select.layerId);
+              for (i = 0; i < glayers.length; i++) {
+                glayer = glayers[i];
+                if (typeof glayer.setColorScale === "function") { 
+                // safe to use the function
+                  glayer.setColorScale(value);
+                }
+              }
+            }
+            detail.appendChild(select);
+
+            var displayMin = document.createElement("input");
+            displayMin.type = 'textinput';
+            displayMin.value = ploty_options.displayMin;
+            displayMin.layerId = L.stamp(obj.layer);
+            displayMin.style.cssText = 'width: 50px; height: 19px';
+            displayMin.onchange = function (e){
+              var min = displayMin.value;
+              var max = displayMax.value;
+              glayers =  Object.values(obj.layer._layers);
+              for (i = 0; i < glayers.length; i++) {
+                glayer = glayers[i];
+                if (typeof glayer.setDisplayRange === "function") { 
+                // safe to use the function
+                  glayer.setDisplayRange(min, max);
+                }
+              }        
+            }
+            detail.appendChild(displayMin);
+
+            var displayMax = document.createElement("input");
+            displayMax.type = 'textinput';
+            displayMax.value = ploty_options.displayMax;
+            displayMax.style.cssText = 'width: 50px; height: 19px';
+            displayMax.onchange = function (e){
+              var max = displayMax.value;
+              var min = displayMin.value;
+              glayers =  Object.values(obj.layer._layers);
+              for (i = 0; i < glayers.length; i++) {
+                glayer = glayers[i];
+                if (typeof glayer.setDisplayRange === "function") { 
+                // safe to use the function
+                  glayer.setDisplayRange(min, max);
+                }
+              }        
+            }
+            detail.appendChild(displayMax);
+
+          }
         }
 
         var container = obj.overlay ? this._overlaysList : this._baseLayersList;
@@ -157,6 +227,16 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
 
 
         return label;
+    },
+    _onChangeDisplayRange: function(obj, min, max){
+      glayers =  Object.values(obj.layer._layers);
+      for (i = 0; i < glayers.length; i++) {
+        glayer = glayers[i];
+        if (typeof glayer.setDisplayRange === "function") { 
+        // safe to use the function
+          glayer.setDisplayRange(min, max);
+        }
+      }
     },
     _onUpClick: function(e){
       var layerId = e.currentTarget.layerId;
@@ -231,6 +311,7 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
     },
     _onLayerChecked: function (obj){
       //console.log("LayerChecked.");
+      $(".leaflet-control-layers-detail[leaflet_id='" + obj.layer._leaflet_id + "']").css('display','block')
       if (obj.layer && obj.layer.getLayers() && obj.layer.getLayers()[0]){
         url = obj.layer.getLayers()[0].options.resource_url + '/check.json';
         console.log('PUT ' + url);
@@ -245,6 +326,7 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
     },
     _onLayerUnChecked: function (obj){
       //console.log("LayerUnChecked.");
+      $(".leaflet-control-layers-detail[leaflet_id='" + obj.layer._leaflet_id + "']").css('display','none')
       if (obj.layer && obj.layer.getLayers() && obj.layer.getLayers()[0]){
         url = obj.layer.getLayers()[0].options.resource_url + '/uncheck.json';
         console.log('PUT ' + url);
@@ -271,8 +353,9 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
         });
       }
     },
-    _onInputClick: function () {
-        var i, input, obj;
+    _onInputClick: function (e) {
+      var layerId = e.currentTarget.layerId;
+      var i, input, obj;
         //inputs = this._form.getElementsByTagName('input');
         var inputs = this._layerControlInputs;
         var inputsLen = inputs.length;
@@ -304,7 +387,7 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
 		            }
                 continue;
             } else if (input.type == 'range' && !this._map.hasLayer(obj.layer)) {
-                input.style.display = 'none';
+                //input.style.display = 'none';
                 continue;
             }
 
@@ -716,6 +799,312 @@ L.control.viewMeta = function (options) {
   return new L.Control.ViewMeta(options);
 };
 
+L.LeafletFits = L.ImageOverlay.extend({
+	options: {
+		arrowSize: 20,
+		band: 0,
+		image: 0,
+		renderer: null
+  },
+  initialize: function (url, options) { 
+    //if(typeof(GeoTIFF) === 'undefined'){
+    //    throw new Error("GeoTIFF not defined");
+    //};
+
+    this._url = url;
+    this.raster = {};
+    L.Util.setOptions(this, options);
+
+    if (this.options.bounds) {
+        //this._rasterBounds = L.latLngBounds(options.bounds);
+        this._rasterBounds = options.bounds;
+    }
+    if (this.options.corners) {
+        this._rasterCorners = options.corners;
+    }
+    if (this.options.renderer) {
+      this.options.renderer.setParent(this);
+    }
+    this._getData();
+  },
+
+  onAdd: function (map) {
+    this._map = map;
+    if (!this._image) {
+        this._initImage();
+    }
+
+    map._panes.overlayPane.appendChild(this._image);
+
+    map.on('moveend', this._reset, this);
+    
+    if (map.options.zoomAnimation && L.Browser.any3d) {
+        map.on('zoomanim', this._animateZoom, this);
+    }
+
+    this._reset();
+  },  
+  _getData: function() {
+    var self = this;
+    // Initialize a new FITS File object
+    var FITS = astro.FITS;
+    // Define a callback function for when the FITS file is received
+    var callback = function() {
+      // Get the first header-dataunit containing a dataunit
+      var hdu = this.getHDU();
+      // Get the first header
+      var header = hdu.header;
+      //var w = wcs();
+      //w.init(header);
+      // Read a card from the header
+      var bitpix = header.get('BITPIX');
+      // Get the dataunit object
+      var dataunit = hdu.data;
+      // Do some wicked client side processing ...
+      var height = hdu.data.height;
+      var width = hdu.data.width;
+      var buf = dataunit.buffer;
+      var dataview = new DataView(buf);
+      var exampledata = new Float64Array(height * width);
+      byteOffset = 0;
+      for (y = 0; y < height; y++) {
+        for (x = 0; x < width; x++) {
+          exampledata[(y*width)+x] = dataview.getFloat64(byteOffset);
+          byteOffset += 8;
+        }
+      }
+
+      self.raster.data = exampledata;
+      self.raster.width = width;
+      self.raster.height = height;
+      if (self._rasterCorners){
+        var m = Matrix.fromTriangles([0,0,width,0,width,height], [self._rasterCorners[0],self._rasterCorners[1],self._rasterCorners[2]].flat());
+        self.raster.ij2world = m;
+        self.raster.world2ij = m.inverse()
+      }
+      self._reset();
+    };  
+    var fits = new FITS(this._url, callback);
+  },
+  setColorScale: function (colorScale) {
+    this.options.renderer.setColorScale(colorScale);
+  },  
+  setDisplayRange: function (min,max) {
+    this.options.renderer.setDisplayRange(min,max);
+  },  
+  _reset: function () {
+    if (this.hasOwnProperty('_map')) {
+        if (this._rasterBounds) {
+            topLeft = this._map.latLngToLayerPoint(this._map.getBounds().getNorthWest()),
+            size = this._map.latLngToLayerPoint(this._map.getBounds().getSouthEast())._subtract(topLeft);
+
+            L.DomUtil.setPosition(this._image, topLeft);
+            this._image.style.width  = size.x + 'px';
+            this._image.style.height = size.y + 'px';
+
+            this._drawImage();
+        };
+    };
+  },
+  _drawImage: function () {
+    if (this.raster.hasOwnProperty('data')) {
+      var args = {};
+      topLeft = this._map.latLngToLayerPoint(this._map.getBounds().getNorthWest()),
+      size = this._map.latLngToLayerPoint(this._map.getBounds().getSouthEast())._subtract(topLeft);
+      args.rasterPixelBounds = L.bounds(this._map.latLngToContainerPoint(this._rasterBounds.getNorthWest()),this._map.latLngToContainerPoint(this._rasterBounds.getSouthEast()));
+      args.xStart = (args.rasterPixelBounds.min.x>0 ? args.rasterPixelBounds.min.x : 0);
+      args.xFinish = (args.rasterPixelBounds.max.x<size.x ? args.rasterPixelBounds.max.x : size.x);
+      args.yStart = (args.rasterPixelBounds.min.y>0 ? args.rasterPixelBounds.min.y : 0);
+      args.yFinish = (args.rasterPixelBounds.max.y<size.y ? args.rasterPixelBounds.max.y : size.y);
+      args.plotWidth = args.xFinish-args.xStart;
+      args.plotHeight = args.yFinish-args.yStart;
+      if ((args.plotWidth<=0) || (args.plotHeight<=0)) {
+        console.log(this.options.name,' is off screen.');
+        var plotCanvas = document.createElement("canvas");
+        plotCanvas.width = size.x;
+        plotCanvas.height = size.y;
+        var ctx = plotCanvas.getContext("2d");
+        ctx.clearRect(0, 0, plotCanvas.width, plotCanvas.height);
+        this._image.src = plotCanvas.toDataURL();
+        return;
+      }
+
+      args.xOrigin = this._map.getPixelBounds().min.x+args.xStart;
+      args.yOrigin = this._map.getPixelBounds().min.y+args.yStart;
+      args.lngSpan = (this._rasterBounds._northEast.lng - this._rasterBounds._southWest.lng)/this.raster.width;
+      args.latSpan = (this._rasterBounds._northEast.lat - this._rasterBounds._southWest.lat)/this.raster.height;
+      //Draw image data to canvas and pass to image element
+      var plotCanvas = document.createElement("canvas");
+      plotCanvas.width = size.x;
+      plotCanvas.height = size.y;
+      var ctx = plotCanvas.getContext("2d");
+      ctx.clearRect(0, 0, plotCanvas.width, plotCanvas.height);
+
+			this.options.renderer.render(this.raster, plotCanvas, ctx, args);
+      //Draw clipping polygon
+      if (this.options.clip) {
+        this._clipMaskToPixelPoints();
+        ctx.globalCompositeOperation = 'destination-out';
+        ctx.rect(args.xStart-10,args.yStart-10,args.plotWidth+20,args.plotHeight+20);
+        //Draw vertices in reverse order
+        for (var i = this._pixelClipPoints.length-1; i >= 0; i--) {
+          var pix = this._pixelClipPoints[i];
+          ctx['lineTo'](pix.x, pix.y);
+        }
+        ctx.closePath();
+        ctx.fill();
+      }
+      this._image.src = String(plotCanvas.toDataURL());   
+    }
+  },  
+  transform: function(rasterImageData, args) {
+		//Create image data and Uint32 views of data to speed up copying
+		var imageData = new ImageData(args.plotWidth, args.plotHeight);
+		var outData = imageData.data;
+		var outPixelsU32 = new Uint32Array(outData.buffer);
+		var inData = rasterImageData.data;
+		var inPixelsU32 = new Uint32Array(inData.buffer);
+    var outWorldsF64 = new Float64Array(new ArrayBuffer(args.plotWidth * args.plotHeight * 8 * 2));
+		var zoom = this._map.getZoom();
+		var scale = this._map.options.crs.scale(zoom);
+		var d = 57.29577951308232; //L.LatLng.RAD_TO_DEG;
+
+		var transformationA = this._map.options.crs.transformation._a;
+		var transformationB = this._map.options.crs.transformation._b;
+		var transformationC = this._map.options.crs.transformation._c;
+		var transformationD = this._map.options.crs.transformation._d;
+		if (L.version >= "1.0") {
+			transformationA = transformationA*this._map.options.crs.projection.R;
+			transformationC = transformationC*this._map.options.crs.projection.R;
+    }
+		for (var y=0;y<args.plotHeight;y++) {
+			var yUntransformed = ((args.yOrigin+y) / scale - transformationD) / transformationC;
+			var currentLat = (2 * Math.atan(Math.exp(yUntransformed)) - (Math.PI / 2)) * d;
+			for (var x=0;x<args.plotWidth;x++) {
+        //Location to draw to
+				var index = (y*args.plotWidth+x);
+				//Calculate lat-lng of (x,y)
+				//This code is based on leaflet code, unpacked to run as fast as possible
+				//Used to deal with TIF being EPSG:4326 (lat,lon) and map being EPSG:3857 (m E,m N)
+				var xUntransformed = ((args.xOrigin+x) / scale - transformationB) / transformationA;
+				var currentLng = xUntransformed * d;
+        var world = this.options.latLng2world(L.latLng(currentLat, currentLng))
+        outWorldsF64[index*2] = world[0];
+        outWorldsF64[index*2 + 1] = world[1];
+			}
+    }
+    var outijs = this.raster.world2ij.applyToArray(outWorldsF64);
+		for (var y=0;y<args.plotHeight;y++) {
+			for (var x=0;x<args.plotWidth;x++) {
+        var index = (y*args.plotWidth+x);
+        var oi = outijs[index*2];
+        var oj = outijs[index*2 + 1];
+        var rasterX = Math.floor(oi);
+        var rasterY = Math.ceil(oj);
+        if (rasterY >= 0 && rasterY <= this.raster.height && rasterX >= 0 && rasterX <= this.raster.width){
+          var rasterIndex = (rasterY*this.raster.width+rasterX);
+          outPixelsU32[index] = inPixelsU32[rasterIndex];
+        }
+      }
+    }
+		return imageData;
+	},
+});
+
+L.leafletFits = function (url, options) {
+  return new L.LeafletFits(url, options);
+};
+
+L.LeafletFitsRenderer = L.Class.extend({
+	
+	initialize: function(options) {		
+        L.setOptions(this, options);
+	},
+
+	setParent: function(parent) {
+		this.parent = parent;
+	},
+
+	render: function(raster, canvas, ctx, args) {
+		throw new Error('Abstract class');
+	}
+
+});
+
+L.LeafletFits.Plotty = L.LeafletFitsRenderer.extend({
+
+	options: {
+		colorScale: 'viridis',
+		clampLow: true,
+		clampHigh: true,
+		displayMin: 0,
+		displayMax: 1
+	},
+
+	initialize: function(options) {
+		if (typeof (plotty) === 'undefined') {
+			throw new Error("plotty not defined");
+		}
+		this.name = "Plotty";
+		
+        L.setOptions(this, options);
+		
+		this._preLoadColorScale();
+	},
+
+    setColorScale: function (colorScale) {
+        this.options.colorScale = colorScale;
+        this.parent._reset();
+    },
+
+    setDisplayRange: function (min,max) {
+        this.options.displayMin = min;
+        this.options.displayMax = max;
+        this.parent._reset();
+    },
+
+    _preLoadColorScale: function () {
+        var canvas = document.createElement('canvas');
+        var plot = new plotty.plot({
+            canvas: canvas,
+			      data: [0],
+            width: 1, height: 1,
+            domain: [this.options.displayMin, this.options.displayMax], 
+            colorScale: this.options.colorScale,
+            clampLow: this.options.clampLow,
+            clampHigh: this.options.clampHigh,
+        });
+        this.colorScaleData = plot.colorScaleCanvas.toDataURL();            
+    },
+	
+	render: function(raster, canvas, ctx, args) {
+		var plottyCanvas = document.createElement("canvas");
+		var plot = new plotty.plot({
+			data: raster.data,
+			width: raster.width, height: raster.height,
+			domain: [this.options.displayMin, this.options.displayMax], 
+			colorScale: this.options.colorScale,
+			clampLow: this.options.clampLow,
+			clampHigh: this.options.clampHigh,
+			canvas: plottyCanvas,
+			useWebGL: false
+		});
+		plot.setNoDataValue(-9999); 
+		plot.render();
+
+		this.colorScaleData = plot.colorScaleCanvas.toDataURL();
+
+		var rasterImageData = plottyCanvas.getContext("2d").getImageData(0, 0, plottyCanvas.width, plottyCanvas.height);
+		var imageData = this.parent.transform(rasterImageData, args);
+		ctx.putImageData(imageData, args.xStart, args.yStart); 
+	}
+
+});
+
+L.LeafletFits.plotty = function (options) {
+    return new L.LeafletFits.Plotty(options);
+};
+
 function initSurfaceMap() {
   var div = document.getElementById("surface-map");
   var radiusSelect = document.getElementById("spot-radius");
@@ -779,7 +1168,7 @@ function initSurfaceMap() {
     str = gxy_str + " " + xy_str + " " + lngLat_str;
     return str;
   };
-  //map.addControl(new L.Control.Coordinates({position: 'topright', customLabelFcn:map_LabelFcn}));
+  map.addControl(new L.Control.Coordinates({position: 'topright', customLabelFcn:map_LabelFcn}));
 
   
   if (_bounds){
@@ -806,7 +1195,7 @@ function initSurfaceMap() {
     layers[baseCount - 1].addTo(map);
   }
   layerGroups.concat([{ name: "top", opacity: 100 }]).forEach(function(layerGroup) {
-    var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0, visible = layerGroup.visible, resource_url = layerGroup.resource_url;
+    var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0, visible = layerGroup.visible, resource_url = layerGroup.resource_url, colorScale = layerGroup.colorScale, displayMin = layerGroup.displayMin, displayMax = layerGroup.displayMax;
     opts = {opacity: opacity, maxNativeZoom: 6, visible: visible, resource_url: resource_url};
 
     if (layerGroup.tiled){
@@ -817,31 +1206,51 @@ function initSurfaceMap() {
         opts = Object.assign(opts, {maxNativeZoom: layerGroup.max_zoom})
       }
       L.tileLayer(baseUrl + global_id + '/layers/' + layerGroup.id + '/{z}/{x}_{y}.png', opts).addTo(group);
-      layers.push(group);
-      if (visible){
-        group.addTo(map);
-      }
-      if (name === "") { name = "top"; }
-        overlayMaps[name] = group;
     } else {
       if (images[name]) {
         images[name].forEach(function(image) {
-	        if (image.bounds){
-            opts = Object.assign(opts, {bounds: worldBounds(image.bounds)});
+          if (!image.fits_file){
+	          if (image.bounds){
+              opts = Object.assign(opts, {bounds: worldBounds(image.bounds)});
+            }
+            if (image.max_zoom){
+	            opts = Object.assign(opts, {maxNativeZoom: image.max_zoom})
+            }
+            L.tileLayer(baseUrl + global_id + '/' + image.id + '/{z}/{x}_{y}.png', opts).addTo(group);
           }
-          if (image.max_zoom){
-	          opts = Object.assign(opts, {maxNativeZoom: image.max_zoom})
-          }
-	        L.tileLayer(baseUrl + global_id + '/' + image.id + '/{z}/{x}_{y}.png', opts).addTo(group);
         });
-        layers.push(group);
-        if (visible){
-          group.addTo(map);
-        }
-        if (name === "") { name = "top"; }
-        overlayMaps[name] = group;
       }
     }
+    //for fits file
+    if (images[name]) {
+      images[name].forEach(function(image) {
+        if (image.fits_file){
+          var b_bounds = L.latLngBounds([
+            world2latLng([image.bounds[0], image.bounds[1]]),
+            world2latLng([image.bounds[2], image.bounds[3]])
+          ]);
+          ploty_opts = {colorScale: 'rainbow', displayMin: 0, displayMax: 30};
+          if (layerGroup.colorScale){
+            opts = Object.assign(opts, {colorScale: layerGroup.colorScale})
+          }
+          if (layerGroup.displayMin){
+            opts = Object.assign(opts, {displayMin: layerGroup.displayMin})
+          }
+          if (layerGroup.displayMax){
+            opts = Object.assign(opts, {colorScale: layerGroup.displayMax})
+          }
+
+          L.leafletFits(image.path, {bounds: b_bounds, corners: image.corners, visible:visible, latLng2world: latLng2world, world2latLng: world2latLng,  renderer: L.LeafletFits.plotty(ploty_opts)}).addTo(group)
+        }        
+      })
+    }
+
+    layers.push(group);
+    if (visible){
+      group.addTo(map);
+    }
+    if (name === "") { name = "top"; }
+    overlayMaps[name] = group;
   });
 
   var spotsLayer = L.layerGroup();
@@ -851,7 +1260,7 @@ function initSurfaceMap() {
   L.control.surfaceScale({ imperial: false, length: length }).addTo(map);
 
   //L.control.layers(baseMaps, overlayMaps).addTo(map);
-  L.control.opacityLayers(baseMaps, overlayMaps).addTo(map);
+  L.control.opacityLayers(baseMaps, overlayMaps, {collapsed:false}).addTo(map);
   if (bounds){
     map.fitBounds(bounds);
   } else {

@@ -8,6 +8,7 @@ class AttachmentFile < ActiveRecord::Base
     url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension",
     restricted_characters: /[&$+,x\/:;=?<>\[\]\{\}\|\\\^~%# ]/
 
+
   alias_attribute :name, :data_file_name
 
   has_many :spots, dependent: :destroy, inverse_of: :attachment_file
@@ -32,6 +33,8 @@ class AttachmentFile < ActiveRecord::Base
   serialize :affine_matrix, Array
 
   validates :data, presence: true
+
+  scope :fits_files, -> { where(data_content_type: "application/octet-stream").where('(attachment_files.data_file_name like ?)', '%.fits') }
 
   def path(style = :original)
     File.exists?(data.path(style)) ? data.url(style) : data.url(:original)
@@ -217,7 +220,7 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def length
-    return unless self.image?
+    #return unless self.image?
     if width && height
       return width >= height ? width : height
     else

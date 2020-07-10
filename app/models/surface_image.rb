@@ -16,6 +16,8 @@ class SurfaceImage < ActiveRecord::Base
   validate :check_image
 
   after_save :refresh_parent
+  scope :fits_file, -> { joins(:image).where('(attachment_files.data_content_type = ?) and (attachment_files.data_file_name like ?)',"application/octet-stream", '%.fits') }
+  scope :calibrated, -> { joins(:image).where('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :calibrated, -> { joins(:image).where('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :uncalibrated, -> { joins(:image).where.not('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :wall, -> { where(wall: true) }
@@ -510,6 +512,6 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def check_image
-	errors.add(:image_id, " must be image.") unless image.image?
+	errors.add(:image_id, " must be image.") unless image.image? || image.fits_file?
   end
 end
