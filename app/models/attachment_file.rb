@@ -152,7 +152,8 @@ class AttachmentFile < ActiveRecord::Base
     end
     image_1 = local_path
     #image_2 = local_path(:warped)
-    temp_image = Tempfile.new(['warped-','.png'], "#{Rails.root.to_s}/tmp/")
+    #temp_image = Tempfile.new(['warped-','.png'], "#{Rails.root.to_s}/tmp/")
+    temp_image = Tempfile.new(['warped-','.png'])
     image_2 = temp_image.path
     temp_image.close!
     png = ChunkyPNG::Image.new(new_geometry[0], new_geometry[1])
