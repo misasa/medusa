@@ -244,6 +244,15 @@ class SurfaceImageDecorator < Draper::Decorator
     end
   end
 
+  def labels(ptokens = [])
+    tokens = self.tokenize
+    h.content_tag(:div, class:"tokens") do
+      (tokens - ptokens).each do |token|
+        h.concat h.content_tag(:span, token, class:"label label-success")
+      end
+    end
+  end
+
   def li_thumbnail(ptokens = [])
     return unless self.image
     return li_fits_file(ptokens) if self.image.fits_file?

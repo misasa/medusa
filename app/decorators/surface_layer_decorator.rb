@@ -114,7 +114,7 @@ class SurfaceLayerDecorator < Draper::Decorator
     })
   end
 
-  def panel_head(tokens)
+  def panel_head_with_menu(tokens)
     h.content_tag(:div, class: "panel-heading") do
       h.concat(
         h.content_tag(:span, class: "panel-title pull-left") do
@@ -131,24 +131,9 @@ class SurfaceLayerDecorator < Draper::Decorator
       h.concat h.content_tag(:span, "opacity: #{self.opacity}%", class: "label label-primary")
       if self.visible?
         h.concat h.content_tag(:span, "visible", class: "label label-primary")
-#        h.concat(
-#          h.link_to(h.uncheck_surface_layer_path(self.surface, self, :format => :json), method: :put, remote: true, class: "btn btn-default btn-sm", title: "toggle visibility of '#{self.name}'") do
-#            h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-refresh")
-#          end
-#        )
       else
         h.concat h.content_tag(:span, "hidden", class: "label label-default")
-#        h.concat(
-#          h.link_to(h.check_surface_layer_path(self.surface, self, :format => :json), method: :put, remote: true, class: "btn btn-default btn-sm", title: "toggle visibility of '#{self.name}'") do
-#            h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-refresh")
-#          end
-#        )
       end
-#      h.concat(
-#        h.link_to(h.toggle_visible_surface_layer_path(self.surface, self, :format => :json), method: :put, remote: true, class: "toggle_visible btn btn-default btn-sm", title: "toggle visibility of '#{self.name}'") do
-#          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-refresh")
-#        end
-#      )
       h.concat h.raw("&nbsp;")
       tokens.each do |token|
         h.concat h.content_tag(:span, token, class: "label label-success")
@@ -184,22 +169,101 @@ class SurfaceLayerDecorator < Draper::Decorator
         end
       )
       h.concat(
-               h.link_to(h.tiles_surface_layer_path(self.surface, self), method: :post, class: "btn btn-default btn-sm pull-right", title: "refresh tiles for images in layer '#{self.name}'") do
+        h.link_to(h.tiles_surface_layer_path(self.surface, self), method: :post, class: "btn btn-default btn-sm pull-right", title: "refresh tiles for images in layer '#{self.name}'") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-refresh")
         end
       )
       h.concat(
-               h.link_to(h.calibrate_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "align images in layer '#{self.name}'") do
+        h.link_to(h.calibrate_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "align images in layer '#{self.name}'") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-adjust")
         end
       )
       h.concat(
-               h.link_to(h.map_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "show images in layer '#{self.name}'") do
+        h.link_to(h.map_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "show images in layer '#{self.name}'") do
           h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
         end
       )
       h.concat h.content_tag(:div, nil, class: "clearfix")
     end
+  end
+
+  def panel_head(tokens, &block)
+    h.content_tag(:div, class: "panel-heading") do
+      h.concat(
+        h.content_tag(:span, class: "panel-title pull-left") do
+          h.concat(
+              h.content_tag(:a, href: "#surface-layer-#{self.id}", data: {toggle: "collapse"}, 'aria-expanded' => false, 'aria-control' => "surface-layer-#{self.id}", title: "fold layer '#{self.name}'") do
+              h.concat h.content_tag(:span, self.surface_images.size ,class: "badge")
+              h.concat " "
+              h.concat self.name
+            end
+          )
+        end
+      )
+      h.concat h.raw("&nbsp;")
+      h.concat h.content_tag(:span, "opacity: #{self.opacity}%", class: "label label-primary")
+      if self.visible?
+        h.concat h.content_tag(:span, "visible", class: "label label-primary")
+      else
+        h.concat h.content_tag(:span, "hidden", class: "label label-default")
+      end
+      h.concat h.raw("&nbsp;")
+      tokens.each do |token|
+        h.concat h.content_tag(:span, token, class: "label label-success")
+      end
+      if block_given?
+        block.call
+      end
+    end
+  end
+
+  def panel_menu
+      h.concat(
+        h.link_to(h.surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :delete, title: "delete layer '#{self.name}'", data: {confirm: "Are you sure you want to delete layer '#{self.name}'"}) do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-remove")
+        end
+      )
+      h.concat(
+        h.link_to(h.move_to_top_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' bottom") do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-circle-arrow-down")
+        end
+      )
+      h.concat(
+        h.link_to(h.move_higher_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' down") do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-down")
+        end
+      )
+      h.concat(
+        h.link_to(h.move_lower_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' up") do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-up")
+        end
+      )
+      h.concat(
+        h.link_to(h.move_to_bottom_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' top") do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-circle-arrow-up")
+        end
+      )
+      h.concat(
+               h.link_to(h.edit_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "edit name and opacity of layer '#{self.name}'") do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-pencil")
+        end
+      )
+      h.concat(
+        h.link_to(h.tiles_surface_layer_path(self.surface, self), method: :post, class: "btn btn-default btn-sm pull-right", title: "refresh tiles for images in layer '#{self.name}'") do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-refresh")
+        end
+      )
+      h.concat(
+        h.link_to(h.calibrate_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "align images in layer '#{self.name}'") do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-adjust")
+        end
+      )
+      h.concat(
+        h.link_to(h.map_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "show images in layer '#{self.name}'") do
+          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+        end
+      )
+      h.concat h.content_tag(:div, nil, class: "clearfix")
   end
 
   def thumbnails_list(tokens)
@@ -219,6 +283,25 @@ class SurfaceLayerDecorator < Draper::Decorator
     end
   end
 
+  def panel_with_block(&block)
+    layer_tokens = []
+    self.surface_images.each do |surface_image|
+      image = surface_image.image
+      #tokens = File.basename(image.name, ".*").split('-')
+      tokens = surface_image.decorate.tokenize
+      if layer_tokens.empty?
+        layer_tokens = tokens
+      else
+        layer_tokens = layer_tokens & tokens
+      end
+    end
+    h.content_tag(:div, class: "panel panel-default") do
+      panel_head(layer_tokens) + h.content_tag(:div, class: "panel-body collapse", id: "surface-layer-#{self.id}") do
+        block.call(layer_tokens)
+      end
+    end
+  end
+
   def panel
     layer_tokens = []
     self.surface_images.each do |surface_image|
@@ -232,7 +315,7 @@ class SurfaceLayerDecorator < Draper::Decorator
       end
     end
     h.content_tag(:div, class: "panel panel-default") do
-      panel_head(layer_tokens) + panel_body(layer_tokens)
+      panel_head(layer_tokens){ panel_menu } + panel_body(layer_tokens)
     end
   end
 end
