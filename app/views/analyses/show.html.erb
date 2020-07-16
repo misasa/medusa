@@ -92,7 +92,7 @@
   }    
   // Set path to FITS file
   //var url = "/some/FITS/file/on/your/server.fits";
-  var url = "<%= @analysis.fits_file.path %>";
+  var url = "<%= @analysis.fits_file.path if @analysis.fits_file %>";
   // Initialize a new FITS File object
   var fits = new FITS(url, callback); 
   console.log(fits); 
