@@ -420,7 +420,9 @@
     var thumbnails = Object.create(Calibrator.Thumbnails.prototype);
     Object.assign(thumbnails, Calibrator.Node(element));
     thumbnails.element.on("click", function(event) {
+      $('.thumbnail.selected').each(function(){$(this).removeClass("selected")});
       var div = $(event.target).parent();
+      div.addClass("selected");
       var base_link = $("#base_image_download_link");
       if (div.data("name")) {
         $("#base_info").text(div.data("name"));
