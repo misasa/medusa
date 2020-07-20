@@ -10,6 +10,11 @@
     bessel "^1.0.2"
     jstat "^1.9.2"
 
+"@types/geojson@^7946.0.7":
+  version "7946.0.7"
+  resolved "https://registry.yarnpkg.com/@types/geojson/-/geojson-7946.0.7.tgz#c8fa532b60a0042219cdf173ca21a975ef0666ad"
+  integrity sha512-wE2v81i4C4Ol09RtsWFAqg3BUitWbHSpSlIo+bNdsCJijO9sjme+zm+73ZMCa/qMC8UEERxzGbvmr1cffo2SiQ==
+
 "@types/pikaday@1.7.4":
   version "1.7.4"
   resolved "https://registry.yarnpkg.com/@types/pikaday/-/pikaday-1.7.4.tgz#aa41f928f0f5af31a4a656f471a78177a9260abf"
@@ -451,6 +456,11 @@ detect-file@^1.0.0:
   resolved "https://registry.yarnpkg.com/detect-file/-/detect-file-1.0.0.tgz#f0d66d03672a825cb1b73bdb3fe62310c8e552b7"
   integrity sha1-8NZtA2cqglyxtzvbP+YjEMjlUrc=
 
+earcut@^2.1.3:
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/earcut/-/earcut-2.2.2.tgz#41b0bc35f63e0fe80da7cddff28511e7e2e80d11"
+  integrity sha512-eZoZPPJcUHnfRZ0PjLvx2qBordSiO8ofC3vt+qACLM95u+4DovnbYNpQtJh0DNsWj8RnxrQytD4WA8gj5cRIaQ==
+
 expand-brackets@^2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/expand-brackets/-/expand-brackets-2.1.4.tgz#b77735e315ce30f6b6eff0f83b04151a22449622"
@@ -564,6 +574,19 @@ fragment-cache@^0.2.1:
   integrity sha1-QpD60n8T6Jvn8zeZxrxaCr//DRk=
   dependencies:
     map-cache "^0.2.2"
+
+geojson-flatten@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/geojson-flatten/-/geojson-flatten-1.0.4.tgz#cdfef2e9042996fcaa14fe658db6d88c99c20930"
+  integrity sha512-PpscUXxO6dvvhZxtwuqiI5v+1C/IQYPJRMWoQeaF2oohJgfGYSHKVAe8L+yUqF34PH/hmq9JlwmO+juPw+95/Q==
+  dependencies:
+    get-stdin "^7.0.0"
+    minimist "^1.2.5"
+
+get-stdin@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/get-stdin/-/get-stdin-7.0.0.tgz#8d5de98f15171a125c5e516643c7a6d0ea8a96f6"
+  integrity sha512-zRKcywvrXlXsA0v0i9Io4KDRaAw7+a1ZpjRwl9Wox8PFlVCCHra7E9c4kqXCoCM9nR5tBkaTTZRBoCm60bFqTQ==
 
 get-value@^2.0.3, get-value@^2.0.6:
   version "2.0.6"
@@ -866,6 +889,24 @@ leaflet-toolbar@0.4.0-alpha.2, leaflet-toolbar@Leaflet/Leaflet.Toolbar:
   version "0.1.5"
   resolved "https://github.com/yyachi/Leaflet.Coordinates#09ffcfdfa2bee2a7cee24a9653baef0ec0abc660"
 
+leaflet.glify@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/leaflet.glify/-/leaflet.glify-3.0.0.tgz#9d18fe6567da5e7593e2c1bba9cdc5016b5f344f"
+  integrity sha512-sMEZA5mn1GFA3Yr/PsD+xz+SuT2NQupveB49rAm+OW/MWGx86M3ndryXmUBfaJR7elIkjtRQG2l+euESvxDGLw==
+  dependencies:
+    "@types/geojson" "^7946.0.7"
+    earcut "^2.1.3"
+    geojson-flatten "^1.0.4"
+    leaflet "^1.6.0"
+    point-in-polygon "^1.0.1"
+    polygon-lookup "^2.4.0"
+    rbush "^2.0.2"
+
+leaflet@^1.6.0:
+  version "1.6.0"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.6.0.tgz#aecbb044b949ec29469eeb31c77a88e2f448f308"
+  integrity sha512-CPkhyqWUKZKFJ6K8umN5/D2wrJ2+/8UIpXppY7QDnUZW5bZL5+SEI2J7GBpwh4LIupOKqbNSQXgqmrEJopHVNQ==
+
 "leaflet@https://github.com/Leaflet/Leaflet#^1.0.0":
   version "1.5.1"
   resolved "https://github.com/Leaflet/Leaflet#2e3e0ffbe87f246eb76d86d2633ddd59b262830b"
@@ -883,6 +924,11 @@ liftoff@~2.5.0:
     object.map "^1.0.0"
     rechoir "^0.6.2"
     resolve "^1.1.7"
+
+lodash@^4.14.2:
+  version "4.17.19"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.19.tgz#e48ddedbe30b3321783c5b4301fbd353bc1e4a4b"
+  integrity sha512-JNvd8XER9GQX0v2qJgsaN/mzFCNA5BRe/j8JN9d+tWyGLSodKQHKFicdwNYzWwI3wjRnaKPsGj1XkBjx/F96DQ==
 
 make-iterator@^1.0.0:
   version "1.0.1"
@@ -921,6 +967,11 @@ micromatch@^3.0.4:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.2"
+
+minimist@^1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/minimist/-/minimist-1.2.5.tgz#67d66014b66a6a8aaa0c083c5fd58df4e4e97602"
+  integrity sha512-FM9nNUYrRBAELZQT3xeZQ7fmMOBg6nWNmJKTcgsJeaLstP/UODVpGsr5OhXhhXg6f+qtJ8uiZ+PUxkDWcgIXLw==
 
 mixin-deep@^1.2.0:
   version "1.3.2"
@@ -1086,10 +1137,36 @@ plotty@^0.4.3:
   resolved "https://registry.yarnpkg.com/plotty/-/plotty-0.4.3.tgz#900c6e1549e2805edf42f12a9b0a34eff2746eec"
   integrity sha512-V15ZMJe1M6O39CctswMK7Rf5YNfAB0yA/VoQ2Er0ULmzi/iN2oChacjAn27l0V6GCUxbhylG4hl1YfClF+Rltg==
 
+point-in-polygon@1.0.1, point-in-polygon@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/point-in-polygon/-/point-in-polygon-1.0.1.tgz#d59b64e8fee41c49458aac82b56718c5957b2af7"
+  integrity sha1-1Ztk6P7kHElFiqyCtWcYxZV7Kvc=
+
+polygon-lookup@^2.4.0:
+  version "2.6.0"
+  resolved "https://registry.yarnpkg.com/polygon-lookup/-/polygon-lookup-2.6.0.tgz#ff4145fde3a7076ac1fa488edad56d2aa5086adb"
+  integrity sha512-Y76ioJomg19RGMYbeUmfgcX7An+0vHK/89nEUmt+1pgVY6WgtW12/jnSlw8D4907kWEi3rhQC11aXUc1qZDN4g==
+  dependencies:
+    lodash "^4.14.2"
+    point-in-polygon "1.0.1"
+    rbush "^2.0.2"
+
 posix-character-classes@^0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/posix-character-classes/-/posix-character-classes-0.1.1.tgz#01eac0fe3b5af71a2a6c02feabb8c1fef7e00eab"
   integrity sha1-AerA/jta9xoqbAL+q7jB/vfgDqs=
+
+quickselect@^1.0.1:
+  version "1.1.1"
+  resolved "https://registry.yarnpkg.com/quickselect/-/quickselect-1.1.1.tgz#852e412ce418f237ad5b660d70cffac647ae94c2"
+  integrity sha512-qN0Gqdw4c4KGPsBOQafj6yj/PA6c/L63f6CaZ/DCF/xF4Esu3jVmKLUDYxghFx8Kb/O7y9tI7x2RjTSXwdK1iQ==
+
+rbush@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/rbush/-/rbush-2.0.2.tgz#bb6005c2731b7ba1d5a9a035772927d16a614605"
+  integrity sha512-XBOuALcTm+O/H8G90b6pzu6nX6v2zCKiFG4BJho8a+bY6AER6t8uQUZdi5bomQc0AprCWhEGa7ncAbbRap0bRA==
+  dependencies:
+    quickselect "^1.0.1"
 
 rechoir@^0.6.2:
   version "0.6.2"
