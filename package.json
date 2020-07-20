@@ -16,7 +16,6 @@
     "leaflet-fullscreen": "Leaflet/Leaflet.fullscreen",
     "leaflet-toolbar": "Leaflet/Leaflet.Toolbar",
     "leaflet.coordinates": "https://github.com/yyachi/Leaflet.Coordinates#develop",
-    "leaflet.glify": "^3.0.0",
     "perspective-transform": "https://github.com/jlouthan/perspective-transform",
     "plotty": "^0.4.3",
     "wcs.js": "https://github.com/astrojs/wcsjs.git"
