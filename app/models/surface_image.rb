@@ -272,15 +272,13 @@ class SurfaceImage < ActiveRecord::Base
     end
   end
 
-  def make_warped_image_old(options = {})
-    image.rotate
-  end
-
   def make_warped_image(options = {})
     return unless image.bounds
     self.left, self.upper, self.right, self.bottom = image.bounds
-    self.data = File.open(image.rotate)
+    temp_path = image.rotate
+    self.data = File.open(temp_path)
     save
+    File.delete(temp_path)
   end
 
   def make_tiles_cmd(options = {})
