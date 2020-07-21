@@ -18,10 +18,11 @@
       <% @specimen.children.each do |specimen| %>
         <div class="row">
           <div  class="col-sm-1">
-            <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
+          <%= check_box_tag("ids[]", specimen.id, false, {id: "ids_#{specimen.id}", class: "select-row"}) if can?(:update, specimen) %>
           </div>
           <div class="col-sm-2">
-            <%= specimen.decorate.status_icon %>
+          <%= link_to(specimen.attachment_image_files.first.decorate.picture(width: 15, height: 15, type: :tiny), attachment_file_path(specimen.attachment_image_files.first, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: specimen_ghost(specimen)) if specimen.attachment_image_files.present? %>
+          <%= specimen.decorate.status_icon %>
             <%= link_to_if can?(:read, specimen), list_title(specimen), specimen, class: specimen_ghost(specimen) %>
           </div>
           <div class="col-sm-2">
@@ -80,15 +81,16 @@
       </div>
       <div class="row">
         <div class="col-sm-offset-1 col-sm-10 form-inline">
-          Quantity <span id="original">(<%= (@specimen.quantity ? @specimen.quantity_with_unit : 'nil') %>)<span> is 
-          <%= f.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", size: 5, readonly: true %>
+          Quantity of <%=@specimen.name %> is
           <div class="btn-group" data-toggle="buttons">
             <%= label_tag :manual, class: "btn btn-default btn-sm" do %>
               <%= check_box_tag :manual, true, false, autocomplete: "off" %>
-              <span class="glyphicon glyphicon-minus"></span>
+              <span class="glyphicon glyphicon-pencil"></span>
             <% end %>
           </div>
-          and loss is
+          <%= f.text_field :quantity_with_unit, class: "form-control input-sm parent quantity", id: "parent_quantity_with_unit", size: 5, readonly: true %>
+          <span id="original">(was <%= (@specimen.quantity ? @specimen.quantity_with_unit : 'unknown') %>)<span> 
+          and loss was
           <span id="divided_loss">0.0 g</span>
           after operation <%= f.text_field :comment, placeholder: "cut by saw", class: "form-control input-sm", size: 12 %>.
         </div>
@@ -103,12 +105,13 @@
   </div>
 </div>
 
-<%= mantra "To link an existing daughter to <#{@specimen.name}>, fill in the upper column of ID. To create a new daughter, fill in the lower columns of name, physical-form, and quantity.", :title => "Sub #{@alias_specimens} of <#{@specimen.name}>" %> 
+<%= mantra "To let join, fill ID field and press save button.  To create new, fill fields and press save button.", :title => "Children generated from <#{@specimen.name}>" %> 
 
 <%= javascript_tag do %>
   //ロスの計算
   function quantity_change_check() {
     var $form = $("form#divide_specimen");
+    var data = $form.serialize(); 
     $.ajax({
       url: '<%= loss_divide_specimen_path %>',
       type: 'put',
@@ -133,18 +136,15 @@
   $(document).on("change", "#manual", function() {
     if ($(this).prop('checked')) {
       $("input.parent.quantity").attr("readonly", false);
-      $(this).next().removeClass("glyphicon-minus");
-      $(this).next().addClass("glyphicon-ok");
     } else {
       $("input.parent.quantity").attr("readonly", true);
-      $(this).next().removeClass("glyphicon-ok");
-      $(this).next().addClass("glyphicon-minus");
+
     }
     quantity_change_check();
   });
 
   $(document).on("succeed.ajaxForm", "#divide_specimen", function() {
-    location.href="<%= specimen_path(@specimen) %>";
+    location.href="<%= specimen_path(@specimen, tab: 'daughter') %>";
   });
 
   $(document).on("click", "input.select-row-all-div", function() {

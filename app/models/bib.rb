@@ -14,6 +14,7 @@ class Bib < ActiveRecord::Base
   has_many :places, through: :referrings, source: :referable, source_type: "Place"
   has_many :boxes, -> { order(:name) }, through: :referrings, source: :referable, source_type: "Box"
   has_many :analyses, through: :referrings, source: :referable, source_type: "Analysis"
+  has_many :surfaces, through: :referrings, source: :referable, source_type: "Surface"
   has_many :tables, before_add: :take_over_specimens
 
   accepts_nested_attributes_for :bib_authors
@@ -51,6 +52,10 @@ class Bib < ActiveRecord::Base
   def all_places
     rplaces = self.places + self.specimen_places
     rplaces
+  end
+
+  def all_spots
+    surfaces.map(&:spots).flatten
   end
   
   def referrings_analyses

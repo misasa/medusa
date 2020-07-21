@@ -22,6 +22,8 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'spinjs-rails'
+
+gem 'best_in_place', '~> 3.0.1'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'
 
@@ -31,7 +33,7 @@ gem 'jbuilder', '~> 1.2'
 
 gem 'lazy_high_charts'
 gem 'histogram'
-
+gem 'narray'
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -60,6 +62,7 @@ gem 'paperclip'
 gem 'barby'
 gem 'rqrcode'
 gem 'chunky_png'
+gem 'color_code'
 gem 'alchemist', github: 'halogenandtoast/alchemist'
 gem 'geonames'
 gem 'rubyzip'
@@ -72,7 +75,7 @@ gem 'validates_existence'
 #gem 'acts_as_mappable', git: 'git@devel.misasa.okayama-u.ac.jp:gems/actsasmappable.git'
 gem 'acts_as_mappable', '0.1.3'
 #gem 'with_recursive', git: 'git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.git'
-gem 'with_recursive'
+gem 'with_recursive', '0.0.5'
 gem 'thinreports'
 gem 'bootstrap-sass'
 gem 'ransack'

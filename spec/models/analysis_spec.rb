@@ -249,8 +249,20 @@ describe Analysis do
       expect(subject.operator).to eq operator
       expect(subject.chemistries[0].measurement_item_id).to eq measurement_item.id
       expect(subject.chemistries[0].value).to eq data.to_f
-      expect(subject.chemistries[0].unit_id).to eq unit_1.id 
+      expect(subject.chemistries[0].unit_id).to eq unit_1.id
     end
+    context "chemistry_with_error" do
+      let(:methods) { ["id", "name", "description", "specimen_id", "technique_id", "device_id", "operator", row_name, row_error] }
+      let(:data_array) { [id, name, description, specimen_id, technique_id, device_id, operator, data, error] }  
+      let(:row_error) {"#{nickname}_error"}
+      let(:error){ "0.1" }
+      it do
+        expect(subject.chemistries[0].measurement_item_id).to eq measurement_item.id
+        expect(subject.chemistries[0].value).to eq data.to_f
+        expect(subject.chemistries[0].uncertainty).to eq error.to_f
+        expect(subject.chemistries[0].unit_id).to eq unit_1.id
+      end
+    end 
     context "chemistry_with_unit" do
       let(:row_name) {"#{nickname}_in_#{unit_2.name}"}
       it do
@@ -263,6 +275,7 @@ describe Analysis do
 
   describe "#set_chemistry" do
     subject { analysis.set_chemistry(nickname, unit_name, data) }
+    let(:user) { FactoryGirl.create(:user) }
     let(:analysis) { FactoryGirl.create(:analysis) }
     let(:nickname) { "nickname" }
     let(:unit_name) { nil }
@@ -273,6 +286,16 @@ describe Analysis do
     before do
       measurement_item
       unit_2
+    end
+    context "create a chemistry" do
+      before do
+        User.current = user
+        subject
+      end
+      it do
+        expect{ analysis.save }.to change(Chemistry, :count).by(1)
+        #expect{ analysis.save }.to change{ Chemistry.find(chemistry.id).value }
+      end
     end
     context "data is a String" do
       context "unit_name is nil" do
@@ -332,6 +355,24 @@ describe Analysis do
             expect(subject.persisted?).to eq false
             expect(subject.unit_id).to eq(unit_1.id)
           end
+        end
+      end
+    end
+    context "with existing chemistry" do
+      let(:chemistry){ FactoryGirl.create(:chemistry, analysis_id: analysis.id, measurement_item_id: measurement_item.id, value: 6.0, uncertainty: nil) }
+      before do
+        User.current = user
+        measurement_item
+        unit_2
+        analysis
+      end  
+      context "update the chemistry" do
+        before do
+          chemistry
+        end
+        it do
+          expect{ analysis.save }.not_to change(Chemistry, :count)
+          expect{ subject }.to change{ Chemistry.find(chemistry.id).value }.from(6.0).to(10.0)
         end
       end
     end

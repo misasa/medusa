@@ -12,33 +12,11 @@
     </tr>
   </thead>
   <tbody>
-    <%= form_tag bundle_edit_attachment_files_path, id: "attachment-file-bundle-form" do %>
-      <% @analysis.attachings.where(attachable_type: "Analysis").order("position ASC").each do |attaching| %>
-        <tr>
-          <% attachment_file = attaching.attachment_file %>
-          <td>
-            <%= check_box_tag("ids[]", attachment_file.id, checked: false, id: "ids_#{attachment_file.id}", class: "select-row") if can?(:update, attachment_file) %>
-          </td>
-          <td><%= attachment_file.decorate.picture(width: 70, height: 70, type: :thumb) %></td>
-          <td><%= link_to_if can?(:read, attachment_file), list_title(attachment_file),attachment_file %></td>
-          <td>
-            <% if attachment_file.pdf? %>
-              <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_file.id), id: "file-#{attachment_file.id}-button") %>
-            <% end %>
-          </td>
-          <td><%= attachment_file.spots.try!(:size) %></td>
-          <td><%= attachment_file.try!(:global_id) %></td> 
-          <td>
-            <%= link_to move_to_top_attaching_path(attaching) + tab_param(__FILE__), method: :move_to_top ,title: "move to top" do %>
-              <span class="glyphicon glyphicon-arrow-up"></span>
-            <% end %>
-          </td>
-          <td>
-            <%= link_to  analysis_attachment_file_path(@analysis,attachment_file) + tab_param(__FILE__), method: :delete ,title: "unlink attachment file",data: {confirm: t("confirm.unlink")} do %>
-              <span class="glyphicon glyphicon-remove"></span>
-            <% end %>
-          </td>
-        </tr>
+  <%= form_tag bundle_edit_attachment_files_path, id: "attachment-file-bundle-form" do %>
+    <%= render(partial: "attachment_file", locals: {attachment_file: @analysis.fits_file, attaching: nil}) if @analysis.fits_file %>
+    <% @analysis.attachings.where(attachable_type: "Analysis").order("position ASC").each do |attaching| %>
+        <% attachment_file = attaching.attachment_file %>
+        <%= render(partial: "attachment_file", locals: {attachment_file: attaching.attachment_file, attaching: attaching}) %>
       <% end %>
     <% end %>
   </tbody>
@@ -80,5 +58,5 @@
   </tfoot>
 </table>
 <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#attachment-file-bundle-form').submit();", class: "btn btn-default", title: "open multi-edit page with checked items" %>
-<%= mantra "To link an existing file to <#{@analysis.name}, select the file in the selection dialog or fill in the column of ID.", :title => "Files related to <#{@analysis.name}>" %>
+<%= mantra "To add data, specify a file with browse button and press save button.  To let join, fill ID field and press save button.  To edit, choose record with checkbox and press pencil button.", :title => "Files related to <#{@analysis.name}>" %>
 

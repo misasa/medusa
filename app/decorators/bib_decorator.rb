@@ -16,8 +16,8 @@ class BibDecorator < Draper::Decorator
 
   def name_with_id
     tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
-    tag += h.raw(" #{to_html} < #{h.draggable_id(global_id)} >")
-    #tag += h.raw(" #{name} < #{h.draggable_id(global_id)} >")
+    tag += h.raw(" ") + to_html
+    tag += h.raw(" ") + h.raw("< #{h.draggable_id(global_id)} >")
     # if Settings.rplot_url
     #   tag += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
     # end
@@ -30,7 +30,18 @@ class BibDecorator < Draper::Decorator
     end
   end
 
-  def tree_node(current: false, current_type: false, in_list_include: false)
+
+  def tables_with_link
+    contents = []
+    tables.each do |table|
+      contents << table.decorate.panel
+    end
+    unless contents.empty?
+      h.raw(contents.join(" "))
+    end
+  end
+
+  def tree_node(current: false, current_type: false, in_list_include: false, hash: nil)
     link = current ? h.content_tag(:strong, name) : name
     icon + h.link_to_if(h.can?(:read, self), link, self)
   end
@@ -62,16 +73,24 @@ class BibDecorator < Draper::Decorator
   #   super({:methods => [:author_ids, :global_id]}.merge(options))
   # end
 
+  def author_short_year
+    txt = author_short
+    txt += " (#{year})" unless year.blank?
+    txt
+  end
+
   def to_html
-    html = author_short
-    html += " (#{year})" unless year.blank?
+#    html = author_short
+#    html += " (#{year})" unless year.blank?
+    link_txt = author_short
+    link_txt += " (#{year})" unless year.blank?
+    html = h.link_to_unless_current(link_txt, h.bib_path(self))
     html += " #{name}" unless name.blank?
-    html += ", <i>#{journal}</i>" unless journal.blank?
-    html += ", <b>#{volume}</b>" unless volume.blank?
-    html += ", #{pages}" unless pages.blank?
-#    html += " at " + updated_at.strftime("%Y-%m-%d %H:%M")
-    html += ", doi: " + h.link_to(doi, doi_link_url) unless doi.blank?
-    html += "."
+    html += h.raw(", ") + h.content_tag(:i, journal) unless journal.blank?
+    html += h.raw(", ") + h.content_tag(:b, volume) unless volume.blank?
+    html += h.raw(", #{pages}") unless pages.blank?
+    html += h.raw(", doi:") + h.link_to(doi, doi_link_url) unless doi.blank?
+    html += h.raw(".")
     html
   end
 
@@ -99,7 +118,8 @@ class BibDecorator < Draper::Decorator
     elsif (author_names.length == 2)
       author_names.join(' & ')
     elsif (author_names.length > 2)
-      author_names[0] + " et al."
+      first_author_name = author_names[0]
+      first_author_name.split(/,/)[0] + " et al."
     else
       ""
     end

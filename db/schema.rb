@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20191028042214) do
+ActiveRecord::Schema.define(version: 20200721063202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,6 +25,7 @@ ActiveRecord::Schema.define(version: 20191028042214) do
     t.datetime "updated_at",   comment: "更新日時"
     t.integer  "technique_id", comment: "分析手法ID"
     t.integer  "device_id",    comment: "分析機器ID"
+    t.integer  "fits_file_id"
   end
 
   add_index "analyses", ["device_id"], name: "index_analyses_on_device_id", using: :btree
@@ -204,10 +205,11 @@ ActiveRecord::Schema.define(version: 20191028042214) do
   end
 
   create_table "measurement_categories", force: true, comment: "測定種別" do |t|
-    t.string  "name",        comment: "名称"
-    t.string  "description", comment: "説明"
-    t.integer "unit_id",     comment: "単位ID"
-    t.integer "scale",       comment: "有効精度"
+    t.string  "name",                                     comment: "名称"
+    t.string  "description",                              comment: "説明"
+    t.integer "unit_id",                                  comment: "単位ID"
+    t.integer "scale",                                    comment: "有効精度"
+    t.boolean "is_template", default: false, null: false
   end
 
   create_table "measurement_items", force: true, comment: "測定項目" do |t|
@@ -238,6 +240,7 @@ ActiveRecord::Schema.define(version: 20191028042214) do
     t.integer  "brought_in_by_id",               comment: "持込者ID"
     t.integer  "brought_out_by_id",              comment: "持出者ID"
     t.datetime "checked_at",                     comment: "棚卸日時"
+    t.text     "note"
   end
 
   add_index "paths", ["datum_id", "datum_type"], name: "index_paths_on_datum_id_and_datum_type", using: :btree
@@ -334,6 +337,16 @@ ActiveRecord::Schema.define(version: 20191028042214) do
   add_index "specimen_quantities", ["divide_id"], name: "index_specimen_quantities_on_divide_id", using: :btree
   add_index "specimen_quantities", ["specimen_id"], name: "index_specimen_quantities_on_specimen_id", using: :btree
 
+  create_table "specimen_surfaces", force: true do |t|
+    t.integer  "specimen_id"
+    t.integer  "surface_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "specimen_surfaces", ["specimen_id"], name: "index_specimen_surfaces_on_specimen_id", using: :btree
+  add_index "specimen_surfaces", ["surface_id"], name: "index_specimen_surfaces_on_surface_id", using: :btree
+
   create_table "specimens", force: true, comment: "標本" do |t|
     t.string   "name",                                                             comment: "名称"
     t.string   "specimen_type",                                                    comment: "標本種別"
@@ -410,12 +423,14 @@ ActiveRecord::Schema.define(version: 20191028042214) do
   add_index "surface_images", ["surface_layer_id"], name: "index_surface_images_on_surface_layer_id", using: :btree
 
   create_table "surface_layers", force: true do |t|
-    t.integer  "surface_id",               null: false, comment: "SurfaceID"
-    t.string   "name",                     null: false, comment: "レイヤ名"
-    t.integer  "opacity",    default: 100, null: false, comment: "不透明度"
-    t.integer  "priority",                 null: false, comment: "優先順位"
+    t.integer  "surface_id",                    null: false, comment: "SurfaceID"
+    t.string   "name",                          null: false, comment: "レイヤ名"
+    t.integer  "opacity",        default: 100,  null: false, comment: "不透明度"
+    t.integer  "priority",                      null: false, comment: "優先順位"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "max_zoom_level"
+    t.boolean  "visible",        default: true, null: false
   end
 
   add_index "surface_layers", ["surface_id", "name"], name: "index_surface_layers_on_surface_id_and_name", unique: true, using: :btree
@@ -468,6 +483,7 @@ ActiveRecord::Schema.define(version: 20191028042214) do
     t.string   "age_unit",                comment: "年代単位"
     t.text     "description",             comment: "説明"
     t.integer  "age_scale",               comment: "有効精度"
+    t.text     "data"
   end
 
   add_index "tables", ["bib_id"], name: "index_tables_on_bib_id", using: :btree

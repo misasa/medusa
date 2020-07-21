@@ -3,7 +3,11 @@ class Surface < ActiveRecord::Base
   include HasRecordProperty
 
   paginates_per 10
+  has_many :referrings, as: :referable, dependent: :destroy
+  has_many :bibs, through: :referrings
 
+  has_many :specimen_surfaces, dependent: :destroy
+  has_many :specimens, through: :specimen_surfaces
   has_many :surface_images, :dependent => :destroy, :order => ("position DESC")
   has_many :calibrated_surface_images, -> { calibrated }, class_name: 'SurfaceImage'
   has_many :uncalibrated_surface_images, -> { uncalibrated }, class_name: 'SurfaceImage'
@@ -12,13 +16,17 @@ class Surface < ActiveRecord::Base
   has_many :base_surface_images, -> { base }, class_name: 'SurfaceImage'
 
   has_many :wall_surface_images, -> { wall }, class_name: 'SurfaceImage'
+  has_many :fits_file_surface_images, -> { fits_file }, class_name: 'SurfaceImage'
+
   has_many :images, through: :surface_images
+  has_many :fits_files, -> { fits_files }, through: :surface_images, source: :image
   has_many :surface_layers, :dependent => :destroy, :order => ("priority DESC")
 #  has_many :spots, through: :images
 #  has_many :spots, class_name: "Spot", foreign_key: :surface_id
   has_many :direct_spots, class_name: "Spot", foreign_key: :surface_id
   accepts_nested_attributes_for :surface_images
 
+  before_save :check_image_bounds
   #after_save :make_map
 
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: true
@@ -80,7 +88,7 @@ class Surface < ActiveRecord::Base
     ss
   end
 
-  def specimens
+  def candidate_specimens
     sps = []
     images.each do |image|
       next unless image
@@ -97,7 +105,7 @@ class Surface < ActiveRecord::Base
   def center
     x = 0.0
     y = 0.0
-    x, y = image_bounds_center if image_bounds_center
+    #x, y = image_bounds_center if image_bounds_center
     x = center_x unless center_x.blank?
     y = center_y unless center_y.blank?
     [x,y]
@@ -322,7 +330,26 @@ class Surface < ActiveRecord::Base
     end
   end
 
+
+  def reorder_images
+    id_positions = surface_images.pluck(:id, :position)
+    first_position = surface_images.first.position
+    surface_images.each{|surface_image|
+      tmp_position = first_position + surface_image.position
+      surface_image.update_attribute(:position, tmp_position)
+    }
+    surface_images.reverse.each_with_index{|surface_image, index|
+      surface_image.update_attribute(:position, index + 1)
+    }
+  end
+
   private
+
+  def check_image_bounds
+    self.center_x, self.center_y = image_bounds_center if image_bounds_center
+    self.width = image_bounds_width if image_bounds_width
+    self.height = image_bounds_height if image_bounds_height
+  end
 
   def make_tile_of_added_image(image)
     return if image.affine_matrix.blank?

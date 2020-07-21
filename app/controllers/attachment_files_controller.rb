@@ -50,7 +50,7 @@ class AttachmentFilesController < ApplicationController
 
   def update
     @attachment_file.update_attributes(attachment_file_params)
-    respond_with @attachment_file
+    respond_with @attachment_file, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
   def update_affine_matrix
@@ -96,8 +96,12 @@ class AttachmentFilesController < ApplicationController
     respond_with @attachment_file, layout: !request.xhr?
   end
 
-  def picture 
+  def picture
     respond_with @attachment_file, layout: !request.xhr?
+  end
+
+  def fits_image
+    send_data(@attachment_file.fits_image.to_blob, :type => 'image/png', :disposition => 'inline')
   end
 
   def destroy

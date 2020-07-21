@@ -18,12 +18,15 @@ class Specimen < ActiveRecord::Base
   after_initialize :calculate_rel_age
   before_save :build_specimen_quantity,
     if: -> (s) { !s.divide_flg && (s.quantity_changed? || s.quantity_unit_was.presence != s.quantity_unit.presence) }
-
+  before_save :build_age,
+    if: -> (s) { s.instance_variable_defined?(:@age_mean) }
   has_many :analyses, before_remove: :delete_table_analysis
   has_many :children, -> { order(:name) }, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify
   has_many :specimens, class_name: "Specimen", foreign_key: :parent_id, dependent: :nullify
   has_many :referrings, as: :referable, dependent: :destroy
   has_many :bibs, through: :referrings
+  has_many :specimen_surfaces, dependent: :destroy
+  has_many :surfaces, through: :specimen_surfaces
   has_many :chemistries, through: :analyses
   has_many :specimen_custom_attributes, dependent: :destroy
   has_many :custom_attributes, through: :specimen_custom_attributes
@@ -64,7 +67,6 @@ class Specimen < ActiveRecord::Base
   validates :collection_date_precision, length: { maximum: 255 }
   validate :status_is_nomal, on: :divide
 
-
   def self.build_bundle_list(objs)
     CSV.generate do |csv|
       csv << ["Id", "Name", "IGSN", "Parent-Id", "Parent-Name", "Quantity", "Physical-Form", "Classification","Description","Group","User","Updated-at","Created-at"]
@@ -72,6 +74,14 @@ class Specimen < ActiveRecord::Base
         csv << ["#{obj.global_id}", "#{obj.name}", "#{obj.igsn}", "#{obj.parent.try!(:global_id)}","#{obj.parent.try!(:name)}","#{obj.quantity_with_unit}", "#{obj.physical_form.try!(:name)}", "#{obj.classification.try!(:full_name)}","#{obj.description}","#{obj.group.try!(:name)}","#{obj.user.try!(:username)}","#{obj.updated_at}","#{obj.created_at}"]
       end
     end
+  end
+
+  def root_with_includes
+    Specimen.includes({children: [:record_property]}).find(root.id)
+  end
+
+  def families_with_includes
+    Specimen.includes(:record_property, {children:[:record_property]}, {analyses:[:record_property, :chemistries]}, {bibs:[:record_property]}, {attachment_files:[:record_property]}).where(id: family_ids)
   end
 
   def as_json(options = {})
@@ -141,14 +151,26 @@ class Specimen < ActiveRecord::Base
   end
 
   def full_analyses
-    Analysis.where(specimen_id: self_and_descendants)
+    Analysis.includes(:chemistries, :record_property, :device, {specimen: [:record_property]}).where(specimen_id: self_and_descendants)
+  end
+
+  def full_surfaces
+    Surface.includes(:record_property).where(id: SpecimenSurface.where(specimen_id: self_and_descendants).pluck(:surface_id))
+  end
+
+  def full_bibs
+    Bib.includes(:record_property, :tables, :referrings).where(id: Referring.where(referable_type: "Specimen").where(referable_id: self_and_descendants).pluck(:bib_id))
+  end
+
+  def full_tables
+    Table.where(id: TableSpecimen.where(specimen_id: family_ids).pluck(:table_id)).includes({table_specimens: [:specimen]})
   end
 
   def whole_family_analyses
     Analysis.where(specimen_id: families)
   end
 
-  def surfaces
+  def candidate_surfaces
     sfs = []
     attachment_image_files.each do |image|
       sfs.concat(image.surfaces) if image.surfaces
@@ -184,9 +206,25 @@ class Specimen < ActiveRecord::Base
     (age_min + age_max) / 2.0
   end
 
+  def age_mean=(age)
+    if age.blank?
+      @age_mean = nil
+    else
+      @age_mean = age.to_f
+    end
+  end
+
   def age_error
     return unless ( age_min && age_max )
     (age_max - age_min) / 2.0
+  end
+
+  def age_error=(error)
+    if error.blank?
+      @age_error = nil
+    else
+      @age_error = error.to_f
+    end
   end
 
   def age_in_text(opts = {})
@@ -313,6 +351,13 @@ class Specimen < ActiveRecord::Base
     specimen_quantity
   end
 
+  def build_age
+    if @age_mean
+      error = @age_error || 0.0
+      self.age_min = @age_mean - error
+      self.age_max = @age_mean + error
+    end
+  end
   private
 
   def new_children

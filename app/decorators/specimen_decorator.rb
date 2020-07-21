@@ -61,7 +61,7 @@ class SpecimenDecorator < Draper::Decorator
 
   def surfaces_with_link
     contents = []
-    surfaces.each do |surface|
+    full_surfaces.each do |surface|
       content = h.raw("")
       content += h.link_to_if(h.can?(:read, surface), h.content_tag(:span, nil, class: "glyphicon glyphicon-edit"), surface, :title => "edit map")
       content += h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
@@ -90,7 +90,7 @@ class SpecimenDecorator < Draper::Decorator
 
   def bibs_with_link
     contents = []
-    bibs.each do |bib| 
+    full_bibs.each do |bib| 
       content = h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
       content += ""
       content += h.link_to_if(h.can?(:read, bib), h.raw(bib.to_html), bib)
@@ -101,17 +101,18 @@ class SpecimenDecorator < Draper::Decorator
       #content = h.content_tag(:li, content)
       table_links = []
       bib.tables.each do |table|
-         next unless table.specimens && table.specimens.include?(self) 
+         next unless full_tables.include?(table) 
          table_link = h.link_to(h.raw(table.caption), table )
 
-         if Settings.rplot_url
-           table_link += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + table.global_id, :title => 'plot online')
-         end
-         table_links << table_link
+         #if Settings.rplot_url
+         #  table_link += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + table.global_id, :title => 'plot online')
+         #end
+         table_links << h.content_tag(:li, table_link)
          #table_links << h.link_to_if(true, h.raw(table.description), table )
       end
       unless table_links.empty?
-        content += h.raw " (" + table_links.join(", ") + ")"
+        content += h.content_tag(:ul, h.raw(table_links.join(" ")))
+        #content += h.raw " (" + table_links.join(", ") + ")"
       end
       content = h.content_tag(:li, content)
       contents << content
@@ -120,6 +121,27 @@ class SpecimenDecorator < Draper::Decorator
       h.content_tag(:ul, h.raw(contents.join(" ")) )
     end
   end
+
+
+  def tables_with_link
+    contents = []
+    full_tables.each do |table|
+      #next unless full_tables.include?(table) 
+      #table_link = h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list") + h.raw("") + h.link_to(h.raw(table.caption), table )
+      #table_link += h.raw(" ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+      #table_link += h.raw(" ")
+      #table_link += h.link_to_if(h.can?(:read, table.bib), h.raw(table.bib.decorate.author_short_year), table.bib)
+      #contents << h.content_tag(:li, table_link)
+      #contents << h.content_tag(:div, table_link)
+      #contents << h.content_tag(:div,nil,id:"table_#{table.id}")
+      contents << table.decorate.panel(self.family_ids)
+    end
+    unless contents.empty?
+      #h.content_tag(:ul, h.raw(contents.join(" ")) )
+      h.raw(contents.join(" "))
+    end
+  end
+
 
   def path_with_id
     path + h.raw(" < #{h.draggable_id(global_id)} >")
@@ -427,33 +449,21 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def family_tree
-    # list = [self].concat(children)
-    # #list = [root].concat(root.children)
-    # ans = ancestors
-    # depth = ans.size
-    # if depth > 0
-    #   list.concat(siblings)
-    #   list.concat(ans)
-    #   ans.each do |an|
-    #     list.concat(an.siblings)
-    #   end
-    # # elsif depth > 1
-    # #   list.concat(ans[1].descendants)
-    # end
-    # list.uniq!
-    # relatives = families.select{|e| list.include?(e) }
-#    h.tree(relatives_for_tree.group_by(&:parent_id)) do |obj|
     in_list = [object, nil].concat(ancestors)
-    h.tree(current_specimen_hash, classes: [Specimen], in_list: in_list) do |obj|
-      obj.decorate.tree_node(current: object == obj, current_type: (object.class == obj.class), in_list_include: in_list.include?(obj))
+    hash = current_specimen_hash
+    h.tree(hash, classes: [Specimen], in_list: in_list) do |obj|
+      obj.decorate.tree_node(current: object == obj, current_type: (object.class == obj.class), in_list_include: in_list.include?(obj), hash: hash)
     end
   end
 
   def current_specimen_hash
     h = Hash.new {|h, k| h[k] = Hash.new {|h, k| h[k] = Array.new } }
-    h[nil][Specimen] = [root]
-    families.each_with_object(h) do |specimen, hash|
+    h[nil][Specimen] = [root_with_includes]
+    families_with_includes.each_with_object(h) do |specimen, hash|
       hash[specimen.record_property_id][Specimen] = specimen.children
+      hash[specimen.record_property_id][Analysis] = specimen.analyses
+      #hash[specimen.record_property_id][Bib] = specimen.bibs
+      #hash[specimen.record_property_id][AttachmentFile] = specimen.attachment_files
     end
   end
 
@@ -477,47 +487,52 @@ class SpecimenDecorator < Draper::Decorator
     end
   end
 
-  def tree_node(current: false, current_type: false, in_list_include: false)
+  def tree_node(current: false, current_type: false, in_list_include: false, hash: nil)
     name_str = name.presence || "[no name]"
     link = current ? h.content_tag(:strong, name_str, class: "text-primary bg-primary") : name_str
     html = icon(in_list_include) + h.link_to_if(h.can?(:read, self), link, self)
     html += status_icon(in_list_include)
-    html += children_count(current_type, in_list_include)
-    html += analyses_count(current_type, in_list_include)
-    html += bibs_count(current_type, in_list_include)
-    html += files_count(current_type, in_list_include)
+    html += children_count(current_type, in_list_include, hash)
+    html += analyses_count(current_type, in_list_include, hash)
+    html += bibs_count(current_type, in_list_include, hash)
+    html += files_count(current_type, in_list_include, hash)
     html
   end
 
-  def children_count(current_type=false, in_list_include=false)
+  def children_count(current_type=false, in_list_include=false, hash=nil)
+    count = ( hash && hash[self.record_property_id][Specimen]) ? hash[self.record_property_id][Specimen].size : children.size
+
     if current_type
-      icon_with_badge_count(Specimen, children.size, in_list_include)
+      icon_with_badge_count(Specimen, count, in_list_include)
     else
       ""
     end
   end
 
-  def analyses_count(current_type=false, in_list_include=false)
+  def analyses_count(current_type=false, in_list_include=false, hash=nil)
+    count = ( hash && hash[self.record_property_id][Analysis] ) ? hash[self.record_property_id][Analysis].size : analyses.count
     if current_type
-      icon_with_count(Analysis, analyses.count)
+      icon_with_count(Analysis, count)
     else
-      icon_with_badge_count(Analysis, analyses.count, in_list_include)
+      icon_with_badge_count(Analysis, count, in_list_include)
     end
   end
 
-  def bibs_count(current_type=false, in_list_include=false)
+  def bibs_count(current_type=false, in_list_include=false, hash=nil)
+    count = ( hash && hash[self.record_property_id][Bib] ) ? hash[self.record_property_id][Bib].size : bibs.count
     if current_type
-      icon_with_count(Bib, bibs.count)
+      icon_with_count(Bib, count)
     else
-      icon_with_badge_count(Bib, bibs.count, in_list_include)
+      icon_with_badge_count(Bib, count, in_list_include)
     end
   end
 
-  def files_count(current_type=false, in_list_include=false)
+  def files_count(current_type=false, in_list_include=false, hash=nil)
+    count = ( hash && hash[self.record_property_id][AttachmentFile] ) ? hash[self.record_property_id][AttachmentFile].size : attachment_files.count
     if current_type
-      icon_with_count(AttachmentFile, attachment_files.count)
+      icon_with_count(AttachmentFile, count)
     else
-      icon_with_badge_count(AttachmentFile, attachment_files.count, in_list_include)
+      icon_with_badge_count(AttachmentFile, count, in_list_include)
     end
   end
 

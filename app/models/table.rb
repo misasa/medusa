@@ -22,6 +22,17 @@ class Table < ActiveRecord::Base
   #validates :age_scale, presence: true, if: -> { with_age.present? }
 #  attr_accessor :ignore_take_over_specimen?
 
+  serialize :data, Hash
+
+  def self.refresh_data
+    self.all.each do |table|
+      msg = "refresh data for #{table.caption}..."
+      p msg
+      logger.debug(msg)
+      table.refresh_data
+      table.save
+    end
+  end
 
   class Row
 
@@ -168,6 +179,9 @@ class Table < ActiveRecord::Base
       chemistries.present?
     end
 
+    def serialize
+    end
+
     private
 
     def chemistries
@@ -273,6 +287,8 @@ class Table < ActiveRecord::Base
     device_id = device.try!(:id)
     return methods_hash[[technique_id, device_id]][:sign] if methods_hash[[technique_id, device_id]].present?
     sign = methods_hash[[technique_id, device_id]][:sign] = assign_sign
+    methods_hash[[technique_id, device_id]][:technique_id] = technique_id
+    methods_hash[[technique_id, device_id]][:device_id] = device_id
     methods_hash[[technique_id, device_id]][:description] = technique.present? ? "#{technique.try!(:name)} " : ""
     methods_hash[[technique_id, device_id]][:description] += "on #{device.name}" if device.present?
     sign
@@ -356,6 +372,54 @@ class Table < ActiveRecord::Base
 
   def pml_elements
     self.selected_analyses.flatten.compact.uniq
+  end
+
+
+  def refresh_data
+    a = []
+    l = ["",""]
+    idx = 1
+    table_specimens.each do |table_specimen|
+      l << idx
+      idx += 1
+    end
+    a << l
+    if self.with_place
+      l = ["latitude",""]
+      self.specimens.each do |specimen|
+        l << (specimen.place.try!(:latitude_to_html) ? specimen.place.try!(:latitude_to_html) : "-")
+      end
+      a << l
+      l = ["longitude",""]
+      self.specimens.each do |specimen|
+        l << (specimen.place.try!(:longitude_to_html) ? specimen.place.try!(:longitude_to_html) : "-")
+      end
+      a << l
+    end
+    if self.with_age
+      l = ["age", age_unit]
+      self.specimens.each do |specimen|
+        l << ( specimen.age_in_text ? specimen.age_in_text(:unit => self.age_unit, :scale => self.age_scale) : "-")
+      end
+      a << l
+    end
+  
+    self.each do |row|
+      #self.data << [row.name(:html), row.unit.try!(:html)]
+      l = []
+      name = row.name(:html)
+      name += "<sup>#{row.symbol}</sup>" if row.symbol.present?
+      l << name
+      l << row.unit.try!(:html)
+      row.each{|cell|
+        str = ( cell.value ? cell.value.to_s : "-")
+        str += "<sup>#{cell.symbol}</sup>" if !row.symbol.present? && cell.symbol.present?;
+        l << str
+      };nil
+      a << l
+    end
+    self.data = {m: a, methods: self.send(:methods_hash).values}
+    #self.data[:methods] = self.method_hash.values
   end
 
   private

@@ -90,9 +90,9 @@ class Sesar < ActiveResource::Base
     attributes[:classification] = array_classification(model.classification)
     attributes[:age_min] = model.age_min
     attributes[:age_max] = model.age_max
-    attributes[:age_unit] = model.age_unit
-    attributes[:size] = model.size
-    attributes[:size_unit] = model.size_unit
+    attributes[:age_unit] = age_unit_conversion(model.age_unit)
+    attributes[:size] = model.size.present? || model.size_unit.present? ? model.size : model.quantity
+    attributes[:size_unit] = model.size.present? || model.size_unit.present? ? model.size_unit : model.quantity_unit
     attributes[:latitude] = model.place.try!(:latitude)
     attributes[:longitude] = model.place.try!(:longitude)
     attributes[:elevation] = model.place.try!(:elevation)
@@ -267,6 +267,17 @@ class Sesar < ActiveResource::Base
       .where.not(value: '')\
       .where.not(custom_attributes: {sesar_name: nil})\
       .where.not(custom_attributes: {sesar_name: ''})
+  end
+
+  def self.age_unit_conversion(age_unit)
+    return "" if age_unit.blank?
+    age_unit_list = YAML.load(File.read("#{Rails.root}/config/age_unit.yml"))
+
+    if age_unit_list.has_key?(age_unit)
+      age_unit == "a" ? age_unit_list[age_unit] : "#{age_unit_list[age_unit]} (#{age_unit})"
+    else
+      age_unit
+    end
   end
 
   private

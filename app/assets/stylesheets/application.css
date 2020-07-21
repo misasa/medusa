@@ -17,6 +17,7 @@
  *= require leaflet-toolbar/dist/leaflet.toolbar.css
  *= require leaflet-distortableimage/dist/leaflet.distortableimage.css
  *= require leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.css
+ *= require handsontable/dist/handsontable.full.min.css
  *= require_tree .
  */
 

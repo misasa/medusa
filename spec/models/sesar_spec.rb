@@ -69,7 +69,7 @@ describe Sesar do
       expect(sesar.attributes["igsn"]).to eq specimen.igsn
       expect(sesar.attributes["age_min"]).to eq specimen.age_min
       expect(sesar.attributes["age_max"]).to eq specimen.age_max
-      expect(sesar.attributes["age_unit"]).to eq specimen.age_unit
+      expect(sesar.attributes["age_unit"]).to eq "years"
       expect(sesar.attributes["size"]).to eq specimen.size
       expect(sesar.attributes["size_unit"]).to eq specimen.size_unit
       expect(sesar.attributes["latitude"]).to eq specimen.place.latitude
@@ -114,6 +114,28 @@ describe Sesar do
     end
     context "place is not blank" do
       it { expect(subject.attributes.has_key?(:country_id)).to eq false }
+    end
+    context "size and size_unit are blank" do
+      before do
+        specimen.size = nil
+        specimen.size_unit = nil
+      end
+      it { expect(subject.attributes[:size]).to eq specimen.quantity }
+      it { expect(subject.attributes[:size_unit]).to eq specimen.quantity_unit }
+    end
+    context "only size is blank" do
+      before do
+        specimen.size = nil
+      end
+      it { expect(subject.attributes[:size]).to eq specimen.size }
+      it { expect(subject.attributes[:size_unit]).to eq specimen.size_unit }
+    end
+    context "only size_unit is blank" do
+      before do
+        specimen.size_unit = nil
+      end
+      it { expect(subject.attributes[:size]).to eq specimen.size }
+      it { expect(subject.attributes[:size_unit]).to eq specimen.size_unit }
     end
 
     describe "to_xml" do
@@ -439,6 +461,26 @@ describe Sesar do
     context "specimenレコードのigsn属性が空" do
       let(:igsn) { "" }
       it { expect(subject).to eq false }
+    end
+  end
+
+  describe ".age_unit_conversion" do
+    subject { Sesar.age_unit_conversion(age_unit) }
+    context "age_unitがblank" do
+      let(:age_unit) { nil }
+      it { expect(subject).to eq "" }
+    end
+    context "age_unitが'a'" do
+      let(:age_unit) { "a" }
+      it { expect(subject).to eq "years" }
+    end
+    context "age_unitが'a'以外かつ設定ファイルに定義されている" do
+      let(:age_unit) { "Ma" }
+      it { expect(subject).to eq "million years (Ma)" }
+    end
+    context "age_unitが設定ファイルに定義されていない" do
+      let(:age_unit) { "other" }
+      it { expect(subject).to eq "other" }
     end
   end
 

@@ -11,6 +11,7 @@
 // about supported directives.
 //
 //= require jquery
+//= require best_in_place
 //= require jquery_ujs
 //= require jquery.ui.datepicker
 //= require jquery.ui.sortable
@@ -25,10 +26,16 @@
 //= require leaflet-fullscreen/dist/Leaflet.fullscreen.js
 //= require leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.src.js
 //= require Leaflet.Spin/leaflet.spin.min.js
+//= require perspective-transform/dist/perspective-transform.min.js
+//= require handsontable/dist/handsontable.full.min.js
 //= require svg
 //= require svg.draggable
 //= require matrix
 //= require acts_as_mappable
+//= require d3/dist/d3.min.js
+//= require plotty/dist/plotty.min.js
+//= require fitsjs/lib/fits.js
+//= require wcs.js/wcs.js
 //= require_tree .
 //= require highcharts/highcharts
 //= require highcharts/highcharts-more

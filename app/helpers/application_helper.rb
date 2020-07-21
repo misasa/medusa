@@ -1,7 +1,7 @@
 module ApplicationHelper
   def mantra(msg, opts = {})
     title = opts[:title] || "guide"
-    popover_button("guide", msg, opts)
+    popover_button(title, msg, opts)
   end
 
   def tooltip_info_sign(msg, opts = {})
@@ -39,15 +39,16 @@ module ApplicationHelper
     tag
   end
 
-  def list_title(obj)
+  def list_title(obj, opts = {})
     return unless obj
+    
     if obj.respond_to?(:decorate)
       obj = obj.decorate
       tag = obj.try(:icon) ? obj.icon + raw(" ") + obj.name : obj.name
     else
       tag = obj.name
     end
-    tag += raw(" ") + content_tag(:small, "<" + obj.global_id + ">" )
+    tag += raw(" ") + content_tag(:small, "<" + obj.global_id + ">" ) if opts[:with_global_id]
     tag += raw(" ") + published_label(obj) if obj.published
     tag
   end

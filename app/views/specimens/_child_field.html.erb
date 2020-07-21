@@ -12,7 +12,7 @@
     <div class="col-sm-1">
     </div>  
     <div class="col-sm-2">
-      <%= f.text_field :name, placeholder: @specimen.name, class: "form-control input-sm" %>
+      <%= f.text_field :name, value: @specimen.name + "-#{@specimen.children.size + 1}", placeholder: @specimen.name, class: "form-control input-sm" %>
     </div>
     <div class="col-sm-2">
       <%= f.select :physical_form_id, PhysicalForm.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
@@ -23,14 +23,10 @@
       <%#= f.text_field :quantity_unit, class: "form-control input-sm quantity" %>
     </div>
     <div class="col-sm-2 form-inline">
-      <a class="btn btn-default btn-sm add-child">
-        <span class="glyphicon glyphicon-chevron-down"></span>
-      </a>
       <span class="remove-quantity-child">
-        <a class="btn btn-default btn-sm remove-child" disabled="disabled">
-          <span class="glyphicon glyphicon-remove"></span>
-        </a>
+        <a class="btn btn-link btn-sm remove-child" disabled="disabled">less</a>
       </span>
+      <a class="btn btn-link btn-sm add-child">more</a>
     </div>
   </div>
 </div>

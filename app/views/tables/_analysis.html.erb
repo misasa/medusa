@@ -39,7 +39,7 @@
   <% end %>
 
   <% (@table.table_analyses.pluck(:specimen_id).uniq - @table.specimens_hash.keys).each do |specimen_id| %>
-  <b><%= link_to Specimen.find(specimen_id).name, specimen_path(specimen_id) %> Please delete following links!</b> 
+  <b><%= link_to Specimen.find(specimen_id).name, specimen_path(specimen_id) %> does not refer to</b> 
     <ul class="table-analyses">
       <% @table.table_analyses.where(specimen_id: specimen_id).includes(analysis: [:technique, :device]).each_with_index do |table_analysis, idx| %>
         <% next unless table_analysis.analysis %>
@@ -50,7 +50,6 @@
             <% end %>
             <%= f.fields_for :table_analyses, table_analysis do |g| %>
             <%= link_to list_title(g.object.analysis), analysis_path(table_analysis.analysis) %> <%= link_to_if(can?(:read, table_analysis.analysis), content_tag(:span, table_analysis.analysis.chemistries.size, class:"badge"), analysis_path(table_analysis.analysis, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal") %>
-            on <%= link_to list_title(g.object.analysis.specimen), specimen_path(table_analysis.analysis.specimen) %>
               <%= g.hidden_field :priority, class: "priority" %>
             <% end %>
           </div>

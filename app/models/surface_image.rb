@@ -15,6 +15,9 @@ class SurfaceImage < ActiveRecord::Base
   validates :surface_layer, existence: true, allow_nil: true
   validate :check_image
 
+  after_save :refresh_parent
+  scope :fits_file, -> { joins(:image).where('(attachment_files.data_content_type = ?) and (attachment_files.data_file_name like ?)',"application/octet-stream", '%.fits') }
+  scope :calibrated, -> { joins(:image).where('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :calibrated, -> { joins(:image).where('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :uncalibrated, -> { joins(:image).where.not('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :wall, -> { where(wall: true) }
@@ -82,13 +85,13 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def width
-    return right - left if left && right
+    return (right - left).abs if left && right
     return unless image
     image.width_in_um
   end
 
   def height
-    return upper - bottom if upper && bottom
+    return (upper - bottom).abs if upper && bottom
     return unless image
     image.height_in_um
   end
@@ -110,6 +113,25 @@ class SurfaceImage < ActiveRecord::Base
 
   def tile_dir
     File.join(surface.map_dir,image.id.to_s)
+  end
+
+  def tiled?
+    File.exist?(tile_dir)
+  end
+
+  def zooms
+    return unless tiled?
+    (Dir.entries(tile_dir) - [".", ".."]).map{|e| e.to_i }
+  end
+
+  def maxzoom
+    return unless tiled?
+    zooms.max
+  end
+
+  def minzoom
+    return unless tiled?
+    zooms.min
   end
 
   def warped_image_path
@@ -200,7 +222,40 @@ class SurfaceImage < ActiveRecord::Base
     make_warped_image
     raise "#{warped_image_path} does not exists." unless File.exists?(warped_image_path)
     line = make_tiles_cmd(options)
+    logger.info(line)
     line.run
+  end
+
+  def merge_tiles(options = {})
+    layer = surface_layer
+    return unless layer
+    return unless tiled?
+    line = merge_tiles_cmd(options)
+    line.run
+  end
+
+  def merge_tiles_with_cp(options = {})
+    layer = surface_layer
+    return unless layer
+    return unless tiled?
+    minzoom.upto(maxzoom) do |zoom|
+      target_dir = File.join(layer.tile_dir, "#{zoom}")
+      unless Dir.exists?(target_dir)
+        line = Terrapin::CommandLine.new("mkdir", "-p :dir")
+        line.run(dir: File.join(target_dir))
+      end  
+      tiles_each(zoom) do |x, y|
+        src_path = tile_image_path(zoom,x,y)
+        dest_path = layer.tile_image_path(zoom,x,y)
+        if File.exists?(dest_path)
+          line = Terrapin::CommandLine.new("composite", "-compose over :dest :src :dest")
+          line.run(src: src_path, dest: dest_path)
+        else
+          line = Terrapin::CommandLine.new("cp", ":src :dest")
+          line.run(src: src_path, dest: dest_path)
+        end
+      end
+    end
   end
 
   def clean_tiles(options = {})
@@ -229,7 +284,11 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def make_tiles_cmd(options = {})
-    maxzoom = options[:maxzoom] || original_zoom_level
+    if surface_layer
+      maxzoom = options[:maxzoom] || surface_layer.max_zoom_level || surface_layer.original_zoom_level
+    else
+      maxzoom = options[:maxzoom] || original_zoom_level
+    end
     transparent = options.has_key?(:transparent) ? options[:transparent] : true
     transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
     image_path = warped_image_path
@@ -247,6 +306,28 @@ class SurfaceImage < ActiveRecord::Base
     line = Terrapin::CommandLine.new("make_tiles", cmd, logger: logger)
   end
   
+  def merge_tiles_cmd(options = {})
+    return unless surface_layer
+    maxzoom = options[:maxzoom] || surface_layer.max_zoom_level || surface_layer.original_zoom_level
+
+    transparent = options.has_key?(:transparent) ? options[:transparent] : true
+    transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
+    image_path = warped_image_path
+    bs = image.bounds
+    ce = surface.center
+    if bs && bs.size == 4 && ce && ce.size == 2
+      bounds_str = sprintf("[%.2f,%.2f,%.2f,%.2f]", bs[0], bs[1], bs[2], bs[3])
+      center_str = sprintf("[%.2f,%.2f]", ce[0], ce[1])
+      length_str = sprintf("%.2f", surface.length)
+      cmd = "#{image_path} #{bounds_str} #{length_str} #{center_str} -o #{surface_layer.tile_dir} -z #{maxzoom}"
+    end
+    cmd += " -t" if transparent
+    cmd += " #{transparent_color}" if transparent_color
+    cmd += " --compose"
+    cmd
+    line = Terrapin::CommandLine.new("make_tiles", cmd, logger: logger)
+  end
+
   def tiles_each(zoom, &block)
     return unless image
     n = 2**zoom
@@ -424,7 +505,13 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   private
+  def refresh_parent
+    if surface
+      surface.reload.save
+    end
+  end
+
   def check_image
-	errors.add(:image_id, " must be image.") unless image.image?
+	errors.add(:image_id, " must be image.") unless image.image? || image.fits_file?
   end
 end

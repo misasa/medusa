@@ -53,6 +53,10 @@ class SpecimensController < ApplicationController
     respond_with @specimen
   end
 
+  def quantity_history
+    respond_with @specimen, layout: !request.xhr?
+  end
+
   def family
     respond_with @specimen, layout: !request.xhr?
   end
@@ -193,6 +197,8 @@ class SpecimensController < ApplicationController
       :lost,
       :igsn,
       :abs_age,
+      :age_mean,
+      :age_error,
       :age_min,
       :age_max,
       :age_unit,
@@ -265,7 +271,8 @@ class SpecimensController < ApplicationController
   end
 
   def find_resource
-    @specimen = Specimen.find(params[:id]).decorate
+    @specimen = Specimen.includes(:classification, :physical_form, :specimen_custom_attributes, :attachment_files, :bibs, {children: [:record_property, :physical_form]}).find(params[:id]).decorate
+    #@full_analyses = Analysis.includes(:chemistries).where(specimen_id: @specimen.self_and_descendants)
     @divide_specimen = Specimen.find(params[:id])
     @divide_specimen.children.build
   end

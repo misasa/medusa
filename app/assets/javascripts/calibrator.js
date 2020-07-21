@@ -42,19 +42,19 @@
     calibrator.anchors_on_base.push(calibrator.element.find("#anchor_b5"));
     $(calibrator.calculate_affine_button).removeAttr('disabled');
     for (var i=0; i < 6; ++i ){
-	$(calibrator.anchors_on_world[i]).removeAttr('disabled');
+	    $(calibrator.anchors_on_world[i]).removeAttr('disabled');
     }
     calibrator.moveButton.attr('disabled',true);
     for (var i=0; i < 6; ++i ){
-	$(calibrator.anchors_on_image[i]).attr('disabled',true);
+	    $(calibrator.anchors_on_image[i]).attr('disabled',true);
     }
     
     $(calibrator.calculate_affine_button).click(function() {
       var imageCoord = [];
       var worldCoord = [];
       for (var i=0; i < 6; ++i ){
-	  imageCoord.push(Number($(calibrator.anchors_on_image[i]).val()));
-	  worldCoord.push(Number($(calibrator.anchors_on_world[i]).val()));
+	      imageCoord.push(Number($(calibrator.anchors_on_image[i]).val()));
+	      worldCoord.push(Number($(calibrator.anchors_on_world[i]).val()));
       }
       var matrix = Matrix.fromTriangles(imageCoord, worldCoord);
       var array = [
@@ -66,49 +66,45 @@
         array[i] = array[i].map(function(x) { return x.toExponential(5); }).join(",");
       }
       $(calibrator.element.find("#affine_matrix")).val("[" + array.join(";") + "]");
-
     });
 
     calibrator.viewer.addZoomControl().draggable();
     calibrator.base.addZoomControl().draggable();
     calibrator.overlay.addZoomControl().draggable();
     calibrator.overlay_image_name = calibrator.thumbnails.overlayImageName();
-    var overlayImagePath = calibrator.thumbnails.overlayImagePath(),
-	resizeOverlay = function() {
-	  var t1 = overlayTriangle.get();
-          var tt = calibrator.transformedCoord();
-          var overlayCoord = calibrator.overlayTriangle.coord()
-          for (var i=0; i < 6; ++i ){
-            $(calibrator.anchors_on_overlay[i]).val(t1[i])
-            $(calibrator.anchors_on_image[i]).val(overlayCoord[i])
-            $(calibrator.anchors_on_world[i]).val(tt[i])
-          }
+    var overlayImagePath = calibrator.thumbnails.overlayImagePath();
+	  resizeOverlay = function() {
+	    var t1 = overlayTriangle.get();
+      var tt = calibrator.transformedCoord();
+      var overlayCoord = calibrator.overlayTriangle.coord()
+      for (var i=0; i < 6; ++i ){
+        $(calibrator.anchors_on_overlay[i]).val(t1[i])
+        $(calibrator.anchors_on_image[i]).val(overlayCoord[i])
+        $(calibrator.anchors_on_world[i]).val(tt[i])
+      }
 
-	  var tb = baseTriangle.get();
-          var baseCoord = calibrator.baseTriangle.coord();
-          var matrix = Matrix.from(
-            calibrator.baseAffine[0],
-            calibrator.baseAffine[3],
-            calibrator.baseAffine[1],
-            calibrator.baseAffine[4],
-            calibrator.baseAffine[2],
-            calibrator.baseAffine[5]
-	  );
-          var baseTransformedCoord = matrix.applyToArray(baseCoord);
-
-          for (var i=0; i < 6; ++i ){
+	    var tb = baseTriangle.get();
+      for (var i=0; i < 6; ++i ){
 	      $(calibrator.anchors_on_base[i]).val(tb[i])
-	      $(calibrator.anchors_on_world[i]).val(baseTransformedCoord[i])
-          }
+      }
+      var baseCoord = calibrator.baseTriangle.coord();
+      var perspT = calibrator.basePerspT();
+      var basePerspTCoord = perspT.transform(baseCoord[0], baseCoord[1]);
+      Array.prototype.push.apply(basePerspTCoord, perspT.transform(baseCoord[2], baseCoord[3]));
+      Array.prototype.push.apply(basePerspTCoord, perspT.transform(baseCoord[4], baseCoord[5]));
+      for (var i=0; i < 6; ++i ){
+        $(calibrator.anchors_on_world[i]).val(basePerspTCoord[i])
+      }  
+      //$("#debug_info").text(baseCoord);
 
-	  var t2 = tb.map(function(x) { return x * viewerBaseImage.scale; });
-	  viewerOverlayImage.transform(Matrix.fromTriangles(t1, t2));
+	    var t2 = tb.map(function(x) { return x * viewerBaseImage.scale; });
+	    viewerOverlayImage.transform(Matrix.fromTriangles(t1, t2));
 
-	  var t3 = tb.map(function(x) { return x * baseImage.scale; });
-	  baseOverlayImage.transform(Matrix.fromTriangles(t1, t3));
+	    var t3 = tb.map(function(x) { return x * baseImage.scale; });
+	    baseOverlayImage.transform(Matrix.fromTriangles(t1, t3));
 
-	  $(calibrator).trigger('change');
-	};
+	    $(calibrator).trigger('change');
+	  };
 
     overlayImage = calibrator.overlay.image(overlayImagePath);
     $(overlayImage).on('loaded', function(event, image) {
@@ -126,7 +122,7 @@
     });
 
     $(calibrator.thumbnails).on('selected', function(event, params) {
-      var src = params.src, name = params.name, points = params.points;
+      var src = params.src, name = params.name, points = params.points, corners = params.corners;
       if (params.affine) {
         calibrator.baseAffine = params.affine;
       } else {
@@ -134,25 +130,29 @@
       }
       if (baseImage) { baseImage.remove(); }
       baseImage = calibrator.base.image(src);
+      if (params.corners) {
+        calibrator.baseCorners = params.corners;
+      }
+
       calibrator.base_image_name = params.name;
       $(baseImage).on('loaded', function(event, image) {
         calibrator.viewer.reset();
-	image.fit();
+	      image.fit();
         for (var i=0; i < 6; ++i ){
           $(calibrator.anchors_on_world[i]).attr('disabled',true);
         }
         $(calibrator.calculate_affine_button).attr('disabled',true);
         calibrator.moveButton.removeAttr('disabled');
 
-	if(baseOverlayImage) { baseOverlayImage.remove() }
-	baseOverlayImage = calibrator.base.image(overlayImagePath).opacity(calibrator.opacity.val());
-	$(baseOverlayImage).on('loaded', function(event, image) {
-	  image.stroke({ width: 1, color: "#f00" });
-	  resizeOverlay();
-	});
+	      if(baseOverlayImage) { baseOverlayImage.remove() }
+	      baseOverlayImage = calibrator.base.image(overlayImagePath).opacity(calibrator.opacity.val());
+	      $(baseOverlayImage).on('loaded', function(event, image) {
+	        image.stroke({ width: 1, color: "#f00" });
+	        resizeOverlay();
+	      });
 
-	if (baseTriangle) { baseTriangle.remove(); }
-	baseTriangle = calibrator.baseTriangle = Calibrator.Triangle(calibrator.base.imageGroup, image);
+	      if (baseTriangle) { baseTriangle.remove(); }
+	      baseTriangle = calibrator.baseTriangle = Calibrator.Triangle(calibrator.base.imageGroup, image);
         var calibration_points_on_world = calibrator.calibration_points_on_world();
         var calibration_points_on_pixels = calibrator.world_pairs_on_base(calibration_points_on_world);
         if (calibration_points_on_pixels) {
@@ -160,23 +160,20 @@
         } else {
           baseTriangle.reset();
         }
-	$(baseTriangle).on('dragmove', resizeOverlay);
+	      $(baseTriangle).on('dragmove', resizeOverlay);
 
-	if(viewerBaseImage) { viewerBaseImage.remove(); }
-	viewerBaseImage = calibrator.viewer.image(src);
-	$(viewerBaseImage).on('loaded', function(event, image) {
-	  image.fit();
-	});
+	      if(viewerBaseImage) { viewerBaseImage.remove(); }
+	      viewerBaseImage = calibrator.viewer.image(src);
+	      $(viewerBaseImage).on('loaded', function(event, image) {
+	        image.fit();
+	      });
 
-	if(viewerOverlayImage) { viewerOverlayImage.remove() }
-	viewerOverlayImage = calibrator.viewer.image(overlayImagePath).opacity(calibrator.opacity.val());
-	$(viewerOverlayImage).on('loaded', function(event, image) {
-	  image.stroke({ width: 5, color: "#f00" });
-	  resizeOverlay();
-	});
-
-
-
+	      if(viewerOverlayImage) { viewerOverlayImage.remove() }
+	      viewerOverlayImage = calibrator.viewer.image(overlayImagePath).opacity(calibrator.opacity.val());
+	      $(viewerOverlayImage).on('loaded', function(event, image) {
+	        image.stroke({ width: 5, color: "#f00" });
+	        resizeOverlay();
+	      });
       });
     });
 
@@ -187,18 +184,18 @@
 
     $(calibrator.moveButton).on('mousedown', function(event) {
       var xy = {
-	left: [-1, 0],
-	right: [1, 0],
-	up: [0, -1],
-	down: [0, 1]
+	      left: [-1, 0],
+	      right: [1, 0],
+	      up: [0, -1],
+	      down: [0, 1]
       },
-	  moveFunction = function () {
-	    if (!calibrator.direction) {
-	      return;
-	    }
-	    baseTriangle.dmove(...xy[calibrator.direction]);
-	    setTimeout(moveFunction, 100);
-	  };
+	    moveFunction = function () {
+	      if (!calibrator.direction) {
+	        return;
+	      }
+	      baseTriangle.dmove(...xy[calibrator.direction]);
+	      setTimeout(moveFunction, 100);
+	    };
 
       calibrator.direction = $(this).data("direction");
       moveFunction();
@@ -210,24 +207,44 @@
 
     return calibrator;
   };
+
   Calibrator.prototype = {
+    basePerspT() {
+      c = this.baseCorners;
+      w = this.baseTriangle.image.width;
+      h = this.baseTriangle.image.height;
+      l = w;
+      if (h > w){ l = h }
+      x = w/l/2.0 * 100.0;
+      y = h/l/2.0 * 100.0;
+      var srcCorners = [-x, +y, x, +y, x, -y, -x, -y];
+      var dstCorners = [c[0][0], c[0][1], c[1][0], c[1][1], c[2][0], c[2][1], c[3][0], c[3][1]];
+      return PerspT(srcCorners, dstCorners);
+    },
+    overlayPerspT() {
+      c = this.thumbnails.overlayCorners();
+      w = this.overlayTriangle.image.width;
+      h = this.overlayTriangle.image.height;
+      l = w;
+      if (h > w){ l = h }
+      x = w/l/2.0 * 100.0;
+      y = h/l/2.0 * 100.0;
+      var srcCorners = [-x, +y, x, +y, x, -y, -x, -y];
+      var dstCorners = [c[0][0], c[0][1], c[1][0], c[1][1], c[2][0], c[2][1], c[3][0], c[3][1]];
+      return PerspT(srcCorners, dstCorners);
+    },
     affineMatrix() {
-      var overlayCoord = this.overlayTriangle.coord(),
-          baseCoord = this.baseTriangle.coord(),
-          matrix = Matrix.from(
-            this.baseAffine[0],
-            this.baseAffine[3],
-            this.baseAffine[1],
-            this.baseAffine[4],
-            this.baseAffine[2],
-            this.baseAffine[5]
-          ),
-          transformedCoord = matrix.applyToArray(baseCoord);
-      return Matrix.fromTriangles(overlayCoord, transformedCoord);
+      var overlayCoord = this.overlayTriangle.coord(),baseCoord = this.baseTriangle.coord();
+      var perspT = this.basePerspT();
+      var basePerspTCoord = perspT.transform(baseCoord[0], baseCoord[1]);
+      Array.prototype.push.apply(basePerspTCoord, perspT.transform(baseCoord[2], baseCoord[3]));
+      Array.prototype.push.apply(basePerspTCoord, perspT.transform(baseCoord[4], baseCoord[5]));
+      pm = Matrix.fromTriangles(overlayCoord, basePerspTCoord);
+      return pm;
     },
     affine_ij2ij() {
       var _overlay_ij = [
-	this.overlayTriangle.circles[0].cx(),
+	      this.overlayTriangle.circles[0].cx(),
         this.overlayTriangle.circles[0].cy(),
         this.overlayTriangle.circles[1].cx(),
         this.overlayTriangle.circles[1].cy(),
@@ -236,7 +253,7 @@
       ];
       var overlay_ij = this.overlayTriangle.coord_ij();
       var _base_ij = [
-	this.baseTriangle.circles[0].cx(),
+	      this.baseTriangle.circles[0].cx(),
         this.baseTriangle.circles[0].cy(),
         this.baseTriangle.circles[1].cx(),
         this.baseTriangle.circles[1].cy(),
@@ -250,18 +267,24 @@
         var overlayCoord = this.overlayTriangle.coord();
         var overlayAffine = this.thumbnails.overlayAffine();
         if (!overlayAffine) {
-	    overlayAffine = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+	        overlayAffine = [1, 0, 0, 0, 1, 0, 0, 0, 1];
+          var affine_overlay = Matrix.from(overlayAffine[0],overlayAffine[3],overlayAffine[1],overlayAffine[4],overlayAffine[2],overlayAffine[5]);
+	        var transformedCoord = affine_overlay.applyToArray(overlayCoord);
+        } else {
+          var perspT = this.overlayPerspT();
+          var transformedCoord = perspT.transform(overlayCoord[0], overlayCoord[1]);
+          Array.prototype.push.apply(transformedCoord, perspT.transform(overlayCoord[2], overlayCoord[3]));
+          Array.prototype.push.apply(transformedCoord, perspT.transform(overlayCoord[4], overlayCoord[5]));
+    
         }
-        var affine_overlay = Matrix.from(overlayAffine[0],overlayAffine[3],overlayAffine[1],overlayAffine[4],overlayAffine[2],overlayAffine[5]);
-	var transformedCoord = affine_overlay.applyToArray(overlayCoord);
         return transformedCoord;
     },
     calibration_points_on_world(){
-	var transformedCoord = this.transformedCoord();
-        return [[transformedCoord[0],transformedCoord[1]],[transformedCoord[2],transformedCoord[3]],[transformedCoord[4],transformedCoord[5]]];
+	    var transformedCoord = this.transformedCoord();
+      return [[transformedCoord[0],transformedCoord[1]],[transformedCoord[2],transformedCoord[3]],[transformedCoord[4],transformedCoord[5]]];
     },
     pixel_from_xy(image, xy){
-	return [this.pixel_from_x(image, xy[0]), this.pixel_from_y(image, xy[1])];
+	    return [this.pixel_from_x(image, xy[0]), this.pixel_from_y(image, xy[1])];
     },
     pixel_from_x(image, x){
       var width = image.width, height = image.height;
@@ -274,18 +297,17 @@
       return height/2.0 - y*length/100.0;
     },
     world_pairs_on_base(world_pairs){
-        var image = this.baseTriangle.image, width = image.width, height = image.height, length = image.length;
-        
-        baseAffine = this.baseAffine;
-        affine_base = Matrix.from(baseAffine[0],baseAffine[3],baseAffine[1],baseAffine[4],baseAffine[2],baseAffine[5]);
-        inv_affine = affine_base.inverse();
-        var world_v = [world_pairs[0][0],world_pairs[0][1],world_pairs[1][0],world_pairs[1][1],world_pairs[2][0],world_pairs[2][1]]
-        var base_v = inv_affine.applyToArray(world_v);
-        return [
-	  this.pixel_from_xy(image, [base_v[0],base_v[1]]), 
-          this.pixel_from_xy(image, [base_v[2],base_v[3]]),
-          this.pixel_from_xy(image, [base_v[4],base_v[5]])
-        ];
+      var image = this.baseTriangle.image, width = image.width, height = image.height, length = image.length;
+      baseAffine = this.baseAffine;
+      perspT = this.basePerspT();        
+      base_pv = perspT.transformInverse(world_pairs[0][0],world_pairs[0][1]);
+      Array.prototype.push.apply(base_pv, perspT.transformInverse(world_pairs[1][0],world_pairs[1][1]));
+      Array.prototype.push.apply(base_pv, perspT.transformInverse(world_pairs[2][0],world_pairs[2][1]));
+      return [
+	      this.pixel_from_xy(image, [base_pv[0],base_pv[1]]), 
+        this.pixel_from_xy(image, [base_pv[2],base_pv[3]]),
+        this.pixel_from_xy(image, [base_pv[4],base_pv[5]])
+      ];
     }
   };
 
@@ -398,7 +420,9 @@
     var thumbnails = Object.create(Calibrator.Thumbnails.prototype);
     Object.assign(thumbnails, Calibrator.Node(element));
     thumbnails.element.on("click", function(event) {
+      $('.thumbnail.selected').each(function(){$(this).removeClass("selected")});
       var div = $(event.target).parent();
+      div.addClass("selected");
       var base_link = $("#base_image_download_link");
       if (div.data("name")) {
         $("#base_info").text(div.data("name"));
@@ -412,7 +436,7 @@
         base_link.hide();
         $("#blend_cmd").text("");
       }
-      $(thumbnails).trigger('selected', { src: div.data("src"), name: div.data("name"), points: div.data("points"), affine: div.data("affine") });
+      $(thumbnails).trigger('selected', { src: div.data("src"), name: div.data("name"), points: div.data("points"), corners: div.data("corners"), affine: div.data("affine") });
     });
     return thumbnails;
   };
@@ -436,7 +460,11 @@
     overlayAffine() {
       var div = this.element.find("div.thumbnail").filter(".overlay");
       return div.data("affine");
-    }
+    },
+    overlayCorners() {
+      var div = this.element.find("div.thumbnail").filter(".overlay");
+      return div.data("corners");
+    },
   };
 
   Calibrator.Triangle = function(svg, image) {

@@ -12,7 +12,7 @@
   </thead>
   <tbody>
     <%= form_tag bundle_edit_analyses_path, id: "analysis-bundle-form" do %>
-      <% @attachment_file.analyses.each do |analysis| %>
+      <% [@attachment_file.analysis].concat(@attachment_file.analyses).compact.each do |analysis| %>
         <tr>
           <td>
             <%= check_box_tag("ids[]", analysis.id, false, {id: "ids_#{analysis.id}", class: "select-row"}) if can?(:update, analysis) %>
@@ -67,4 +67,4 @@
   </tfoot>
 </table>
 <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#analysis-bundle-form').submit();", class: "btn btn-default", title: "open multi-edit page with checked items" %>
-<%= mantra "To create a new analysis, fill in the columns of name and device. To link an existing analysis to <#{@attachment_file.name}>, fill in the column of ID.", :title => "Analyses related to <#{@attachment_file.name}>" %>
+<%= mantra "To let join, fill ID field and press save button.  To create new, fill fields and press save button.", :title => "Analyses related to <#{@attachment_file.name}>" %>

@@ -59,6 +59,10 @@ class SurfaceImagesController < ApplicationController
     duplicate_global_id
   end
 
+  def fits_image
+    send_data(@image.fits_image.to_blob, :type => 'image/png', :disposition => 'inline')
+  end
+
   def tiles
     TileWorker.perform_async(@surface_image.id)
     respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
@@ -102,7 +106,11 @@ class SurfaceImagesController < ApplicationController
       position = params["position"].to_i
       @surface_image.insert_at(position)
     end 
-    respond_with @image, location: adjust_url_by_requesting_tab(request.referer)    
+    #respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
+    ret = {
+      order: @surface_image.surface.surface_images.pluck(:image_id, :position)
+    }
+    render json: ret.to_json
   end
 
   def layer
@@ -121,7 +129,7 @@ class SurfaceImagesController < ApplicationController
   private
 
   def surface_image_params
-    params.require(:surface_image).permit(:corners_on_map, :corners_on_world)
+    params.require(:surface_image).permit(:corners_on_map, :corners_on_world, :surface_layer_id)
   end
 
   def image_params

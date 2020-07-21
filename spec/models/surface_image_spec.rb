@@ -5,7 +5,7 @@ describe SurfaceImage do
   let(:surface) { FactoryGirl.create(:surface) }
   let(:obj) { FactoryGirl.create(:surface_image, :surface_id => surface.id, :image_id => image.id)}
 
-  describe "with real file", :current => true do
+  describe "with real file" do
     let(:image) { FactoryGirl.create(:attachment_file, affine_matrix: [9.5e+01,-1.8e+01,-2.0e+02,1.8e+01,9.4e+01,-3.3e+01,0,0,1]) }
     describe "make_warped_image" do
       subject {obj.make_warped_image}
@@ -19,7 +19,66 @@ describe SurfaceImage do
 
   let(:image) { FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
   
-  describe "scope", :current => true do
+  describe "make_tiles_cmd", :current => true do
+    let(:surface) { FactoryGirl.create(:surface) }
+    let(:obj) { FactoryGirl.create(:surface_image, :surface_id => surface.id, :image_id => image.id)}
+    let(:options){ {} }
+    subject {obj.make_tiles_cmd(options)}
+    context "without surface_layer" do
+      before do
+        allow(obj).to receive(:original_zoom_level).and_return(12)
+      end
+      it { expect(subject.command).to match(/\-z 12/) }
+    end
+    context "with surface_layer with max_zoom_level" do
+      let(:layer) { FactoryGirl.create(:surface_layer, :max_zoom_level => 11) }
+      before do
+        obj.surface_layer = layer
+        obj.save
+      end
+      it { expect(subject.command).to match(/\-z 11/) }
+    end
+
+    context "with surface_layer without max_zoom_level" do
+      let(:layer) { FactoryGirl.create(:surface_layer) }
+      before do
+        obj.surface_layer = layer
+        allow(layer).to receive(:original_zoom_level).and_return(10)
+        obj.save
+      end
+      it { expect(subject.command).to match(/\-z 10/) }
+    end
+  end
+
+  describe "merge_tiles_cmd", :current => true do
+    let(:surface) { FactoryGirl.create(:surface) }
+    let(:obj) { FactoryGirl.create(:surface_image, :surface_id => surface.id, :image_id => image.id)}
+    let(:options){ {} }
+    subject {obj.merge_tiles_cmd(options)}
+    context "without surface_layer" do
+      it { expect(subject).to be_nil }
+    end
+    context "with surface_layer with max_zoom_level" do
+      let(:layer) { FactoryGirl.create(:surface_layer, :max_zoom_level => 11) }
+      before do
+        obj.surface_layer = layer
+        obj.save
+      end
+      it { expect(subject.command).to match(/\-z 11/) }
+    end
+
+    context "with surface_layer without max_zoom_level" do
+      let(:layer) { FactoryGirl.create(:surface_layer) }
+      before do
+        obj.surface_layer = layer
+        allow(layer).to receive(:original_zoom_level).and_return(10)
+        obj.save
+      end
+      it { expect(subject.command).to match(/\-z 10/) }
+    end
+  end
+
+  describe "scope" do
     describe "wall" do
       let(:image_1){ FactoryGirl.create(:attachment_file) }
       let(:wall_image){ FactoryGirl.create(:surface_image, :wall => true, :surface_id => surface.id, :image_id => image_1.id) }
@@ -195,7 +254,7 @@ describe SurfaceImage do
     end
   end
 
-  describe "#corners_on_world=", :current => true do
+  describe "#corners_on_world=" do
     subject { obj.corners_on_world = corners_on_world }
     before do
       image_mock = double('Image')
@@ -244,7 +303,7 @@ describe SurfaceImage do
 
   describe "spots" do
   	it { expect(obj.spots).to include(spot)}
-  	context "shares same surface's spots" do
+    context "shares same surface's spots" do
 	    let(:image_1) { FactoryGirl.create(:attachment_file, :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
 	    let(:image_2) { FactoryGirl.create(:attachment_file, :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]") }
 	    let(:spot_1) { FactoryGirl.create(:spot, :attachment_file_id => image_1.id) }
@@ -252,11 +311,11 @@ describe SurfaceImage do
 
 	    before do
 	      surface.images << image_1
-	      surface.images << image_2
-	      spot_1
-	      spot_2
-	    end
-	    it { expect(obj.spots).to include(spot_1)}
+        surface.images << image_2
+      end
+      pending("...") do   
+        it { expect(obj.spots.count).to eql(2)}
+      end
     end
   end
 

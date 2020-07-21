@@ -1,12 +1,13 @@
 require 'matrix'
+require 'RubyFits'
 class AttachmentFile < ActiveRecord::Base
   include HasRecordProperty
-
   has_attached_file :data,
     styles: { thumb: "160x120>", tiny: "50x50"},
     path: ":rails_root/public/system/:class/:id_partition/:basename_with_style.:extension",
     url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension",
     restricted_characters: /[&$+,x\/:;=?<>\[\]\{\}\|\\\^~%# ]/
+
 
   alias_attribute :name, :data_file_name
 
@@ -19,17 +20,21 @@ class AttachmentFile < ActiveRecord::Base
   has_many :analyses, through: :attachings, source: :attachable, source_type: "Analysis"
   has_many :surface_images, foreign_key: :image_id
   has_many :surfaces, :through => :surface_images, dependent: :destroy
-
+  has_one :analysis, foreign_key: :fits_file_id
   attr_accessor :path
+  before_post_process :skip_for_fits
   after_post_process :save_geometry
 #  after_save :rotate
   after_save :check_affine_matrix
   after_save :update_spots_world_xy
+  after_create :generate_analysis
   after_update :rename_attached_files_if_needed
 
   serialize :affine_matrix, Array
 
   validates :data, presence: true
+
+  scope :fits_files, -> { where(data_content_type: "application/octet-stream").where('(attachment_files.data_file_name like ?)', '%.fits') }
 
   def path(style = :original)
     File.exists?(data.path(style)) ? data.url(style) : data.url(:original)
@@ -136,6 +141,8 @@ class AttachmentFile < ActiveRecord::Base
     b_h = upper - bottom
     p_um = pixels_per_um
     new_geometry = [(b_w * p_um).ceil, (b_h * p_um).ceil]
+    logger.info("new_geometry: #{new_geometry}")
+
     corners_on_new_image = []
     corners_on_world.each do |corner|
       dx = corner[0] - left
@@ -145,14 +152,15 @@ class AttachmentFile < ActiveRecord::Base
     end
     image_1 = local_path
     #image_2 = local_path(:warped)
-    temp_image = Tempfile.new(['warped-','.png'], "#{Rails.root.to_s}/tmp/")
+    #temp_image = Tempfile.new(['warped-','.png'], "#{Rails.root.to_s}/tmp/")
+    temp_image = Tempfile.new(['warped-','.png'])
     image_2 = temp_image.path
     temp_image.close!
     png = ChunkyPNG::Image.new(new_geometry[0], new_geometry[1])
     png.save(image_2)
     array_str = corners_on_new_image.to_s.gsub(/\s+/,"")
     
-    line = Terrapin::CommandLine.new("image_in_image", "#{image_1} #{image_2} #{array_str} -o #{image_2}", logger: logger)
+    line = Terrapin::CommandLine.new("image_in_image", "#{image_1} #{image_2} #{array_str} -p nearest -o #{image_2}", logger: logger)
     line.run
     return image_2
   end
@@ -213,7 +221,7 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def length
-    return unless self.image?
+    #return unless self.image?
     if width && height
       return width >= height ? width : height
     else
@@ -375,7 +383,11 @@ class AttachmentFile < ActiveRecord::Base
 
 
     image = %Q|<image xlink:href="#{path}" x="0" y="0" width="#{original_width}" height="#{original_height}" data-id="#{id}"/>|
-    surface_spots_within_bounds_converted.inject(image) { |svg, spot| svg + spot.to_svg }
+    if surfaces.empty?
+      spots.inject(image) { |svg, spot| svg + spot.to_svg }
+    else
+      surface_spots_within_bounds_converted.inject(image) { |svg, spot| svg + spot.to_svg }
+    end
   end
 
   def pixel_pairs_on_world(pairs)
@@ -402,7 +414,57 @@ class AttachmentFile < ActiveRecord::Base
     pixel_pairs_on_world(calibration_points_on_pixel)
   end
 
+  def fits_file?
+    data_content_type == 'application/octet-stream' && File.extname(data_file_name) == '.fits'
+  end
+
+  def fits_data
+    return unless fits_file?
+    fits = Fits::FitsFile.new()
+    fits.open(data.path)
+    pHDU=fits.hdu(0)
+    pHDU.extend Fits
+    pHDU.getAsArray()
+  end
+
+  def fits_image(params = {})
+    return unless fits_file?
+    data = NArray.to_na(fits_data)
+    val = data[data.lt Float::INFINITY]
+    mean = val.mean()
+    sigma = val.stddev()
+    r_min = params[:r_min] || mean > 2.0 * sigma ? mean - 2.0 * sigma : 0.0
+    r_max = params[:r_max] || mean + 2.0 * sigma
+    dim0, dim1 = data.shape()
+    data[data.eq Float::INFINITY] = 0.0
+    dd = data/(r_max - r_min)
+    dd[dd.gt 1.0] = 1.0
+    dd = (1.0 - dd) *240
+    png = ChunkyPNG::Image.new(*data.shape(),ChunkyPNG::Color::TRANSPARENT)
+    dd.to_a.each_with_index do |a, i|
+      a.each_with_index do |h, j|
+        #puts "(#{i},#{j}) #{h}"
+        h = 240.0 if h.nan?
+        rgb = ColorCode::HSL.new(h: h, s:100, l:50).to_rgb.to_hash
+        png[i,j] = ChunkyPNG::Color.rgba(rgb[:r],rgb[:g],rgb[:b],255)
+      end
+    end
+    png
+  end
+
   private
+  def skip_for_fits
+    flag = !(File.extname(data_file_name) == '.fits')
+    flag
+  end
+
+  def generate_analysis
+    if fits_file?
+      self.build_analysis unless self.analysis
+      self.analysis.name = File.basename(data_file_name,".*")
+      self.analysis.save
+    end
+  end
 
   def x_max
       width.to_f/length.to_f * 100 if width

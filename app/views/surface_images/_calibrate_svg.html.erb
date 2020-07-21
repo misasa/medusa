@@ -5,12 +5,39 @@
   <div class="col-lg-12">
     <div class="viewer pull-left" style="display:none"></div>
   </div>
+  <div class="col-lg-12">   
+    <%= form_for @image, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
+      <div class="row">
+        <div class="col-lg-9">
+          <div class="input-group">
+            <span class="input-group-addon">Affine matrix
+            </span>
+            <%= f.text_field :affine_matrix_in_string, readonly: true, id: "affine_matrix", class: "form-control" %>
+            <span class="input-group-btn">
+             <%= link_to(edit_attachment_file_path(@image), class: "btn btn-default", :title => "edit affine matrix", :type => "button") do %>
+               <span class="glyphicon glyphicon-edit"></span>
+             <% end %>
+            </span>
+            <span class="input-group-btn">
+	      <%= button_tag title: "update affine matrix", id: "calibrator-button", class: "btn btn-default" do %>
+	         <span class="glyphicon glyphicon-save"></span>
+	      <% end %>
+            </span>
+          </div>
+        </div>
+      </div>
+      <% end %>
+  </div>
+
+
   <div class="col-lg-5">
   <span id="base_info">
   </span>
   <a id="base_image_download_link" hidden> 
     <span class="glyphicon glyphicon-download"></span>
   </a>
+  <span id="debug_info">
+  </span>
   </div>
   <div class="col-lg-5">
   <span class="glyphicon glyphicon-arrow-left"></span>
@@ -21,6 +48,9 @@
   </div>
   <div class="col-lg-2">
   </div>
+
+
+
   <div class="col-lg-5">
     <div class="controller base">
     </div>
@@ -177,39 +207,68 @@
     </div>
   </div>
   <div class="col-lg-12">
-    <div class="thumbnails pull-left">
-      <% @surface.images.each_with_index do |image, index| %>
-        <%= content_tag :div, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: image.path, name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), affine: image.affine_matrix.presence, path: download_attachment_file_path(image) } do %>
-	  <%= image.decorate.picture(width: 70, height: 70, type: :thumb) %>
-	<% end %>
-      <% end %>
-    </div>
-  </div>
-
-
-  <div class="col-lg-12">   
-    <%= form_for @image, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
-      <div class="row">
-        <div class="col-lg-9">
-          <div class="input-group">
-            <span class="input-group-addon">Affine matrix
-            </span>
-            <%= f.text_field :affine_matrix_in_string, readonly: true, id: "affine_matrix", class: "form-control" %>
-            <span class="input-group-btn">
-             <%= link_to(edit_attachment_file_path(@image), class: "btn btn-default", :title => "edit affine matrix", :type => "button") do %>
-               <span class="glyphicon glyphicon-edit"></span>
-             <% end %>
-            </span>
-            <span class="input-group-btn">
-	      <%= button_tag title: "update affine matrix", id: "calibrator-button", class: "btn btn-default" do %>
-	         <span class="glyphicon glyphicon-save"></span>
-	      <% end %>
-            </span>
+      <% not_belongs_to_layer = @surface.top_surface_images%>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="panel-title pull-lfet">
+            <a href="#surface-layer-top", data-toggle="collapse", aria-expanded="false", aria-control="surface-layer-top", title = "show and hide images belong to top">
+              <span class="badge"><%= not_belongs_to_layer.size %></span> Top
+            </a>
+          </span>
+        </div>
+        <div class="panel-body" id="surface-layer-top">
+          <div class="thumbnails pull-left">
+          <% not_belongs_to_layer.each do |surface_image| %>
+              <% next unless surface_image.image %>
+              <% image = surface_image.image %>
+              <%= content_tag :div, title: image.name, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: image.path, name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), corners: image.corners_on_world, affine: image.affine_matrix.presence, path: download_attachment_file_path(image) } do %>
+                <%= surface_image.decorate.labels %>
+                <%= image.decorate.picture(width: 100, height: 100, type: :thumb) %>
+              <% end %>
+            <% end %>
           </div>
         </div>
       </div>
+      <% @surface.surface_layers.each do |surface_layer| %>
+        <%= surface_layer.decorate.panel_with_block do |layer_tokens| %>
+          <div class="thumbnails pull-left">
+            <% surface_layer.surface_images.each do |surface_image| %>
+              <% next unless surface_image.image %>
+              <% image = surface_image.image %>
+              <%= content_tag :div, title: image.name, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: image.path, name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), corners: image.corners_on_world, affine: image.affine_matrix.presence, path: download_attachment_file_path(image) } do %>
+                <%= surface_image.decorate.labels(layer_tokens) %>
+                <%= image.decorate.picture(width: 100, height: 100, type: :thumb) %>
+              <% end %>
+            <% end %>
+          </div>
+        <% end %>
       <% end %>
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <span class="panel-title pull-lfet">
+           <a href="#surface-layer-base", data-toggle="collapse", aria-expanded="false", aria-control="surface-layer-top", title = "show and hide images belong to base">
+            Base
+          </a>
+          </span>
+          <span class="label label-primary">opacity: 100%</span>
+      </div>
+      <div class="panel-body" id="surface-layer-base">
+        <div class="thumbnails pull-left">
+          <% @surface.wall_surface_images.each do |surface_image| %>
+            <% next unless surface_image.image %>
+            <% image = surface_image.image %>
+            <%= content_tag :div, title: image.name, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: image.path, name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), corners: image.corners_on_world, affine: image.affine_matrix.presence, path: download_attachment_file_path(image) } do %>
+              <%= surface_image.decorate.labels %>
+              <%= image.decorate.picture(width: 100, height: 100, type: :thumb) %>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    
   </div>
+
+
 
 
 

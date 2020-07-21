@@ -1,3 +1,4 @@
+<%= mantra "An image located leftward is piled on upward in each layer.", :title => "Image alignment" %> 
 <% not_belongs_to_layer = @surface.top_surface_images%>
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -7,7 +8,7 @@
     </a>
     </span>
   </div>
-  <div class="panel-body collapse in" id="surface-layer-top">
+  <div class="panel-body" id="surface-layer-top">
     <ul class="list-inline thumbnails surface-layer">
       <% not_belongs_to_layer.each do |surface_image| %>
         <% next unless surface_image.image %>
@@ -16,24 +17,32 @@
     </ul>
   </div>
   <div class="panel-footer">
-    <ul class="list-inline thumbnails surface-layer">
+    <ul class="list-inline thumbnails">
       <% @surface.uncalibrated_surface_images.each do |surface_image| %>
         <% next unless surface_image.image %>
         <%= surface_image.decorate.li_thumbnail %>
       <% end %>
     </ul>    
+    <%= mantra "To upload and link a image to surface, use this interface.", {title: "new image"} %> 
     <div class="row">
      <div class="form-inline col-sm-6">
-      <%= form_for AttachmentFile.new, url: surface_images_path(@surface), multipart: true, class: "form-inline", builder: ApplicationFormBuilder do |f|%>
+     <%= mantra "To upload a image to surface, use this interface.", {title: "upload"} %> 
+     <%= form_for AttachmentFile.new, url: surface_images_path(@surface), multipart: true, class: "form-inline", builder: ApplicationFormBuilder do |f|%>
         <%#= hidden_tabname_tag(__FILE__) %>
         <%= f.fields_for :record_property_attributes do |r| %>
           <%= r.hidden_field :user_id ,value: @current_user.id %>
         <% end %>
         <%#= check_box_tag nil, nil, false, class: "select-row-all" %>
-          <div class="input-group">
+        <div class="collapse" id="collapseMatrixForm">
+          <div id="affine_editor_for_new"></div>
+        </div>
+        <div class="input-group">
             <%= f.file_browse_field :data %>
             <%= f.text_field :affine_matrix_in_string, class: "form-control", value:"", placeholder:"[1,0,0;0,1,0;0,0,1]" %>
             <div class="input-group-btn">
+              <%= content_tag(:button, type: "button", title:"matrix form", class: "btn btn-default", data: {toggle:"collapse", target: "#collapseMatrixForm"}) do %>
+                <span class="glyphicon glyphicon-pencil"></span>
+              <% end %>
               <%= f.button title:"add image to #{@surface.name} with affine matrix", class: "btn btn-default" do %>
                 <span class="glyphicon glyphicon-save"></span>
               <% end %>
@@ -42,6 +51,7 @@
       <% end %>
     </div>
     <div class="col-sm-6">
+      <%= mantra "To link a image to surface, use this interface.", {title: "link"} %> 
       <%= form_tag link_by_global_id_surface_images_path(@surface), method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
 	  <div class="input-group">
@@ -63,11 +73,13 @@
   </div>
 </div>
 <div class="panel panel-default">
-  <div class="panel-heading">
-    <%= form_for SurfaceLayer.new, url: surface_layers_path(@surface), class:"inline" do |f|%>
-      <%= mantra "To upload and link a layer to surface, use interface at the below." %> 
-      <%= f.text_field :name %>
+  <div class="panel-heading">  
+  <%= mantra "To upload and link a layer to surface, use this interface.", {title: "new layer"} %> 
+  <%= form_for SurfaceLayer.new, url: surface_layers_path(@surface), class:"inline" do |f|%>
+    name
+      <%= f.text_field :name, placeholder: "new layer" %>
       <%= f.hidden_field :priority, value: @surface.surface_layers.max_priority + 1 %>
+      opacity
       <%= f.text_field :opacity %>
       <%= f.button title:"add layer", class: "btn btn-default btn-sm pull-right" do %>
         <span class="glyphicon glyphicon-plus"></span>
@@ -92,7 +104,7 @@
     <span class="label label-primary">opacity: 100%</span>
     <div class="clearfix"></div>
   </div>
-  <div class="panel-body collapse in" id="surface-layer-base">
+  <div class="panel-body collapse" id="surface-layer-base">
     <ul class="list-inline thumbnails surface-layer">
       <% @surface.wall_surface_images.each do |surface_image| %>
         <% next unless surface_image.image %>
@@ -103,6 +115,40 @@
 </div>
 
 <%= javascript_tag do %>
+  $(document).on("succeed.ajaxForm", function() {
+    location.href="";
+  });    
+  <% @surface.surface_images.each do |surface_image| %>
+    <% image = surface_image.image %>
+    <% m = image.affine_matrix %>
+    var thot_<%= image.id %> = new Handsontable(document.getElementById("affine_editor_<%= image.id %>"), {
+      data: [[<%= m[0] %>, <%= m[1] %>, <%= m[2] %>, ],[<%= m[3] %>, <%= m[4] %>, <%= m[5] %>, ],[<%= m[6] %>, <%= m[7] %>, <%= m[8] %>, ]],
+      licenseKey: 'non-commercial-and-evaluation'
+    });
+    Handsontable.hooks.add('afterChange', function() {
+      console.log(arguments);
+      m = thot_<%= image.id %>.getData();
+      str = '[' + m[0].join(',') + ';' + m[1].join(',') + ';' + m[2].join(',') + ']'
+      $('#edit_attachment_file_<%= image.id %>').find('#attachment_file_affine_matrix_in_string').val(str);
+      console.log(str);
+    }, thot_<%= image.id %>);
+    $(document).on("succeed.ajaxForm", "#edit_attachment_file_<%= image.id %>", function() {
+      location.href="";
+    });    
+  <% end %>
+  const container = document.getElementById('affine_editor_for_new');
+  const hot = new Handsontable(container, {
+    data: [[1,0,0],[0,1,0],[0,0,1]],
+    licenseKey: 'non-commercial-and-evaluation'
+  });
+  Handsontable.hooks.add('afterChange', function() {
+    console.log(arguments);
+    m = hot.getData();
+    str = '[' + m[0].join(',') + ';' + m[1].join(',') + ';' + m[2].join(',') + ']'
+    $('#new_attachment_file').find('#attachment_file_affine_matrix_in_string').val(str);
+    console.log(str);
+  }, hot);
+
   (function($) {
     $("ul.surface-layer").sortable({
       connectWith: ".surface-layer",
@@ -120,7 +166,9 @@
           if (cindex == 0 && Number(positions[1]) > Number(position) ){
             insert_position = Number(positions[1]) + 1;
           } else {
-            if ( Number(position) < Number(positions[cindex + 1]) || Number(position) > Number(positions[cindex - 1])){
+            if ( Number(position) < Number(positions[cindex + 1])){
+              insert_position = positions[cindex + 1]
+            } else if (Number(position) > Number(positions[cindex - 1])){
               insert_position = positions[cindex - 1]
             }
           }
@@ -131,10 +179,23 @@
             $.ajax({
               url: 'images/' + image_id + '/insert_at.json',
               type: 'POST',
-              dataType: 'text',
+              dataType: 'json',
               data: { "position": insert_position },
-              success: function(){},
-              error: function(){}
+              success: function(data){ 
+                console.log(data)
+                for(let [k, v] of data.order.entries()){
+                  image_id = v[0]
+                  position = v[1]
+                  selector = 'li.surface-image[data-image-id="' + String(image_id) + '"]'
+                  elem = $(selector)
+                  if (!(elem.data("position") == position) ){
+                    console.log("update position!")
+                    elem.attr("data-position", String(position))
+                  }
+                }
+
+              },
+              error: function(){ console.log("error")}
             });
           }
         }
@@ -150,7 +211,8 @@
           type: 'POST',
           dataType: 'text',
           data: { "layer_id": $(event.target).data("id") },
-          success: function(){}
+          success: function(data){ console.log(data)},
+          error: function(){ console.log("error")}
         });
       }
     }).disableSelection();

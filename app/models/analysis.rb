@@ -13,6 +13,7 @@ class Analysis < ActiveRecord::Base
   belongs_to :specimen, touch: true
   belongs_to :device
   belongs_to :technique
+  belongs_to :fits_file, class_name: 'AttachmentFile'
 
   validates :specimen, existence: true, allow_nil: true
   validates :device, existence: true, allow_nil: true
@@ -135,7 +136,15 @@ class Analysis < ActiveRecord::Base
         end
       end
       unit = Unit.find_by(name: unit_name)
-      chemistries.build(measurement_item_id: measurement_item.id, value: value, unit_id: unit.try(:id))
+      chemistry = associate_chemistry_by_item_nickname(measurement_item_name)
+      if chemistry
+        chemistry.value = value
+        chemistry.unit_id = unit.try(:id)
+        chemistry.save if chemistry.persisted?
+        chemistry
+      else
+        chemistries.build(measurement_item_id: measurement_item.id, value: value, unit_id: unit.try(:id))
+      end
     end
   end
 
@@ -159,7 +168,12 @@ class Analysis < ActiveRecord::Base
   end
 
   def associate_chemistry_by_item_nickname(nickname)
-    chemistries.joins(:measurement_item).merge(MeasurementItem.where(nickname: nickname)).first
+    chemistry = chemistries.joins(:measurement_item).merge(MeasurementItem.where(nickname: nickname)).readonly(false).first
+    unless chemistry
+      measurement_item = MeasurementItem.where(nickname: nickname).first
+      chemistry = chemistries.to_a.find{|chem| chem.measurement_item_id == measurement_item.id } if measurement_item
+    end
+    chemistry
   end
 
   def self.to_castemls(objs)

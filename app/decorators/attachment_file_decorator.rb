@@ -59,6 +59,8 @@ class AttachmentFileDecorator < Draper::Decorator
 
   def picture_with_spots(width: 250, height: 250, spots: [], with_cross: false)
     return unless image?
+    return unless original_height
+    return unless original_width
     height_rate = original_height.to_f / height
     width_rate = original_width.to_f / width
     scale = (width_rate >= height_rate) ? 1.to_f/width_rate : 1.to_f/height_rate
@@ -220,7 +222,7 @@ class AttachmentFileDecorator < Draper::Decorator
     link
   end
 
-  def tree_node(current: false, current_type: false, in_list_include: false)
+  def tree_node(current: false, current_type: false, in_list_include: false, hash: nil)
     link = current ? h.content_tag(:strong, name) : name
     icon + h.link_to_if(h.can?(:read, self), link, self)
   end
@@ -289,9 +291,20 @@ class AttachmentFileDecorator < Draper::Decorator
   end
 
 
+  def matrix_form
+    h.form_for(self) do |form|
+      h.concat(h.content_tag(:div,nil,id:"affine_editor_#{self.id}"))
+      h.concat form.hidden_field :affine_matrix_in_string
+      h.concat(form.button(class: "btn btn-default") do
+        h.concat h.content_tag(:span, nil, class:"glyphicon glyphicon-save")
+      end)
+    end
+  end
+
   private
 
   def icon_with_count(klass, count)
     "#{klass}Decorator".constantize.icon + h.content_tag(:span, count) if count.nonzero?
   end
+
 end

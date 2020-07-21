@@ -1,4 +1,9 @@
 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+<div class="pull-left">
+place&nbsp;<%= link_to('quantity', quantity_history_specimen_path(@specimen))%>
+</div>
+</div>
+<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
   <% @specimen.paths.includes(:brought_in_by, :brought_out_by).each do |path| %>
   <% box = path.boxes.last %>
   <div class="panel panel-default">
@@ -6,7 +11,8 @@
       <%= content_tag(:h3, history_title(path), class: "panel-title" ) %> 
     </div>
     <div class="panel-body">
-      <%= timeline(path.brought_in_at, path.brought_out_at) %>
+      <div><%= timeline(path.brought_in_at, path.brought_out_at) %></div>
+      <div>description: <%= best_in_place path, :note, :as => :input, :place_holder => 'Clik me to edit.' %></div>
 
       <% if box %>
           <% links = [] %>
@@ -25,4 +31,4 @@
   <% end %>
 </div>
 
-<%= mantra "The upper record is the newer.", :title => "Boxes which contain <#{@specimen.name}>" %>
+<%= mantra "Newer record above.", :title => "Relocation history of <#{@specimen.name}>" %>

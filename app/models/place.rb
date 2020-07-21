@@ -66,6 +66,11 @@ class Place < ActiveRecord::Base
     end
   end
 
+  def as_json(options = {})
+    #super({:methods => [:global_id, :pmlame_ids]}.merge(options))
+    super({:methods => [:global_id]}.merge(options))
+  end
+
   def dms_value_to_f(dms_hash)
     return if dms_hash.nil?
     dms_hash.map { |k, v| k == :direction ? [k, v] : [k, v.to_f] }.to_h

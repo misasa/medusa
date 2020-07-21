@@ -967,7 +967,7 @@ describe SpecimenDecorator do
     describe "name_link" do
       let(:column_name){ "name" }
       it do
-        expect(subject).to eq("<a class=\" ghost\" href=\"/specimens/#{specimen.id}\"><span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span> specimen1 <small>&lt;#{specimen.global_id}&gt;</small> <span class=\"label label-danger\">pub</span></a>")
+        expect(subject).to eq("<a class=\" ghost\" href=\"/specimens/#{specimen.id}\"><span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span> specimen1 <span class=\"label label-danger\">pub</span></a>")
         #expect(subject).to eq("<a class=\" ghost\" href=\"/specimens/#{specimen.id}\">specimen1</a>")
       end
     end
@@ -1148,6 +1148,7 @@ describe SpecimenDecorator do
           + "<div class=\"tree-node\" data-depth=\"10\">"\
           + "<span class=\"glyphicon glyphicon-stats\"></span>"\
           + "<a href=\"/analyses/#{analysis.id}\">test_2</a>"\
+          + "<a data-target=\"#show-modal\" data-toggle=\"modal\" href=\"/analyses/#{analysis.id}.modal\"><span class=\"badge\">0</span></a>"\
           + "</div>"\
           + "</div>"
         )

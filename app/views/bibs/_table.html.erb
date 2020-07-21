@@ -3,6 +3,7 @@
     <tr>
       <th></th>
       <th>caption</th>
+      <th>ID</th>
       <th>assembly</th>
       <th><%= @alias_specimen %></th>
       <th></th>
@@ -13,6 +14,7 @@
       <tr>
         <td></td>
         <td><%= link_to_if can?(:read, table), list_title(table), table %></td>
+        <td><%= table.global_id %></td>
         <td><%= link_to table.measurement_category.try!(:name), edit_measurement_category_path(table.measurement_category) if table.measurement_category %></td>
         <td><%= table.specimens.count %></td>
         <td>
@@ -27,6 +29,7 @@
     <tr>
       <%= form_for Table.new, url: bib_tables_path(@bib, format: :json), remote: true, html: { class: "dinamic-message", role: "form" } do |f|%>
         <%= hidden_tabname_tag(__FILE__) %>
+        <th></th>
         <th></th>
         <th><%= f.text_field :caption, class: "form-control input-sm" %></th>
         <th><%= f.select :measurement_category_id, MeasurementCategory.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
@@ -46,4 +49,4 @@
     location.href="<%= bib_path(@bib, tab: "table") %>";
   });
 <% end %>
-<%= mantra "To create a new table, fill in the columns of caption and assembly.", :title => "Tables related to the bib" %>
+<%= mantra "To create new, fill fields and press save button.", :title => "Tables related to bibliography" %>
