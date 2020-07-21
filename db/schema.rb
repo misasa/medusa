@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200513040306) do
+ActiveRecord::Schema.define(version: 20200721063202) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -205,10 +205,11 @@ ActiveRecord::Schema.define(version: 20200513040306) do
   end
 
   create_table "measurement_categories", force: true, comment: "測定種別" do |t|
-    t.string  "name",        comment: "名称"
-    t.string  "description", comment: "説明"
-    t.integer "unit_id",     comment: "単位ID"
-    t.integer "scale",       comment: "有効精度"
+    t.string  "name",                                     comment: "名称"
+    t.string  "description",                              comment: "説明"
+    t.integer "unit_id",                                  comment: "単位ID"
+    t.integer "scale",                                    comment: "有効精度"
+    t.boolean "is_template", default: false, null: false
   end
 
   create_table "measurement_items", force: true, comment: "測定項目" do |t|

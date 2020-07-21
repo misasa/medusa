@@ -95,7 +95,7 @@
 <% if @analysis.chemistries.empty? %>
   <div>
   form for 
-  <% MeasurementCategory.pluck(:name, :id).each do |name, id| %>
+  <% MeasurementCategory.where(is_template:true).pluck(:name, :id).each do |name, id| %>
     <%= link_to name,multiple_new_analysis_chemistries_path(@analysis,measurement_category_id: id) %>
   <% end %>
   </div>
