@@ -9,6 +9,12 @@
     </div>
 
     <div>
+      <%= f.label :is_template %>
+      <%= f.check_box :is_template %>
+    </div>
+
+
+    <div>
       <%= f.label :unit_id %>
       <%= f.select :unit_id, @units.map{|r|[raw(r.html),r.id]}, { include_blank: "null" }, class: "form-control input-sm" %>
     </div>

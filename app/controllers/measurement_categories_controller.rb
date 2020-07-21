@@ -6,7 +6,7 @@ class MeasurementCategoriesController < ApplicationController
 
   def index
     @search = MeasurementCategory.search(params[:q])
-    @search.sorts = "updated_at ASC" if @search.sorts.empty?
+    @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @measurement_categories = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @measurement_categories
   end
@@ -64,6 +64,7 @@ class MeasurementCategoriesController < ApplicationController
   def measurement_category_params
     params.require(:measurement_category).permit(
       :name,
+      :is_template,
       :description,
       :unit_id,
       :scale,
