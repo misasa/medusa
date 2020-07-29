@@ -4,6 +4,7 @@ class RotateWorker
   def perform(image_id)
     # Do something
     image = AttachmentFile.find(image_id)
-    image.rotate
+    temp_path = image.rotate
+    File.delete(temp_path)
   end
 end
