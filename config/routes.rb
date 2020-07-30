@@ -296,6 +296,7 @@ Medusa::Application.routes.draw do
     member do
       get :property
       put :publish
+      put :refresh
     end
     resources :analyses, controller: "table_analyses"
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "place" }

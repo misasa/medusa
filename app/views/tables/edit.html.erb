@@ -24,6 +24,11 @@
     <% end %>
   </div>
   <div class="form-group form-group-sm">
+    <%= f.label :with_error, class: "checkbox-inline" do %>
+      <%= f.check_box :with_error %> show error
+    <% end %>
+  </div>
+  <div class="form-group form-group-sm">
     <label class="small">Place</label>
     <%= f.label :with_place, class: "checkbox-inline" do %>
       <%= f.check_box :with_place %>

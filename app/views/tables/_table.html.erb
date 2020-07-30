@@ -34,7 +34,14 @@
           <th><%== row.name(:html) %>  <%= raw "<sup>#{row.symbol}</sup>" if row.symbol.present? %></th>
           <th><%== row.unit.try!(:html) %></th>
           <% row.each do |cell| %>
-            <td><%= cell.value || "-" %> <%= raw "<sup>#{cell.symbol}</sup>" if !row.symbol.present? && cell.symbol.present? %></td>
+            <td>
+              <% if @table.with_error %>
+                <%= cell.value_with_error || "-" %>
+              <% else %>
+                <%= cell.value || "-" %>              
+              <% end %>
+              <%= raw "<sup>#{cell.symbol}</sup>" if !row.symbol.present? && cell.symbol.present? %>
+            </td>
           <% end %>
           <% if @table.with_average %>
             <td>

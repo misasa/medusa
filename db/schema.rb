@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200721063202) do
+ActiveRecord::Schema.define(version: 20200730010247) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -472,18 +472,19 @@ ActiveRecord::Schema.define(version: 20200721063202) do
   add_index "table_specimens", ["table_id"], name: "index_table_specimens_on_table_id", using: :btree
 
   create_table "tables", force: true, comment: "表" do |t|
-    t.integer  "bib_id",                  comment: "参考文献ID"
-    t.integer  "measurement_category_id", comment: "測定種別ID"
-    t.text     "caption",                 comment: "表題"
-    t.boolean  "with_average",            comment: "平均値表示フラグ"
-    t.boolean  "with_place",              comment: "場所表示フラグ"
-    t.datetime "created_at",              comment: "作成日時"
-    t.datetime "updated_at",              comment: "更新日時"
-    t.boolean  "with_age",                comment: "年代表示フラグ"
-    t.string   "age_unit",                comment: "年代単位"
-    t.text     "description",             comment: "説明"
-    t.integer  "age_scale",               comment: "有効精度"
+    t.integer  "bib_id",                                              comment: "参考文献ID"
+    t.integer  "measurement_category_id",                             comment: "測定種別ID"
+    t.text     "caption",                                             comment: "表題"
+    t.boolean  "with_average",                                        comment: "平均値表示フラグ"
+    t.boolean  "with_place",                                          comment: "場所表示フラグ"
+    t.datetime "created_at",                                          comment: "作成日時"
+    t.datetime "updated_at",                                          comment: "更新日時"
+    t.boolean  "with_age",                                            comment: "年代表示フラグ"
+    t.string   "age_unit",                                            comment: "年代単位"
+    t.text     "description",                                         comment: "説明"
+    t.integer  "age_scale",                                           comment: "有効精度"
     t.text     "data"
+    t.boolean  "with_error",              default: true, null: false
   end
 
   add_index "tables", ["bib_id"], name: "index_tables_on_bib_id", using: :btree
