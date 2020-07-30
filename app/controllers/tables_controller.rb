@@ -33,6 +33,12 @@ class TablesController < ApplicationController
     respond_with @table
   end
 
+  def refresh
+    #@table.publish!
+    TableRefreshWorker.perform_async(@table.id)
+    respond_with @table
+  end
+
   def property
     respond_with @table, layout: !request.xhr?
   end
@@ -53,6 +59,7 @@ class TablesController < ApplicationController
       :with_average,
       :with_place,
       :with_age,
+      :with_error,
       :age_unit,
       :age_scale,
       :description,

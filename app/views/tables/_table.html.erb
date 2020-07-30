@@ -1,7 +1,7 @@
 <%= form_for @table, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
   <table class="table table-condensed table-striped">
     <ul>
-      <li>assembly: <%= link_to @table.measurement_category.try!(:name), edit_measurement_category_path(@table.measurement_category) if @table.measurement_category %></li>
+      <li>rowname: <%= link_to @table.measurement_category.try!(:name), edit_measurement_category_path(@table.measurement_category) if @table.measurement_category %></li>
       <li>modified at <%= difference_from_now(@table.updated_at) -%></li>
     </ul>
     <thead>
@@ -34,7 +34,14 @@
           <th><%== row.name(:html) %>  <%= raw "<sup>#{row.symbol}</sup>" if row.symbol.present? %></th>
           <th><%== row.unit.try!(:html) %></th>
           <% row.each do |cell| %>
-            <td><%= cell.value || "-" %> <%= raw "<sup>#{cell.symbol}</sup>" if !row.symbol.present? && cell.symbol.present? %></td>
+            <td>
+              <% if @table.with_error %>
+                <%= cell.value_with_error || "-" %>
+              <% else %>
+                <%= cell.value || "-" %>              
+              <% end %>
+              <%= raw "<sup>#{cell.symbol}</sup>" if !row.symbol.present? && cell.symbol.present? %>
+            </td>
           <% end %>
           <% if @table.with_average %>
             <td>
