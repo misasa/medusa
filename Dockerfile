@@ -1,58 +1,93 @@
-FROM valian/docker-python-opencv-ffmpeg
-RUN pip install --upgrade pip
-RUN pip install git+https://github.com/misasa/image_mosaic.git
+#Node.js & Yarn
+FROM node:13.14-stretch as node
+FROM yyachi/ruby-fits:2.1.7 as ruby-fits 
 
-RUN apt-get update && apt-get install -y \
-apt-transport-https \
-curl \
+FROM ubuntu:bionic as build-env
+RUN apt-get update \
+&& apt-get -y install git curl make openssl zlib1g-dev libssl1.0-dev libreadline-dev build-essential \
+libpq-dev \
+#postgresql-client \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/*
-RUN curl -sL https://deb.nodesource.com/setup_13.x | bash -
-RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | apt-key add -
-RUN echo "deb https://dl.yarnpkg.com/debian/ stable main" | tee /etc/apt/sources.list.d/yarn.list
-RUN apt-get update && apt-get install -y \
-libpq-dev postgresql-client rsync libssl-dev \
-libreadline-gplv2-dev imagemagick nfs-common \
-nodejs yarn \
-zlib1g-dev \
-libbz2-dev \
-swig \
-&& apt-get clean \
-&& rm -rf /var/lib/apt/lists/*
-RUN wget https://www.ir.isas.jaxa.jp/~cyamauch/sli/sllib-1.4.5a.tar.gz
-RUN gzip -dc sllib-1.4.5a.tar.gz | tar xvf -
-RUN cd sllib-1.4.5a && make && make install32
-RUN wget https://www.ir.isas.jaxa.jp/~cyamauch/sli/sfitsio-1.4.5.tar.gz
-RUN gzip -dc sfitsio-1.4.5.tar.gz | tar xvf -
-RUN cd sfitsio-1.4.5 \
-&& sed -i 's/\!isfinite(\*/\!isfinite((float) \*/' fits_table_col.cc \
-&& sed -i 's/\!isfinite(\*/\!isfinite((float) \*/' fits_image.cc \
-&& make && make install32
-RUN git clone https://github.com/sstephenson/rbenv.git /opt/rbenv
-RUN git clone https://github.com/sstephenson/ruby-build.git /opt/rbenv/plugins/ruby-build
-RUN /opt/rbenv/plugins/ruby-build/install.sh
+RUN git clone https://github.com/sstephenson/rbenv.git /opt/rbenv \
+&& git clone https://github.com/sstephenson/ruby-build.git /opt/rbenv/plugins/ruby-build \
+&& /opt/rbenv/plugins/ruby-build/install.sh
 ENV PATH /opt/rbenv/bin:/opt/rbenv/shims:$PATH
 ENV RBENV_ROOT /opt/rbenv
-RUN echo 'export RBENV_ROOT="/opt/rbenv"' >> /etc/profile
-RUN echo 'export PATH="${RBENV_ROOT}/bin:${PATH}"' >> /etc/profile
-RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh
-RUN echo 'eval "$(rbenv init -)"' >> /etc/profile
-RUN sh /etc/profile.d/rbenv.sh
+RUN echo 'export RBENV_ROOT="/opt/rbenv"' >> /etc/profile \
+&& echo 'export PATH="${RBENV_ROOT}/bin:${PATH}"' >> /etc/profile \
+&& echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh \
+&& echo 'eval "$(rbenv init -)"' >> /etc/profile \
+&& sh /etc/profile.d/rbenv.sh \
+&& rbenv install 2.1.7 \
+&& rbenv global 2.1.7 \
+&& echo 'gem: --no-document' >> ~/.gemrc && cp ~/.gemrc /etc/gemrc && chmod uog+r /etc/gemrc \
+&& gem update --system 2.7.8
+WORKDIR /app
+COPY Gemfile Gemfile.lock /app/
+RUN bash -l -c 'bundle install'
 
-#RUN /root/.rbenv/plugins/ruby-build/install.sh
-#ENV PATH /root/.rbenv/bin:/root/.rbenv/shims:$PATH
+# deploy
+FROM yyachi/image_mosaic:0.1.9
+
+# Install Node.js and Yarn
+ENV YARN_VERSION 1.22.4
+RUN mkdir -p /opt
+COPY --from=node /opt/yarn-v$YARN_VERSION /opt/yarn
+COPY --from=node /usr/local/bin/node /usr/local/bin/
+COPY --from=node /usr/local/lib/node_modules/ /usr/local/lib/node_modules/
+RUN ln -s /opt/yarn/bin/yarn /usr/local/bin/yarn \
+  && ln -s /opt/yarn/bin/yarn /usr/local/bin/yarnpkg \
+  && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
+  && ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
+  && ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npx
+
+RUN apt-get update && apt-get install -y \
+#libpq-dev \
+postgresql-client \
+openssl \
+#rsync \
+#libssl-dev \
+#libssl-dev \
+#libreadline-gplv2-dev \
+imagemagick \
+#nfs-common \
+git curl \
+&& apt-get clean \
+&& rm -rf /var/lib/apt/lists/*
+#RUN git clone https://github.com/sstephenson/rbenv.git /opt/rbenv
+#RUN git clone https://github.com/sstephenson/ruby-build.git /opt/rbenv/plugins/ruby-build
+#RUN /opt/rbenv/plugins/ruby-build/install.sh
+#ENV PATH /opt/rbenv/bin:/opt/rbenv/shims:$PATH
+#ENV RBENV_ROOT /opt/rbenv
+#RUN echo 'export RBENV_ROOT="/opt/rbenv"' >> /etc/profile
+#RUN echo 'export PATH="${RBENV_ROOT}/bin:${PATH}"' >> /etc/profile
 #RUN echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh
-#RUN echo 'eval "$(rbenv init -)"' >> /root/.bashrc
+#RUN echo 'eval "$(rbenv init -)"' >> /etc/profile
 #RUN sh /etc/profile.d/rbenv.sh
-#ENV CONFIGURE_OPTS --disable-install-doc
-RUN rbenv install 2.1.7
-RUN rbenv global 2.1.7
-RUN echo 'gem: --no-document' >> ~/.gemrc && cp ~/.gemrc /etc/gemrc && chmod uog+r /etc/gemrc
-RUN gem update --system 2.7.8
 
-RUN git clone https://github.com/yuasatakayuki/RubyFits.git
-RUN mkdir -p RubyFits/swig/build && cd RubyFits/swig/build && cmake .. && make install
-RUN cp /root/lib/ruby/* /opt/rbenv/versions/2.1.7/lib/ruby/site_ruby/
+#RUN rbenv install 2.1.7
+#RUN rbenv global 2.1.7
+#RUN echo 'gem: --no-document' >> ~/.gemrc && cp ~/.gemrc /etc/gemrc && chmod uog+r /etc/gemrc
+#RUN gem update --system 2.7.8
+
+# install ruby
+COPY --from=build-env /opt/rbenv /opt/rbenv
+COPY --from=build-env /usr/lib/x86_64-linux-gnu/libcrypto.so.1.0.0 /usr/lib/x86_64-linux-gnu/libcrypto.so.1.0.0
+COPY --from=build-env /usr/lib/x86_64-linux-gnu/libssl.so.1.0.0 /usr/lib/x86_64-linux-gnu/libssl.so.1.0.0
+
+ENV PATH /opt/rbenv/bin:/opt/rbenv/shims:$PATH
+ENV RBENV_ROOT /opt/rbenv
+RUN echo 'export RBENV_ROOT="/opt/rbenv"' >> /etc/profile \
+&& echo 'export PATH="${RBENV_ROOT}/bin:${PATH}"' >> /etc/profile \
+&& echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh \
+&& echo 'eval "$(rbenv init -)"' >> /etc/profile \
+&& sh /etc/profile.d/rbenv.sh \
+&& rbenv global 2.1.7
+
+# install RubyFits
+COPY --from=ruby-fits /root/lib/ruby/RubyFits.rb /opt/rbenv/versions/2.1.7/lib/ruby/site_ruby/RubyFits.rb
+COPY --from=ruby-fits /root/lib/ruby/fits.so /opt/rbenv/versions/2.1.7/lib/ruby/site_ruby/fits.so
 
 ARG UID=1000
 ARG GID=1000
@@ -61,10 +96,9 @@ RUN addgroup -gid ${GID} medusa && useradd -m --home-dir /medusa --shell /bin/sh
  && mkdir -p /medusa/public/system /medusa/public/assets \
  && chown -R medusa:medusa /medusa/public
 
-#RUN mkdir -p /usr/src/app
 WORKDIR /medusa
 COPY Gemfile Gemfile.lock /medusa/
-RUN bash -l -c 'bundle install'
+#RUN bash -l -c 'bundle install'
 COPY package.json yarn.lock /medusa/
 RUN bash -l -c 'yarn install'
 COPY . /medusa
