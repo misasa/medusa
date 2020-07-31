@@ -12,6 +12,16 @@ describe Sesar do
     allow(geocoder_obj).to receive(:state).and_return(geocoder_response['address']['state'])
     allow(geocoder_obj).to receive(:city).and_return(geocoder_response['address']['city'])
     allow(Geocoder).to receive(:search).and_return([geocoder_obj])
+    sesar_settings = double('Sesar_settings')
+    external_url = double('external_url')
+    allow(external_url).to receive(:url).and_return('http://dream.misasa.okayama-u.ac.jp/?q=#{global_id}')
+    allow(external_url).to receive(:description).and_return(nil)
+    allow(external_url).to receive(:url_type).and_return("regular URL")
+    allow(sesar_settings).to receive(:user_code).and_return("1111")
+    allow(sesar_settings).to receive(:archive_name).and_return("Institute for Study of the Earth's Interior Okayama University")
+    allow(sesar_settings).to receive(:archive_contact).and_return("tkk@misasa.okayama-u.ac.kp")
+    allow(sesar_settings).to receive(:external_urls).and_return([external_url])
+    allow(Settings).to receive(:sesar).and_return(sesar_settings)
   end
 
   describe ".sync" do
