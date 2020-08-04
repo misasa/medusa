@@ -68,8 +68,10 @@ class TableDecorator < Draper::Decorator
               #h.concat h.raw(" ")
               #h.concat self.caption
               h.concat self.name_with_id
-              h.concat h.raw(" ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
-              h.concat h.raw(" ") + h.link_to_if(h.can?(:read, self.bib), h.raw(self.bib.decorate.author_short_year), self.bib)
+              if self.bib
+                h.concat h.raw(" ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+                h.concat h.raw(" ") + h.link_to_if(h.can?(:read, self.bib), h.raw(self.bib.decorate.author_short_year), self.bib)
+              end
             end
           )
         end
