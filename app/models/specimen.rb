@@ -163,7 +163,7 @@ class Specimen < ActiveRecord::Base
   end
 
   def full_tables
-    Table.where(id: TableSpecimen.where(specimen_id: family_ids).pluck(:table_id)).includes({table_specimens: [:specimen]})
+    Table.where(id: TableSpecimen.where(specimen_id: family_ids).pluck(:table_id)).includes({table_specimens: [:specimen]}).order(:caption)
   end
 
   def whole_family_analyses
