@@ -72,7 +72,7 @@ class TableDecorator < Draper::Decorator
                 h.concat h.raw(" in ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
                 h.concat h.raw(" ") + h.link_to_if(h.can?(:read, self.bib), h.raw(self.bib.decorate.author_short_year), self.bib)
               end
-              h.concat h.link_to(h.difference_from_now(self.updated_at), h.refresh_table_path(self), title: "refresh preview for '#{self.name}'", class: "small pull-right", method: :put, remote: true)
+              h.concat h.link_to("updated at #{h.difference_from_now(self.updated_at)}", h.refresh_table_path(self), title: "refresh preview for '#{self.name}'", class: "small pull-right", method: :put, remote: true)
             end
           )
         end
