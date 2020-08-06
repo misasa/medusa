@@ -63,7 +63,7 @@ class TableDecorator < Draper::Decorator
       h.concat(
         h.content_tag(:span, class: "panel-title pull-left") do
           h.concat(
-              h.content_tag(:a, href: "#tableAccordionCollapse-#{self.id}", data: {toggle: "collapse"}, 'aria-expanded' => false, 'aria-control' => "tableAccordionCollapse-#{self.id}", title: "fold table '#{self.caption}'") do
+              h.content_tag(:a, href: "#tableAccordionCollapse-#{self.id}", data: {toggle: "collapse"}, 'aria-expanded' => false, 'aria-control' => "tableAccordionCollapse-#{self.id}", title: "fold or unfold '#{self.caption}'") do
               #h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list")
               #h.concat h.raw(" ")
               #h.concat self.caption
@@ -72,7 +72,7 @@ class TableDecorator < Draper::Decorator
                 h.concat h.raw(" in ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
                 h.concat h.raw(" ") + h.link_to_if(h.can?(:read, self.bib), h.raw(self.bib.decorate.author_short_year), self.bib)
               end
-              h.concat h.link_to("updated at #{h.difference_from_now(self.updated_at)}", h.refresh_table_path(self), title: "refresh preview for '#{self.name}'", class: "small pull-right", method: :put, remote: true)
+              h.concat h.link_to("refreshed at #{h.difference_from_now(self.updated_at)}", h.refresh_table_path(self), title: "refresh '#{self.name}'", class: "small pull-right", method: :put, remote: true)
             end
           )
         end
