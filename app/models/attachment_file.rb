@@ -142,6 +142,7 @@ class AttachmentFile < ActiveRecord::Base
     p_um = pixels_per_um
     new_geometry = [(b_w * p_um).ceil, (b_h * p_um).ceil]
     logger.info("new_geometry: #{new_geometry}")
+    puts("new_geometry: #{new_geometry}")
 
     corners_on_new_image = []
     corners_on_world.each do |corner|
@@ -161,6 +162,7 @@ class AttachmentFile < ActiveRecord::Base
     array_str = corners_on_new_image.to_s.gsub(/\s+/,"")
     
     line = Terrapin::CommandLine.new("image_in_image", "#{image_1} #{image_2} #{array_str} -p nearest -o #{image_2}", logger: logger)
+    puts(line.command)
     line.run
     return image_2
   end

@@ -28,7 +28,7 @@ COPY Gemfile Gemfile.lock /app/
 RUN bash -l -c 'bundle install'
 
 # deploy
-FROM yyachi/image_mosaic:0.1.9
+FROM yyachi/image_mosaic:0.2.0
 
 # Install Node.js and Yarn
 ENV YARN_VERSION 1.22.4

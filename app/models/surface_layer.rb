@@ -73,6 +73,41 @@ class SurfaceLayer < ActiveRecord::Base
     end
   end
 
+
+  def make_tiles_cmd(options = {})
+    maxzoom = options[:maxzoom] || self.max_zoom_level || self.original_zoom_level
+    transparent = options.has_key?(:transparent) ? options[:transparent] : true
+    transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
+    args = []
+    surface_images.reverse.each_with_index do |surface_image, index|
+      if surface_image.wall
+        next
+      end
+      next if surface_image.image.fits_file?
+      image_path = surface_image.image_path
+      next unless File.exist?(image_path)
+      args << image_path
+      args << surface_image.corners_on_world_str("%.2f")
+    end
+    return if args.empty?
+    cmd = args.join(" ")
+    ce = surface.center
+    if ce && ce.size == 2
+      center_str = sprintf("[%.2f,%.2f]", ce[0], ce[1])
+      length_str = sprintf("%.2f", surface.length)
+      cmd += " #{length_str} #{center_str} -o #{tile_dir} -z #{maxzoom}"
+    end
+    cmd += " -t" if transparent
+    cmd += " #{transparent_color}" if transparent_color
+    cmd
+    line = Terrapin::CommandLine.new("make_tiles", cmd, logger: logger)
+  end
+
+  def make_tiles(options = {})
+    line = make_tiles_cmd(options)
+    line.run
+  end
+  
   def merge_tiles
     clean_tiles
     surface_images.reverse.each do |surface_image|
