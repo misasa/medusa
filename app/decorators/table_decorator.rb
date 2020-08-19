@@ -63,12 +63,16 @@ class TableDecorator < Draper::Decorator
       h.concat(
         h.content_tag(:span, class: "panel-title pull-left") do
           h.concat(
-              h.content_tag(:a, href: "#tableAccordionCollapse-#{self.id}", data: {toggle: "collapse"}, 'aria-expanded' => false, 'aria-control' => "tableAccordionCollapse-#{self.id}", title: "fold table '#{self.caption}'") do
-              h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list")
-              h.concat h.raw(" ")
-              h.concat self.caption
-              h.concat h.raw(" ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
-              h.concat h.raw(" ") + h.link_to_if(h.can?(:read, self.bib), h.raw(self.bib.decorate.author_short_year), self.bib)
+              h.content_tag(:a, href: "#tableAccordionCollapse-#{self.id}", data: {toggle: "collapse"}, 'aria-expanded' => false, 'aria-control' => "tableAccordionCollapse-#{self.id}", title: "fold or unfold '#{self.caption}'") do
+              #h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list")
+              #h.concat h.raw(" ")
+              #h.concat self.caption
+              h.concat self.name_with_id
+              if self.bib
+                h.concat h.raw(" in ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+                h.concat h.raw(" ") + h.link_to_if(h.can?(:read, self.bib), h.raw(self.bib.decorate.author_short_year), self.bib)
+              end
+              h.concat h.link_to("refreshed at #{h.difference_from_now(self.updated_at)}", h.refresh_table_path(self), title: "refresh '#{self.name}'", class: "small pull-right", method: :put, remote: true)
             end
           )
         end
@@ -79,7 +83,9 @@ class TableDecorator < Draper::Decorator
 
   def panel_foot
     h.content_tag(:div, class: "panel-footer") do
-      h.concat h.raw("")
+      h.concat h.link_to(h.content_tag(:span, nil, class:"glyphicon glyphicon-refresh"), h.refresh_table_path(self), title: "refresh preview for '#{self.name}'", class: "btn btn-default", method: :put, remote: true)
+      h.concat h.raw(" ")
+      h.concat h.content_tag(:span, "updated at #{h.difference_from_now(self.updated_at)}")
     end
   end
 
@@ -88,9 +94,9 @@ class TableDecorator < Draper::Decorator
     self.table_specimens.each.with_index(1) do |ts, idx|
       specimen = ts.specimen
       if fids.include?(specimen.id)
-        l << h.link_to(h.content_tag(:span, "#{idx}: " + specimen.name, class: "label label-primary"), h.specimen_path(specimen))
+        l << h.content_tag(:span, "#{idx}: " + specimen.name, id:"select_row_#{idx}_in_table_#{self.id}", class: "label label-primary")
       else
-        l << h.link_to(h.content_tag(:span, "#{idx}: " + specimen.name, class: "label label-default"), h.specimen_path(specimen))
+        l << h.content_tag(:span, "#{idx}: " + specimen.name, id:"select_row_#{idx}_in_table_#{self.id}", class: "label label-default")
       end
     end
     h.content_tag(:div, class: "panel-body collapse in", id: "tableAccordionCollapse-#{self.id}") do
@@ -102,16 +108,29 @@ class TableDecorator < Draper::Decorator
           h.concat h.content_tag(:div, h.content_tag(:span, h.raw("(#{m[:sign]}) #{m[:description]}")))
         end
       end
+      #h.concat h.content_tag(:span, "updated at " + h.difference_from_now(self.updated_at))
     end
   end
   
   def table_js
     m = self.data[:m]
     return unless m
+    bs = []
+    self.table_specimens.each.with_index(1) do |ts, idx|
+      code = <<EOS
+      var select_row_#{idx}_in_table_#{self.id} = document.getElementById('select_row_#{idx}_in_table_#{self.id}');
+      Handsontable.dom.addEvent(select_row_#{idx}_in_table_#{self.id}, 'click', function () {
+        thot_#{self.id}.selectCell(0, #{idx+1});
+      });
+EOS
+      bs << code      
+    end
+
     m[0] = ["",""].concat( self.table_specimens.map.with_index(1){|ts, idx| h.link_to(h.content_tag(:span, "#{idx}", class:"label label-default"), h.specimen_path(ts.specimen), title: "#{ts.specimen.name}") } ) if m
     h.javascript_tag do
       code = <<EOS
-      var thot_#{self.id} = new Handsontable(document.getElementById("table_#{self.id}"), {
+      var container = document.getElementById("table_#{self.id}");
+      var thot_#{self.id} = new Handsontable(container, {
         data: #{m.to_json},
         columns: [#{ "{ renderer: 'html'}," * m[0].length }],
         licenseKey: 'non-commercial-and-evaluation',
@@ -122,10 +141,10 @@ class TableDecorator < Draper::Decorator
         fixedColumnsLeft: 2      
         //rowHeaders: true,
         //colHeaders: true
-      });      
+      });
+      #{bs.join}
 EOS
       h.concat h.raw(code)
-      h.concat h.raw("console.log('hello table');")  
     end
   end
 

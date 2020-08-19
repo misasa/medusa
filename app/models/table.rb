@@ -165,10 +165,32 @@ class Table < ActiveRecord::Base
       return unless present?
       @raw ||= Alchemist.measure(chemistry.value, chemistry.unit.name.to_sym).to(row.unit.name.to_sym).value
     end
+    def raw_error
+      return unless present?
+      return unless chemistry.uncertainty
+      @raw_error ||= Alchemist.measure(chemistry.uncertainty, chemistry.unit.name.to_sym).to(row.unit.name.to_sym).value
+    end
 
     def value
       return unless present?
       @value ||= raw.round(row.scale)
+    end
+
+    def value_with_error
+      return unless present?
+      @value ||= raw.round(row.scale)
+      @error = raw_error
+      if raw_error
+        @error = @error.round(row.scale)
+        "#{@value} (#{@error})"
+      else
+        @value
+      end
+    end
+
+    def error
+      return unless present?
+      @error ||= raw_error.round(row.scale)
     end
 
     def symbol
@@ -412,7 +434,11 @@ class Table < ActiveRecord::Base
       l << name
       l << row.unit.try!(:html)
       row.each{|cell|
-        str = ( cell.value ? cell.value.to_s : "-")
+        if self.with_error
+          str = ( cell.value_with_error ? cell.value_with_error.to_s : "-")
+        else
+          str = ( cell.value ? cell.value.to_s : "-")
+        end
         str += "<sup>#{cell.symbol}</sup>" if !row.symbol.present? && cell.symbol.present?;
         l << str
       };nil

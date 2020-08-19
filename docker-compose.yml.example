@@ -5,6 +5,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
   redis:
+<<<<<<< HEAD
     image: redis:4.0
   app:
     #build: .
@@ -20,29 +21,68 @@ services:
       - ./config:/usr/src/app/config
       - ./public:/usr/src/app/public
       - stone_data:/mnt/database
+=======
+    image: redis:4.0  
+  app:
+    build:
+      context: .
+      args:
+        UID: 1000
+        GID: 1000
+    working_dir: /medusa
+    environment:
+      - "RAILS_ENV=development"
+      - "REDIS_URL=redis://redis:6379"    
+    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    volumes:
+      - ./app:/medusa/app
+      - ./spec:/medusa/spec
+      - ./config:/medusa/config
+      - ./public:/medusa/public
+      - ./db:/medusa/db
+>>>>>>> upstream/master
     ports:
       - "3000:3000"
     depends_on:
       - postgres
       - redis
   worker:
+<<<<<<< HEAD
     image: misasa/medusa:latest
     working_dir: /usr/src/app
+=======
+    build:
+      context: . 
+      args:
+        UID: 1000
+        GID: 1000
+    working_dir: /medusa
+>>>>>>> upstream/master
     environment:
       - "RAILS_ENV=development"
       - "REDIS_URL=redis://redis:6379"      
     volumes:
+<<<<<<< HEAD
       - ./config:/usr/src/app/config
       - ./public/system:/usr/src/app/public/system
+=======
+      - ./app:/medusa/app
+      - ./config:/medusa/config
+      - ./public/system:/medusa/public/system
+>>>>>>> upstream/master
     command: bundle exec sidekiq
     links:
       - postgres
       - redis
 volumes:
   postgres_data:
+<<<<<<< HEAD
     external: true
   stone_data:
     driver_opts:
       type: nfs
       o: "addr=172.24.1.36,nfsvers=4"
       device: ":/"
+=======
+    external: true
+>>>>>>> upstream/master

@@ -15,12 +15,17 @@
     </div>
   </div>
   <div class="form-group form-group-sm">
-    <%= f.label "assembly", class: "small" %>
+    <%= f.label "rowname", class: "small" %>
     <%= f.select :measurement_category_id, MeasurementCategory.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
     <%= f.label :with_average, class: "checkbox-inline" do %>
       <%= f.check_box :with_average %> show average
+    <% end %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label :with_error, class: "checkbox-inline" do %>
+      <%= f.check_box :with_error %> show error
     <% end %>
   </div>
   <div class="form-group form-group-sm">
