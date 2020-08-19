@@ -218,7 +218,8 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def make_tiles(options = {})
-    return if image.affine_matrix.blank?
+    return if image.fits_file?
+    return if image.affine_matrix.blank?	  
     make_warped_image
     raise "#{warped_image_path} does not exists." unless File.exists?(warped_image_path)
     line = make_tiles_cmd(options)
