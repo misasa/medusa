@@ -12,7 +12,7 @@ class LayerMergeWorker
       total n
       surface_layer.clean_tiles
       surface_layer.surface_images.reverse.each_with_index do |surface_image, index|
-        if surface_image.wall
+        if surface_image.wall || surface_image.image.fits_file?
           at index, "#{surface_layer.name}/#{surface_image.image.name} ... (skipped)"
           next
         end
