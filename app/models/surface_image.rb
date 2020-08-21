@@ -77,6 +77,11 @@ class SurfaceImage < ActiveRecord::Base
     end
   end
 
+  def corners_on_world_str(fmt = '%.2f')
+    return unless corners_on_world
+    cos = corners_on_world
+    return "[" + cos.map{|co| "[#{co.map{|i| sprintf(fmt,i)}.join(",")}]"}.join(",") + "]"
+  end
 
   def corners_on_world
     return unless image
@@ -138,6 +143,11 @@ class SurfaceImage < ActiveRecord::Base
     #return unless image
     #image.local_path(:warped)
     local_path
+  end
+
+  def image_path
+    return unless image
+    image.local_path
   end
 
   def tile_image_path(z,x,y, opts = {})
@@ -223,7 +233,6 @@ class SurfaceImage < ActiveRecord::Base
     make_warped_image
     raise "#{warped_image_path} does not exists." unless File.exists?(warped_image_path)
     line = make_tiles_cmd(options)
-    logger.info(line)
     line.run
   end
 
@@ -232,6 +241,8 @@ class SurfaceImage < ActiveRecord::Base
     return unless layer
     return unless tiled?
     line = merge_tiles_cmd(options)
+    logger.info(line.command)
+    puts line.command
     line.run
   end
 
@@ -262,6 +273,7 @@ class SurfaceImage < ActiveRecord::Base
   def clean_tiles(options = {})
     if Dir.exists?(tile_dir)
       line = Terrapin::CommandLine.new("rm", "-r :tile_dir", logger: logger)
+      puts line.command
       line.run(tile_dir: tile_dir)
     end
   end
@@ -269,6 +281,7 @@ class SurfaceImage < ActiveRecord::Base
   def clean_warped_image(options = {})
     if warped_image_path && File.exists?(warped_image_path)
       line = Terrapin::CommandLine.new("rm", "-f :image_path", logger: logger)
+      puts line.command
       line.run(image_path: warped_image_path)  
     end
   end
@@ -290,14 +303,17 @@ class SurfaceImage < ActiveRecord::Base
     end
     transparent = options.has_key?(:transparent) ? options[:transparent] : true
     transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
-    image_path = warped_image_path
-    bs = image.bounds
+    #image_path = self.image_path
+    return if image.fits_file?
+    return unless File.exist?(image_path)
+    cos = image.corners_on_world
     ce = surface.center
-    if bs && bs.size == 4 && ce && ce.size == 2
-      bounds_str = sprintf("[%.2f,%.2f,%.2f,%.2f]", bs[0], bs[1], bs[2], bs[3])
+    if cos && cos.size == 4 && ce && ce.size == 2
+      #bounds_str = sprintf("[%.2f,%.2f,%.2f,%.2f]", bs[0], bs[1], bs[2], bs[3])
+      corners_str = corners_on_world_str
       center_str = sprintf("[%.2f,%.2f]", ce[0], ce[1])
       length_str = sprintf("%.2f", surface.length)
-      cmd = "#{image_path} #{bounds_str} #{length_str} #{center_str} -o #{tile_dir} -z #{maxzoom}"
+      cmd = "#{image_path} #{corners_str} #{length_str} #{center_str} -o #{tile_dir} -z #{maxzoom}"
     end
     cmd += " -t" if transparent
     cmd += " #{transparent_color}" if transparent_color

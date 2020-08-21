@@ -7,23 +7,43 @@ class SurfaceTileWorker
     n = surface.surface_images.size
     n_pos = surface.surface_images.pluck(:position).uniq.count 
 
-    total n
     if n_pos < n
       at 0, "reordering images..."
       surface.reorder_images
     end
-    surface.surface_layers.each do |surface_layer|
-      surface_layer.clean_tiles
-    end
-    surface.surface_images.reverse.each_with_index do |surface_image, index|
+    n = surface.base_surface_images.count + surface.top_surface_images.count + surface.surface_layers.count
+    total n
+    index = 1
+    surface.wall_surface_images.reverse.each_with_index do |surface_image, idx|
       at index, "processing #{surface.name}/#{surface_image.image.name} ... (#{index + 1}/#{n})"
       surface_image.clean_tiles
-      surface_image.clean_warped_image
-      surface_image.make_tiles(opts)
-      if surface_image.surface_layer
-        surface_image.merge_tiles unless surface_image.wall
-      end
+      line = surface_image.make_tiles_cmd(opts)
+      next unless line
+      logger.info(line.command)
+      line.run
+      index += 1
     end
+
+    surface.surface_layers.reverse.each_with_index do |surface_layer, idx|
+      at index, "processing #{surface.name}/#{surface_layer.name} ... (#{index + 1}/#{n})"
+      surface_layer.clean_tiles
+      line = surface_layer.make_tiles_cmd(opts)
+      next unless line
+      logger.info(line.command)
+      line.run
+      index += 1
+    end
+
+    surface.top_surface_images.reverse.each_with_index do |surface_image, idx|
+      at index, "processing #{surface.name}/#{surface_image.image.name} ... (#{index + 1}/#{n})"
+      surface_image.clean_tiles
+      line = surface_image.make_tiles_cmd(opts)
+      next unless line
+      logger.info(line.command)
+      line.run
+      index += 1
+    end
+
     at n, "Tile making job for #{surface.name} is done."
   end
 end

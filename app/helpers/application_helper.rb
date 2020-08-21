@@ -1,4 +1,12 @@
 module ApplicationHelper
+  def product_version
+    "Medusa v#{Medusa::Application.version}"
+  end
+
+  def server_utc_time
+    Time.now.utc.strftime("%H:%M:%S UTC")
+  end
+
   def mantra(msg, opts = {})
     title = opts[:title] || "guide"
     popover_button(title, msg, opts)
@@ -11,7 +19,7 @@ module ApplicationHelper
   end
 
   def popover_info_sign(title, msg, opts = {})
-    content_tag(:a, title: title, data:{toggle: "popover", content: msg, placement: "right"}) do
+    content_tag(:a, title: title, data:{toggle: "popover", content: msg, placement: "auto", trigger: "hover"}) do
       content_tag(:span, nil, class:"glyphicon glyphicon-info-sign")
     end
   end
