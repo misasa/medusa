@@ -28,8 +28,8 @@ COPY Gemfile Gemfile.lock /app/
 RUN bash -l -c 'bundle install'
 
 # deploy
-FROM misasa/image_mosaic:release-0.2.2
-
+FROM misasa/image_mosaic:release-0.2.4
+#FROM yyachi/image_mosaic:0.2.4
 # Install Node.js and Yarn
 ENV YARN_VERSION 1.22.4
 RUN mkdir -p /opt
