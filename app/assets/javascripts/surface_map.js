@@ -177,6 +177,13 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
                   glayer.setColorScale(value);
                 }
               }
+              url = obj.layer.getLayers()[0].options.resource_url + '.json';
+              $.ajax(url,{
+                type: 'PUT',
+                data: {surface_layer: {color_scale: value}},
+                complete: function(e){ console.log('ok'); },
+                error: function(e) { console.log(e); }
+              });      
             }
             detail.appendChild(select);
 
@@ -195,7 +202,14 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
                 // safe to use the function
                   glayer.setDisplayRange(min, max);
                 }
-              }        
+              }
+              url = obj.layer.getLayers()[0].options.resource_url + '.json';
+              $.ajax(url,{
+                type: 'PUT',
+                data: {surface_layer: {display_min: min}},
+                complete: function(e){ console.log('ok'); },
+                error: function(e) { console.log(e); }
+              });      
             }
             detail.appendChild(displayMin);
 
@@ -213,7 +227,14 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
                 // safe to use the function
                   glayer.setDisplayRange(min, max);
                 }
-              }        
+              }
+              url = obj.layer.getLayers()[0].options.resource_url + '.json';
+              $.ajax(url,{
+                type: 'PUT',
+                data: {surface_layer: {display_max: max}},
+                complete: function(e){ console.log('ok'); },
+                error: function(e) { console.log(e); }
+              });      
             }
             detail.appendChild(displayMax);
 
@@ -338,7 +359,7 @@ L.Control.OpacityLayers = L.Control.Layers.extend({
           error: function(e) { console.log(e); }
         });
       }
-    },
+    },    
     _onOpacityChanged: function (obj, opacity){
       //console.log("OpacityChanged.");
       opacity = parseFloat(opacity) * 100;

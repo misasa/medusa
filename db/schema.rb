@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20200730010247) do
+ActiveRecord::Schema.define(version: 20201005044747) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -431,6 +431,9 @@ ActiveRecord::Schema.define(version: 20200730010247) do
     t.datetime "updated_at"
     t.integer  "max_zoom_level"
     t.boolean  "visible",        default: true, null: false
+    t.string   "color_scale"
+    t.float    "display_min"
+    t.float    "display_max"
   end
 
   add_index "surface_layers", ["surface_id", "name"], name: "index_surface_layers_on_surface_id_and_name", unique: true, using: :btree

@@ -32,7 +32,35 @@ class BoxDecorator < Draper::Decorator
   end
 
   def primary_picture(width: 250, height: 250)
-    attachment_files.first.decorate.picture(width: width, height: height) if attachment_files.present?
+    #attachment_files.first.decorate.picture(width: width, height: height) if attachment_files.present?
+    picture_file = nil
+    atts = attachings.where(attachable_type: "Box").order("position ASC")
+    atts.each do |attaching|
+      attachment_file = attaching.attachment_file
+      if attachment_file.image?
+        picture_file = attachment_file
+        break
+      end
+    end
+    if picture_file
+      picture_file.decorate.picture(width: width, height: height)
+    end
+  end
+
+
+  def primary_picture_with_link(width: 250, height: 250)
+    picture_file = nil
+    atts = attachings.where(attachable_type: "Box").order("position ASC")
+    atts.each do |attaching|
+      attachment_file = attaching.attachment_file
+      if attachment_file.image?
+        picture_file = attachment_file
+        break
+      end
+    end
+    if picture_file
+      h.link_to(picture_file.decorate.picture(width: width, height: height), h.attachment_file_path(picture_file), class: h.specimen_ghost(self))
+    end
   end
 
   def family_tree
@@ -187,7 +215,7 @@ class BoxDecorator < Draper::Decorator
     lines << ["#{alias_specimen} name", "ID", "remark"].join("\t&\t") + "\\\\"
     lines << '\hline'
     specimens.each do |specimen|
-      lines << [specimen.name, specimen.global_id, ""].join("\t&\t") + "\\\\"
+      lines << [specimen.name, specimen.global_id, specimen.try!(:description)].join(" & ") + "\\\\"
     end
     lines << '\hline'
     lines << '\end{tabular}'

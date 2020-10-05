@@ -1,10 +1,8 @@
-<%# cache @specimen do %>
 <div>
   <% if @specimen.attachment_files.present? %>
-    <%= link_to(@specimen.primary_picture, attachment_file_path(@specimen.attachment_files.first), class: specimen_ghost(@specimen)) %>
+    <%= @specimen.primary_picture_with_link %>
   <% end %>
 </div>
 <div id="family-tree">
   <%= @specimen.family_tree %>
 </div>
-<%# end %>
