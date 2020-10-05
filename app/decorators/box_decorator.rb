@@ -187,7 +187,7 @@ class BoxDecorator < Draper::Decorator
     lines << ["#{alias_specimen} name", "ID", "remark"].join("\t&\t") + "\\\\"
     lines << '\hline'
     specimens.each do |specimen|
-      lines << [specimen.name, specimen.global_id, ""].join("\t&\t") + "\\\\"
+      lines << [specimen.name, specimen.global_id, specimen.try!(:description)].join(" & ") + "\\\\"
     end
     lines << '\hline'
     lines << '\end{tabular}'
