@@ -98,6 +98,9 @@ class SurfaceLayersController < ApplicationController
     params.require(:surface_layer).permit(
       :name,
       :opacity,
+      :color_scale,
+      :display_min,
+      :display_max,
       :max_zoom_level,
       :visible,
       :priority
