@@ -1,6 +1,6 @@
 <div>
   <% if @box.attachment_files.present? %>
-    <%= link_to(@box.primary_picture, attachment_file_path(@box.attachment_files.first)) %>
+    <%= @box.primary_picture_with_link %>
   <% end %>
 </div>
 <div id="family-tree">
