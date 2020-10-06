@@ -76,7 +76,7 @@ class SurfaceDecorator < Draper::Decorator
       else
         layer_group_name = s_image.surface_layer.try!(:name) || 'top'
         h_images[layer_group_name] = [] unless h_images.has_key?(layer_group_name)
-        h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: s_image.image.bounds, max_zoom: a_zooms[index], fits_file: s_image.image.fits_file?, corners: s_image.corners_on_world, path: h.asset_url(s_image.image.data.url)}
+        h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: s_image.image.bounds, max_zoom: a_zooms[index], fits_file: s_image.image.fits_file?, corners: s_image.corners_on_world, path: s_image.image.path}
       end
     end
     {
