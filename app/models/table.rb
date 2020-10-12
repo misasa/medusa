@@ -409,12 +409,12 @@ class Table < ActiveRecord::Base
     if self.with_place
       l = ["latitude",""]
       self.specimens.each do |specimen|
-        l << (specimen.place.try!(:latitude_to_html) ? specimen.place.try!(:latitude_to_html) : "-")
+        l << (specimen.rplace.try!(:latitude_to_html) ? specimen.rplace.try!(:latitude_to_html) : "-")
       end
       a << l
       l = ["longitude",""]
       self.specimens.each do |specimen|
-        l << (specimen.place.try!(:longitude_to_html) ? specimen.place.try!(:longitude_to_html) : "-")
+        l << (specimen.rplace.try!(:longitude_to_html) ? specimen.rplace.try!(:longitude_to_html) : "-")
       end
       a << l
     end
