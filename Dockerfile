@@ -72,8 +72,8 @@ git curl \
 #RUN gem update --system 2.7.8
 
 # enable ghostscript format types 
-RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
-
+#RUN sed -i '/disable ghostscript format types/,+6d' /etc/ImageMagick-6/policy.xml
+COPY ImageMagick-6-policy.xml /etc/ImageMagick-6/policy.xml
 # install ruby
 COPY --from=build-env /opt/rbenv /opt/rbenv
 COPY --from=build-env /usr/lib/x86_64-linux-gnu/libcrypto.so.1.0.0 /usr/lib/x86_64-linux-gnu/libcrypto.so.1.0.0
