@@ -17,8 +17,8 @@
 
         </li>
       <% end %>
-      <% if @specimen.place %>
-        <% place = @specimen.place.decorate %>
+      <% if @specimen.rplace %>
+        <% place = @specimen.rplace.decorate %>
         <li>
           place: <%= raw(place.try!(:latitude_to_html)) + ", " + raw(place.try!(:longitude_to_html)) %> <%= link_to "more", place_path(place) %>
         </li>
