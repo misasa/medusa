@@ -83,10 +83,21 @@ class SurfaceImage < ActiveRecord::Base
     return "[" + cos.map{|co| "[#{co.map{|i| sprintf(fmt,i)}.join(",")}]"}.join(",") + "]"
   end
 
+  def corners_on_image_str(fmt = '%.2f')
+    return unless corners_on_image
+    cos = corners_on_image
+    return "[" + cos.map{|co| "[#{co.map{|i| sprintf(fmt,i)}.join(",")}]"}.join(",") + "]"
+  end
+
   def corners_on_world
     return unless image
     return image.corners_on_world if calibrated?
     return surface.initial_corners_for(image)
+  end
+
+  def corners_on_image
+    return unless image
+    return image.corners_on_image
   end
 
   def width

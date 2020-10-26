@@ -78,6 +78,7 @@ class SurfaceLayer < ActiveRecord::Base
     maxzoom = options[:maxzoom] || self.max_zoom_level || self.original_zoom_level
     transparent = options.has_key?(:transparent) ? options[:transparent] : true
     transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
+    multi  = options.has_key?(:multi) ? options[:multi] : 4
     args = []
     surface_images.reverse.each_with_index do |surface_image, index|
       if surface_image.wall
@@ -99,6 +100,7 @@ class SurfaceLayer < ActiveRecord::Base
     end
     cmd += " -t" if transparent
     cmd += " #{transparent_color}" if transparent_color
+    cmd += " --multi #{multi}" if multi
     cmd
     line = Terrapin::CommandLine.new("make_tiles", cmd, logger: logger)
   end
@@ -113,6 +115,26 @@ class SurfaceLayer < ActiveRecord::Base
     surface_images.reverse.each do |surface_image|
       next if surface_image.wall
       surface_image.merge_tiles
+    end
+  end
+
+  def transform(affine_matrix = "[[1.0,0.0,0.0],[0.0,1.0,0.0],[0.0,0.0,1.0]]")
+    surface_images.each do |surface_image|
+      image = surface_image.image
+      next unless image
+      points = surface_image.corners_on_world_str
+      if points
+        cmd_args = "--matrix=" + affine_matrix + " " + points
+        line = Terrapin::CommandLine.new("transform_points", cmd_args, logger: logger)
+        line.run
+        _corners_on_world_str = line.output.output.chomp
+        line = Terrapin::CommandLine.new("H_from_points", "#{surface_image.corners_on_image_str} #{_corners_on_world_str} -f yaml", logger: logger)
+        line.run
+        _out = line.output.output.chomp
+        a = YAML.load(_out)
+        image.affine_matrix = a.flatten
+        image.save
+      end
     end
   end
 
