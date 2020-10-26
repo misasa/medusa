@@ -14,7 +14,7 @@ class TileWorker
     if layer && !surface_image.wall
       #at 0.8, "merging layer #{layer.name} ..."
       #layer.merge_tiles
-      LayerMergeWorker.perform_async(layer.id)
+      #LayerMergeWorker.perform_async(layer.id)
     end
     at 1, "Tile making job for #{surface_image.image.name} is done."
   end

@@ -7,6 +7,7 @@ class LayerMergeWorker
     end
 
     def perform(surface_layer_id, opts = {})
+      return
       surface_layer = SurfaceLayer.find(surface_layer_id)
       n = surface_layer.surface_images.count
       total n
