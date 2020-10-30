@@ -227,14 +227,40 @@ class Specimen < ActiveRecord::Base
     end
   end
 
-  def age_in_text(opts = {})
+  def rage_unit
+    ans_and_self = [self]
+    ans_and_self.concat(ancestors.reverse) unless ancestors.empty?
+    rau = nil
+    ans_and_self.each do |s|
+      if s.age_unit
+        rau = s.age_unit
+        break
+      end
+    end
+    rau
+  end
+
+  def rage_in_text(opts = {})
+    ans_and_self = [self]
+    ans_and_self.concat(ancestors.reverse) unless ancestors.empty?
+    ra = nil
+    ans_and_self.each do |s|
+      if s.age_unit
+        ra = s.age_in_text
+        break
+      end
+    end
+    ra
+  end
+
+  def age_in_text(opts = {:with_error => true})
     unit = opts[:unit] || self.age_unit
-    scale = opts[:scale] || 0
+    scale = opts[:scale] || 3
     text = nil
     if age_mean && age_error
       #text = "#{age_mean}(#{age_error(opts)})"
       text = Alchemist.measure(self.age_mean, self.age_unit.to_sym).to(unit.to_sym).value.round(scale).to_s
-      text += " (" + Alchemist.measure(self.age_error, self.age_unit.to_sym).to(unit.to_sym).value.round(scale).to_s + ")"
+      text += " (" + Alchemist.measure(self.age_error, self.age_unit.to_sym).to(unit.to_sym).value.round(scale).to_s + ")" if opts[:with_error]
     elsif age_min
       text = ">" + Alchemist.measure(self.age_min, self.age_unit.to_sym).to(unit.to_sym).value.round(scale).to_s
     elsif age_max
