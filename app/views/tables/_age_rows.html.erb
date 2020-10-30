@@ -2,7 +2,7 @@
   <th>age</th>
   <th><%= table.age_unit %></th>
   <% table.specimens.each do |specimen| %>
-    <td><%= raw(specimen.age_in_text(:unit => table.age_unit, :scale => table.age_scale) || "-") %></td>
+    <td><%= raw(specimen.rage_in_text(:unit => table.age_unit, :scale => table.age_scale) || "-") %></td>
   <% end %>
   <% if table.with_average %>
     <td></td>
