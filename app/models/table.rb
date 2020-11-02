@@ -421,7 +421,7 @@ class Table < ActiveRecord::Base
     if self.with_age
       l = ["age", age_unit]
       self.specimens.each do |specimen|
-        l << ( specimen.age_in_text ? specimen.age_in_text(:unit => self.age_unit, :scale => self.age_scale) : "-")
+        l << ( specimen.rage_in_text ? specimen.rage_in_text(:unit => self.age_unit, :scale => self.age_scale) : "-")
       end
       a << l
     end
