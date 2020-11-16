@@ -1312,11 +1312,13 @@ function initSurfaceMap() {
 		      var spot = this; 
           var pos = world2latLng([spot.world_x, spot.world_y]);
           //var options = { draggable: true, color: 'blue', fillColor: '#f03', fillOpacity: 0.5, radius: 200 };
-          var options = { draggable: true, title: spot['name'] };
+          var options = { draggable: true, title: spot['name'], data:spot };
           var marker = new L.marker(pos, options).addTo(spotsLayer);
           var popupContent = [];
           popupContent.push("<nobr>" + spot['name_with_id'] + "</nobr>");
-          popupContent.push("<nobr>coordinate: (" + spot['world_x'] + ", " + spot["world_y"] + ")</nobr>");
+          var x_input = "<input type='text', id=\"spot_world_x\" value=\"" + spot['world_x'] + "\">";
+          var y_input = "<input type='text', id=\"spot_world_y\" value=\"" + spot['world_y'] + "\">"
+          popupContent.push("<nobr>coordinate: (" + x_input + ", " + y_input + ")</nobr>");
           if (spot['attachment_file_id']){
             var image_url = resourceUrl + '/images/' + spot['attachment_file_id'];
             popupContent.push("<nobr>image: <a href=" + image_url + ">" + spot['attachment_file_name'] +  "</a>"+ "</nobr>");
@@ -1324,11 +1326,76 @@ function initSurfaceMap() {
           if (spot['target_uid']){
             popupContent.push("<nobr>link: " + spot['target_link'] +  "</nobr>");
           }
+
+          var delete_btn = "<button class='marker-delete-button btn btn-danger'>Delete</button>";
+          var cancel_btn = "<button class='marker-cancel-button btn btn-info'>Cancel</button>";
+          var save_btn = "<button class='marker-save-button btn btn-primary'>Save</button>";
+
+          popupContent.push('<div style="text-align:center;">' + save_btn + cancel_btn + delete_btn + '</div>');
           marker.bindPopup(popupContent.join("<br/>"), {
             maxWidth: "auto",
-          });  
+          });
+          marker.on("popupopen", onPopupOpen)
+          marker.on("popupclose", function(){
+            console.log("PopupClose");
+          })
+          marker.on('dragend', onDragEnd);
 	      });
       });
+  }
+
+  function onDragEnd() {
+    console.log("DragEnd");
+    var tempMarker = this;
+    var spot = tempMarker.options.data;
+    var world = latLng2world(tempMarker.getLatLng());
+    //document.getElementById('spot_world_x').value = world.x;
+
+    console.log(world);
+  }
+
+  function onPopupOpen() {
+    console.log("PopupOpen");
+    var tempMarker = this;
+    //tempMarker.dragging.enable();
+    var spot = tempMarker.options.data;
+    var world = latLng2world(tempMarker.getLatLng());
+    $("#spot_world_x").val(world[0]);
+    $("#spot_world_y").val(world[1]);
+    $(".marker-save-button:visible").click(function (){
+      var url = spot.resource_url + ".json";
+      var world_x = $("#spot_world_x").val();
+      var world_y = $("#spot_world_y").val();
+  
+      $.ajax(url,{
+        type: 'PUT',
+        data: {spot:{world_x: world_x, world_y: world_y}},
+        beforeSend: function(e) {console.log('saving...')},
+        complete: function(e){ 
+          map.removeLayer(tempMarker);
+          loadMarkers();
+        },
+        error: function(e) {console.log(e)}
+      })
+    });
+    $(".marker-cancel-button:visible").click(function (){
+      map.closePopup();
+      var pos = world2latLng([spot.world_x, spot.world_y]);
+      tempMarker.setLatLng(pos);
+      //map.panTo(pos);
+    });
+    $(".marker-delete-button:visible").click(function (){
+      var url = spot.resource_url + ".json";   
+      $.ajax(url,{
+        type: 'DELETE',
+        data: {"id":spot.id},
+        beforeSend: function(e) {console.log('removing...')},
+        complete: function(e){ 
+          map.removeLayer(tempMarker);
+        },
+        error: function(e) {console.log(e)}
+      })
+    });
   }
 
   var marker;
@@ -1345,7 +1412,8 @@ function initSurfaceMap() {
 	      }
 	      var pos = map.getCenter();
 	      var icon = L.icon({
-		      iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAHVJREFUWMPt1rENgDAMRNEPi3gERmA0RmAERgmjsAEjhMY0dOBIWHCWTulOL5UN8VmACpRoUdcAU1v19SQaYYQRRhhhhMmIMV//9WGuG/xudmA6C+YApGUGgNF1b0KKjithhBFGGGGE+Rtm9XfL8CHzS8340hzaXWaR1yQVAAAAAABJRU5ErkJggg==',
+          //iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAHVJREFUWMPt1rENgDAMRNEPi3gERmA0RmAERgmjsAEjhMY0dOBIWHCWTulOL5UN8VmACpRoUdcAU1v19SQaYYQRRhhhhMmIMV//9WGuG/xudmA6C+YApGUGgNF1b0KKjithhBFGGGGE+Rtm9XfL8CHzS8340hzaXWaR1yQVAAAAAABJRU5ErkJggg==',
+          iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAPUlEQVRYw+3WwQkAMAgEQZP+e04+6eAECczawOBHq5LOm6BdwwEAAAAAAIwDVnpOv99AlocEAAAAAACgoQtVAgoyQcceMgAAAABJRU5ErkJggg==',
 		      iconSize:     [32, 32],
 		      iconAnchor:   [16, 16]
 	      });
@@ -1360,32 +1428,45 @@ function initSurfaceMap() {
 	        '<label class="control-label">link ID:</label>' +
 	        '<input type="string" placeholder="type here" id="target_uid"/>' +
 	        '</div>' +
-	        '<div class="form-group">' +
-	        '<div style="text-align:center;">' +
-	        '<button type="submit">Save</button></div>' +
-	        '</div>' +
-	        '</form>';
+          '</form>'+
+	        '<nobr><div style="text-align:center;">' +
+          '<button type="submit" value="submit" class="marker-add-button btn btn-small btn-primary">Save</button>' +
+          '<button type="submit" value="cancel" class="marker-delete-button btn btn-small btn-info">Cancel</button>' +
+          '</div></nobr>'
         marker.bindPopup(popupContent, {
 			    maxWidth: "auto",
-		    }).openPopup();
-        $('body').on('submit', '#addspot-form', mySubmitFunction);
+        });     
+        marker.on("popupopen", function(){
+          console.log("PopupOpen");
+          var tempMarker = this;
+
+          $(".marker-delete-button:visible").click(function (){
+                map.removeLayer(tempMarker);
+          });
+
+          $(".marker-add-button:visible").click(function (){
+            var form = document.querySelector('#addspot-form');
+            var ll = marker.getLatLng();
+            var world = latLng2world(ll);
+            var url = resourceUrl + '/spots.json';
+            $.ajax(url,{
+              type: 'POST',
+              data: {spot:{name: form['name'].value, target_uid: form['target_uid'].value, world_x: world[0], world_y: world[1]}},
+              beforeSend: function(e) {console.log('saving...')},
+              complete: function(e){ 
+                marker.remove();
+                loadMarkers();
+              },
+              error: function(e) {console.log(e)}
+            })  
+          });
+
+        });
+        marker.openPopup();  
+        //$('body').on('submit', '#addspot-form', mySubmitFunction);
         function mySubmitFunction(e){
 		      e.preventDefault();
 		      console.log("didnt submit");
-		      var form = document.querySelector('#addspot-form');
-          var ll = marker.getLatLng();
-          var world = latLng2world(ll);
-          var url = resourceUrl + '/spots.json';
-		      $.ajax(url,{
-			      type: 'POST',
-				    data: {spot:{name: form['name'].value, target_uid: form['target_uid'].value, world_x: world[0], world_y: world[1]}},
-			      beforeSend: function(e) {console.log('saving...')},
-			      complete: function(e){ 
-				      marker.remove();
-				      loadMarkers();
-			      },
-			      error: function(e) {console.log(e)}
-		      })
         }
 	  }
   });

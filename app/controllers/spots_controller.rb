@@ -62,6 +62,8 @@ class SpotsController < ApplicationController
       :description,
       :spot_x,
       :spot_y,
+      :world_x,
+      :world_y,
       :target_uid,
       :radius_in_percent,
       :stroke_color,
