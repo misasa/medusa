@@ -63,7 +63,8 @@ class Spot < ActiveRecord::Base
 
   def set_world_xy
     return unless attachment_file_id
-    self.world_x, self.world_y = spot_world_xy
+    self.spot_x, self.spot_y = spot_xy_from_world if self.world_x_changed? || self.world_y_changed?
+    self.world_x, self.world_y = spot_world_xy if self.spot_x_changed? || self.spot_y_changed?
   end
 
   def get_analysis
@@ -181,6 +182,13 @@ class Spot < ActiveRecord::Base
     worlds[0]
   end
 
+  def spot_xy_from_world
+    worlds = [[world_x, world_y]]
+    return unless attachment_file && attachment_file.affine_matrix
+    return if attachment_file.affine_matrix.empty?
+    pixels = attachment_file.world_pairs_on_pixel(worlds)
+    pixels[0]
+  end
 
   def world_x
     super || (spot_world_xy[0] if spot_world_xy)
