@@ -40,4 +40,14 @@ namespace :db do
     Rails.logger.info "Database restore task is #{success ? "succeed" : "failed"}."
   end
 
+  desc "Execute database import task."
+  task import: :environment do
+    db_config = Rails.application.config.database_configuration[Rails.env]
+    db_import = "#{ENV["DB_IMPORT"]}"
+    command = "psql -U #{db_config["username"]} -h #{db_config["host"]} #{db_config["database"]} < #{db_import}"
+    Rails.logger.info command
+    success = system command
+    Rails.logger.info "Database import task is #{success ? "succeed" : "failed"}."
+  end
+
 end
