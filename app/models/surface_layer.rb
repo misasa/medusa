@@ -23,10 +23,10 @@ class SurfaceLayer < ActiveRecord::Base
     overlay_images.each do |image|
       next if image.bounds.blank?
       l,u,r,b = image.bounds
-      left = l if l < left
-      upper = u if u > upper
-      right = r if r > right
-      bottom = b if b < bottom
+      left = l if l && l < left
+      upper = u if u && u > upper
+      right = r if r && r > right
+      bottom = b if b && b < bottom
     end
     [left, upper, right, bottom]
   end
