@@ -258,7 +258,9 @@ class Analysis < ActiveRecord::Base
     info.merge!(surface_id: Surface.find_by_globe(true).try(:global_id)) if place && place.latitude && place.longitude
     spot = get_spot
     if spot
-      info.merge!(image_id: spot.attachment_file.global_id, x_image: spot.spot_x_from_center, y_image: spot.spot_y_from_center)
+      if spot.attachment_file
+        info.merge!(image_id: spot.attachment_file.global_id, x_image: spot.spot_x_from_center, y_image: spot.spot_y_from_center)
+      end
       if spot.surface
         info.merge!(surface_id: spot.surface.global_id, x_vs: spot.try(:world_x), y_vs: spot.try(:world_y))
       end
@@ -269,6 +271,9 @@ class Analysis < ActiveRecord::Base
 
   def get_spot
     spots = Spot.where(target_uid: global_id)
+    if spots.empty? && specimen
+      spots = Spot.where(target_uid: specimen.global_id)
+    end
     return if spots.empty?
     spots[0]
   end
