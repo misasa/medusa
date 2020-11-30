@@ -12,7 +12,7 @@ place&nbsp;<%= link_to('quantity', quantity_history_specimen_path(@specimen))%>
     </div>
     <div class="panel-body">
       <div><%= timeline(path.brought_in_at, path.brought_out_at) %></div>
-      <div>description: <%= best_in_place path, :note, :as => :input, :place_holder => 'Clik me to edit.' %></div>
+      <div>description: <%= best_in_place path, :note, :as => :input, :place_holder => 'Clik me to edit.', :html_attrs => { size: 50 } %></div>
 
       <% if box %>
           <% links = [] %>
