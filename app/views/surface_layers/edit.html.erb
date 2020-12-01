@@ -17,6 +17,12 @@
     <%= f.check_box :visible %>
     <% end %>
   </div>
+  <div class="form-group form-group-sm">
+    <label class="small">Base</label>
+    <%= f.label :wall, class: "checkbox-inline" do %>
+    <%= f.check_box :wall %>
+    <% end %>
+  </div>
   <%= f.button class: "btn btn-default" do %>
   <span class="glyphicon glyphicon-save"></span>
   <% end %>

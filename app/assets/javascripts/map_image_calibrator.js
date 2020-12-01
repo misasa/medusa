@@ -1,4 +1,4 @@
-function initMapImageCalibrator() {
+function _initMapImageCalibrator() {
   var div = document.getElementById("surface-map");
   var baseUrl = div.dataset.baseUrl;
   var urlRoot = div.dataset.urlRoot;

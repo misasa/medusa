@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201005044747) do
+ActiveRecord::Schema.define(version: 20201201024445) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -423,17 +423,18 @@ ActiveRecord::Schema.define(version: 20201005044747) do
   add_index "surface_images", ["surface_layer_id"], name: "index_surface_images_on_surface_layer_id", using: :btree
 
   create_table "surface_layers", force: true do |t|
-    t.integer  "surface_id",                    null: false, comment: "SurfaceID"
-    t.string   "name",                          null: false, comment: "レイヤ名"
-    t.integer  "opacity",        default: 100,  null: false, comment: "不透明度"
-    t.integer  "priority",                      null: false, comment: "優先順位"
+    t.integer  "surface_id",                     null: false, comment: "SurfaceID"
+    t.string   "name",                           null: false, comment: "レイヤ名"
+    t.integer  "opacity",        default: 100,   null: false, comment: "不透明度"
+    t.integer  "priority",                       null: false, comment: "優先順位"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "max_zoom_level"
-    t.boolean  "visible",        default: true, null: false
+    t.boolean  "visible",        default: true,  null: false
     t.string   "color_scale"
     t.float    "display_min"
     t.float    "display_max"
+    t.boolean  "wall",           default: false, null: false
   end
 
   add_index "surface_layers", ["surface_id", "name"], name: "index_surface_layers_on_surface_id_and_name", unique: true, using: :btree

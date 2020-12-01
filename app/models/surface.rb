@@ -22,6 +22,7 @@ class Surface < ActiveRecord::Base
   has_many :images, through: :surface_images
   has_many :fits_files, -> { fits_files }, through: :surface_images, source: :image
   has_many :surface_layers, :dependent => :destroy, :order => ("priority DESC")
+  has_many :wall_surface_layers, -> { wall }, class_name: 'SurfaceLayer'
 #  has_many :spots, through: :images
 #  has_many :spots, class_name: "Spot", foreign_key: :surface_id
   has_many :direct_spots, class_name: "Spot", foreign_key: :surface_id
