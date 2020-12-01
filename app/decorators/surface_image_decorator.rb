@@ -235,7 +235,7 @@ class SurfaceImageDecorator < Draper::Decorator
           h.concat drop_down_menu_fits
           h.concat h.content_tag(:span, "Fits", class:"label label-warning")
           unless self.calibrated?
-            h.concat h.content_tag(:span, "not calibrated", class:"label label-default")
+            h.concat h.content_tag(:span, "not calibrated", class:"label label-danger")
           end
           h.concat h.content_tag(:div, self.image.decorate.matrix_form, class:"collapse", id:"collapseAffine-#{self.image.id}")
         end
@@ -271,7 +271,7 @@ class SurfaceImageDecorator < Draper::Decorator
             unless self.calibrated?
 #              h.concat h.content_tag(:span, "calibrated", class:"label label-success")
 #            else
-              h.concat h.content_tag(:span, "not calibrated", class:"label label-default")
+              h.concat h.content_tag(:span, "not calibrated", class:"label label-danger")
             end
             #h.concat h.content_tag(:small, "(#{position})" )
             h.concat h.content_tag(:div, self.image.decorate.matrix_form, class:"collapse", id:"collapseAffine-#{self.image.id}")

@@ -193,7 +193,7 @@ class SurfaceLayerDecorator < Draper::Decorator
         h.content_tag(:span, class: "panel-title pull-left") do
           h.concat(
               h.content_tag(:a, href: "#surface-layer-#{self.id}", data: {toggle: "collapse"}, 'aria-expanded' => false, 'aria-control' => "surface-layer-#{self.id}", title: "fold layer '#{self.name}'") do
-              h.concat h.content_tag(:span, self.surface_images.size ,class: "badge")
+              h.concat h.content_tag(:span, self.calibrated_surface_images.count ,class: "badge")
               h.concat " "
               h.concat self.name
             end
@@ -266,10 +266,10 @@ class SurfaceLayerDecorator < Draper::Decorator
       h.concat h.content_tag(:div, nil, class: "clearfix")
   end
 
-  def thumbnails_list(tokens)
+  def thumbnails_list(tokens, s_images = surface_images)
     h.content_tag(:ul, class: "list-inline thumbnails surface-layer", data: {id: self.id}, style: "min-height: 100px;" ) do
       #self.surface_images.reorder("position DESC").each do |surface_image|
-      surface_images.each do |surface_image|
+      s_images.each do |surface_image|
         next unless surface_image.image
         next if surface_image.wall
         h.concat surface_image.decorate.li_thumbnail(tokens)
@@ -279,7 +279,13 @@ class SurfaceLayerDecorator < Draper::Decorator
 
   def panel_body(tokens)
     h.content_tag(:div, class: "panel-body collapse", id: "surface-layer-#{self.id}") do
-      thumbnails_list(tokens)
+      thumbnails_list(tokens, calibrated_surface_images)
+    end
+  end
+
+  def panel_footer(tokens)
+    h.content_tag(:div, class: "panel-footer", id: "surface-layer-#{self.id}") do
+      thumbnails_list(tokens, uncalibrated_surface_images)
     end
   end
 
@@ -314,8 +320,10 @@ class SurfaceLayerDecorator < Draper::Decorator
         layer_tokens = layer_tokens & tokens
       end
     end
+    t = panel_head(layer_tokens){ panel_menu } + panel_body(layer_tokens)
+    t += panel_footer(layer_tokens) if uncalibrated_surface_images.count > 0
     h.content_tag(:div, class: "panel panel-default") do
-      panel_head(layer_tokens){ panel_menu } + panel_body(layer_tokens)
+      t
     end
   end
 end

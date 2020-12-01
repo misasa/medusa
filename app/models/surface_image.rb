@@ -17,7 +17,7 @@ class SurfaceImage < ActiveRecord::Base
 
   after_save :refresh_parent
   scope :fits_file, -> { joins(:image).where('(attachment_files.data_content_type = ?) and (attachment_files.data_file_name like ?)',"application/octet-stream", '%.fits') }
-  scope :calibrated, -> { joins(:image).where('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
+  #scope :calibrated, -> { joins(:image).where('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :calibrated, -> { joins(:image).where('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :uncalibrated, -> { joins(:image).where.not('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :wall, -> { where(wall: true) }
@@ -28,6 +28,7 @@ class SurfaceImage < ActiveRecord::Base
   scope :not_belongs_to_layer, -> { where(surface_layer_id: nil) }
   scope :top, -> { joins(:image).where('(surface_images.surface_layer_id is null) and (wall is not true) and (attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
   scope :base, -> { joins(:image).where('(wall is true) and (attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%') }
+  scope :uncalibrated_top, -> { joins(:image).where.not('(attachment_files.affine_matrix is not null) and (attachment_files.affine_matrix not like ?)', '--- []%').where(surface_layer_id: nil) }
 
 
   def local_path(style = :original)
