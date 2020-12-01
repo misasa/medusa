@@ -103,6 +103,7 @@ class SurfaceLayersController < ApplicationController
       :display_max,
       :max_zoom_level,
       :visible,
+      :wall,
       :priority
     )
   end

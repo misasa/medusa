@@ -7,6 +7,7 @@ class SurfaceLayer < ActiveRecord::Base
   has_many :uncalibrated_surface_images, -> { uncalibrated }, class_name: 'SurfaceImage'
   has_many :images, through: :surface_images
   acts_as_list :scope => :surface_id, column: :priority
+  scope :wall, -> { where(wall: true) }
 
   validates :surface_id, presence: true
   validates :surface, existence: true, allow_nil: true

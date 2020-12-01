@@ -37,11 +37,29 @@ class SurfaceImageDecorator < Draper::Decorator
     surface_length = surface.length
     tilesize = surface.tilesize
     return unless image
+    s_images = surface.surface_images.calibrated.reverse
+    a_zooms = s_images.map{|s_image| Math.log(surface_length/tilesize * s_image.resolution, 2).ceil if s_image.resolution }
+    layer_groups = []
     base_images = []
-    b_images = surface.wall_surface_images if b_images.empty?
-    b_images.each do |b_image|
-      base_images << {path: b_image.data.url, width: b_image.image.width, height: b_image.image.height, id: b_image.image.try!(:id), bounds: b_image.bounds}
+    h_images = Hash.new
+    s_images.each_with_index do |s_image, index|
+      if s_image.wall
+        base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.image.bounds, max_zoom: a_zooms[index]}
+      else
+        layer_group_name = s_image.surface_layer.try!(:name) || 'top'
+        h_images[layer_group_name] = [] unless h_images.has_key?(layer_group_name)
+        h_images[layer_group_name] << {id: s_image.image.try!(:id), bounds: s_image.image.bounds, max_zoom: a_zooms[index], fits_file: s_image.image.fits_file?, corners: s_image.corners_on_world, path: s_image.image.path}
+      end
     end
+
+#    base_images = []
+#    if b_images.empty?
+#      b_images = surface.wall_surface_images
+      #b_images.concat(surface.wall_surface_layers.map{|l| l.surface_images}.flatten)
+#    end
+#    b_images.each do |b_image|
+#      base_images << {name: b_image.name, path: b_image.data.url, width: b_image.image.width, height: b_image.image.height, id: b_image.image.try!(:id), bounds: b_image.bounds}
+#    end
 
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data:{
                     base_url: Settings.map_url,
@@ -50,8 +68,9 @@ class SurfaceImageDecorator < Draper::Decorator
                     length: surface.length,
                     center: surface.center,
                     #base_images: [{path: b_images[0].data.url, width: b_images[0].image.width, height: b_images[0].image.height, id: b_images[0].image.try!(:id), bounds: b_images[0].bounds}],
-                    base_images: base_images,
-                    layer_groups: [{name: image.try!(:name), opacity: 100 }],
+                    base_images: base_images,                    
+                    #layer_groups: [{name: image.try!(:name), opacity: 100 }],
+                    layer_groups: surface.wall_surface_layers.reverse.map { |layer| { id: layer.id, name: layer.name, opacity: layer.opacity, tiled: layer.tiled?, bounds: layer.bounds, max_zoom: layer.maxzoom, visible: layer.visible, wall: layer.wall, colorScale: layer.color_scale, displayMin: layer.display_min, displayMax: layer.display_max, resource_url: h.surface_layer_path(surface, layer) }},
                     images: {image.try!(:name) => [{id: image.try!(:id), corners: self.corners_on_world, path: image.path, resource_url: h.surface_image_path(surface, image)}]},
     })
   end
