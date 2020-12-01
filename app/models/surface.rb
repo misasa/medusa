@@ -14,6 +14,7 @@ class Surface < ActiveRecord::Base
   has_many :not_belongs_to_layer_surface_images, -> { not_belongs_to_layer }, class_name: 'SurfaceImage'
   has_many :top_surface_images, -> { top }, class_name: 'SurfaceImage'
   has_many :base_surface_images, -> { base }, class_name: 'SurfaceImage'
+  has_many :uncalibrated_top_surface_images, -> { uncalibrated_top }, class_name: 'SurfaceImage'
 
   has_many :wall_surface_images, -> { wall }, class_name: 'SurfaceImage'
   has_many :fits_file_surface_images, -> { fits_file }, class_name: 'SurfaceImage'
