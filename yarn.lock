@@ -887,7 +887,7 @@ leaflet-toolbar@0.4.0-alpha.2, leaflet-toolbar@Leaflet/Leaflet.Toolbar:
 
 leaflet-view-meta@yyachi/leaflet-view-meta:
   version "0.0.0"
-  resolved "https://codeload.github.com/yyachi/leaflet-view-meta/tar.gz/b9c74b78ed558fe0b605245b8d36af225b930fa1"
+  resolved "https://codeload.github.com/yyachi/leaflet-view-meta/tar.gz/dbf9037438eb3e9ea7a95a3cd760ebe0c2524998"
   dependencies:
     leaflet "^1.4.0"
 
