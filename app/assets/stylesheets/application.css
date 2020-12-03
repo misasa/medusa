@@ -15,6 +15,7 @@
  *= require leaflet-fullscreen/dist/leaflet.fullscreen.css
  *= require Leaflet.ZoomLabel/src/L.Control.ZoomLabel.css
  *= require leaflet-toolbar/dist/leaflet.toolbar.css
+ *= require leaflet-view-meta/src/leaflet-view-meta.css
  *= require leaflet-distortableimage/dist/leaflet.distortableimage.css
  *= require leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.css
  *= require handsontable/dist/handsontable.full.min.css
