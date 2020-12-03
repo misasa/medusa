@@ -885,6 +885,12 @@ leaflet-toolbar@0.4.0-alpha.2, leaflet-toolbar@Leaflet/Leaflet.Toolbar:
   version "0.4.0-alpha.2"
   resolved "https://codeload.github.com/Leaflet/Leaflet.Toolbar/tar.gz/0a080860542dbd1cc5fb3a543f68c4a799d9c88c"
 
+leaflet-view-meta@yyachi/leaflet-view-meta:
+  version "0.0.0"
+  resolved "https://codeload.github.com/yyachi/leaflet-view-meta/tar.gz/b9c74b78ed558fe0b605245b8d36af225b930fa1"
+  dependencies:
+    leaflet "^1.4.0"
+
 "leaflet.coordinates@https://github.com/yyachi/Leaflet.Coordinates#develop":
   version "0.1.5"
   resolved "https://github.com/yyachi/Leaflet.Coordinates#09ffcfdfa2bee2a7cee24a9653baef0ec0abc660"
@@ -901,6 +907,11 @@ leaflet.glify@^3.0.0:
     point-in-polygon "^1.0.1"
     polygon-lookup "^2.4.0"
     rbush "^2.0.2"
+
+leaflet@^1.4.0:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.7.1.tgz#10d684916edfe1bf41d688a3b97127c0322a2a19"
+  integrity sha512-/xwPEBidtg69Q3HlqPdU3DnrXQOvQU/CCHA1tcDQVzOwm91YMYaILjNp7L4Eaw5Z4sOYdbBz6koWyibppd8Zqw==
 
 leaflet@^1.6.0:
   version "1.6.0"

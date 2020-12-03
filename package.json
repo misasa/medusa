@@ -15,6 +15,7 @@
     "leaflet-distortableimage": "yyachi/Leaflet.DistortableImage#develop",
     "leaflet-fullscreen": "Leaflet/Leaflet.fullscreen",
     "leaflet-toolbar": "Leaflet/Leaflet.Toolbar",
+    "leaflet-view-meta": "yyachi/leaflet-view-meta",
     "leaflet.coordinates": "https://github.com/yyachi/Leaflet.Coordinates#develop",
     "leaflet.glify": "^3.0.0",
     "perspective-transform": "https://github.com/jlouthan/perspective-transform",
