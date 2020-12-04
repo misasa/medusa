@@ -877,6 +877,10 @@ leaflet-distortableimage@yyachi/Leaflet.DistortableImage#develop:
     grunt-cli "^1.2.0"
     leaflet-toolbar "0.4.0-alpha.2"
 
+leaflet-fits@yyachi/leaflet-fits:
+  version "0.0.0"
+  resolved "https://codeload.github.com/yyachi/leaflet-fits/tar.gz/ff8db60e2e48237cdff27de2ccd4c5a18be41392"
+
 leaflet-fullscreen@Leaflet/Leaflet.fullscreen:
   version "1.0.2"
   resolved "https://codeload.github.com/Leaflet/Leaflet.fullscreen/tar.gz/91c9745c712981942499f14f7a347c80fab41096"

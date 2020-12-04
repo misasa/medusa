@@ -13,6 +13,7 @@
     "handsontable": "https://github.com/handsontable/handsontable",
     "leaflet": "https://github.com/Leaflet/Leaflet#^1.0.0",
     "leaflet-distortableimage": "yyachi/Leaflet.DistortableImage#develop",
+    "leaflet-fits": "yyachi/leaflet-fits",
     "leaflet-fullscreen": "Leaflet/Leaflet.fullscreen",
     "leaflet-toolbar": "Leaflet/Leaflet.Toolbar",
     "leaflet-view-meta": "yyachi/leaflet-view-meta",
