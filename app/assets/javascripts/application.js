@@ -20,8 +20,8 @@
 //= require bootstrap
 //= require spin
 //= require jquery.spin
-//= require leaflet/dist/leaflet
 //= require leaflet.glify/dist/glify-browser.js
+//= require leaflet-surfacemap/src/leaflet-surfacemap.js
 //= require leaflet-fits/src/leaflet-fits-gl.js
 //= require leaflet-fits/src/leaflet-fits-gl-plotty.js
 //= require leaflet-surfacescale/src/leaflet-surfacescale.js

@@ -1,5 +1,3 @@
-// OpacityLayerControl
-
 // Customized circle for spot.
 L.circle.spot = function(map, spot, urlRoot, options) {
     var options = L.Util.extend({}, { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 3 }, options),
@@ -11,7 +9,6 @@ L.circle.spot = function(map, spot, urlRoot, options) {
   });
   return marker;
 };
-
 
 // Radius control for Circle.
 L.Control.Radius = L.Control.extend({
@@ -69,7 +66,6 @@ L.layerGroup.spots = function(map, spots, urlRoot) {
   return group;
 };
 
-
 // Customized layer group for grid.
 L.layerGroup.grid = function(map, length) {
   var group = L.layerGroup(),
@@ -96,7 +92,6 @@ L.layerGroup.grid = function(map, length) {
   return group;
 };
 
-
 function initSurfaceMap() {
   var div = document.getElementById("surface-map");
   var radiusSelect = document.getElementById("spot-radius");
@@ -120,10 +115,11 @@ function initSurfaceMap() {
   var baseMaps = {};
   var overlayMaps = {};
   var zoom = 1;
-
+  
   var map = L.map('surface-map', {
     maxZoom: 14,
     minZoom: 0,
+    surface: {center_x: center[0], center_y: center[1], length: length},
     //crs: L.CRS.Simple,
     //    layers: layers
   }).setView([50.00, 14.44], 8);

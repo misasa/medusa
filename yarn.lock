@@ -889,6 +889,10 @@ leaflet-fullscreen@Leaflet/Leaflet.fullscreen:
   version "1.0.2"
   resolved "https://codeload.github.com/Leaflet/Leaflet.fullscreen/tar.gz/91c9745c712981942499f14f7a347c80fab41096"
 
+leaflet-surfacemap@yyachi/leaflet-surfacemap:
+  version "0.0.0"
+  resolved "https://codeload.github.com/yyachi/leaflet-surfacemap/tar.gz/f9ac216583329143cfc23a1688a658667dba1b8d"
+
 leaflet-surfacescale@yyachi/leaflet-surfacescale:
   version "0.0.0"
   resolved "https://codeload.github.com/yyachi/leaflet-surfacescale/tar.gz/bd492b7326e89aa839c38dcdae685facaf278310"

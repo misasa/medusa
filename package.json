@@ -16,6 +16,7 @@
     "leaflet-distortableimage": "yyachi/Leaflet.DistortableImage#develop",
     "leaflet-fits": "yyachi/leaflet-fits",
     "leaflet-fullscreen": "Leaflet/Leaflet.fullscreen",
+    "leaflet-surfacemap": "yyachi/leaflet-surfacemap",
     "leaflet-surfacescale": "yyachi/leaflet-surfacescale",
     "leaflet-toolbar": "Leaflet/Leaflet.Toolbar",
     "leaflet-view-meta": "yyachi/leaflet-view-meta",
