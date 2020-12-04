@@ -25,6 +25,7 @@
 //= require leaflet-fits/src/leaflet-fits-gl.js
 //= require leaflet-fits/src/leaflet-fits-gl-plotty.js
 //= require leaflet-surfacescale/src/leaflet-surfacescale.js
+//= require leaflet-control-surfacelayers/src/leaflet-control-surfacelayers.js
 //= require leaflet-toolbar/dist/leaflet.toolbar.js
 //= require leaflet-view-meta/src/leaflet-view-meta.js
 //= require leaflet-distortableimage/dist/leaflet.distortableimage.js

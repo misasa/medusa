@@ -1,5 +1,5 @@
 class Medusa::Application
-    VERSION = ["9","7","23"]
+    VERSION = ["9","7","24"]
     def self.version
         VERSION.join(".")
     end
