@@ -15,6 +15,7 @@
     "leaflet-distortableimage": "yyachi/Leaflet.DistortableImage#develop",
     "leaflet-fits": "yyachi/leaflet-fits",
     "leaflet-fullscreen": "Leaflet/Leaflet.fullscreen",
+    "leaflet-surfacescale": "yyachi/leaflet-surfacescale",
     "leaflet-toolbar": "Leaflet/Leaflet.Toolbar",
     "leaflet-view-meta": "yyachi/leaflet-view-meta",
     "leaflet.coordinates": "https://github.com/yyachi/Leaflet.Coordinates#develop",
