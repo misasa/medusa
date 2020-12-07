@@ -11,7 +11,7 @@
     "d3": "^5.16.0",
     "fitsjs": "^0.6.6",
     "handsontable": "https://github.com/handsontable/handsontable",
-    "leaflet": "https://github.com/Leaflet/Leaflet#^1.0.0",
+    "leaflet": "yyachi/leaflet",
     "leaflet-control-surfacelayers": "yyachi/leaflet-control-surfacelayers",
     "leaflet-distortableimage": "yyachi/Leaflet.DistortableImage#develop",
     "leaflet-fits": "yyachi/leaflet-fits",
