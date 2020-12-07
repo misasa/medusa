@@ -1159,10 +1159,9 @@ pikaday@1.8.0:
   resolved "https://registry.yarnpkg.com/pikaday/-/pikaday-1.8.0.tgz#ce930e257042e852e6aadee1115e01554b2d71c5"
   integrity sha512-SgGxMYX0NHj9oQnMaSyAipr2gOrbB4Lfs/TJTb6H6hRHs39/5c5VZi73Q8hr53+vWjdn6HzkWcj8Vtl3c9ziaA==
 
-plotty@^0.4.3:
+plotty@yyachi/plotty:
   version "0.4.3"
-  resolved "https://registry.yarnpkg.com/plotty/-/plotty-0.4.3.tgz#900c6e1549e2805edf42f12a9b0a34eff2746eec"
-  integrity sha512-V15ZMJe1M6O39CctswMK7Rf5YNfAB0yA/VoQ2Er0ULmzi/iN2oChacjAn27l0V6GCUxbhylG4hl1YfClF+Rltg==
+  resolved "https://codeload.github.com/yyachi/plotty/tar.gz/027e61a18aec42755abcd8263432799de04def6c"
 
 point-in-polygon@1.0.1, point-in-polygon@^1.0.1:
   version "1.0.1"
