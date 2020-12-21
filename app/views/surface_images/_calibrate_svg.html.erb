@@ -221,7 +221,7 @@
           <% not_belongs_to_layer.each do |surface_image| %>
               <% next unless surface_image.image %>
               <% image = surface_image.image %>
-              <%= content_tag :div, title: image.name, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: image.path, name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), corners: image.corners_on_world, affine: image.affine_matrix.presence, path: download_attachment_file_path(image) } do %>
+              <%= content_tag :div, title: image.name, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: (image.fits_file? ? image.png_url : image.path), name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), corners: image.corners_on_world, affine: image.affine_matrix.presence, path: download_attachment_file_path(image) } do %>
                 <%= surface_image.decorate.labels %>
                 <%= image.decorate.picture(width: 100, height: 100, type: :thumb) %>
               <% end %>
@@ -235,7 +235,7 @@
             <% surface_layer.surface_images.each do |surface_image| %>
               <% next unless surface_image.image %>
               <% image = surface_image.image %>
-              <%= content_tag :div, title: image.name, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: image.path, name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), corners: image.corners_on_world, affine: image.affine_matrix.presence, path: download_attachment_file_path(image) } do %>
+              <%= content_tag :div, title: image.name, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: (image.fits_file? ? image.png_url : image.path), name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), corners: image.corners_on_world, affine: image.affine_matrix.presence, path: download_attachment_file_path(image) } do %>
                 <%= surface_image.decorate.labels(layer_tokens) %>
                 <%= image.decorate.picture(width: 100, height: 100, type: :thumb) %>
               <% end %>
@@ -257,7 +257,7 @@
           <% @surface.wall_surface_images.each do |surface_image| %>
             <% next unless surface_image.image %>
             <% image = surface_image.image %>
-            <%= content_tag :div, title: image.name, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: image.path, name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), corners: image.corners_on_world, affine: image.affine_matrix.presence, path: download_attachment_file_path(image) } do %>
+            <%= content_tag :div, title: image.name, class: "thumbnail pull-left" + (image.id == @surface_image.image_id ? " overlay hidden" : ""), data: { src: (image.fits_file? ? image.png_url: image.path), name: image.name, points: image.world_pairs_on_pixel(@image.calibration_points_on_world), corners: image.corners_on_world, affine: image.affine_matrix.presence, path: download_attachment_file_path(image) } do %>
               <%= surface_image.decorate.labels %>
               <%= image.decorate.picture(width: 100, height: 100, type: :thumb) %>
             <% end %>

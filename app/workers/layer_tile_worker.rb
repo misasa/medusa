@@ -13,6 +13,7 @@ class LayerTileWorker
       surface.reorder_images
     end
     surface_layer.clean_tiles
+    surface_layer.generate_pngs
     line = surface_layer.make_tiles_cmd(opts)
     logger.info(line.command)
     line.run

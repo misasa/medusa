@@ -71,7 +71,7 @@ class SurfaceImageDecorator < Draper::Decorator
                     base_images: base_images,                    
                     #layer_groups: [{name: image.try!(:name), opacity: 100 }],
                     layer_groups: surface.wall_surface_layers.reverse.map { |layer| { id: layer.id, name: layer.name, opacity: layer.opacity, tiled: layer.tiled?, bounds: layer.bounds, max_zoom: layer.maxzoom, visible: layer.visible, wall: layer.wall, colorScale: layer.color_scale, displayMin: layer.display_min, displayMax: layer.display_max, resource_url: h.surface_layer_path(surface, layer) }},
-                    images: {image.try!(:name) => [{id: image.try!(:id), corners: self.corners_on_world, path: image.path, resource_url: h.surface_image_path(surface, image)}]},
+                    images: {image.try!(:name) => [{id: image.try!(:id), corners: self.corners_on_world, path: (image.fits_file? ? image.png_url : image.path), resource_url: h.surface_image_path(surface, image)}]},
     })
   end
 
@@ -86,7 +86,8 @@ class SurfaceImageDecorator < Draper::Decorator
                     add_spot: true,
                     add_radius: true,
                     base_images: surface.base_surface_images.map{ |b_image| {name: b_image.image.name, path: b_image.data.url, width: b_image.image.width, height: b_image.image.height, id: b_image.image.try!(:id), bounds: b_image.bounds} },
-                    layer_groups: [{name: image.try!(:name), opacity: 100, visible:true, displayMin:0, displayMax:25, colorScale:'rainbow' }],
+                    #layer_groups: [{name: image.try!(:name), opacity: 100, visible:true, displayMin:0, displayMax:25, colorScale:'rainbow' }],
+                    layer_groups: surface.wall_surface_layers.reverse.map { |layer| { id: layer.id, name: layer.name, opacity: layer.opacity, tiled: layer.tiled?, bounds: layer.bounds, max_zoom: layer.maxzoom, visible: layer.visible, wall: layer.wall, colorScale: layer.color_scale, displayMin: layer.display_min, displayMax: layer.display_max, resource_url: h.surface_layer_path(surface, layer) }},
                     images: {image.try!(:name) => [{id: image.try!(:id), bounds: image.bounds, max_zoom: original_zoom_level, fits_file: image.fits_file?, corners: self.corners_on_world, path: h.asset_url(image.data.url), resource_url: h.surface_image_path(surface, image) }]},
                     spots: [],
                     bounds: bounds,
@@ -250,12 +251,12 @@ class SurfaceImageDecorator < Draper::Decorator
           (tokens - ptokens).each do |token|
             h.concat h.content_tag(:span, token, class:"label label-success")
           end
-          #h.concat h.link_to(h.image_tag(self.image.path(:thumb)), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
-          h.concat drop_down_menu_fits
           h.concat h.content_tag(:span, "Fits", class:"label label-warning")
           unless self.calibrated?
             h.concat h.content_tag(:span, "not calibrated", class:"label label-danger")
           end
+          h.concat h.link_to(h.image_tag(self.image.png_url), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
+          h.concat drop_down_menu_fits
           h.concat h.content_tag(:div, self.image.decorate.matrix_form, class:"collapse", id:"collapseAffine-#{self.image.id}")
         end
       )
@@ -274,8 +275,8 @@ class SurfaceImageDecorator < Draper::Decorator
 
   def li_thumbnail(ptokens = [])
     return unless self.image
-    return li_fits_file(ptokens) if self.image.fits_file?
-    return unless self.image.image?
+    #return li_fits_file(ptokens) if self.image.fits_file?
+    return unless self.image.image? || self.image.fits_file?
     #return unless File.exist?(self.image.data.path)
       h.content_tag(:li, class: "surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do
         h.concat(
@@ -284,14 +285,17 @@ class SurfaceImageDecorator < Draper::Decorator
             (tokens - ptokens).each do |token|
               h.concat h.content_tag(:span, token, class:"label label-success")
             end
-            h.concat h.link_to(h.image_tag(self.image.path(:thumb)), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
-            #h.concat h.content_tag(:small, self.image.name)
-            h.concat drop_down_menu
+            h.concat h.content_tag(:span, "Fits", class:"label label-warning") if self.image.fits_file?
             unless self.calibrated?
-#              h.concat h.content_tag(:span, "calibrated", class:"label label-success")
-#            else
               h.concat h.content_tag(:span, "not calibrated", class:"label label-danger")
             end
+            if self.image.fits_file?              
+              h.concat h.link_to(h.image_tag(self.image.png_url), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
+            else
+              h.concat h.link_to(h.image_tag(self.image.path(:thumb)), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
+            end
+            #h.concat h.content_tag(:small, self.image.name)
+            h.concat drop_down_menu
             #h.concat h.content_tag(:small, "(#{position})" )
             h.concat h.content_tag(:div, self.image.decorate.matrix_form, class:"collapse", id:"collapseAffine-#{self.image.id}")
           end

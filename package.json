@@ -22,6 +22,7 @@
     "leaflet-view-meta": "yyachi/leaflet-view-meta",
     "leaflet.coordinates": "https://github.com/yyachi/Leaflet.Coordinates#develop",
     "leaflet.glify": "^3.0.0",
+    "ndarray": "yyachi/ndarray",
     "perspective-transform": "https://github.com/jlouthan/perspective-transform",
     "plotty": "yyachi/plotty",
     "wcs.js": "https://github.com/astrojs/wcsjs.git"

@@ -114,6 +114,7 @@ function initSurfaceMap() {
   var layers = [];
   var baseMaps = {};
   var overlayMaps = {};
+  var fitsLayers = {};
   var zoom = 1;
   
   var map = L.map('surface-map', {
@@ -167,6 +168,9 @@ function initSurfaceMap() {
     var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0, visible = layerGroup.visible, resource_url = layerGroup.resource_url, colorScale = layerGroup.colorScale, displayMin = layerGroup.displayMin, displayMax = layerGroup.displayMax;
     opts = {opacity: opacity, maxNativeZoom: 6, visible: visible, resource_url: resource_url};
     var flag = false;
+    var group_fits = L.layerGroup();
+    var flag_fits = false;
+
     if (layerGroup.tiled){
       if (layerGroup.bounds){
         opts = Object.assign(opts, {bounds: worldBounds(layerGroup.bounds)});
@@ -179,16 +183,14 @@ function initSurfaceMap() {
     } else {
       if (images[name]) {
         images[name].forEach(function(image) {
-          if (!image.fits_file){
-	          if (image.bounds){
-              opts = Object.assign(opts, {bounds: worldBounds(image.bounds)});
-            }
-            if (image.max_zoom){
-	            opts = Object.assign(opts, {maxNativeZoom: image.max_zoom})
-            }
-            L.tileLayer(baseUrl + global_id + '/' + image.id + '/{z}/{x}_{y}.png', opts).addTo(group);
-            flag = true;
+	        if (image.bounds){
+            opts = Object.assign(opts, {bounds: worldBounds(image.bounds)});
           }
+          if (image.max_zoom){
+	          opts = Object.assign(opts, {maxNativeZoom: image.max_zoom})
+          }
+          L.tileLayer(baseUrl + global_id + '/' + image.id + '/{z}/{x}_{y}.png', opts).addTo(group);
+          flag = true;
         });
       }
     }
@@ -210,18 +212,17 @@ function initSurfaceMap() {
           if (layerGroup.displayMax){
             ploty_opts = Object.assign(ploty_opts, {displayMax: layerGroup.displayMax})
           }
-          opts = Object.assign(opts, {
-            bounds: b_bounds,
-            corners: image.corners, 
-            visible:visible, 
-            latLng2world: latLng2world, 
-            world2latLng: world2latLng,  
-            renderer: L.LeafletFitsGL.plotty(ploty_opts)}
-          );
-
-          L.leafletFitsGL(image.path, opts).addTo(group);
-          //L.leafletFits(image.path, {bounds: b_bounds, corners: image.corners, visible:visible, latLng2world: latLng2world, world2latLng: world2latLng,  renderer: L.LeafletFits.plotty(ploty_opts)}).addTo(group)
-          flag = true;
+          //L.leafletFitsGL(image.path, 
+          //  Object.assign(opts, {
+          //    bounds: b_bounds,
+          //    corners: image.corners, 
+          //    visible:visible, 
+          //    latLng2world: latLng2world, 
+          //    world2latLng: world2latLng,  
+          //    renderer: L.LeafletFitsGL.plotty(ploty_opts)}
+          //  )  
+          //).addTo(group);
+          flag_fits = true;
         }        
       })
     }
@@ -240,6 +241,9 @@ function initSurfaceMap() {
       if (name === "") { name = "top"; }
       if (flag){
         overlayMaps[name] = group;
+      }
+      if (flag_fits){
+        fitsLayers[name] = group_fits;
       }
     }
   });
@@ -271,7 +275,7 @@ function initSurfaceMap() {
   L.control.surfaceScale({ imperial: false, length: length }).addTo(map);
 
   //L.control.layers(baseMaps, overlayMaps).addTo(map);
-  L.control.surfaceLayers(baseMaps, overlayMaps, {collapsed:false}).addTo(map);
+  L.control.surfaceLayers(baseMaps, overlayMaps, {collapsed:false, fitsLayers: fitsLayers}).addTo(map);
   if (bounds){
     map.fitBounds(bounds);
   } else {

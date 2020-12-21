@@ -27,6 +27,7 @@ class SurfaceTileWorker
     surface.surface_layers.reverse.each_with_index do |surface_layer, idx|
       at index, "processing #{surface.name}/#{surface_layer.name} ... (#{index + 1}/#{n})"
       surface_layer.clean_tiles
+      surface_layer.generate_pngs
       line = surface_layer.make_tiles_cmd(opts)
       next unless line
       logger.info(line.command)
@@ -37,6 +38,9 @@ class SurfaceTileWorker
     surface.top_surface_images.reverse.each_with_index do |surface_image, idx|
       at index, "processing #{surface.name}/#{surface_image.image.name} ... (#{index + 1}/#{n})"
       surface_image.clean_tiles
+      if surface_image.image.fits_file?
+        surface_image.image.fits2png
+      end  
       line = surface_image.make_tiles_cmd(opts)
       next unless line
       logger.info(line.command)

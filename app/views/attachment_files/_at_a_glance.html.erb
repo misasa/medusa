@@ -49,11 +49,16 @@
   </div>
 
   <div class="hidden" id="display-type-tex">
-    <pre><code><%= @attachment_file.to_tex %></code></pre>
+    <% if @attachment_file.image? %>
+      <pre><code><%= @attachment_file.to_tex %></code></pre>
+    <% end %>
   </div>
 
+
   <div class="hidden" id="display-type-casteml">
-    <pre><code><%= @attachment_file.to_pml %></code></pre>
+    <% if @attachment_file.image? %>
+      <pre><code><%= @attachment_file.to_pml %></code></pre>
+    <% end %>
   </div>  
 </div>
 <%= mantra "Shows file information. Above is name and ID number, and left is image and attached sample.", :title => "Properties of <#{@attachment_file.name}>" %> 

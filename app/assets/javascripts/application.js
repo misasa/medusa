@@ -20,6 +20,7 @@
 //= require bootstrap
 //= require spin
 //= require jquery.spin
+//= require ndarray/dist/ndarray-browser.js
 //= require leaflet.glify/dist/glify-browser.js
 //= require leaflet-surfacemap/src/leaflet-surfacemap.js
 //= require leaflet-fits/src/leaflet-fits-gl.js
