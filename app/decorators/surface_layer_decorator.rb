@@ -71,10 +71,11 @@ class SurfaceLayerDecorator < Draper::Decorator
   end
 
   def fits_viewer(options)
+    _range = self.default_display_range
     h.content_tag(:div, nil, id: "fits-viewer", class: options[:class], data:{
       base_url: Settings.map_url,
-      display_max: self.display_max,
-      display_min: self.display_min,
+      display_max: (self.display_max.blank? ? _range[1] : self.display_max),
+      display_min: (self.display_min.blank? ? _range[0] : self.display_min),
       opacity: self.opacity,
       color_scale: self.color_scale,
       fits_images: fits_surface_images.map { |s_image| { id: s_image.image.id, name: s_image.image.name, path: s_image.image.path, default_display_range:s_image.image.default_display_range }},

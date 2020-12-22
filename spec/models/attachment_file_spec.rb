@@ -329,25 +329,42 @@ describe AttachmentFile do
 
   describe "fits2png" do
     subject { obj.fits2png(params) }
-    let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'viridis' }} 
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
     before do
       User.current = user
       obj
     end
-    it { expect(subject).not_to raise_error }
+    context "with known colormap" do
+      let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'viridis' }} 
+      it { expect(subject).not_to raise_error }
+    end
+    context "with unknown colormap" do
+      let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'jet' }} 
+      it { expect(subject).not_to raise_error }
+    end
+    context "with no colormap" do
+      let(:params){ { r_min: 0.1, r_max: 0.5 }} 
+      it { expect(subject).not_to raise_error }
+    end
+    context "with empty colormap" do
+      let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'' }} 
+      it { expect(subject).not_to raise_error }
+    end
+    context "with nil colormap" do
+      let(:params){ { r_min: 0.1, r_max: 0.5, color_map: nil }} 
+      it { expect(subject).not_to raise_error }
+    end
+
   end
 
   describe ".colormap" do
     subject { AttachmentFile.colormap(1.0/256) }
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
-    before do
-      AttachmentFile.colormap(0.0/255)
-      AttachmentFile.colormap(1.0)
-    end
-    it { expect(nil).to be_nil}
+    it { expect(AttachmentFile.colormap(1.0/256)).to eql(255)}
+    it { expect(AttachmentFile.colormap(nil)).to eql(255)}
+
   end
 
   describe "#pdf?" do

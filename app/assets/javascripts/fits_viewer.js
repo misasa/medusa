@@ -1,26 +1,39 @@
 FitsViewer = function(id, fitsImages, options){
     data_array = [];
-    displayRange = options.displayRange;
+    displayMin = options.displayMin;
+    displayMax = options.displayMax;
     colorScale = options.colorScale;
     this.fitsImages = fitsImages,
     this.colorScale = options.colorScale;
-    this.displayRange = options.displayRange;
+    //this.displayRange = options.displayRange;
+    this.displayMin = options.displayMin;
+    this.displayMax = options.displayMax;
 
     this.data_array = data_array;
     this.setColorScale = function(colorScale){
         this.colorScale = colorScale;
     }
     this.setDisplayMin = function(displayMin){
-        this.displayRange[0] = displayMin;
+        if (displayMin == ""){
+            displayMin = this.displayMinDefault;
+        }
+        this.displayMin = displayMin;
     }
     this.setDisplayMax = function(displayMax){
-        this.displayRange[1] = displayMax;
+        if (displayMax == ""){
+            displayMax = this.displayMaxDefault;
+        }
+        this.displayMax = displayMax;
     }
     var render_plot = function(){
+        if (this.colorScale == "null"){
+            this.colorScale = 'rainbow';
+        }
+
         plotDataArray("fits-canvas", this.data_array, {
             width: 1100,
             padding: [5,5],
-            domain: this.displayRange, 
+            domain: [this.displayMin,this.displayMax], 
             colorScale: this.colorScale
         });
     }
@@ -81,7 +94,9 @@ function initFitsViewer() {
     var fitsImages = JSON.parse(div.dataset.fitsImages);
     var fits_viewer = new FitsViewer("fits-viewer", fitsImages, {
             colorScale: colorScale,
-            displayRange: [displayMin, displayMax]
+            //displayRange: [displayMin, displayMax]
+            displayMin: displayMin,
+            displayMax: displayMax
         });
     return fits_viewer;
 }  

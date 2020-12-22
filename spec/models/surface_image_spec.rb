@@ -24,6 +24,9 @@ describe SurfaceImage do
     let(:obj) { FactoryGirl.create(:surface_image, :surface_id => surface.id, :image_id => image.id)}
     let(:options){ {} }
     subject {obj.make_tiles_cmd(options)}
+    before do
+      allow(File).to receive(:exist?).with(image.local_path).and_return(true)
+    end
     context "without surface_layer" do
       before do
         allow(obj).to receive(:original_zoom_level).and_return(12)

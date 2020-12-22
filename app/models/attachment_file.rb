@@ -95,6 +95,7 @@ class AttachmentFile < ActiveRecord::Base
   def save_geometry
     self.original_geometry = Paperclip::Geometry.from_file(data.queued_for_write[:original]).to_s rescue nil
   end
+
   def local_path(style = :original)
     _path = data.path(style)
     if style == :warped
@@ -154,11 +155,13 @@ class AttachmentFile < ActiveRecord::Base
 
   def rotate
     logger.info("in rotate")
+    
     raise "bounds does not exist." unless bounds
     if self.fits_file?
       local_path = self.png_path
+    else
+      local_path = self.local_path
     end
-
     raise "#{local_path} does not exist." unless File.exists?(local_path)
     raise "#{local_path} is not a image."unless (image? || fits_file?)
     logger.info("generating...")
@@ -477,7 +480,7 @@ class AttachmentFile < ActiveRecord::Base
   end
 
   def self.colormap(h, key = nil)
-    h = 0 if h.nan?
+    h = 0 if h.nil? || h.nan?
     index = (h*255.0).to_i * 4
     if key && @colormap.has_key?(key.to_sym)
       rgbas = @colormap[key.to_sym]  

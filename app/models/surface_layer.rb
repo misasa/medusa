@@ -160,5 +160,14 @@ class SurfaceLayer < ActiveRecord::Base
       end
     end
   end
-
+  def default_display_range
+    min = +Float::INFINITY
+    max = -Float::INFINITY
+    fits_surface_images.each do |s_image|
+       _range = s_image.image.default_display_range
+       min = _range[0] if _range[0] < min
+       max = _range[1] if _range[1] > max
+    end
+    [min, max]
+  end
 end

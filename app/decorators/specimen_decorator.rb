@@ -598,7 +598,7 @@ class SpecimenDecorator < Draper::Decorator
     lines << ["#{alias_specimen} name", "physical form", "quantity", "ID", "remark"].join("\t&\t") + "\\\\"
     lines << '\hline'
     children.each do |specimen|
-      lines << [specimen.name, specimen.physical_form.try!(:name), specimen.try!(:quantity), specimen.global_idspecimen.try!(:description)].join(" & ") + "\\\\"
+      lines << [specimen.name, specimen.physical_form.try!(:name), specimen.try!(:quantity), specimen.global_id, specimen.try!(:description)].join(" & ") + "\\\\"
     end
     lines << '\hline'
     lines << '\end{tabular}'
