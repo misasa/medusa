@@ -101,7 +101,11 @@ class AttachmentFilesController < ApplicationController
   end
 
   def fits_image
-    send_data(@attachment_file.fits_image.to_blob, :type => 'image/png', :disposition => 'inline')
+    fits_image_param = {}
+    fits_image_param[:r_min] = params["r_min"].to_f unless params["r_min"].blank?
+    fits_image_param[:r_max] = params["r_max"].to_f unless params["r_max"].blank?
+    fits_image_param[:color_map] = params["color_map"] unless params["color_map"].blank?
+    send_data(@attachment_file.fits_image(fits_image_param).to_blob, :type => 'image/png', :disposition => 'inline')
   end
 
   def destroy

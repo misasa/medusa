@@ -312,27 +312,28 @@ describe Specimen do
       let(:age_error){ 5 }
       let(:age_min){ age_mean - age_error }
       let(:age_max){ age_mean + age_error }
-      it { expect(subject).to be_eql("50 (5)") }
+
+      it { expect(subject).to be_eql("50.0 (5.0)") }
       context "with specified unit" do
         let(:unit){ "a" }
         let(:scale){ 1 }
-        it { expect(specimen.age_in_text(:unit => unit, :scale => scale)).to be_eql("50000.0 (5000.0)") }
+        it { expect(specimen.age_in_text(:unit => unit, :scale => scale)).to be_eql("50000.0") }
       end
       context "scale blank" do
         let(:unit){ "a" }
         let(:scale){ nil }
-        it { expect(specimen.age_in_text(:unit => unit, :scale => scale)).to be_eql("50000 (5000)") }
+        it { expect(specimen.age_in_text(:unit => unit, :scale => scale)).to be_eql("50000.0") }
       end
     end
 
     context "without min" do
       let(:age_min){ nil }
-      it { expect(subject).to be_eql("<55")}
+      it { expect(subject).to be_eql("<55.0")}
     end
 
     context "without max" do
       let(:age_max){ nil }
-      it { expect(subject).to be_eql(">45")}
+      it { expect(subject).to be_eql(">45.0")}
     end
 
     context "without min and max" do

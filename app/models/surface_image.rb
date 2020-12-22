@@ -240,7 +240,7 @@ class SurfaceImage < ActiveRecord::Base
   end
 
   def make_tiles(options = {})
-    return if image.fits_file?
+    #return if image.fits_file?
     return if image.affine_matrix.blank?	  
     make_warped_image
     raise "#{warped_image_path} does not exists." unless File.exists?(warped_image_path)
@@ -316,7 +316,12 @@ class SurfaceImage < ActiveRecord::Base
     transparent = options.has_key?(:transparent) ? options[:transparent] : true
     transparent_color = options.has_key?(:transparent_color) ? options[:transparent_color] : false
     #image_path = self.image_path
-    return if image.fits_file?
+    #return if image.fits_file?
+    if image.fits_file?
+      image_path = image.png_path
+    else
+      image_path = self.image_path
+    end
     return unless File.exist?(image_path)
     cos = image.corners_on_world
     ce = surface.center

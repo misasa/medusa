@@ -245,7 +245,40 @@ describe AttachmentFile do
       obj
     end
     it { expect(subject).not_to be_nil }
+  end
 
+  describe "local_path", :current => true do
+    subject { obj.local_path(:png) }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    before do
+      User.current = user
+      obj
+    end
+    it { expect(File.exists? subject).to be_truthy }
+  end
+
+
+  describe "png_path", :current => true do
+    subject { obj.png_path }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    before do
+      User.current = user
+      obj
+    end
+    it { expect(File.exists? subject).to be_truthy }
+  end
+
+  describe "png_url", :current => true do
+    subject { obj.png_url(:thumb) }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    before do
+      User.current = user
+      obj
+    end
+    it { expect(subject).to be_truthy }
   end
 
   describe "fits_data" do
@@ -259,8 +292,32 @@ describe AttachmentFile do
     it { expect(subject).to be_an_instance_of(Array) }
   end
 
+  describe "fits_info", :current => true do
+    subject { obj.fits_info }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    before do
+      User.current = user
+      obj
+    end
+    it { expect(subject[:mean]).not_to be_nil }
+    it { expect(subject[:sigma]).not_to be_nil }
+  end
+
+  describe "default_display_range", :current => true do
+    subject { obj.default_display_range }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    before do
+      User.current = user
+      obj
+    end
+    it { expect(subject).to be_an_instance_of(Array) }
+  end
+
   describe "fits_image" do
-    subject { obj.fits_image }
+    subject { obj.fits_image(params) }
+    let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'viridis' }} 
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
     before do
@@ -268,6 +325,46 @@ describe AttachmentFile do
       obj
     end
     it { expect(subject).to be_an_instance_of(ChunkyPNG::Image) }
+  end
+
+  describe "fits2png" do
+    subject { obj.fits2png(params) }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    before do
+      User.current = user
+      obj
+    end
+    context "with known colormap" do
+      let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'viridis' }} 
+      it { expect(subject).not_to raise_error }
+    end
+    context "with unknown colormap" do
+      let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'jet' }} 
+      it { expect(subject).not_to raise_error }
+    end
+    context "with no colormap" do
+      let(:params){ { r_min: 0.1, r_max: 0.5 }} 
+      it { expect(subject).not_to raise_error }
+    end
+    context "with empty colormap" do
+      let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'' }} 
+      it { expect(subject).not_to raise_error }
+    end
+    context "with nil colormap" do
+      let(:params){ { r_min: 0.1, r_max: 0.5, color_map: nil }} 
+      it { expect(subject).not_to raise_error }
+    end
+
+  end
+
+  describe ".colormap" do
+    subject { AttachmentFile.colormap(1.0/256) }
+    let(:user) { FactoryGirl.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    it { expect(AttachmentFile.colormap(1.0/256)).to eql(255)}
+    it { expect(AttachmentFile.colormap(nil)).to eql(255)}
+
   end
 
   describe "#pdf?" do

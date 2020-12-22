@@ -20,9 +20,15 @@
 //= require bootstrap
 //= require spin
 //= require jquery.spin
-//= require leaflet/dist/leaflet
+//= require ndarray/dist/ndarray-browser.js
 //= require leaflet.glify/dist/glify-browser.js
+//= require leaflet-surfacemap/src/leaflet-surfacemap.js
+//= require leaflet-fits/src/leaflet-fits-gl.js
+//= require leaflet-fits/src/leaflet-fits-gl-plotty.js
+//= require leaflet-surfacescale/src/leaflet-surfacescale.js
+//= require leaflet-control-surfacelayers/src/leaflet-control-surfacelayers.js
 //= require leaflet-toolbar/dist/leaflet.toolbar.js
+//= require leaflet-view-meta/src/leaflet-view-meta.js
 //= require leaflet-distortableimage/dist/leaflet.distortableimage.js
 //= require leaflet-fullscreen/dist/Leaflet.fullscreen.js
 //= require Leaflet.Spin/leaflet.spin.min.js

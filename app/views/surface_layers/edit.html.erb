@@ -12,6 +12,18 @@
     <%= f.text_field :max_zoom_level, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
+    <%= f.label 'display min', class: "small" %> ( default: <%= @surface_layer.default_display_range[0] %> )
+    <%= f.text_field :display_min, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label 'display max', class: "small" %> ( default: <%= @surface_layer.default_display_range[1] %>)
+    <%= f.text_field :display_max, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label 'color scale', class: "small" %>
+    <%= f.select :color_scale, [['rainbow','rainbow'], ['viridis', 'viridis'], ['greys', 'greys']], class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
     <label class="small">Visible</label>
     <%= f.label :visible, class: "checkbox-inline" do %>
     <%= f.check_box :visible %>
@@ -28,9 +40,28 @@
   <% end %>
   <%= mantra "When an image is coarse, feed large max zoom to avoid bluring. Leave empty to be default.", :title => "Layer preferences" %> 
 <% end %>
+<div>
+<%= link_to(tiles_surface_layer_path(@surface_layer.surface, @surface_layer), method: :post, class: "btn btn-default btn-sm", title: "refresh tiles for images in layer '#{@surface_layer.name}'") do %>
+        <span class="glyphicon glyphicon-refresh"></span>
+<% end %>
+<%= @surface_layer.fits_viewer(class: "large-map") %>
+</div>
 
 <%= javascript_tag do %>
   $(document).on("succeed.ajaxForm", "#edit_surface_layer_<%= @surface_layer.id %>", function() {
     location.href="<% surface_layer_path(@surface, @surface_layer) %>";
+  });
+  var fits_viewer = initFitsViewer();
+  $('#surface_layer_color_scale').on('change',function(){
+    fits_viewer.setColorScale(this.value);
+    fits_viewer.render();
+  });
+  $('#surface_layer_display_min').on('change',function(){
+    fits_viewer.setDisplayMin(this.value);
+    fits_viewer.render();
+  });
+  $('#surface_layer_display_max').on('change',function(){
+    fits_viewer.setDisplayMax(this.value);
+    fits_viewer.render();
   });
 <% end %>

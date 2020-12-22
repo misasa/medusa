@@ -703,6 +703,11 @@ interpret@~1.1.0:
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.1.0.tgz#7ed1b1410c6a0e0f78cf95d3b8440c63f78b8614"
   integrity sha1-ftGxQQxqDg94z5XTuEQMY/eLhhQ=
 
+iota-array@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/iota-array/-/iota-array-1.0.0.tgz#81ef57fe5d05814cd58c2483632a99c30a0e8087"
+  integrity sha1-ge9X/l0FgUzVjCSDYyqZwwoOgIc=
+
 is-absolute@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/is-absolute/-/is-absolute-1.0.0.tgz#395e1ae84b11f26ad1795e73c17378e48a301576"
@@ -725,7 +730,7 @@ is-accessor-descriptor@^1.0.0:
   dependencies:
     kind-of "^6.0.0"
 
-is-buffer@^1.1.5:
+is-buffer@^1.0.2, is-buffer@^1.1.5:
   version "1.1.6"
   resolved "https://registry.yarnpkg.com/is-buffer/-/is-buffer-1.1.6.tgz#efaa2ea9daa0d7ab2ea13a97b2b8ad51fefbe8be"
   integrity sha512-NcdALwpXkTm5Zvvbk7owOUSvVvBKDgKP5/ewfXEznmQFfs4ZRmanOeKBTjRVjka3QFoN6XJ+9F3USqfHqTaU5w==
@@ -870,6 +875,10 @@ kind-of@^6.0.0, kind-of@^6.0.2:
   resolved "https://registry.yarnpkg.com/kind-of/-/kind-of-6.0.2.tgz#01146b36a6218e64e58f3a8d66de5d7fc6f6d051"
   integrity sha512-s5kLOcnH0XqDO+FvuaLX8DDjZ18CGFk7VygH40QoKPUQhW4e2rvM0rwUq0t8IQDOwYSeLK01U90OjzBTme2QqA==
 
+leaflet-control-surfacelayers@yyachi/leaflet-control-surfacelayers:
+  version "0.0.0"
+  resolved "https://codeload.github.com/yyachi/leaflet-control-surfacelayers/tar.gz/444634d7b47452665312f8631883af60eb957986"
+
 leaflet-distortableimage@yyachi/Leaflet.DistortableImage#develop:
   version "0.6.0"
   resolved "https://codeload.github.com/yyachi/Leaflet.DistortableImage/tar.gz/db5e9a485ab5df43fe489db9b69e05382bfb07bd"
@@ -877,13 +886,31 @@ leaflet-distortableimage@yyachi/Leaflet.DistortableImage#develop:
     grunt-cli "^1.2.0"
     leaflet-toolbar "0.4.0-alpha.2"
 
+leaflet-fits@yyachi/leaflet-fits:
+  version "0.0.0"
+  resolved "https://codeload.github.com/yyachi/leaflet-fits/tar.gz/ff8db60e2e48237cdff27de2ccd4c5a18be41392"
+
 leaflet-fullscreen@Leaflet/Leaflet.fullscreen:
   version "1.0.2"
   resolved "https://codeload.github.com/Leaflet/Leaflet.fullscreen/tar.gz/91c9745c712981942499f14f7a347c80fab41096"
 
+leaflet-surfacemap@yyachi/leaflet-surfacemap:
+  version "0.0.0"
+  resolved "https://codeload.github.com/yyachi/leaflet-surfacemap/tar.gz/f9ac216583329143cfc23a1688a658667dba1b8d"
+
+leaflet-surfacescale@yyachi/leaflet-surfacescale:
+  version "0.0.0"
+  resolved "https://codeload.github.com/yyachi/leaflet-surfacescale/tar.gz/bd492b7326e89aa839c38dcdae685facaf278310"
+
 leaflet-toolbar@0.4.0-alpha.2, leaflet-toolbar@Leaflet/Leaflet.Toolbar:
   version "0.4.0-alpha.2"
   resolved "https://codeload.github.com/Leaflet/Leaflet.Toolbar/tar.gz/0a080860542dbd1cc5fb3a543f68c4a799d9c88c"
+
+leaflet-view-meta@yyachi/leaflet-view-meta:
+  version "0.0.0"
+  resolved "https://codeload.github.com/yyachi/leaflet-view-meta/tar.gz/dbf9037438eb3e9ea7a95a3cd760ebe0c2524998"
+  dependencies:
+    leaflet "^1.4.0"
 
 "leaflet.coordinates@https://github.com/yyachi/Leaflet.Coordinates#develop":
   version "0.1.5"
@@ -902,14 +929,15 @@ leaflet.glify@^3.0.0:
     polygon-lookup "^2.4.0"
     rbush "^2.0.2"
 
+leaflet@^1.4.0, leaflet@^1.7.1:
+  version "1.7.1"
+  resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.7.1.tgz#10d684916edfe1bf41d688a3b97127c0322a2a19"
+  integrity sha512-/xwPEBidtg69Q3HlqPdU3DnrXQOvQU/CCHA1tcDQVzOwm91YMYaILjNp7L4Eaw5Z4sOYdbBz6koWyibppd8Zqw==
+
 leaflet@^1.6.0:
   version "1.6.0"
   resolved "https://registry.yarnpkg.com/leaflet/-/leaflet-1.6.0.tgz#aecbb044b949ec29469eeb31c77a88e2f448f308"
   integrity sha512-CPkhyqWUKZKFJ6K8umN5/D2wrJ2+/8UIpXppY7QDnUZW5bZL5+SEI2J7GBpwh4LIupOKqbNSQXgqmrEJopHVNQ==
-
-"leaflet@https://github.com/Leaflet/Leaflet#^1.0.0":
-  version "1.5.1"
-  resolved "https://github.com/Leaflet/Leaflet#2e3e0ffbe87f246eb76d86d2633ddd59b262830b"
 
 liftoff@~2.5.0:
   version "2.5.0"
@@ -1012,6 +1040,13 @@ nanomatch@^1.2.9:
     regex-not "^1.0.0"
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
+
+ndarray@yyachi/ndarray:
+  version "1.0.19"
+  resolved "https://codeload.github.com/yyachi/ndarray/tar.gz/fa55cfae73fb7115b22bbc6710c23503ff4b2409"
+  dependencies:
+    iota-array "^1.0.0"
+    is-buffer "^1.0.2"
 
 nopt@~4.0.1:
   version "4.0.1"
@@ -1132,10 +1167,9 @@ pikaday@1.8.0:
   resolved "https://registry.yarnpkg.com/pikaday/-/pikaday-1.8.0.tgz#ce930e257042e852e6aadee1115e01554b2d71c5"
   integrity sha512-SgGxMYX0NHj9oQnMaSyAipr2gOrbB4Lfs/TJTb6H6hRHs39/5c5VZi73Q8hr53+vWjdn6HzkWcj8Vtl3c9ziaA==
 
-plotty@^0.4.3:
+plotty@yyachi/plotty:
   version "0.4.3"
-  resolved "https://registry.yarnpkg.com/plotty/-/plotty-0.4.3.tgz#900c6e1549e2805edf42f12a9b0a34eff2746eec"
-  integrity sha512-V15ZMJe1M6O39CctswMK7Rf5YNfAB0yA/VoQ2Er0ULmzi/iN2oChacjAn27l0V6GCUxbhylG4hl1YfClF+Rltg==
+  resolved "https://codeload.github.com/yyachi/plotty/tar.gz/027e61a18aec42755abcd8263432799de04def6c"
 
 point-in-polygon@1.0.1, point-in-polygon@^1.0.1:
   version "1.0.1"

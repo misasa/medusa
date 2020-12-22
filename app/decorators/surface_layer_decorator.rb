@@ -54,7 +54,7 @@ class SurfaceLayerDecorator < Draper::Decorator
         base_images << {id: s_image.image.try!(:id), name: s_image.image.try!(:name), bounds: s_image.image.bounds, path: s_image.data.url, width: s_image.image.width, height: s_image.image.height}
       else
         layer_groups << {name: s_image.image.try!(:name), opacity: 100 }
-        h_images[s_image.image.try!(:name)] = [{id: s_image.image.try!(:id), corners: s_image.image.corners_on_world, path: s_image.image.path, resource_url: h.surface_image_path(surface, s_image.image)}]
+        h_images[s_image.image.try!(:name)] = [{id: s_image.image.try!(:id), corners: s_image.image.corners_on_world, path: (s_image.image.fits_file? ? s_image.image.png_url : s_image.image.path), resource_url: h.surface_image_path(surface, s_image.image)}]
       end
     end
     h.content_tag(:div, nil, id: "surface-map", class: options[:class], data:{
@@ -68,6 +68,20 @@ class SurfaceLayerDecorator < Draper::Decorator
                     layer_groups: surface.wall_surface_layers.reverse.map { |layer| { id: layer.id, name: layer.name, opacity: layer.opacity, tiled: layer.tiled?, bounds: layer.bounds, max_zoom: layer.maxzoom, visible: layer.visible, wall: layer.wall, colorScale: layer.color_scale, displayMin: layer.display_min, displayMax: layer.display_max, resource_url: h.surface_layer_path(surface, layer) }},
                     images: h_images,
     })    
+  end
+
+  def fits_viewer(options)
+    _range = self.default_display_range
+    h.content_tag(:div, nil, id: "fits-viewer", class: options[:class], data:{
+      base_url: Settings.map_url,
+      display_max: (self.display_max.blank? ? _range[1] : self.display_max),
+      display_min: (self.display_min.blank? ? _range[0] : self.display_min),
+      opacity: self.opacity,
+      color_scale: self.color_scale,
+      fits_images: fits_surface_images.map { |s_image| { id: s_image.image.id, name: s_image.image.name, path: s_image.image.path, default_display_range:s_image.image.default_display_range }},
+    }) do
+      h.concat h.content_tag(:canvas, nil, id: "fits-canvas");
+    end
   end
 
   def map(options)
@@ -108,7 +122,8 @@ class SurfaceLayerDecorator < Draper::Decorator
                     add_spot: true,
                     add_radius: true,
                     base_images: base_images,
-                    layer_groups: layer_groups,
+                    #layer_groups: layer_groups,
+                    layer_groups: surface.wall_surface_layers.reverse.map { |layer| { id: layer.id, name: layer.name, opacity: layer.opacity, tiled: layer.tiled?, bounds: layer.bounds, max_zoom: layer.maxzoom, visible: layer.visible, wall: layer.wall, colorScale: layer.color_scale, displayMin: layer.display_min, displayMax: layer.display_max, resource_url: h.surface_layer_path(surface, layer) }},
                     images: h_images,
                     spots: [],
                     bounds: m_bounds

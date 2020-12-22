@@ -9,6 +9,9 @@ class TileWorker
     at 0, "processing #{surface_image.image.name} ..."
     surface_image.clean_tiles
     surface_image.clean_warped_image
+    if surface_image.image.fits_file?
+      surface_image.image.fits2png
+    end
     surface_image.make_tiles(opts)
     layer = surface_image.surface_layer
     if layer && !surface_image.wall

@@ -5,6 +5,7 @@ class SurfaceLayer < ActiveRecord::Base
   has_many :overlay_surface_images, -> { overlay }, class_name: 'SurfaceImage'
   has_many :calibrated_surface_images, -> { calibrated }, class_name: 'SurfaceImage'
   has_many :uncalibrated_surface_images, -> { uncalibrated }, class_name: 'SurfaceImage'
+  has_many :fits_surface_images, -> { fits_file }, class_name: 'SurfaceImage'
   has_many :images, through: :surface_images
   acts_as_list :scope => :surface_id, column: :priority
   scope :wall, -> { where(wall: true) }
@@ -87,8 +88,11 @@ class SurfaceLayer < ActiveRecord::Base
       if surface_image.wall
         next
       end
-      next if surface_image.image.fits_file?
-      image_path = surface_image.image_path
+      if surface_image.image.fits_file?
+        image_path = surface_image.image.png_path
+      else
+        image_path = surface_image.image_path
+      end
       next unless File.exist?(image_path)
       args << image_path
       args << surface_image.corners_on_world_str("%.2f")
@@ -108,7 +112,23 @@ class SurfaceLayer < ActiveRecord::Base
     line = Terrapin::CommandLine.new("make_tiles", cmd, logger: logger)
   end
 
+  def generate_pngs(options = {})
+    surface_images.reverse.each_with_index do |surface_image, index|
+      if surface_image.wall
+        next
+      end
+      if surface_image.image.fits_file?
+        params = {}
+        params[:r_min] = display_min if display_min
+        params[:r_max] = display_max if display_max
+        params[:color_map] = color_scale if color_scale
+        surface_image.image.fits2png(params)
+      end
+    end
+  end
+
   def make_tiles(options = {})
+    generate_pngs(options)
     line = make_tiles_cmd(options)
     line.run
   end
@@ -140,5 +160,14 @@ class SurfaceLayer < ActiveRecord::Base
       end
     end
   end
-
+  def default_display_range
+    min = +Float::INFINITY
+    max = -Float::INFINITY
+    fits_surface_images.each do |s_image|
+       _range = s_image.image.default_display_range
+       min = _range[0] if _range[0] < min
+       max = _range[1] if _range[1] > max
+    end
+    [min, max]
+  end
 end
