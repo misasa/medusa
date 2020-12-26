@@ -247,7 +247,7 @@ describe AttachmentFile do
     it { expect(subject).not_to be_nil }
   end
 
-  describe "local_path", :current => true do
+  describe "local_path" do
     subject { obj.local_path(:png) }
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
@@ -259,7 +259,7 @@ describe AttachmentFile do
   end
 
 
-  describe "png_path", :current => true do
+  describe "png_path" do
     subject { obj.png_path }
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
@@ -270,7 +270,7 @@ describe AttachmentFile do
     it { expect(File.exists? subject).to be_truthy }
   end
 
-  describe "png_url", :current => true do
+  describe "png_url" do
     subject { obj.png_url(:thumb) }
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
@@ -292,7 +292,7 @@ describe AttachmentFile do
     it { expect(subject).to be_an_instance_of(Array) }
   end
 
-  describe "fits_info", :current => true do
+  describe "fits_info" do
     subject { obj.fits_info }
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
@@ -304,7 +304,7 @@ describe AttachmentFile do
     it { expect(subject[:sigma]).not_to be_nil }
   end
 
-  describe "default_display_range", :current => true do
+  describe "default_display_range" do
     subject { obj.default_display_range }
     let(:user) { FactoryGirl.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }

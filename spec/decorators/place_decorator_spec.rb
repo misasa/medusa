@@ -126,13 +126,13 @@ describe PlaceDecorator do
       context " error latitude and longitude" do
         let(:latitude){360}
         let(:longitude){360}
-        it {expect(subject).to eq ""}
+        xit {expect(subject).to eq ""}
       end
     end
     context "get country name" do
       let(:latitude){35.3606}
       let(:longitude){132.75558}
-      it {expect(subject).to eq "Japan"}
+      xit {expect(subject).to eq "Japan"}
     end
   end
 
@@ -142,23 +142,23 @@ describe PlaceDecorator do
       context " latitude is nil" do
         let(:latitude){nil}
         let(:longitude){132.75558}
-        it {expect(subject).to eq []}
+        xit {expect(subject).to eq []}
       end
       context " longitude is nil" do
         let(:latitude){35.3606}
         let(:longitude){nil}
-        it {expect(subject).to eq []}
+        xit {expect(subject).to eq []}
       end
       context " error latitude and longitude" do
         let(:latitude){360}
         let(:longitude){360}
-        it {expect(subject).to eq []}
+        xit {expect(subject).to eq []}
       end
     end
     context "get country name" do
       let(:latitude){35.3606}
       let(:longitude){132.75558}
-      it {expect(subject.count).to eq 10}
+      xit {expect(subject.count).to eq 10}
     end
   end
 
