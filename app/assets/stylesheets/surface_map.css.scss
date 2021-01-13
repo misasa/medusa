@@ -16,3 +16,51 @@
 #surface-map.leaflet-container {
   background: #000000;
 }
+
+.surface-map-editor {
+  border-radius: 1px;
+  background: #fff;
+  //border: 1px solid rgba(0, 0, 0, 0.2);
+  background-clip: padding-box;
+  padding: 1px;
+  min-width: 220px;
+}
+.surface-map-editor .nowrap {
+  white-space: nowrap;
+}
+
+.surface-map-editor td {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.surface-map-editor td[colspan="2"] {
+  text-align: left;
+  font-weight: bold;
+}
+
+.surface-map-editor td:not([colspan]):first-child {
+  padding-left: 5px;
+  width: 77.5px;
+  text-align: left;
+}
+
+.surface-map-editor td:not([colspan]):last-child {
+  width: 130px;
+  text-align: right;
+}
+
+.surface-map-editor .uiElement input {
+  width: 100%;
+  //width: 120px;
+  text-align: right;
+}
+
+.surface-map-editor .uiElement {
+  margin:1px;
+}
+
+.surface-map-editor .uiHidden{
+display:none;
+}
+

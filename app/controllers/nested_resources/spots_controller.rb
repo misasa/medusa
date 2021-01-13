@@ -21,7 +21,7 @@ class NestedResources::SpotsController < ApplicationController
     else
       @parent.spots << @spot
     end
-    respond_with @spot, location: adjust_url_by_requesting_tab(request.referer), action: "error"
+    respond_with @spot.decorate, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
   def update
@@ -52,6 +52,7 @@ class NestedResources::SpotsController < ApplicationController
       :world_y,
       :target_uid,
       :radius_in_percent,
+      :radius_in_um,
       :stroke_color,
       :stroke_width,
       :fill_color,

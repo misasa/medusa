@@ -19,6 +19,7 @@ class Spot < ActiveRecord::Base
   before_validation :generate_name, if: "name.blank?"
   before_validation :generate_stroke_width, if: "stroke_width.blank?"
   before_save :set_world_xy
+  before_save :sync_radius
 #  after_create :attachment_to_target
 
   scope :with_surfaces, -> (surfaces){
@@ -59,6 +60,15 @@ class Spot < ActiveRecord::Base
   def generate_stroke_width
     self.stroke_width = 1.0
     self.stroke_width = attachment_file.percent2pixel(0.5) if attachment_file
+  end
+
+  def sync_radius
+    return unless attachment_file_id
+    if self.radius_in_percent_changed?
+      self.radius_in_um = radius_um_from_percent
+    elsif self.radius_in_um_changed?
+      self.radius_in_percent = radius_percent_from_um
+    end
   end
 
   def set_world_xy
@@ -196,6 +206,20 @@ class Spot < ActiveRecord::Base
 
   def world_y
     super || (spot_world_xy[1] if spot_world_xy)
+  end
+
+  def radius_um_from_percent
+    return unless attachment_file && attachment_file.affine_matrix
+    return if attachment_file.affine_matrix.blank?
+    return if radius_in_percent.blank?
+    attachment_file.length_in_um * radius_in_percent/100.0
+  end
+
+  def radius_percent_from_um
+    return unless attachment_file && attachment_file.affine_matrix
+    return if attachment_file.affine_matrix.empty?
+    return if radius_in_um.blank?
+    radius_in_um / attachment_file.length_in_um * 100.0
   end
 
   def to_svg

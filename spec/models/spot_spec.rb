@@ -85,17 +85,59 @@ describe Spot do
     end
   end
 
-  describe ".spot_world_xy" do
-    subject{ spot.spot_world_xy }
-    context "with calibrated image", :current => true do
+  describe "radius_in_um" do
+    subject { spot.radius_in_um }
+    context "with calibrated image" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]")}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      it {expect(subject).not_to be_nil}
+    end
+
+    context "when save radius_in_um with calibrated image" do
       let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]")}
       let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
       before do
-        #p subject
+        spot.radius_in_um = 100
+        spot.save
+      end
+      it {expect(subject).not_to be_nil}
+      after do
+        p spot
+      end
+    end
+
+    context "without calibrated image" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix => nil)}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      it {expect(subject).to be_nil}
+    end    
+
+    context "when save radius_in_um without calibrated image", :current => true do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix => nil)}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      before do
+        spot.radius_in_um = 10
+        spot.save
+      end
+      it {expect(subject).to be_eql(10.0)}
+      it {expect(spot.radius_in_percent).to be_nil}
+    end    
+
+  end
+
+  describe ".spot_world_xy" do
+    subject{ spot.spot_world_xy }
+    context "with calibrated image" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]")}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      before do
       end
       it {expect(subject).not_to be_nil}
       it {expect(subject[0]).not_to be_nil}
       it {expect(subject[1]).not_to be_nil}
+      after do
+        #p spot
+      end
     end
 
     context "without calibrated image" do
@@ -112,6 +154,49 @@ describe Spot do
       it {expect(subject).to be_nil}
     end
 
+  end
+
+
+  describe ".radius_um_from_percent" do
+    subject{ spot.radius_um_from_percent }
+    context "with calibrated image" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]")}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      it {expect(subject).not_to be_nil}
+    end
+
+    context "without calibrated image" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix => nil)}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      it {expect(subject).to be_nil}
+    end
+
+    context "with nil affine_matrix" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix => nil)}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      it {expect(subject).to be_nil}
+    end
+  end
+
+  describe ".radius_percent_from_um" do
+    subject{ spot.radius_percent_from_um }
+    context "with calibrated image" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]")}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id, radius_in_um: 10.0)}
+      it {expect(subject).not_to be_nil}
+    end
+
+    context "without calibrated image" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix => nil)}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      it {expect(subject).to be_nil}
+    end
+
+    context "with nil affine_matrix" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix => nil)}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id)}
+      it {expect(subject).to be_nil}
+    end
   end
 
   # describe "#spot_x_from_center" do
@@ -192,7 +277,7 @@ describe Spot do
         expect(subject).to be_nil
       end
     end
-    context "when the type of the data_content_type is image/jpeg,", :current => false do
+    context "when the type of the data_content_type is image/jpeg," do
       let(:data_content_type) { "image/jpeg" }
       let(:data_file_name) { "file_name_1.jpg" }
       it "return spot data" do

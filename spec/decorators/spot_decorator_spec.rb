@@ -40,7 +40,20 @@ describe SpotDecorator do
       end
     end
   end
+  describe "#as_json", :current => true do
+    subject { spot.as_json }
 
+    let(:target_uid) { nil }
+    it { expect(subject).to include("radius_in_percent" => 1.0) }
+    it { expect(subject).to include("radius_in_um" => 1.0) }
+    context "without calibrated image" do
+      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix => nil)}
+      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id).decorate}
+      it { expect(subject).to include("radius_in_percent" => 1.0) }
+      it { expect(subject).to include("radius_in_um" => nil) }
+    end
+
+  end
   describe ".target_path" do
     subject { spot.target_path }
     context "target_uid is nil" do

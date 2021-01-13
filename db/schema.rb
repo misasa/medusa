@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20201201024445) do
+ActiveRecord::Schema.define(version: 20201226085915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -397,6 +397,7 @@ ActiveRecord::Schema.define(version: 20201201024445) do
     t.integer  "surface_id",         comment: "SurfaceID"
     t.float    "world_x",            comment: "ワールドX座標"
     t.float    "world_y",            comment: "ワールドY座標"
+    t.float    "radius_in_um",       comment: "半径 micro meter"
   end
 
   add_index "spots", ["attachment_file_id"], name: "index_spots_on_attachment_file_id", using: :btree
