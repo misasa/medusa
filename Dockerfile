@@ -101,10 +101,10 @@ RUN addgroup -gid ${GID} medusa && useradd -m --home-dir /medusa --shell /bin/sh
 
 WORKDIR /medusa
 COPY Gemfile Gemfile.lock /medusa/
-#RUN bash -l -c 'bundle install'
 COPY package.json yarn.lock /medusa/
 RUN bash -l -c 'yarn install'
 COPY . /medusa
+RUN bash -l -c 'bundle install'
 RUN chown -R medusa:medusa /medusa
 USER medusa
 ENV PORT 3000

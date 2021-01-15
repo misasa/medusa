@@ -1,69 +1,437 @@
-// Customized circle for spot.
-L.circle.spot = function(map, spot, urlRoot, options) {
-    var options = L.Util.extend({}, { color: 'red', fillColor: '#f03', fillOpacity: 0.5, radius: 3 }, options),
-      marker = new L.circle(map.unproject([spot.x, spot.y], 0), options);
-  marker.on('click', function() {
-    var latlng = this.getLatLng(),
-        link = '<a href=' + urlRoot + 'records/' + spot.id + '>' + spot.name + '</a><br/>';
-    this.bindPopup(link + "x: " + latlng.lng.toFixed(2) + "<br />y: " + -latlng.lat.toFixed(2)).openPopup();
-  });
-  return marker;
-};
-
-// Radius control for Circle.
-L.Control.Radius = L.Control.extend({
-  initialize: function (layerGroup, options) {
-    this._layerGroup = layerGroup;
-    L.Util.setOptions(this, options);
+L.Surface = L.Class.extend({
+  initialize: function (options) {
+    L.setOptions(this, options)
+    //this.createMarkerForm()
+    //this.createGeometryForm()
+    //this.addDOMEvents()
   },
-  onAdd: function(map) {
-    var layerGroup = this._layerGroup,
-	div = L.DomUtil.create('div', 'leaflet-control-layers'),
-        range = this.range = L.DomUtil.create('input');
-    range.type = 'range';
-    range.min = 0.1;
-    range.max = 10;
-    range.step = 0.1;
-    range.value = 3;
-    range.style = 'width:60px;margin:3px;';
-    div.appendChild(range);
-    L.DomEvent.on(range, 'click', function(event) {
-      event.preventDefault();
-    });
-    L.DomEvent.on(range, 'change', function() {
-      layerGroup.eachLayer(function(layer) {
-	layer.setRadius(range.value);
+  obj2spot: function(obj){
+    var surface = this;
+    obj.reload = function(options = {}){
+      var url = obj.resource_url + ".json";
+      $.get(url, {}, function(data){
+        var spot = surface.obj2spot(data);
+        if ('onSuccess' in options){
+          options.onSuccess(spot);
+        }
+      });
+    },
+    obj.save = function(attrib, options = {}){
+      var url = obj.resource_url + ".json";
+      $.ajax(url,{
+        type: 'PUT',
+        data: {spot:attrib},
+        beforeSend: function(e) {console.log('saving...')},
+        complete: function(e){
+          if ('onSuccess' in options){
+            options.onSuccess(obj);
+          }
+        },
+        error: function(e) {
+          if ('onError' in options){
+            options.onError(e);
+          } else {
+            console.log(e);
+          }
+        }
+      })      
+    }
+    obj.delete = function(options){
+      var url = obj.resource_url + ".json";
+      $.ajax(url,{
+        type: 'DELETE',
+        data: {"id":obj.id},
+        beforeSend: function(e) {console.log('removing...')},
+        complete: function(e){ 
+          if ('onSuccess' in options){
+            options.onSuccess(e)
+          }
+        },
+        error: function(e) {
+          if ('onError' in options){
+            options.onError(e);
+          } else {
+            console.log(e)
+          }
+        }
+      })    
+    }
+    obj.circle_options = function(){
+      var radius_in_um = 7.5;
+      if (this.radius_in_um !== null){
+        radius_in_um = this.radius_in_um;
+      }
+      var pos = surface.world2latLng([this.world_x, this.world_y]);
+      var opts = {radius: surface.um2distance(radius_in_um, pos), surface:surface, obj:this};
+      if ('stroke_color' in this && this.stroke_color !== null && this.stroke_color !== ""){
+        opts.color = this.stroke_color;
+      }
+      if ('fill_color' in this && this.fill_color !== null && this.fill_color !== ""){
+        opts.fillColor = this.fill_color;
+      }
+      if ('opacity' in this && this.opacity !== null && this.opacity !== ""){
+        opts.fillOpacity = this.opacity;
+      }
+      return opts;
+    }
+    return obj
+  },
+  spots: function(options){
+    var url = this.options.resourceUrl + '/spots.json';
+    var surface = this;
+    var obj2spot = this.obj2spot;
+    $.get(url, {}, function(data){
+      $(data).each(function(){
+        var attrib = this;
+        var spot = surface.obj2spot(attrib);
+        if ('onSuccess' in options){
+          options.onSuccess(spot);
+        }
       });
     });
-    L.DomEvent.on(range, 'input', function() {
-      layerGroup.eachLayer(function(layer) {
-	layer.setRadius(range.value);
-      });
-    });
-    L.DomEvent.on(range, 'mouseenter', function(e) {
-      map.dragging.disable()
-    });
-    L.DomEvent.on(range, 'mouseleave', function(e) {
-      map.dragging.enable();
-    });
-    return div;
   },
-  getValue: function() {
-    return this.range.value;
+  create_spot: function (attrib, options) {
+    var url = this.options.resourceUrl + '/spots.json';
+    var surface = this;
+    $.ajax(url,{
+      type: 'POST',
+      data: {spot:attrib},
+      beforeSend: function(e) {console.log('saving...')},
+      complete: function(e){ 
+        if ('onSuccess' in options){
+          var obj = e.responseJSON;
+          var spot = surface.obj2spot(obj);
+          options.onSuccess(spot);
+        }
+        //marker.remove();
+        //surface.loadMarkers();
+      },
+      error: function(e) {console.log(e)}
+    })
   }
 });
-L.control.radius = function(layerGroup, options) {
-  return new L.Control.Radius(layerGroup, options);
-};
 
+L.surface = function(options) {
+  return new L.Surface(options);
+}
+L.SpotEditor = L.Class.extend({
+  options: {
+    placeholderHTML: ``
+  },
+  initialize: function (spot, options) {
+    this.spot = spot;
+    L.setOptions(this, options)
+    this.inputs = Object.assign({});
+    this.createUI()
+    //this.createGeometryForm()
+    //this.addDOMEvents()
+  },
+  createUI: function () {
+    var container = L.DomUtil.create('div','surface-map-editor');
+    //var _ui = this.createEditUI();
+    this.ui = container;
+    if (this.spot === undefined){
+      this.editUI = this.createNewUI();
+    } else {
+      this.infoUI = this.createInfoUI();
+      this.editUI = this.createEditUI();
+    }
+  },
+  to_attrib: function(){
+    attrib = this.input_values()
+    var style_options = {};
+    if ('style_options' in this){
+      style_options = this.style_options;
+      if ('color' in style_options){
+        attrib['stroke_color'] = style_options.color;
+      }
+      if ('fillColor' in style_options){
+        attrib['fill_color'] = style_options.fillColor;
+      }
+      if ('fillOpacity' in style_options){
+        attrib['opacity'] = style_options.fillOpacity;
+      }
+    }
+    return attrib;
+  },
+  input_values: function(){
+    values = {};
+    inputs = this.inputs
+    Object.keys(inputs).forEach(function(data){
+      values[data] = inputs[data].value
+    });
+    return values;
+  },
+  createNewUI: function(){
+    var spotEditor = this;
+    var surface = this.options.surface;
+    var geometry = this.options.geometry;
+    var container = L.DomUtil.create('div','surface-map-editor spot-editor', this.ui);
+    var table = L.DomUtil.create(
+      `table`,
+      `surface-map-editor-table`,
+      container
+    );
+    this.inputs['name'] = this.addInputRow(table, `Name`,"inputSpotName");
+    //this.inputs['name'].value = spot.name;
+    this.inputs['target_uid'] = this.addInputRow(table, `Link ID`,"inputSpotTarget");
+    //this.inputs['target_uid'].value = spot.target_uid;
+    this.inputs['world_x'] = this.addInputRow(table, `X (μm)`,"inputSpotWorldX");
+    this.inputs['world_y'] = this.addInputRow(table, `Y (μm)`,"inputSpotWorldY");
+    this.inputs['radius_in_um'] = this.addInputRow(table, `Radius (μm)`,"inputSpotRadius");
+    //this.inputs['world_x'].value = L.surfaceNumberFormatter(spot.world_x);
+    //this.inputs['world_y'].value = L.surfaceNumberFormatter(spot.world_y);
+    //if ('radius_in_um' in spot && spot.radius_in_um !== null){
+    //  this.inputs['radius_in_um'].value = L.surfaceNumberFormatter(spot.radius_in_um);
+    //}
+    var save_btn = L.DomUtil.create('button', 'btn btn-primary', container);
+    save_btn.innerHTML = 'Save';
+    L.DomEvent.on(save_btn, `click`, function (e) {
+      attrib = spotEditor.to_attrib();
+      surface.create_spot(attrib, {
+        onSuccess: function(spot){
+          geometry.closePopup();
+          geometry._map.removeLayer(geometry);
+          var pos = surface.world2latLng([spot.world_x, spot.world_y]);
+          var circle = L.surfaceCircle(pos, spot.circle_options()).addTo(spotEditor.options.spotsLayer);
+          spot.marker = circle;
+        }
+      });
+    });
+    var cancel_btn = L.DomUtil.create('button', 'btn btn-info', container);
+    cancel_btn.innerHTML = 'Cancel';
+    L.DomEvent.on(cancel_btn, `click`, function (e) {
+      geometry.closePopup();
+      geometry._map.removeLayer(geometry);
+    });
+  },
+  createEditUI: function(){
+    var spotEditor = this;
+    var spot = this.spot;
+    var surface = this.options.surface;
+    var geometry = this.options.geometry;
+    var container = L.DomUtil.create('div','surface-map-editor spot-editor', this.ui);
+    var table = L.DomUtil.create(
+      `table`,
+      `surface-map-editor-table`,
+      container
+    );
+    this.inputs['name'] = this.addInputRow(table, `Name`,"inputSpotName");
+    this.inputs['name'].value = spot.name;
+    this.inputs['target_uid'] = this.addInputRow(table, `Link ID`,"inputSpotTarget");
+    this.inputs['target_uid'].value = spot.target_uid;
+    this.inputs['world_x'] = this.addInputRow(table, `X (μm)`,"inputSpotWorldX");
+    this.inputs['world_y'] = this.addInputRow(table, `Y (μm)`,"inputSpotWorldY");
+    this.inputs['radius_in_um'] = this.addInputRow(table, `Radius (μm)`,"inputSpotRadius");
+    this.inputs['world_x'].value = L.surfaceNumberFormatter(spot.world_x);
+    this.inputs['world_y'].value = L.surfaceNumberFormatter(spot.world_y);
+    if ('radius_in_um' in spot && spot.radius_in_um !== null){
+      this.inputs['radius_in_um'].value = L.surfaceNumberFormatter(spot.radius_in_um);
+    }
+    var save_btn = L.DomUtil.create('button', 'btn btn-primary', container);
+    save_btn.innerHTML = 'Save';
+    var cancel_btn = L.DomUtil.create('button', 'btn btn-info', container);
+    cancel_btn.innerHTML = 'Cancel';
+    var delete_btn = L.DomUtil.create('button', 'btn btn-danger', container);
+    delete_btn.innerHTML = 'Delete';
+    //popupContent.push('<div style="text-align:center;">' + save_btn + cancel_btn + delete_btn + '</div>');
+    L.DomEvent.on(save_btn, `click`, function (e) {
+      attrib = spotEditor.to_attrib();
+      spot.save(attrib,{
+        onSuccess: function(e){
+          geometry.closePopup();
+          geometry._map.removeLayer(geometry);
+          spot.reload({
+            onSuccess: function(spot){
+              var pos = surface.world2latLng([spot.world_x, spot.world_y]);
+              var circle = L.surfaceCircle(pos, spot.circle_options()).addTo(spotEditor.options.spotsLayer);
+              spot.marker = circle;
+            }
+          });
+        }
+      });
+    });
+    L.DomEvent.on(cancel_btn, `click`, function (e) {
+      geometry.closePopup();
+      var pos = surface.world2latLng([spot.world_x, spot.world_y]);
+      var opts = spot.circle_options()
+      geometry.setLatLng(pos);
+      geometry.setRadius(opts.radius);
+      geometry.setStyle(opts);
+    });
+    L.DomEvent.on(delete_btn, `click`, function (e) {
+      console.log('deleting...');
+      console.log(container);
+      console.log(e);
+      spot.delete({onSuccess: function(){
+        geometry.closePopup();
+        geometry._map.removeLayer(geometry);
+      }});
+    });
+    return container;
+  },
+  createInfoUI: function(){
+    var spotEditor = this;
+    if (this.spot === undefined){
+      return;
+    }
+    var spot = this.spot;
+    var surface = this.options.surface;
+    var container = L.DomUtil.create('div','surface-map-editor spot-info', this.ui);
+    var title = L.DomUtil.create('div', 'nowrap', container);
+    title.innerHTML = spot.name_with_id;
+    if (spot.attachment_file_id){
+      var image_url = surface.resourceUrl + '/images/' + spot.attachment_file_id;
+      var image = L.DomUtil.create('div', '', container);
+      var label = L.DomUtil.create('span','',image);
+      label.innerHTML = 'image: '
+      var image_link = L.DomUtil.create('a','nowrap',image)
+      image_link.href = image_url;
+      image_link.innerHTML = spot.attachment_file_name;
+    }
+    if (spot.target_uid){
+      var link = L.DomUtil.create('div', '', container);
+      link.innerHTML = 'link: ' + spot['target_link'];
+    }
+    return container;
+  },
+  addDividerRow: function (tableElement, labelString) {
+    let tr = tableElement.insertRow();
+    let tdDivider = tr.insertCell();
+    tdDivider.colSpan = 2;
+    tdDivider.innerHTML = labelString;
+  },
+  addDataRow: function (tableElement, labelString, ) {
+    let tr = tableElement.insertRow();
+    let tdLabel = tr.insertCell();
+    tdLabel.innerText = labelString;
+    let tdData = tr.insertCell();
+    tdData.innerHTML = this.options.placeholderHTML;
+    return tdData;
+  },  
+  addInputRow: function (tableElement, labelString, classname) {
+    let tr = tableElement.insertRow();
+    let tdLabel = tr.insertCell();
+    tdLabel.innerText = labelString;
+    let tdData = tr.insertCell();
+    _inputcontainer = L.DomUtil.create("span", "uiElement input", tdData);
+    var input = L.DomUtil.create("input", classname, _inputcontainer);
+    input.type = "text";
+    L.DomEvent.disableClickPropagation(input);
+    input.value = this.options.placeholderHTML;
+    return input;
+  },
+});
+L.spotEditor = function(spot, options) {
+  return new L.SpotEditor(spot, options);
+}
 
-// Customized layer group for spots.
-L.layerGroup.spots = function(map, spots, urlRoot) {
-  var group = L.layerGroup();
-  for(var i = 0; i < spots.length; i++) {
-    L.circle.spot(map, spots[i], urlRoot).addTo(group);
+L.surfaceNumberFormatter = function(number, opts = {digits:3}){
+  return Number(number.toFixed(opts.digits));
+}
+
+L.SurfaceCircle = L.Circle.extend({
+  getLatLngOnCircle: function (){
+    var lng = this._latlng.lng,
+        lat = this._latlng.lat,
+        map = this._map,
+        crs = map.options.crs;
+    //console.log('getLatLngOnCircle...');
+
+    var d = Math.PI / 180,
+        latR = (this._mRadius / crs.R) / d,
+        top = map.project([lat + latR, lng]),
+        bottom = map.project([lat - latR, lng]),
+        p = top.add(bottom).divideBy(2),
+        lat2 = map.unproject(p).lat,
+        lngR = Math.acos((Math.cos(latR * d) - Math.sin(lat * d) * Math.sin(lat2 * d)) /
+            (Math.cos(lat * d) * Math.cos(lat2 * d))) / d;
+
+        if (isNaN(lngR) || lngR === 0) {
+          lngR = latR / Math.cos(Math.PI / 180 * lat); // Fallback for edge case, #2425
+        }
+        return L.latLng(lat2, lng - lngR);
+  },
+  _project: function () {
+
+    var lng = this._latlng.lng,
+        lat = this._latlng.lat,
+        map = this._map,
+        crs = map.options.crs;
+ 		if (true) {
+  			var d = Math.PI / 180,
+  			    latR = (this._mRadius / crs.R) / d,
+  			    top = map.project([lat + latR, lng]),
+  			    bottom = map.project([lat - latR, lng]),
+  			    p = top.add(bottom).divideBy(2),
+  			    lat2 = map.unproject(p).lat,
+  			    lngR = Math.acos((Math.cos(latR * d) - Math.sin(lat * d) * Math.sin(lat2 * d)) /
+  			            (Math.cos(lat * d) * Math.cos(lat2 * d))) / d;
+
+  			if (isNaN(lngR) || lngR === 0) {
+  				lngR = latR / Math.cos(Math.PI / 180 * lat); // Fallback for edge case, #2425
+        }
+  			this._point = p.subtract(map.getPixelOrigin());
+  			this._radius = isNaN(lngR) ? 0 : p.x - map.project([lat2, lng - lngR]).x;
+        this._radiusY = p.y - top.y;
+  		} else {
+  			var latlng2 = crs.unproject(crs.project(this._latlng).subtract([this._mRadius, 0]));
+
+  			this._point = map.latLngToLayerPoint(this._latlng);
+  			this._radius = this._point.x - map.latLngToLayerPoint(latlng2).x;
+  	}        
+    this._updateBounds();
   }
-  return group;
+});
+L.SurfaceCircle.addInitHook(function(){
+  var surface = this.options.surface;
+  var styleEditor = surface.styleEditor;
+  var spotsLayer = surface.spotsLayer;
+  var spot = this.options.obj;
+  var spotEditor = L.spotEditor(spot, {surface: surface, geometry: this, spotsLayer: spotsLayer});
+  this.options.spotEditor = spotEditor;
+  popupContent = spotEditor.ui;
+  this.bindPopup(popupContent, {
+    maxWidth: "auto",
+    minWidth: 200
+  });
+  this.on("popupopen", function(){
+    var marker = this;
+    var map = this._map;
+    var spotEditor = this.options.spotEditor;
+    console.log("PopupOpen");
+    styleEditor.enable(this);
+    this.pm.enable();
+    var tempMarker = this;
+    var world = surface.latLng2world(tempMarker.getLatLng());
+    var latlng1 = tempMarker.getLatLng();
+    var world1 = surface.latLng2world(latlng1);
+    var latlng2 = tempMarker.getLatLngOnCircle();
+    var world2 = surface.latLng2world(latlng2);
+    var radius_in_um = surface.latLngDistance2um(latlng1, latlng2);
+    spotEditor.inputs['world_x'].value = L.surfaceNumberFormatter(world[0]);
+    spotEditor.inputs['world_y'].value = L.surfaceNumberFormatter(world[1]);
+    spotEditor.inputs['radius_in_um'].value = L.surfaceNumberFormatter(radius_in_um);
+  });
+  this.on("popupclose", function(){
+    console.log("PopupClose");
+    styleEditor.disable(this);
+    this.pm.disable();
+  });
+  this.on('pm:edit', e => {
+    var spotEditor = e.layer.options.spotEditor;
+    var latlng1 = e.layer._latlng;
+    var world1 = surface.latLng2world(latlng1);
+    var latlng2 = e.layer.getLatLngOnCircle();
+    var world2 = surface.latLng2world(latlng2);
+    var radius_in_um = surface.latLngDistance2um(latlng1, latlng2);
+    spotEditor.inputs['world_x'].value = L.surfaceNumberFormatter(world1[0]);
+    spotEditor.inputs['world_y'].value = L.surfaceNumberFormatter(world1[1]);
+    spotEditor.inputs['radius_in_um'].value = L.surfaceNumberFormatter(radius_in_um);
+  });
+});
+L.surfaceCircle = function(latlng, options) {
+  return new L.SurfaceCircle(latlng, options);
 };
 
 // Customized layer group for grid.
@@ -115,12 +483,14 @@ function initSurfaceMap() {
   var baseMaps = {};
   var overlayMaps = {};
   var fitsLayers = {};
+  var circleMarkers = [];
   var zoom = 1;
   
+  var surface = L.surface({center_x: center[0], center_y: center[1], length: length, resourceUrl: resourceUrl, baseUrl: baseUrl});
   var map = L.map('surface-map', {
     maxZoom: 14,
     minZoom: 0,
-    surface: {center_x: center[0], center_y: center[1], length: length},
+    surface: {center_x: center[0], center_y: center[1], length: length, resourceUrl: resourceUrl},
     //crs: L.CRS.Simple,
     //    layers: layers
   }).setView([50.00, 14.44], 8);
@@ -128,10 +498,12 @@ function initSurfaceMap() {
   var latLng2world = function(latLng){
     point = map.project(latLng,0)
     ratio = 2*20037508.34/length
-    x = center[0] - length/2.0 + point.x * length/256;
-    y = center[1] + length/2.0 - point.y * length/256;
+    x = (center[0] - length/2.0 + point.x * length/256);
+    y = (center[1] + length/2.0 - point.y * length/256);
     return [x, y]
   };
+  map.options.surface.latLng2world = latLng2world;
+  surface.latLng2world = latLng2world;
 
   var world2latLng = function(world){
       x_w = world[0];
@@ -141,6 +513,27 @@ function initSurfaceMap() {
       latLng = map.unproject([x,y],0)
       return latLng;
   };
+  surface.world2latLng = world2latLng;
+  var um2distance = function(um, latLng){
+    var point = latLng2world(latLng); // on world
+    var point2 = [point[0] + um, point[1]]; // on world
+    var latLng2 = world2latLng(point2); // on Earth
+    var distance = latLng.distanceTo(latLng2);
+    return distance;
+  }
+  surface.um2distance = um2distance;
+  var latLngDistance2um = function(latLng, latLng2){
+    var world1 = latLng2world(latLng);
+    var world2 = latLng2world(latLng2);
+    um = Math.sqrt(Math.pow((world2[0] - world1[0]),2) - Math.pow((world2[1] - world1[1]),2));
+    return um;
+  }
+  surface.latLngDistance2um = latLngDistance2um;
+  var um2pix = function(um){
+    umperpix = length/256/(map.getZoomScale(map.getZoom(),0));
+    return um/umperpix
+  }
+  map.um2pix = um2pix;
 
   var worldBounds = function(world_bounds){
       return L.latLngBounds([world2latLng([world_bounds[0], world_bounds[1]]),world2latLng([world_bounds[2], world_bounds[3]])]);
@@ -270,7 +663,44 @@ function initSurfaceMap() {
 
   var spotsLayer = L.layerGroup();
   map.addLayer(spotsLayer);
-  loadMarkers();
+  surface.spotsLayer = spotsLayer;
+  var styleEditor =  L.control.styleEditor({
+    useGrouping: false,
+    forms: {'geometry': {'color': true, fillColor: true, fillOpacity: true }},
+  });
+  surface.styleEditor = styleEditor;
+  map.on('styleeditor:changed', function(element){
+    console.log('styleeditor:changed');
+    var options = Object.assign({}, element.options)
+    if ('obj' in element.options) {
+      var obj = element.options.obj;
+      delete options.obj;
+    }
+    delete options.radius;
+    if ('spotEditor' in element.options){
+      var spotEditor = element.options.spotEditor;
+      delete options.spotEditor;
+      delete options.surface;
+      spotEditor.style_options = options;
+    }
+  });
+  map.on('pm:create', e => {
+    console.log(e);
+    var pos = e.layer._latlng;
+    var opts = e.layer.options;
+    opts.surface = surface;
+    var circle = L.surfaceCircle(pos, opts).addTo(spotsLayer);
+    map.removeLayer(e.layer);
+    circle.openPopup();
+  });
+
+  surface.spots({
+    onSuccess: function(spot){
+      var pos = world2latLng([spot.world_x, spot.world_y]);
+      var circle = L.surfaceCircle(pos, spot.circle_options()).addTo(spotsLayer);
+      spot.marker = circle;
+    }
+  });
 
   L.control.surfaceScale({ imperial: false, length: length }).addTo(map);
 
@@ -282,179 +712,41 @@ function initSurfaceMap() {
     map.setView(map.unproject([256 / 2, 256 / 2], 0), zoom);
   }
   map.addControl(new L.Control.Fullscreen());
-
-  function loadMarkers() {
-      var url = resourceUrl + '/spots.json';
-      $.get(url, {}, function(data){
-        spotsLayer.clearLayers();
-	      $(data).each(function(){
-		      var spot = this; 
-          var pos = world2latLng([spot.world_x, spot.world_y]);
-          //var options = { draggable: true, color: 'blue', fillColor: '#f03', fillOpacity: 0.5, radius: 200 };
-          var options = { draggable: true, title: spot['name'], data:spot };
-          var marker = new L.marker(pos, options).addTo(spotsLayer);
-          var popupContent = [];
-          popupContent.push("<nobr>" + spot['name_with_id'] + "</nobr>");
-          var x_input = "<input type='text', id=\"spot_world_x\" value=\"" + spot['world_x'] + "\">";
-          var y_input = "<input type='text', id=\"spot_world_y\" value=\"" + spot['world_y'] + "\">"
-          popupContent.push("<nobr>coordinate: (" + x_input + ", " + y_input + ")</nobr>");
-          if (spot['attachment_file_id']){
-            var image_url = resourceUrl + '/images/' + spot['attachment_file_id'];
-            popupContent.push("<nobr>image: <a href=" + image_url + ">" + spot['attachment_file_name'] +  "</a>"+ "</nobr>");
-          }
-          if (spot['target_uid']){
-            popupContent.push("<nobr>link: " + spot['target_link'] +  "</nobr>");
-          }
-
-          var delete_btn = "<button class='marker-delete-button btn btn-danger'>Delete</button>";
-          var cancel_btn = "<button class='marker-cancel-button btn btn-info'>Cancel</button>";
-          var save_btn = "<button class='marker-save-button btn btn-primary'>Save</button>";
-
-          popupContent.push('<div style="text-align:center;">' + save_btn + cancel_btn + delete_btn + '</div>');
-          marker.bindPopup(popupContent.join("<br/>"), {
-            maxWidth: "auto",
-          });
-          marker.on("popupopen", onPopupOpen)
-          marker.on("popupclose", function(){
-            console.log("PopupClose");
-          })
-          marker.on('dragend', onDragEnd);
-	      });
-      });
-  }
-
-  function onDragEnd() {
-    console.log("DragEnd");
-    var tempMarker = this;
-    var spot = tempMarker.options.data;
-    var world = latLng2world(tempMarker.getLatLng());
-    //document.getElementById('spot_world_x').value = world.x;
-
-    console.log(world);
-  }
-
-  function onPopupOpen() {
-    console.log("PopupOpen");
-    var tempMarker = this;
-    //tempMarker.dragging.enable();
-    var spot = tempMarker.options.data;
-    var world = latLng2world(tempMarker.getLatLng());
-    $("#spot_world_x").val(world[0]);
-    $("#spot_world_y").val(world[1]);
-    $(".marker-save-button:visible").click(function (){
-      var url = spot.resource_url + ".json";
-      var world_x = $("#spot_world_x").val();
-      var world_y = $("#spot_world_y").val();
   
-      $.ajax(url,{
-        type: 'PUT',
-        data: {spot:{world_x: world_x, world_y: world_y}},
-        beforeSend: function(e) {console.log('saving...')},
-        complete: function(e){ 
-          map.removeLayer(tempMarker);
-          loadMarkers();
-        },
-        error: function(e) {console.log(e)}
-      })
-    });
-    $(".marker-cancel-button:visible").click(function (){
-      map.closePopup();
-      var pos = world2latLng([spot.world_x, spot.world_y]);
-      tempMarker.setLatLng(pos);
-      //map.panTo(pos);
-    });
-    $(".marker-delete-button:visible").click(function (){
-      var url = spot.resource_url + ".json";   
-      $.ajax(url,{
-        type: 'DELETE',
-        data: {"id":spot.id},
-        beforeSend: function(e) {console.log('removing...')},
-        complete: function(e){ 
-          map.removeLayer(tempMarker);
-        },
-        error: function(e) {console.log(e)}
-      })
-    });
-  }
-
-  var marker;
-  var toolbarAction = L.Toolbar2.Action.extend({
-	  options: {
-	    toolbarIcon: {
-		    html: '<svg class="svg-icons"><use xlink:href="#restore"></use><symbol id="restore" viewBox="0 0 18 18"><path d="M18 7.875h-1.774c-0.486-3.133-2.968-5.615-6.101-6.101v-1.774h-2.25v1.774c-3.133 0.486-5.615 2.968-6.101 6.101h-1.774v2.25h1.774c0.486 3.133 2.968 5.615 6.101 6.101v1.774h2.25v-1.774c3.133-0.486 5.615-2.968 6.101-6.101h1.774v-2.25zM13.936 7.875h-1.754c-0.339-0.959-1.099-1.719-2.058-2.058v-1.754c1.89 0.43 3.381 1.921 3.811 3.811zM9 10.125c-0.621 0-1.125-0.504-1.125-1.125s0.504-1.125 1.125-1.125c0.621 0 1.125 0.504 1.125 1.125s-0.504 1.125-1.125 1.125zM7.875 4.064v1.754c-0.959 0.339-1.719 1.099-2.058 2.058h-1.754c0.43-1.89 1.921-3.381 3.811-3.811zM4.064 10.125h1.754c0.339 0.959 1.099 1.719 2.058 2.058v1.754c-1.89-0.43-3.381-1.921-3.811-3.811zM10.125 13.936v-1.754c0.959-0.339 1.719-1.099 2.058-2.058h1.754c-0.43 1.89-1.921 3.381-3.811 3.811z"></path></symbol></svg>',
-		    tooltip: 'Add spot'
-	    }
-	  },
-	  addHooks: function (){
-	      if(marker !== undefined){
-		      map.removeLayer(marker);
-	      }
-	      var pos = map.getCenter();
-	      var icon = L.icon({
-          //iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACMAAAAjCAYAAAAe2bNZAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAHVJREFUWMPt1rENgDAMRNEPi3gERmA0RmAERgmjsAEjhMY0dOBIWHCWTulOL5UN8VmACpRoUdcAU1v19SQaYYQRRhhhhMmIMV//9WGuG/xudmA6C+YApGUGgNF1b0KKjithhBFGGGGE+Rtm9XfL8CHzS8340hzaXWaR1yQVAAAAAABJRU5ErkJggg==',
-          iconUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAPUlEQVRYw+3WwQkAMAgEQZP+e04+6eAECczawOBHq5LOm6BdwwEAAAAAAIwDVnpOv99AlocEAAAAAACgoQtVAgoyQcceMgAAAABJRU5ErkJggg==',
-		      iconSize:     [32, 32],
-		      iconAnchor:   [16, 16]
-	      });
-        var world = latLng2world(pos);
-	      marker = new L.marker(pos,{icon: icon, draggable:true}).addTo(map);
-	      var popupContent = '<form role="form" id="addspot-form" class="form" enctype="multipart/form-data">' +
-	        '<div class="form-group">' +
-	        '<label class="control-label">Name:</label>' +
-	        '<input type="string" placeholder="untitled spot" id="name"/>' +
-	        '</div>' +
-	        '<div class="form-group">' +
-	        '<label class="control-label">link ID:</label>' +
-	        '<input type="string" placeholder="type here" id="target_uid"/>' +
-	        '</div>' +
-          '</form>'+
-	        '<nobr><div style="text-align:center;">' +
-          '<button type="submit" value="submit" class="marker-add-button btn btn-small btn-primary">Save</button>' +
-          '<button type="submit" value="cancel" class="marker-delete-button btn btn-small btn-info">Cancel</button>' +
-          '</div></nobr>'
-        marker.bindPopup(popupContent, {
-			    maxWidth: "auto",
-        });     
-        marker.on("popupopen", function(){
-          console.log("PopupOpen");
-          var tempMarker = this;
-
-          $(".marker-delete-button:visible").click(function (){
-                map.removeLayer(tempMarker);
-          });
-
-          $(".marker-add-button:visible").click(function (){
-            var form = document.querySelector('#addspot-form');
-            var ll = marker.getLatLng();
-            var world = latLng2world(ll);
-            var url = resourceUrl + '/spots.json';
-            $.ajax(url,{
-              type: 'POST',
-              data: {spot:{name: form['name'].value, target_uid: form['target_uid'].value, world_x: world[0], world_y: world[1]}},
-              beforeSend: function(e) {console.log('saving...')},
-              complete: function(e){ 
-                marker.remove();
-                loadMarkers();
-              },
-              error: function(e) {console.log(e)}
-            })  
-          });
-
-        });
-        marker.openPopup();  
-        //$('body').on('submit', '#addspot-form', mySubmitFunction);
-        function mySubmitFunction(e){
-		      e.preventDefault();
-		      console.log("didnt submit");
-        }
-	  }
-  });
-  new L.Toolbar2.Control({
+  map.pm.addControls({
     position: 'topleft',
-    actions: [toolbarAction]
-  }).addTo(map);
-  //L.control._viewMeta({position: `topleft`, enableUserInput: true, latLng2world: latLng2world, world2latLng: world2latLng, customLabelFcn: map_LabelFcn}).addTo(map);
-  L.control.viewMeta({position: `topleft`, enableUserInput: true, latLng2world: latLng2world, world2latLng: world2latLng, customLabelFcn: map_LabelFcn}).addTo(map);
+    drawMarker: false,
+    drawCircleMarker: false,
+    drawPolyline: false,
+    drawRectangle: false,
+    drawPolygon: false,
+    drawCircle: true,
+    editMode: false,
+    dragMode: false,
+    cutPolygon: false,
+    removalMode: false
+  });
+  const customTranslation = {
+    tooltips: {
+      //placeMarker: 'Custom Marker Translation',
+      startCircle: "Click to locate spot",
+      finishCircle: "Click to set radius",      
+    },
+    buttonTitles: {
+      "drawCircleButton": "Add spot",
+    }    
+  };
+  map.pm.setLang('customName', customTranslation, 'en');
+
+  map.addControl(styleEditor);
+  L.control.viewMeta({position: `bottomleft`, enableUserInput: true, latLng2world: latLng2world, world2latLng: world2latLng, customLabelFcn: map_LabelFcn}).addTo(map);
+  map.on('zoomend', function(e) {
+    var currentZoom = map.getZoom();
+    //console.log("Current Zoom" + " " + currentZoom);
+    for(var i=0; i<circleMarkers.length; i++){
+     circleMarkers[i].setRadius(um2pix(5.0));
+    }
+  });  
   surfaceMap = map;
   return map;
 }

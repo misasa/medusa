@@ -1,6 +1,10 @@
 source 'https://rubygems.org'
 source 'http://dream.misasa.okayama-u.ac.jp/rubygems/'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
+git_source(:github) do |repo_name|
+  repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
+  "https://github.com/#{repo_name}.git"
+end
 gem 'rails', '4.0.2'
 
 # Use postgresql as the database for Active Record
@@ -63,7 +67,7 @@ gem 'barby'
 gem 'rqrcode'
 gem 'chunky_png'
 gem 'color_code'
-gem 'alchemist', github: 'halogenandtoast/alchemist'
+gem 'alchemist', github: 'halogenandtoast/alchemist', ref: '5c086daffa1baf962b6b0e304234535ba964b86a'
 gem 'geonames'
 gem 'rubyzip'
 #gem 'oai'

@@ -1,6 +1,7 @@
 GIT
-  remote: git://github.com/halogenandtoast/alchemist.git
+  remote: https://github.com/halogenandtoast/alchemist.git
   revision: 5c086daffa1baf962b6b0e304234535ba964b86a
+  ref: 5c086daffa1baf962b6b0e304234535ba964b86a
   specs:
     alchemist (0.1.7)
 

@@ -23,13 +23,13 @@ describe "place" do
       describe "pdf icon" do
         context "data_content_type is pdf" do
           let(:data_type) { "application/pdf" }
-          it "show icon" do
+          xit "show icon" do
             expect(page).to have_link("file-#{attachment_file.id}-button")
           end
         end
         context "data_content_type is jpeg" do
           let(:data_type) { "image/jpeg" }
-          it "do not show icon" do
+          xit "do not show icon" do
             expect(page).not_to have_link("file-#{attachment_file.id}-button")
           end
         end
@@ -41,13 +41,13 @@ describe "place" do
       describe "pdf icon" do
         context "data_content_type is pdf" do
           let(:data_type) { "application/pdf" }
-          it "show icon" do
+          xit "show icon" do
             expect(page).to have_link("file-#{attachment_file.id}-button")
           end
         end
         context "data_content_type is jpeg" do
           let(:data_type) { "image/jpeg" }
-          it "do not show icon" do
+          xit "do not show icon" do
             expect(page).not_to have_link("file-#{attachment_file.id}-button")
           end
         end
