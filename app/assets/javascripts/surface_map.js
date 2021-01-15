@@ -57,7 +57,7 @@ L.Surface = L.Class.extend({
       })    
     }
     obj.circle_options = function(){
-      var radius_in_um = 5.0;
+      var radius_in_um = 7.5;
       if (this.radius_in_um !== null){
         radius_in_um = this.radius_in_um;
       }
@@ -419,7 +419,6 @@ L.SurfaceCircle.addInitHook(function(){
     this.pm.disable();
   });
   this.on('pm:edit', e => {
-    console.log(e);
     var spotEditor = e.layer.options.spotEditor;
     var latlng1 = e.layer._latlng;
     var world1 = surface.latLng2world(latlng1);
@@ -727,6 +726,18 @@ function initSurfaceMap() {
     cutPolygon: false,
     removalMode: false
   });
+  const customTranslation = {
+    tooltips: {
+      //placeMarker: 'Custom Marker Translation',
+      startCircle: "Click to locate spot",
+      finishCircle: "Click to set radius",      
+    },
+    buttonTitles: {
+      "drawCircleButton": "Add spot",
+    }    
+  };
+  map.pm.setLang('customName', customTranslation, 'en');
+
   map.addControl(styleEditor);
   L.control.viewMeta({position: `bottomleft`, enableUserInput: true, latLng2world: latLng2world, world2latLng: world2latLng, customLabelFcn: map_LabelFcn}).addTo(map);
   map.on('zoomend', function(e) {
