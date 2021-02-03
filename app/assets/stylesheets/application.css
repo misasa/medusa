@@ -19,7 +19,7 @@
  *= require leaflet-control-surfacelayers/src/leaflet-control-surfacelayers.css
  *= require leaflet-distortableimage/dist/leaflet.distortableimage.css
  *= require leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.css
- *= require @geoman-io/leaflet-geoman-free/dist/leaflet-geoman.css
+ *= require leaflet.pm/dist/leaflet.pm.css
  *= require leaflet-styleeditor/dist/css/Leaflet.StyleEditor.min.css
  *= require handsontable/dist/handsontable.full.min.css
  *= require_tree .

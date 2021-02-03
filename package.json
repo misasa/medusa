@@ -6,7 +6,6 @@
   "author": "Yusuke Yachi <yusuke.yachi@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@geoman-io/leaflet-geoman-free": "https://github.com/yyachi/leaflet-geoman",
     "Leaflet.Spin": "makinacorpus/Leaflet.Spin",
     "Leaflet.ZoomLabel": "https://github.com/yyachi/Leaflet.ZoomLabel",
     "d3": "^5.16.0",
@@ -24,6 +23,7 @@
     "leaflet-view-meta": "yyachi/leaflet-view-meta",
     "leaflet.coordinates": "https://github.com/yyachi/Leaflet.Coordinates#develop",
     "leaflet.glify": "^3.0.0",
+    "leaflet.pm": "^2.2.0",
     "ndarray": "yyachi/ndarray",
     "perspective-transform": "https://github.com/jlouthan/perspective-transform",
     "plotty": "yyachi/plotty",
