@@ -6,13 +6,13 @@ describe "attachment_file" do
     create_data
     visit attachment_files_path
   end
-  let(:login_user) { FactoryGirl.create(:user) }
+  let(:login_user) { FactoryBot.create(:user) }
   let(:create_data) {}
-  
+
   describe "attachment_file list" do
     let(:create_data) { attachment_file.create_record_property(user_id: login_user.id) }
-    let(:attachment_file) { FactoryGirl.create(:attachment_file, data_file_name: "file_name", data_content_type: data_content_type) }
-    
+    let(:attachment_file) { FactoryBot.create(:attachment_file, data_file_name: "file_name", data_content_type: data_content_type) }
+
     context "data_content_type is pdf" do
       let(:data_content_type) { "application/pdf" }
       it "show pdf icon" do
@@ -26,7 +26,7 @@ describe "attachment_file" do
       end
     end
   end
-  
+
   describe "attachment_file detail screen" do
     before { click_link(attachment_file.data_file_name) }
 
@@ -38,9 +38,9 @@ describe "attachment_file" do
           attachment_file.create_record_property(user_id: login_user.id)
         end
         describe "spot link" do
-          let(:spot) { FactoryGirl.create(:spot, attachment_file_id: attachment_file.id, target_uid: target_uid) }
-          let(:attachment_file) { FactoryGirl.create(:attachment_file) }
-          let(:obj) { FactoryGirl.create(:specimen, name: "obj_name") }
+          let(:spot) { FactoryBot.create(:spot, attachment_file_id: attachment_file.id, target_uid: target_uid) }
+          let(:attachment_file) { FactoryBot.create(:attachment_file) }
+          let(:obj) { FactoryBot.create(:specimen, name: "obj_name") }
           # context "link exists" do
           #   let(:target_uid) { obj.record_property.global_id }
           #   it "link name is displayed" do
@@ -59,7 +59,7 @@ describe "attachment_file" do
 
     # describe "at-a-glance tab" do
     #   let(:create_data) { attachment_file.create_record_property(user_id: login_user.id) }
-    #   let(:attachment_file) { FactoryGirl.create(:attachment_file, data_file_name: "file_name", data_content_type: data_content_type, original_geometry: "", affine_matrix: []) }
+    #   let(:attachment_file) { FactoryBot.create(:attachment_file, data_file_name: "file_name", data_content_type: data_content_type, original_geometry: "", affine_matrix: []) }
     #   before { click_link("at-a-glance") }
     #   describe "pdf icon" do
     #     context "data_content_type is pdf" do
@@ -77,5 +77,5 @@ describe "attachment_file" do
     #   end
     # end
   end
-  
+
 end

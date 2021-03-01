@@ -1,4 +1,4 @@
-class UpdateReferableTypeColumnToReferrings < ActiveRecord::Migration
+class UpdateReferableTypeColumnToReferrings < ActiveRecord::Migration[4.2]
   def up
     execute "UPDATE referrings SET referable_type = 'Specimen' WHERE referable_type = 'Stone'"
   end

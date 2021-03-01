@@ -4,7 +4,7 @@ describe "Author" do
 
   describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:author, name: name) }
+      let(:obj) { FactoryBot.build(:author, name: name) }
       context "is presence" do
         let(:name) { "sample_author" }
         it { expect(obj).to be_valid }

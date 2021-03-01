@@ -1,4 +1,4 @@
-class UpdateAttachableTypeColumnToAttachings < ActiveRecord::Migration
+class UpdateAttachableTypeColumnToAttachings < ActiveRecord::Migration[4.2]
   def up
     execute "UPDATE attachings SET attachable_type = 'Specimen' WHERE attachable_type = 'Stone'"
   end

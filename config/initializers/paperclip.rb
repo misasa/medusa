@@ -12,5 +12,8 @@ module Paperclip
       end
       basename
     end
-  end 
+  end
+  Paperclip.options[:content_type_mappings] = {
+    fits: %w(application/octet-stream)
+  }
 end

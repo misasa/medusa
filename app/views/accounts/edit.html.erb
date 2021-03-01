@@ -1,6 +1,7 @@
 <div class="row">
   <div class="col-lg-4">
-    <%= form_for(@user,url: account_path) do |f| %>
+    <%= form_with(model:@user,url: account_path) do |f| %>
+
     <%= error_notification(@user.errors) %>
 
     <div>
@@ -57,7 +58,7 @@
       	<% if @user.omniauth_uid(:google_oauth2).present? %>
       	  <%= link_to("Unlink", unlink_account_path(provider: :google_oauth2), method: :post, class: "btn btn-mini btn-default") %>
       	<% else %>
-      	  <%= link_to("Link", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-mini btn-default") %>
+      	  <%= link_to("Link", user_google_oauth2_omniauth_authorize_path, class: "btn btn-mini btn-default") %>
       	<% end %>
       </div>
     <% end %>
@@ -87,7 +88,7 @@ Number of IGSN assinged records: <%= Specimen.readables(@user).count("igsn is no
 
 <div class="row">
   <div class="col-lg-12">
-    <%= form_tag(find_by_global_id_account_path,method: :get) do %>
+    <%= form_with url:find_by_global_id_account_path, method: :get do %>
     <span class="pull-left">Table of records that you can access: Fill ID</span>
     <div class="col-lg-4">
       <div class="input-group">

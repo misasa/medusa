@@ -1,4 +1,4 @@
-class CreateCategoryMeasurementItems < ActiveRecord::Migration
+class CreateCategoryMeasurementItems < ActiveRecord::Migration[4.2]
   def change
     create_table :category_measurement_items do |t|
       t.integer :measurement_item_id

@@ -2,12 +2,12 @@ require 'spec_helper'
 include ActionDispatch::TestProcess
 
 describe DivideSpecimensController do
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
 
   describe "PUT update" do
-    let!(:specimen) { FactoryGirl.create(:specimen) }
-    let!(:physical_form) { FactoryGirl.create(:physical_form) }
+    let!(:specimen) { FactoryBot.create(:specimen) }
+    let!(:physical_form) { FactoryBot.create(:physical_form) }
     let(:attributes) do
       {
         quantity: 100,
@@ -18,7 +18,7 @@ describe DivideSpecimensController do
         ]
       }
     end
-    subject { put :update, id: specimen.id, specimen:attributes, format: :json }
+    subject { put :update, params: { id: specimen.id, specimen:attributes, format: :json }}
     context "witout format" do
       before { subject }
       it { expect(assigns(:specimen)).to eq specimen }
@@ -29,8 +29,8 @@ describe DivideSpecimensController do
   end
 
   describe "PUT loss" do
-    let!(:specimen) { FactoryGirl.create(:specimen, quantity: 200, quantity_unit: "kg") }
-    let!(:physical_form) { FactoryGirl.create(:physical_form) }
+    let!(:specimen) { FactoryBot.create(:specimen, quantity: 200, quantity_unit: "kg") }
+    let!(:physical_form) { FactoryBot.create(:physical_form) }
     let(:attributes) do
       {
         quantity: 100,
@@ -41,7 +41,7 @@ describe DivideSpecimensController do
         ]
       }
     end
-    before { put :loss, params }
+    before { put :loss, params: params }
     subject { JSON.parse(response.body) }
     context "exists manual params" do
       let(:params) { { id: specimen.id, specimen:attributes, manual: "true" } }

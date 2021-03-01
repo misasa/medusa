@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SurfaceDecorator do
-  let(:surface){ FactoryGirl.create(:surface).decorate }
+  let(:surface){ FactoryBot.create(:surface).decorate }
   describe ".url_for_tile" do
     subject { surface.url_for_tile }
     before do
@@ -12,7 +12,7 @@ describe SurfaceDecorator do
   end
   describe "map" do
     subject { surface.decorate.map }
-    let(:surface){ FactoryGirl.create(:surface) }
+    let(:surface){ FactoryBot.create(:surface) }
     let(:left) {-3808.472}
     let(:upper) {3787.006}
     let(:right) {3851.032}

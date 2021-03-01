@@ -9,7 +9,7 @@ class TableAnalysesController < ApplicationController
   end
 
   def update
-    @table.update_attributes(table_params)
+    @table.update(table_params)
     respond_with @table
   end
 

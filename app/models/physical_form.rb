@@ -1,4 +1,4 @@
-class PhysicalForm < ActiveRecord::Base
+class PhysicalForm < ApplicationRecord
   has_many :specimens
 
   validates :name, presence: true, length: {maximum: 255}

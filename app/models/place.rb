@@ -1,4 +1,4 @@
-class Place < ActiveRecord::Base
+class Place < ApplicationRecord
   include HasRecordProperty
   include OutputPdf
   include OutputCsv
@@ -200,6 +200,21 @@ class Place < ActiveRecord::Base
         degree = -1.0 * degree if self.longitude_dms_direction == 'W' || self.longitude_dms_direction == 'west'
         self.longitude = degree
       end
+    end
+  end
+
+  private
+
+  def _assign_attribute(k, v)
+    super
+  rescue ActiveModel::UnknownAttributeError
+    case k.to_s
+    when /latitude\_dms\_(.*)/
+      latitude_dms[$1.to_sym] = v
+    when /longitude\_dms\_(.*)/
+      longitude_dms[$1.to_sym] = v
+    else
+      raise
     end
   end
 

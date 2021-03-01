@@ -1,4 +1,4 @@
-class AddConversionAndHtmlAndTextToUnits < ActiveRecord::Migration
+class AddConversionAndHtmlAndTextToUnits < ActiveRecord::Migration[4.2]
   def change
     Unit.destroy_all
     change_table :units do |t|

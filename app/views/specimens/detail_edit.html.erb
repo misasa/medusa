@@ -1,4 +1,4 @@
-<%= form_for @specimen, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
+<%= form_with model:@specimen, local: false, format: :json, html: { id: "edit_specimen_#{@specimen.id}", class: "update", role: "form" } do |f| %>
   <div class="form-group form-group-sm">
     <%= f.label :igsn, class: "small" %>
     <%= f.text_field :igsn, class: "form-control input-sm", disabled: true%>

@@ -13,6 +13,10 @@ Bundler.require(:default, Rails.env)
 
 module Medusa
   class Application < Rails::Application
+    # Use the responders controller from the responders gem
+    config.app_generators.scaffold_controller :responders_controller
+    config.action_view.form_with_generates_ids = true
+
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.

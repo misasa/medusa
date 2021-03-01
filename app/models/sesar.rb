@@ -140,7 +140,7 @@ class Sesar < ActiveResource::Base
 
     sample_type = sesar_sample.sample_type
     if sample_type
-      model.physical_form = PhysicalForm.find_or_create_by_sesar_sample_type(sample_type) do |physical_form|
+      model.physical_form = PhysicalForm.find_or_create_by(sesar_sample_type: sample_type) do |physical_form|
         physical_form.name = sample_type
       end
     end
@@ -227,22 +227,22 @@ class Sesar < ActiveResource::Base
        ""
     end
   end
-  
+
   def self.country_name(result)
     return "" if result.blank? || result.address.blank?
     result.country
   end
-  
+
   def self.province_name(result)
     return "" if result.blank? || result.address.blank?
     result.state
   end
-  
+
   def self.city_name(result)
     return "" if result.blank? || result.address.blank?
     result.city
   end
-  
+
   def self.external_url(model)
     urls = Array(Settings.sesar.external_urls).each_with_object([]) do |external_url, array|
       array << {
@@ -320,7 +320,7 @@ class Sesar < ActiveResource::Base
       "xsi:schemaLocation" => "http://app.geosamples.org/classifications.xsd"
     }
   end
-  
+
   def classification_xml(builder, sample, values)
     builder.classification(classification_schema) do
       build_classification_part(sample, values) do |values|
@@ -336,7 +336,7 @@ class Sesar < ActiveResource::Base
       end
     end
   end
-  
+
   def build_classification_part(sample, values, &block)
     if values.size > 2
       first = values.shift
@@ -347,7 +347,7 @@ class Sesar < ActiveResource::Base
       block.call values
     end
   end
-  
+
   def sample_other_names_xml(sample, values)
     sample.sample_other_names do
       values.each do |value|
@@ -355,7 +355,7 @@ class Sesar < ActiveResource::Base
       end
     end
   end
-  
+
   def external_urls_xml(sample, values)
     sample.external_urls do
       values.each do |value|

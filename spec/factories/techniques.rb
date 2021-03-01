@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :technique do
-    name "double spike"
+    name { "double spike" }
   end
 end

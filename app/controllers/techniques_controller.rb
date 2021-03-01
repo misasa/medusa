@@ -5,7 +5,7 @@ class TechniquesController < ApplicationController
   layout "admin"
   
   def index
-    @search = Technique.search(params[:q])
+    @search = Technique.ransack(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
 #    @techniques = @search.result.page(params[:page]).per(params[:per_page])
     @techniques = @search.result
@@ -27,7 +27,7 @@ class TechniquesController < ApplicationController
   end
   
   def update
-    @technique.update_attributes(technique_params)
+    @technique.update(technique_params)
     respond_with(@technique, location: techniques_path)
   end
   

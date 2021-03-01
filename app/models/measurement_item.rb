@@ -1,11 +1,11 @@
-class MeasurementItem < ActiveRecord::Base
+class MeasurementItem < ApplicationRecord
   has_many :chemistries, dependent: :destroy
   has_many :category_measurement_items, dependent: :destroy
   has_many :measurement_categories, through: :category_measurement_items
   belongs_to :unit
 
   validates :nickname, presence: true, length: {maximum: 255}
-  validates :unit, existence: true, allow_nil: true
+  validates :unit, presence: { message: :required, if: -> { unit_id.present? } }
 
   scope :categorize, ->(measurement_category_id) { joins(:measurement_categories).where(measurement_categories: {id: measurement_category_id}) }
   

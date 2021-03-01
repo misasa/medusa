@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe "surfaces/show.html.erb" do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:obj_1){ FactoryGirl.create(:surface, name: 'hoge')  }
-  let(:specimen_1){ FactoryGirl.create(:specimen, name: 'sample-1')  }
-  let(:specimen_2){ FactoryGirl.create(:specimen, name: 'sample-2')  }
-  let(:bib_1){ FactoryGirl.create(:bib, name: 'bib-1')  }
-  let(:bib_2){ FactoryGirl.create(:bib, name: 'bib-2')  }
+  let(:user) { FactoryBot.create(:user) }
+  let(:obj_1){ FactoryBot.create(:surface, name: 'hoge')  }
+  let(:specimen_1){ FactoryBot.create(:specimen, name: 'sample-1')  }
+  let(:specimen_2){ FactoryBot.create(:specimen, name: 'sample-2')  }
+  let(:bib_1){ FactoryBot.create(:bib, name: 'bib-1')  }
+  let(:bib_2){ FactoryBot.create(:bib, name: 'bib-2')  }
 
   before do
     assign(:surface, obj_1.decorate)
@@ -34,7 +34,7 @@ describe "surfaces/show.html.erb" do
     end
   end
   context "with image" do
-    let(:image_1) { FactoryGirl.create(:attachment_file, :name => 'fuga', :affine_matrix => nil) }
+    let(:image_1) { FactoryBot.create(:attachment_file, :name => 'fuga', :affine_matrix => nil) }
     before do
       obj_1.images << image_1
     end

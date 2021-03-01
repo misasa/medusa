@@ -1,4 +1,4 @@
-<%= form_tag update_order_search_columns_path, remote: true, format: :json, class: "update", id: "update_display_search_columns" do %>
+<%= form_with url:update_order_search_columns_path(format: :json), local: false, class: "update", id: "update_display_search_columns" do %>
   <%= render partial: "index_form" %>
 <% end %>
 <%= javascript_tag do %>

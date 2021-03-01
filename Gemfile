@@ -5,19 +5,23 @@ git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
 end
-gem 'rails', '4.0.2'
+
+gem 'rails', '6.1.0'
 
 # Use postgresql as the database for Active Record
 gem 'pg'
 
 # Use SCSS for stylesheets
-gem 'sass-rails', '~> 4.0.2'
+gem 'sass-rails', '~> 5.1'
+
+#If the Sprockets higher than the following version, Sprockets::Railtie::ManifestNeededError will occur when the app is started.
+gem 'sprockets', '3.7.2'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 4.1.18'
 
 # Use CoffeeScript for .js.coffee assets and views
-gem 'coffee-rails', '~> 4.0.0'
+gem 'coffee-rails'
 
 # See https://github.com/sstephenson/execjs#readme for more supported runtimes
 gem 'therubyracer', platforms: :ruby
@@ -26,13 +30,13 @@ gem 'therubyracer', platforms: :ruby
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'spinjs-rails'
+gem "best_in_place", git: "https://github.com/mmotherwell/best_in_place"
 
-gem 'best_in_place', '~> 3.0.1'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
 # gem 'turbolinks'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
-gem 'jbuilder', '~> 1.2'
+gem 'jbuilder'
 #gem 'active_model_serializers'
 
 gem 'lazy_high_charts'
@@ -56,10 +60,10 @@ gem 'unicorn'
 # gem 'debugger', group: [:development, :test]
 
 gem 'devise'
-gem 'omniauth'
+gem 'omniauth', '1.9.1'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-shibboleth'
-gem 'cancan'
+gem 'cancancan'
 gem 'kaminari'
 gem 'draper'
 gem 'paperclip'
@@ -72,15 +76,14 @@ gem 'geonames'
 gem 'rubyzip'
 #gem 'oai'
 gem 'comma'
-gem 'acts_as_taggable_on'
+gem 'acts-as-taggable-on'
 gem 'exception_notification'
 gem 'settingslogic'
-gem 'validates_existence'
 #gem 'acts_as_mappable', git: 'git@devel.misasa.okayama-u.ac.jp:gems/actsasmappable.git'
-gem 'acts_as_mappable', '0.1.3'
+gem 'acts_as_mappable', '0.1.4'
 #gem 'with_recursive', git: 'git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.git'
-gem 'with_recursive', '0.0.5'
-gem 'thinreports'
+gem 'with_recursive', '0.0.6'
+gem 'thinreports', '0.7.7'
 gem 'bootstrap-sass'
 gem 'ransack'
 gem 'whenever', require: false
@@ -88,25 +91,28 @@ gem 'acts_as_list'
 gem 'builder'
 gem 'activeresource'
 gem 'geocoder'
-gem 'migration_comments'
 #gem 'dimensions'
 gem 'sidekiq', '~> 4.2'
 gem 'sidekiq-failures'
 gem 'sidekiq-history'
 gem 'sidekiq-status'
 gem 'terrapin'
+gem 'bigdecimal', '1.3.5'
+gem 'responders'
+gem 'webpacker', '5.2.1'
 group :development, :test do
   gem 'rack-lineprof'
   gem 'stackprof'
   gem 'stackprof-webnav'
-  gem 'rack-mini-profiler', '~> 0.10', require: false
+  gem 'rack-mini-profiler', require: false
   gem 'bullet'
   gem 'rak'
   gem 'pry-rails'
   gem 'pry-doc'
   gem 'pry-stack_explorer'
   gem 'pry-byebug'
-  gem 'rspec-rails', '>= 3.0.0.beta1'
+  gem 'rspec-rails', '~> 4.0.2'
+  gem 'rails-controller-testing'
   gem 'spring'
   gem 'guard-rspec', require: false
   gem 'capistrano'
@@ -125,6 +131,6 @@ group :test do
   gem 'simplecov', :require => false
   gem 'simplecov-rcov', :require => false
   gem 'ci_reporter'
-  gem 'factory_girl_rails'
+  gem 'factory_bot_rails'
   gem 'timecop'
 end

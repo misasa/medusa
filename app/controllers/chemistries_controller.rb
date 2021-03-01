@@ -7,7 +7,7 @@ class ChemistriesController < ApplicationController
   end
 
   def update
-    @chemistry.update_attributes(chemistry_params)
+    @chemistry.update(chemistry_params)
     respond_with @chemistry, location: analysis_path(@chemistry.analysis)
   end
 

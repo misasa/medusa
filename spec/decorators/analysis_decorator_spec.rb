@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe AnalysisDecorator do
-  let(:obj) { FactoryGirl.create(:analysis).decorate }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:obj) { FactoryBot.create(:analysis).decorate }
+  let(:user) { FactoryBot.create(:user) }
   before{ User.current = user }
 
   describe "icon" do
@@ -11,7 +11,7 @@ describe AnalysisDecorator do
   end
 
   describe ".primary_picture" do
-    let(:attachment_file){ FactoryGirl.create(:attachment_file) }
+    let(:attachment_file){ FactoryBot.create(:attachment_file) }
     let(:picture) { obj.primary_picture(width: width, height: height) }
     let(:capybara) { Capybara.string(picture) }
     let(:body) { capybara.find("body") }

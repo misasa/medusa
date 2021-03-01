@@ -1,4 +1,4 @@
-<%= form_for @unit, html: {class: "col-lg-3"} do |f| %>
+<%= form_with model:@unit, html: {class: "col-lg-3"} do |f| %>
   <%= error_notification(@unit.errors) %>
 
   <div class="form-group form-group-sm">

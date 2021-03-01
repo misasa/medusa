@@ -1,4 +1,4 @@
-<%= form_for analysis, remote: true, format: :json, html: { class: "create" } do |f| %>
+<%= form_with model:analysis, local: false, format: :json, html: { id: "new_analysis", class: "create" } do |f| %>
 <tr>
   <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
   <th><%= f.text_field :name, class: "form-control input-sm", size: 15 %></th>

@@ -1,4 +1,4 @@
-class CreateAttachings < ActiveRecord::Migration
+class CreateAttachings < ActiveRecord::Migration[4.2]
   def change
     create_table :attachings do |t|
       t.integer :attachment_file_id

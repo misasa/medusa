@@ -1,4 +1,4 @@
-class CreateReferrings < ActiveRecord::Migration
+class CreateReferrings < ActiveRecord::Migration[4.2]
   def change
     create_table :referrings do |t|
       t.integer :bib_id

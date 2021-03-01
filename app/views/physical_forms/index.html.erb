@@ -29,7 +29,7 @@
     <% end %>
   </tbody>
   <tfoot>
-    <%= form_for PhysicalForm.new, remote: true, format: :json, html: { class: "create" } do |f| %>
+    <%= form_with model:PhysicalForm.new, local: false, format: :json, html: { id: "new_physical_form", class: "create" } do |f| %>
     <tr>
       <td></td>
       <td><%= f.text_field :name, class: "form-control input-sm" %></td>

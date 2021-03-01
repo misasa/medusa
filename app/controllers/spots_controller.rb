@@ -22,7 +22,7 @@ class SpotsController < ApplicationController
   end
 
   def update
-    @spot.update_attributes(spot_params)
+    @spot.update(spot_params)
     #respond_with @spot, location: attachment_file_path(@spot.attachment_file)
     respond_with @spot
   end
@@ -50,7 +50,7 @@ class SpotsController < ApplicationController
   end
 
   def bundle_update
-    @spots.each { |spot| spot.update_attributes(spot_params.only_presence) }
+    @spots.each { |spot| spot.update(spot_params.only_presence) }
     render :bundle_edit
   end
 

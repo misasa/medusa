@@ -1,4 +1,4 @@
-class CreateBibs < ActiveRecord::Migration
+class CreateBibs < ActiveRecord::Migration[4.2]
   def change
     create_table :bibs do |t|
       t.string :entry_type

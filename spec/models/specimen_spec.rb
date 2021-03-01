@@ -2,16 +2,16 @@
 require "spec_helper"
 
 describe Specimen do
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
   before { User.current = user }
 
   describe "publish!" do
     subject { specimen.publish!  }
-    let(:specimen){ FactoryGirl.create(:specimen, parent_id: specimen_root.id)}
-    let(:specimen_root) { FactoryGirl.create(:specimen, parent_id: nil, place_id: place.id) }
-    let(:specimen_sibling) { FactoryGirl.create(:specimen, parent_id: specimen_root.id) }
-    let(:specimen_descendant) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
-    let(:place){ FactoryGirl.create(:place) }
+    let(:specimen){ FactoryBot.create(:specimen, parent_id: specimen_root.id)}
+    let(:specimen_root) { FactoryBot.create(:specimen, parent_id: nil, place_id: place.id) }
+    let(:specimen_sibling) { FactoryBot.create(:specimen, parent_id: specimen_root.id) }
+    let(:specimen_descendant) { FactoryBot.create(:specimen, parent_id: specimen.id) }
+    let(:place){ FactoryBot.create(:place) }
     before do
       specimen
       specimen_sibling
@@ -23,11 +23,11 @@ describe Specimen do
   end
 
   describe "rplace" do
-    let(:specimen){ FactoryGirl.create(:specimen, place_id: nil) }
-    let(:specimen1) { FactoryGirl.create(:specimen, parent_id: specimen.id, place_id: nil) }
-    let(:specimen2) { FactoryGirl.create(:specimen, parent_id: specimen1.id, place_id: place.id) }
-    let(:specimen3) { FactoryGirl.create(:specimen, parent_id: specimen2.id, place_id: nil) }
-    let(:place){ FactoryGirl.create(:place)}
+    let(:specimen){ FactoryBot.create(:specimen, place_id: nil) }
+    let(:specimen1) { FactoryBot.create(:specimen, parent_id: specimen.id, place_id: nil) }
+    let(:specimen2) { FactoryBot.create(:specimen, parent_id: specimen1.id, place_id: place.id) }
+    let(:specimen3) { FactoryBot.create(:specimen, parent_id: specimen2.id, place_id: nil) }
+    let(:place){ FactoryBot.create(:place)}
 
     context "get its place" do
       it { expect(specimen.rplace).to be_nil}
@@ -47,38 +47,38 @@ describe Specimen do
   end
 
   describe "status" do
-    let(:specimen){ FactoryGirl.create(:specimen) }
+    let(:specimen){ FactoryBot.create(:specimen) }
     subject { specimen.status }
     context "normal" do
-      before { specimen.update_attributes(quantity: 0.5, quantity_unit: "mg") }
+      before { specimen.update(quantity: 0.5, quantity_unit: "mg") }
       it { expect(subject).to eq(0) }
     end
     context "undetermined quantity" do
-      before { specimen.update_attributes(quantity: "", quantity_unit: "") }
+      before { specimen.update(quantity: "", quantity_unit: "") }
       it { expect(subject).to eq(1) }
     end
     context "disappearance" do
-      before { specimen.update_attributes(quantity: "0", quantity_unit: "kg") }
+      before { specimen.update(quantity: "0", quantity_unit: "kg") }
       it { expect(subject).to eq(2) }
     end
     context "disposal" do
-      before { specimen.record_property.update_attributes(disposed: true) }
+      before { specimen.record_property.update(disposed: true) }
       it { expect(subject).to eq(3) }
     end
     context "loss" do
-      before { specimen.record_property.update_attributes(lost: true) }
+      before { specimen.record_property.update(lost: true) }
       it { expect(subject).to eq(4) }
     end
   end
 
   describe ".full_analyses" do
-    let(:specimen){ FactoryGirl.create(:specimen) }
-    let(:specimen1) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
-    let(:specimen2) { FactoryGirl.create(:specimen, parent_id: specimen1.id) }
-    let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen1.id)}
-    let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen1.id)}
-    let(:analysis_3) { FactoryGirl.create(:analysis, specimen_id: specimen2.id)}
-    let(:analysis_4) { FactoryGirl.create(:analysis, specimen_id: specimen2.id)}
+    let(:specimen){ FactoryBot.create(:specimen) }
+    let(:specimen1) { FactoryBot.create(:specimen, parent_id: specimen.id) }
+    let(:specimen2) { FactoryBot.create(:specimen, parent_id: specimen1.id) }
+    let(:analysis_1) { FactoryBot.create(:analysis, specimen_id: specimen1.id)}
+    let(:analysis_2) { FactoryBot.create(:analysis, specimen_id: specimen1.id)}
+    let(:analysis_3) { FactoryBot.create(:analysis, specimen_id: specimen2.id)}
+    let(:analysis_4) { FactoryBot.create(:analysis, specimen_id: specimen2.id)}
     before do
       specimen1
       specimen2
@@ -93,13 +93,13 @@ describe Specimen do
   end
 
   describe ".to_pml" do
-    let(:specimen1) { FactoryGirl.create(:specimen) }
-    let(:specimen2) { FactoryGirl.create(:specimen) }
+    let(:specimen1) { FactoryBot.create(:specimen) }
+    let(:specimen2) { FactoryBot.create(:specimen) }
     let(:specimens) { [specimen1] }
-    let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen1.id)}
-    let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen1.id)}
-    let(:analysis_3) { FactoryGirl.create(:analysis, specimen_id: specimen2.id)}
-    let(:analysis_4) { FactoryGirl.create(:analysis, specimen_id: specimen2.id)}
+    let(:analysis_1) { FactoryBot.create(:analysis, specimen_id: specimen1.id)}
+    let(:analysis_2) { FactoryBot.create(:analysis, specimen_id: specimen1.id)}
+    let(:analysis_3) { FactoryBot.create(:analysis, specimen_id: specimen2.id)}
+    let(:analysis_4) { FactoryBot.create(:analysis, specimen_id: specimen2.id)}
     before do
       specimen1
       specimen2
@@ -116,9 +116,9 @@ describe Specimen do
   end
 
   describe ".descendants" do
-    let(:root) { FactoryGirl.create(:specimen, name: "root") }
-    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:root) { FactoryBot.create(:specimen, name: "root") }
+    let(:child_1){ FactoryBot.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:specimen, parent_id: child_1.id) }
     before do
       root;child_1;child_1_1;
     end
@@ -128,9 +128,9 @@ describe Specimen do
   end
 
   describe ".self_and_descendants" do
-    let(:root) { FactoryGirl.create(:specimen, name: "root") }
-    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:root) { FactoryBot.create(:specimen, name: "root") }
+    let(:child_1){ FactoryBot.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:specimen, parent_id: child_1.id) }
     before do
       root;child_1;child_1_1;
     end
@@ -140,8 +140,8 @@ describe Specimen do
   end
 
   describe ".blood_path" do
-      let(:parent_specimen) { FactoryGirl.create(:specimen) }
-      let(:specimen) { FactoryGirl.create(:specimen, parent_id: parent_id) }
+      let(:parent_specimen) { FactoryBot.create(:specimen) }
+      let(:specimen) { FactoryBot.create(:specimen, parent_id: parent_id) }
       before do
         parent_specimen
         specimen
@@ -162,7 +162,7 @@ describe Specimen do
 
   describe "#abs_age_text" do
     subject { specimen.abs_age_text }
-    let(:specimen) { FactoryGirl.build(:specimen, abs_age: abs_age) }
+    let(:specimen) { FactoryBot.build(:specimen, abs_age: abs_age) }
     context "when abs_age is nil." do
       let(:abs_age) { nil }
       it { expect(subject).to be_nil }
@@ -182,7 +182,7 @@ describe Specimen do
   end
 
   describe "#build_age", :current => true do
-    let(:specimen){ FactoryGirl.build(:specimen) } 
+    let(:specimen){ FactoryBot.build(:specimen) } 
     let(:age) { 10.0 }
     let(:error) { 0.5 }
     before do
@@ -222,7 +222,7 @@ describe Specimen do
   end
 
   describe "#age_mean=", :current => true do
-    let(:specimen){ FactoryGirl.build(:specimen) } 
+    let(:specimen){ FactoryBot.build(:specimen) } 
     let(:age) { "10.0" }
     before do
       specimen
@@ -241,7 +241,7 @@ describe Specimen do
 
   describe "#age_mean" do
     subject {specimen.age_mean }
-    let(:specimen){ FactoryGirl.create(:specimen, age_min: age_min, age_max: age_max, age_unit: age_unit)}
+    let(:specimen){ FactoryBot.create(:specimen, age_min: age_min, age_max: age_max, age_unit: age_unit)}
     let(:age_unit){ "ka" }
     let(:age_min){ 45 }
     let(:age_max){ 55 }
@@ -272,7 +272,7 @@ describe Specimen do
 
   describe "#age_error" do
     subject {specimen.age_error }
-    let(:specimen){ FactoryGirl.create(:specimen, age_min: age_min, age_max: age_max, age_unit: age_unit)}
+    let(:specimen){ FactoryBot.create(:specimen, age_min: age_min, age_max: age_max, age_unit: age_unit)}
     let(:age_unit){ "ka" }
     let(:age_min){ 45 }
     let(:age_max){ 55 }
@@ -303,7 +303,7 @@ describe Specimen do
 
   describe "#age_in_text" do
     subject {specimen.age_in_text }
-    let(:specimen){ FactoryGirl.create(:specimen, age_min: age_min, age_max: age_max, age_unit: age_unit)}
+    let(:specimen){ FactoryBot.create(:specimen, age_min: age_min, age_max: age_max, age_unit: age_unit)}
     let(:age_unit){ "ka" }
     let(:age_min){ 45 }
     let(:age_max){ 55 }
@@ -345,17 +345,17 @@ describe Specimen do
 
   describe "#quantity_history" do
     let(:time) { Time.new(2016, 11,12) }
-    let!(:specimen1) { FactoryGirl.create(:specimen, divide_flg: true) }
-    let!(:specimen2) { FactoryGirl.create(:specimen, divide_flg: true, parent_id: specimen1.id) }
-    let!(:specimen3) { FactoryGirl.create(:specimen, divide_flg: true, parent_id: specimen2.id) }
-    let!(:divide1) { FactoryGirl.create(:divide, updated_at: time) }
-    let!(:divide2) { FactoryGirl.create(:divide, updated_at: time + 1.day, before_specimen_quantity: specimen_quantity1) }
-    let!(:divide3) { FactoryGirl.create(:divide, updated_at: time + 2.days, before_specimen_quantity: specimen_quantity3) }
-    let!(:specimen_quantity1) { FactoryGirl.create(:specimen_quantity, specimen: specimen1, divide: divide1, quantity: 100, quantity_unit: "kg") }
-    let!(:specimen_quantity2) { FactoryGirl.create(:specimen_quantity, specimen: specimen1, divide: divide2, quantity: 60, quantity_unit: "kg") }
-    let!(:specimen_quantity3) { FactoryGirl.create(:specimen_quantity, specimen: specimen2, divide: divide2, quantity: 40, quantity_unit: "kg") }
-    let!(:specimen_quantity4) { FactoryGirl.create(:specimen_quantity, specimen: specimen2, divide: divide3, quantity: 20, quantity_unit: "kg") }
-    let!(:specimen_quantity5) { FactoryGirl.create(:specimen_quantity, specimen: specimen3, divide: divide3, quantity: 10, quantity_unit: "kg") }
+    let!(:specimen1) { FactoryBot.create(:specimen, divide_flg: true) }
+    let!(:specimen2) { FactoryBot.create(:specimen, divide_flg: true, parent_id: specimen1.id) }
+    let!(:specimen3) { FactoryBot.create(:specimen, divide_flg: true, parent_id: specimen2.id) }
+    let!(:divide1) { FactoryBot.create(:divide, updated_at: time) }
+    let!(:divide2) { FactoryBot.create(:divide, updated_at: time + 1.day, before_specimen_quantity: specimen_quantity1) }
+    let!(:divide3) { FactoryBot.create(:divide, updated_at: time + 2.days, before_specimen_quantity: specimen_quantity3) }
+    let!(:specimen_quantity1) { FactoryBot.create(:specimen_quantity, specimen: specimen1, divide: divide1, quantity: 100, quantity_unit: "kg") }
+    let!(:specimen_quantity2) { FactoryBot.create(:specimen_quantity, specimen: specimen1, divide: divide2, quantity: 60, quantity_unit: "kg") }
+    let!(:specimen_quantity3) { FactoryBot.create(:specimen_quantity, specimen: specimen2, divide: divide2, quantity: 40, quantity_unit: "kg") }
+    let!(:specimen_quantity4) { FactoryBot.create(:specimen_quantity, specimen: specimen2, divide: divide3, quantity: 20, quantity_unit: "kg") }
+    let!(:specimen_quantity5) { FactoryBot.create(:specimen_quantity, specimen: specimen3, divide: divide3, quantity: 10, quantity_unit: "kg") }
     subject { specimen1.quantity_history }
     it { expect(subject.class).to eq(Hash) }
     it { expect(subject[0].class).to eq(Array) }
@@ -403,17 +403,17 @@ describe Specimen do
 
   describe "#quantity_history_with_current" do
     let(:time) { Time.new(2016, 11,12) }
-    let!(:specimen1) { FactoryGirl.create(:specimen, divide_flg: true) }
-    let!(:specimen2) { FactoryGirl.create(:specimen, divide_flg: true, parent_id: specimen1.id) }
-    let!(:specimen3) { FactoryGirl.create(:specimen, divide_flg: true, parent_id: specimen2.id) }
-    let!(:divide1) { FactoryGirl.create(:divide, updated_at: time) }
-    let!(:divide2) { FactoryGirl.create(:divide, updated_at: time + 1.day, before_specimen_quantity: specimen_quantity1) }
-    let!(:divide3) { FactoryGirl.create(:divide, updated_at: time + 2.days, before_specimen_quantity: specimen_quantity3) }
-    let!(:specimen_quantity1) { FactoryGirl.create(:specimen_quantity, specimen: specimen1, divide: divide1, quantity: 100, quantity_unit: "kg") }
-    let!(:specimen_quantity2) { FactoryGirl.create(:specimen_quantity, specimen: specimen1, divide: divide2, quantity: 60, quantity_unit: "kg") }
-    let!(:specimen_quantity3) { FactoryGirl.create(:specimen_quantity, specimen: specimen2, divide: divide2, quantity: 40, quantity_unit: "kg") }
-    let!(:specimen_quantity4) { FactoryGirl.create(:specimen_quantity, specimen: specimen2, divide: divide3, quantity: 20, quantity_unit: "kg") }
-    let!(:specimen_quantity5) { FactoryGirl.create(:specimen_quantity, specimen: specimen3, divide: divide3, quantity: 10, quantity_unit: "kg") }
+    let!(:specimen1) { FactoryBot.create(:specimen, divide_flg: true) }
+    let!(:specimen2) { FactoryBot.create(:specimen, divide_flg: true, parent_id: specimen1.id) }
+    let!(:specimen3) { FactoryBot.create(:specimen, divide_flg: true, parent_id: specimen2.id) }
+    let!(:divide1) { FactoryBot.create(:divide, updated_at: time) }
+    let!(:divide2) { FactoryBot.create(:divide, updated_at: time + 1.day, before_specimen_quantity: specimen_quantity1) }
+    let!(:divide3) { FactoryBot.create(:divide, updated_at: time + 2.days, before_specimen_quantity: specimen_quantity3) }
+    let!(:specimen_quantity1) { FactoryBot.create(:specimen_quantity, specimen: specimen1, divide: divide1, quantity: 100, quantity_unit: "kg") }
+    let!(:specimen_quantity2) { FactoryBot.create(:specimen_quantity, specimen: specimen1, divide: divide2, quantity: 60, quantity_unit: "kg") }
+    let!(:specimen_quantity3) { FactoryBot.create(:specimen_quantity, specimen: specimen2, divide: divide2, quantity: 40, quantity_unit: "kg") }
+    let!(:specimen_quantity4) { FactoryBot.create(:specimen_quantity, specimen: specimen2, divide: divide3, quantity: 20, quantity_unit: "kg") }
+    let!(:specimen_quantity5) { FactoryBot.create(:specimen_quantity, specimen: specimen3, divide: divide3, quantity: 10, quantity_unit: "kg") }
     subject { specimen1.quantity_history_with_current }
     it { expect(subject.class).to eq(Hash) }
     it { expect(subject[0].class).to eq(Array) }
@@ -470,7 +470,7 @@ describe Specimen do
 
   describe "#divided_parent_quantity" do
     before do
-      @specimen = FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg")
+      @specimen = FactoryBot.create(:specimen, quantity: 100, quantity_unit: "kg")
       @specimen.quantity = 0
       @specimen.quantity_unit = "g"
       @specimen.children.build(quantity: 50, quantity_unit: "kg")
@@ -496,7 +496,7 @@ describe Specimen do
 
   describe "#divided_loss" do
     before do
-      @specimen = FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg")
+      @specimen = FactoryBot.create(:specimen, quantity: 100, quantity_unit: "kg")
       @specimen.quantity = quantity
       @specimen.quantity_unit = quantity_unit
       @specimen.children.build(quantity: 30, quantity_unit: "kg")
@@ -521,10 +521,10 @@ describe Specimen do
   end
 
   describe "#divide_save" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     before do
       User.current = user
-      @specimen = FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg")
+      @specimen = FactoryBot.create(:specimen, quantity: 100, quantity_unit: "kg")
       @specimen_quantitiy = @specimen.specimen_quantities.last
       @specimen.quantity = 50
       @specimen.comment = "comment"
@@ -570,8 +570,8 @@ describe Specimen do
   end
 
   describe "build_specimen_quantity" do
-    let(:specimen) { FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg") }
-    let(:divide) { FactoryGirl.create(:divide) }
+    let(:specimen) { FactoryBot.create(:specimen, quantity: 100, quantity_unit: "kg") }
+    let(:divide) { FactoryBot.create(:divide) }
     before do
       @specimen_quantity = specimen.specimen_quantities.last
     end
@@ -603,16 +603,16 @@ describe Specimen do
 
   describe "#whole_family_analyses" do
     before do
-      root = FactoryGirl.create(:specimen, name: "root")
-      @target = FactoryGirl.create(:specimen, parent_id: root.id)
-      brother = FactoryGirl.create(:specimen, parent_id: root.id)
-      child = FactoryGirl.create(:specimen, parent_id: @target.id)
-      @root_analysis_1 = FactoryGirl.create(:analysis, specimen_id: root.id)
-      @root_analysis_2 = FactoryGirl.create(:analysis, specimen_id: root.id)
-      @target_analysis = FactoryGirl.create(:analysis, specimen_id: @target.id)
-      @brother_analysis = FactoryGirl.create(:analysis, specimen_id: brother.id)
-      @child_analysis_1 = FactoryGirl.create(:analysis, specimen_id: child.id)
-      @child_analysis_2 = FactoryGirl.create(:analysis, specimen_id: child.id)
+      root = FactoryBot.create(:specimen, name: "root")
+      @target = FactoryBot.create(:specimen, parent_id: root.id)
+      brother = FactoryBot.create(:specimen, parent_id: root.id)
+      child = FactoryBot.create(:specimen, parent_id: @target.id)
+      @root_analysis_1 = FactoryBot.create(:analysis, specimen_id: root.id)
+      @root_analysis_2 = FactoryBot.create(:analysis, specimen_id: root.id)
+      @target_analysis = FactoryBot.create(:analysis, specimen_id: @target.id)
+      @brother_analysis = FactoryBot.create(:analysis, specimen_id: brother.id)
+      @child_analysis_1 = FactoryBot.create(:analysis, specimen_id: child.id)
+      @child_analysis_2 = FactoryBot.create(:analysis, specimen_id: child.id)
     end
     it "receives whole family analyses" do
       analyses_array = [@root_analysis_1, @root_analysis_2, @target_analysis, @brother_analysis, @child_analysis_1, @child_analysis_2]
@@ -621,8 +621,8 @@ describe Specimen do
   end
 
   describe "new_children" do
-    let!(:specimen) { FactoryGirl.create(:specimen) }
-    let!(:specimen_child) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
+    let!(:specimen) { FactoryBot.create(:specimen) }
+    let!(:specimen_child) { FactoryBot.create(:specimen, parent_id: specimen.id) }
     before do
       @new_specimen = specimen.children.build
     end
@@ -631,7 +631,7 @@ describe Specimen do
   end
 
   describe "build_divide" do
-    let!(:specimen) { FactoryGirl.create(:specimen, name: "specimenA", quantity: 100, quantity_unit: "kg", divide_flg: divide_flg, comment: "comment") }
+    let!(:specimen) { FactoryBot.create(:specimen, name: "specimenA", quantity: 100, quantity_unit: "kg", divide_flg: divide_flg, comment: "comment") }
     before do
       specimen.quantity = 200
       specimen.quantity_unit = "g"
@@ -657,7 +657,7 @@ describe Specimen do
   end
 
   describe "build_log" do
-    let!(:specimen) { FactoryGirl.create(:specimen, name: "specimenA", quantity: 100, quantity_unit: "kg", divide_flg: divide_flg, comment: "comment") }
+    let!(:specimen) { FactoryBot.create(:specimen, name: "specimenA", quantity: 100, quantity_unit: "kg", divide_flg: divide_flg, comment: "comment") }
     before do
       specimen.quantity = 200
       specimen.quantity_unit = "g"
@@ -670,7 +670,7 @@ describe Specimen do
     context "divide_flg false" do
       let(:divide_flg) { false }
       context "new_record" do
-        let!(:specimen) { FactoryGirl.build(:specimen, name: "specimenA", divide_flg: divide_flg, comment: "comment") }
+        let!(:specimen) { FactoryBot.build(:specimen, name: "specimenA", divide_flg: divide_flg, comment: "comment") }
         it { expect(subject).to eq("Quantity of specimenA was set to 200.0 g") }
       end
       context "non new_record" do
@@ -681,7 +681,7 @@ describe Specimen do
 
   describe "quantity_with_unit" do
     subject { specimen.quantity_with_unit }
-    let(:specimen) { FactoryGirl.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+    let(:specimen) { FactoryBot.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
     let(:quantity) { 100.0 }
     let(:quantity_unit) { "kg" }
     context "with quantity and unit" do
@@ -697,7 +697,7 @@ describe Specimen do
 
   describe "quantity_with_unit=" do
     #subject { specimen.quantity_with_unit = quantity_with_unit }
-    let(:specimen) { FactoryGirl.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+    let(:specimen) { FactoryBot.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
     let(:quantity) { 100.0 }
     let(:quantity_unit) { "kg" }
     let(:quantity_with_unit){ "80 g"}
@@ -714,7 +714,7 @@ describe Specimen do
 
   describe "quantity_with_unit= for children" do
     before do
-      @specimen = FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg")
+      @specimen = FactoryBot.create(:specimen, quantity: 100, quantity_unit: "kg")
       @specimen.quantity = quantity
       @specimen.quantity_unit = quantity_unit
       @specimen.children.build(quantity_with_unit: "30 kg")
@@ -739,12 +739,12 @@ describe Specimen do
   end
   describe "#delete_table_analysis" do
     subject { specimen.send(:delete_table_analysis, analysis_1) }
-    let(:specimen) { FactoryGirl.create(:specimen) }
-    let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen.id) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen.id) }
-    let(:table_analysis_1) { FactoryGirl.create(:table_analysis, table: table, specimen: specimen, analysis: analysis_1, priority: 1) }
-    let(:table_analysis_2) { FactoryGirl.create(:table_analysis, table: table, specimen: specimen, analysis: analysis_2, priority: 2) }
-    let(:table) { FactoryGirl.create(:table) }
+    let(:specimen) { FactoryBot.create(:specimen) }
+    let(:analysis_1) { FactoryBot.create(:analysis, specimen_id: specimen.id) }
+    let(:analysis_2) { FactoryBot.create(:analysis, specimen_id: specimen.id) }
+    let(:table_analysis_1) { FactoryBot.create(:table_analysis, table: table, specimen: specimen, analysis: analysis_1, priority: 1) }
+    let(:table_analysis_2) { FactoryBot.create(:table_analysis, table: table, specimen: specimen, analysis: analysis_2, priority: 2) }
+    let(:table) { FactoryBot.create(:table) }
     before do
       table_analysis_1
       table_analysis_2
@@ -755,9 +755,9 @@ describe Specimen do
 
   describe "#set_specimen_custom_attributes" do
     subject { specimen.set_specimen_custom_attributes }
-    let(:specimen) { FactoryGirl.create(:specimen) }
-    let(:custom_attribute_1) { FactoryGirl.create(:custom_attribute, name: "bbb") }
-    let(:custom_attribute_2) { FactoryGirl.create(:custom_attribute, name: "aaa") }
+    let(:specimen) { FactoryBot.create(:specimen) }
+    let(:custom_attribute_1) { FactoryBot.create(:custom_attribute, name: "bbb") }
+    let(:custom_attribute_2) { FactoryBot.create(:custom_attribute, name: "aaa") }
     context "CustomAttribute not exists" do
       it { expect(subject.size).to eq 0 }
     end
@@ -774,7 +774,7 @@ describe Specimen do
         it { expect(subject[1].persisted?).to eq false }
       end
       context "specimen associate custom_attribute" do
-        before { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id) }
+        before { FactoryBot.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id) }
         it { expect(subject.size).to eq (CustomAttribute.count) }
         it { expect(subject[0].custom_attribute_id).to eq(custom_attribute_2.id) }
         it { expect(subject[0].persisted?).to eq false }
@@ -785,7 +785,7 @@ describe Specimen do
   end
 
   describe "#ghost" do
-    let(:specimen) { FactoryGirl.build(:specimen, quantity: quantity) }
+    let(:specimen) { FactoryBot.build(:specimen, quantity: quantity) }
     context "quantity is null" do
       let(:quantity) { nil }
       it { expect(specimen).to_not be_ghost }
@@ -812,7 +812,7 @@ describe Specimen do
       end
       after { Timecop.return }
       let(:now) { Time.zone.local(2000, 1, 1) }
-      let(:specimen) { FactoryGirl.create(:specimen, abs_age: abs_age, age_unit: nil, age_min: nil, age_max: nil) }
+      let(:specimen) { FactoryBot.create(:specimen, abs_age: abs_age, age_unit: nil, age_min: nil, age_max: nil) }
       context "when abs_age is nil." do
         let(:abs_age) { nil }
         it { expect(specimen.age_unit).to be_nil }
@@ -851,7 +851,7 @@ describe Specimen do
     describe "build_age", :current => true do
       let(:age) { 10 }
       before do
-        @specimen = FactoryGirl.build(:specimen)
+        @specimen = FactoryBot.build(:specimen)
       end
       context "with age_mean=" do
         before { @specimen.age_mean = age }
@@ -868,8 +868,8 @@ describe Specimen do
       end
     end
     describe "build_specimen_quantity" do
-      let(:user) { FactoryGirl.create(:user) }
-      let(:specimen) { FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg") }
+      let(:user) { FactoryBot.create(:user) }
+      let(:specimen) { FactoryBot.create(:specimen, quantity: 100, quantity_unit: "kg") }
       let(:quantity) { 100 }
       let(:quantity_unit) { "kg" }
       let(:divide_flg) { false }
@@ -891,7 +891,7 @@ describe Specimen do
       end
       context "divide_flg false" do
         context "new_record" do
-          let(:specimen) { FactoryGirl.build(:specimen, quantity: 100, quantity_unit: "kg") }
+          let(:specimen) { FactoryBot.build(:specimen, quantity: 100, quantity_unit: "kg") }
           it do
             expect(@specimen).to receive(:build_specimen_quantity)
             @specimen.save!
@@ -940,7 +940,7 @@ describe Specimen do
     end
 
     describe "name" do
-      let(:obj) { FactoryGirl.build(:specimen, name: value) }
+      let(:obj) { FactoryBot.build(:specimen, name: value) }
       it_should_behave_like "length_check"
       context "is presence" do
         let(:value) { "sample_obj_name" }
@@ -951,10 +951,10 @@ describe Specimen do
         it { expect(obj).not_to be_valid }
       end
       context "uniqueness" do
-        before { FactoryGirl.create(:specimen, name: "ユニークストーン", box_id: box.id) }
-        let(:box) { FactoryGirl.create(:box) }
-        let(:specimen) { FactoryGirl.build(:specimen, name: name, box_id: id) }
-        let(:box2) { FactoryGirl.create(:box, name: "box2" ) }
+        before { FactoryBot.create(:specimen, name: "ユニークストーン", box_id: box.id) }
+        let(:box) { FactoryBot.create(:box) }
+        let(:specimen) { FactoryBot.build(:specimen, name: name, box_id: id) }
+        let(:box2) { FactoryBot.create(:box, name: "box2" ) }
         context "specimenのnameとbox_idが違う" do
           let(:name) { "aaaaaaaa" }
           let(:id) { box2.id }
@@ -979,10 +979,10 @@ describe Specimen do
     end
 
     describe "parent_id" do
-      let(:parent_specimen) { FactoryGirl.create(:specimen) }
-      let(:specimen) { FactoryGirl.create(:specimen, parent_id: parent_id) }
-      let(:child_specimen) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
-      let(:user) { FactoryGirl.create(:user) }
+      let(:parent_specimen) { FactoryBot.create(:specimen) }
+      let(:specimen) { FactoryBot.create(:specimen, parent_id: parent_id) }
+      let(:child_specimen) { FactoryBot.create(:specimen, parent_id: specimen.id) }
+      let(:user) { FactoryBot.create(:user) }
       before do
         User.current = user
         parent_specimen
@@ -1011,12 +1011,12 @@ describe Specimen do
 
     describe "to_bibtex" do
       subject {obj.to_bibtex}
-      let(:obj) { FactoryGirl.create(:specimen) }
+      let(:obj) { FactoryBot.create(:specimen) }
       it { expect(subject).to match(/^\@article/) }
     end
 
     describe "igsn" do
-      let(:obj) { FactoryGirl.build(:specimen, igsn: igsn) }
+      let(:obj) { FactoryBot.build(:specimen, igsn: igsn) }
       context "9桁の場合" do
         let(:igsn) { "abcd12345" }
         it { expect(obj).to be_valid }
@@ -1026,14 +1026,14 @@ describe Specimen do
         it { expect(obj).not_to be_valid }
       end
       context "uniqueではない場合" do
-        before { FactoryGirl.create(:specimen, igsn: "123456789") }
-        let(:obj) { FactoryGirl.build(:specimen, name: "samplename2", igsn: "123456789") }
+        before { FactoryBot.create(:specimen, igsn: "123456789") }
+        let(:obj) { FactoryBot.build(:specimen, name: "samplename2", igsn: "123456789") }
         it { expect(obj).not_to be_valid }
       end
 
       context "Unlinked" do
-        before { FactoryGirl.create(:specimen, igsn: "") }
-        let(:obj) { FactoryGirl.build(:specimen, name: "samplename2", igsn: "") }
+        before { FactoryBot.create(:specimen, igsn: "") }
+        let(:obj) { FactoryBot.build(:specimen, name: "samplename2", igsn: "") }
         it { expect(obj).to be_valid }
       end
 
@@ -1049,7 +1049,7 @@ describe Specimen do
     end
 
     describe "abs_age" do
-      let(:obj) { FactoryGirl.build(:specimen, abs_age: abs_age) }
+      let(:obj) { FactoryBot.build(:specimen, abs_age: abs_age) }
       context "数値の場合" do
         context "整数" do
           let(:abs_age) { 1 }
@@ -1071,7 +1071,7 @@ describe Specimen do
     end
 
     describe "age_min" do
-      let(:obj) { FactoryGirl.build(:specimen, age_min: age_min) }
+      let(:obj) { FactoryBot.build(:specimen, age_min: age_min) }
       context "数値の場合" do
         context "整数" do
           let(:age_min) { 1 }
@@ -1093,7 +1093,7 @@ describe Specimen do
     end
 
     describe "age_max" do
-      let(:obj) { FactoryGirl.build(:specimen, age_max: age_max) }
+      let(:obj) { FactoryBot.build(:specimen, age_max: age_max) }
       context "数値の場合" do
         context "整数" do
           let(:age_max) { 11 }
@@ -1109,18 +1109,18 @@ describe Specimen do
         it { expect(obj).not_to be_valid }
       end
       context "allow_nil" do
-        let(:obj) { FactoryGirl.build(:specimen, age_max: nil) }
+        let(:obj) { FactoryBot.build(:specimen, age_max: nil) }
         it { expect(obj).to be_valid }
       end
     end
 
     describe "age_unit" do
-      let(:obj) { FactoryGirl.build(:specimen, age_unit: value) }
+      let(:obj) { FactoryBot.build(:specimen, age_unit: value) }
       it_should_behave_like "length_check"
     end
 
     describe "quantity" do
-      let(:obj) { FactoryGirl.build(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+      let(:obj) { FactoryBot.build(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
       let(:quantity_unit) { "kg" }
       context "num" do
         let(:quantity){ "1" }
@@ -1151,7 +1151,7 @@ describe Specimen do
     end
 
     describe "quantity_unit" do
-      let(:obj) { FactoryGirl.build(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+      let(:obj) { FactoryBot.build(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
       let(:quantity){ "1" }
       context "exists" do
         let(:quantity_unit) { "kgram" }
@@ -1174,27 +1174,27 @@ describe Specimen do
     end
 
     describe "size" do
-      let(:obj) { FactoryGirl.build(:specimen, size: value) }
+      let(:obj) { FactoryBot.build(:specimen, size: value) }
       it_should_behave_like "length_check"
     end
 
     describe "size_unit" do
-      let(:obj) { FactoryGirl.build(:specimen, size_unit: value) }
+      let(:obj) { FactoryBot.build(:specimen, size_unit: value) }
       it_should_behave_like "length_check"
     end
 
     describe "collector" do
-      let(:obj) { FactoryGirl.build(:specimen, collector: value) }
+      let(:obj) { FactoryBot.build(:specimen, collector: value) }
       it_should_behave_like "length_check"
     end
 
     describe "collector_detail" do
-      let(:obj) { FactoryGirl.build(:specimen, collector_detail: value) }
+      let(:obj) { FactoryBot.build(:specimen, collector_detail: value) }
       it_should_behave_like "length_check"
     end
 
     describe "collection_date_precision" do
-      let(:obj) { FactoryGirl.build(:specimen, collection_date_precision: value) }
+      let(:obj) { FactoryBot.build(:specimen, collection_date_precision: value) }
       it_should_behave_like "length_check"
     end
   end

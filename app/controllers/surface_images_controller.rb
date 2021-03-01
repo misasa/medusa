@@ -34,7 +34,7 @@ class SurfaceImagesController < ApplicationController
   def create
     @image = AttachmentFile.new(image_params)
     @surface.images << @image if @image.save
-    respond_with @image, location: adjust_url_by_requesting_tab(request.referer), action: "error"      
+    respond_with @image, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
 
@@ -46,7 +46,7 @@ class SurfaceImagesController < ApplicationController
 
   def update
     @image = AttachmentFile.find(params[:id])
-    @surface_image.update_attributes(surface_image_params) unless params[:surface_image].blank?
+    @surface_image.update(surface_image_params) unless params[:surface_image].blank?
     #@surface.images << @image
     respond_with @surface_image, location: adjust_url_by_requesting_tab(request.referer)
   end
@@ -87,12 +87,12 @@ class SurfaceImagesController < ApplicationController
   end
 
   def choose_as_base
-    @surface_image.update_attributes(wall: true)
+    @surface_image.update(wall: true)
     respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
   end
 
   def unchoose_as_base
-    @surface_image.update_attributes(wall: false)
+    @surface_image.update(wall: false)
     respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
   end
 
@@ -105,7 +105,7 @@ class SurfaceImagesController < ApplicationController
     unless params["position"].blank?
       position = params["position"].to_i
       @surface_image.insert_at(position)
-    end 
+    end
     #respond_with @image, location: adjust_url_by_requesting_tab(request.referer)
     ret = {
       order: @surface_image.surface.surface_images.pluck(:image_id, :position)
@@ -114,7 +114,7 @@ class SurfaceImagesController < ApplicationController
   end
 
   def layer
-    @surface_image.update_attributes(surface_layer_id: params["layer_id"])
+    @surface_image.update(surface_layer_id: params["layer_id"])
     render :nothing => true
   end
 
@@ -169,14 +169,14 @@ class SurfaceImagesController < ApplicationController
     if params[:base_id]
       @base_image = @surface.surface_images.includes({surface: [:record_property, {surface_images: :image}]}).find_by_image_id(params[:base_id])
 
-    end 
+    end
   end
 
 
   def duplicate_global_id
     respond_to do |format|
       format.html { render "parts/duplicate_global_id", status: :unprocessable_entity }
-      format.all { render nothing: true, status: :unprocessable_entity }
+      format.all { render body: nil, status: :unprocessable_entity }
     end
-  end  
+  end
 end

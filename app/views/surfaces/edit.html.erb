@@ -7,7 +7,7 @@
 
 <div class="row">
   <div class="form-inline col-lg-5">
-<%= form_for @surface, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
+<%= form_with model:@surface, local: false, format: :json, html: { id: "edit_surface_#{@surface.id}", class: "update", role: "form" } do |f| %>
   <div class="input-group">
     <span class="input-group-addon">Name</span>
     <%= f.text_field :name, class: "form-control" %>

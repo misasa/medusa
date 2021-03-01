@@ -12,7 +12,7 @@ class NestedResources::PlacesController < ApplicationController
     end
     respond_with @places
   end
-  
+
   def create
     @place = Place.new(place_params)
     @parent.places << @place if @place.save
@@ -46,7 +46,7 @@ class NestedResources::PlacesController < ApplicationController
     resource_class = resource_name.camelize.constantize
     @parent = resource_class.find(params["#{resource_name}_id"])
   end
-  
+
   def place_params
     params.require(:place).permit(
       :name,
@@ -75,7 +75,7 @@ class NestedResources::PlacesController < ApplicationController
   def duplicate_global_id
     respond_to do |format|
       format.html { render "parts/duplicate_global_id", status: :unprocessable_entity }
-      format.all { render nothing: true, status: :unprocessable_entity }
+      format.all { render body: nil, status: :unprocessable_entity }
     end
   end
 

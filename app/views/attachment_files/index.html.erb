@@ -63,7 +63,7 @@
     <% end %>
   </thead>
   <tbody>
-    <%= form_tag bundle_edit_attachment_files_path, id: "bundle-form" do %>
+    <%= form_with url:bundle_edit_attachment_files_path, id: "bundle-form" do %>
     <%= render partial: :attachment_file, collection: @attachment_files, locals: { checked: false } %>
     <% end %>
   </tbody>
@@ -71,5 +71,5 @@
     <%= render partial: "new", locals: { attachment_file: AttachmentFile.new } %>
   </tfoot>
 </table>
-<%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#bundle-form').submit();", class: "btn btn-default" %>
+<%= link_to content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), '#', onclick: "$('#bundle-form').submit();", class: "btn btn-default" %>
 <%= mantra "To create new, specify a file with browse button, fill fields and press save button.  To attach coordinates to image, prepare'.jpg' and'.geo' files and use 'orochi-upload'.  To edit, choose record with checkbox and press pencil button.", :title => "All attachment files" %> 

@@ -4,7 +4,7 @@ describe MeasurementCategory do
 
   describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:measurement_category, name: name) }
+      let(:obj) { FactoryBot.build(:measurement_category, name: name) }
       context "is presence" do
         let(:name) { "sample_measurement_category" }
         it { expect(obj).to be_valid }
@@ -23,7 +23,7 @@ describe MeasurementCategory do
       end
       context "is duplicate" do
         let(:name) { "name" }
-        before { FactoryGirl.create(:measurement_category, name: name) }
+        before { FactoryBot.create(:measurement_category, name: name) }
         it { expect(obj).not_to be_valid }
       end
     end
@@ -31,7 +31,7 @@ describe MeasurementCategory do
 
   describe "#export_headers" do
     subject { obj.export_headers }
-    let(:obj) { FactoryGirl.build(:measurement_category) }
+    let(:obj) { FactoryBot.build(:measurement_category) }
     let(:nicknames_with_unit) { ["foo"] }
     let(:nicknames) { ["bar", "baz"] }
     before do
@@ -43,8 +43,8 @@ describe MeasurementCategory do
 
   describe "#nicknames_with_unit" do
     subject { obj.send(:nicknames_with_unit) }
-    let(:obj) { FactoryGirl.build(:measurement_category) }
-    let(:unit) { FactoryGirl.create(:unit, name: "unit") }
+    let(:obj) { FactoryBot.build(:measurement_category) }
+    let(:unit) { FactoryBot.create(:unit, name: "unit") }
     let(:nicknames) { ["bar", "baz"] }
     before do
       allow(obj).to receive(:unit).and_return(unit)
@@ -61,9 +61,9 @@ describe MeasurementCategory do
 
   describe "#as_json" do
     subject { obj.to_json }
-    let(:obj) { FactoryGirl.create(:measurement_category) }
-    let(:measurement_item_1) { FactoryGirl.create(:measurement_item, nickname: "foo") }
-    let(:measurement_item_2) { FactoryGirl.create(:measurement_item, nickname: "bar") }
+    let(:obj) { FactoryBot.create(:measurement_category) }
+    let(:measurement_item_1) { FactoryBot.create(:measurement_item, nickname: "foo") }
+    let(:measurement_item_2) { FactoryBot.create(:measurement_item, nickname: "bar") }
     before do
       obj.measurement_items << measurement_item_1
       obj.measurement_items << measurement_item_2
@@ -77,9 +77,9 @@ describe MeasurementCategory do
 
   describe "#unit_name" do
     subject { obj.unit_name }
-    let(:obj) { FactoryGirl.create(:measurement_category) }
-    let(:measurement_item_1) { FactoryGirl.create(:measurement_item, nickname: "foo") }
-    let(:measurement_item_2) { FactoryGirl.create(:measurement_item, nickname: "bar") }
+    let(:obj) { FactoryBot.create(:measurement_category) }
+    let(:measurement_item_1) { FactoryBot.create(:measurement_item, nickname: "foo") }
+    let(:measurement_item_2) { FactoryBot.create(:measurement_item, nickname: "bar") }
     it {
       expect(subject).to be_present
     }
@@ -87,9 +87,9 @@ describe MeasurementCategory do
 
   describe "#nicknames" do
     subject { obj.send(:nicknames) }
-    let(:obj) { FactoryGirl.create(:measurement_category) }
-    let(:measurement_item_1) { FactoryGirl.create(:measurement_item, nickname: "foo") }
-    let(:measurement_item_2) { FactoryGirl.create(:measurement_item, nickname: "bar") }
+    let(:obj) { FactoryBot.create(:measurement_category) }
+    let(:measurement_item_1) { FactoryBot.create(:measurement_item, nickname: "foo") }
+    let(:measurement_item_2) { FactoryBot.create(:measurement_item, nickname: "bar") }
     context "obj not associate measurement_item" do
       before { measurement_item_1 }
       it { expect(subject).to eq [] }

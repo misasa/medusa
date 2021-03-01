@@ -2,9 +2,9 @@ require 'spec_helper'
 include ActionDispatch::TestProcess
 
 describe SpecimenDecorator do
-  let(:user){FactoryGirl.create(:user)}
-  let(:obj){FactoryGirl.create(:specimen).decorate}
-  let(:box){FactoryGirl.create(:box)}
+  let(:user){FactoryBot.create(:user)}
+  let(:obj){FactoryBot.create(:specimen).decorate}
+  let(:box){FactoryBot.create(:box)}
   before{User.current = user}
 
   describe "icon" do
@@ -13,7 +13,7 @@ describe SpecimenDecorator do
   end
 
   describe "search_name" do
-    let(:column) { FactoryGirl.create(:search_column, name: name) }
+    let(:column) { FactoryBot.create(:search_column, name: name) }
     subject { SpecimenDecorator.search_name(column) }
     context "column is name" do
       let(:name) { "name" }
@@ -30,7 +30,7 @@ describe SpecimenDecorator do
   end
 
   describe "search_form" do
-    let(:column) { FactoryGirl.create(:search_column, name: name) }
+    let(:column) { FactoryBot.create(:search_column, name: name) }
     let(:f) do
       form = nil
       h.search_form_for(Specimen.search){|f| form = f }
@@ -45,7 +45,7 @@ describe SpecimenDecorator do
       let(:name) { "name" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_name_cont\" name=\"q[name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[name_cont]\" id=\"q_name_cont\" />"
         )
       end
     end
@@ -53,7 +53,7 @@ describe SpecimenDecorator do
       let(:name) { "igsn" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_igsn_cont\" name=\"q[igsn_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[igsn_cont]\" id=\"q_igsn_cont\" />"
         )
       end
     end
@@ -61,7 +61,7 @@ describe SpecimenDecorator do
       let(:name) { "parent" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_parent_name_cont\" name=\"q[parent_name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[parent_name_cont]\" id=\"q_parent_name_cont\" />"
         )
       end
     end
@@ -69,7 +69,7 @@ describe SpecimenDecorator do
       let(:name) { "box" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_box_name_cont\" name=\"q[box_name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[box_name_cont]\" id=\"q_box_name_cont\" />"
         )
       end
     end
@@ -77,7 +77,7 @@ describe SpecimenDecorator do
       let(:name) { "physical_form" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_physical_form_name_cont\" name=\"q[physical_form_name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[physical_form_name_cont]\" id=\"q_physical_form_name_cont\" />"
         )
       end
     end
@@ -85,7 +85,7 @@ describe SpecimenDecorator do
       let(:name) { "classification" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_classification_full_name_cont\" name=\"q[classification_full_name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[classification_full_name_cont]\" id=\"q_classification_full_name_cont\" />"
         )
       end
     end
@@ -93,7 +93,7 @@ describe SpecimenDecorator do
       let(:name) { "tags" }
       it do
         expect(subject).to eq(
-          "<select class=\"form-control input-sm\" id=\"q_tags_name_eq\" name=\"q[tags_name_eq]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+          "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"q[tags_name_eq]\" id=\"q_tags_name_eq\"><option value=\"\" label=\" \"></option>\n"\
           + "</select>"
         )
       end
@@ -106,7 +106,7 @@ describe SpecimenDecorator do
       let(:name) { "user" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_user_username_cont\" name=\"q[user_username_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[user_username_cont]\" id=\"q_user_username_cont\" />"
         )
       end
     end
@@ -114,7 +114,7 @@ describe SpecimenDecorator do
       let(:name) { "group" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_group_name_cont\" name=\"q[group_name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[group_name_cont]\" id=\"q_group_name_cont\" />"
         )
       end
     end
@@ -122,7 +122,7 @@ describe SpecimenDecorator do
       let(:name) { "published" }
       it do
         expect(subject).to eq(
-          "<select class=\"form-control input-sm\" id=\"q_record_property_published_eq\" name=\"q[record_property_published_eq]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+          "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"q[record_property_published_eq]\" id=\"q_record_property_published_eq\"><option value=\"\" label=\" \"></option>\n"\
           + "<option value=\"true\">true</option>\n"\
           + "<option value=\"false\">false</option></select>"
         )
@@ -132,8 +132,8 @@ describe SpecimenDecorator do
       let(:name) { "published_at" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm datepicker\" id=\"q_record_property_published_at_gteq\" name=\"q[record_property_published_at_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"\
-          + "<input class=\"form-control input-sm datepicker\" id=\"q_record_property_published_at_lteq_end_of_day\" name=\"q[record_property_published_at_lteq_end_of_day]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+          "<input placeholder=\"from:\" value=\"\" class=\"form-control input-sm datepicker\" style=\"min-width: 60px;\" type=\"text\" name=\"q[record_property_published_at_gteq]\" id=\"q_record_property_published_at_gteq\" />"\
+          + "<input placeholder=\"to:\" value=\"\" class=\"form-control input-sm datepicker\" style=\"min-width: 60px;\" type=\"text\" name=\"q[record_property_published_at_lteq_end_of_day]\" id=\"q_record_property_published_at_lteq_end_of_day\" />"
         )
       end
     end
@@ -141,8 +141,8 @@ describe SpecimenDecorator do
       let(:name) { "updated_at" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm datepicker\" id=\"q_updated_at_gteq\" name=\"q[updated_at_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"\
-          + "<input class=\"form-control input-sm datepicker\" id=\"q_updated_at_lteq_end_of_day\" name=\"q[updated_at_lteq_end_of_day]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+          "<input placeholder=\"from:\" value=\"\" class=\"form-control input-sm datepicker\" style=\"min-width: 60px;\" type=\"text\" name=\"q[updated_at_gteq]\" id=\"q_updated_at_gteq\" />"\
+          + "<input placeholder=\"to:\" value=\"\" class=\"form-control input-sm datepicker\" style=\"min-width: 60px;\" type=\"text\" name=\"q[updated_at_lteq_end_of_day]\" id=\"q_updated_at_lteq_end_of_day\" />"
         )
       end
     end
@@ -150,8 +150,8 @@ describe SpecimenDecorator do
       let(:name) { "created_at" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm datepicker\" id=\"q_created_at_gteq\" name=\"q[created_at_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"\
-          + "<input class=\"form-control input-sm datepicker\" id=\"q_created_at_lteq_end_of_day\" name=\"q[created_at_lteq_end_of_day]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+          "<input placeholder=\"from:\" value=\"\" class=\"form-control input-sm datepicker\" style=\"min-width: 60px;\" type=\"text\" name=\"q[created_at_gteq]\" id=\"q_created_at_gteq\" />"\
+          + "<input placeholder=\"to:\" value=\"\" class=\"form-control input-sm datepicker\" style=\"min-width: 60px;\" type=\"text\" name=\"q[created_at_lteq_end_of_day]\" id=\"q_created_at_lteq_end_of_day\" />"
         )
       end
     end
@@ -159,7 +159,7 @@ describe SpecimenDecorator do
       let(:name) { "specimen_type" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_specimen_type_cont\" name=\"q[specimen_type_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[specimen_type_cont]\" id=\"q_specimen_type_cont\" />"
         )
       end
     end
@@ -167,7 +167,7 @@ describe SpecimenDecorator do
       let(:name) { "description" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_description_cont\" name=\"q[description_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[description_cont]\" id=\"q_description_cont\" />"
         )
       end
     end
@@ -175,7 +175,7 @@ describe SpecimenDecorator do
       let(:name) { "place" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_place_name_cont\" name=\"q[place_name_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[place_name_cont]\" id=\"q_place_name_cont\" />"
         )
       end
     end
@@ -183,8 +183,8 @@ describe SpecimenDecorator do
       let(:name) { "quantity" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_quantity_gteq\" name=\"q[quantity_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" />"\
-          + "<input class=\"form-control input-sm\" id=\"q_quantity_lteq\" name=\"q[quantity_lteq]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input placeholder=\"from:\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[quantity_gteq]\" id=\"q_quantity_gteq\" />"\
+          + "<input placeholder=\"to:\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[quantity_lteq]\" id=\"q_quantity_lteq\" />"
         )
       end
     end
@@ -192,7 +192,7 @@ describe SpecimenDecorator do
       let(:name) { "quantity_unit" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_quantity_unit_cont\" name=\"q[quantity_unit_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[quantity_unit_cont]\" id=\"q_quantity_unit_cont\" />"
         )
       end
     end
@@ -200,8 +200,8 @@ describe SpecimenDecorator do
       let(:name) { "age_min" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_age_min_gteq\" name=\"q[age_min_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" />"\
-          + "<input class=\"form-control input-sm\" id=\"q_age_min_lteq\" name=\"q[age_min_lteq]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input placeholder=\"from:\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[age_min_gteq]\" id=\"q_age_min_gteq\" />"\
+          + "<input placeholder=\"to:\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[age_min_lteq]\" id=\"q_age_min_lteq\" />"
         )
       end
     end
@@ -209,8 +209,8 @@ describe SpecimenDecorator do
       let(:name) { "age_max" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_age_max_gteq\" name=\"q[age_max_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" />"\
-          + "<input class=\"form-control input-sm\" id=\"q_age_max_lteq\" name=\"q[age_max_lteq]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input placeholder=\"from:\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[age_max_gteq]\" id=\"q_age_max_gteq\" />"\
+          + "<input placeholder=\"to:\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[age_max_lteq]\" id=\"q_age_max_lteq\" />"
         )
       end
     end
@@ -218,7 +218,7 @@ describe SpecimenDecorator do
       let(:name) { "age_unit" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_age_unit_cont\" name=\"q[age_unit_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[age_unit_cont]\" id=\"q_age_unit_cont\" />"
         )
       end
     end
@@ -226,7 +226,7 @@ describe SpecimenDecorator do
       let(:name) { "size" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_size_cont\" name=\"q[size_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[size_cont]\" id=\"q_size_cont\" />"
         )
       end
     end
@@ -234,7 +234,7 @@ describe SpecimenDecorator do
       let(:name) { "size_unit" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_size_unit_cont\" name=\"q[size_unit_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[size_unit_cont]\" id=\"q_size_unit_cont\" />"
         )
       end
     end
@@ -242,8 +242,8 @@ describe SpecimenDecorator do
       let(:name) { "collected_at" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm datepicker\" id=\"q_collected_at_gteq\" name=\"q[collected_at_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"\
-          + "<input class=\"form-control input-sm datepicker\" id=\"q_collected_at_lteq_end_of_day\" name=\"q[collected_at_lteq_end_of_day]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+          "<input placeholder=\"from:\" value=\"\" class=\"form-control input-sm datepicker\" style=\"min-width: 60px;\" type=\"text\" name=\"q[collected_at_gteq]\" id=\"q_collected_at_gteq\" />"\
+          + "<input placeholder=\"to:\" value=\"\" class=\"form-control input-sm datepicker\" style=\"min-width: 60px;\" type=\"text\" name=\"q[collected_at_lteq_end_of_day]\" id=\"q_collected_at_lteq_end_of_day\" />"
         )
       end
     end
@@ -251,7 +251,7 @@ describe SpecimenDecorator do
       let(:name) { "collection_date_precision" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_collection_date_precision_cont\" name=\"q[collection_date_precision_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[collection_date_precision_cont]\" id=\"q_collection_date_precision_cont\" />"
         )
       end
     end
@@ -259,7 +259,7 @@ describe SpecimenDecorator do
       let(:name) { "collector" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_collector_cont\" name=\"q[collector_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[collector_cont]\" id=\"q_collector_cont\" />"
         )
       end
     end
@@ -267,7 +267,7 @@ describe SpecimenDecorator do
       let(:name) { "collector_detail" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm\" id=\"q_collector_detail_cont\" name=\"q[collector_detail_cont]\" style=\"min-width: 60px;\" type=\"text\" />"
+          "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"q[collector_detail_cont]\" id=\"q_collector_detail_cont\" />"
         )
       end
     end
@@ -275,7 +275,7 @@ describe SpecimenDecorator do
       let(:name) { "disposed" }
       it do
         expect(subject).to eq(
-          "<select class=\"form-control input-sm\" id=\"q_record_property_disposed_eq\" name=\"q[record_property_disposed_eq]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+          "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"q[record_property_disposed_eq]\" id=\"q_record_property_disposed_eq\"><option value=\"\" label=\" \"></option>\n"\
           + "<option value=\"true\">true</option>\n"\
           + "<option value=\"false\">false</option></select>"
         )
@@ -285,8 +285,8 @@ describe SpecimenDecorator do
       let(:name) { "disposed_at" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm datepicker\" id=\"q_record_property_disposed_at_gteq\" name=\"q[record_property_disposed_at_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"\
-          + "<input class=\"form-control input-sm datepicker\" id=\"q_record_property_disposed_at_lteq_end_of_day\" name=\"q[record_property_disposed_at_lteq_end_of_day]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+          "<input placeholder=\"from:\" value=\"\" class=\"form-control input-sm datepicker\" style=\"min-width: 60px;\" type=\"text\" name=\"q[record_property_disposed_at_gteq]\" id=\"q_record_property_disposed_at_gteq\" />"\
+          + "<input placeholder=\"to:\" value=\"\" class=\"form-control input-sm datepicker\" style=\"min-width: 60px;\" type=\"text\" name=\"q[record_property_disposed_at_lteq_end_of_day]\" id=\"q_record_property_disposed_at_lteq_end_of_day\" />"
         )
       end
     end
@@ -294,7 +294,7 @@ describe SpecimenDecorator do
       let(:name) { "lost" }
       it do
         expect(subject).to eq(
-          "<select class=\"form-control input-sm\" id=\"q_record_property_lost_eq\" name=\"q[record_property_lost_eq]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+          "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"q[record_property_lost_eq]\" id=\"q_record_property_lost_eq\"><option value=\"\" label=\" \"></option>\n"\
           + "<option value=\"true\">true</option>\n"\
           + "<option value=\"false\">false</option></select>"
         )
@@ -304,15 +304,15 @@ describe SpecimenDecorator do
       let(:name) { "lost_at" }
       it do
         expect(subject).to eq(
-          "<input class=\"form-control input-sm datepicker\" id=\"q_record_property_lost_at_gteq\" name=\"q[record_property_lost_at_gteq]\" placeholder=\"from:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"\
-          + "<input class=\"form-control input-sm datepicker\" id=\"q_record_property_lost_at_lteq_end_of_day\" name=\"q[record_property_lost_at_lteq_end_of_day]\" placeholder=\"to:\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+          "<input placeholder=\"from:\" value=\"\" class=\"form-control input-sm datepicker\" style=\"min-width: 60px;\" type=\"text\" name=\"q[record_property_lost_at_gteq]\" id=\"q_record_property_lost_at_gteq\" />"\
+          + "<input placeholder=\"to:\" value=\"\" class=\"form-control input-sm datepicker\" style=\"min-width: 60px;\" type=\"text\" name=\"q[record_property_lost_at_lteq_end_of_day]\" id=\"q_record_property_lost_at_lteq_end_of_day\" />"
         )
       end
     end
   end
 
   describe "create_form" do
-    let(:column) { FactoryGirl.create(:search_column, name: name) }
+    let(:column) { FactoryBot.create(:search_column, name: name) }
     let(:f) do
       form = nil
       h.form_for(Specimen.new){|f| form = f }
@@ -336,7 +336,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_name\" name=\"specimen[name]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[name]\" id=\"specimen_name\" />"
           )
         end
       end
@@ -363,9 +363,9 @@ describe SpecimenDecorator do
         it do
           expect(subject).to eq(
             "<div class=\"input-group\">"\
-            + "<input class=\"form-control input-sm\" id=\"specimen_parent_global_id\" name=\"specimen[parent_global_id]\" style=\"min-width: 60px;\" type=\"text\" />"\
+            + "<input id=\"specimen_parent_global_id\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[parent_global_id]\" />"\
             + "<span class=\"input-group-addon\">"\
-            + "<a data-input=\"#specimen_parent_global_id\" data-target=\"#search-modal\" data-toggle=\"modal\" href=\"/specimens.modal?per_page=10\">"\
+            + "<a data-toggle=\"modal\" data-target=\"#search-modal\" data-input=\"#specimen_parent_global_id\" href=\"/specimens.modal?per_page=10\">"\
             + "<span class=\"glyphicon glyphicon-search\"></span>"\
             + "</a>"\
             + "</span>"\
@@ -378,9 +378,9 @@ describe SpecimenDecorator do
         it do
           expect(subject).to eq(
             "<div class=\"input-group\">"\
-            + "<input class=\"form-control input-sm\" id=\"specimen_parent_global_id\" name=\"specimen[parent_global_id]\" style=\"min-width: 60px;\" type=\"text\" />"\
+            + "<input id=\"specimen_parent_global_id\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[parent_global_id]\" />"\
             + "<span class=\"input-group-addon\">"\
-            + "<a data-input=\"#specimen_parent_global_id\" data-target=\"#search-modal\" data-toggle=\"modal\" href=\"/specimens.modal?per_page=10\">"\
+            + "<a data-toggle=\"modal\" data-target=\"#search-modal\" data-input=\"#specimen_parent_global_id\" href=\"/specimens.modal?per_page=10\">"\
             + "<span class=\"glyphicon glyphicon-search\"></span>"\
             + "</a>"\
             + "</span>"\
@@ -396,9 +396,9 @@ describe SpecimenDecorator do
         it do
           expect(subject).to eq(
             "<div class=\"input-group\">"\
-            + "<input class=\"form-control input-sm\" id=\"specimen_box_global_id\" name=\"specimen[box_global_id]\" style=\"min-width: 60px;\" type=\"text\" />"\
+            + "<input id=\"specimen_box_global_id\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[box_global_id]\" />"\
             + "<span class=\"input-group-addon\">"\
-            + "<a data-input=\"#specimen_box_global_id\" data-target=\"#search-modal\" data-toggle=\"modal\" href=\"/boxes.modal?per_page=10\">"\
+            + "<a data-toggle=\"modal\" data-target=\"#search-modal\" data-input=\"#specimen_box_global_id\" href=\"/boxes.modal?per_page=10\">"\
             + "<span class=\"glyphicon glyphicon-search\"></span>"\
             + "</a>"\
             + "</span>"\
@@ -411,9 +411,9 @@ describe SpecimenDecorator do
         it do
           expect(subject).to eq(
             "<div class=\"input-group\">"\
-            + "<input class=\"form-control input-sm\" id=\"specimen_box_global_id\" name=\"specimen[box_global_id]\" style=\"min-width: 60px;\" type=\"text\" />"\
+            + "<input id=\"specimen_box_global_id\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[box_global_id]\" />"\
             + "<span class=\"input-group-addon\">"\
-            + "<a data-input=\"#specimen_box_global_id\" data-target=\"#search-modal\" data-toggle=\"modal\" href=\"/boxes.modal?per_page=10\">"\
+            + "<a data-toggle=\"modal\" data-target=\"#search-modal\" data-input=\"#specimen_box_global_id\" href=\"/boxes.modal?per_page=10\">"\
             + "<span class=\"glyphicon glyphicon-search\"></span>"\
             + "</a>"\
             + "</span>"\
@@ -428,7 +428,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<select class=\"form-control input-sm\" id=\"specimen_physical_form_id\" name=\"specimen[physical_form_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"specimen[physical_form_id]\" id=\"specimen_physical_form_id\"><option value=\"\" label=\" \"></option>\n"\
             + "</select>"
           )
         end
@@ -437,7 +437,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<select class=\"form-control input-sm\" id=\"specimen_physical_form_id\" name=\"specimen[physical_form_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"specimen[physical_form_id]\" id=\"specimen_physical_form_id\"><option value=\"\" label=\" \"></option>\n"\
             + "</select>"
           )
         end
@@ -449,7 +449,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<select class=\"form-control input-sm\" id=\"specimen_classification_id\" name=\"specimen[classification_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"specimen[classification_id]\" id=\"specimen_classification_id\"><option value=\"\" label=\" \"></option>\n"\
             + "</select>"
           )
         end
@@ -458,7 +458,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<select class=\"form-control input-sm\" id=\"specimen_classification_id\" name=\"specimen[classification_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"specimen[classification_id]\" id=\"specimen_classification_id\"><option value=\"\" label=\" \"></option>\n"\
             + "</select>"
           )
         end
@@ -470,7 +470,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_tag_list\" name=\"specimen[tag_list]\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" value=\"\" name=\"specimen[tag_list]\" id=\"specimen_tag_list\" />"
           )
         end
       end
@@ -478,7 +478,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_tag_list\" name=\"specimen[tag_list]\" style=\"min-width: 60px;\" type=\"text\" value=\"\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" value=\"\" name=\"specimen[tag_list]\" id=\"specimen_tag_list\" />"
           )
         end
       end
@@ -508,7 +508,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<select class=\"form-control input-sm\" id=\"specimen_user_id\" name=\"specimen[user_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"specimen[user_id]\" id=\"specimen_user_id\"><option value=\"\" label=\" \"></option>\n"\
             + "<option value=\"#{user.id}\">user</option></select>"
           )
         end
@@ -520,7 +520,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<select class=\"form-control input-sm\" id=\"specimen_group_id\" name=\"specimen[group_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"specimen[group_id]\" id=\"specimen_group_id\"><option value=\"\" label=\" \"></option>\n"\
             + "</select>"
           )
         end
@@ -529,7 +529,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<select class=\"form-control input-sm\" id=\"specimen_group_id\" name=\"specimen[group_id]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"specimen[group_id]\" id=\"specimen_group_id\"><option value=\"\" label=\" \"></option>\n"\
             + "</select>"
           )
         end
@@ -545,7 +545,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<select class=\"form-control input-sm\" id=\"specimen_published\" name=\"specimen[published]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"specimen[published]\" id=\"specimen_published\"><option value=\"\" label=\" \"></option>\n"\
             + "<option value=\"true\">true</option>\n"\
             + "<option value=\"false\">false</option></select>"
           )
@@ -591,7 +591,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_specimen_type\" name=\"specimen[specimen_type]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[specimen_type]\" id=\"specimen_specimen_type\" />"
           )
         end
       end
@@ -599,7 +599,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_specimen_type\" name=\"specimen[specimen_type]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[specimen_type]\" id=\"specimen_specimen_type\" />"
           )
         end
       end
@@ -610,7 +610,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_description\" name=\"specimen[description]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[description]\" id=\"specimen_description\" />"
           )
         end
       end
@@ -618,7 +618,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_description\" name=\"specimen[description]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[description]\" id=\"specimen_description\" />"
           )
         end
       end
@@ -630,9 +630,9 @@ describe SpecimenDecorator do
         it do
           expect(subject).to eq(
             "<div class=\"input-group\">"\
-            + "<input class=\"form-control input-sm\" id=\"specimen_place_global_id\" name=\"specimen[place_global_id]\" style=\"min-width: 60px;\" type=\"text\" />"\
+            + "<input id=\"specimen_place_global_id\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[place_global_id]\" />"\
             + "<span class=\"input-group-addon\">"\
-            + "<a data-input=\"#specimen_place_global_id\" data-target=\"#search-modal\" data-toggle=\"modal\" href=\"/places.modal?per_page=10\">"\
+            + "<a data-toggle=\"modal\" data-target=\"#search-modal\" data-input=\"#specimen_place_global_id\" href=\"/places.modal?per_page=10\">"\
             + "<span class=\"glyphicon glyphicon-search\"></span>"\
             + "</a>"\
             + "</span>"\
@@ -645,9 +645,9 @@ describe SpecimenDecorator do
         it do
           expect(subject).to eq(
             "<div class=\"input-group\">"\
-            + "<input class=\"form-control input-sm\" id=\"specimen_place_global_id\" name=\"specimen[place_global_id]\" style=\"min-width: 60px;\" type=\"text\" />"\
+            + "<input id=\"specimen_place_global_id\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[place_global_id]\" />"\
             + "<span class=\"input-group-addon\">"\
-            + "<a data-input=\"#specimen_place_global_id\" data-target=\"#search-modal\" data-toggle=\"modal\" href=\"/places.modal?per_page=10\">"\
+            + "<a data-toggle=\"modal\" data-target=\"#search-modal\" data-input=\"#specimen_place_global_id\" href=\"/places.modal?per_page=10\">"\
             + "<span class=\"glyphicon glyphicon-search\"></span>"\
             + "</a>"\
             + "</span>"\
@@ -662,7 +662,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_quantity\" name=\"specimen[quantity]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[quantity]\" id=\"specimen_quantity\" />"
           )
         end
       end
@@ -670,7 +670,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_quantity\" name=\"specimen[quantity]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[quantity]\" id=\"specimen_quantity\" />"
           )
         end
       end
@@ -681,7 +681,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_quantity_unit\" name=\"specimen[quantity_unit]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[quantity_unit]\" id=\"specimen_quantity_unit\" />"
           )
         end
       end
@@ -689,7 +689,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_quantity_unit\" name=\"specimen[quantity_unit]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[quantity_unit]\" id=\"specimen_quantity_unit\" />"
           )
         end
       end
@@ -700,7 +700,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_age_min\" name=\"specimen[age_min]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[age_min]\" id=\"specimen_age_min\" />"
           )
         end
       end
@@ -708,7 +708,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_age_min\" name=\"specimen[age_min]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[age_min]\" id=\"specimen_age_min\" />"
           )
         end
       end
@@ -719,7 +719,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_age_max\" name=\"specimen[age_max]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[age_max]\" id=\"specimen_age_max\" />"
           )
         end
       end
@@ -727,7 +727,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_age_max\" name=\"specimen[age_max]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[age_max]\" id=\"specimen_age_max\" />"
           )
         end
       end
@@ -738,7 +738,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<select class=\"form-control input-sm\" id=\"specimen_age_unit\" name=\"specimen[age_unit]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"specimen[age_unit]\" id=\"specimen_age_unit\"><option value=\"\" label=\" \"></option>\n"\
             + "<option value=\"a\">a</option>\n"\
             + "<option value=\"ka\">ka</option>\n"\
             + "<option value=\"Ma\">Ma</option>\n"\
@@ -750,7 +750,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<select class=\"form-control input-sm\" id=\"specimen_age_unit\" name=\"specimen[age_unit]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"specimen[age_unit]\" id=\"specimen_age_unit\"><option value=\"\" label=\" \"></option>\n"\
             + "<option value=\"a\">a</option>\n"\
             + "<option value=\"ka\">ka</option>\n"\
             + "<option value=\"Ma\">Ma</option>\n"\
@@ -765,7 +765,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_size\" name=\"specimen[size]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[size]\" id=\"specimen_size\" />"
           )
         end
       end
@@ -773,7 +773,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_size\" name=\"specimen[size]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[size]\" id=\"specimen_size\" />"
           )
         end
       end
@@ -784,7 +784,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_size_unit\" name=\"specimen[size_unit]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[size_unit]\" id=\"specimen_size_unit\" />"
           )
         end
       end
@@ -792,7 +792,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_size_unit\" name=\"specimen[size_unit]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[size_unit]\" id=\"specimen_size_unit\" />"
           )
         end
       end
@@ -803,7 +803,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_collected_at\" name=\"specimen[collected_at]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[collected_at]\" id=\"specimen_collected_at\" />"
           )
         end
       end
@@ -811,7 +811,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_collected_at\" name=\"specimen[collected_at]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[collected_at]\" id=\"specimen_collected_at\" />"
           )
         end
       end
@@ -822,7 +822,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_collection_date_precision\" name=\"specimen[collection_date_precision]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[collection_date_precision]\" id=\"specimen_collection_date_precision\" />"
           )
         end
       end
@@ -830,7 +830,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_collection_date_precision\" name=\"specimen[collection_date_precision]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[collection_date_precision]\" id=\"specimen_collection_date_precision\" />"
           )
         end
       end
@@ -841,7 +841,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_collector\" name=\"specimen[collector]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[collector]\" id=\"specimen_collector\" />"
           )
         end
       end
@@ -849,7 +849,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_collector\" name=\"specimen[collector]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[collector]\" id=\"specimen_collector\" />"
           )
         end
       end
@@ -860,7 +860,7 @@ describe SpecimenDecorator do
         let(:page_type) { :index }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_collector_detail\" name=\"specimen[collector_detail]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[collector_detail]\" id=\"specimen_collector_detail\" />"
           )
         end
       end
@@ -868,7 +868,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<input class=\"form-control input-sm\" id=\"specimen_collector_detail\" name=\"specimen[collector_detail]\" style=\"min-width: 60px;\" type=\"text\" />"
+            "<input class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[collector_detail]\" id=\"specimen_collector_detail\" />"
           )
         end
       end
@@ -883,7 +883,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<select class=\"form-control input-sm\" id=\"specimen_disposed\" name=\"specimen[disposed]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"specimen[disposed]\" id=\"specimen_disposed\"><option value=\"\" label=\" \"></option>\n"\
             + "<option value=\"true\">true</option>\n"\
             + "<option value=\"false\">false</option></select>"
           )
@@ -911,7 +911,7 @@ describe SpecimenDecorator do
         let(:page_type) { :bundle_edit }
         it do
           expect(subject).to eq(
-            "<select class=\"form-control input-sm\" id=\"specimen_lost\" name=\"specimen[lost]\" style=\"min-width: 60px;\"><option value=\"\"></option>\n"\
+            "<select class=\"form-control input-sm\" style=\"min-width: 60px;\" name=\"specimen[lost]\" id=\"specimen_lost\"><option value=\"\" label=\" \"></option>\n"\
             + "<option value=\"true\">true</option>\n"\
             + "<option value=\"false\">false</option></select>"
           )
@@ -932,16 +932,16 @@ describe SpecimenDecorator do
   end
 
   describe "content" do
-    let(:parent) { FactoryGirl.create(:specimen, name: "parent1") }
-    let(:box) { FactoryGirl.create(:box, name: "box1") }
-    let(:place) { FactoryGirl.create(:place, name: "place1") }
-    let(:physical_form) { FactoryGirl.create(:physical_form, name: "physical_form1") }
-    let(:parent_classification) { FactoryGirl.create(:classification, name: "classification1") }
-    let(:classification) { FactoryGirl.create(:classification, name: "classification2", parent: parent_classification) }
-    let(:group) { FactoryGirl.create(:group, name: "group1") }
+    let(:parent) { FactoryBot.create(:specimen, name: "parent1") }
+    let(:box) { FactoryBot.create(:box, name: "box1") }
+    let(:place) { FactoryBot.create(:place, name: "place1") }
+    let(:physical_form) { FactoryBot.create(:physical_form, name: "physical_form1") }
+    let(:parent_classification) { FactoryBot.create(:classification, name: "classification1") }
+    let(:classification) { FactoryBot.create(:classification, name: "classification2", parent: parent_classification) }
+    let(:group) { FactoryBot.create(:group, name: "group1") }
     let(:time) { "2016-11-01 10:11:12".to_time }
     let(:specimen) do
-      FactoryGirl.create(:specimen,
+      FactoryBot.create(:specimen,
         name: "specimen1",
         parent: parent,
         box: box,
@@ -961,6 +961,7 @@ describe SpecimenDecorator do
       specimen.record_property.published_at = time
       specimen.record_property.disposed_at = time
       specimen.record_property.lost_at = time
+      specimen.updated_at = time
       specimen.save!
     end
     subject { specimen.decorate.content(column_name) }
@@ -1056,23 +1057,22 @@ describe SpecimenDecorator do
 
   describe ".summary_of_analysis" do
     subject { obj.summary_of_analysis }
-    let(:analysis_1){FactoryGirl.create(:analysis)}
-    let(:item_1){FactoryGirl.create(:measurement_item)}
-    let(:chemistry_1){FactoryGirl.create(:chemistry, :analysis_id => analysis_1.id, :measurement_item_id => item_1.id)}
+    let(:analysis_1){FactoryBot.create(:analysis)}
+    let(:item_1){FactoryBot.create(:measurement_item)}
+    let(:chemistry_1){FactoryBot.create(:chemistry, :analysis_id => analysis_1.id, :measurement_item_id => item_1.id)}
     before {
       allow(obj.h).to receive(:can?).and_return(true)
       analysis_1.specimen = obj
       analysis_1.save
     }
-
-    it { expect(subject).to include("<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#specimen-analyses-#{obj.id}\"><span class=\"badge\">1</span></a>") }
+    it { expect(subject).to include("<a href=\"#specimen-analyses-#{obj.id}\" data-toggle=\"collapse\" class=\"collapse-active\"><span class=\"badge\">1</span></a>") }
   end
 
   describe ".name_with_id" do
     subject{obj.name_with_id}
     it{expect(subject).to include(obj.name)}
     it{expect(subject).to include(obj.global_id)}
-    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")} 
+    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")}
   end
 
   describe ".path" do
@@ -1081,18 +1081,18 @@ describe SpecimenDecorator do
     before { allow(obj.h).to receive(:can?).and_return(true) }
     context "box is nil" do
       before{obj.box = nil}
-      it{expect(subject).to eq "<span class=\"\"><span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span>#{obj.name}</span>"} 
+      it{expect(subject).to eq "<span class=\"\"><span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span>#{obj.name}</span>"}
     end
     context "box is not nil" do
       before{obj.box = box}
-      it{expect(subject).to include("<span class=\"glyphicon glyphicon-folder-close\"></span>")} 
-      it{expect(subject).to include("<a href=\"/boxes/#{box.id}\">#{box.name}</a>")} 
-      it{expect(subject).to include(me)} 
+      it{expect(subject).to include("<span class=\"glyphicon glyphicon-folder-close\"></span>")}
+      it{expect(subject).to include("<a href=\"/boxes/#{box.id}\">#{box.name}</a>")}
+      it{expect(subject).to include(me)}
     end
   end
 
   describe ".primary_picture" do
-    let(:attachment_file){ FactoryGirl.create(:attachment_file) }
+    let(:attachment_file){ FactoryBot.create(:attachment_file) }
     let(:picture) { obj.primary_picture(width: width, height: height) }
     let(:capybara) { Capybara.string(picture) }
     let(:body) { capybara.find("body") }
@@ -1124,14 +1124,14 @@ describe SpecimenDecorator do
     it{expect(subject).to match("<div class=\"tree-node\" data-depth=\"1\">.*</div>")}
     it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")}
     it{expect(subject).to match("<a href=\"/specimens/#{obj.id}\">.*</a>")}
-    it{expect(subject).to include("<strong class=\"text-primary bg-primary\">#{obj.name}</strong>")} 
+    it{expect(subject).to include("<strong class=\"text-primary bg-primary\">#{obj.name}</strong>")}
   end
 
   describe "tree_nodes" do
-    let(:specimen) { FactoryGirl.create(:specimen, name: "test_1") }
-    let(:analysis) { FactoryGirl.create(:analysis, name: "test_2") }
-    let(:bib) { FactoryGirl.create(:bib, name: "test_3") }
-    let(:attachment_file) { FactoryGirl.create(:attachment_file, name: "test_4", data_file_name: "test_4.jpg") }
+    let(:specimen) { FactoryBot.create(:specimen, name: "test_1") }
+    let(:analysis) { FactoryBot.create(:analysis, name: "test_2") }
+    let(:bib) { FactoryBot.create(:bib, name: "test_3") }
+    let(:attachment_file) { FactoryBot.create(:attachment_file, name: "test_4", data_file_name: "test_4.jpg") }
     before do
       sign_in user
       obj.children << specimen
@@ -1148,7 +1148,7 @@ describe SpecimenDecorator do
           + "<div class=\"tree-node\" data-depth=\"10\">"\
           + "<span class=\"glyphicon glyphicon-stats\"></span>"\
           + "<a href=\"/analyses/#{analysis.id}\">test_2</a>"\
-          + "<a data-target=\"#show-modal\" data-toggle=\"modal\" href=\"/analyses/#{analysis.id}.modal\"><span class=\"badge\">0</span></a>"\
+          + "<a data-toggle=\"modal\" data-target=\"#show-modal\" href=\"/analyses/#{analysis.id}.modal\"><span class=\"badge\">0</span></a>"\
           + "</div>"\
           + "</div>"
         )
@@ -1189,38 +1189,38 @@ describe SpecimenDecorator do
   describe ".tree_node" do
     subject{obj.tree_node}
     before { allow(obj.h).to receive(:can?).and_return(true) }
-    let(:child){FactoryGirl.create(:specimen)}
-    let(:analysis){FactoryGirl.create(:analysis)}
-    let(:bib){FactoryGirl.create(:bib)}
-    let(:attachment_file){FactoryGirl.create(:attachment_file)}
-    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")} 
-    it{expect(subject).to include("#{obj.name}")} 
+    let(:child){FactoryBot.create(:specimen)}
+    let(:analysis){FactoryBot.create(:analysis)}
+    let(:bib){FactoryBot.create(:bib)}
+    let(:attachment_file){FactoryBot.create(:attachment_file)}
+    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")}
+    it{expect(subject).to include("#{obj.name}")}
     before do
       obj.children << child
       obj.analyses << analysis
-      obj.bibs << bib 
-      obj.attachment_files << attachment_file 
+      obj.bibs << bib
+      obj.attachment_files << attachment_file
     end
-    it { expect(subject).to_not include("<span class=\"glyphicon glyphicon-cloud \"></span><span>#{obj.children.count}</span>") }
+    it {expect(subject).to_not include("<span class=\"glyphicon glyphicon-cloud \"></span><span>#{obj.children.count}</span>") }
     it do
       expect(subject).to include(
         "<span class=\"\"><span class=\"glyphicon glyphicon-stats\"></span></span>"\
-        + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-Analysis-#{obj.record_property_id}\">"\
-        + "<span class=\"badge\" data-klass=\"Analysis\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.analyses.count}</span></a>"
+        + "<a href=\"#tree-Analysis-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+        + "<span data-klass=\"Analysis\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.analyses.count}</span></a>"
       )
     end
     it do
       expect(subject).to include(
         "<span class=\"\"><span class=\"glyphicon glyphicon-book\"></span></span>"\
-        + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-Bib-#{obj.record_property_id}\">"\
-        + "<span class=\"badge\" data-klass=\"Bib\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.bibs.count}</span></a>"
+        + "<a href=\"#tree-Bib-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+        + "<span data-klass=\"Bib\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.bibs.count}</span></a>"
       )
     end
     it do
       expect(subject).to include(
         "<span class=\"\"><span class=\"glyphicon glyphicon-file\"></span></span>"\
-        + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-AttachmentFile-#{obj.record_property_id}\">"\
-        + "<span class=\"badge\" data-klass=\"AttachmentFile\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.attachment_files.count}</span></a>"
+        + "<a href=\"#tree-AttachmentFile-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+        + "<span data-klass=\"AttachmentFile\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.attachment_files.count}</span></a>"
       )
     end
     context "current" do
@@ -1229,7 +1229,7 @@ describe SpecimenDecorator do
     end
     context "not current" do
       subject{obj.tree_node(current: false)}
-      it{expect(subject).not_to match("<strong>.*</strong>")} 
+      it{expect(subject).not_to match("<strong>.*</strong>")}
     end
     context "current_type" do
       context "in_list_include" do
@@ -1237,8 +1237,8 @@ describe SpecimenDecorator do
         it do
           expect(subject).to include(
             "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-cloud\"></span></span>"\
-            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-Specimen-#{obj.record_property_id}\">"\
-            + "<span class=\"badge badge-active\" data-klass=\"Specimen\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.children.count}</span></a>"
+            + "<a href=\"#tree-Specimen-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+            + "<span data-klass=\"Specimen\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{obj.children.count}</span></a>"
           )
         end
         it { expect(subject).to include("<span class=\"glyphicon glyphicon-stats\"></span><span>#{obj.analyses.count}</span>") }
@@ -1250,8 +1250,8 @@ describe SpecimenDecorator do
         it do
           expect(subject).to include(
             "<span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span>"\
-            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-Specimen-#{obj.record_property_id}\">"\
-            + "<span class=\"badge\" data-klass=\"Specimen\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.children.count}</span></a>"
+            + "<a href=\"#tree-Specimen-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+            + "<span data-klass=\"Specimen\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.children.count}</span></a>"
           )
         end
         it { expect(subject).to include("<span class=\"glyphicon glyphicon-stats\"></span><span>#{obj.analyses.count}</span>") }
@@ -1266,22 +1266,22 @@ describe SpecimenDecorator do
         it do
           expect(subject).to include(
             "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-stats\"></span></span>"\
-            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-Analysis-#{obj.record_property_id}\">"\
-            + "<span class=\"badge badge-active\" data-klass=\"Analysis\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.analyses.count}</span></a>"
+            + "<a href=\"#tree-Analysis-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+            + "<span data-klass=\"Analysis\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{obj.analyses.count}</span></a>"
           )
         end
         it do
           expect(subject).to include(
             "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-book\"></span></span>"\
-            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-Bib-#{obj.record_property_id}\">"\
-            + "<span class=\"badge badge-active\" data-klass=\"Bib\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.bibs.count}</span></a>"
+            + "<a href=\"#tree-Bib-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+            + "<span data-klass=\"Bib\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{obj.bibs.count}</span></a>"
           )
         end
         it do
           expect(subject).to include(
             "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-file\"></span></span>"\
-            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-AttachmentFile-#{obj.record_property_id}\">"\
-            + "<span class=\"badge badge-active\" data-klass=\"AttachmentFile\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.attachment_files.count}</span></a>"
+            + "<a href=\"#tree-AttachmentFile-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+            + "<span data-klass=\"AttachmentFile\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{obj.attachment_files.count}</span></a>"
           )
         end
       end
@@ -1291,22 +1291,22 @@ describe SpecimenDecorator do
         it do
           expect(subject).to include(
             "<span class=\"\"><span class=\"glyphicon glyphicon-stats\"></span></span>"\
-            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-Analysis-#{obj.record_property_id}\">"\
-            + "<span class=\"badge\" data-klass=\"Analysis\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.analyses.count}</span></a>"
+            + "<a href=\"#tree-Analysis-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+            + "<span data-klass=\"Analysis\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.analyses.count}</span></a>"
           )
         end
         it do
           expect(subject).to include(
             "<span class=\"\"><span class=\"glyphicon glyphicon-book\"></span></span>"\
-            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-Bib-#{obj.record_property_id}\">"\
-            + "<span class=\"badge\" data-klass=\"Bib\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.bibs.count}</span></a>"
+            + "<a href=\"#tree-Bib-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+            + "<span data-klass=\"Bib\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.bibs.count}</span></a>"
           )
         end
         it do
           expect(subject).to include(
             "<span class=\"\"><span class=\"glyphicon glyphicon-file\"></span></span>"\
-            + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-AttachmentFile-#{obj.record_property_id}\">"\
-            + "<span class=\"badge\" data-klass=\"AttachmentFile\" data-record_property_id=\"#{obj.record_property_id}\">#{obj.attachment_files.count}</span></a>"
+            + "<a href=\"#tree-AttachmentFile-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+            + "<span data-klass=\"AttachmentFile\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.attachment_files.count}</span></a>"
           )
         end
       end
@@ -1318,7 +1318,7 @@ describe SpecimenDecorator do
     let(:icon) { "cloud" }
     let(:klass) { "Specimen" }
     let(:count) { obj.children.count }
-    let(:child) { FactoryGirl.create(:specimen) }
+    let(:child) { FactoryBot.create(:specimen) }
     context "count zero" do
       before { obj.children.clear }
       it { expect(subject).to be_blank }
@@ -1331,8 +1331,8 @@ describe SpecimenDecorator do
           it do
             expect(subject).to eq(
               "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
-              + "<span class=\"badge badge-active\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
+              + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+              + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{count}</span></a>"
             )
           end
         end
@@ -1341,8 +1341,8 @@ describe SpecimenDecorator do
           it do
             expect(subject).to eq(
               "<span class=\"\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
-              + "<span class=\"badge\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
+              + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+              + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{count}</span></a>"
             )
           end
         end
@@ -1359,7 +1359,7 @@ describe SpecimenDecorator do
     let(:icon) { "stats" }
     let(:klass) { "Analysis" }
     let(:count) { obj.analyses.count }
-    let(:analysis) { FactoryGirl.create(:analysis) }
+    let(:analysis) { FactoryBot.create(:analysis) }
     context "count zero" do
       before { obj.analyses.clear }
       it { expect(subject).to be_blank }
@@ -1382,8 +1382,8 @@ describe SpecimenDecorator do
           it do
             expect(subject).to eq(
               "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
-              + "<span class=\"badge badge-active\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
+              + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+              + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{count}</span></a>"
             )
           end
         end
@@ -1392,8 +1392,8 @@ describe SpecimenDecorator do
           it do
             expect(subject).to eq(
               "<span class=\"\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
-              + "<span class=\"badge\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
+              + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+              + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{count}</span></a>"
             )
           end
         end
@@ -1406,7 +1406,7 @@ describe SpecimenDecorator do
     let(:icon) { "book" }
     let(:klass) { "Bib" }
     let(:count) { obj.bibs.count }
-    let(:bib) { FactoryGirl.create(:bib) }
+    let(:bib) { FactoryBot.create(:bib) }
     context "count zero" do
       before { obj.bibs.clear }
       it { expect(subject).to be_blank }
@@ -1429,8 +1429,8 @@ describe SpecimenDecorator do
           it do
             expect(subject).to eq(
               "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
-              + "<span class=\"badge badge-active\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
+              + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+              + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{count}</span></a>"
             )
           end
         end
@@ -1439,8 +1439,8 @@ describe SpecimenDecorator do
           it do
             expect(subject).to eq(
               "<span class=\"\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
-              + "<span class=\"badge\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
+              + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+              + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{count}</span></a>"
             )
           end
         end
@@ -1453,7 +1453,7 @@ describe SpecimenDecorator do
     let(:icon) { "file" }
     let(:klass) { "AttachmentFile" }
     let(:count) { obj.attachment_files.count }
-    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    let(:attachment_file) { FactoryBot.create(:attachment_file) }
     context "count zero" do
       before { obj.attachment_files.clear }
       it { expect(subject).to be_blank }
@@ -1476,8 +1476,8 @@ describe SpecimenDecorator do
           it do
             expect(subject).to eq(
               "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
-              + "<span class=\"badge badge-active\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
+              + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+              + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{count}</span></a>"
             )
           end
         end
@@ -1486,8 +1486,8 @@ describe SpecimenDecorator do
           it do
             expect(subject).to eq(
               "<span class=\"\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
-              + "<a class=\"collapse-active\" data-toggle=\"collapse\" href=\"#tree-#{klass}-#{obj.record_property_id}\">"\
-              + "<span class=\"badge\" data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\">#{count}</span></a>"
+              + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
+              + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{count}</span></a>"
             )
           end
         end
@@ -1499,7 +1499,7 @@ describe SpecimenDecorator do
     subject{ obj.to_tex(alias_specimen) }
     before{ obj.children << child }
     let(:alias_specimen) { "specimen" }
-    let(:child) { FactoryGirl.create(:specimen, name: child_name) }
+    let(:child) { FactoryBot.create(:specimen, name: child_name) }
     let(:child_name) { "child_name" }
     it{ expect(subject).to include(obj.name) }
     it{ expect(subject).to include(obj.global_id) }
@@ -1513,23 +1513,23 @@ describe SpecimenDecorator do
   describe "status_name" do
     subject { obj.status_name }
     context "normal" do
-      before { obj.update_attributes(quantity: 0.5, quantity_unit: "mg") }
+      before { obj.update(quantity: 0.5, quantity_unit: "mg") }
       it { expect(subject).to eq("") }
     end
     context "undetermined quantity" do
-      before { obj.update_attributes(quantity: "", quantity_unit: "") }
+      before { obj.update(quantity: "", quantity_unit: "") }
       it { expect(subject).to eq("unknown") }
     end
     context "disappearance" do
-      before { obj.update_attributes(quantity: "0", quantity_unit: "kg") }
+      before { obj.update(quantity: "0", quantity_unit: "kg") }
       it { expect(subject).to eq("zero") }
     end
     context "disposal" do
-      before { obj.record_property.update_attributes(disposed: true) }
+      before { obj.record_property.update(disposed: true) }
       it { expect(subject).to eq("trash") }
     end
     context "loss" do
-      before { obj.record_property.update_attributes(lost: true) }
+      before { obj.record_property.update(lost: true) }
       it { expect(subject).to eq("lost") }
     end
   end
@@ -1537,26 +1537,24 @@ describe SpecimenDecorator do
   describe "status_icon" do
     subject { obj.status_icon }
     context "normal" do
-      before { obj.update_attributes(quantity: 0.5, quantity_unit: "mg") }
-      it { expect(subject).to eq("<span class=\"\" title=\"status:\"><span class=\"glyphicon glyphicon-\"></span></span>") }
+      before { obj.update(quantity: 0.5, quantity_unit: "mg") }
+      it {expect(subject).to eq("<span title=\"status:\" class=\"\"><span class=\"glyphicon glyphicon-\"></span></span>") }
     end
     context "undetermined quantity" do
-      before { obj.update_attributes(quantity: "", quantity_unit: "") }
-      it { expect(subject).to eq("<span class=\"\" title=\"status:unknown\"><span class=\"glyphicon glyphicon-question-sign\"></span></span>") }
+      before { obj.update(quantity: "", quantity_unit: "") }
+      it {expect(subject).to eq("<span title=\"status:unknown\" class=\"\"><span class=\"glyphicon glyphicon-question-sign\"></span></span>") }
     end
     context "disappearance" do
-      before { obj.update_attributes(quantity: "0", quantity_unit: "kg") }
-      it { expect(subject).to eq("<span class=\"\" title=\"status:zero\"><span class=\"glyphicon glyphicon-ban-circle\"></span></span>") }
+      before { obj.update(quantity: "0", quantity_unit: "kg") }
+      it { expect(subject).to eq("<span title=\"status:zero\" class=\"\"><span class=\"glyphicon glyphicon-ban-circle\"></span></span>") }
     end
     context "disposal" do
-      before { obj.record_property.update_attributes(disposed: true) }
-      it { expect(subject).to eq("<span class=\"\" title=\"status:trash\"><span class=\"glyphicon glyphicon-trash\"></span></span>") }
+      before { obj.record_property.update(disposed: true) }
+      it { expect(subject).to eq("<span title=\"status:trash\" class=\"\"><span class=\"glyphicon glyphicon-trash\"></span></span>") }
     end
     context "loss" do
-      before { obj.record_property.update_attributes(lost: true) }
-      it { expect(subject).to eq("<span class=\"\" title=\"status:lost\"><span class=\"glyphicon glyphicon-warning-sign\"></span></span>") }
+      before { obj.record_property.update(lost: true) }
+      it { expect(subject).to eq("<span title=\"status:lost\" class=\"\"><span class=\"glyphicon glyphicon-warning-sign\"></span></span>") }
     end
   end
-
-
 end

@@ -1,4 +1,4 @@
-class Unit < ActiveRecord::Base
+class Unit < ApplicationRecord
   has_many :chemistries
   has_many :measurement_items
   has_many :measurement_categories

@@ -12,7 +12,7 @@
     <li>
       <% @place.attachment_pdf_files.each do |attachment_pdf_file| %>
         <%= attachment_pdf_file.name %>
-        <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_pdf_file.id), id: "file-#{attachment_pdf_file.id}-button") %>
+        <%= link_to(image_pack_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_pdf_file.id), id: "file-#{attachment_pdf_file.id}-button") %>
       <% end %>
     </li>
   <% end %>

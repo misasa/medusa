@@ -1,4 +1,4 @@
-class CreateOmniauths < ActiveRecord::Migration
+class CreateOmniauths < ActiveRecord::Migration[4.2]
   def change
     create_table :omniauths do |t|
       t.integer :user_id, null: false

@@ -651,7 +651,7 @@ class SpecimenDecorator < Draper::Decorator
     end
 
     def create_form_global_id(f, column, path)
-      field = f.text_field(:"#{column.name}_global_id", class: "form-control input-sm", style: "min-width: 60px;")
+      field = f.text_field(:"#{column.name}_global_id", id: "specimen_#{column.name}_global_id", class: "form-control input-sm", style: "min-width: 60px;")
       link = h.link_to(path, "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#specimen_#{column.name}_global_id") do
         h.content_tag(:span, link, class: "glyphicon glyphicon-search")
       end

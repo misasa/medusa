@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe CategoryMeasurementItem do
   describe ".move_to_top" do
-      let(:measurement_category){ FactoryGirl.create(:measurement_category)}
-      let(:measurement_category2){ FactoryGirl.create(:measurement_category)}
-      let(:obj1) { FactoryGirl.create(:category_measurement_item, position: 1,measurement_category: measurement_category) }
-      let(:obj2) { FactoryGirl.create(:category_measurement_item, position: 2,measurement_category: measurement_category) }
-      let(:obj3) { FactoryGirl.create(:category_measurement_item, position: 3,measurement_category: measurement_category) }
-      let(:obj4) { FactoryGirl.create(:category_measurement_item, position: 4,measurement_category: measurement_category) }
-      let(:obj5) { FactoryGirl.create(:category_measurement_item, position: 1,measurement_category: measurement_category2) }
+      let(:measurement_category){ FactoryBot.create(:measurement_category)}
+      let(:measurement_category2){ FactoryBot.create(:measurement_category)}
+      let(:obj1) { FactoryBot.create(:category_measurement_item, position: 1,measurement_category: measurement_category) }
+      let(:obj2) { FactoryBot.create(:category_measurement_item, position: 2,measurement_category: measurement_category) }
+      let(:obj3) { FactoryBot.create(:category_measurement_item, position: 3,measurement_category: measurement_category) }
+      let(:obj4) { FactoryBot.create(:category_measurement_item, position: 4,measurement_category: measurement_category) }
+      let(:obj5) { FactoryBot.create(:category_measurement_item, position: 1,measurement_category: measurement_category2) }
       before do
         obj1
         obj2

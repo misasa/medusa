@@ -1,4 +1,4 @@
-class SearchColumn < ActiveRecord::Base
+class SearchColumn < ApplicationRecord
 
   MASTER_USER_ID = 0
 
@@ -23,11 +23,13 @@ class SearchColumn < ActiveRecord::Base
 
   def self.update_display(display_type_hash, user_id)
     ActiveRecord::Base.transaction do
-      display_type_hash.map.with_index(1) do |(id, type), index|
+      res = []
+      display_type_hash.each.with_index(1) do |(id, type), index|
         search_column = find_by(id: id, user_id: user_id)
-        search_column.update_attributes(display_type: type, display_order: index) if search_column
-        search_column
+        search_column.update(display_type: type, display_order: index) if search_column
+        res << search_column
       end
+      res
     end
   end
 

@@ -48,16 +48,14 @@ class NestedResources::ChemistriesController < ApplicationController
   private
 
   def chemistries_params
-#TODO permitのパラメータチェックの仕方を調べる
-    params.require(:chemistries)
-
-#    params.require(:chemistries).permit([
-#        :measurement_item_id,
-#        :value,
-#        :uncertainty,
-#        :unit_id
-#      ]
-#    )
+    params.require(:chemistries).map do |chemistry|
+      chemistry.permit(
+        :measurement_item_id,
+        :value,
+        :uncertainty,
+        :unit_id
+      )
+    end
   end
 
   def chemistry_params

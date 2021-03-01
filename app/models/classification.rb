@@ -1,4 +1,4 @@
-class Classification < ActiveRecord::Base
+class Classification < ApplicationRecord
   has_many :specimens
   has_many :children, class_name: "Classification", foreign_key: :parent_id
   belongs_to :parent, class_name: "Classification", foreign_key: :parent_id
@@ -16,9 +16,9 @@ class Classification < ActiveRecord::Base
       self.full_name = name
     end
   end
-  
+
   def check_classification(sesar_material, sesar_classification)
-    return true if sesar_classification.blank? 
+    return true if sesar_classification.blank?
     case sesar_material
     when "Biology", "Mineral", "Rock"
       classifications = YAML.load(File.read("#{Rails.root}/config/material_classification.yml"))["classification"]
@@ -35,6 +35,6 @@ class Classification < ActiveRecord::Base
   end
 
   def reflection_child_full_name
-    children(force_reload: true).map { |child| child.save }
+    children.map { |child| child.save }
   end
 end

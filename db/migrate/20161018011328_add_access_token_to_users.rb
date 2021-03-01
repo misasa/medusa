@@ -1,4 +1,4 @@
-class AddAccessTokenToUsers < ActiveRecord::Migration
+class AddAccessTokenToUsers < ActiveRecord::Migration[4.2]
   def change
     change_table :users do |t|
       t.string :staff_id, comment: "職員ID"

@@ -1,4 +1,4 @@
-class Table < ActiveRecord::Base
+class Table < ApplicationRecord
   include HasRecordProperty
 
   alias_attribute :name, :caption
@@ -10,10 +10,11 @@ class Table < ActiveRecord::Base
   has_many :analyses, through: :table_analyses
   #has_many :chemistries, through: :specimens
   has_many :chemistries, through: :analyses
+
+  belongs_to :measurement_category
   has_many :category_measurement_items, through: :measurement_category
   has_many :measurement_items, through: :measurement_category
   belongs_to :bib, touch: true
-  belongs_to :measurement_category
 
   accepts_nested_attributes_for :table_specimens
   accepts_nested_attributes_for :table_analyses

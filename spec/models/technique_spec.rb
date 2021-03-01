@@ -4,7 +4,7 @@ describe Technique do
 
   describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:technique, name: name) }
+      let(:obj) { FactoryBot.build(:technique, name: name) }
       context "is presence" do
         let(:name) { "technique" }
         it { expect(obj).to be_valid }

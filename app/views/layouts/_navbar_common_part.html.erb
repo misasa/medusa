@@ -1,6 +1,6 @@
 <ul class="nav navbar-nav navbar-right">
-  <li><%= link_to "job", sidekiq_path %></li>
-  <li>
+  <li class="nav-item"><%= link_to "job", sidekiq_path %></li>
+  <li class="nav-item">
   <% if current_user.box %>
   <%= link_to box_path(current_user.box) do %>
     <span class="glyphicon glyphicon-home"></span>
@@ -12,28 +12,28 @@
   <% end %>
   </li>
   <% if current_user.admin? %>
-  <li>
+  <li class="nav-item">
   <%= link_to system_preference_path ,title: "system preference" do %>
     <span class="glyphicon glyphicon-wrench"></span>
   <% end %>
   </li>
   <% end %>
-  <li>
+  <li class="nav-item">
   <%= link_to edit_account_path,title: "account" do %>
     <span class="glyphicon glyphicon-user"></span>
   <% end %>
   </li>
-  <li>
+  <li class="nav-item">
   <%= link_to destroy_user_session_path, method: :delete, data: {confirm: t("confirm.logout")}, title: "logout" do %>
     <span class="glyphicon glyphicon-off"></span>
   <% end %>
   </li>
-  <li>
+  <li class="nav-item">
   <%= link_to Settings.help_url, title: 'help' do %>
     <span class="glyphicon glyphicon-question-sign"></span>
   <% end %>
   </li>
-  <li>
+  <li class="nav-item">
   <%= link_to Settings.help_url, title: product_version do %>
     <span class="glyphicon glyphicon-info-sign"></span>
   <% end %>

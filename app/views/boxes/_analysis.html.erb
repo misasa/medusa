@@ -35,7 +35,7 @@ end
       <% end %>
     </tbody>
   </table>
-  <%= form_tag( box_path(@box), method: :get) do %>
+  <%= form_with url:box_path(@box), method: :get do %>
     <%= hidden_tabname_tag(__FILE__) %>
     analysis:
     <%= select_tag :analysis_id,options_for_select(analyses.map{|analysis|[analysis.name,analysis.id]},params[:analysis_id]),include_blank: true %>

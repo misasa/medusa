@@ -4,7 +4,7 @@ describe Device do
 
   describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:device, name: name) }
+      let(:obj) { FactoryBot.build(:device, name: name) }
       context "is presence" do
         let(:name) { "sample_device" }
         it { expect(obj).to be_valid }

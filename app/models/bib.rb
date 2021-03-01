@@ -1,4 +1,4 @@
-class Bib < ActiveRecord::Base 
+class Bib < ApplicationRecord
   include HasRecordProperty
   include HasViewSpot
   include OutputPdf
@@ -7,7 +7,7 @@ class Bib < ActiveRecord::Base
   LABEL_HEADER = ["Id", "Name", "Authors"]
 
   has_many :bib_authors, -> { order(:priority) }, before_add: :set_initial_position
-  has_many :authors, through: :bib_authors, order: 'bib_authors.priority'
+  has_many :authors, -> { order(:priority) }, through: :bib_authors
 
   has_many :referrings, dependent: :destroy
   has_many :specimens, through: :referrings, source: :referable, source_type: "Specimen"
@@ -21,7 +21,7 @@ class Bib < ActiveRecord::Base
 
   validates :name, presence: true, length: { maximum: 255 }
   validate :author_valid?, if: Proc.new{|bib| bib.authors.blank?}
-  
+
 
   def related_spots
     sps = []
@@ -57,16 +57,16 @@ class Bib < ActiveRecord::Base
   def all_spots
     surfaces.map(&:spots).flatten
   end
-  
+
   def referrings_analyses
     ranalyses = self.analyses
-    specimens.each do |specimen| 
+    specimens.each do |specimen|
       (ranalyses = ranalyses + specimen.analyses) unless specimen.analyses.empty?
     end
-    boxes.each do |box| 
+    boxes.each do |box|
       (ranalyses = ranalyses + box.analyses) unless box.analyses.empty?
     end
-    places.each do |place| 
+    places.each do |place|
       (ranalyses = ranalyses + place.analyses) unless place.analyses.empty?
     end
     tables.each do |table|
@@ -80,7 +80,7 @@ class Bib < ActiveRecord::Base
     return unless doi
     "https://doi.org/#{doi}"
   end
-  
+
   def primary_pdf_attachment_file
     pdf_files.first if pdf_files.present?
   end
@@ -100,22 +100,22 @@ class Bib < ActiveRecord::Base
       end
     end
   end
-  
+
   def self.build_bundle_tex(bibs)
     bibs.map{|bib| bib.to_tex}.join(" ")
   end
-  
+
   def to_tex
     if entry_type == "article"
 #      tex = "\n@article{#{abbreviation.presence || global_id},\n#{article_tex},\n}"
       tex = "\n@article{#{global_id},\n#{article_tex},\n}"
     else
 #      tex = "\n@misc{#{abbreviation.presence || global_id},\n#{misc_tex},\n}"
-      tex = "\n@misc{#{global_id},\n#{misc_tex},\n}"      
+      tex = "\n@misc{#{global_id},\n#{misc_tex},\n}"
     end
     return tex
   end
-  
+
   def article_tex
     bib_array = []
     bib_array << "\tauthor = \"#{author_lists}\""
@@ -135,7 +135,7 @@ class Bib < ActiveRecord::Base
     bib_array << "\tkey = \"#{key}\"" if key.present?
     bib_array.join(",\n")
   end
-  
+
   def misc_tex
     bib_array = []
     bib_array << "\tauthor = \"#{author_lists}\""
@@ -179,7 +179,7 @@ class Bib < ActiveRecord::Base
       obj.published = true
       obj.save
     end
-    
+
     objs_r = []
     objs_r.concat(self.specimens)
     objs_r.concat(self.analyses)
@@ -200,9 +200,9 @@ class Bib < ActiveRecord::Base
       attachment_files.order("updated_at desc").select {|file| file.pdf? }
     end
   end
-  
+
   def author_valid?
-    errors[:author] = "can't be blank"
+    errors.add(:authors, :blank, message: "can't be blank")
   end
 
   def set_initial_position(bib_author)

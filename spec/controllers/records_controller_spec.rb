@@ -1,16 +1,16 @@
 require 'spec_helper'
 
 describe RecordsController do
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
 
   describe "GET index" do
-    let(:specimen) { FactoryGirl.create(:specimen) }
-    let(:box) { FactoryGirl.create(:box) }
-    let(:analysis) { FactoryGirl.create(:analysis) }
-    let(:bib) { FactoryGirl.create(:bib) }
-    let(:place) { FactoryGirl.create(:place) }
-    let(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    let(:specimen) { FactoryBot.create(:specimen) }
+    let(:box) { FactoryBot.create(:box) }
+    let(:analysis) { FactoryBot.create(:analysis) }
+    let(:bib) { FactoryBot.create(:bib) }
+    let(:place) { FactoryBot.create(:place) }
+    let(:attachment_file) { FactoryBot.create(:attachment_file) }
     let(:allcount){Specimen.count + Box.count + Analysis.count + Bib.count + Place.count + AttachmentFile.count}
     before do
       specimen
@@ -56,54 +56,54 @@ describe RecordsController do
   describe "GET show" do
 
     context "record found json " do
-      let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:specimen) { FactoryBot.create(:specimen) }
       before do
         specimen
-        get :show, id: specimen.record_property.global_id ,format: :json
+        get :show, params: { id: specimen.record_property.global_id ,format: :json }
       end
       #it { expect(response.body).to include(specimen.to_json) }
       it {
         json = JSON.parse(response.body)
         expect(json["datum_attributes"]["name"]).to eql(specimen.name)
-        expect(json["datum_attributes"]["global_id"]).to eql(specimen.global_id)        
+        expect(json["datum_attributes"]["global_id"]).to eql(specimen.global_id)
       }
     end
     context "record found html " do
-      let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:specimen) { FactoryBot.create(:specimen) }
       before do
         specimen
-        get :show, id: specimen.record_property.global_id ,format: :html
+        get :show, params: { id: specimen.record_property.global_id ,format: :html }
       end
       it { expect(response).to  redirect_to(controller: "specimens",action: "show",id:specimen.id) }
     end
     context "record found pml " do
-      let(:specimen) { FactoryGirl.create(:specimen) }
-      let(:analysis){ FactoryGirl.create(:analysis, specimen_id: specimen.id ) }
+      let(:specimen) { FactoryBot.create(:specimen) }
+      let(:analysis){ FactoryBot.create(:analysis, specimen_id: specimen.id ) }
       before do
         specimen
         analysis
-        get :show, id: specimen.record_property.global_id ,format: :pml
+        get :show, params: { id: specimen.record_property.global_id ,format: :pml }
       end
       it { expect(response.body).to include("\<sample_global_id\>#{specimen.global_id}") }
 
     end
     context "record not found json" do
       before do
-        get :show, id: "not_found_id" ,format: :json
+        get :show, params: { id: "not_found_id" ,format: :json }
       end
       it { expect(response.body).to be_blank }
       it { expect(response.status).to eq 404 }
     end
     context "record not found html" do
       before do
-        get :show, id: "not_found_id" ,format: :html
+        get :show, params: { id: "not_found_id" ,format: :html }
       end
       it { expect(response).to render_template("record_not_found") }
       it { expect(response.status).to eq 404 }
     end
     context "record not found pml" do
       before do
-        get :show, id: "not_found_id" ,format: :pml
+        get :show, params: { id: "not_found_id" ,format: :pml }
       end
       it { expect(response.body).to be_blank }
       it { expect(response.status).to eq 404 }
@@ -112,26 +112,26 @@ describe RecordsController do
   end
 
   describe "GET ancestors" do
-    let(:root) { FactoryGirl.create(:specimen, name: "root") }
-    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
+    let(:root) { FactoryBot.create(:specimen, name: "root") }
+    let(:child_1){ FactoryBot.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryBot.create(:analysis, specimen_id: root.id ) }
+    let(:analysis_2){ FactoryBot.create(:analysis, specimen_id: child_1.id ) }
+    let(:analysis_3){ FactoryBot.create(:analysis, specimen_id: child_1_1.id ) }
     before do
       root;child_1;child_1_1;
       analysis_1;analysis_2;analysis_3;
     end
     context "with format pml" do
       before do
-        get :ancestors, id: child_1_1.record_property.global_id, format: :pml
+        get :ancestors, params: { id: child_1_1.record_property.global_id, format: :pml }
       end
       it { expect(response.body).to include("\<sample_global_id\>#{root.global_id}") }
       it { expect(response.body).to include("\<sample_global_id\>#{child_1.global_id}") }
     end
     context "with format json" do
       before do
-        get :ancestors, id: child_1_1.record_property.global_id, format: :json
+        get :ancestors, params: { id: child_1_1.record_property.global_id, format: :json }
       end
       it { expect(response.body).to include("\"global_id\":\"#{root.global_id}\"") }
       it { expect(response.body).to include("\"global_id\":\"#{child_1.global_id}\"") }
@@ -139,26 +139,26 @@ describe RecordsController do
   end
 
   describe "GET descendants" do
-    let(:root) { FactoryGirl.create(:specimen, name: "root") }
-    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
+    let(:root) { FactoryBot.create(:specimen, name: "root") }
+    let(:child_1){ FactoryBot.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryBot.create(:analysis, specimen_id: root.id ) }
+    let(:analysis_2){ FactoryBot.create(:analysis, specimen_id: child_1.id ) }
+    let(:analysis_3){ FactoryBot.create(:analysis, specimen_id: child_1_1.id ) }
     before do
       root;child_1;child_1_1;
       analysis_1;analysis_2;analysis_3;
     end
     context "with format pml" do
       before do
-        get :descendants, id: root.record_property.global_id, format: :pml
+        get :descendants, params: { id: root.record_property.global_id, format: :pml }
       end
       it { expect(response.body).to include("\<sample_global_id\>#{child_1_1.global_id}") }
       it { expect(response.body).to include("\<sample_global_id\>#{child_1.global_id}") }
     end
     context "with format json" do
       before do
-        get :descendants, id: root.record_property.global_id, format: :json
+        get :descendants, params: { id: root.record_property.global_id, format: :json }
       end
       it { expect(response.body).to include("\"global_id\":\"#{child_1_1.global_id}\"") }
       it { expect(response.body).to include("\"global_id\":\"#{child_1.global_id}\"") }
@@ -166,19 +166,19 @@ describe RecordsController do
   end
 
   describe "GET self_and_descendants" do
-    let(:root) { FactoryGirl.create(:specimen, name: "root") }
-    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
+    let(:root) { FactoryBot.create(:specimen, name: "root") }
+    let(:child_1){ FactoryBot.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryBot.create(:analysis, specimen_id: root.id ) }
+    let(:analysis_2){ FactoryBot.create(:analysis, specimen_id: child_1.id ) }
+    let(:analysis_3){ FactoryBot.create(:analysis, specimen_id: child_1_1.id ) }
     before do
       root;child_1;child_1_1;
       analysis_1;analysis_2;analysis_3;
     end
     context "with format pml" do
       before do
-        get :self_and_descendants, id: root.record_property.global_id, format: :pml
+        get :self_and_descendants, params: { id: root.record_property.global_id, format: :pml }
       end
       it { expect(response.body).to include("\<sample_global_id\>#{root.global_id}") }
       it { expect(response.body).to include("\<sample_global_id\>#{child_1_1.global_id}") }
@@ -186,7 +186,7 @@ describe RecordsController do
     end
     context "with format json" do
       before do
-        get :self_and_descendants, id: root.record_property.global_id, format: :json
+        get :self_and_descendants, params: { id: root.record_property.global_id, format: :json }
       end
       it { expect(response.body).to include("\"global_id\":\"#{root.global_id}\"") }
       it { expect(response.body).to include("\"global_id\":\"#{child_1_1.global_id}\"") }
@@ -195,16 +195,16 @@ describe RecordsController do
   end
 
   describe "GET pmlame" do
-    let!(:root) { FactoryGirl.create(:specimen, name: "root") }
-    let!(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
-    let!(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let!(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
-    let!(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
-    let!(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
+    let!(:root) { FactoryBot.create(:specimen, name: "root") }
+    let!(:child_1){ FactoryBot.create(:specimen, parent_id: root.id) }
+    let!(:child_1_1){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let!(:analysis_1){ FactoryBot.create(:analysis, specimen_id: root.id ) }
+    let!(:analysis_2){ FactoryBot.create(:analysis, specimen_id: child_1.id ) }
+    let!(:analysis_3){ FactoryBot.create(:analysis, specimen_id: child_1_1.id ) }
 
     context "type is none" do
       before do
-        get :pmlame, id: child_1.record_property.global_id, format: :json
+        get :pmlame, params: { id: child_1.record_property.global_id, format: :json }
       end
       it { expect(response.body).not_to include("\"sample_id\":\"#{root.global_id}\"") }
       it { expect(response.body).to include("\"sample_id\":\"#{child_1_1.global_id}\"") }
@@ -212,7 +212,7 @@ describe RecordsController do
     end
     context "type is family" do
       before do
-        get :pmlame, id: child_1.record_property.global_id, format: :json, type: "family"
+        get :pmlame, params: { id: child_1.record_property.global_id, format: :json, type: "family" }
       end
       it { expect(response.body).to include("\"sample_id\":\"#{root.global_id}\"") }
       it { expect(response.body).to include("\"sample_id\":\"#{child_1_1.global_id}\"") }
@@ -221,19 +221,19 @@ describe RecordsController do
   end
 
   describe "GET families" do
-    let(:root) { FactoryGirl.create(:specimen, name: "root") }
-    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
+    let(:root) { FactoryBot.create(:specimen, name: "root") }
+    let(:child_1){ FactoryBot.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryBot.create(:analysis, specimen_id: root.id ) }
+    let(:analysis_2){ FactoryBot.create(:analysis, specimen_id: child_1.id ) }
+    let(:analysis_3){ FactoryBot.create(:analysis, specimen_id: child_1_1.id ) }
     before do
       root;child_1;child_1_1;
       analysis_1;analysis_2;analysis_3;
     end
     context "with format pml" do
       before do
-        get :families, id: child_1.record_property.global_id, format: :pml
+        get :families, params: { id: child_1.record_property.global_id, format: :pml }
       end
       it { expect(response.body).to include("\<sample_global_id\>#{root.global_id}") }
       it { expect(response.body).to include("\<sample_global_id\>#{child_1_1.global_id}") }
@@ -241,7 +241,7 @@ describe RecordsController do
     end
     context "with format json" do
       before do
-        get :families, id: child_1.record_property.global_id, format: :json
+        get :families, params: { id: child_1.record_property.global_id, format: :json }
       end
       it { expect(response.body).to include("\"global_id\":\"#{root.global_id}\"") }
       it { expect(response.body).to include("\"global_id\":\"#{child_1_1.global_id}\"") }
@@ -250,50 +250,50 @@ describe RecordsController do
   end
 
   describe "GET root" do
-    let(:root) { FactoryGirl.create(:specimen, name: "root") }
-    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
+    let(:root) { FactoryBot.create(:specimen, name: "root") }
+    let(:child_1){ FactoryBot.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryBot.create(:analysis, specimen_id: root.id ) }
+    let(:analysis_2){ FactoryBot.create(:analysis, specimen_id: child_1.id ) }
+    let(:analysis_3){ FactoryBot.create(:analysis, specimen_id: child_1_1.id ) }
     before do
       root;child_1;child_1_1;
       analysis_1;analysis_2;analysis_3;
     end
     context "with format pml" do
       before do
-        get :root, id: child_1_1.record_property.global_id, format: :pml
+        get :root, params: { id: child_1_1.record_property.global_id, format: :pml }
       end
       it { expect(response.body).to include("\<sample_global_id\>#{root.global_id}") }
     end
     context "with format json" do
       before do
-        get :root, id: child_1_1.record_property.global_id, format: :json
+        get :root,params: {  id: child_1_1.record_property.global_id, format: :json }
       end
       it { expect(response.body).to include("\"global_id\":\"#{root.global_id}\"") }
     end
   end
 
   describe "GET parent" do
-    let(:root) { FactoryGirl.create(:specimen, name: "root") }
-    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: root.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
+    let(:root) { FactoryBot.create(:specimen, name: "root") }
+    let(:child_1){ FactoryBot.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let(:analysis_1){ FactoryBot.create(:analysis, specimen_id: root.id ) }
+    let(:analysis_2){ FactoryBot.create(:analysis, specimen_id: child_1.id ) }
+    let(:analysis_3){ FactoryBot.create(:analysis, specimen_id: child_1_1.id ) }
     before do
       root;child_1;child_1_1;
       analysis_1;analysis_2;analysis_3;
     end
     context "with format pml" do
       before do
-        get :parent, id: child_1_1.record_property.global_id, format: :pml
+        get :parent, params: { id: child_1_1.record_property.global_id, format: :pml }
       end
       it { expect(response.body).to include("\<sample_global_id\>#{child_1.global_id}") }
     end
     context "with format json" do
       before do
-        get :parent, id: child_1_1.record_property.global_id, format: :json
+        get :parent, params: { id: child_1_1.record_property.global_id, format: :json }
       end
       it { expect(response.body).to include("\"global_id\":\"#{child_1.global_id}\"") }
     end
@@ -301,29 +301,29 @@ describe RecordsController do
 
 
   describe "GET siblings" do
-    let(:root) { FactoryGirl.create(:specimen, name: "root") }
-    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let(:child_1_2){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let(:child_1_3){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:root) { FactoryBot.create(:specimen, name: "root") }
+    let(:child_1){ FactoryBot.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let(:child_1_2){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let(:child_1_3){ FactoryBot.create(:specimen, parent_id: child_1.id) }
 
-    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1_2.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_3.id ) }
+    let(:analysis_1){ FactoryBot.create(:analysis, specimen_id: child_1_1.id ) }
+    let(:analysis_2){ FactoryBot.create(:analysis, specimen_id: child_1_2.id ) }
+    let(:analysis_3){ FactoryBot.create(:analysis, specimen_id: child_1_3.id ) }
     before do
       root;child_1;child_1_1;child_1_2;child_1_3;
       analysis_1;analysis_2;analysis_3;
     end
     context "with format pml" do
       before do
-        get :siblings, id: child_1_1.record_property.global_id, format: :pml
+        get :siblings, params: { id: child_1_1.record_property.global_id, format: :pml }
       end
       it { expect(response.body).to include("\<sample_global_id\>#{child_1_2.global_id}") }
       it { expect(response.body).to include("\<sample_global_id\>#{child_1_3.global_id}") }
     end
     context "with format json" do
       before do
-        get :siblings, id: child_1_1.record_property.global_id, format: :json
+        get :siblings, params: { id: child_1_1.record_property.global_id, format: :json }
       end
       it { expect(response.body).to include("\"global_id\":\"#{child_1_2.global_id}\"") }
       it { expect(response.body).to include("\"global_id\":\"#{child_1_3.global_id}\"") }
@@ -331,22 +331,22 @@ describe RecordsController do
   end
 
   describe "GET daughters" do
-    let(:root) { FactoryGirl.create(:specimen, name: "root") }
-    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let(:child_1_2){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let(:child_1_3){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:root) { FactoryBot.create(:specimen, name: "root") }
+    let(:child_1){ FactoryBot.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let(:child_1_2){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let(:child_1_3){ FactoryBot.create(:specimen, parent_id: child_1.id) }
 
-    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1_2.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_3.id ) }
+    let(:analysis_1){ FactoryBot.create(:analysis, specimen_id: child_1_1.id ) }
+    let(:analysis_2){ FactoryBot.create(:analysis, specimen_id: child_1_2.id ) }
+    let(:analysis_3){ FactoryBot.create(:analysis, specimen_id: child_1_3.id ) }
     before do
       root;child_1;child_1_1;child_1_2;child_1_3;
       analysis_1;analysis_2;analysis_3;
     end
     context "with format pml" do
       before do
-        get :daughters, id: child_1.record_property.global_id, format: :pml
+        get :daughters, params: { id: child_1.record_property.global_id, format: :pml }
       end
       it { expect(response.body).to include("\<sample_global_id\>#{child_1_1.global_id}") }
       it { expect(response.body).to include("\<sample_global_id\>#{child_1_2.global_id}") }
@@ -354,7 +354,7 @@ describe RecordsController do
     end
     context "with format json" do
       before do
-        get :daughters, id: child_1.record_property.global_id, format: :json
+        get :daughters, params: { id: child_1.record_property.global_id, format: :json }
       end
       it { expect(response.body).to include("\"global_id\":\"#{child_1_1.global_id}\"") }
       it { expect(response.body).to include("\"global_id\":\"#{child_1_2.global_id}\"") }
@@ -363,22 +363,22 @@ describe RecordsController do
   end
 
   describe "GET self_and_siblings" do
-    let(:root) { FactoryGirl.create(:specimen, name: "root") }
-    let(:child_1){ FactoryGirl.create(:specimen, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let(:child_1_2){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
-    let(:child_1_3){ FactoryGirl.create(:specimen, parent_id: child_1.id) }
+    let(:root) { FactoryBot.create(:specimen, name: "root") }
+    let(:child_1){ FactoryBot.create(:specimen, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let(:child_1_2){ FactoryBot.create(:specimen, parent_id: child_1.id) }
+    let(:child_1_3){ FactoryBot.create(:specimen, parent_id: child_1.id) }
 
-    let(:analysis_1){ FactoryGirl.create(:analysis, specimen_id: child_1_1.id ) }
-    let(:analysis_2){ FactoryGirl.create(:analysis, specimen_id: child_1_2.id ) }
-    let(:analysis_3){ FactoryGirl.create(:analysis, specimen_id: child_1_3.id ) }
+    let(:analysis_1){ FactoryBot.create(:analysis, specimen_id: child_1_1.id ) }
+    let(:analysis_2){ FactoryBot.create(:analysis, specimen_id: child_1_2.id ) }
+    let(:analysis_3){ FactoryBot.create(:analysis, specimen_id: child_1_3.id ) }
     before do
       root;child_1;child_1_1;child_1_2;child_1_3;
       analysis_1;analysis_2;analysis_3;
     end
     context "with format pml" do
       before do
-        get :self_and_siblings, id: child_1_1.record_property.global_id, format: :pml
+        get :self_and_siblings, params: { id: child_1_1.record_property.global_id, format: :pml }
       end
       it { expect(response.body).to include("\<sample_global_id\>#{child_1_1.global_id}") }
       it { expect(response.body).to include("\<sample_global_id\>#{child_1_2.global_id}") }
@@ -386,7 +386,7 @@ describe RecordsController do
     end
     context "with format json" do
       before do
-        get :self_and_siblings, id: child_1_1.record_property.global_id, format: :json
+        get :self_and_siblings, params: { id: child_1_1.record_property.global_id, format: :json }
       end
       it { expect(response.body).to include("\"global_id\":\"#{child_1_1.global_id}\"") }
       it { expect(response.body).to include("\"global_id\":\"#{child_1_2.global_id}\"") }
@@ -396,31 +396,31 @@ describe RecordsController do
 
   describe "GET property" do
     context "record found json" do
-      let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:specimen) { FactoryBot.create(:specimen) }
       before do
         specimen
-        get :property, id: specimen.record_property.global_id ,format: :json
+        get :property, params: { id: specimen.record_property.global_id ,format: :json }
       end
       it { expect(response.body).to eq(specimen.record_property.to_json) }
     end
     context "record found html" do
-      let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:specimen) { FactoryBot.create(:specimen) }
       before do
         specimen
-        get :property, id: specimen.record_property.global_id ,format: :html
+        get :property, params: { id: specimen.record_property.global_id ,format: :html }
       end
       pending { expect(response).to render_template("") }
     end
     context "record not found json" do
       before do
-        get :property, id: "not_found_id" ,format: :json
+        get :property, params: { id: "not_found_id" ,format: :json }
       end
       it { expect(response.body).to be_blank }
       it { expect(response.status).to eq 404 }
     end
     context "record not found html" do
       before do
-        get :property, id: "not_found_id" ,format: :html
+        get :property, params: { id: "not_found_id" ,format: :html }
       end
       it { expect(response).to render_template("record_not_found") }
       it { expect(response.status).to eq 404 }
@@ -428,51 +428,51 @@ describe RecordsController do
   end
 
   describe "GET casteml" do
-    let(:obj) { FactoryGirl.create(:specimen) }
-    let(:analysis_1){ FactoryGirl.create(:analysis, :specimen_id => obj.id )}
-    let(:analysis_2){ FactoryGirl.create(:analysis, :specimen_id => obj.id )}
+    let(:obj) { FactoryBot.create(:specimen) }
+    let(:analysis_1){ FactoryBot.create(:analysis, :specimen_id => obj.id )}
+    let(:analysis_2){ FactoryBot.create(:analysis, :specimen_id => obj.id )}
     let(:casteml){[analysis_2, analysis_1].to_pml}
     before do
       obj
       analysis_1
       analysis_2
     end
-    after{get :casteml, id: obj.global_id }
-    #it { expect(controller).to receive(:send_data).with(casteml, {type: "application/xml", filename: obj.global_id + ".pml", disposition: "attached"}).and_return{controller.render nothing: true} }
-    it { expect(controller).to receive(:send_data).with(/<?xml/, {type: "application/xml", filename: obj.global_id + ".pml", disposition: "attached"}).and_return{controller.render nothing: true} }
+    after{get :casteml, params: { id: obj.global_id }}
+    #it { expect(controller).to receive(:send_data).with(casteml, {type: "application/xml", filename: obj.global_id + ".pml", disposition: "attached"}){controller.head:no_content} }
+    it { expect(controller).to receive(:send_data).with(/<?xml/, {type: "application/xml", filename: obj.global_id + ".pml", disposition: "attached"}){controller.head:no_content} }
   end
 
   describe "PUT dispose" do
-    let!(:specimen) { FactoryGirl.create(:specimen) }
-    it { expect { put :dispose, id: specimen.record_property.global_id }.to change{ specimen.record_property.reload.disposed }.from(false).to(true) }
+    let!(:specimen) { FactoryBot.create(:specimen) }
+    it { expect { put :dispose, params: { id: specimen.record_property.global_id }}.to change{ specimen.record_property.reload.disposed }.from(false).to(true) }
   end
 
   describe "PUT restore" do
-    let!(:specimen) { FactoryGirl.create(:specimen) }
+    let!(:specimen) { FactoryBot.create(:specimen) }
     before do
       specimen.record_property.disposed = true
       specimen.record_property.save!
     end
-    it { expect { put :restore, id: specimen.record_property.global_id }.to change{ specimen.record_property.reload.disposed }.from(true).to(false) }
+    it { expect { put :restore, params: { id: specimen.record_property.global_id }}.to change{ specimen.record_property.reload.disposed }.from(true).to(false) }
   end
 
   describe "PUT lose" do
-    let!(:specimen) { FactoryGirl.create(:specimen) }
-    it { expect { put :lose, id: specimen.record_property.global_id }.to change{ specimen.record_property.reload.lost }.from(false).to(true) }
+    let!(:specimen) { FactoryBot.create(:specimen) }
+    it { expect { put :lose, params: { id: specimen.record_property.global_id }}.to change{ specimen.record_property.reload.lost }.from(false).to(true) }
   end
 
   describe "PUT found" do
-    let!(:specimen) { FactoryGirl.create(:specimen) }
+    let!(:specimen) { FactoryBot.create(:specimen) }
     before do
       specimen.record_property.lost = true
       specimen.record_property.save!
     end
-    it { expect { put :found, id: specimen.record_property.global_id }.to change{ specimen.record_property.reload.lost }.from(true).to(false) }
+    it { expect { put :found, params: { id: specimen.record_property.global_id }}.to change{ specimen.record_property.reload.lost }.from(true).to(false) }
   end
 
   describe "DELETE destroy" do
-    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:specimen) { FactoryBot.create(:specimen) }
     before { specimen }
-    it { expect { delete :destroy, id: specimen.record_property.global_id }.to change(RecordProperty, :count).by(-1) }
+    it { expect { delete :destroy, params: { id: specimen.record_property.global_id }}.to change(RecordProperty, :count).by(-1) }
   end
 end

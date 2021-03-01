@@ -92,8 +92,8 @@ Medusa::Application.routes.draw do
       get :property
       get :detail_edit
       get :chemistries
-      get :place, to: :show_place
-      post :place, to: :create_place
+      get :place, action: :show_place
+      post :place, action: :create_place
     end
     resource :record_property, only: [:show, :update], defaults: { parent_resource: "specimen" } do
       member do
@@ -128,7 +128,7 @@ Medusa::Application.routes.draw do
   end
 
   resources :paths, only: [:update]
-    
+
   resources :boxes, concerns: [:bundleable, :reportable], except: [:new] do
     member do
       get :family
@@ -386,7 +386,7 @@ Medusa::Application.routes.draw do
       post 'move_to_top'
     end
   end
- 
+
   resources :units, except: [:new]
   resources :techniques, except: [:new]
   resources :authors, except: [:new]

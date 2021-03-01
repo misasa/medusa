@@ -4,12 +4,12 @@ include ActionDispatch::TestProcess
 describe AttachmentFile do
 
  describe "validates" do
-    let(:user){FactoryGirl.create(:user)}
+    let(:user){FactoryBot.create(:user)}
     before{User.current = user}
     describe "data" do
       before{obj.save}
       context "is presence" do
-        let(:data) { fixture_file_upload("/files/test_image.jpg",'image/jpeg')}
+        let(:data) { fixture_file_upload("test_image.jpg",'image/jpeg')}
         let(:obj){AttachmentFile.new(data: data)}
         it { expect(obj).to be_valid }
       end
@@ -27,14 +27,14 @@ describe AttachmentFile do
   describe "alias_attribute" do
     describe "name" do
       subject { attachment_file.name }
-      let(:attachment_file) { FactoryGirl.build(:attachment_file, name: "name", data_file_name: data_file_name) }
+      let(:attachment_file) { FactoryBot.build(:attachment_file, name: "name", data_file_name: data_file_name) }
       let(:data_file_name) { "test.jpg" }
       it { expect(subject).to eq data_file_name }
     end
   end
 
   describe ".path" do
-    let(:attachment_file) { FactoryGirl.create(:attachment_file, :id => attachment_file_id, :data_file_name => "test.jpg") }
+    let(:attachment_file) { FactoryBot.create(:attachment_file, :id => attachment_file_id, :data_file_name => "test.jpg") }
     context "with no argument" do
       subject { attachment_file.path }
       context "id is 1 digit" do
@@ -58,9 +58,9 @@ describe AttachmentFile do
   end
 
   describe ".md5hash" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     let(:md5hash){ Digest::MD5.hexdigest(File.open("spec/fixtures/files/test_image.jpg", 'rb').read) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.jpg",'image/jpeg')) }
     before do
       User.current = user
       obj
@@ -72,15 +72,15 @@ describe AttachmentFile do
   end
 
   describe ".data_fingerprint" do
-    let(:obj) { FactoryGirl.create(:attachment_file) }
+    let(:obj) { FactoryBot.create(:attachment_file) }
     before{ obj.data_fingerprint = "test" }
     it {expect(obj.data_fingerprint).to eq("test")}
     after { obj.destroy }
   end
 
   describe ".save_geometry" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.new(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.new(data: fixture_file_upload("test_image.jpg",'image/jpeg')) }
     before do
       User.current = user
       obj
@@ -89,8 +89,8 @@ describe AttachmentFile do
   end
 
   describe "corners_on_world=" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.jpg",'image/jpeg')) }
     let(:corners_on_world){ [[1492.8272, 2371.039],[1576.2872, 2368.185],[1573.1728, 2304.961],[1489.7128, 2307.815]]}
     before do
       User.current = user
@@ -102,8 +102,8 @@ describe AttachmentFile do
   end
 
   describe ".save_affine_matrix" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.jpg",'image/jpeg')) }
     let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
 
     before do
@@ -116,8 +116,8 @@ describe AttachmentFile do
   end
 
   describe ".check_affine_matrix" do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.jpg",'image/jpeg')) }
     let(:new_name){ "deleteme.1234.jpg" }
     let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
     let(:affine_matrix_1_in_string){ "[1,0,0;0,1,0;0,0.0,1]" }
@@ -137,11 +137,11 @@ describe AttachmentFile do
     end
 
     it "change affine_matrix" do
-      obj.update_attributes(affine_matrix_in_string: affine_matrix_in_string)
+      obj.update(affine_matrix_in_string: affine_matrix_in_string)
     end
 
     it "change affine_matrix to one" do
-      obj.update_attributes(affine_matrix_in_string: affine_matrix_1_in_string)
+      obj.update(affine_matrix_in_string: affine_matrix_1_in_string)
     end
 
     after { obj.destroy }
@@ -149,8 +149,8 @@ describe AttachmentFile do
 
   describe ".rename_attached_files_if_needed" do
     pending("") do
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.jpg",'image/jpeg')) }
     let(:new_name){ "deleteme.1234.jpg" }
 
     before do
@@ -158,7 +158,7 @@ describe AttachmentFile do
       obj
     end
     it "change data.path" do
-      obj.update_attributes(name: new_name)
+      obj.update(name: new_name)
       expect(File.exist?(obj.data.path)).to be_truthy
     end
     after { obj.destroy }
@@ -166,7 +166,7 @@ describe AttachmentFile do
   end
 
   describe ".create" do
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryBot.create(:user) }
     before do
       User.current = user
       obj
@@ -175,7 +175,7 @@ describe AttachmentFile do
     context "with filename include @" do
       let(:obj) { AttachmentFile.new(data: fixture_file_upload(file,'image/jpeg')) }
       let(:basename){ "test_image@1"  }
-      let(:file){"/files/#{basename}.jpg"}
+      let(:file){"#{basename}.jpg"}
       it "shoud not replace @ with _" do
         expect(File.basename(obj.data.path,'.*')).to eql(basename)
       end
@@ -184,7 +184,7 @@ describe AttachmentFile do
     context "with filename include +" do
       let(:obj) { AttachmentFile.new(data: fixture_file_upload(file,'image/jpeg')) }
       let(:basename){ "test_image+1"  }
-      let(:file){"/files/#{basename}.jpg"}
+      let(:file){"#{basename}.jpg"}
       it "shoud replace + with _" do
         expect(File.basename(obj.data.path,'.*')).to eql("test_image_1")
       end
@@ -193,20 +193,20 @@ describe AttachmentFile do
 
  #   it {expect(obj.original_geometry).to eq("2352x1568")}
     context "with affine_matrix" do
-      let(:obj) { AttachmentFile.new(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg'), affine_matrix_in_string: affine_matrix_in_string) }
+      let(:obj) { AttachmentFile.new(data: fixture_file_upload("test_image.jpg",'image/jpeg'), affine_matrix_in_string: affine_matrix_in_string) }
       let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
       it {expect(obj.affine_matrix).not_to be_nil}
     end
     context "without affine_matrix" do
-      let(:obj) { AttachmentFile.new(data: fixture_file_upload("/files/test_image.jpg",'image/jpeg')) }
+      let(:obj) { AttachmentFile.new(data: fixture_file_upload("test_image.jpg",'image/jpeg')) }
       it {expect(obj.affine_matrix).to be_eql([])}
     end
-    after { obj.destroy  } 
+    after { obj.destroy  }
   end
 
   describe "#fits?" do
     subject { obj.fits_file? }
-    let(:obj) { FactoryGirl.build(:attachment_file, data_content_type: data_content_type, data_file_name: data_file_name) }
+    let(:obj) { FactoryBot.build(:attachment_file, data_content_type: data_content_type, data_file_name: data_file_name) }
     context "data_content_type is octet-stream" do
       let(:data_content_type) { "application/octet-stream" }
       let(:data_file_name) { "test.fits" }
@@ -238,8 +238,8 @@ describe AttachmentFile do
 
   describe "generate_analysis" do
     subject { obj.analysis }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.fits",'application/octet-stream')) }
     before do
       User.current = user
       obj
@@ -249,8 +249,8 @@ describe AttachmentFile do
 
   describe "local_path" do
     subject { obj.local_path(:png) }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.fits",'application/octet-stream')) }
     before do
       User.current = user
       obj
@@ -261,8 +261,8 @@ describe AttachmentFile do
 
   describe "png_path" do
     subject { obj.png_path }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.fits",'application/octet-stream')) }
     before do
       User.current = user
       obj
@@ -272,8 +272,8 @@ describe AttachmentFile do
 
   describe "png_url" do
     subject { obj.png_url(:thumb) }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.fits",'application/octet-stream')) }
     before do
       User.current = user
       obj
@@ -283,8 +283,8 @@ describe AttachmentFile do
 
   describe "fits_data" do
     subject { obj.fits_data }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.fits",'application/octet-stream')) }
     before do
       User.current = user
       obj
@@ -294,8 +294,8 @@ describe AttachmentFile do
 
   describe "fits_info" do
     subject { obj.fits_info }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.fits",'application/octet-stream')) }
     before do
       User.current = user
       obj
@@ -306,8 +306,8 @@ describe AttachmentFile do
 
   describe "default_display_range" do
     subject { obj.default_display_range }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.fits",'application/octet-stream')) }
     before do
       User.current = user
       obj
@@ -317,9 +317,9 @@ describe AttachmentFile do
 
   describe "fits_image" do
     subject { obj.fits_image(params) }
-    let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'viridis' }} 
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'viridis' }}
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.fits",'application/octet-stream')) }
     before do
       User.current = user
       obj
@@ -329,39 +329,39 @@ describe AttachmentFile do
 
   describe "fits2png" do
     subject { obj.fits2png(params) }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.fits",'application/octet-stream')) }
     before do
       User.current = user
       obj
     end
     context "with known colormap" do
-      let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'viridis' }} 
-      it { expect(subject).not_to raise_error }
+      let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'viridis' }}
+      it { expect{subject}.not_to raise_error }
     end
     context "with unknown colormap" do
-      let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'jet' }} 
-      it { expect(subject).not_to raise_error }
+      let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'jet' }}
+      it { expect{subject}.not_to raise_error }
     end
     context "with no colormap" do
-      let(:params){ { r_min: 0.1, r_max: 0.5 }} 
-      it { expect(subject).not_to raise_error }
+      let(:params){ { r_min: 0.1, r_max: 0.5 }}
+      it { expect{subject}.not_to raise_error }
     end
     context "with empty colormap" do
-      let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'' }} 
-      it { expect(subject).not_to raise_error }
+      let(:params){ { r_min: 0.1, r_max: 0.5, color_map:'' }}
+      it { expect{subject}.not_to raise_error }
     end
     context "with nil colormap" do
-      let(:params){ { r_min: 0.1, r_max: 0.5, color_map: nil }} 
-      it { expect(subject).not_to raise_error }
+      let(:params){ { r_min: 0.1, r_max: 0.5, color_map: nil }}
+      it { expect{subject}.not_to raise_error }
     end
 
   end
 
   describe ".colormap" do
     subject { AttachmentFile.colormap(1.0/256) }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:obj) { AttachmentFile.create(data: fixture_file_upload("/files/test_image.fits",'application/octet-stream')) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.fits",'application/octet-stream')) }
     it { expect(AttachmentFile.colormap(1.0/256)).to eql(255)}
     it { expect(AttachmentFile.colormap(nil)).to eql(255)}
 
@@ -369,7 +369,7 @@ describe AttachmentFile do
 
   describe "#pdf?" do
     subject { obj.pdf? }
-    let(:obj) { FactoryGirl.build(:attachment_file, data_content_type: data_content_type) }
+    let(:obj) { FactoryBot.build(:attachment_file, data_content_type: data_content_type) }
     context "data_content_type is pdf" do
       let(:data_content_type) { "application/pdf" }
       it { expect(subject).to eq true }
@@ -386,7 +386,7 @@ describe AttachmentFile do
 
   describe "#image?" do
     subject { obj.image? }
-    let(:obj) { FactoryGirl.build(:attachment_file, data_content_type: data_content_type) }
+    let(:obj) { FactoryBot.build(:attachment_file, data_content_type: data_content_type) }
     context "data_content_type is pdf" do
       let(:data_content_type) { "application/pdf" }
       it { expect(subject).to eq false }
@@ -402,7 +402,7 @@ describe AttachmentFile do
   end
 
   describe ".original_width" do
-    let(:obj){FactoryGirl.create(:attachment_file)}
+    let(:obj){FactoryBot.create(:attachment_file)}
     subject{ obj.original_width }
     before{obj.original_geometry = original_geometry}
     context "original_geometry is blank" do
@@ -416,7 +416,7 @@ describe AttachmentFile do
   end
 
   describe ".original_height" do
-    let(:obj){FactoryGirl.create(:attachment_file)}
+    let(:obj){FactoryBot.create(:attachment_file)}
     subject{ obj.original_height }
     before{obj.original_geometry = original_geometry}
     context "original_geometry is blank" do
@@ -430,7 +430,7 @@ describe AttachmentFile do
   end
 
   describe ".width_in_um" do
-    let(:obj){FactoryGirl.create(:attachment_file)}
+    let(:obj){FactoryBot.create(:attachment_file)}
     subject{obj.width_in_um}
     context "affine_matrix is blank" do
       before{obj.affine_matrix = nil}
@@ -442,7 +442,7 @@ describe AttachmentFile do
   end
 
   describe ".height_in_um" do
-    let(:obj){FactoryGirl.create(:attachment_file)}
+    let(:obj){FactoryBot.create(:attachment_file)}
     subject{obj.height_in_um}
     context "affine_matrix is blank" do
       before{obj.affine_matrix = nil}
@@ -455,7 +455,7 @@ describe AttachmentFile do
 
   describe ".transform_points" do
     subject { obj.send(:transform_points, points)  }
-    let(:obj){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
+    let(:obj){FactoryBot.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
 
     context "apply points with affine_matrix" do
       let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
@@ -479,7 +479,7 @@ describe AttachmentFile do
 
   describe ".affine_transform" do
 #    subject { obj.affine_transform(x,y)}
-    let(:obj){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
+    let(:obj){FactoryBot.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
     context "with affine_matrix apply (-50,40)" do
       let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
       let(:x){ -50 }
@@ -507,7 +507,7 @@ describe AttachmentFile do
 
   describe ".pixel_pairs_on_world" do
     subject { obj.world_pairs_on_pixel( obj.pixel_pairs_on_world(pixel_pairs) ) }
-    let(:obj){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
+    let(:obj){FactoryBot.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
     let(:point_1){ [20, 30] }
     let(:pixel_pairs){ [point_1] }
     let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
@@ -516,11 +516,11 @@ describe AttachmentFile do
 #      p pixel_pairs
 #      p subject
 #    end
-    it {expect(subject).not_to be_empty} 
+    it {expect(subject).not_to be_empty}
   end
   describe ".bounds" do
     subject {obj.bounds}
-    let(:obj){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
+    let(:obj){FactoryBot.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix_in_string => affine_matrix_in_string)}
     let(:affine_matrix_in_string){ "[9.492e+01,-1.875e+01,-1.986e+02;1.873e+01,9.428e+01,-3.378e+01;0.000e+00,0.000e+00,1.000e+00]" }
 
     context "affine_matrix is blank" do
@@ -541,7 +541,7 @@ describe AttachmentFile do
 
   describe ".affine_matrix_in_string" do
     subject{obj.affine_matrix_in_string}
-    let(:obj){FactoryGirl.create(:attachment_file)}
+    let(:obj){FactoryBot.create(:attachment_file)}
     context "affine_matrix is blank" do
       before{obj.affine_matrix = nil}
       it {expect(subject).to eq nil}
@@ -553,9 +553,9 @@ describe AttachmentFile do
   end
 
   describe ".surfaces" do
-    let(:surface){ FactoryGirl.create(:surface) }
-    let(:surface_2){ FactoryGirl.create(:surface) }
-    let(:obj){ FactoryGirl.create(:attachment_file, data_content_type: data_content_type)}
+    let(:surface){ FactoryBot.create(:surface) }
+    let(:surface_2){ FactoryBot.create(:surface) }
+    let(:obj){ FactoryBot.create(:attachment_file, data_content_type: data_content_type)}
     let(:data_content_type) { "image/jpeg" }
     before do
       obj
@@ -575,9 +575,9 @@ describe AttachmentFile do
 
   describe ".to_pml" do
     subject{[obj].to_pml}
-    let(:obj){FactoryGirl.create(:attachment_file)}
-    let(:analysis){FactoryGirl.create(:analysis)}
-    let(:spot){FactoryGirl.create(:spot, :target_uid => analysis.global_id)}
+    let(:obj){FactoryBot.create(:attachment_file)}
+    let(:analysis){FactoryBot.create(:analysis)}
+    let(:spot){FactoryBot.create(:spot, :target_uid => analysis.global_id)}
     before do
       obj
       analysis
@@ -592,7 +592,7 @@ describe AttachmentFile do
 
   describe "rotate" do
     subject{obj.rotate}
-    let(:obj){FactoryGirl.create(:attachment_file, affine_matrix: [9.5e+01,-1.8e+01,-2.0e+02,1.8e+01,9.4e+01,-3.3e+01,0,0,1])}
+    let(:obj){FactoryBot.create(:attachment_file, affine_matrix: [9.5e+01,-1.8e+01,-2.0e+02,1.8e+01,9.4e+01,-3.3e+01,0,0,1])}
     before do
       allow(obj).to receive(:local_path).and_return(File.join(fixture_path, "/files/test_image.jpg"))
     end

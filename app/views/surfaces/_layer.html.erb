@@ -27,7 +27,7 @@
     <div class="row">
      <div class="form-inline col-sm-6">
      <%= mantra "To upload a image to surface, use this interface.", {title: "upload"} %> 
-     <%= form_for AttachmentFile.new, url: surface_images_path(@surface), multipart: true, class: "form-inline", builder: ApplicationFormBuilder do |f|%>
+     <%= form_with model:AttachmentFile.new, url: surface_images_path(@surface), multipart: true, class: "form-inline", builder: ApplicationFormBuilder do |f|%>
         <%#= hidden_tabname_tag(__FILE__) %>
         <%= f.fields_for :record_property_attributes do |r| %>
           <%= r.hidden_field :user_id ,value: @current_user.id %>
@@ -51,8 +51,8 @@
       <% end %>
     </div>
     <div class="col-sm-6">
-      <%= mantra "To link a image to surface, use this interface.", {title: "link"} %> 
-      <%= form_tag link_by_global_id_surface_images_path(@surface), method: :post do %>
+      <%= mantra "To link a image to surface, use this interface.", {title: "link"} %>
+      <%= form_with url:link_by_global_id_surface_images_path(@surface), method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
 	  <div class="input-group">
 	    <span class="input-group-addon">
@@ -75,7 +75,7 @@
 <div class="panel panel-default">
   <div class="panel-heading">  
   <%= mantra "To upload and link a layer to surface, use this interface.", {title: "new layer"} %> 
-  <%= form_for SurfaceLayer.new, url: surface_layers_path(@surface), class:"inline" do |f|%>
+  <%= form_with model:SurfaceLayer.new, url: surface_layers_path(@surface), class:"inline" do |f|%>
     name
       <%= f.text_field :name, placeholder: "new layer" %>
       <%= f.hidden_field :priority, value: @surface.surface_layers.max_priority + 1 %>

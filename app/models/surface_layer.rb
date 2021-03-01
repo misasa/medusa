@@ -1,6 +1,6 @@
-class SurfaceLayer < ActiveRecord::Base
+class SurfaceLayer < ApplicationRecord
   belongs_to :surface
-  has_many :surface_images, :dependent => :nullify, :order => ("position DESC")
+  has_many :surface_images, -> { order('position DESC') }, dependent: :nullify
   has_many :wall_surface_images, -> { wall }, class_name: 'SurfaceImage'
   has_many :overlay_surface_images, -> { overlay }, class_name: 'SurfaceImage'
   has_many :calibrated_surface_images, -> { calibrated }, class_name: 'SurfaceImage'
@@ -11,7 +11,7 @@ class SurfaceLayer < ActiveRecord::Base
   scope :wall, -> { where(wall: true) }
 
   validates :surface_id, presence: true
-  validates :surface, existence: true, allow_nil: true
+  validates :surface, presence: { message: :required, if: -> { surface_id.present? } }
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :surface_id }
   validates :opacity, presence: true, numericality: { greater_than: 0, less_than_or_equal_to: 100 }
   validates :priority, presence: true, numericality: { greater_than_or_equal_to: 1 }

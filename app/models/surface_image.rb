@@ -1,4 +1,4 @@
-class SurfaceImage < ActiveRecord::Base
+class SurfaceImage < ApplicationRecord
   has_attached_file :data,
   styles: { thumb: "160x120>", tiny: "50x50"},
   path: ":rails_root/public/system/:class/:id_partition/:basename_with_style.:extension",
@@ -8,11 +8,12 @@ class SurfaceImage < ActiveRecord::Base
   alias_attribute :name, :data_file_name
 
   belongs_to :surface
-  belongs_to :image, class_name: AttachmentFile
+  belongs_to :image, class_name: "AttachmentFile"
   belongs_to :surface_layer
   acts_as_list :scope => :surface_id, column: :position
 
-  validates :surface_layer, existence: true, allow_nil: true
+  validates :surface_layer, presence: { message: :required, if: -> { surface_layer_id.present? } }
+  validates_attachment_content_type :data, :content_type => ["image/jpg", "image/jpeg", "image/png", "image/gif", "application/pdf", "application/octet-stream", "text/plain", "image/bmp"]
   validate :check_image
 
   after_save :refresh_parent

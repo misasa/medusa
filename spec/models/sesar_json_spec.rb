@@ -3,7 +3,7 @@ require 'spec_helper'
 require 'webmock/rspec'
 
 describe SesarJson do
-  let(:specimen) { FactoryGirl.create(:specimen, igsn: igsn, collector: "採集者", collector_detail: "採集者詳細") }
+  let(:specimen) { FactoryBot.create(:specimen, igsn: igsn, collector: "採集者", collector_detail: "採集者詳細") }
   let(:igsn) { "IEIMA0005" }
   let(:user_code) { Settings.sesar.user_code }
 
@@ -156,12 +156,12 @@ describe SesarJson do
     # Custom attributes.
     let(:publish_date) { "2020-01-01" }
     let(:sample_subtype) { "Specimen" }
-    let(:specimen_custom_attribute_1) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id, value: "2019-12-20") }
-    let(:custom_attribute_1) { FactoryGirl.create(:custom_attribute, sesar_name: "publish_date") }
-    let(:specimen_custom_attribute_2) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_2.id, value: "subtype") }
-    let(:custom_attribute_2) { FactoryGirl.create(:custom_attribute, sesar_name: "sample_subtype") }
-    let(:specimen_custom_attribute_3) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_3.id, value: "test1,test2") }
-    let(:custom_attribute_3) { FactoryGirl.create(:custom_attribute, sesar_name: "sample_other_names") }
+    let(:specimen_custom_attribute_1) { FactoryBot.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id, value: "2019-12-20") }
+    let(:custom_attribute_1) { FactoryBot.create(:custom_attribute, sesar_name: "publish_date") }
+    let(:specimen_custom_attribute_2) { FactoryBot.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_2.id, value: "subtype") }
+    let(:custom_attribute_2) { FactoryBot.create(:custom_attribute, sesar_name: "sample_subtype") }
+    let(:specimen_custom_attribute_3) { FactoryBot.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_3.id, value: "test1,test2") }
+    let(:custom_attribute_3) { FactoryBot.create(:custom_attribute, sesar_name: "sample_other_names") }
 
     before do
       @sesar_json = SesarJson.new()
@@ -346,7 +346,7 @@ describe SesarJson do
 
         context "該当するclassificationsが存在する場合" do
           before do
-            FactoryGirl.create(:classification, sesar_classification: sesar_classification)
+            FactoryBot.create(:classification, sesar_classification: sesar_classification)
           end
 
           it "見つけたclassificationオブジェクトを返す" do
@@ -380,7 +380,7 @@ describe SesarJson do
 
         context "classificationsに親のclassificationのみ存在する場合" do
           before do
-            FactoryGirl.create(:classification, sesar_classification: parent_sesar_classification)
+            FactoryBot.create(:classification, sesar_classification: parent_sesar_classification)
           end
           it "親のレコードが増えない" do
             expect{ subject }.not_to change{ Classification.where(sesar_material: material, sesar_classification: parent_sesar_classification).count }
@@ -392,7 +392,7 @@ describe SesarJson do
 
         context "classificationsに子のclassificationのみ存在する場合" do
           before do
-            FactoryGirl.create(:classification, sesar_classification: sesar_classification)
+            FactoryBot.create(:classification, sesar_classification: sesar_classification)
           end
           it "子のレコードが増えない" do
             expect{ subject }.not_to change{ Classification.where(sesar_material: material, sesar_classification: sesar_classification).count }
@@ -404,8 +404,8 @@ describe SesarJson do
 
         context "classificationsに親子両方のclassificationが存在する場合" do
           before do
-            FactoryGirl.create(:classification, sesar_classification: parent_sesar_classification)
-            FactoryGirl.create(:classification, sesar_classification: sesar_classification)
+            FactoryBot.create(:classification, sesar_classification: parent_sesar_classification)
+            FactoryBot.create(:classification, sesar_classification: sesar_classification)
           end
           it "レコードが増えない" do
             specimen

@@ -5,7 +5,7 @@ class GroupsController < ApplicationController
   layout "admin"
 
   def index
-    @search = Group.search(params[:q])
+    @search = Group.ransack(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @groups = @search.result.page(params[:page]).per(params[:per_page])
   end
@@ -25,7 +25,7 @@ class GroupsController < ApplicationController
   end
 
   def update
-    @group.update_attributes(group_params)
+    @group.update(group_params)
     respond_with(@group, location: groups_path)
   end
   

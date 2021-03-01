@@ -3,9 +3,9 @@ require 'spec_helper'
 describe NestedResources::SpecimensController do
   let(:parent_name){:bib}
   let(:child_name){:specimen}
-  let(:parent) { FactoryGirl.create(parent_name) }
-  let(:child) { FactoryGirl.create(child_name) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:parent) { FactoryBot.create(parent_name) }
+  let(:child) { FactoryBot.create(child_name) }
+  let(:user) { FactoryBot.create(:user) }
   let(:url){"where_i_came_from"}
   let(:attributes) { {name: name} }
   let(:name){"child_name"}
@@ -15,7 +15,7 @@ describe NestedResources::SpecimensController do
   before { child }
 
   describe "POST create" do
-    let(:method){post :create, parent_resource: parent_name, bib_id: parent, specimen: attributes, association_name: :specimens}
+    let(:method){post :create, params: { parent_resource: parent_name, bib_id: parent, specimen: attributes, association_name: :specimens }}
     before{child}
     it { expect{method}.to change(Specimen, :count).by(1) }
     context "validate" do
@@ -41,7 +41,7 @@ describe NestedResources::SpecimensController do
   end
 
   describe "PUT update" do
-    let(:method){put :update, parent_resource: parent_name, bib_id: parent, id: child_id, association_name: :specimens}
+    let(:method){put :update, params: { parent_resource: parent_name, bib_id: parent, id: child_id, association_name: :specimens }}
     let(:child_id){child.id}
     it { expect {method}.to change(Specimen, :count).by(0) }
     context "present child" do
@@ -56,7 +56,7 @@ describe NestedResources::SpecimensController do
   end
 
   describe "DELETE destory" do
-    let(:method){delete :destroy, parent_resource: parent_name, bib_id: parent, id: child_id, association_name: :specimens}
+    let(:method){delete :destroy, params: { parent_resource: parent_name, bib_id: parent, id: child_id, association_name: :specimens }}
     before { parent.specimens << child}
     let(:child_id){child.id}
     it { expect {method}.to change(Specimen, :count).by(0) }
@@ -72,7 +72,7 @@ describe NestedResources::SpecimensController do
   end
 
   describe "PUT update" do
-    let(:method){put :update, parent_resource: parent_name, bib_id: parent, id: child_id, association_name: :specimens}
+    let(:method){put :update, params: { parent_resource: parent_name, bib_id: parent, id: child_id, association_name: :specimens }}
     let(:child_id){child.id}
     it { expect {method}.to change(Specimen, :count).by(0) }
     context "present child" do
@@ -86,7 +86,7 @@ describe NestedResources::SpecimensController do
     end
   end
   describe "DELETE destory" do
-    let(:method){delete :destroy, parent_resource: parent_name, bib_id: parent, id: child_id, association_name: :specimens}
+    let(:method){delete :destroy, params: { parent_resource: parent_name, bib_id: parent, id: child_id, association_name: :specimens }}
     before { parent.specimens << child}
     let(:child_id){child.id}
     it { expect {method}.to change(Specimen, :count).by(0) }
@@ -102,7 +102,7 @@ describe NestedResources::SpecimensController do
   end
 
   describe "POST link_by_global_id" do
-    let(:method){post :link_by_global_id, parent_resource: parent_name,bib_id: parent.id, global_id: global_id , association_name: :specimens}
+    let(:method){post :link_by_global_id, params: { parent_resource: parent_name,bib_id: parent.id, global_id: global_id , association_name: :specimens }}
     context "present child" do
       let(:global_id){child.global_id}
       before { method }
@@ -118,29 +118,29 @@ describe NestedResources::SpecimensController do
       before { allow(Specimen).to receive(:joins).and_raise }
       context "format html" do
         before do
-          post :link_by_global_id, parent_resource: parent_name.to_s, bib_id: parent.id, global_id: child.global_id, format: :html
+          post :link_by_global_id, params: { parent_resource: parent_name.to_s, bib_id: parent.id, global_id: child.global_id, format: :html }
         end
         it { expect(response.body).to render_template("parts/duplicate_global_id") }
         it { expect(response.status).to eq 422 }
       end
       context "format json" do
         before do
-          post :link_by_global_id, parent_resource: parent_name.to_s, bib_id: parent.id, global_id: child.global_id, format: :json
+          post :link_by_global_id, params: { parent_resource: parent_name.to_s, bib_id: parent.id, global_id: child.global_id, format: :json }
         end
         it { expect(response.body).to be_blank }
         it { expect(response.status).to eq 422 }
       end
     end
   end
-  
+
   describe "POST inventory" do
-    let!(:specimen) { FactoryGirl.create(:specimen) }
-    let!(:box) { FactoryGirl.create(:box) }
+    let!(:specimen) { FactoryBot.create(:specimen) }
+    let!(:box) { FactoryBot.create(:box) }
     let!(:now) { Time.now }
     let(:parent_name) { :box }
     before do
       allow(Time).to receive(:now).and_return( now )
-      post :inventory, parent_resource: parent_name, box_id: box_id, id: specimen.id, association_name: :specimens
+      post :inventory, params: { parent_resource: parent_name, box_id: box_id, id: specimen.id, association_name: :specimens }
     end
     context "not changed box_id" do
       let(:box_id) { specimen.box_id }

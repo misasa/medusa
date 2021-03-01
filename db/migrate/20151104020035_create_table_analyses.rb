@@ -1,4 +1,4 @@
-class CreateTableAnalyses < ActiveRecord::Migration
+class CreateTableAnalyses < ActiveRecord::Migration[4.2]
   def change
     create_table :table_analyses do |t|
       t.integer :table_id

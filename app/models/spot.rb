@@ -1,4 +1,4 @@
-class Spot < ActiveRecord::Base
+class Spot < ApplicationRecord
   include HasRecordProperty
 
   belongs_to :attachment_file, inverse_of: :spots
@@ -6,18 +6,18 @@ class Spot < ActiveRecord::Base
   belongs_to :target_property, class_name: 'RecordProperty', foreign_key: "target_uid", primary_key: "global_id"
 
   with_options if: -> (spot) { spot.attachment_file_id } do |opt|
-    opt.validates :attachment_file, existence: true
+    opt.validates :attachment_file, presence: true
     opt.validates :spot_x, presence: true
     opt.validates :spot_y, presence: true
   end
   with_options if: -> (spot) { spot.surface_id } do |opt|
-    opt.validates :surface, existence: true
+    opt.validates :surface, presence: true
     opt.validates :world_x, presence: true
     opt.validates :world_y, presence: true
   end
 
-  before_validation :generate_name, if: "name.blank?"
-  before_validation :generate_stroke_width, if: "stroke_width.blank?"
+  before_validation :generate_name, if: proc { |s| s.name.blank? }
+  before_validation :generate_stroke_width, if: proc { |s| s.stroke_width.blank? }
   before_save :set_world_xy
   before_save :sync_radius
 #  after_create :attachment_to_target

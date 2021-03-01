@@ -1,4 +1,4 @@
-class ChangeEmailTousers < ActiveRecord::Migration
+class ChangeEmailTousers < ActiveRecord::Migration[4.2]
   def up
     change_column :users, :email, :string, null: true
     change_column_default :users, :email, nil

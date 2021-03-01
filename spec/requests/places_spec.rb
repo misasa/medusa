@@ -7,7 +7,7 @@ describe "place" do
     create_data
     visit places_path
   end
-  let(:login_user) { FactoryGirl.create(:user) }
+  let(:login_user) { FactoryBot.create(:user) }
   let(:create_data) {}
   
   describe "place detail screen" do
@@ -15,8 +15,8 @@ describe "place" do
     let(:create_data) do 
       place.create_record_property(user_id: login_user.id) 
     end
-    let(:place) { FactoryGirl.create(:place) }
-    let(:attachment_file) { FactoryGirl.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
+    let(:place) { FactoryBot.create(:place) }
+    let(:attachment_file) { FactoryBot.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
     
     describe "at-a-glance tab" do
       before { click_link("at-a-glance") }

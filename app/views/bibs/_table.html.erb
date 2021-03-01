@@ -27,7 +27,7 @@
   </tbody>
   <tfoot>
     <tr>
-      <%= form_for Table.new, url: bib_tables_path(@bib, format: :json), remote: true, html: { class: "dinamic-message", role: "form" } do |f|%>
+      <%= form_with model:Table.new, url: bib_tables_path(@bib, format: :json), local: false, html: { id: "new_table", class: "dinamic-message", role: "form" } do |f|%>
         <%= hidden_tabname_tag(__FILE__) %>
         <th></th>
         <th></th>

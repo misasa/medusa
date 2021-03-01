@@ -18,7 +18,7 @@ task complement_table_analyses: :delete_invalid_table_analyses do
     table.table_specimens.each do |table_specimen|
       table_specimen.specimen.analyses.each do |analysis|
         key = { table_id: table.id, specimen_id: table_specimen.specimen_id, analysis_id: analysis.id }
-        next if TableAnalysis.exists?(key)
+        next if TableAnalysis.exists?(name: key)
         priority = (table.table_analyses.where(specimen_id: table_specimen.specimen_id).maximum(:priority) || 0) + 1
         TableAnalysis.create!(key.merge(priority: priority))
       end

@@ -1,30 +1,28 @@
-class AddCommentToSpecimens < ActiveRecord::Migration
+class AddCommentToSpecimens < ActiveRecord::Migration[4.2]
   def change
-    change_table "specimens" do |t|
-      t.comment "標本"
-      t.change_comment :id, "ID"
-      t.change_comment :name, "名称"
-      t.change_comment :specimen_type, "標本種別"
-      t.change_comment :description, "説明"
-      t.change_comment :parent_id, "親標本ID"
-      t.change_comment :place_id, "場所ID"
-      t.change_comment :box_id, "保管場所ID"
-      t.change_comment :physical_form_id, "形状ID"
-      t.change_comment :classification_id, "分類ID"
-      t.change_comment :quantity, "数量"
-      t.change_comment :quantity_unit, "数量単位"
-      t.change_comment :created_at, "作成日時"
-      t.change_comment :updated_at, "更新日時"
-      t.change_comment :igsn, "IGSN"
-      t.change_comment :age_min, "年代（最小）"
-      t.change_comment :age_max, "年代（最大）"
-      t.change_comment :age_unit, "年代単位"
-      t.change_comment :size, "サイズ"
-      t.change_comment :size_unit, "サイズ単位"
-      t.change_comment :collected_at, "採取日時"
-      t.change_comment :collection_date_precision, "採取日時精度"
-      t.change_comment :collector, "採取者"
-      t.change_comment :collector_detail, "採取詳細情報"
-    end
+    change_table_comment(:specimens, "標本")
+    change_column_comment(:specimens, :id, "ID")
+    change_column_comment(:specimens, :name, "名称")
+    change_column_comment(:specimens, :specimen_type, "標本種別")
+    change_column_comment(:specimens, :description, "説明")
+    change_column_comment(:specimens, :parent_id, "親標本ID")
+    change_column_comment(:specimens, :place_id, "場所ID")
+    change_column_comment(:specimens, :box_id, "保管場所ID")
+    change_column_comment(:specimens, :physical_form_id, "形状ID")
+    change_column_comment(:specimens, :classification_id, "分類ID")
+    change_column_comment(:specimens, :quantity, "数量")
+    change_column_comment(:specimens, :quantity_unit, "数量単位")
+    change_column_comment(:specimens, :created_at, "作成日時")
+    change_column_comment(:specimens, :updated_at, "更新日時")
+    change_column_comment(:specimens, :igsn, "IGSN")
+    change_column_comment(:specimens, :age_min, "年代（最小）")
+    change_column_comment(:specimens, :age_max, "年代（最大）")
+    change_column_comment(:specimens, :age_unit, "年代単位")
+    change_column_comment(:specimens, :size, "サイズ")
+    change_column_comment(:specimens, :size_unit, "サイズ単位")
+    change_column_comment(:specimens, :collected_at, "採取日時")
+    change_column_comment(:specimens, :collection_date_precision, "採取日時精度")
+    change_column_comment(:specimens, :collector, "採取者")
+    change_column_comment(:specimens, :collector_detail, "採取詳細情報")
   end
 end

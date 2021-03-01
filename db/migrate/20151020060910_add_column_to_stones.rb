@@ -1,4 +1,4 @@
-class AddColumnToStones < ActiveRecord::Migration
+class AddColumnToStones < ActiveRecord::Migration[4.2]
   def change
     change_table :stones do |t|
       t.string   :igsn, limit: 9, unique: true

@@ -1,10 +1,10 @@
 require "spec_helper"
 
-class OutputPdfSpec < ActiveRecord::Base
+class OutputPdfSpec < ApplicationRecord
   include OutputPdf
 end
 
-class OutputPdfSpecMigration < ActiveRecord::Migration
+class OutputPdfSpecMigration < ActiveRecord::Migration[4.2]
   def self.up
     create_table :output_pdf_specs do |t|
       t.string :name
@@ -83,15 +83,13 @@ describe OutputPdf do
 
   describe "qr_image" do
     after { obj.qr_image }
-    before { allow_any_instance_of(StringIO).to receive(:set_encoding).and_return(string_io) }
     let(:obj) { klass.create(name: "foo", global_id: global_id) }
     let(:global_id) { "1234" }
     let(:string_io) { double(:string_io) }
     let(:dim) { klass::QRCODE_DIM }
     it { expect(Barby::QrCode).to receive(:new).with(global_id).and_call_original }
     it { expect_any_instance_of(Barby::QrCode).to receive(:to_png).with({xdim: dim, ydim: dim}).and_call_original }
-    it { expect_any_instance_of(StringIO).to receive(:set_encoding).with("UTF-8") }
-    it { expect(obj.qr_image).to eq string_io }
+    it { expect(obj.qr_image.string.encoding).to eq ::Encoding::UTF_8 }
   end
 
   describe "primary_attachment_file_path" do
@@ -104,7 +102,7 @@ describe OutputPdf do
     end
     context "attachment_files is present" do
       let(:attachment_files) { [file] }
-      let(:file) { FactoryGirl.create(:attachment_file) }
+      let(:file) { FactoryBot.create(:attachment_file) }
       context "file.data.path is exist" do
         before { allow(File).to receive(:exist?).and_return(true) }
         it { expect(subject).to eq file.data.path }

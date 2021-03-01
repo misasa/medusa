@@ -4,7 +4,7 @@ describe BoxType do
 
   describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:box_type, name: name) }
+      let(:obj) { FactoryBot.build(:box_type, name: name) }
       context "is presence" do
         let(:name) { "sample_box_type" }
         it { expect(obj).to be_valid }

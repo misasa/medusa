@@ -3,10 +3,10 @@ require "spec_helper"
 describe RecordProperty do
   shared_examples "checking user permission" do |method, owner_permission_attribute, group_permission_attribute, guest_permission_attribute|
     subject { record_property.send(method, user) }
-    let(:record_property) { FactoryGirl.build(:record_property, user_id: user_id, group_id: group_id, owner_permission_attribute => owner_permission, group_permission_attribute => group_permission, guest_permission_attribute => guest_permission) }
-    let(:user) { FactoryGirl.create(:user, administrator: admin) }
+    let(:record_property) { FactoryBot.build(:record_property, user_id: user_id, group_id: group_id, owner_permission_attribute => owner_permission, group_permission_attribute => group_permission, guest_permission_attribute => guest_permission) }
+    let(:user) { FactoryBot.create(:user, administrator: admin) }
     let(:admin) { false }
-    let(:group) { FactoryGirl.create(:group) }
+    let(:group) { FactoryBot.create(:group) }
     before { GroupMember.create(user: user, group: group) }
     context "when user is owner." do
       let(:user_id) { user.id }
@@ -66,7 +66,7 @@ describe RecordProperty do
 
   describe ".datum_attributes" do
     subject { record_property.datum_attributes }
-    let(:record_property) { FactoryGirl.build(:record_property) }
+    let(:record_property) { FactoryBot.build(:record_property) }
     it { expect(subject).to include("global_id" => record_property.datum.global_id)}
   end
 
@@ -80,8 +80,8 @@ describe RecordProperty do
 
   describe ".owner?" do
     subject { record_property.owner?(user) }
-    let(:record_property) { FactoryGirl.build(:record_property, user_id: user_id) }
-    let(:user) { FactoryGirl.create(:user) }
+    let(:record_property) { FactoryBot.build(:record_property, user_id: user_id) }
+    let(:user) { FactoryBot.create(:user) }
     context "when match user_id" do
       let(:user_id) { user.id }
       it { expect(subject).to be_truthy }
@@ -94,9 +94,9 @@ describe RecordProperty do
 
   describe ".group?" do
     subject { record_property.group?(user) }
-    let(:record_property) { FactoryGirl.build(:record_property, user: nil, group_id: group_id) }
-    let(:user) { FactoryGirl.create(:user) }
-    let(:group) { FactoryGirl.create(:group) }
+    let(:record_property) { FactoryBot.build(:record_property, user: nil, group_id: group_id) }
+    let(:user) { FactoryBot.create(:user) }
+    let(:group) { FactoryBot.create(:group) }
     before { GroupMember.create(user: user, group: group) }
     context "when match group_id" do
       let(:group_id) { group.id }
@@ -110,7 +110,7 @@ describe RecordProperty do
 
   describe ".generate_global_id" do
     subject { obj.global_id }
-    let(:obj){FactoryGirl.build(:record_property,global_id: global_id)}
+    let(:obj){FactoryBot.build(:record_property,global_id: global_id)}
     before { obj.save }
     context "global_id is nil" do
       let(:global_id){nil}
@@ -123,7 +123,7 @@ describe RecordProperty do
   end
 
   describe ".dispose" do
-    let(:obj){ FactoryGirl.create(:record_property, disposed: false, disposed_at: nil) }
+    let(:obj){ FactoryBot.create(:record_property, disposed: false, disposed_at: nil) }
     before do
       obj.dispose
     end
@@ -132,7 +132,7 @@ describe RecordProperty do
   end
 
   describe ".restore" do
-    let(:obj){ FactoryGirl.create(:record_property, disposed: true, disposed_at: "2016-10-10 12:13:14") }
+    let(:obj){ FactoryBot.create(:record_property, disposed: true, disposed_at: "2016-10-10 12:13:14") }
     before do
       obj.restore
     end
@@ -142,7 +142,7 @@ describe RecordProperty do
 
   describe ".adjust_pubulished_at" do
     subject { obj.published_at }
-    let(:obj){FactoryGirl.build(:record_property,published: published,published_at: published_at)}
+    let(:obj){FactoryBot.build(:record_property,published: published,published_at: published_at)}
     context "publishd true" do
       let(:published){true}
       before{obj.save}
@@ -170,7 +170,7 @@ describe RecordProperty do
   end
 
   describe ".adjust_disposed_at" do
-    let(:obj){FactoryGirl.build(:record_property, disposed: disposed, disposed_at: disposed_at)}
+    let(:obj){FactoryBot.build(:record_property, disposed: disposed, disposed_at: disposed_at)}
     before{ obj.save }
     subject { obj.disposed_at }
     context "disposed true" do
@@ -198,7 +198,7 @@ describe RecordProperty do
   end
 
   describe ".adjust_lost_at" do
-    let(:obj){FactoryGirl.build(:record_property, lost: lost, lost_at: lost_at)}
+    let(:obj){FactoryBot.build(:record_property, lost: lost, lost_at: lost_at)}
     before{ obj.save }
     subject { obj.lost_at }
     context "lost true" do
@@ -227,14 +227,14 @@ describe RecordProperty do
 
   describe "callbacks" do
     describe "generate_global_id" do
-      let(:user) { FactoryGirl.create(:user) }
+      let(:user) { FactoryBot.create(:user) }
       context "global_id is nil" do
-        let(:record_property){ FactoryGirl.build(:record_property, user_id: user.id, global_id: nil) }
+        let(:record_property){ FactoryBot.build(:record_property, user_id: user.id, global_id: nil) }
         before { record_property.save }
         it{ expect(record_property.global_id).to be_present }
       end
       context "global_id is not nil" do
-        let(:record_property){ FactoryGirl.build(:record_property, user_id: user.id, global_id: "xxx") }
+        let(:record_property){ FactoryBot.build(:record_property, user_id: user.id, global_id: "xxx") }
         before { record_property.save }
         it{ expect(record_property.global_id).to eq "xxx" }
       end
@@ -243,12 +243,12 @@ describe RecordProperty do
 
   describe ".readables", :current => true do
     subject { RecordProperty.readables(user) }
-    let(:record_property) { FactoryGirl.create(:record_property, owner_readable: owner_readable, group_readable: group_readable, guest_readable: guest_readable, user_id: user_id, group_id: group_id, published: published) }
-    let(:user) { FactoryGirl.create(:user_foo, administrator: admin) }
+    let(:record_property) { FactoryBot.create(:record_property, owner_readable: owner_readable, group_readable: group_readable, guest_readable: guest_readable, user_id: user_id, group_id: group_id, published: published) }
+    let(:user) { FactoryBot.create(:user_foo, administrator: admin) }
     let(:admin) { false }
-    let(:group) { FactoryGirl.create(:group) }
-    let(:another_user) { FactoryGirl.create(:user_baa) }
-    let(:another_group) { FactoryGirl.create(:group) }
+    let(:group) { FactoryBot.create(:group) }
+    let(:another_user) { FactoryBot.create(:user_baa) }
+    let(:another_group) { FactoryBot.create(:group) }
     let(:published){ false }
     before do
       GroupMember.create(user: user, group: group)

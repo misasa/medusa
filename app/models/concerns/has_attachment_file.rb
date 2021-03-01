@@ -2,8 +2,8 @@ module HasAttachmentFile
   extend ActiveSupport::Concern
   
   included do
-    has_many :attachings, as: :attachable, dependent: :destroy
-    has_many :attachment_files, -> { order('attachings.position asc') }, through: :attachings
+    has_many :attachings, -> { order('position asc') }, as: :attachable, dependent: :destroy
+    has_many :attachment_files, through: :attachings
 
     delegate :thumbnail_path, to: :primary_file, prefix: true, allow_nil: true
   end

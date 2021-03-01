@@ -1,4 +1,4 @@
-class CreateMeasurementItems < ActiveRecord::Migration
+class CreateMeasurementItems < ActiveRecord::Migration[4.2]
   def change
     create_table :measurement_items do |t|
       t.string :nickname

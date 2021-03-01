@@ -5,7 +5,7 @@ class MeasurementCategoriesController < ApplicationController
   layout "admin"
 
   def index
-    @search = MeasurementCategory.search(params[:q])
+    @search = MeasurementCategory.ransack(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @measurement_categories = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @measurement_categories
@@ -49,7 +49,7 @@ class MeasurementCategoriesController < ApplicationController
   end
 
   def update
-    @measurement_category.update_attributes(measurement_category_params)
+    @measurement_category.update(measurement_category_params)
     @units = Unit.all
     respond_with(@measurement_category, location: measurement_categories_path)
   end

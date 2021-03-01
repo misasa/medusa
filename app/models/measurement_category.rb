@@ -1,4 +1,4 @@
-class MeasurementCategory < ActiveRecord::Base
+class MeasurementCategory < ApplicationRecord
   has_many :category_measurement_items, -> { order :position }, dependent: :destroy
   has_many :measurement_items, -> { order 'category_measurement_items.position' }, through: :category_measurement_items
   belongs_to :unit
@@ -6,7 +6,7 @@ class MeasurementCategory < ActiveRecord::Base
   accepts_nested_attributes_for :category_measurement_items
 
   validates :name, presence: true, length: {maximum: 255}, uniqueness: :name
-  validates :unit, existence: true, allow_nil: true
+  validates :unit, presence: { message: :required, if: -> { unit_id.present? } }
 
   def export_headers
     nicknames_with_unit.concat(nicknames.map { |nickname| "#{nickname}_error" })

@@ -12,7 +12,7 @@ class NestedResources::AnalysesController < ApplicationController
   def create
     @analysis = Analysis.new(analysis_params)
     @parent.analyses << @analysis if @analysis.save
-    respond_with @analysis, location: adjust_url_by_requesting_tab(request.referer), action: "error"      
+    respond_with @analysis, location: adjust_url_by_requesting_tab(request.referer), action: "error"
 
   end
 
@@ -35,7 +35,7 @@ class NestedResources::AnalysesController < ApplicationController
   end
 
   private
-  
+
   def analysis_params
     params.require(:analysis).permit(
       :name,
@@ -69,7 +69,7 @@ class NestedResources::AnalysesController < ApplicationController
   def duplicate_global_id
     respond_to do |format|
       format.html { render "parts/duplicate_global_id", status: :unprocessable_entity }
-      format.all { render nothing: true, status: :unprocessable_entity }
+      format.all { render body: nil, status: :unprocessable_entity }
     end
   end
 end

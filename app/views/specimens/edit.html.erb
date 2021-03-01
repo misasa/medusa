@@ -1,4 +1,4 @@
-<%= form_for @specimen, remote: true, format: :json, html: { class: "update", role: "form" } do |f| %>
+<%= form_with model:@specimen, local: false, format: :json, html: { id: "edit_specimen_#{@specimen.id}", class: "update", role: "form" } do |f| %>
   <div class="form-group form-group-sm">
     <%= f.label :name, class: "small" %>
     <%= f.text_field :name, class: "form-control input-sm" %>
@@ -26,7 +26,7 @@
   <div class="form-group form-group-sm">
     <%= f.label :parent_global_id, class: "small" %>
     <div class="input-group">
-      <%= f.text_field :parent_global_id, class: "form-control input-sm" %>
+      <%= f.text_field :parent_global_id, id: "specimen_parent_global_id", class: "form-control input-sm" %>
       <span class="input-group-addon">
 	<%= link_to specimens_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#specimen_parent_global_id" do %>
 	<span class="glyphicon glyphicon-search"></span>
@@ -37,7 +37,7 @@
   <div class="form-group form-group-sm">
     <%= f.label :box_global_id, class: "small" %>
     <div class="input-group">
-      <%= f.text_field :box_global_id, class: "form-control input-sm" %>
+      <%= f.text_field :box_global_id, id: "specimen_box_global_id", class: "form-control input-sm" %>
       <span class="input-group-addon">
 	<%= link_to boxes_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#specimen_box_global_id" do %>
 	<span class="glyphicon glyphicon-search"></span>
@@ -48,7 +48,7 @@
   <div class="form-group form-group-sm">
     <%= f.label :place_global_id, class: "small" %>
     <div class="input-group">
-      <%= f.text_field :place_global_id, class: "form-control input-sm" %>
+      <%= f.text_field :place_global_id, id: "specimen_place_global_id", class: "form-control input-sm" %>
       <span class="input-group-addon">
 	<%= link_to places_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#specimen_place_global_id" do %>
 	<span class="glyphicon glyphicon-search"></span>

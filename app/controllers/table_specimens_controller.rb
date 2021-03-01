@@ -15,7 +15,7 @@ class TableSpecimensController < ApplicationController
     	 succeed = @parent.send(params[:association_name]) << @specimen if @specimen.save
       raise ActiveRecord::Rollback unless succeed
     end
-    respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer), action: "error" 
+    respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
   def update
@@ -39,10 +39,10 @@ class TableSpecimensController < ApplicationController
   rescue
     duplicate_global_id
   end
-  
+
   def inventory
     @specimen = Specimen.find(params[:id])
-    @specimen.update_attributes(box_id: params[:box_id])
+    @specimen.update(box_id: params[:box_id])
     @specimen.paths.current.first.update_attribute(:checked_at, Time.now) if @specimen.paths.current.first
     respond_with @specimen
   end
@@ -90,7 +90,7 @@ class TableSpecimensController < ApplicationController
   def find_resource
     @parent = Table.find(params['table_id'])
     #@specimen = Specimen.find(id)
-    #@table_specimen = @parent.table_specimens.where(specimen_id: specimen) 
+    #@table_specimen = @parent.table_specimens.where(specimen_id: specimen)
     #resource_name = params[:parent_resource]
     #resource_class = resource_name.camelize.constantize
     #@parent = resource_class.find(params["#{resource_name}_id"])
@@ -99,7 +99,7 @@ class TableSpecimensController < ApplicationController
   def duplicate_global_id
     respond_to do |format|
       format.html { render "parts/duplicate_global_id", status: :unprocessable_entity }
-      format.all { render nothing: true, status: :unprocessable_entity }
+      format.all { render body: nil, status: :unprocessable_entity }
     end
   end
 

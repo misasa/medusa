@@ -1,4 +1,4 @@
-class CreateSearchColumns < ActiveRecord::Migration
+class CreateSearchColumns < ActiveRecord::Migration[4.2]
   def up
     create_table :search_columns do |t|
       t.integer :user_id, null: false, comment: "ユーザID"

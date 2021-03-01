@@ -1,4 +1,4 @@
-class CreateStoneCustomAttributes < ActiveRecord::Migration
+class CreateStoneCustomAttributes < ActiveRecord::Migration[4.2]
   def change
     create_table :stone_custom_attributes do |t|
       t.integer :stone_id

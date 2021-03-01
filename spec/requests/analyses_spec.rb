@@ -6,7 +6,7 @@ describe "analysis" do
     create_data
     visit analyses_path
   end
-  let(:login_user) { FactoryGirl.create(:user) }
+  let(:login_user) { FactoryBot.create(:user) }
   let(:create_data) {}
   
   describe "analysis detail screen" do
@@ -15,8 +15,8 @@ describe "analysis" do
       analysis.attachment_files << attachment_file 
       analysis.create_record_property(user_id: login_user.id) 
     end
-    let(:analysis) { FactoryGirl.create(:analysis) }
-    let(:attachment_file) { FactoryGirl.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
+    let(:analysis) { FactoryBot.create(:analysis) }
+    let(:attachment_file) { FactoryBot.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
     
     describe "view spot" do
       describe "thumbnail" do

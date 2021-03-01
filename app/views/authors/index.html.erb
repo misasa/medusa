@@ -58,7 +58,7 @@
     <% end %>
   </tbody>
   <tfoot>
-    <%= form_for Author.new, remote: true, format: :json, html: { class: "create" } do |f| %>
+    <%= form_with model:Author.new, local: false, format: :json, html: { id: "new_author", class: "create" } do |f| %>
     <tr>
       <td></td>
       <td><%= f.text_field :name, class: "form-control input-sm" %></td>

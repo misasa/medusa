@@ -1,11 +1,13 @@
 module ActiveRecord::Associations::Builder
   class BelongsTo
-    def define_accessors
+    def self.define_accessors(model, reflection)
       super
-      define_global_id_accessors
+      mixin = model.generated_association_methods
+      name = reflection.name
+      define_global_id_accessors(mixin, name)
     end
 
-    def define_global_id_accessors
+    def self.define_global_id_accessors(mixin, name)
       mixin.class_eval <<-CODE, __FILE__, __LINE__ + 1
         def #{name}_global_id
           association(:#{name}).load_target.try(:global_id)

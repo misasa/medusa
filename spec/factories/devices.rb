@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :device do
-    name "EPMA"
+    name { "EPMA" }
   end
 end

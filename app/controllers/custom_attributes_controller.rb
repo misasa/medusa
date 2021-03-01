@@ -5,7 +5,7 @@ class CustomAttributesController < ApplicationController
   layout "admin"
   
   def index
-    @search = CustomAttribute.search(params[:q])
+    @search = CustomAttribute.ransack(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @custom_attributes = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @custom_attributes
@@ -26,7 +26,7 @@ class CustomAttributesController < ApplicationController
   end
   
   def update
-    @custom_attribute.update_attributes(custom_attribute_params)
+    @custom_attribute.update(custom_attribute_params)
     respond_with(@custom_attribute, location: custom_attributes_path)
   end
   

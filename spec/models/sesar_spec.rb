@@ -26,8 +26,8 @@ describe Sesar do
 
   describe ".sync" do
     subject { Sesar.sync(specimen) }
-    let(:specimen) { FactoryGirl.create(:specimen, igsn: igsn, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101") }
-    let(:bib) { FactoryGirl.create(:bib) }
+    let(:specimen) { FactoryBot.create(:specimen, igsn: igsn, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101") }
+    let(:bib) { FactoryBot.create(:bib) }
     let(:material) {"Rock"}
     let(:sesar_classification) {"Igneous"}
     let(:igsn) { "JEDRM001X" }
@@ -57,8 +57,8 @@ describe Sesar do
 
   describe ".from_active_record(model)" do
     subject { Sesar.from_active_record(specimen) }
-    let(:specimen) { FactoryGirl.create(:specimen, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101", collected_end_at: "20150202") }
-    let(:bib) { FactoryGirl.create(:bib) }
+    let(:specimen) { FactoryBot.create(:specimen, collector: "採集者", collector_detail: "採集者詳細", collection_date_precision: "date", collected_at: "20150101", collected_end_at: "20150202") }
+    let(:bib) { FactoryBot.create(:bib) }
     let(:material) {"Rock"}
     let(:sesar_classification) {"Igneous"}
 
@@ -154,7 +154,7 @@ describe Sesar do
         @xml = sesar.to_xml
       end
       context "Specimen レコードがIGSN属性を持たない" do
-        let(:specimen) { FactoryGirl.create(:specimen, igsn: nil) }
+        let(:specimen) { FactoryBot.create(:specimen, igsn: nil) }
         it { expect(@xml).to include "xsi:schemaLocation=\"http://app.geosamples.org/4.0/sample.xsd\"" }
         it { expect(@xml).to include "<user_code>#{Settings.sesar.user_code}</user_code>" }
         it { expect(@xml).not_to include "<igsn>" }
@@ -218,10 +218,10 @@ describe Sesar do
     end
 
     context "with custom_attribute" do
-      let(:specimen_custom_attribute_1) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id, value: "value") }
-      let(:custom_attribute_1) { FactoryGirl.create(:custom_attribute, sesar_name: "sample_comment") }
-      let(:specimen_custom_attribute_2) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_2.id, value: "name_1,name_2") }
-      let(:custom_attribute_2) { FactoryGirl.create(:custom_attribute, sesar_name: "sample_other_names") }
+      let(:specimen_custom_attribute_1) { FactoryBot.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id, value: "value") }
+      let(:custom_attribute_1) { FactoryBot.create(:custom_attribute, sesar_name: "sample_comment") }
+      let(:specimen_custom_attribute_2) { FactoryBot.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_2.id, value: "name_1,name_2") }
+      let(:custom_attribute_2) { FactoryBot.create(:custom_attribute, sesar_name: "sample_other_names") }
       before do
         specimen_custom_attribute_1
         specimen_custom_attribute_2
@@ -245,7 +245,7 @@ describe Sesar do
   
   describe ".array_classification(classification)" do
     subject { Sesar.array_classification(classification) }
-    let(:classification) { FactoryGirl.create(:classification, sesar_classification: sesar_classification) }
+    let(:classification) { FactoryBot.create(:classification, sesar_classification: sesar_classification) }
     context "sesar_classificationに値が設定されている" do
       let(:sesar_classification) {"Igneous>Volcanic>VolcanicType>Felsic"}
       it { expect(subject).to eq ["Rock","Igneous","Volcanic","VolcanicType","Felsic"] }
@@ -332,24 +332,24 @@ describe Sesar do
         Settings.reload!
       end
       context "紐づくbibが存在しない場合" do
-        let(:model) { FactoryGirl.create(:specimen, igsn: "") }
+        let(:model) { FactoryBot.create(:specimen, igsn: "") }
         it { expect(subject).to include({description: nil, url_type: "regular URL", url: "http://dream.misasa.okayama-u.ac.jp/?q=#{model.global_id}"}) }
         it { expect(subject).to_not include({url: "https://doi.org/doi１", description: "書誌情報１", url_type: "DOI"}) }
       end
       context "紐づくbibが存在する場合" do
-        let(:model) { FactoryGirl.create(:specimen, igsn: "") }
-        let(:bib) { FactoryGirl.create(:bib) }
+        let(:model) { FactoryBot.create(:specimen, igsn: "") }
+        let(:bib) { FactoryBot.create(:bib) }
         before do
           model.bibs << bib
         end        
         it { expect(subject).to include({url: "https://doi.org/doi１", description: "書誌情報１", url_type: "DOI"}) }
         context "doi is nil" do
-          let(:bib) { FactoryGirl.create(:bib, doi: nil)}
+          let(:bib) { FactoryBot.create(:bib, doi: nil)}
           it { expect(subject).not_to include({url: "https://doi.org/", description: "書誌情報１", url_type: "DOI"}) }
         end
 
         context "doi is ''" do
-          let(:bib) { FactoryGirl.create(:bib, doi: "")}
+          let(:bib) { FactoryBot.create(:bib, doi: "")}
           it { expect(subject).not_to include({url: "https://doi.org/", description: "書誌情報１", url_type: "DOI"}) }
         end
 
@@ -359,13 +359,13 @@ describe Sesar do
 
   describe ".associate_specimen_custom_attributes" do
     subject { Sesar.associate_specimen_custom_attributes(specimen) }
-    let(:specimen) { FactoryGirl.create(:specimen) }
-    let(:specimen_custom_attribute_1) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id, value: value_1) }
-    let(:specimen_custom_attribute_2) { FactoryGirl.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_2.id, value: value_2) }
+    let(:specimen) { FactoryBot.create(:specimen) }
+    let(:specimen_custom_attribute_1) { FactoryBot.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_1.id, value: value_1) }
+    let(:specimen_custom_attribute_2) { FactoryBot.create(:specimen_custom_attribute, specimen_id: specimen.id, custom_attribute_id: custom_attribute_2.id, value: value_2) }
     let(:value_1) { "value_1" }
     let(:value_2) { "value_2" }
-    let(:custom_attribute_1) { FactoryGirl.create(:custom_attribute, sesar_name: sesar_name_1) }
-    let(:custom_attribute_2) { FactoryGirl.create(:custom_attribute, sesar_name: sesar_name_2) }
+    let(:custom_attribute_1) { FactoryBot.create(:custom_attribute, sesar_name: sesar_name_1) }
+    let(:custom_attribute_2) { FactoryBot.create(:custom_attribute, sesar_name: sesar_name_2) }
     let(:sesar_name_1) { "sesar_name_1" }
     let(:sesar_name_2) { "sesar_name_2" }
     context "specimen not associate specimen_custom_attribute" do
@@ -458,7 +458,7 @@ describe Sesar do
   describe ".igsn_registered?" do
     subject { sesar.igsn_registered? }
     let(:sesar) { Sesar.from_active_record(specimen) }
-    let(:specimen) { FactoryGirl.create(:specimen, igsn: igsn) }
+    let(:specimen) { FactoryBot.create(:specimen, igsn: igsn) }
     let(:igsn) { "IEAAA0001" }
 
     context "specimenレコードがigsn属性を持つ" do

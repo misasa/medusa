@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Omniauth do
   describe "validates" do
     describe "provider" do
-      let(:obj) { FactoryGirl.build(:omniauth, provider: provider) }
+      let(:obj) { FactoryBot.build(:omniauth, provider: provider) }
       context "is presence" do
         let(:provider) { "provider" }
         it { expect(obj).to be_valid }
@@ -23,7 +23,7 @@ describe Omniauth do
     end
     
     describe "uid" do
-      let(:obj) { FactoryGirl.build(:omniauth, uid: uid) }
+      let(:obj) { FactoryBot.build(:omniauth, uid: uid) }
       context "is presence" do
         let(:uid) { "123456" }
         it { expect(obj).to be_valid }
@@ -49,8 +49,8 @@ describe Omniauth do
     let(:auth) { double(:auth, provider: provider, uid: uid) }
     let(:provider) { "sample_provider" }
     let(:uid) { "12345" }
-    let(:omniauth) { FactoryGirl.create(:omniauth, provider: provider, uid: uid, user: user) }
-    let(:user) { FactoryGirl.create(:user) }
+    let(:omniauth) { FactoryBot.create(:omniauth, provider: provider, uid: uid, user: user) }
+    let(:user) { FactoryBot.create(:user) }
     context "auth matches omniauth record" do
       it { expect(subject).to eq user }
     end

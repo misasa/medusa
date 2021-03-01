@@ -1,4 +1,4 @@
-class AddNameToRecordProperties < ActiveRecord::Migration
+class AddNameToRecordProperties < ActiveRecord::Migration[4.2]
   def up
     change_table :record_properties do |t|
       t.string :name

@@ -6,7 +6,7 @@
     <div class="viewer pull-left" style="display:none"></div>
   </div>
   <div class="col-lg-12">   
-    <%= form_for @image, remote: true, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
+    <%= form_with model:@image, local: false, method: 'patch', html: { id: "calibrator-form", class: "update" } do |f| %>
       <div class="row">
         <div class="col-lg-9">
           <div class="input-group">

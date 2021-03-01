@@ -1,4 +1,4 @@
-<%= form_for @divide, remote: true, format: :json, html: { class: "update col-lg-10", role: "form", id: "edit_divide" } do |f| %>
+<%= form_with model:@divide, local: false, format: :json, html: { class: "update col-lg-10", role: "form", id: "edit_divide" } do |f| %>
 
   <table class="table table-condensed">
     <thead>

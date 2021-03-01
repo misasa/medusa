@@ -6,7 +6,7 @@ class SpecimensController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @search = Specimen.includes(:classification, :physical_form).readables(current_user).search(params[:q])
+    @search = Specimen.includes(:classification, :physical_form).readables(current_user).ransack(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @specimens = @search.result.page(params[:page]).per(params[:per_page])
     @search_columns = SearchColumn.model_is(Specimen).user_is(current_user)
@@ -38,7 +38,7 @@ class SpecimensController < ApplicationController
   end
 
   def update
-    @specimen.update_attributes(specimen_params)
+    @specimen.update(specimen_params)
     if params[:sesar_upload] && @specimen.errors.blank?
       sesar_upload
     elsif params[:sesar_download] && @specimen.errors.blank?
@@ -120,7 +120,7 @@ class SpecimensController < ApplicationController
   end
 
   def bundle_update
-    @specimens.each { |specimen| specimen.update_attributes(specimen_params.only_presence) }
+    @specimens.each { |specimen| specimen.update(specimen_params.only_presence) }
     render :bundle_edit
   end
 
@@ -153,7 +153,7 @@ class SpecimensController < ApplicationController
   def sesar_upload
     @sesar = Sesar.from_active_record(@specimen)
     if @sesar.save
-      @specimen.update_attributes(igsn: @sesar.igsn)
+      @specimen.update(igsn: @sesar.igsn)
     else
       @sesar.errors.each do |key, value|
         @specimen.errors.add(key, value)

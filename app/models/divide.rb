@@ -1,4 +1,4 @@
-class Divide < ActiveRecord::Base
+class Divide < ApplicationRecord
   belongs_to :before_specimen_quantity, class_name: "SpecimenQuantity"
   has_one :before_specimen, through: :before_specimen_quantity, source: :specimen
   has_one :before, through: :before_specimen_quantity, source: :divide

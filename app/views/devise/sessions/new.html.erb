@@ -1,5 +1,5 @@
 <h2><%= Settings.site_name %></h2>
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+<%= form_with(model:resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
 <% if Settings.sign_in.enable_password %>
   <%= f.submit "Sign in", class: "btn btn-mini btn-default" %> with <%= f.text_field :username, :autofocus => true, :placeholder => "Username" %>
    and <%= f.password_field :password, :placeholder => "Password" %>  
@@ -7,7 +7,7 @@
 <% end %>
 <% if Settings.sign_in.enable_google %>
   <div>
-    <%= link_to "Sign in", user_omniauth_authorize_path(:google_oauth2), class: "btn btn-mini btn-default" %> with Google account
+    <%= link_to "Sign in", user_google_oauth2_omniauth_authorize_path, class: "btn btn-mini btn-default" %> with Google account
   </div>
 <% end %>
 <% if Settings.sign_in.enable_shibboleth %>

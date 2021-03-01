@@ -4,7 +4,7 @@ describe HasQuantity do
   describe "decimal_quantity" do
     let(:quantity) { 100 }
     let(:quantity_unit) { "kg" }
-    let(:specimen) { FactoryGirl.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+    let(:specimen) { FactoryBot.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
     subject { specimen.decimal_quantity }
     it { expect(subject.class).to eq(BigDecimal) }
     it { expect(subject).to eq(100000) }
@@ -13,7 +13,7 @@ describe HasQuantity do
   describe "decimal_quantity_was" do
     let(:quantity) { 100 }
     let(:quantity_unit) { "kg" }
-    let(:specimen) { FactoryGirl.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+    let(:specimen) { FactoryBot.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
     before do
       specimen.quantity = 200
       specimen.quantity_unit = "g"
@@ -26,7 +26,7 @@ describe HasQuantity do
   describe "string_quantity" do
     let(:quantity) { 100.0 }
     let(:quantity_unit) { "kg" }
-    let(:specimen) { FactoryGirl.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+    let(:specimen) { FactoryBot.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
     subject { specimen.string_quantity }
     it { expect(subject).to eq("100.0 kg") }
   end
@@ -34,7 +34,7 @@ describe HasQuantity do
   describe "decimal_quantity_was" do
     let(:quantity) { 100 }
     let(:quantity_unit) { "kg" }
-    let(:specimen) { FactoryGirl.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+    let(:specimen) { FactoryBot.create(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
     before do
       specimen.quantity = 200
       specimen.quantity_unit = "g"
@@ -44,7 +44,7 @@ describe HasQuantity do
   end
 
   describe "quantity_unit_exists" do
-    let(:obj) { FactoryGirl.build(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
+    let(:obj) { FactoryBot.build(:specimen, quantity: quantity, quantity_unit: quantity_unit) }
     let(:quantity) { 100 }
     before { obj.quantity_unit_exists }
     context "exists unit" do

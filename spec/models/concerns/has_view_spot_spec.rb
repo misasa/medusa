@@ -1,10 +1,10 @@
 require "spec_helper"
 
-class HasViewSpotSpec < ActiveRecord::Base
+class HasViewSpotSpec < ApplicationRecord
   include HasViewSpot
 end
 
-class HasViewSpotSpecMigration < ActiveRecord::Migration
+class HasViewSpotSpecMigration < ActiveRecord::Migration[4.2]
   def self.up
     create_table :has_view_spot_specs do |t|
       t.string :name

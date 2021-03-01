@@ -2,8 +2,8 @@ require 'spec_helper'
 include ActionDispatch::TestProcess
 
 describe AttachmentFileDecorator do
-  let(:user){ FactoryGirl.create(:user)}
-  let(:attachment_file){FactoryGirl.create(:attachment_file).decorate}
+  let(:user){ FactoryBot.create(:user)}
+  let(:attachment_file){FactoryBot.create(:attachment_file).decorate}
   before{User.current = user}
 
   describe "icon" do
@@ -64,8 +64,8 @@ describe AttachmentFileDecorator do
       it {expect(subject).not_to include "{\\footnotesize \\circle{0.7} \\url{"}
     end
     context "spots is not empty " do
-      let(:spot){FactoryGirl.create(:spot, :target_uid => nil)}
-      let(:surface){FactoryGirl.create(:surface)}
+      let(:spot){FactoryBot.create(:spot, :target_uid => nil)}
+      let(:surface){FactoryBot.create(:surface)}
       before do
         attachment_file.spots << spot
         surface.images << attachment_file
@@ -102,8 +102,8 @@ describe AttachmentFileDecorator do
 
   describe ".family_tree", :current => true do
     subject { attachment_file.family_tree }
-    let(:spot){ FactoryGirl.create(:spot, target_uid: specimen.global_id) }
-    let(:specimen){ FactoryGirl.create(:specimen) }
+    let(:spot){ FactoryBot.create(:spot, target_uid: specimen.global_id) }
+    let(:specimen){ FactoryBot.create(:specimen) }
     before do
       allow(spot.decorate.h).to receive(:can?).and_return(true)
       attachment_file.spots << spot

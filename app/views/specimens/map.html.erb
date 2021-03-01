@@ -2,7 +2,7 @@
  <%= @specimen.place.try(:to_map) %>
  <%= javascript_tag "actsAsMappable.initToMap();" %>
 <% else %>
- <%= form_for Place.new(:latitude_dms_direction => 'N', :longitude_dms_direction => 'E'), url: place_specimen_path(@specimen) do |f| %>
+ <%= form_with model:Place.new(:latitude_dms_direction => 'N', :longitude_dms_direction => 'E'), url: place_specimen_path(@specimen) do |f| %>
      <div class="form-group form-group-sm">
       <%= f.label :latitude, class: "small" %>
       <%= f.label :latitude, class: "radiobox-inline" do %>

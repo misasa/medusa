@@ -25,7 +25,7 @@
           </tr>
         </thead>
         <tbody>
-        <%= form_tag bundle_edit_places_path, id: "place-bundle-form" do %>
+        <%= form_with url:bundle_edit_places_path, id: "place-bundle-form" do %>
           <% place = @specimen.place %>
           <tr>
             <td>
@@ -83,7 +83,7 @@
   <table class="table table-condensed">
     <tr>
     <td class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-      <%= form_tag link_by_global_id_specimen_surfaces_path(@specimen),method: :post do %>
+      <%= form_with url:link_by_global_id_specimen_surfaces_path(@specimen), method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
           <div class="input-group"> 
           <%= text_field_tag :global_id, nil, id: "surface-global-id", :placeholder => "input ID", class: "form-control input-sm" %>
@@ -100,8 +100,7 @@
       <% end %>
     </td>
     <td class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-  
-        <%= form_for Surface.new, url: specimen_surfaces_path(@specimen) do |f|%>
+        <%= form_with model:Surface.new, url: specimen_surfaces_path(@specimen) do |f|%>
           <%= hidden_tabname_tag(__FILE__) %>
           <%= f.text_field :name, :placeholder => "input name", class: "form-control input-sm" %>
             <%= f.button title:"add surface", class: "btn btn-default" do %>
@@ -112,4 +111,3 @@
     </tr>
   </table>
   </div>
-  

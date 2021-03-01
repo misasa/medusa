@@ -1,4 +1,4 @@
-<%= form_for @classification, html: {class: "col-lg-4"} do |f| %>
+<%= form_with model:@classification, html: {class: "col-lg-4"} do |f| %>
   <%= error_notification(@classification.errors) %>
 
   <div class="form-classification form-classification-sm">

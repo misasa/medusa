@@ -1,4 +1,4 @@
-class CreateTableStones < ActiveRecord::Migration
+class CreateTableStones < ActiveRecord::Migration[4.2]
   def change
     create_table :table_stones do |t|
       t.integer :table_id

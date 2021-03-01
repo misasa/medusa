@@ -14,13 +14,13 @@ describe Place do
   end
 
   describe "#analyses" do
-    let(:obj){FactoryGirl.create(:place) }
-    let(:specimen_1) { FactoryGirl.create(:specimen, name: "hoge", place_id: obj.id) }
-    let(:specimen_2) { FactoryGirl.create(:specimen, name: "specimen_2", place_id: obj.id) }
-    let(:specimen_3) { FactoryGirl.create(:specimen, name: "specimen_3", place_id: obj.id) }
-    let(:analysis_1) { FactoryGirl.create(:analysis, specimen_id: specimen_1.id) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, specimen_id: specimen_2.id) }
-    let(:analysis_3) { FactoryGirl.create(:analysis, specimen_id: specimen_3.id) }
+    let(:obj){FactoryBot.create(:place) }
+    let(:specimen_1) { FactoryBot.create(:specimen, name: "hoge", place_id: obj.id) }
+    let(:specimen_2) { FactoryBot.create(:specimen, name: "specimen_2", place_id: obj.id) }
+    let(:specimen_3) { FactoryBot.create(:specimen, name: "specimen_3", place_id: obj.id) }
+    let(:analysis_1) { FactoryBot.create(:analysis, specimen_id: specimen_1.id) }
+    let(:analysis_2) { FactoryBot.create(:analysis, specimen_id: specimen_2.id) }
+    let(:analysis_3) { FactoryBot.create(:analysis, specimen_id: specimen_3.id) }
     before do
       specimen_1;specimen_2;specimen_3;      
       analysis_1;analysis_2;analysis_3;
@@ -61,7 +61,7 @@ describe Place do
 
  describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:place, name: name) }
+      let(:obj) { FactoryBot.build(:place, name: name) }
       context "is presence" do
         let(:name) { "sample_obj_name" }
         it { expect(obj).to be_valid }
@@ -84,7 +84,7 @@ describe Place do
   end
 
   describe ".accessor_dms" do
-    let(:place){ FactoryGirl.create(:place, latitude: latitude, longitude: longitude)}
+    let(:place){ FactoryBot.create(:place, latitude: latitude, longitude: longitude)}
     let(:latitude){ 5.625 }
     let(:longitude){ 5.625 }
     it {
@@ -103,7 +103,7 @@ describe Place do
   describe ".latitude_dms" do
     subject { place.latitude_dms }
     context "with latitude" do
-      let(:place){ FactoryGirl.create(:place, latitude: latitude) }
+      let(:place){ FactoryBot.create(:place, latitude: latitude) }
       context "with positive" do
         let(:latitude){ 5.625 }
         it { expect(subject[:direction]).to be_eql("N") }
@@ -121,7 +121,7 @@ describe Place do
       end
     end
     context "without latitude" do
-      let(:place){ FactoryGirl.create(:place, latitude: nil) }
+      let(:place){ FactoryBot.create(:place, latitude: nil) }
       it { expect(subject[:direction]).to be_nil }
       context "after set latitude_dms_direction=" do
         before do
@@ -136,7 +136,7 @@ describe Place do
   describe ".longitude_dms" do
     subject { place.longitude_dms }
     context "with longitude" do
-      let(:place){ FactoryGirl.create(:place, longitude: longitude) }
+      let(:place){ FactoryBot.create(:place, longitude: longitude) }
       context "with positive" do
         let(:longitude){ 5.625 }
         it { expect(subject[:direction]).to be_eql("E") }
@@ -154,7 +154,7 @@ describe Place do
       end
     end
     context "without longitude" do
-      let(:place){ FactoryGirl.create(:place, longitude: nil) }
+      let(:place){ FactoryBot.create(:place, longitude: nil) }
       it { expect(subject[:direction]).to be_nil }
       context "after set longitude_direction=" do
         before do
@@ -166,7 +166,7 @@ describe Place do
   end
 
   describe ".logitude_dms_*" do
-    let(:place){ FactoryGirl.create(:place, longitude: longitude) }
+    let(:place){ FactoryBot.create(:place, longitude: longitude) }
     let(:longitude){ 5.317 }
     describe "direction" do
       subject { place.longitude_dms_direction }
@@ -180,7 +180,7 @@ describe Place do
 
     describe "direction=" do
       subject { place.longitude_dms_direction = direction }
-      let(:place){ FactoryGirl.create(:place, longitude: nil) }
+      let(:place){ FactoryBot.create(:place, longitude: nil) }
       let(:direction){ "E" }
       before do
         subject
@@ -192,7 +192,7 @@ describe Place do
 
   describe ".latitude_dms_*" do
     context "with latitude" do
-      let(:place){ FactoryGirl.create(:place, latitude: latitude) }
+      let(:place){ FactoryBot.create(:place, latitude: latitude) }
       let(:latitude){ 5.625 }
       it {
         expect(place.latitude_dms_direction).to be_eql("N")      
@@ -212,7 +212,7 @@ describe Place do
     end
 
     context "with latitude_dms_*=" do
-      let(:place){ FactoryGirl.create(:place, latitude_dms_direction: latitude_direction, latitude_dms_deg: latitude_deg, latitude_dms_min: latitude_min, latitude_dms_sec: latitude_sec) }
+      let(:place){ FactoryBot.create(:place, latitude_dms_direction: latitude_direction, latitude_dms_deg: latitude_deg, latitude_dms_min: latitude_min, latitude_dms_sec: latitude_sec) }
       let(:latitude){ 5.625 }
       let(:latitude_direction){ "N" }
       let(:latitude_deg){ 5 }
@@ -231,7 +231,7 @@ describe Place do
 
   describe ".latitude_dms_deg=" do
     subject { place.latitude_dms_deg = latitude_deg }
-    let(:place){ FactoryGirl.build(:place, latitude: nil) }
+    let(:place){ FactoryBot.build(:place, latitude: nil) }
     let(:latitude_deg){ 35 }
     before do
       subject
@@ -252,7 +252,7 @@ describe Place do
 
   describe ".latitude_dms_changed?" do
     subject { place.latitude_dms_changed? }
-    let(:place){ FactoryGirl.create(:place, latitude: latitude) }
+    let(:place){ FactoryBot.create(:place, latitude: latitude) }
     before do
       place.latitude_dms_direction = "N"
       place.latitude_dms_deg = "5"
@@ -273,7 +273,7 @@ describe Place do
 
   describe ".longitude_dms_changed?" do
     subject { place.longitude_dms_changed? }
-    let(:place){ FactoryGirl.create(:place, longitude: longitude) }
+    let(:place){ FactoryBot.create(:place, longitude: longitude) }
     before do
       place.longitude_dms_direction = "E"
       place.longitude_dms_deg = "5"
@@ -294,7 +294,7 @@ describe Place do
 
   describe ".dms_value_to_f" do
     subject { place.dms_value_to_f(dms_hash) }
-    let(:place){ FactoryGirl.create(:place) }
+    let(:place){ FactoryBot.create(:place) }
 
     context "dms hash is nil" do
       let(:dms_hash) { nil }
@@ -337,7 +337,7 @@ describe Place do
   describe "before_save", :current => true do
     subject { obj.save }
     context "create" do
-      let(:obj){ FactoryGirl.build(:place, attributes)}
+      let(:obj){ FactoryBot.build(:place, attributes)}
       let(:attributes){ {name: "test", latitude: nil, longitude: nil, latitude_dms_direction: latitude_dms_direction, latitude_dms_deg: deg, latitude_dms_min: min, latitude_dms_sec: sec, longitude_dms_direction: longitude_dms_direction, longitude_dms_deg: deg, longitude_dms_min: min, longitude_dms_sec: sec} }
       let(:latitude_dms_direction){ "N" }
       let(:longitude_dms_direction){ "S" }
@@ -352,8 +352,8 @@ describe Place do
     end
 
     context "update" do
-      subject { obj.update_attributes(attributes) }
-      let(:obj){ FactoryGirl.create(:place, attributes)}
+      subject { obj.update(attributes) }
+      let(:obj){ FactoryBot.create(:place, attributes)}
       let(:attributes){ {name: "test", latitude_dms_direction: latitude_dms_direction, latitude_dms_deg: deg, latitude_dms_min: min, latitude_dms_sec: sec, longitude_dms_direction: longitude_dms_direction, longitude_dms_deg: deg, longitude_dms_min: min, longitude_dms_sec: sec} }
       let(:latitude_dms_direction){ "N" }
       let(:longitude_dms_direction){ "S" }
@@ -379,7 +379,7 @@ describe Place do
 
   describe "latitude_in_text" do
     subject { obj.latitude_in_text }
-    let(:obj){ FactoryGirl.create(:place, name: "test", latitude: degree, longitude: nil) }
+    let(:obj){ FactoryBot.create(:place, name: "test", latitude: degree, longitude: nil) }
     context "degree > 0" do
       let(:degree) { 5.625 }
       it { expect(subject).to be_eql("N 5 degree 37 minute 30.0 second") }
@@ -394,7 +394,7 @@ describe Place do
 
   describe "longitude_in_text" do
     subject { obj.longitude_in_text }
-    let(:obj){ FactoryGirl.create(:place, name: "test", latitude: nil, longitude: degree) }
+    let(:obj){ FactoryBot.create(:place, name: "test", latitude: nil, longitude: degree) }
     context "degree > 0" do
       let(:degree) { 5.625 }
       it { expect(subject).to be_eql("E 5 degree 37 minute 30.0 second") }
@@ -410,7 +410,7 @@ describe Place do
 
   describe "latitude_to_html" do
     subject { obj.latitude_to_html }
-    let(:obj){ FactoryGirl.create(:place, name: "test", latitude: degree) }
+    let(:obj){ FactoryBot.create(:place, name: "test", latitude: degree) }
     context "degree > 0" do
       let(:degree) { 5.625 }
       it { expect(subject).to be_eql("N5&deg;37&prime;30.0&Prime;") }
@@ -425,7 +425,7 @@ describe Place do
 
   describe "longitude_to_html" do
     subject { obj.longitude_to_html }
-    let(:obj){ FactoryGirl.create(:place, name: "test", longitude: degree) }
+    let(:obj){ FactoryBot.create(:place, name: "test", longitude: degree) }
     context "degree > 0" do
       let(:degree) { 5.625 }
       it { expect(subject).to be_eql("E5&deg;37&prime;30.0&Prime;") }

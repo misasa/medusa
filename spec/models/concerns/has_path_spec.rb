@@ -1,10 +1,10 @@
 require "spec_helper"
 
-class HasPathSpec < ActiveRecord::Base
+class HasPathSpec < ApplicationRecord
   include HasPath
 end
 
-class HasPathSpecMigration < ActiveRecord::Migration
+class HasPathSpecMigration < ActiveRecord::Migration[4.2]
   def self.up
     create_table :has_path_specs do |t|
       t.string :name

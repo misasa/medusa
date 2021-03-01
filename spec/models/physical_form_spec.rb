@@ -4,7 +4,7 @@ describe PhysicalForm do
 
   describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:physical_form, name: name) }
+      let(:obj) { FactoryBot.build(:physical_form, name: name) }
       context "is presence" do
         let(:name) { "sample_physical_form" }
         it { expect(obj).to be_valid }

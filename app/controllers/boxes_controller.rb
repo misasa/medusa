@@ -5,7 +5,7 @@ class BoxesController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @search = Box.includes(:parent).readables(current_user).search(params[:q])
+    @search = Box.includes(:parent).readables(current_user).ransack(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @boxes = @search.result.includes(:box_type).page(params[:page]).per(params[:per_page])
     respond_with @boxes
@@ -62,21 +62,21 @@ class BoxesController < ApplicationController
 
     default_sorts = "path ASC"
     if params[:button_action].blank? || params[:button_action] == separator
-      @contents_search = Path.search(params[:q])
+      @contents_search = Path.ransack(params[:q])
       @contents_search.sorts = "path ASC"
       @contents = Path.none
       @contents = @contents.page(params[:page]).per(params[:per_page])
     else
       case params[:button_action]
       when /diff/
-        @contents_search = Path.diff(@box, @src_date, dst_date_time).search(params[:q])
+        @contents_search = Path.diff(@box, @src_date, dst_date_time).ransack(params[:q])
       when /integ/
-        @contents_search = Path.integ(@box, @src_date, dst_date_time).search(params[:q])
+        @contents_search = Path.integ(@box, @src_date, dst_date_time).ransack(params[:q])
       when /snapshot/
-        @contents_search = Path.snapshot(@box, dst_date_time).search(params[:q])
+        @contents_search = Path.snapshot(@box, dst_date_time).ransack(params[:q])
       else
         # in/out
-        @contents_search = Path.change(@box, @src_date, dst_date_time).search(params[:q])
+        @contents_search = Path.change(@box, @src_date, dst_date_time).ransack(params[:q])
         default_sorts = ["brought_at DESC", "sign ASC"]
       end
       @contents_search.sorts = default_sorts if @contents_search.sorts.empty?
@@ -99,7 +99,7 @@ class BoxesController < ApplicationController
   end
 
   def update
-    @box.update_attributes(box_params)
+    @box.update(box_params)
     respond_with @box
   end
 
@@ -137,7 +137,7 @@ class BoxesController < ApplicationController
   end
 
   def bundle_update
-    @boxes.each { |box| box.update_attributes(box_params.only_presence) }
+    @boxes.each { |box| box.update(box_params.only_presence) }
     render :bundle_edit
   end
 

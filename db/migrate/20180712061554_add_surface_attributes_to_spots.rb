@@ -1,4 +1,4 @@
-class AddSurfaceAttributesToSpots < ActiveRecord::Migration
+class AddSurfaceAttributesToSpots < ActiveRecord::Migration[4.2]
   def change
     change_table :spots do |t|
       t.references :surface, index: true, comment: "SurfaceID"

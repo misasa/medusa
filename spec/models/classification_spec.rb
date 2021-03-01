@@ -4,7 +4,7 @@ describe Classification do
 
   describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:classification, name: name, sesar_material: "Rock") }
+      let(:obj) { FactoryBot.build(:classification, name: name, sesar_material: "Rock") }
       context "is presence" do
         let(:name) { "sample_classification" }
         it { expect(obj).to be_valid }
@@ -23,7 +23,7 @@ describe Classification do
       end
     end
     describe "sesar_material" do
-      let(:obj) { FactoryGirl.build(:classification, sesar_material: sesar_material) }
+      let(:obj) { FactoryBot.build(:classification, sesar_material: sesar_material) }
       context "is presence" do
         let(:sesar_material) { "sample" }
         it { expect(obj).to be_valid }
@@ -44,9 +44,9 @@ describe Classification do
   end
 
   describe "full_name" do
-    let(:parent){ FactoryGirl.build(:classification_parent, sesar_material: "Rock")}
-    let(:child){ FactoryGirl.build(:classification_child, sesar_material: "Rock")}
-    let(:grandchild){ FactoryGirl.build(:classification_grandchild, sesar_material: "Rock")}
+    let(:parent){ FactoryBot.build(:classification_parent, sesar_material: "Rock")}
+    let(:child){ FactoryBot.build(:classification_child, sesar_material: "Rock")}
+    let(:grandchild){ FactoryBot.build(:classification_grandchild, sesar_material: "Rock")}
     context "new parent full_name" do
       before{parent.save}
       it{expect(parent).to be_persisted}
@@ -79,6 +79,7 @@ describe Classification do
         child.save
         grandchild.parent_id = child.id
         grandchild.save
+        parent.reload
         parent.name = "parent2"
         parent.save
         child.reload
@@ -92,7 +93,7 @@ describe Classification do
   
   describe "check_classification(material, classification)" do
     subject { classification.check_classification(sesar_material, sesar_classification) }
-    let(:classification) { FactoryGirl.create(:classification) }
+    let(:classification) { FactoryBot.create(:classification) }
     context "sesar_materialがBiology" do
       let(:sesar_material) { "Biology" }
       context "対象のsesar_classificationが存在する" do

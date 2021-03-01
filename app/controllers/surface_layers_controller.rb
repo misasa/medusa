@@ -28,7 +28,7 @@ class SurfaceLayersController < ApplicationController
 
   def update
     @surface_layer = SurfaceLayer.find(params[:id])
-    @surface_layer.update_attributes(surface_layer_params)
+    @surface_layer.update(surface_layer_params)
     respond_with @surface_layer
   end
 
@@ -62,7 +62,7 @@ class SurfaceLayersController < ApplicationController
   end
 
   def check
-    @surface_layer.update_attributes(visible: true)
+    @surface_layer.update(visible: true)
     #respond_with @surface_layer, location: adjust_url_by_requesting_tab(request.referer)
     ret = {
       visible: @surface_layer.visible
@@ -71,7 +71,7 @@ class SurfaceLayersController < ApplicationController
   end
 
   def uncheck
-    @surface_layer.update_attributes(visible: false)
+    @surface_layer.update(visible: false)
     ret = {
       visible: @surface_layer.visible
     }
@@ -81,9 +81,9 @@ class SurfaceLayersController < ApplicationController
 
   def toggle_visible
     if @surface_layer.visible?
-      @surface_layer.update_attributes(visible: false)
+      @surface_layer.update(visible: false)
     else
-      @surface_layer.update_attributes(visible: true)
+      @surface_layer.update(visible: true)
     end
     ret = {
       visible: @surface_layer.reload.visible

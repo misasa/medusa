@@ -5,7 +5,7 @@ class AuthorsController < ApplicationController
   layout "admin"
   
   def index
-    @search = Author.search(params[:q])
+    @search = Author.ransack(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @authors = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @authors
@@ -26,7 +26,7 @@ class AuthorsController < ApplicationController
   end
   
   def update
-    @author.update_attributes(author_params)
+    @author.update(author_params)
     respond_with(@author, location: authors_path)
   end
   

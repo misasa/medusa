@@ -16,7 +16,7 @@ class NestedResources::SpecimensController < ApplicationController
     	succeed = @parent.send(@association_name) << @specimen if @specimen.save
       raise ActiveRecord::Rollback unless succeed
     end
-    respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer), action: "error" 
+    respond_with @specimen, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
   def update
@@ -38,10 +38,10 @@ class NestedResources::SpecimensController < ApplicationController
   rescue
     duplicate_global_id
   end
-  
+
   def inventory
     @specimen = Specimen.find(params[:id])
-    @specimen.update_attributes(box_id: params[:box_id])
+    @specimen.update(box_id: params[:box_id])
     @specimen.paths.current.first.update_attribute(:checked_at, Time.now) if @specimen.paths.current.first
     respond_with @specimen
   end
@@ -95,11 +95,11 @@ class NestedResources::SpecimensController < ApplicationController
   def duplicate_global_id
     respond_to do |format|
       format.html { render "parts/duplicate_global_id", status: :unprocessable_entity }
-      format.all { render nothing: true, status: :unprocessable_entity }
+      format.all { render body: nil, status: :unprocessable_entity }
     end
   end
 
   def set_association_name
-    @association_name = (params[:association_name] ? params[:association_name] : :specimens) 
+    @association_name = (params[:association_name] ? params[:association_name] : :specimens)
   end
 end
