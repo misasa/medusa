@@ -1,7 +1,5 @@
-class AddCommentAgeScaleColumnToTables < ActiveRecord::Migration
+class AddCommentAgeScaleColumnToTables < ActiveRecord::Migration[4.2]
   def change
-    change_table "tables" do |t|
-      t.change_comment :age_scale, "有効精度"
-    end
+    change_column_comment(:tables, :age_scale, "有効精度")
   end
 end

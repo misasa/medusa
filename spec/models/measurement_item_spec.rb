@@ -4,7 +4,7 @@ describe MeasurementItem do
 
   describe "validates" do
     describe "nickname" do
-      let(:obj) { FactoryGirl.build(:measurement_item, nickname: nickname) }
+      let(:obj) { FactoryBot.build(:measurement_item, nickname: nickname) }
       context "is presence" do
         let(:nickname) { "sample_measurement_item" }
         it { expect(obj).to be_valid }
@@ -35,7 +35,7 @@ describe MeasurementItem do
 
   describe ".display_name" do
     subject{obj.display_name}
-    let(:obj) { FactoryGirl.build(:measurement_item, nickname: nickname,display_in_html: display_in_html) }
+    let(:obj) { FactoryBot.build(:measurement_item, nickname: nickname,display_in_html: display_in_html) }
     context "display_in_html is not blank" do
       let(:nickname){"nickname"}
       let(:display_in_html){"display_in_html"}
@@ -50,7 +50,7 @@ describe MeasurementItem do
 
   describe ".tex_name" do
     subject{obj.tex_name}
-    let(:obj) { FactoryGirl.build(:measurement_item, nickname: nickname,display_in_tex: display_in_tex) }
+    let(:obj) { FactoryBot.build(:measurement_item, nickname: nickname,display_in_tex: display_in_tex) }
     context "display_in_tex is not blank" do
       let(:nickname){"nickname"}
       let(:display_in_tex){"display_in_tex"}

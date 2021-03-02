@@ -6,7 +6,7 @@ class SurfacesController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @search = Surface.readables(current_user).search(params[:q])
+    @search = Surface.readables(current_user).ransack(params[:q])
     @search.sorts = ["globe DESC", "updated_at DESC"] if @search.sorts.empty?
     @surfaces = @search.result.page(params[:page]).per(params[:per_page])
     #@surfaces = SurfaceDecorator.decorate_collection(@search.result)
@@ -44,7 +44,7 @@ class SurfacesController < ApplicationController
   end
 
   def update
-    @surface.update_attributes(surface_params)
+    @surface.update(surface_params)
     respond_with @surface
   end
   
@@ -83,7 +83,7 @@ class SurfacesController < ApplicationController
   end
 
   def bundle_update
-    @surfaces.each { |surface| surface.update_attributes(surface_params.only_presence) }
+    @surfaces.each { |surface| surface.update(surface_params.only_presence) }
     render :bundle_edit
   end
 

@@ -1,4 +1,4 @@
-class CreatePhysicalForms < ActiveRecord::Migration
+class CreatePhysicalForms < ActiveRecord::Migration[4.2]
   def change
     create_table :physical_forms do |t|
       t.string :name

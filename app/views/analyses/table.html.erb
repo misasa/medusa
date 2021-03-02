@@ -1,6 +1,6 @@
 <div>
   <% @fmt_str = params[:fmt_str].presence||"%.2f" %>
-  <%= form_tag(table_analyses_path,method: :get) do %>
+  <%= form_with url:table_analyses_path, method: :get do %>
     measurement_category: <%= select_tag :measurement_category_id, options_for_select(MeasurementCategory.pluck(:name,:id),params[:measurement_category_id]),include_blank: true %>
     unit: <%= select_tag :unit_id,options_for_select(Unit.all.map{|r|[raw(r.html),r.id]},params[:unit_id]), include_blank: true %>
     type: <%= select_tag :table_type,options_for_select([['HTML','html'],['LaTeX','latex']],params[:table_type])%>

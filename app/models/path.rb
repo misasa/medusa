@@ -1,4 +1,4 @@
-class Path < ActiveRecord::Base
+class Path < ApplicationRecord
 
   include Enumerable
 
@@ -18,7 +18,7 @@ class Path < ActiveRecord::Base
 #  scope :exists_at, -> (datetime) { where(arel_table[:brought_in_at].lteq(datetime).and(arel_table[:brought_out_at].eq(nil).or(arel_table[:brought_out_at].gteq(datetime)))) rescue none }
 
   def self.cont_at(date)
-    search = search(brought_out_at_gteq: date, brought_in_at_lteq_end_of_day: date)
+    search = ransack(brought_out_at_gteq: date, brought_in_at_lteq_end_of_day: date)
     records = search.result
     records = records.current if search.conditions.empty?
     records = records.group(:datum_id, :datum_type, :ids)
@@ -41,13 +41,13 @@ class Path < ActiveRecord::Base
     records = records.select("CASE WHEN brought_in_at < '#{src_date}' AND brought_out_at > '#{dst_date}' THEN '' WHEN brought_out_at IS NOT NULL AND brought_out_at < '#{dst_date}' THEN '-' ELSE '+' END AS sign, datum_id, datum_type, ids, brought_in_at, brought_out_at, checked_at")
     #params[:q][:brought_out_at_gteq] = sdate.strftime("%Y-%m-%d")
     #params[:q][:brought_in_at_lteq_end_of_day] = @dst_date
-    records = records.search({brought_out_at_gteq: src_date, brought_in_at_lteq: dst_date}).result
+    records = records.ransack({brought_out_at_gteq: src_date, brought_in_at_lteq: dst_date}).result
     records
   end
 
   def self.diff(box, src_date, dst_date)
-    src = contents_of(box).cont_at(src_date).as("src")
-    dst = contents_of(box).cont_at(dst_date).as("dst")
+    src = contents_of(box).cont_at(src_date).arel.as("src")
+    dst = contents_of(box).cont_at(dst_date).arel.as("dst")
     join = arel_table.project("CASE WHEN src.datum_id IS NULL THEN '+' ELSE '-' END AS sign, COALESCE(src.datum_id, dst.datum_id) AS datum_id, COALESCE(src.datum_type, dst.datum_type) AS datum_type, COALESCE(src.ids, dst.ids) AS ids, COALESCE(src.brought_in_at, dst.brought_in_at) AS brought_in_at, COALESCE(src.brought_out_at, dst.brought_out_at) AS brought_out_at, COALESCE(src.checked_at, dst.checked_at) AS checked_at")
     join = join.from(src).join(dst, Arel::Nodes::FullOuterJoin).on(src[:datum_id].eq(dst[:datum_id]).and(src[:datum_type].eq(dst[:datum_type])).and(src[:ids].eq(dst[:ids])))
     join = join.where(src[:datum_id].eq(nil).or(dst[:datum_id].eq(nil)))
@@ -78,7 +78,7 @@ class Path < ActiveRecord::Base
     html = ""
     html += "#{brought_in_at.strftime('%Y-%m-%d %H:%M')} - " if brought_in_at
     html += "#{brought_out_at.strftime('%Y-%m-%d %H:%M')}" if brought_out_at
-    html 
+    html
   end
 
   def duration

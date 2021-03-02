@@ -5,7 +5,7 @@ class PlacesController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @search = Place.includes(:specimens).readables(current_user).search(params[:q])
+    @search = Place.includes(:specimens).readables(current_user).ransack(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @places = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @places
@@ -32,7 +32,7 @@ class PlacesController < ApplicationController
   end
 
   def update
-    @place.update_attributes(place_params)
+    @place.update(place_params)
     respond_with @place
   end
 
@@ -54,7 +54,7 @@ class PlacesController < ApplicationController
   end
 
   def bundle_update
-    @places.each { |place| place.update_attributes(place_params.only_presence) }
+    @places.each { |place| place.update(place_params.only_presence) }
     render :bundle_edit
   end
 

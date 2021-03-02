@@ -3,7 +3,7 @@ This admin page configures default view on search. A new user will start with th
 Configure current view on search from <%= link_to("here", search_columns_path) %>.
 </p>
 
-<%= form_tag master_update_order_search_columns_path, remote: true, format: :json, class: "update", id: "update_display_search_columns" do %>
+<%= form_with url:master_update_order_search_columns_path(format: :json), local: false, class: "update", id: "update_display_search_columns" do %>
   <%= render partial: "index_form" %>
 <% end %>
 <%= javascript_tag do %>

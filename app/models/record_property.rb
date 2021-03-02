@@ -1,8 +1,8 @@
-class RecordProperty < ActiveRecord::Base
+class RecordProperty < ApplicationRecord
   belongs_to :user
   belongs_to :group
   belongs_to :datum, polymorphic: true
-  has_one :self_ref, :class_name => self, :foreign_key => :id
+  has_one :self_ref, :class_name => self.to_s, :foreign_key => :id
   has_one :spot, :through => :self_ref, :source => :datum, source_type: 'Spot'
   has_one :place, :through => :self_ref, :source => :datum, source_type: 'Place'
   has_one :analysis, :through => :self_ref, :source => :datum, source_type: 'Analysis'
@@ -15,14 +15,14 @@ class RecordProperty < ActiveRecord::Base
   has_one :global_qr
   delegate :ghost?, to: :datum, allow_nil: true
 
-  before_save :generate_global_id, if: "global_id.blank?"
+  before_save :generate_global_id, if: proc { |s| s.global_id.blank? }
   before_save :adjust_published_at
   before_save :adjust_disposed_at
   before_save :adjust_lost_at
   after_save :recursive_lose_or_found, if: -> { lost_changed? }
 
-  validates :user, existence: true
-  validates :group, existence: true, allow_nil: true
+  validates :user, presence: true
+  validates :group, presence: { message: :required, if: -> { group_id.present? } }
 
   alias_attribute :owner_readable?, :owner_readable
   alias_attribute :owner_writable?, :owner_writable
@@ -39,7 +39,7 @@ class RecordProperty < ActiveRecord::Base
     where_clauses = where_clauses.or(guest_readables_where_clauses)
     includes(:user, :group).where(where_clauses).references(:user)
   }
-  
+
   def datum_attributes
     return unless datum
 
@@ -71,19 +71,19 @@ class RecordProperty < ActiveRecord::Base
   end
 
   def dispose
-    update_attributes(disposed: true)
+    update(disposed: true)
   end
 
   def restore
-    update_attributes(disposed: false)
+    update(disposed: false)
   end
 
   def lose
-    update_attributes(lost: true)
+    update(lost: true)
   end
 
   def found
-    update_attributes(lost: false)
+    update(lost: false)
   end
 
   def adjust_published_at
@@ -125,7 +125,7 @@ class RecordProperty < ActiveRecord::Base
   def self.group_readables_where_clauses(user)
     record_properties = self.arel_table
     group_members = GroupMember.arel_table
-    record_properties[:group_readable].eq(true).and(GroupMember.where(group_members[:user_id].eq(user.id).and(group_members[:group_id].eq(record_properties[:group_id]))).exists)
+    record_properties[:group_readable].eq(true).and(GroupMember.where(group_members[:user_id].eq(user.id).and(group_members[:group_id].eq(record_properties[:group_id]))).arel.exists)
   end
 
   def self.guest_readables_where_clauses

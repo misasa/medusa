@@ -1,4 +1,4 @@
-class CreateSurfaceLayers < ActiveRecord::Migration
+class CreateSurfaceLayers < ActiveRecord::Migration[4.2]
   def change
     create_table :surface_layers do |t|
       t.references :surface, null: false, index: true, comment: "SurfaceID"

@@ -6,7 +6,7 @@
 <td><%= link_to_if can?(:read, attachment_file), list_title(attachment_file),attachment_file %></td>
 <td>
   <% if attachment_file.pdf? %>
-    <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_file.id), id: "file-#{attachment_file.id}-button") %>
+    <%= link_to(image_pack_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_file.id), id: "file-#{attachment_file.id}-button") %>
   <% end %>
 </td>
 <td><%= attachment_file.spots.try!(:size) %></td>

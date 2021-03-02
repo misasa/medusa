@@ -1,4 +1,4 @@
-class CreateUniqQrs < ActiveRecord::Migration
+class CreateUniqQrs < ActiveRecord::Migration[4.2]
   def change
     create_table :uniq_qrs do |t|
       t.integer  :record_property_id

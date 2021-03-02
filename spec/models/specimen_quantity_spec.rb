@@ -4,7 +4,7 @@ describe SpecimenQuantity do
 
   describe "validates" do
     describe "quantity" do
-      let(:obj) { FactoryGirl.build(:specimen_quantity, quantity: quantity) }
+      let(:obj) { FactoryBot.build(:specimen_quantity, quantity: quantity) }
       context "num" do
         let(:quantity){ "1" }
         it { expect(obj).to be_valid }
@@ -26,10 +26,10 @@ describe SpecimenQuantity do
 
   describe "class methods" do
     describe "point" do
-      let(:before_specimen) { FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg") }
-      let(:before_specimen_quantity) { FactoryGirl.create(:specimen_quantity, specimen: before_specimen, quantity: 100, quantity_unit: "kg") }
-      let(:divide) { FactoryGirl.create(:divide, before_specimen_quantity: before_specimen_quantity, updated_at: time, divide_flg: divide_flg, log: "log") }
-      let(:specimen) { FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg") }
+      let(:before_specimen) { FactoryBot.create(:specimen, quantity: 100, quantity_unit: "kg") }
+      let(:before_specimen_quantity) { FactoryBot.create(:specimen_quantity, specimen: before_specimen, quantity: 100, quantity_unit: "kg") }
+      let(:divide) { FactoryBot.create(:divide, before_specimen_quantity: before_specimen_quantity, updated_at: time, divide_flg: divide_flg, log: "log") }
+      let(:specimen) { FactoryBot.create(:specimen, quantity: 100, quantity_unit: "kg") }
       let(:time) { Time.zone.local(2016, 11,12) }
       let(:divide_flg) { true }
       subject { SpecimenQuantity.point(divide, 100000.0, "100.0(kg)") }
@@ -64,10 +64,10 @@ describe SpecimenQuantity do
 
   describe "instance methods" do
     describe "point" do
-      let(:before_specimen) { FactoryGirl.create(:specimen, quantity: 100, quantity_unit: "kg") }
-      let(:before_specimen_quantity) { FactoryGirl.create(:specimen_quantity, specimen: before_specimen, quantity: 100, quantity_unit: "kg") }
-      let(:divide) { FactoryGirl.create(:divide, before_specimen_quantity: before_specimen_quantity, updated_at: time, divide_flg: divide_flg, log: "log") }
-      let(:specimen_quantity) { FactoryGirl.create(:specimen_quantity, quantity: 100, quantity_unit: "kg", divide: divide) }
+      let(:before_specimen) { FactoryBot.create(:specimen, quantity: 100, quantity_unit: "kg") }
+      let(:before_specimen_quantity) { FactoryBot.create(:specimen_quantity, specimen: before_specimen, quantity: 100, quantity_unit: "kg") }
+      let(:divide) { FactoryBot.create(:divide, before_specimen_quantity: before_specimen_quantity, updated_at: time, divide_flg: divide_flg, log: "log") }
+      let(:specimen_quantity) { FactoryBot.create(:specimen_quantity, quantity: 100, quantity_unit: "kg", divide: divide) }
       let(:time) { Time.zone.local(2016, 11,12) }
       let(:divide_flg) { true }
       subject { specimen_quantity.point }

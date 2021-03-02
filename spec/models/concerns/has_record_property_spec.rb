@@ -1,10 +1,10 @@
 require "spec_helper"
 
-class HasRecordPropertySpec < ActiveRecord::Base
+class HasRecordPropertySpec < ApplicationRecord
   include HasRecordProperty
 end
 
-class HasRecordPropertySpecMigration < ActiveRecord::Migration
+class HasRecordPropertySpecMigration < ActiveRecord::Migration[4.2]
   def self.up
     create_table :has_record_property_specs do |t|
       t.string :name
@@ -54,16 +54,16 @@ describe HasRecordProperty do
   end
 
   describe "#spot_links" do
-    let(:file) { FactoryGirl.create(:attachment_file)}
-    let(:spot) { FactoryGirl.create(:spot, attachment_file: file)}
+    let(:file) { FactoryBot.create(:attachment_file)}
+    let(:spot) { FactoryBot.create(:spot, attachment_file: file)}
 
     subject { obj.spot_links }
     before do
       obj
     end
     context "for Specimen" do
-      let(:obj) { FactoryGirl.create(:specimen)}
-      let(:spot) { FactoryGirl.create(:spot, attachment_file: file, target_uid: obj.global_id) }
+      let(:obj) { FactoryBot.create(:specimen)}
+      let(:spot) { FactoryBot.create(:spot, attachment_file: file, target_uid: obj.global_id) }
       before do
         spot
       end
@@ -77,20 +77,20 @@ describe HasRecordProperty do
       obj
     end
     context "for Specimen" do
-      let(:obj) { FactoryGirl.create(:specimen) }
+      let(:obj) { FactoryBot.create(:specimen) }
       context "without specimen" do
         it { expect(subject).to eq(0) }
       end
       context "with a specimen" do
-        let(:specimen1) { FactoryGirl.create(:specimen)}
+        let(:specimen1) { FactoryBot.create(:specimen)}
         before do
           obj.specimens << specimen1
         end
         it { expect(subject).to eq(1) }
       end
       context "with 2 specimens" do
-        let(:specimen1) { FactoryGirl.create(:specimen)}
-        let(:specimen2) { FactoryGirl.create(:specimen)}
+        let(:specimen1) { FactoryBot.create(:specimen)}
+        let(:specimen2) { FactoryBot.create(:specimen)}
         before do
           obj.specimens << specimen1
           obj.specimens << specimen2
@@ -99,20 +99,20 @@ describe HasRecordProperty do
       end
     end
     context "for Box" do
-      let(:obj) { FactoryGirl.create(:box) }
+      let(:obj) { FactoryBot.create(:box) }
       context "without specimen" do
         it { expect(subject).to eq(0) }
       end
       context "with a specimen" do
-        let(:specimen1) { FactoryGirl.create(:specimen)}
+        let(:specimen1) { FactoryBot.create(:specimen)}
         before do
           obj.specimens << specimen1
         end
         it { expect(subject).to eq(1) }
       end
       context "with 2 specimens" do
-        let(:specimen1) { FactoryGirl.create(:specimen)}
-        let(:specimen2) { FactoryGirl.create(:specimen)}
+        let(:specimen1) { FactoryBot.create(:specimen)}
+        let(:specimen2) { FactoryBot.create(:specimen)}
         before do
           obj.specimens << specimen1
           obj.specimens << specimen2
@@ -122,7 +122,7 @@ describe HasRecordProperty do
     end
 
     context "for Analysis" do
-      let(:obj) { FactoryGirl.create(:analysis) }
+      let(:obj) { FactoryBot.create(:analysis) }
       context "without specimen" do
         before do
           obj.specimen = nil
@@ -130,7 +130,7 @@ describe HasRecordProperty do
         it { expect(subject).to eq(0) }
       end
       context "with a specimen" do
-        let(:specimen1) { FactoryGirl.create(:specimen)}
+        let(:specimen1) { FactoryBot.create(:specimen)}
         before do
           obj.specimen = specimen1
         end
@@ -145,7 +145,7 @@ describe HasRecordProperty do
       obj
     end
     context "for Specimen" do
-      let(:obj) { FactoryGirl.create(:specimen) }
+      let(:obj) { FactoryBot.create(:specimen) }
       context "without box" do
         before do
           obj.box = nil
@@ -153,7 +153,7 @@ describe HasRecordProperty do
         it { expect(subject).to eq(0) }
       end
       context "with a box" do
-        let(:box1) { FactoryGirl.create(:box)}
+        let(:box1) { FactoryBot.create(:box)}
         before do
           obj.box = box1
         end
@@ -161,20 +161,20 @@ describe HasRecordProperty do
       end
     end
     context "for Box" do
-      let(:obj) { FactoryGirl.create(:box) }
+      let(:obj) { FactoryBot.create(:box) }
       context "without box" do
         it { expect(subject).to eq(0) }
       end
       context "with a box" do
-        let(:box1) { FactoryGirl.create(:box)}
+        let(:box1) { FactoryBot.create(:box)}
         before do
           obj.boxes << box1
         end
         it { expect(subject).to eq(1) }
       end
       context "with 2 boxes" do
-        let(:box1) { FactoryGirl.create(:box)}
-        let(:box2) { FactoryGirl.create(:box)}
+        let(:box1) { FactoryBot.create(:box)}
+        let(:box2) { FactoryBot.create(:box)}
         before do
           obj.boxes << box1
           obj.boxes << box2
@@ -183,20 +183,20 @@ describe HasRecordProperty do
       end
     end
     context "for Bib" do
-      let(:obj) { FactoryGirl.create(:bib) }
+      let(:obj) { FactoryBot.create(:bib) }
       context "without box" do
         it { expect(subject).to eq(0) }
       end
       context "with a box" do
-        let(:box1) { FactoryGirl.create(:box)}
+        let(:box1) { FactoryBot.create(:box)}
         before do
           obj.boxes << box1
         end
         it { expect(subject).to eq(1) }
       end
       context "with 2 boxes" do
-        let(:box1) { FactoryGirl.create(:box)}
-        let(:box2) { FactoryGirl.create(:box)}
+        let(:box1) { FactoryBot.create(:box)}
+        let(:box2) { FactoryBot.create(:box)}
         before do
           obj.boxes << box1
           obj.boxes << box2
@@ -212,20 +212,20 @@ describe HasRecordProperty do
       obj
     end
     context "for Specimen" do
-      let(:obj) { FactoryGirl.create(:specimen) }
+      let(:obj) { FactoryBot.create(:specimen) }
       context "without file" do
         it { expect(subject).to eq(0) }
       end
       context "with a file" do
-        let(:file1) { FactoryGirl.create(:attachment_file)}
+        let(:file1) { FactoryBot.create(:attachment_file)}
         before do
           obj.attachment_files << file1
         end
         it { expect(subject).to eq(1) }
       end
       context "with 2 files" do
-        let(:file1) { FactoryGirl.create(:attachment_file)}
-        let(:file2) { FactoryGirl.create(:attachment_file)}
+        let(:file1) { FactoryBot.create(:attachment_file)}
+        let(:file2) { FactoryBot.create(:attachment_file)}
         before do
           obj.attachment_files << file1
           obj.attachment_files << file2
@@ -241,17 +241,17 @@ describe HasRecordProperty do
         obj
      end
      context "for Specimen" do
-       let(:obj) { FactoryGirl.create(:specimen) }
+       let(:obj) { FactoryBot.create(:specimen) }
 #       it { expect(subject).to match /\/#{obj.name} <specimen: #{obj.global_id}> <link: specimen=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
        it { expect(subject).to match /\/#{obj.name} <specimen #{obj.global_id}>/}
      end
      context "for Box" do
-       let(:obj) { FactoryGirl.create(:box) }
+       let(:obj) { FactoryBot.create(:box) }
 #       it { expect(subject).to match /\/#{obj.name} <box: #{obj.global_id}> <link: specimen=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
        it { expect(subject).to match /\/#{obj.name} <box #{obj.global_id}>/}
      end
      context "for Bib" do
-       let(:obj) { FactoryGirl.create(:bib) }
+       let(:obj) { FactoryBot.create(:bib) }
 #       it { expect(subject).to match /\/#{obj.name} <bib: #{obj.global_id}> <link: specimen=\d+ box=\d+ analysis=\d+ file=\d+ bib=\d+ locality=\d+ point=\d+> <last-modified: #{obj.updated_at}> <created: #{obj.created_at}>/}
        it { expect(subject).to match /\/#{obj.name} <bib #{obj.global_id}>/}
      end
@@ -260,7 +260,7 @@ describe HasRecordProperty do
   describe "#to_bibtex" do
     subject { obj.to_bibtex }
     context "bib" do
-      let(:obj) { FactoryGirl.create(:bib, entry_type: entry_type, abbreviation: abbreviation) }
+      let(:obj) { FactoryBot.create(:bib, entry_type: entry_type, abbreviation: abbreviation) }
       describe "@article" do
         before do
           obj
@@ -277,7 +277,7 @@ describe HasRecordProperty do
         end
       end
       context "specimen" do
-        let(:obj) { FactoryGirl.create(:specimen, name: name) }
+        let(:obj) { FactoryBot.create(:specimen, name: name) }
         let(:name) { "specimen" }
         describe "@specimen" do
           before do
@@ -292,11 +292,11 @@ describe HasRecordProperty do
   describe ".readables" do
     subject { HasRecordPropertySpec.readables(user) }
     let(:obj) { klass.create(name: "foo") }
-    let(:user) { FactoryGirl.create(:user_foo, administrator: admin) }
+    let(:user) { FactoryBot.create(:user_foo, administrator: admin) }
     let(:admin) { false }
-    let(:group) { FactoryGirl.create(:group) }
-    let(:another_user) { FactoryGirl.create(:user_baa) }
-    let(:another_group) { FactoryGirl.create(:group) }
+    let(:group) { FactoryBot.create(:group) }
+    let(:another_user) { FactoryBot.create(:user_baa) }
+    let(:another_group) { FactoryBot.create(:group) }
     before do
       GroupMember.create(user: user, group: group)
       obj.create_record_property(owner_readable: owner_readable, group_readable: group_readable, guest_readable: guest_readable, user_id: user_id, group_id: group_id)
@@ -360,7 +360,7 @@ describe HasRecordProperty do
   describe "#writable?" do
     subject { obj.writable?(user) }
     let(:obj) { klass.create(name: "foo") }
-    let(:user) { FactoryGirl.create(:user_foo) }
+    let(:user) { FactoryBot.create(:user_foo) }
     before { obj.create_record_property }
     context "when obj is new_record." do
       before { allow(obj).to receive(:new_record?).and_return(true) }
@@ -389,8 +389,8 @@ describe HasRecordProperty do
   describe "callbacks" do
     describe "after_create" do
       describe "generate_record_property" do
-        let(:user) { FactoryGirl.create(:user) }
-        let(:specimen) { FactoryGirl.build(:specimen) }
+        let(:user) { FactoryBot.create(:user) }
+        let(:specimen) { FactoryBot.build(:specimen) }
         before do
           User.current = user
           specimen.save
@@ -402,14 +402,14 @@ describe HasRecordProperty do
     describe "after_save" do
       describe "update_record_property" do
         context "name attribute is exist" do
-          let(:specimen) { FactoryGirl.create(:specimen, name: name) }
+          let(:specimen) { FactoryBot.create(:specimen, name: name) }
           let(:name) { "specimen" }
           before { specimen }
           it { expect(specimen.record_property).to be_present }
           it { expect(specimen.record_property.name).to eq name }
         end
         context "name attribute isn't exist" do
-          let(:chemistry) { FactoryGirl.create(:chemistry) }
+          let(:chemistry) { FactoryBot.create(:chemistry) }
           before { chemistry }
           it { expect(chemistry.record_property).to be_present }
           it { expect(chemistry.record_property.name).to be_nil }
@@ -418,8 +418,8 @@ describe HasRecordProperty do
     end
 
     describe ".disposal_or_loss?" do
-      let(:specimen){ FactoryGirl.create(:specimen) }
-      let(:user) { FactoryGirl.create(:user) }
+      let(:specimen){ FactoryBot.create(:specimen) }
+      let(:user) { FactoryBot.create(:user) }
       before do
         User.current = user
         specimen.record_property.lost = lost
@@ -450,8 +450,8 @@ describe HasRecordProperty do
     end
 
     describe ".dispose" do
-      let(:specimen){ FactoryGirl.create(:specimen) }
-      let(:user) { FactoryGirl.create(:user) }
+      let(:specimen){ FactoryBot.create(:specimen) }
+      let(:user) { FactoryBot.create(:user) }
       before do
         User.current = user
         specimen.dispose
@@ -461,8 +461,8 @@ describe HasRecordProperty do
     end
 
     describe ".restore" do
-      let(:specimen){ FactoryGirl.create(:specimen) }
-      let(:user) { FactoryGirl.create(:user) }
+      let(:specimen){ FactoryBot.create(:specimen) }
+      let(:user) { FactoryBot.create(:user) }
       before do
         User.current = user
         specimen.record_property.disposed = true
@@ -475,28 +475,28 @@ describe HasRecordProperty do
     end
 
     describe ".user_id=" do
-      let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:specimen) { FactoryBot.create(:specimen) }
       let(:user_id){999}
       before{specimen.user_id = user_id}
       it { expect(specimen.user_id).to eq user_id}
     end
 
     describe ".group_id=" do
-      let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:specimen) { FactoryBot.create(:specimen) }
       let(:group_id){999}
       before{specimen.group_id = group_id}
       it { expect(specimen.group_id).to eq group_id}
     end
 
     describe ".disposed=" do
-      let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:specimen) { FactoryBot.create(:specimen) }
       let(:disposed){ true }
       before { specimen.disposed = disposed }
       it { expect(specimen.disposed).to eq disposed }
     end
 
     describe ".lost=" do
-      let(:specimen) { FactoryGirl.create(:specimen) }
+      let(:specimen) { FactoryBot.create(:specimen) }
       let(:lost){ true }
       before { specimen.lost = lost }
       it { expect(specimen.lost).to eq lost }
@@ -505,10 +505,10 @@ describe HasRecordProperty do
 
   describe "#build_pmlame" do
     subject{ obj.build_pmlame([]) }
-    let(:obj) { FactoryGirl.create(:specimen)}
-    let(:analysis_1) { FactoryGirl.create(:analysis) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, name: "分類2") }
-    let!(:spot_1) { FactoryGirl.create(:spot, target_uid: analysis_1.try(:global_id) ) }
+    let(:obj) { FactoryBot.create(:specimen)}
+    let(:analysis_1) { FactoryBot.create(:analysis) }
+    let(:analysis_2) { FactoryBot.create(:analysis, name: "分類2") }
+    let!(:spot_1) { FactoryBot.create(:spot, target_uid: analysis_1.try(:global_id) ) }
     let(:pml_elements) { [] }
 
     before do
@@ -542,7 +542,7 @@ describe HasRecordProperty do
     end
     context "when only pml_elements is exist and spot is not exists " do
       let(:pml_elements) { [analysis_1, analysis_2] }
-      let!(:spot_1) { FactoryGirl.create(:spot, target_uid: nil ) }
+      let!(:spot_1) { FactoryBot.create(:spot, target_uid: nil ) }
       it do
         result = [@analysis_1_pmlame, @analysis_2_pmlame]
         expect(subject).to match_array(result)
@@ -557,7 +557,7 @@ describe HasRecordProperty do
     end
     context "when pml_elements is exist which has not have to_pmlame method," do
       let(:pml_elements) { [box] }
-      let(:box) { FactoryGirl.create(:box ) }
+      let(:box) { FactoryBot.create(:box ) }
       it do
         result = []
         expect(subject).to match_array(result)
@@ -571,9 +571,9 @@ describe HasRecordProperty do
       obj
     end
     context "when datum type is Specimen" do
-      let(:obj) { FactoryGirl.create(:specimen)}
-      let(:analysis_1) { FactoryGirl.create(:analysis) }
-      let(:analysis_2) { FactoryGirl.create(:analysis, name: "分類2") }
+      let(:obj) { FactoryBot.create(:specimen)}
+      let(:analysis_1) { FactoryBot.create(:analysis) }
+      let(:analysis_2) { FactoryBot.create(:analysis, name: "分類2") }
       before do
         obj.analyses << analysis_1
         obj.analyses << analysis_2
@@ -582,10 +582,10 @@ describe HasRecordProperty do
       it { expect(subject).to match_array([analysis_1, analysis_2]) }
     end
     context "when datum type is Place" do
-      let(:obj) { FactoryGirl.create(:place)}
-      let(:specimen) { FactoryGirl.create(:specimen) }
-      let(:analysis_1) { FactoryGirl.create(:analysis) }
-      let(:analysis_2) { FactoryGirl.create(:analysis, name: "分類2") }
+      let(:obj) { FactoryBot.create(:place)}
+      let(:specimen) { FactoryBot.create(:specimen) }
+      let(:analysis_1) { FactoryBot.create(:analysis) }
+      let(:analysis_2) { FactoryBot.create(:analysis, name: "分類2") }
       before do
         specimen.analyses << analysis_1
         specimen.analyses << analysis_2
@@ -594,18 +594,18 @@ describe HasRecordProperty do
       it { expect(subject).to match_array([analysis_1, analysis_2]) }
     end
     context "when datum type is Chemistry" do
-      let(:obj) { FactoryGirl.create(:chemistry)}
-      let(:analysis_1) { FactoryGirl.create(:analysis) }
-      let(:analysis_2) { FactoryGirl.create(:analysis, name: "分類2") }
+      let(:obj) { FactoryBot.create(:chemistry)}
+      let(:analysis_1) { FactoryBot.create(:analysis) }
+      let(:analysis_2) { FactoryBot.create(:analysis, name: "分類2") }
       before do
         obj.analysis = analysis_1
       end
       it { expect(subject).to match_array([analysis_1]) }
     end
     context "when datum type is AttachmentFile" do
-      let(:obj) { FactoryGirl.create(:attachment_file)}
-      let(:analysis_1) { FactoryGirl.create(:analysis) }
-      let(:analysis_2) { FactoryGirl.create(:analysis, name: "分類2") }
+      let(:obj) { FactoryBot.create(:attachment_file)}
+      let(:analysis_1) { FactoryBot.create(:analysis) }
+      let(:analysis_2) { FactoryBot.create(:analysis, name: "分類2") }
       before do
         obj.analyses << analysis_1
         obj.analyses << analysis_2
@@ -613,11 +613,11 @@ describe HasRecordProperty do
       it { expect(subject).to match_array([analysis_1, analysis_2]) }
     end
     context "when datum type is Surface" do
-      let(:obj) { FactoryGirl.create(:surface)}
-      let(:spot_1) { FactoryGirl.create(:spot) }
-      let(:spot_2) { FactoryGirl.create(:spot) }
-      let(:target_1) { FactoryGirl.create(:analysis) }
-      let(:target_2) { FactoryGirl.create(:spot) }
+      let(:obj) { FactoryBot.create(:surface)}
+      let(:spot_1) { FactoryBot.create(:spot) }
+      let(:spot_2) { FactoryBot.create(:spot) }
+      let(:target_1) { FactoryBot.create(:analysis) }
+      let(:target_2) { FactoryBot.create(:spot) }
       before do
         allow(obj).to receive(:spots).and_return([spot_1, spot_2])
         allow(spot_1).to receive(:target).and_return(target_1)

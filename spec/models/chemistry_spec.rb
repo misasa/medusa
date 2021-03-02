@@ -3,17 +3,17 @@ require 'spec_helper'
 describe Chemistry do
 
   describe "test", :current => true do
-    let(:specimen_1) { FactoryGirl.create(:specimen) }
-    let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_1) }
-    let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_1) }
-    let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis_1, measurement_item: measurement_item, unit: unit, value: value) }
-    let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_2, measurement_item: measurement_item, unit: unit_2, value: value) }
-    let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_3, measurement_item: measurement_item, unit: unit, value: value) }
-    let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit, display_in_html: display_in_html, nickname: nickname) }
-    let(:measurement_item_2) { FactoryGirl.create(:measurement_item, unit: unit, display_in_html: display_in_html, nickname: nickname) }
-    let(:unit) { FactoryGirl.create(:unit, :name => 'cg/g', :conversion => 100) }
-    let(:unit_2) { FactoryGirl.create(:unit, :name => 'ug/g', :conversion => 1000000) }
+    let(:specimen_1) { FactoryBot.create(:specimen) }
+    let(:analysis_1) { FactoryBot.create(:analysis, specimen: specimen_1) }
+    let(:analysis_2) { FactoryBot.create(:analysis, specimen: specimen_1) }
+    let(:analysis_3) { FactoryBot.create(:analysis, specimen: specimen_1) }
+    let(:chemistry) { FactoryBot.create(:chemistry, analysis: analysis_1, measurement_item: measurement_item, unit: unit, value: value) }
+    let(:chemistry_1) { FactoryBot.create(:chemistry, analysis: analysis_2, measurement_item: measurement_item, unit: unit_2, value: value) }
+    let(:chemistry_2) { FactoryBot.create(:chemistry, analysis: analysis_3, measurement_item: measurement_item, unit: unit, value: value) }
+    let(:measurement_item) { FactoryBot.create(:measurement_item, unit: unit, display_in_html: display_in_html, nickname: nickname) }
+    let(:measurement_item_2) { FactoryBot.create(:measurement_item, unit: unit, display_in_html: display_in_html, nickname: nickname) }
+    let(:unit) { FactoryBot.create(:unit, :name => 'cg/g', :conversion => 100) }
+    let(:unit_2) { FactoryBot.create(:unit, :name => 'ug/g', :conversion => 1000000) }
 
     let(:value) { 1 }
     let(:display_in_html) { "HTML" }
@@ -33,11 +33,11 @@ describe Chemistry do
 
   describe "#specimen" do
     subject { chemistry.specimen }
-    let(:specimen_1) { FactoryGirl.create(:specimen) }
-    let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1) }
-    let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis_1, measurement_item: measurement_item, unit: unit, value: value) }
-    let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit, display_in_html: display_in_html, nickname: nickname) }
-    let(:unit) { FactoryGirl.create(:unit) }
+    let(:specimen_1) { FactoryBot.create(:specimen) }
+    let(:analysis_1) { FactoryBot.create(:analysis, specimen: specimen_1) }
+    let(:chemistry) { FactoryBot.create(:chemistry, analysis: analysis_1, measurement_item: measurement_item, unit: unit, value: value) }
+    let(:measurement_item) { FactoryBot.create(:measurement_item, unit: unit, display_in_html: display_in_html, nickname: nickname) }
+    let(:unit) { FactoryBot.create(:unit) }
     let(:value) { 1 }
     let(:display_in_html) { "HTML" }
     let(:nickname) { "nickname" }
@@ -48,9 +48,9 @@ describe Chemistry do
 
   describe "#display_name" do
     subject { chemistry.display_name }
-    let(:chemistry) { FactoryGirl.build(:chemistry, measurement_item: measurement_item, unit: unit, value: value) }
-    let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit, display_in_html: display_in_html, nickname: nickname) }
-    let(:unit) { FactoryGirl.create(:unit) }
+    let(:chemistry) { FactoryBot.build(:chemistry, measurement_item: measurement_item, unit: unit, value: value) }
+    let(:measurement_item) { FactoryBot.create(:measurement_item, unit: unit, display_in_html: display_in_html, nickname: nickname) }
+    let(:unit) { FactoryBot.create(:unit) }
     let(:value) { 1 }
     let(:display_in_html) { "HTML" }
     let(:nickname) { "nickname" }
@@ -65,8 +65,8 @@ describe Chemistry do
 
   describe "#unit_conversion_value" do
     subject { chemistry.unit_conversion_value(unit_name, scale) }
-    let(:chemistry) { FactoryGirl.create(:chemistry, unit: unit, value: value) }
-    let(:unit) { FactoryGirl.create(:unit, name: "gram_per_gram", conversion: 1) }
+    let(:chemistry) { FactoryBot.create(:chemistry, unit: unit, value: value) }
+    let(:unit) { FactoryBot.create(:unit, name: "gram_per_gram", conversion: 1) }
     let(:value) { 10 }
     let(:unit_name) { "carat" }
     let(:scale) { 1 }
@@ -104,7 +104,7 @@ describe Chemistry do
         it { expect(subject).to eq 0.353 }
       end
       context "unit_name is 'centi_gram_per_gram'" do
-        let(:unit) { FactoryGirl.create(:unit, name: "centi_gram_per_gram", conversion: 100) }
+        let(:unit) { FactoryBot.create(:unit, name: "centi_gram_per_gram", conversion: 100) }
         let(:value) { 51.23 }
         let(:unit_name) { "centi_gram_per_gram" }
         it { expect(subject).to eq 51.23 }
@@ -134,13 +134,13 @@ describe Chemistry do
 
   describe "#measured_value" do
     subject { chemistry.measured_value }
-    let(:chemistry) { FactoryGirl.create(:chemistry, unit: unit, value: value) }
-    let(:unit) { FactoryGirl.create(:unit, name: "parts_per_milli", conversion: conversion) }
+    let(:chemistry) { FactoryBot.create(:chemistry, unit: unit, value: value) }
+    let(:unit) { FactoryBot.create(:unit, name: "parts_per_milli", conversion: conversion) }
     let(:conversion) { 1000000 }
     let(:value) { 3000000 }
 
     before do
-      parts = FactoryGirl.create(:unit, name: "parts", conversion: 1)
+      parts = FactoryBot.create(:unit, name: "parts", conversion: 1)
       Alchemist.setup
       Alchemist.register(:mass, parts.name.to_sym, 1.to_d / parts.conversion)
       Alchemist.register(:mass, unit.name.to_sym, 1.to_d / unit.conversion)
@@ -161,12 +161,12 @@ describe Chemistry do
 
   describe "#measured_uncertainty" do
     subject { chemistry.measured_uncertainty }
-    let(:chemistry) { FactoryGirl.create(:chemistry, unit: unit, uncertainty: uncertainty) }
-    let(:unit) { FactoryGirl.create(:unit, name: "parts_per_milli", conversion: conversion) }
+    let(:chemistry) { FactoryBot.create(:chemistry, unit: unit, uncertainty: uncertainty) }
+    let(:unit) { FactoryBot.create(:unit, name: "parts_per_milli", conversion: conversion) }
     let(:conversion) { 1000000 }
     context "unit is present" do
       before do
-        parts = FactoryGirl.create(:unit, name: "parts", conversion: 1)
+        parts = FactoryBot.create(:unit, name: "parts", conversion: 1)
         Alchemist.setup
         Alchemist.register(:mass, parts.name.to_sym, 1.to_d / parts.conversion)
         Alchemist.register(:mass, unit.name.to_sym, 1.to_d / unit.conversion)
@@ -203,15 +203,15 @@ describe Chemistry do
 
   describe "#to_pmlame" do
     subject { chemistry.to_pmlame }
-    let(:chemistry) { FactoryGirl.create(:chemistry, unit: unit, value: value, uncertainty: uncertainty, measurement_item: measurement_item) }
-    let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit, nickname: "SiO") }
-    let(:unit) { FactoryGirl.create(:unit, name: "parts_per_milli", conversion: conversion) }
+    let(:chemistry) { FactoryBot.create(:chemistry, unit: unit, value: value, uncertainty: uncertainty, measurement_item: measurement_item) }
+    let(:measurement_item) { FactoryBot.create(:measurement_item, unit: unit, nickname: "SiO") }
+    let(:unit) { FactoryBot.create(:unit, name: "parts_per_milli", conversion: conversion) }
     let(:conversion) { 1000000 }
     let(:value) { 3000000 }
     let(:uncertainty) { 2000000 }
 
     before do
-      parts = FactoryGirl.create(:unit, name: "parts", conversion: 1)
+      parts = FactoryBot.create(:unit, name: "parts", conversion: 1)
       Alchemist.setup
       Alchemist.register(:mass, parts.name.to_sym, 1.to_d / parts.conversion)
       Alchemist.register(:mass, unit.name.to_sym, 1.to_d / unit.conversion)

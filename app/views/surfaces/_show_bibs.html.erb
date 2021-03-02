@@ -14,7 +14,7 @@
   </tbody>
   <tfoot>
     <tr>
-    <%= form_tag link_by_global_id_surface_bibs_path(@surface),method: :post do %>
+    <%= form_with url:link_by_global_id_surface_bibs_path(@surface), method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
         <th>
 	  <div class="input-group">

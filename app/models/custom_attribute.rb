@@ -1,4 +1,4 @@
-class CustomAttribute < ActiveRecord::Base
+class CustomAttribute < ApplicationRecord
   has_many :specimen_custom_attributes, dependent: :destroy
   has_many :specimens, through: :specimen_custom_attributes
   

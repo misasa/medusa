@@ -12,7 +12,7 @@ class NestedResources::AttachmentFilesController < ApplicationController
   def create
     @attachment_file = AttachmentFile.new(attachment_file_params)
     @parent.attachment_files << @attachment_file if @attachment_file.save
-    respond_with @attachment_file, location: adjust_url_by_requesting_tab(request.referer), action: "error"      
+    respond_with @attachment_file, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
   def update
@@ -71,7 +71,7 @@ class NestedResources::AttachmentFilesController < ApplicationController
   def duplicate_global_id
     respond_to do |format|
       format.html { render "parts/duplicate_global_id", status: :unprocessable_entity }
-      format.all { render nothing: true, status: :unprocessable_entity }
+      format.all { render body: nil, status: :unprocessable_entity }
     end
   end
 

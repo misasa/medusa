@@ -1,4 +1,4 @@
-class Chemistry < ActiveRecord::Base
+class Chemistry < ApplicationRecord
   include HasRecordProperty
 
   belongs_to :analysis, touch: true
@@ -7,9 +7,9 @@ class Chemistry < ActiveRecord::Base
   delegate :specimen, to: :analysis
 
   # avoid failure, when analysis import from csv.
-  validates :analysis, existence: true, unless: -> { analysis && analysis.new_record? }
-  validates :measurement_item, existence: true
-  validates :unit, existence: true
+  validates :analysis, presence: true, unless: -> { analysis && analysis.new_record? }
+  validates :measurement_item, presence: true
+  validates :unit, presence: true
   validates :value, numericality: true
   validates :uncertainty, numericality: true, allow_nil: true
 

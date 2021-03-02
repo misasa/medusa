@@ -1,4 +1,4 @@
-class CreateChemistries < ActiveRecord::Migration
+class CreateChemistries < ActiveRecord::Migration[4.2]
   def change
     create_table :chemistries do |t|
       t.integer :analysis_id, :null => false

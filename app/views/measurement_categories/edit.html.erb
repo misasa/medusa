@@ -1,5 +1,5 @@
 <p>To list more measurement item, edit measurement-item and check <%= @measurement_category.name %> in Category.</p>
-<%= form_for @measurement_category do |f| %>
+<%= form_with model:@measurement_category do |f| %>
   <div class="col-lg-4">
     <%= error_notification(@measurement_category.errors) %>
 

@@ -1,4 +1,4 @@
-class Analysis < ActiveRecord::Base
+class Analysis < ApplicationRecord
   include HasRecordProperty
   include HasViewSpot
   include HasAttachmentFile
@@ -15,9 +15,9 @@ class Analysis < ActiveRecord::Base
   belongs_to :technique
   belongs_to :fits_file, class_name: 'AttachmentFile'
 
-  validates :specimen, existence: true, allow_nil: true
-  validates :device, existence: true, allow_nil: true
-  validates :technique, existence: true, allow_nil: true
+  validates :specimen, presence: { message: :required, if: -> { specimen_id.present? } }
+  validates :device, presence: { message: :required, if: -> { device_id.present? } }
+  validates :technique, presence: { message: :required, if: -> { technique_id.present? } }
   validates :name, presence: true, length: { maximum: 255 }
 
   before_update :update_table_analyses
@@ -291,10 +291,20 @@ class Analysis < ActiveRecord::Base
 
   def update_table_analyses
     return unless specimen_id_changed?
-    TableAnalysis.delete_all(analysis_id: id)
+    TableAnalysis.where(analysis_id: id).delete_all
     TableSpecimen.where(specimen_id: specimen_id).each do |table_specimen|
       max_priority = TableAnalysis.where(table_id: table_specimen.table_id, specimen_id: table_specimen.specimen_id).maximum(:priority) || 0
       TableAnalysis.create!(table_id: table_specimen.table_id, specimen_id: table_specimen.specimen_id, analysis_id: id, priority: (max_priority + 1))
+    end
+  end
+  
+  def _assign_attribute(k, v)
+    super
+  rescue ActiveModel::UnknownAttributeError
+    if k.to_s =~ /^(.+?)(_error)?(?:_in_(.+?))?$/
+      public_send("#{k}=", v)
+    else
+      raise
     end
   end
 

@@ -87,6 +87,12 @@ class SesarJson < ActiveResource::Base
   end
 
   class Errors < ActiveResource::Errors
+    def old_behavior_messages
+      @messages
+    end
+    alias_method :org_messages, :messages
+    alias_method :messages, :old_behavior_messages
+
     def from_json(json, save_cache = false)
       decoded = ActiveSupport::JSON.decode(json) || {} rescue {}
       decoded = decoded['sample'] if decoded.has_key?('sample')
@@ -113,6 +119,7 @@ class SesarJson < ActiveResource::Base
   end
 
   def self.sync(model)
+    p model.igsn
     return if model.igsn.blank?
     sesar_obj = self.find(model.igsn)
   rescue ActiveResource::BadRequest, ActiveResource::ForbiddenAccess, ActiveResource::ResourceNotFound => e
@@ -126,7 +133,7 @@ class SesarJson < ActiveResource::Base
     specimen.physical_form = get_physical_form_model
     specimen.classification = get_classification_model
     specimen.save
-    
+
     params = {}
     params[:name] = @attributes["name"]
     params[:description] = @attributes["description"]
@@ -140,7 +147,7 @@ class SesarJson < ActiveResource::Base
     params[:collection_date_precision] = @attributes["collection_date_precision"]
     params[:collector] = @attributes["collector"]
     params[:collector_detail] = @attributes["collector_detail"]
-    specimen.update_attributes(params)
+    specimen.update(params)
 
     associate_specimen_custom_attributes(specimen).each do |sca|
       specimen_custom_attribute = SpecimenCustomAttribute.find_by(specimen_id: sca.specimen_id, custom_attribute_id: sca.custom_attribute_id)
@@ -192,7 +199,7 @@ class SesarJson < ActiveResource::Base
   def get_place_model(specimen)
     locality = @attributes["locality"]
     locality_description = @attributes["locality_description"]
-    latitude = @attributes["latitude"] 
+    latitude = @attributes["latitude"]
     longitude = @attributes["longitude"]
     elevation = @attributes["elevation"]
     elevation_unit = @attributes["elevation_unit"]

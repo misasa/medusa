@@ -1,4 +1,4 @@
-class ChangeStaffIdAndCardIdToApiKey < ActiveRecord::Migration
+class ChangeStaffIdAndCardIdToApiKey < ActiveRecord::Migration[4.2]
   def up
     change_table :users do |t|
       t.string :api_key, comment: "APIキー"

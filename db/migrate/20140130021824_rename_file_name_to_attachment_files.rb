@@ -1,4 +1,4 @@
-class RenameFileNameToAttachmentFiles < ActiveRecord::Migration
+class RenameFileNameToAttachmentFiles < ActiveRecord::Migration[4.2]
   def change
     rename_column :attachment_files, :file_name, :data_file_name
     rename_column :attachment_files, :file_size, :data_file_size

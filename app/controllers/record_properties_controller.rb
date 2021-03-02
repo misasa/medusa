@@ -7,7 +7,7 @@ class RecordPropertiesController < ApplicationController
   end
 
   def update
-    @record_property.update_attributes(record_property_params)
+    @record_property.update(record_property_params)
     respond_with @record_property
   end
 

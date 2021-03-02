@@ -1,4 +1,4 @@
-class TableAnalysis < ActiveRecord::Base
+class TableAnalysis < ApplicationRecord
 
   belongs_to :table, touch: true
   belongs_to :specimen

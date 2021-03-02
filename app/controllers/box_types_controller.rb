@@ -5,7 +5,7 @@ class BoxTypesController < ApplicationController
   layout "admin"
 
   def index
-    @search = BoxType.search(params[:q])
+    @search = BoxType.ransack(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @box_types = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @box_types
@@ -26,7 +26,7 @@ class BoxTypesController < ApplicationController
   end
 
   def update
-    @box_type.update_attributes(box_type_params)
+    @box_type.update(box_type_params)
     respond_with(@box_type, location: box_types_path)
   end
 

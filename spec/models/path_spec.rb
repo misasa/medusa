@@ -1,18 +1,18 @@
 require 'spec_helper'
 
 describe Path do
-  let(:user){ FactoryGirl.create(:user, :username => "test-1", :email => "test-1@example.com")}
+  let(:user){ FactoryBot.create(:user, :username => "test-1", :email => "test-1@example.com")}
 
 	before do
     allow(User).to receive(:current).and_return(user)
 	end
 	describe "contents_of" do
-    let(:box){ FactoryGirl.create(:box, :name => "box-1", :parent_id => shelf.id) }
-    let(:shelf){ FactoryGirl.create(:box, :name => "D", :parent_id => room.id) }
-    let(:shelf_b){ FactoryGirl.create(:box, :name => "A", :parent_id => room_b.id) }
-    let(:room){ FactoryGirl.create(:box, :name => "127", :parent_id => building.id) }
-    let(:room_b){ FactoryGirl.create(:box, :name => "126", :parent_id => building.id) }
-    let(:building){ FactoryGirl.create(:box, :name => "main") }
+    let(:box){ FactoryBot.create(:box, :name => "box-1", :parent_id => shelf.id) }
+    let(:shelf){ FactoryBot.create(:box, :name => "D", :parent_id => room.id) }
+    let(:shelf_b){ FactoryBot.create(:box, :name => "A", :parent_id => room_b.id) }
+    let(:room){ FactoryBot.create(:box, :name => "127", :parent_id => building.id) }
+    let(:room_b){ FactoryBot.create(:box, :name => "126", :parent_id => building.id) }
+    let(:building){ FactoryBot.create(:box, :name => "main") }
 
     before do
       box
@@ -29,13 +29,13 @@ describe Path do
     let(:time_1_day_ago){ time_now.days_ago(1) }
     let(:time_2_days_ago){ time_now.days_ago(2) }
     let(:time_3_days_ago){ time_now.days_ago(3) }
-    let(:box){ FactoryGirl.create(:box, :name => "box-1", :parent_id => shelf_floor_1.id) }
-    let(:shelf_floor_1){ FactoryGirl.create(:box, :name => "1", :parent_id => shelf.id) }
-    let(:shelf_floor_2){ FactoryGirl.create(:box, :name => "2", :parent_id => shelf.id) }
-    let(:shelf_floor_3){ FactoryGirl.create(:box, :name => "3", :parent_id => shelf.id) }
-    let(:shelf_floor_4){ FactoryGirl.create(:box, :name => "4", :parent_id => shelf.id) }
-    let(:shelf){ FactoryGirl.create(:box, :name => "D", :parent_id => room.id) }
-    let(:room){ FactoryGirl.create(:box, :name => "127") }
+    let(:box){ FactoryBot.create(:box, :name => "box-1", :parent_id => shelf_floor_1.id) }
+    let(:shelf_floor_1){ FactoryBot.create(:box, :name => "1", :parent_id => shelf.id) }
+    let(:shelf_floor_2){ FactoryBot.create(:box, :name => "2", :parent_id => shelf.id) }
+    let(:shelf_floor_3){ FactoryBot.create(:box, :name => "3", :parent_id => shelf.id) }
+    let(:shelf_floor_4){ FactoryBot.create(:box, :name => "4", :parent_id => shelf.id) }
+    let(:shelf){ FactoryBot.create(:box, :name => "D", :parent_id => room.id) }
+    let(:room){ FactoryBot.create(:box, :name => "127") }
 	  let(:ids){ shelf_floor_3.ancestors.map(&:id).push(shelf_floor_3.id) }
     before do
       shelf
@@ -54,8 +54,8 @@ describe Path do
 
   describe ".cont_at(date)"do
     subject { Path.cont_at(date) }
-    let!(:specimen) { FactoryGirl.create(:specimen) }
-   
+    let!(:specimen) { FactoryBot.create(:specimen) }
+
     context "date指定あり" do
       let(:date) { "21151117" }
       it "result" do
@@ -78,10 +78,10 @@ describe Path do
 
   describe ".snapshot" do
     subject { Path.snapshot(box, dst_date) }
-    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:specimen) { FactoryBot.create(:specimen) }
     let(:box) { specimen.box }
     let(:dst_date) { "2005-11-19" }
-    let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: brought_in_at, brought_out_at: brought_out_at) } 
+    let(:path) { FactoryBot.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: brought_in_at, brought_out_at: brought_out_at) }
     let(:paths) { Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at, :checked_at) }
     let(:brought_out_at) { "20051120" }
     let(:brought_in_at) { "20051117" }
@@ -90,7 +90,7 @@ describe Path do
     end
     context "brought_in_at before dst_date and brought-out_at after dst_date" do
       it {
-        expect(subject[0]).to eql(path) 
+        expect(subject[0]).to eql(path)
       }
     end
 
@@ -99,7 +99,7 @@ describe Path do
       let(:brought_in_at) { "20051117" }
 
       it {
-        expect(subject).to be_empty 
+        expect(subject).to be_empty
       }
     end
 
@@ -109,7 +109,7 @@ describe Path do
       let(:brought_in_at) { "20051125" }
 
       it {
-        expect(subject).to be_empty 
+        expect(subject).to be_empty
       }
     end
 
@@ -117,11 +117,11 @@ describe Path do
 
   describe ".integ" do
     subject { Path.integ(box, src_date, dst_date) }
-    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:specimen) { FactoryBot.create(:specimen) }
     let(:box) { specimen.box }
     let(:dst_date) { "2005-11-19" }
     let(:src_date) { "2005-11-16" }
-    let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: brought_in_at, brought_out_at: brought_out_at) } 
+    let(:path) { FactoryBot.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: brought_in_at, brought_out_at: brought_out_at) }
     let(:paths) { Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at, :checked_at) }
     let(:brought_out_at) { "20051120" }
     let(:brought_in_at) { "20051117" }
@@ -130,10 +130,10 @@ describe Path do
       paths
     end
     context "brought_in_at after src_date and brought-out_at after dst_date", :current => true do
-      #it { expect(subject[0].attributes).to include paths[0].attributes }
+      #it { expect(subject[0].attributes).to include paths[1].attributes }
       it {
-        expect(subject[0].attributes).to include paths[1].attributes 
-        expect(subject[0].attributes["sign"]).to eq "+" 
+        expect(subject[0].attributes).to include paths[1].attributes
+        expect(subject[0].attributes["sign"]).to eq "+"
       }
     end
     context "brought_in_at before src_date and brought-out_at after dst_date" do
@@ -149,14 +149,14 @@ describe Path do
     end
 
   end
-  
+
   describe ".diff(box, src_date, dst_date)" do
     subject { Path.diff(box, src_date, dst_date) }
-    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:specimen) { FactoryBot.create(:specimen) }
     let(:box) { specimen.box }
     let(:src_date) { "20051117" }
     let(:dst_date) { "20051119" }
-    let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: brought_in_at, brought_out_at: brought_out_at) } 
+    let(:path) { FactoryBot.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: brought_in_at, brought_out_at: brought_out_at) }
     let(:paths) { Path.select(:datum_id, :datum_type, :ids, :brought_in_at, :brought_out_at) }
 
     context "brought-in before src_date" do
@@ -169,7 +169,7 @@ describe Path do
         let(:brought_out_at){ "20051115" }
         it "returns empty" do
           paths
-          expect(subject).to eq []      
+          expect(subject).to eq []
         end
       end
 
@@ -188,7 +188,7 @@ describe Path do
         let(:brought_out_at){ "20051120" }
         it "returns empty" do
           paths
-          expect(subject).to eq []      
+          expect(subject).to eq []
         end
       end
 
@@ -196,7 +196,7 @@ describe Path do
         let(:brought_out_at){ nil }
         it "returns empty" do
           paths
-          expect(subject).to eq []      
+          expect(subject).to eq []
         end
       end
     end
@@ -211,7 +211,7 @@ describe Path do
         let(:brought_out_at){ "20051118" }
         it "returns empty" do
           paths
-          expect(subject).to eq []      
+          expect(subject).to eq []
         end
       end
 
@@ -255,7 +255,7 @@ describe Path do
       end
       it "returns []" do
         paths
-        expect(subject).to eq []        
+        expect(subject).to eq []
       end
     end
 
@@ -269,7 +269,7 @@ describe Path do
         let(:brought_out_at){ "20051122" }
         it "returns empty" do
           paths
-          expect(subject).to eq []      
+          expect(subject).to eq []
         end
       end
 
@@ -277,13 +277,13 @@ describe Path do
         let(:brought_out_at){ nil }
         it "returns empty" do
           paths
-          expect(subject).to eq []      
+          expect(subject).to eq []
         end
       end
 
     end
     context "該当あり(sign+)" do
-      before { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: "20151118", brought_out_at: "20151120") }
+      before { FactoryBot.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: "20151118", brought_out_at: "20151120") }
       let(:src_date) { "20151117" }
       let(:dst_date) { "20151119" }
       it "result" do
@@ -294,7 +294,7 @@ describe Path do
     end
     context "該当あり(sign-)" do
       before do
-        FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: "2005-11-20 01:40:12", brought_out_at: "2005-11-23 01:43:12")
+        FactoryBot.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: "2005-11-20 01:40:12", brought_out_at: "2005-11-23 01:43:12")
       end
       let(:src_date) { "20051121" }
       let(:dst_date) { "20051124" }
@@ -313,11 +313,11 @@ describe Path do
 
   describe "change" do
     subject { Path.change(box, src_date, dst_date) }
-    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:specimen) { FactoryBot.create(:specimen) }
     let(:box) { specimen.box }
     let(:brought_in_at) { Date.new(2015, 12, 2) }
     let(:brought_out_at) { Date.new(2015, 12, 3) }
-    before { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: brought_in_at, brought_out_at: brought_out_at) }
+    before { FactoryBot.create(:path_specimen, datum_id: specimen.id, ids: [box.id], brought_in_at: brought_in_at, brought_out_at: brought_out_at) }
     context "brought_in_atが期間内" do
       let(:src_date) { Time.zone.local(2015, 12, 2).beginning_of_day }
       let(:dst_date) { Time.zone.local(2015, 12, 2).end_of_day }
@@ -334,11 +334,11 @@ describe Path do
       it { expect(subject).to be_blank }
     end
   end
-  
+
   describe "each"do
-    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:specimen) { FactoryBot.create(:specimen) }
     context "idsがpresent" do
-      let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [specimen.box.id]) }
+      let(:path) { FactoryBot.create(:path_specimen, datum_id: specimen.id, ids: [specimen.box.id]) }
       it "result" do
         proc = Proc.new do |sample|
           sample
@@ -355,7 +355,7 @@ describe Path do
       end
     end
     context "idsがblank" do
-      let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: nil) }
+      let(:path) { FactoryBot.create(:path_specimen, datum_id: specimen.id, ids: nil) }
       it "result" do
         count = 0
         proc = Proc.new do |sample|
@@ -374,19 +374,19 @@ describe Path do
       end
     end
   end
-  
+
   describe "boxes"do
-    let(:specimen) { FactoryGirl.create(:specimen) }
+    let(:specimen) { FactoryBot.create(:specimen) }
     context "idsがpresent" do
-      let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: [specimen.box.id]) }
+      let(:path) { FactoryBot.create(:path_specimen, datum_id: specimen.id, ids: [specimen.box.id]) }
       it { expect(path.boxes).to eq [specimen.box] }
     end
     context "idsがblank" do
-      let(:path) { FactoryGirl.create(:path_specimen, datum_id: specimen.id, ids: nil) }
+      let(:path) { FactoryBot.create(:path_specimen, datum_id: specimen.id, ids: nil) }
       it { expect(path.boxes).to eq [] }
     end
   end
-  
+
   describe ".ransackable_scopes(auth_object = nil)"do
     subject { Path.ransackable_scopes(auth_object = nil) }
     it { expect(subject).to eq [:exists_at] }

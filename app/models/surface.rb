@@ -1,5 +1,5 @@
 require 'matrix'
-class Surface < ActiveRecord::Base
+class Surface < ApplicationRecord
   include HasRecordProperty
 
   paginates_per 10
@@ -8,7 +8,7 @@ class Surface < ActiveRecord::Base
 
   has_many :specimen_surfaces, dependent: :destroy
   has_many :specimens, through: :specimen_surfaces
-  has_many :surface_images, :dependent => :destroy, :order => ("position DESC")
+  has_many :surface_images, -> { order('position DESC') }, dependent: :destroy
   has_many :calibrated_surface_images, -> { calibrated }, class_name: 'SurfaceImage'
   has_many :uncalibrated_surface_images, -> { uncalibrated }, class_name: 'SurfaceImage'
   has_many :not_belongs_to_layer_surface_images, -> { not_belongs_to_layer }, class_name: 'SurfaceImage'
@@ -21,7 +21,7 @@ class Surface < ActiveRecord::Base
 
   has_many :images, through: :surface_images
   has_many :fits_files, -> { fits_files }, through: :surface_images, source: :image
-  has_many :surface_layers, :dependent => :destroy, :order => ("priority DESC")
+  has_many :surface_layers, -> { order('priority DESC') }, dependent: :destroy
   has_many :wall_surface_layers, -> { wall }, class_name: 'SurfaceLayer'
 #  has_many :spots, through: :images
 #  has_many :spots, class_name: "Spot", foreign_key: :surface_id

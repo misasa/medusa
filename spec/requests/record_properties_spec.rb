@@ -5,11 +5,11 @@ describe "record_property" do
     login login_user
     User.current = login_user
   end
-  let(:login_user) { FactoryGirl.create(:user) }
+  let(:login_user) { FactoryBot.create(:user) }
   let(:headers) { { "ACCEPT" => "application/json", "HTTP_ACCEPT" => "application/json", "CONTENT_TYPE" => "application/json" } }
 
   describe "analyses" do
-    let!(:analysis) { FactoryGirl.create(:analysis) }
+    let!(:analysis) { FactoryBot.create(:analysis) }
     let(:disposed) { false }
     let(:lost) { false }
     before do
@@ -62,7 +62,7 @@ describe "record_property" do
   end
 
   describe "attachment_files" do
-    let!(:attachment_file) { FactoryGirl.create(:attachment_file) }
+    let!(:attachment_file) { FactoryBot.create(:attachment_file) }
     let(:disposed) { false }
     let(:lost) { false }
     before do
@@ -115,7 +115,7 @@ describe "record_property" do
   end
 
   describe "bibs" do
-    let!(:bib) { FactoryGirl.create(:bib) }
+    let!(:bib) { FactoryBot.create(:bib) }
     let(:disposed) { false }
     let(:lost) { false }
     before do
@@ -168,7 +168,7 @@ describe "record_property" do
   end
 
   describe "boxes" do
-    let!(:box) { FactoryGirl.create(:box) }
+    let!(:box) { FactoryBot.create(:box) }
     let(:disposed) { false }
     let(:lost) { false }
     before do
@@ -221,7 +221,7 @@ describe "record_property" do
   end
 
   describe "places" do
-    let!(:place) { FactoryGirl.create(:place) }
+    let!(:place) { FactoryBot.create(:place) }
     let(:disposed) { false }
     let(:lost) { false }
     before do
@@ -274,7 +274,7 @@ describe "record_property" do
   end
 
   describe "specimens" do
-    let!(:specimen) { FactoryGirl.create(:specimen) }
+    let!(:specimen) { FactoryBot.create(:specimen) }
     let(:disposed) { false }
     let(:lost) { false }
     before do

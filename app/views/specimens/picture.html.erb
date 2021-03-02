@@ -6,13 +6,13 @@
     <%= @specimen.attachment_files.first.decorate.family_tree %>
   </div>
 
-  <%= form_for Spot.new, url: attachment_file_spots_path(@specimen.attachment_files.first) do |f| %>
+  <%= form_with model:Spot.new, url: attachment_file_spots_path(@specimen.attachment_files.first) do |f| %>
     <table>
       <tr>
         <td><%=icon_tag("screenshot") %> (link ID </td>
           <td>
             <div class="input-group">
-              <%= f.text_field :target_uid, class: "form-control input-sm" %>
+              <%= f.text_field :target_uid, id: "spot_target_uid", class: "form-control input-sm" %>
               <span class="input-group-addon">
                 <%= link_to records_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#spot_target_uid", id: "record-property-search" do %>
                   <span class="glyphicon glyphicon-search"></span>
@@ -41,7 +41,7 @@
     <% files.each do |file| %>
     <div class="col-lg-3">
       <%= link_to attachment_file_path(file, format: :svg), remote: true, class: "thumbnail" do %>
-        <%= image_tag file.path %>
+        <%= image_tag file.path, alt: File.basename(file.path, '.*').sub(/-[[:xdigit:]]{32}\z/, '').tr('-_', ' ').capitalize %>
       <% end %>
     </div>
     <% end %>

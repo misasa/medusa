@@ -4,8 +4,8 @@ describe "TableSpecimen" do
 
   describe "before_create" do
     describe "assign_position" do
-      let(:table_specimen) { FactoryGirl.create(:table_specimen, position: nil, table: table) }
-      let(:table) { FactoryGirl.create(:table) }
+      let(:table_specimen) { FactoryBot.create(:table_specimen, position: nil, table: table) }
+      let(:table) { FactoryBot.create(:table) }
       subject { table_specimen.position }
       context "not exists other table_specimen record" do
         before do
@@ -15,9 +15,9 @@ describe "TableSpecimen" do
         it { expect(subject).to eq 1 }
       end
       context "exists other table_specimen record" do
-        let(:other_table_specimen_1) { FactoryGirl.create(:table_specimen, position: 10, table: table) }
-        let(:other_table_specimen_2) { FactoryGirl.create(:table_specimen, position: 20, table: table_2) }
-        let(:table_2) { FactoryGirl.create(:table) }
+        let(:other_table_specimen_1) { FactoryBot.create(:table_specimen, position: 10, table: table) }
+        let(:other_table_specimen_2) { FactoryBot.create(:table_specimen, position: 20, table: table_2) }
+        let(:table_2) { FactoryBot.create(:table) }
         before do
           other_table_specimen_1
           other_table_specimen_2
@@ -29,14 +29,14 @@ describe "TableSpecimen" do
     end
     
     describe "create_table_analyses" do
-      let(:table_specimen) { FactoryGirl.create(:table_specimen, specimen: specimen, table: table) }
-      let(:specimen) { FactoryGirl.create(:specimen) }
-      let(:sub_specimen){  FactoryGirl.create(:specimen, parent_id: specimen.id) }
-      let(:table) { FactoryGirl.create(:table) }
-      let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen) }
-      let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen) }
-      let(:analysis_3) { FactoryGirl.create(:analysis, specimen: sub_specimen) }
-      let(:analysis_4) { FactoryGirl.create(:analysis, specimen: sub_specimen) }
+      let(:table_specimen) { FactoryBot.create(:table_specimen, specimen: specimen, table: table) }
+      let(:specimen) { FactoryBot.create(:specimen) }
+      let(:sub_specimen){  FactoryBot.create(:specimen, parent_id: specimen.id) }
+      let(:table) { FactoryBot.create(:table) }
+      let(:analysis_1) { FactoryBot.create(:analysis, specimen: specimen) }
+      let(:analysis_2) { FactoryBot.create(:analysis, specimen: specimen) }
+      let(:analysis_3) { FactoryBot.create(:analysis, specimen: sub_specimen) }
+      let(:analysis_4) { FactoryBot.create(:analysis, specimen: sub_specimen) }
 
       before do
         analysis_1

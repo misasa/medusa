@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe ClassificationsController do
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
 
   describe "GET index" do
-    let(:classification_1) { FactoryGirl.create(:classification, name: "hoge",  sesar_material: "Rock") }
-    let(:classification_2) { FactoryGirl.create(:classification, name: "classification_2",  sesar_material: "Rock") }
-    let(:classification_3) { FactoryGirl.create(:classification, name: "classification_3",  sesar_material: "Rock") }
+    let(:classification_1) { FactoryBot.create(:classification, name: "hoge",  sesar_material: "Rock") }
+    let(:classification_2) { FactoryBot.create(:classification, name: "classification_2",  sesar_material: "Rock") }
+    let(:classification_3) { FactoryBot.create(:classification, name: "classification_3",  sesar_material: "Rock") }
     let(:classifications){ Classification.all }
     before do
       classification_1;classification_2;classification_3
@@ -18,19 +18,19 @@ describe ClassificationsController do
 
   # This "GET show" has no html.
   describe "GET show" do
-    let(:classification) { FactoryGirl.create(:classification,  sesar_material: "Rock") }
+    let(:classification) { FactoryBot.create(:classification,  sesar_material: "Rock") }
     before do
       classification
-      get :show, id: classification.id, format: :json
+      get :show, params: { id: classification.id, format: :json }
     end
     it { expect(response.body).to eq(classification.to_json) }
   end
 
   describe "GET edit" do
-    let(:classification) { FactoryGirl.create(:classification,  sesar_material: "Rock") }
+    let(:classification) { FactoryBot.create(:classification,  sesar_material: "Rock") }
     before do
       classification
-      get :edit, id: classification.id
+      get :edit, params: { id: classification.id }
     end
     it { expect(assigns(:classification)).to eq classification }
     it { expect(assigns(:material)).to eq ["Biology","Gas","Ice","Liquid>aqueous","Liquid>organic","Mineral","Not applicable","Other","Particulate","Rock","Sedimen","Soil","Synthetic"] }
@@ -39,9 +39,9 @@ describe ClassificationsController do
   describe "POST create" do
     describe "with valid attributes" do
       let(:attributes) { {name: "classification_name", description: "new descripton", sesar_material: "Rock"} }
-      it { expect { post :create, classification: attributes }.to change(Classification, :count).by(1) }
+      it { expect { post :create, params: { classification: attributes }}.to change(Classification, :count).by(1) }
       context "assigns a newly created classification as @classification" do
-        before {post :create, classification: attributes}
+        before {post :create, params: { classification: attributes }}
         it{expect(assigns(:classification)).to be_persisted}
         it{expect(assigns(:classification).name).to eq(attributes[:name])}
         it{expect(assigns(:classification).sesar_material).to eq(attributes[:sesar_material])}
@@ -51,9 +51,9 @@ describe ClassificationsController do
     describe "with invalid attributes" do
       let(:attributes) { {name: ""} }
       before { allow_any_instance_of(Classification).to receive(:save).and_return(false) }
-      it { expect { post :create, classification: attributes }.not_to change(Classification, :count) }
+      it { expect { post :create, params: { classification: attributes }}.not_to change(Classification, :count) }
       context "assigns a newly but unsaved classification as @classification" do
-        before {post :create, classification: attributes}
+        before {post :create, params: { classification: attributes }}
         it{expect(assigns(:classification)).to be_new_record}
         it{expect(assigns(:classification).name).to eq(attributes[:name])}
         it{expect(assigns(:classification).description).to eq(attributes[:description])}
@@ -62,10 +62,10 @@ describe ClassificationsController do
   end
 
   describe "PUT update" do
-    let(:classification) { FactoryGirl.create(:classification, name: "classification", description: "description", sesar_material: "Gas") }
+    let(:classification) { FactoryBot.create(:classification, name: "classification", description: "description", sesar_material: "Gas") }
     before do
       classification
-      put :update, id: classification.id, classification: attributes
+      put :update, params: { id: classification.id, classification: attributes }
     end
     describe "with valid attributes" do
       let(:attributes) { {name: "update_name",description: "update description", sesar_material: "Rock", sesar_classification: "Igneous"} }
@@ -78,7 +78,7 @@ describe ClassificationsController do
     end
     describe "with invalid attributes" do
       let(:attributes) { {name: "",description: "update description"} }
-      before { allow(classification).to receive(:update_attributes).and_return(false) }
+      before { allow(classification).to receive(:update).and_return(false) }
       it { expect(assigns(:classification)).to eq classification }
       it { expect(assigns(:classification).name).to eq attributes[:name] }
       it { expect(assigns(:classification).description).to eq attributes[:description] }
@@ -96,9 +96,9 @@ describe ClassificationsController do
   end
 
   describe "DELETE destroy" do
-    let(:classification) { FactoryGirl.create(:classification, name: "classification", sesar_material: "Rock", description: "description") }
+    let(:classification) { FactoryBot.create(:classification, name: "classification", sesar_material: "Rock", description: "description") }
     before{ classification }
-    it { expect { delete :destroy,id: classification.id }.to change(Classification, :count).by(-1) }
+    it { expect { delete :destroy, params: { id: classification.id }}.to change(Classification, :count).by(-1) }
   end
-  
+
 end

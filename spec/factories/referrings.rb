@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :referring do
     association :bib, factory: :bib
     association :referable, factory: :place

@@ -1,10 +1,8 @@
-class AddCommentToGroupMembers < ActiveRecord::Migration
+class AddCommentToGroupMembers < ActiveRecord::Migration[4.2]
   def change
-    change_table "group_members" do |t|
-      t.comment "グループメンバー"
-      t.change_comment :id, "ID"
-      t.change_comment :group_id, "グループID"
-      t.change_comment :user_id, "ユーザID"
-    end
+    change_table_comment(:group_members, "グループメンバー")
+    change_column_comment(:group_members, :id, "ID")
+    change_column_comment(:group_members, :group_id, "グループID")
+    change_column_comment(:group_members, :user_id, "ユーザID")
   end
 end

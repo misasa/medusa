@@ -5,7 +5,7 @@ class UnitsController < ApplicationController
   layout "admin"
 
   def index
-    @search = Unit.search(params[:q])
+    @search = Unit.ransack(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @units = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @units
@@ -26,7 +26,7 @@ class UnitsController < ApplicationController
   end
 
   def update
-    @unit.update_attributes(unit_params)
+    @unit.update(unit_params)
     respond_with(@unit, location: units_path)
   end
 

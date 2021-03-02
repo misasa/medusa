@@ -6,7 +6,7 @@ class ClassificationsController < ApplicationController
   layout "admin"
 
   def index
-    @search = Classification.search(params[:q])
+    @search = Classification.ransack(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @classifications = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @classifications
@@ -29,7 +29,7 @@ class ClassificationsController < ApplicationController
   def update
     update_params = classification_params
     if @classification.check_classification(update_params["sesar_material"], update_params["sesar_classification"])
-      @classification.update_attributes(update_params)
+      @classification.update(update_params)
     end
     respond_with(@classification, location: classifications_path)
 

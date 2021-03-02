@@ -20,7 +20,7 @@ module ToggleColumn
       end
 
       def url_for(toggle_column)
-        @template.url_for @template.params.merge(toggle_column: toggle_column)
+        @template.url_for @template.params.permit!.merge(toggle_column: toggle_column)
       end
 
       def to_s

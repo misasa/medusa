@@ -1,4 +1,4 @@
-class ChangePermissionAttributesOfRecordProperties < ActiveRecord::Migration
+class ChangePermissionAttributesOfRecordProperties < ActiveRecord::Migration[4.2]
   def change
     change_table :record_properties do |t|
       t.boolean :owner_readable, null: false, default: true

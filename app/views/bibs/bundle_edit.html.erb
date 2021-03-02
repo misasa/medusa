@@ -5,12 +5,12 @@
       <i class="glyphicon glyphicon-tag"></i>
     <% end %>
     ,<%= link_to("bibtex", download_to_tex_bibs_path(ids: bib_ids)) %>
-    ,<%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_bundle_card_bibs_path(ids: bib_ids)) %>,
+    ,<%= link_to(image_pack_tag("icon_pdf_1.png", size: "24x24"), download_bundle_card_bibs_path(ids: bib_ids)) %>,
     and <%= link_to("A4", download_bundle_card_bibs_path(ids: bib_ids, a4: true)) %>
   </div>
 <% end %>
 
-<%= form_for Bib.new, url: bundle_update_bibs_path do |f| %>
+<%= form_with model:Bib.new, url: bundle_update_bibs_path do |f| %>
 <table class="table table-condensed table-striped">
   <thead>
     <tr>

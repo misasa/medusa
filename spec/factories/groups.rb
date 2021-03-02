@@ -1,5 +1,5 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :group do
-    name "グループ１"
+    name  { "グループ１" }
   end
 end

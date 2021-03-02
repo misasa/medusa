@@ -1,4 +1,4 @@
-class SpecimenCustomAttribute < ActiveRecord::Base
+class SpecimenCustomAttribute < ApplicationRecord
   belongs_to :specimen
   belongs_to :custom_attribute
   

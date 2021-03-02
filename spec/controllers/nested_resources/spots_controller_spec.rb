@@ -4,9 +4,9 @@ describe NestedResources::SpotsController do
   context "under attachment_file" do
       let(:parent_name){:attachment_file}
       let(:child_name){:spot}
-      let(:parent) { FactoryGirl.create(parent_name) }
-      let(:child) { FactoryGirl.create(child_name) }
-      let(:user) { FactoryGirl.create(:user) }
+      let(:parent) { FactoryBot.create(parent_name) }
+      let(:child) { FactoryBot.create(child_name) }
+      let(:user) { FactoryBot.create(:user) }
       let(:url){"where_i_came_from"}
       let(:spot_x){1}
       let(:attributes) { {spot_x: spot_x,spot_y: 0} }
@@ -16,7 +16,7 @@ describe NestedResources::SpotsController do
       before { child }
 
       describe "POST create" do
-        let(:method){post :create, parent_resource: parent_name, attachment_file_id: parent, spot: attributes, association_name: :spots}
+        let(:method){post :create, params: { parent_resource: parent_name, attachment_file_id: parent, spot: attributes, association_name: :spots }}
         before{child}
         it { expect{method}.to change(Spot, :count).by(1) }
         context "validate" do
@@ -33,7 +33,7 @@ describe NestedResources::SpotsController do
         end
       end
       describe "PUT update" do
-        let(:method){put :update, parent_resource: parent_name, attachment_file_id: parent, id: child_id, association_name: :spots}
+        let(:method){put :update, params: { parent_resource: parent_name, attachment_file_id: parent, id: child_id, association_name: :spots }}
         let(:child_id){child.id}
         it { expect {method}.to change(Spot, :count).by(0) }
         context "present child" do
@@ -48,7 +48,7 @@ describe NestedResources::SpotsController do
       end
 
       describe "DELETE destory" do
-        let(:method){delete :destroy, parent_resource: parent_name, attachment_file_id: parent, id: child_id, association_name: :spots}
+        let(:method){delete :destroy, params: { parent_resource: parent_name, attachment_file_id: parent, id: child_id, association_name: :spots }}
         before { parent.spots << child}
         let(:child_id){child.id}
         it { expect {method}.to change(Spot, :count).by(-1) }
@@ -67,9 +67,9 @@ describe NestedResources::SpotsController do
   context "under surface" do
       let(:parent_name){:surface}
       let(:child_name){:spot}
-      let(:parent) { FactoryGirl.create(parent_name) }
-      let(:child) { FactoryGirl.create(child_name) }
-      let(:user) { FactoryGirl.create(:user) }
+      let(:parent) { FactoryBot.create(parent_name) }
+      let(:child) { FactoryBot.create(child_name) }
+      let(:user) { FactoryBot.create(:user) }
       let(:url){"where_i_came_from"}
       let(:spot_x){1}
       let(:attributes) { {world_x: spot_x,world_y: 0} }
@@ -77,9 +77,9 @@ describe NestedResources::SpotsController do
       before { sign_in user }
       before { parent }
       before { child }
-      
+
       describe "POST create" do
-        let(:method){post :create, parent_resource: parent_name, surface_id: parent, spot: attributes, association_name: :spots}
+        let(:method){post :create, params: { parent_resource: parent_name, surface_id: parent, spot: attributes, association_name: :spots }}
         before{child}
         it { expect{method}.to change(Spot, :count).by(1) }
         context "validate" do
@@ -97,9 +97,9 @@ describe NestedResources::SpotsController do
         end
       end
       describe "PUT update" do
-        let(:method){put :update, parent_resource: parent_name, surface_id: parent, id: child_id, association_name: :spots, spot: attributes }
+        let(:method){put :update, params: { parent_resource: parent_name, surface_id: parent, id: child_id, association_name: :spots, spot: attributes }}
         let(:child_id){child.id}
-      let(:attributes){ {name: 'update_name'} } 
+      let(:attributes){ {name: 'update_name'} }
         it { expect {method}.to change(Spot, :count).by(0) }
         context "present child" do
           before { method }
@@ -113,7 +113,7 @@ describe NestedResources::SpotsController do
       end
 
       describe "DELETE destory" do
-        let(:method){delete :destroy, parent_resource: parent_name, surface_id: parent, id: child_id, association_name: :spots}
+        let(:method){delete :destroy, params: { parent_resource: parent_name, surface_id: parent, id: child_id, association_name: :spots }}
         before { parent.direct_spots << child}
         let(:child_id){child.id}
         it { expect {method}.to change(Spot, :count).by(-1) }

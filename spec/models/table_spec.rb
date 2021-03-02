@@ -2,23 +2,23 @@
 require "spec_helper"
 
 describe "Table" do
-  let(:table) { FactoryGirl.create(:table, measurement_category: measurement_category) }
-  let(:measurement_category) { FactoryGirl.create(:measurement_category, unit: unit) }
-  let(:unit) { FactoryGirl.create(:unit) }
-  let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
-  let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit) }
-  let(:table_specimen) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen) }
-  let(:specimen) { FactoryGirl.create(:specimen) }
-  let(:analysis) { FactoryGirl.create(:analysis, specimen: specimen) }
-  let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item) }
-  let(:sub_specimen) { FactoryGirl.create(:specimen, parent_id: specimen.id) }
-  let(:sub_analysis) { FactoryGirl.create(:analysis, specimen: sub_specimen) }
-  let(:sub_chemistry) { FactoryGirl.create(:chemistry, analysis: sub_analysis, unit: unit, measurement_item: measurement_item) }
+  let(:table) { FactoryBot.create(:table, measurement_category: measurement_category) }
+  let(:measurement_category) { FactoryBot.create(:measurement_category, unit: unit) }
+  let(:unit) { FactoryBot.create(:unit) }
+  let(:category_measurement_item) { FactoryBot.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
+  let(:measurement_item) { FactoryBot.create(:measurement_item, unit: unit) }
+  let(:table_specimen) { FactoryBot.create(:table_specimen, table: table, specimen: specimen) }
+  let(:specimen) { FactoryBot.create(:specimen) }
+  let(:analysis) { FactoryBot.create(:analysis, specimen: specimen) }
+  let(:chemistry) { FactoryBot.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item) }
+  let(:sub_specimen) { FactoryBot.create(:specimen, parent_id: specimen.id) }
+  let(:sub_analysis) { FactoryBot.create(:analysis, specimen: sub_specimen) }
+  let(:sub_chemistry) { FactoryBot.create(:chemistry, analysis: sub_analysis, unit: unit, measurement_item: measurement_item) }
 
   describe "validates" do
     describe "age_unit" do
       subject { table.valid? }
-      let(:table) { FactoryGirl.build(:table, with_age: with_age, age_unit: age_unit) }
+      let(:table) { FactoryBot.build(:table, with_age: with_age, age_unit: age_unit) }
       let(:with_age) { true }
       let(:age_unit) { "Ka" }
       context "is present" do
@@ -43,7 +43,7 @@ describe "Table" do
     end
     describe "age_scale" do
       subject { table.valid? }
-      let(:table) { FactoryGirl.build(:table, with_age: with_age, age_scale: age_scale) }
+      let(:table) { FactoryBot.build(:table, with_age: with_age, age_scale: age_scale) }
       let(:with_age) { true }
       let(:age_scale) { 0 }
       context "is present" do
@@ -156,7 +156,7 @@ describe "Table" do
         table_specimen
         allow(Table::Row).to receive(:new).with(table, category_measurement_item_1, [chemistry]).and_return(:row_1)
       end
-      let(:category_measurement_item_1) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
+      let(:category_measurement_item_1) { FactoryBot.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
       it { expect { |b| table.each(&b) }.to yield_control.once }
       it { expect { |b| table.each(&b) }.to yield_successive_args(:row_1) }
     end
@@ -171,8 +171,8 @@ describe "Table" do
         allow(Table::Row).to receive(:new).with(table, category_measurement_item_1, [chemistry]).and_return(:row_1)
         allow(Table::Row).to receive(:new).with(table, category_measurement_item_2, [chemistry]).and_return(:row_2)
       end
-      let(:category_measurement_item_1) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
-      let(:category_measurement_item_2) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
+      let(:category_measurement_item_1) { FactoryBot.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
+      let(:category_measurement_item_2) { FactoryBot.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
       it { expect { |b| table.each(&b) }.to yield_control.twice }
       it { expect { |b| table.each(&b) }.to yield_successive_args(:row_2, :row_1) }
     end
@@ -187,8 +187,8 @@ describe "Table" do
       before do
         table.method_sign(technique_1, device_1)
       end
-      let(:technique_1) { FactoryGirl.create(:technique, name: "technique_1") }
-      let(:device_1) { FactoryGirl.create(:device, name: "device_1") }
+      let(:technique_1) { FactoryBot.create(:technique, name: "technique_1") }
+      let(:device_1) { FactoryBot.create(:device, name: "device_1") }
       it { expect(subject).to eq({"a" => "#{technique_1.name} on #{device_1.name}"}) }
     end
     context "table has 2 descriptions" do
@@ -196,10 +196,10 @@ describe "Table" do
         table.method_sign(technique_1, device_1)
         table.method_sign(technique_2, device_2)
       end
-      let(:technique_1) { FactoryGirl.create(:technique, name: "technique_1") }
-      let(:technique_2) { FactoryGirl.create(:technique, name: "technique_2") }
-      let(:device_1) { FactoryGirl.create(:device, name: "device_1") }
-      let(:device_2) { FactoryGirl.create(:device, name: "device_2") }
+      let(:technique_1) { FactoryBot.create(:technique, name: "technique_1") }
+      let(:technique_2) { FactoryBot.create(:technique, name: "technique_2") }
+      let(:device_1) { FactoryBot.create(:device, name: "device_1") }
+      let(:device_2) { FactoryBot.create(:device, name: "device_2") }
       it { expect(subject).to eq({"a" => "#{technique_1.name} on #{device_1.name}", "b" => "#{technique_2.name} on #{device_2.name}"}) }
     end
   end
@@ -207,8 +207,8 @@ describe "Table" do
   describe "#method_sign", :current => true do
     context "method call once" do
       subject { table.method_sign(technique, device) }
-      let(:technique) { FactoryGirl.create(:technique) }
-      let(:device) { FactoryGirl.create(:device) }
+      let(:technique) { FactoryBot.create(:technique) }
+      let(:device) { FactoryBot.create(:device) }
       context "technique is nil" do
         let(:technique) { nil }
         context "device is nil" do
@@ -235,10 +235,10 @@ describe "Table" do
     context "method call twice" do
       before { table.method_sign(technique_1, device_1) }
       subject { table.method_sign(technique_2, device_2) }
-      let(:technique_1) { FactoryGirl.create(:technique, name: "technique_1") }
-      let(:technique_2) { FactoryGirl.create(:technique, name: "technique_2") }
-      let(:device_1) { FactoryGirl.create(:device, name: "device_1") }
-      let(:device_2) { FactoryGirl.create(:device, name: "device_2") }
+      let(:technique_1) { FactoryBot.create(:technique, name: "technique_1") }
+      let(:technique_2) { FactoryBot.create(:technique, name: "technique_2") }
+      let(:device_1) { FactoryBot.create(:device, name: "device_1") }
+      let(:device_2) { FactoryBot.create(:device, name: "device_2") }
       it { expect(subject).to eq "b" }
       it do
         subject
@@ -253,10 +253,10 @@ describe "Table" do
   describe "#priority" do
     subject { table.priority(analysis_id) }
     let(:analysis_id) { analysis_2.id }
-    let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen) }
-    let(:table_analysis_1) { FactoryGirl.create(:table_analysis, table: table, specimen: specimen, analysis: analysis_1, priority: 1) }
-    let(:table_analysis_2) { FactoryGirl.create(:table_analysis, table: table, specimen: specimen, analysis: analysis_2, priority: 2) }
+    let(:analysis_1) { FactoryBot.create(:analysis, specimen: specimen) }
+    let(:analysis_2) { FactoryBot.create(:analysis, specimen: specimen) }
+    let(:table_analysis_1) { FactoryBot.create(:table_analysis, table: table, specimen: specimen, analysis: analysis_1, priority: 1) }
+    let(:table_analysis_2) { FactoryBot.create(:table_analysis, table: table, specimen: specimen, analysis: analysis_2, priority: 2) }
     before do
       table_analysis_1
       table_analysis_2
@@ -273,13 +273,13 @@ describe "Table" do
 end
 
 describe "after_remove specimens" do
-  let(:bib) { FactoryGirl.create(:bib) }
-  let(:table) { FactoryGirl.create(:table, measurement_category: measurement_category) }
-  let(:table_2) { FactoryGirl.create(:table, measurement_category: measurement_category) }
-  let(:measurement_category) { FactoryGirl.create(:measurement_category, unit: unit) }
-  let(:unit) { FactoryGirl.create(:unit, name: "gram_per_gram", conversion: 1) }
-  let(:specimen_1) { FactoryGirl.create(:specimen) }
-  let(:specimen_2) { FactoryGirl.create(:specimen) }
+  let(:bib) { FactoryBot.create(:bib) }
+  let(:table) { FactoryBot.create(:table, measurement_category: measurement_category) }
+  let(:table_2) { FactoryBot.create(:table, measurement_category: measurement_category) }
+  let(:measurement_category) { FactoryBot.create(:measurement_category, unit: unit) }
+  let(:unit) { FactoryBot.create(:unit, name: "gram_per_gram", conversion: 1) }
+  let(:specimen_1) { FactoryBot.create(:specimen) }
+  let(:specimen_2) { FactoryBot.create(:specimen) }
   subject { table.specimens.destroy(specimen_2) }
   context "does not remove specimen from bib" do
     before do
@@ -308,14 +308,14 @@ end
 
 
 describe "table" do
-  let(:bib) { FactoryGirl.create(:bib) }
-  let(:table) { FactoryGirl.create(:table, measurement_category: measurement_category) }
-  let(:table_2) { FactoryGirl.create(:table, measurement_category: measurement_category) }
-  let(:measurement_category) { FactoryGirl.create(:measurement_category, unit: unit) }
-  let(:unit) { FactoryGirl.create(:unit, name: "gram_per_gram", conversion: 1) }
-  let(:specimen_1) { FactoryGirl.create(:specimen) }
-  let(:specimen_2) { FactoryGirl.create(:specimen) }
-  let(:specimen_3) { FactoryGirl.create(:specimen) }
+  let(:bib) { FactoryBot.create(:bib) }
+  let(:table) { FactoryBot.create(:table, measurement_category: measurement_category) }
+  let(:table_2) { FactoryBot.create(:table, measurement_category: measurement_category) }
+  let(:measurement_category) { FactoryBot.create(:measurement_category, unit: unit) }
+  let(:unit) { FactoryBot.create(:unit, name: "gram_per_gram", conversion: 1) }
+  let(:specimen_1) { FactoryBot.create(:specimen) }
+  let(:specimen_2) { FactoryBot.create(:specimen) }
+  let(:specimen_3) { FactoryBot.create(:specimen) }
 #  subject { table.specimens.destroy(specimen_2) }
   context "takes over specimen from bib" do
     before do
@@ -343,14 +343,14 @@ describe "table" do
 end
 describe "Table::Row" do
   let(:row) { Table::Row.new(table, category_measurement_item, [chemistry]) }
-  let(:table) { FactoryGirl.create(:table, measurement_category: measurement_category) }
-  let(:measurement_category) { FactoryGirl.create(:measurement_category, unit: unit) }
-  let(:unit) { FactoryGirl.create(:unit, name: "gram_per_gram", conversion: 1) }
-  let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
-  let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit, nickname: "測定１", display_in_html: "[A]", display_in_tex: "\abundance{A}") }
-  let(:specimen) { FactoryGirl.create(:specimen) }
-  let(:analysis) { FactoryGirl.create(:analysis, specimen: specimen) }
-  let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item) }
+  let(:table) { FactoryBot.create(:table, measurement_category: measurement_category) }
+  let(:measurement_category) { FactoryBot.create(:measurement_category, unit: unit) }
+  let(:unit) { FactoryBot.create(:unit, name: "gram_per_gram", conversion: 1) }
+  let(:category_measurement_item) { FactoryBot.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
+  let(:measurement_item) { FactoryBot.create(:measurement_item, unit: unit, nickname: "測定１", display_in_html: "[A]", display_in_tex: "\abundance{A}") }
+  let(:specimen) { FactoryBot.create(:specimen) }
+  let(:analysis) { FactoryBot.create(:analysis, specimen: specimen) }
+  let(:chemistry) { FactoryBot.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item) }
   before do
     Alchemist.setup
     Alchemist.register(:mass, unit.name.to_sym, 1.to_d / unit.conversion)
@@ -377,14 +377,14 @@ describe "Table::Row" do
 
     context "table linked 2 chemistries without device & technique pair" do
       let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2]) }
-      let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
-      let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
-      let(:specimen_1) { FactoryGirl.create(:specimen) }
-      let(:specimen_2) { FactoryGirl.create(:specimen) }
-      let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1, device: nil, technique: nil) }
-      let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2, device: nil, technique: nil) }
-      let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
-      let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
+      let(:table_specimen_1) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_1) }
+      let(:table_specimen_2) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_2) }
+      let(:specimen_1) { FactoryBot.create(:specimen) }
+      let(:specimen_2) { FactoryBot.create(:specimen) }
+      let(:analysis_1) { FactoryBot.create(:analysis, specimen: specimen_1, device: nil, technique: nil) }
+      let(:analysis_2) { FactoryBot.create(:analysis, specimen: specimen_2, device: nil, technique: nil) }
+      let(:chemistry_1) { FactoryBot.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
+      let(:chemistry_2) { FactoryBot.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
       before do
         table_specimen_1
         table_specimen_2
@@ -395,16 +395,16 @@ describe "Table::Row" do
 
     context "table linked 2 chemistries with same device & technique pair" do
       let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2]) }
-      let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
-      let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
-      let(:specimen_1) { FactoryGirl.create(:specimen) }
-      let(:specimen_2) { FactoryGirl.create(:specimen) }
-      let(:device_1){ FactoryGirl.create(:device) }
-      let(:technique_1){ FactoryGirl.create(:technique) }
-      let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1, device: device_1, technique: technique_1) }
-      let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2, device: device_1, technique: technique_1) }
-      let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
-      let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
+      let(:table_specimen_1) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_1) }
+      let(:table_specimen_2) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_2) }
+      let(:specimen_1) { FactoryBot.create(:specimen) }
+      let(:specimen_2) { FactoryBot.create(:specimen) }
+      let(:device_1){ FactoryBot.create(:device) }
+      let(:technique_1){ FactoryBot.create(:technique) }
+      let(:analysis_1) { FactoryBot.create(:analysis, specimen: specimen_1, device: device_1, technique: technique_1) }
+      let(:analysis_2) { FactoryBot.create(:analysis, specimen: specimen_2, device: device_1, technique: technique_1) }
+      let(:chemistry_1) { FactoryBot.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
+      let(:chemistry_2) { FactoryBot.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
       before do
         table_specimen_1
         table_specimen_2
@@ -414,21 +414,21 @@ describe "Table::Row" do
 
     context "table linked 2 chemistries with same device & technique pair and 1 chemistry without device & techniqu pair" do
       let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2, chemistry_3]) }
-      let(:measurement_item_2) { FactoryGirl.create(:measurement_item, unit: unit, nickname: "測定2", display_in_html: "[B]", display_in_tex: "\abundance{B}") }
-      let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
-      let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
-      let(:table_specimen_3) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_3) }
-      let(:specimen_1) { FactoryGirl.create(:specimen) }
-      let(:specimen_2) { FactoryGirl.create(:specimen) }
-      let(:specimen_3) { FactoryGirl.create(:specimen) }
-      let(:device_1){ FactoryGirl.create(:device) }
-      let(:technique_1){ FactoryGirl.create(:technique) }
-      let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1, device: device_1, technique: technique_1) }
-      let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2, device: device_1, technique: technique_1) }
-      let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_3, device: device_1, technique: nil) }
-      let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
-      let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
-      let(:chemistry_3) { FactoryGirl.create(:chemistry, analysis: analysis_3, unit: unit, measurement_item: measurement_item, value: 3) }
+      let(:measurement_item_2) { FactoryBot.create(:measurement_item, unit: unit, nickname: "測定2", display_in_html: "[B]", display_in_tex: "\abundance{B}") }
+      let(:table_specimen_1) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_1) }
+      let(:table_specimen_2) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_2) }
+      let(:table_specimen_3) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_3) }
+      let(:specimen_1) { FactoryBot.create(:specimen) }
+      let(:specimen_2) { FactoryBot.create(:specimen) }
+      let(:specimen_3) { FactoryBot.create(:specimen) }
+      let(:device_1){ FactoryBot.create(:device) }
+      let(:technique_1){ FactoryBot.create(:technique) }
+      let(:analysis_1) { FactoryBot.create(:analysis, specimen: specimen_1, device: device_1, technique: technique_1) }
+      let(:analysis_2) { FactoryBot.create(:analysis, specimen: specimen_2, device: device_1, technique: technique_1) }
+      let(:analysis_3) { FactoryBot.create(:analysis, specimen: specimen_3, device: device_1, technique: nil) }
+      let(:chemistry_1) { FactoryBot.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
+      let(:chemistry_2) { FactoryBot.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
+      let(:chemistry_3) { FactoryBot.create(:chemistry, analysis: analysis_3, unit: unit, measurement_item: measurement_item, value: 3) }
       before do
         table_specimen_1
         table_specimen_2
@@ -441,21 +441,21 @@ describe "Table::Row" do
 
     context "table linked 2 chemistries with same device & technique pair and 1 chemistry without device & techniqu pair and after remove last chemistry" do
       let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2, chemistry_3]) }
-      let(:measurement_item_2) { FactoryGirl.create(:measurement_item, unit: unit, nickname: "測定2", display_in_html: "[B]", display_in_tex: "\abundance{B}") }
-      let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
-      let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
-      let(:table_specimen_3) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_3) }
-      let(:specimen_1) { FactoryGirl.create(:specimen) }
-      let(:specimen_2) { FactoryGirl.create(:specimen) }
-      let(:specimen_3) { FactoryGirl.create(:specimen) }
-      let(:device_1){ FactoryGirl.create(:device) }
-      let(:technique_1){ FactoryGirl.create(:technique) }
-      let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1, device: device_1, technique: technique_1) }
-      let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2, device: device_1, technique: technique_1) }
-      let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_3, device: device_1, technique: nil) }
-      let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
-      let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
-      let(:chemistry_3) { FactoryGirl.create(:chemistry, analysis: analysis_3, unit: unit, measurement_item: measurement_item, value: 3) }
+      let(:measurement_item_2) { FactoryBot.create(:measurement_item, unit: unit, nickname: "測定2", display_in_html: "[B]", display_in_tex: "\abundance{B}") }
+      let(:table_specimen_1) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_1) }
+      let(:table_specimen_2) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_2) }
+      let(:table_specimen_3) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_3) }
+      let(:specimen_1) { FactoryBot.create(:specimen) }
+      let(:specimen_2) { FactoryBot.create(:specimen) }
+      let(:specimen_3) { FactoryBot.create(:specimen) }
+      let(:device_1){ FactoryBot.create(:device) }
+      let(:technique_1){ FactoryBot.create(:technique) }
+      let(:analysis_1) { FactoryBot.create(:analysis, specimen: specimen_1, device: device_1, technique: technique_1) }
+      let(:analysis_2) { FactoryBot.create(:analysis, specimen: specimen_2, device: device_1, technique: technique_1) }
+      let(:analysis_3) { FactoryBot.create(:analysis, specimen: specimen_3, device: device_1, technique: nil) }
+      let(:chemistry_1) { FactoryBot.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
+      let(:chemistry_2) { FactoryBot.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
+      let(:chemistry_3) { FactoryBot.create(:chemistry, analysis: analysis_3, unit: unit, measurement_item: measurement_item, value: 3) }
       before do
         table_specimen_1
         table_specimen_2
@@ -466,17 +466,17 @@ describe "Table::Row" do
     end
     context "table linked 2 chemistries with different device & technique pair" do
       let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2]) }
-      let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
-      let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
-      let(:specimen_1) { FactoryGirl.create(:specimen) }
-      let(:specimen_2) { FactoryGirl.create(:specimen) }
-      let(:device_1){ FactoryGirl.create(:device) }
-      let(:technique_1){ FactoryGirl.create(:technique) }
-      let(:technique_2){ FactoryGirl.create(:technique) }
-      let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1, device: device_1, technique: technique_1) }
-      let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2, device: device_1, technique: technique_2) }
-      let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
-      let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
+      let(:table_specimen_1) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_1) }
+      let(:table_specimen_2) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_2) }
+      let(:specimen_1) { FactoryBot.create(:specimen) }
+      let(:specimen_2) { FactoryBot.create(:specimen) }
+      let(:device_1){ FactoryBot.create(:device) }
+      let(:technique_1){ FactoryBot.create(:technique) }
+      let(:technique_2){ FactoryBot.create(:technique) }
+      let(:analysis_1) { FactoryBot.create(:analysis, specimen: specimen_1, device: device_1, technique: technique_1) }
+      let(:analysis_2) { FactoryBot.create(:analysis, specimen: specimen_2, device: device_1, technique: technique_2) }
+      let(:chemistry_1) { FactoryBot.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
+      let(:chemistry_2) { FactoryBot.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
       before do
         table_specimen_1
         table_specimen_2
@@ -495,7 +495,7 @@ describe "Table::Row" do
         table_specimen_1
         allow(Table::Cell).to receive(:new).with(row, [chemistry]).and_return(:cell)
       end
-      let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen) }
+      let(:table_specimen_1) { FactoryBot.create(:table_specimen, table: table, specimen: specimen) }
       it { expect { |b| row.each(&b) }.to yield_control.once }
       it { expect { |b| row.each(&b) }.to yield_successive_args(:cell) }
     end
@@ -505,8 +505,8 @@ describe "Table::Row" do
         table_specimen_2
         allow(Table::Cell).to receive(:new).with(row, [chemistry]).and_return(:cell)
       end
-      let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen) }
-      let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen) }
+      let(:table_specimen_1) { FactoryBot.create(:table_specimen, table: table, specimen: specimen) }
+      let(:table_specimen_2) { FactoryBot.create(:table_specimen, table: table, specimen: specimen) }
       it { expect { |b| row.each(&b) }.to yield_control.twice }
       it { expect { |b| row.each(&b) }.to yield_successive_args(:cell, :cell) }
     end
@@ -515,7 +515,7 @@ describe "Table::Row" do
   describe "#mean" do
     subject { row.mean(round_flag) }
     let(:round_flag) { false }
-    let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item, scale: scale) }
+    let(:category_measurement_item) { FactoryBot.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item, scale: scale) }
     let(:scale) { 1 }
     context "round_flag is false" do
       context "table linked 1 chemistry" do
@@ -523,14 +523,14 @@ describe "Table::Row" do
       end
       context "table linked 2 chemistries" do
         let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2]) }
-        let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
-        let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
-        let(:specimen_1) { FactoryGirl.create(:specimen) }
-        let(:specimen_2) { FactoryGirl.create(:specimen) }
-        let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1) }
-        let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2) }
-        let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
-        let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
+        let(:table_specimen_1) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_1) }
+        let(:table_specimen_2) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_2) }
+        let(:specimen_1) { FactoryBot.create(:specimen) }
+        let(:specimen_2) { FactoryBot.create(:specimen) }
+        let(:analysis_1) { FactoryBot.create(:analysis, specimen: specimen_1) }
+        let(:analysis_2) { FactoryBot.create(:analysis, specimen: specimen_2) }
+        let(:chemistry_1) { FactoryBot.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
+        let(:chemistry_2) { FactoryBot.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
         before do
           specimen_1
           analysis_1
@@ -551,14 +551,14 @@ describe "Table::Row" do
         end
         context "table linked 2 chemistries" do
           let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2]) }
-          let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
-          let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
-          let(:specimen_1) { FactoryGirl.create(:specimen) }
-          let(:specimen_2) { FactoryGirl.create(:specimen) }
-          let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1) }
-          let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2) }
-          let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
-          let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
+          let(:table_specimen_1) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_1) }
+          let(:table_specimen_2) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_2) }
+          let(:specimen_1) { FactoryBot.create(:specimen) }
+          let(:specimen_2) { FactoryBot.create(:specimen) }
+          let(:analysis_1) { FactoryBot.create(:analysis, specimen: specimen_1) }
+          let(:analysis_2) { FactoryBot.create(:analysis, specimen: specimen_2) }
+          let(:chemistry_1) { FactoryBot.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1) }
+          let(:chemistry_2) { FactoryBot.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2) }
           before do
             specimen_1
             analysis_1
@@ -588,20 +588,20 @@ describe "Table::Row" do
   describe "#standard_diviation" do
     subject { row.standard_diviation }
     let(:row) { Table::Row.new(table, category_measurement_item, [chemistry_1, chemistry_2, chemistry_3]) }
-    let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item, scale: scale) }
+    let(:category_measurement_item) { FactoryBot.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item, scale: scale) }
     let(:scale) { 1 }
-    let(:table_specimen_1) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_1) }
-    let(:table_specimen_2) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_2) }
-    let(:table_specimen_3) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen_3) }
-    let(:specimen_1) { FactoryGirl.create(:specimen) }
-    let(:specimen_2) { FactoryGirl.create(:specimen) }
-    let(:specimen_3) { FactoryGirl.create(:specimen) }
-    let(:analysis_1) { FactoryGirl.create(:analysis, specimen: specimen_1) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen_2) }
-    let(:analysis_3) { FactoryGirl.create(:analysis, specimen: specimen_3) }
-    let(:chemistry_1) { FactoryGirl.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1.0) }
-    let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2.0) }
-    let(:chemistry_3) { FactoryGirl.create(:chemistry, analysis: analysis_3, unit: unit, measurement_item: measurement_item, value: 0.6) }
+    let(:table_specimen_1) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_1) }
+    let(:table_specimen_2) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_2) }
+    let(:table_specimen_3) { FactoryBot.create(:table_specimen, table: table, specimen: specimen_3) }
+    let(:specimen_1) { FactoryBot.create(:specimen) }
+    let(:specimen_2) { FactoryBot.create(:specimen) }
+    let(:specimen_3) { FactoryBot.create(:specimen) }
+    let(:analysis_1) { FactoryBot.create(:analysis, specimen: specimen_1) }
+    let(:analysis_2) { FactoryBot.create(:analysis, specimen: specimen_2) }
+    let(:analysis_3) { FactoryBot.create(:analysis, specimen: specimen_3) }
+    let(:chemistry_1) { FactoryBot.create(:chemistry, analysis: analysis_1, unit: unit, measurement_item: measurement_item, value: 1.0) }
+    let(:chemistry_2) { FactoryBot.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 2.0) }
+    let(:chemistry_3) { FactoryBot.create(:chemistry, analysis: analysis_3, unit: unit, measurement_item: measurement_item, value: 0.6) }
     before do
       table_specimen_1
       table_specimen_2
@@ -646,9 +646,9 @@ describe "Table::Row" do
   describe "#scale" do
     subject { row.scale }
     let(:row) { Table::Row.new(table, category_measurement_item, [chemistry]) }
-    let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item, scale: scale1) }
-    let(:measurement_category) { FactoryGirl.create(:measurement_category, unit: unit, scale: scale2) }
-    let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit, scale: scale3) }
+    let(:category_measurement_item) { FactoryBot.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item, scale: scale1) }
+    let(:measurement_category) { FactoryBot.create(:measurement_category, unit: unit, scale: scale2) }
+    let(:measurement_item) { FactoryBot.create(:measurement_item, unit: unit, scale: scale3) }
     let(:scale1) { 1 }
     let(:scale1) { nil }
     let(:scale2) { nil }
@@ -692,9 +692,9 @@ describe "Table::Row" do
   describe "#unit" do
     subject { row.unit }
     let(:row) { Table::Row.new(table, category_measurement_item, [chemistry]) }
-    let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit1, measurement_item: measurement_item) }
-    let(:measurement_category) { FactoryGirl.create(:measurement_category, unit: unit2) }
-    let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit3) }
+    let(:category_measurement_item) { FactoryBot.create(:category_measurement_item, measurement_category: measurement_category, unit: unit1, measurement_item: measurement_item) }
+    let(:measurement_category) { FactoryBot.create(:measurement_category, unit: unit2) }
+    let(:measurement_item) { FactoryBot.create(:measurement_item, unit: unit3) }
     let(:unit1) { nil }
     let(:unit2) { nil }
     let(:unit3) { nil }
@@ -702,34 +702,34 @@ describe "Table::Row" do
       it { expect(subject).to eq unit }
     end
     context "measurement_itemにunitが設定されている" do
-      let(:unit3) { FactoryGirl.create(:unit, name: "unit_name3", conversion: 1, html: "html3", text: "text3") }
+      let(:unit3) { FactoryBot.create(:unit, name: "unit_name3", conversion: 1, html: "html3", text: "text3") }
       it { expect(subject).to eq unit3 }
       context "measurement_categoryにunitが設定されている" do
-        let(:unit2) { FactoryGirl.create(:unit, name: "unit_name2", conversion: 1, html: "html2", text: "text2") }
+        let(:unit2) { FactoryBot.create(:unit, name: "unit_name2", conversion: 1, html: "html2", text: "text2") }
         it { expect(subject).to eq unit2 }
         context "category_measurement_itemにunitが設定されている" do
-          let(:unit1) { FactoryGirl.create(:unit, name: "unit_name1", conversion: 1, html: "html1", text: "text1") }
+          let(:unit1) { FactoryBot.create(:unit, name: "unit_name1", conversion: 1, html: "html1", text: "text1") }
           it { expect(subject).to eq unit1 }
         end
       end
     end
     context "category_measurement_itemにunitが設定されている" do
-      let(:unit1) { FactoryGirl.create(:unit, name: "unit_name1", conversion: 1, html: "html1", text: "text1") }
+      let(:unit1) { FactoryBot.create(:unit, name: "unit_name1", conversion: 1, html: "html1", text: "text1") }
       it { expect(subject).to eq unit1 }
       context "measurement_categoryにunitが設定されている" do
-        let(:unit2) { FactoryGirl.create(:unit, name: "unit_name2", conversion: 1, html: "html2", text: "text2") }
+        let(:unit2) { FactoryBot.create(:unit, name: "unit_name2", conversion: 1, html: "html2", text: "text2") }
         it { expect(subject).to eq unit1 }
       end
     end
     context "category_measurement_itemにunitが設定されている" do
-      let(:unit1) { FactoryGirl.create(:unit, name: "unit_name1", conversion: 1, html: "html1", text: "text1") }
+      let(:unit1) { FactoryBot.create(:unit, name: "unit_name1", conversion: 1, html: "html1", text: "text1") }
       context "measurement_itemにunitが設定されている" do
-        let(:unit3) { FactoryGirl.create(:unit, name: "unit_name3", conversion: 1, html: "html3", text: "text3") }
+        let(:unit3) { FactoryBot.create(:unit, name: "unit_name3", conversion: 1, html: "html3", text: "text3") }
         it { expect(subject).to eq unit1 }
       end
     end
     context "measurement_categoryにunitが設定されている" do
-      let(:unit2) { FactoryGirl.create(:unit, name: "unit_name2", conversion: 1, html: "html2", text: "text2") }
+      let(:unit2) { FactoryBot.create(:unit, name: "unit_name2", conversion: 1, html: "html2", text: "text2") }
       it { expect(subject).to eq unit2 }
     end
   end
@@ -738,17 +738,17 @@ end
 describe "Table::Cell" do
   let(:cell) { Table::Cell.new(row, table.chemistries) }
   let(:row) { Table::Row.new(table, category_measurement_item, table.chemistries) }
-  let(:table) { FactoryGirl.create(:table, measurement_category: measurement_category) }
-  let(:measurement_category) { FactoryGirl.create(:measurement_category, unit: unit) }
-  let(:unit) { FactoryGirl.create(:unit, name: "gram_per_gram", conversion: 1) }
-  let(:category_measurement_item) { FactoryGirl.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
-  let(:measurement_item) { FactoryGirl.create(:measurement_item, unit: unit) }
-  let(:table_specimen) { FactoryGirl.create(:table_specimen, table: table, specimen: specimen) }
-  let(:specimen) { FactoryGirl.create(:specimen) }
-  let(:analysis) { FactoryGirl.create(:analysis, specimen: specimen) }
-  let(:chemistry) { FactoryGirl.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item, value: 1) }
-  let(:analysis_2) { FactoryGirl.create(:analysis, specimen: specimen) }
-  let(:chemistry_2) { FactoryGirl.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 1) }
+  let(:table) { FactoryBot.create(:table, measurement_category: measurement_category) }
+  let(:measurement_category) { FactoryBot.create(:measurement_category, unit: unit) }
+  let(:unit) { FactoryBot.create(:unit, name: "gram_per_gram", conversion: 1) }
+  let(:category_measurement_item) { FactoryBot.create(:category_measurement_item, measurement_category: measurement_category, unit: unit, measurement_item: measurement_item) }
+  let(:measurement_item) { FactoryBot.create(:measurement_item, unit: unit) }
+  let(:table_specimen) { FactoryBot.create(:table_specimen, table: table, specimen: specimen) }
+  let(:specimen) { FactoryBot.create(:specimen) }
+  let(:analysis) { FactoryBot.create(:analysis, specimen: specimen) }
+  let(:chemistry) { FactoryBot.create(:chemistry, analysis: analysis, unit: unit, measurement_item: measurement_item, value: 1) }
+  let(:analysis_2) { FactoryBot.create(:analysis, specimen: specimen) }
+  let(:chemistry_2) { FactoryBot.create(:chemistry, analysis: analysis_2, unit: unit, measurement_item: measurement_item, value: 1) }
 
   before do
     Alchemist.setup
@@ -842,11 +842,11 @@ describe "Table::Cell" do
 
   describe "pml_elements" do
     subject { obj.pml_elements }
-    let(:obj) { FactoryGirl.create(:table)}
-    let(:analysis_1) { FactoryGirl.create(:analysis) }
-    let(:analysis_2) { FactoryGirl.create(:analysis, name: "分類2") }
-    let(:analysis_3) { FactoryGirl.create(:analysis, name: "分類3") }
-    let(:analysis_4) { FactoryGirl.create(:analysis, name: "分類4") }
+    let(:obj) { FactoryBot.create(:table)}
+    let(:analysis_1) { FactoryBot.create(:analysis) }
+    let(:analysis_2) { FactoryBot.create(:analysis, name: "分類2") }
+    let(:analysis_3) { FactoryBot.create(:analysis, name: "分類3") }
+    let(:analysis_4) { FactoryBot.create(:analysis, name: "分類4") }
     before do
       obj.analyses << analysis_1
       obj.analyses << analysis_2

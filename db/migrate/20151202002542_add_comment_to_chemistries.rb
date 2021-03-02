@@ -1,18 +1,16 @@
-class AddCommentToChemistries < ActiveRecord::Migration
+class AddCommentToChemistries < ActiveRecord::Migration[4.2]
   def change
-    change_table "chemistries" do |t|
-      t.comment "分析要素"
-      t.change_comment :id, "ID"
-      t.change_comment :analysis_id, "分析ID"
-      t.change_comment :measurement_item_id, "測定項目ID"
-      t.change_comment :info, "情報"
-      t.change_comment :value, "測定値"
-      t.change_comment :label, "ラベル"
-      t.change_comment :description, "説明"
-      t.change_comment :uncertainty, "不確実性"
-      t.change_comment :created_at, "作成日時"
-      t.change_comment :updated_at, "更新日時"
-      t.change_comment :unit_id, "単位ID"
-    end
+    change_table_comment(:chemistries, "分析要素")
+    change_column_comment(:chemistries, :id, "ID")
+    change_column_comment(:chemistries, :analysis_id, "分析ID")
+    change_column_comment(:chemistries, :measurement_item_id, "測定項目ID")
+    change_column_comment(:chemistries, :info, "情報")
+    change_column_comment(:chemistries, :value, "測定値")
+    change_column_comment(:chemistries, :label, "ラベル")
+    change_column_comment(:chemistries, :description, "説明")
+    change_column_comment(:chemistries, :uncertainty, "不確実性")
+    change_column_comment(:chemistries, :created_at, "作成日時")
+    change_column_comment(:chemistries, :updated_at, "更新日時")
+    change_column_comment(:chemistries, :unit_id, "単位ID")
   end
 end

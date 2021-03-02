@@ -1,4 +1,4 @@
-class CreateBibAuthors < ActiveRecord::Migration
+class CreateBibAuthors < ActiveRecord::Migration[4.2]
   def change
     create_table :bib_authors do |t|
       t.integer :bib_id

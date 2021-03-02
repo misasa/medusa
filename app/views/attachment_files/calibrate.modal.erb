@@ -4,7 +4,7 @@
     <%= @attachment_file.name %>
   </h4>
 </div>
-<%= form_for @attachment_file, remote: true, format: :js, html: { class: "update", role: "form" } do |f| %>
+<%= form_with model:@attachment_file, local: false, format: :js, html: { class: "update", role: "form" } do |f| %>
   <div class="modal-body">
     <div class="row">
       <div class="col-lg-2">

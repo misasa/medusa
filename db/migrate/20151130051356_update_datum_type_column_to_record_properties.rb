@@ -1,4 +1,4 @@
-class UpdateDatumTypeColumnToRecordProperties < ActiveRecord::Migration
+class UpdateDatumTypeColumnToRecordProperties < ActiveRecord::Migration[4.2]
   def up
     execute "UPDATE record_properties SET datum_type = 'Specimen' WHERE datum_type = 'Stone'"
   end

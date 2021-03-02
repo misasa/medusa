@@ -80,7 +80,7 @@ class NestedResources::BibsController < ApplicationController
   def duplicate_global_id
     respond_to do |format|
       format.html { render "parts/duplicate_global_id", status: :unprocessable_entity }
-      format.all { render nothing: true, status: :unprocessable_entity }
+      format.all { render body: nil, status: :unprocessable_entity }
     end
   end
 

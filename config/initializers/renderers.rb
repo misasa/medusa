@@ -33,7 +33,7 @@ class Array
             obj.surface_spots_within_bounds_converted.each do |spot|
               array.delete(spot.target) if spot.target && spot.target.instance_of?(Analysis)
               array << spot
-            end              
+            end
           elsif obj.respond_to?(:spots)
             obj.spots.each do |spot|
 #              analyses.delete(spot.target) if spot.target && spot.target.instance_of?(Analysis)
@@ -57,6 +57,11 @@ class Array
 end # class
 
 ActionController::Renderers.add :pml do |object, options|
-	self.content_type ||= Mime::PML
-	object.respond_to?(:to_pml) ? object.to_pml : object
+  self.content_type ||= Mime[:pml]
+
+	if object.respond_to?(:to_pml)
+    object.to_pml
+  else
+    object.kind_of?(ActiveRecord::Relation) ? object.to_a.to_pml : object
+  end
 end

@@ -112,6 +112,7 @@ class AttachmentFileDecorator < Draper::Decorator
     height_rate = original_height.to_f / height
     width_rate = original_width.to_f / width
     options = (width_rate >= height_rate) ? { width: width } : { height: height }
+    options[:alt] = File.basename(path(type), '.*').sub(/-[[:xdigit:]]{32}\z/, '').tr('-_', ' ').capitalize
     h.image_tag(path(type), options)
   end
 

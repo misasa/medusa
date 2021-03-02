@@ -1,15 +1,13 @@
-class AddCommentToTaggings < ActiveRecord::Migration
+class AddCommentToTaggings < ActiveRecord::Migration[4.2]
   def change
-    change_table "taggings" do |t|
-      t.comment "タグ付け"
-      t.change_comment :id, "ID"
-      t.change_comment :tag_id, "タグID"
-      t.change_comment :taggable_id, "タグ付け対象ID"
-      t.change_comment :taggable_type, "タグ付け対象タイプ"
-      t.change_comment :tagger_id, "tagger_id"
-      t.change_comment :tagger_type, "tagget_type"
-      t.change_comment :context, "コンテキスト"
-      t.change_comment :created_at, "作成日時"
-    end
+    change_table_comment(:taggings, "タグ付け")
+    change_column_comment(:taggings, :id, "ID")
+    change_column_comment(:taggings, :tag_id, "タグID")
+    change_column_comment(:taggings, :taggable_id, "タグ付け対象ID")
+    change_column_comment(:taggings, :taggable_type, "タグ付け対象タイプ")
+    change_column_comment(:taggings, :tagger_id, "tagger_id")
+    change_column_comment(:taggings, :tagger_type, "tagget_type")
+    change_column_comment(:taggings, :context, "コンテキスト")
+    change_column_comment(:taggings, :created_at, "作成日時")
   end
 end

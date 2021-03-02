@@ -1,4 +1,4 @@
-class CreateSurfaceImages < ActiveRecord::Migration
+class CreateSurfaceImages < ActiveRecord::Migration[4.2]
   def change
     create_table :surface_images do |t|
       t.integer :surface_id

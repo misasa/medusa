@@ -1,4 +1,4 @@
-class CreateRecordProperties < ActiveRecord::Migration
+class CreateRecordProperties < ActiveRecord::Migration[4.2]
   def change
     create_table :record_properties do |t|
       t.integer  :datum_id

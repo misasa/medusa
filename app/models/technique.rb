@@ -1,4 +1,4 @@
-class Technique < ActiveRecord::Base
+class Technique < ApplicationRecord
   has_many :analyses
 
   validates :name, presence: true, length: { maximum: 255 }

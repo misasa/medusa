@@ -8,20 +8,20 @@ describe "specimen" do
     crate_search_columns
     visit specimens_path
   end
-  let(:login_user) { FactoryGirl.create(:user) }
+  let(:login_user) { FactoryBot.create(:user) }
   let(:create_data) {}
   let(:crate_search_columns) do
-    FactoryGirl.create(:search_column, user: login_user, datum_type: "Specimen", name: "name", display_name: "name", display_type: 2)
+    FactoryBot.create(:search_column, user: login_user, datum_type: "Specimen", name: "name", display_name: "name", display_type: 2)
   end
-  
+
   describe "specimen detail screen" do
-    before { click_link(specimen.name) }
+    before { click_link(specimen.name, match: :first) }
     let(:create_data) do
-      specimen.attachment_files << attachment_file 
+      specimen.attachment_files << attachment_file
       specimen.create_record_property(user_id: login_user.id)
     end
-    let(:specimen) { FactoryGirl.create(:specimen, quantity: nil, quantity_unit: nil) }
-    let(:attachment_file) { FactoryGirl.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
+    let(:specimen) { FactoryBot.create(:specimen, quantity: nil, quantity_unit: nil) }
+    let(:attachment_file) { FactoryBot.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
     let(:data_type) { "image/jpeg" }
 
     describe "view spot" do
@@ -64,8 +64,7 @@ describe "specimen" do
       end
 
       describe "new spot" do
-        pending "new spot新規作成時の実装が困難のためpending" do
-        end
+        pending "new spot新規作成時の実装が困難のためpending"
       end
 
       describe "thumbnail" do
@@ -84,7 +83,7 @@ describe "specimen" do
         end
       end
     end
-    
+
     describe "at-a-glance tab" do
       before { click_link("at-a-glance") }
       describe "pdf icon" do
@@ -102,7 +101,7 @@ describe "specimen" do
         end
       end
     end
-    
+
     describe "file tab" do
       before { click_link("file (1)") }
       describe "pdf icon" do
@@ -121,5 +120,5 @@ describe "specimen" do
       end
     end
   end
-  
+
 end

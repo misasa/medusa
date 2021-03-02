@@ -4,8 +4,8 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'sidekiq/testing'
-require 'factory_girl'
-require 'factory_girl_rails'
+require 'factory_bot'
+require 'factory_bot_rails'
 Sidekiq::Testing.fake!
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -20,6 +20,9 @@ Dir[Rails.root.join("spec/support/**/*.rb")].each { |f| require f }
 # If you are not using ActiveRecord, you can remove this line.
 ActiveRecord::Migration.check_pending! if defined?(ActiveRecord::Migration)
 #ActiveRecord::Base.logger = Logger.new(STDOUT)
+
+FactoryBot.use_parent_strategy = false
+
 RSpec.configure do |config|
   # ## Mock Framework
   #
@@ -28,8 +31,10 @@ RSpec.configure do |config|
   # config.mock_with :mocha
   # config.mock_with :flexmock
   # config.mock_with :rr
-  
+
   config.include Capybara::DSL
+  
+  config.include Devise::Test::ControllerHelpers, type: :controller
 
   config.include ControllerSpecHelper, type: :controller
   config.include RequestSpecHelper, type: :request
@@ -53,10 +58,13 @@ RSpec.configure do |config|
   #     --seed 1234
   config.order = "random"
 
+  config.infer_spec_type_from_file_location!
+
   config.before(:all) do
-    FactoryGirl.reload
+    RSpec::Rails::FixtureFileUploadSupport::RailsFixtureFileWrapper.include RSpec::Rails::FileFixtureSupport
+    FactoryBot.reload
   end
-  
+
   if Bullet.enable?
     config.before(:each) do
       Bullet.start_request

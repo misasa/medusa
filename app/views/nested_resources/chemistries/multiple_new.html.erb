@@ -5,7 +5,7 @@
   <%= li_if_exist 'description: ', @parent.try!(:description) %>
   <li>modified at <%= difference_from_now(@parent.updated_at) -%></li>
 </ul>
-<%= form_tag  multiple_create_analysis_chemistries_path(@parent),method: :post do %>
+<%= form_with url:multiple_create_analysis_chemistries_path(@parent), method: :post do %>
   <table class="table table-condensed table-striped">
     <thead>
       <tr>

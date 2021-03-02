@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-class Specimen < ActiveRecord::Base
+class Specimen < ApplicationRecord
   include HasRecordProperty
   include HasViewSpot
   include OutputPdf
@@ -43,10 +43,10 @@ class Specimen < ActiveRecord::Base
   accepts_nested_attributes_for :specimen_custom_attributes
   accepts_nested_attributes_for :children
 
-  validates :box, existence: true, allow_nil: true
-  validates :place, existence: true, allow_nil: true
-  validates :classification, existence: true, allow_nil: true
-  validates :physical_form, existence: true, allow_nil: true
+  validates :box, presence: { message: :required, if: -> { box_id.present? } }
+  validates :place, presence: { message: :required, if: -> { place_id.present? } }
+  validates :classification, presence: { message: :required, if: -> { classification_id.present? } }
+  validates :physical_form, presence: { message: :required, if: -> { physical_form_id.present? } }
   #validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :box_id }
   validates :name, presence: true, length: { maximum: 255 }
   validate :parent_id_cannot_self_children, if: ->(specimen) { specimen.parent_id }
@@ -420,13 +420,14 @@ class Specimen < ActiveRecord::Base
   end
 
   def status_is_nomal
+    return if new_record?
     unless [Status::NORMAL, Status::UNDETERMINED_QUANTITY].include?(status)
       errors.add(:status, " is not normal")
     end
   end
 
   def path_changed?
-    box_id_changed?
+    saved_change_to_box_id?
   end
 
   def path_ids
@@ -434,7 +435,7 @@ class Specimen < ActiveRecord::Base
   end
 
   def delete_table_analysis(analysis)
-    TableAnalysis.delete_all(analysis_id: analysis.id, specimen_id: self.id)
+    TableAnalysis.where(analysis_id: analysis.id, specimen_id: self.id).delete_all
   end
 
   def calculate_rel_age

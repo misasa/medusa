@@ -1,6 +1,6 @@
 <%= qrcode record.global_id %>
 
-<%= form_for record, remote: true, format: :json, html: { class: "update", role: "form" } do |form| %>
+<%= form_with model:record, local: false, format: :json, html: { id: "edit_#{record.model_name.singular}_#{record.id}", class: "update", role: "form" } do |form| %>
   <%= form.fields_for :record_property do |f| %>
     <div class="form-group form-group-sm">
       <%= f.label :global_id, class: "small" %>

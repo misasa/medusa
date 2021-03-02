@@ -1,4 +1,4 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :specimen_custom_attribute do
     sequence(:value) { |n| "value_#{n}" }
     association :specimen, factory: :specimen

@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-class Box < ActiveRecord::Base
+class Box < ApplicationRecord
   include HasRecordProperty
   include HasViewSpot
   include OutputPdf
@@ -25,8 +25,8 @@ class Box < ActiveRecord::Base
 
   delegate :name, to: :box_type, prefix: true, allow_nil: true
 
-  validates :box_type, existence: true, allow_nil: true
-  validates :parent_id, existence: true, allow_nil: true
+  validates :box_type, presence: { message: :required, if: -> { box_type_id.present? } }
+  validates :parent_id, presence: { message: :required, if: -> { parent_id.present? } }
   validates :name, presence: true, length: { maximum: 255 }, uniqueness: { scope: :parent_id }
   validate :parent_id_cannot_self_children, if: ->(box) { box.parent_id }
   validates :quantity, presence: { if: -> { quantity_unit.present? } }
@@ -58,7 +58,7 @@ class Box < ActiveRecord::Base
 
   def analyses
     analyses = []
-    specimens.each do |specimen| 
+    specimens.each do |specimen|
       (analyses = analyses + specimen.analyses) unless specimen.analyses.empty?
     end
     analyses
@@ -86,8 +86,8 @@ class Box < ActiveRecord::Base
   end
 
   def recursive_inventory(checked_at)
-    specimens.where(fixed_in_box: true).each { |specimen| specimen.paths.current.first.update_attributes(checked_at: checked_at) if specimen.paths.current.first }
-    boxes.where(fixed_in_box: true).each { |box| box.paths.current.first.update_attributes(checked_at: checked_at) if box.paths.current.first }
+    specimens.where(fixed_in_box: true).each { |specimen| specimen.paths.current.first.update(checked_at: checked_at) if specimen.paths.current.first }
+    boxes.where(fixed_in_box: true).each { |box| box.paths.current.first.update(checked_at: checked_at) if box.paths.current.first }
   end
 
   def recursive_lose
@@ -115,7 +115,7 @@ class Box < ActiveRecord::Base
   end
 
   def path_changed?
-    parent_id_changed?
+    saved_change_to_parent_id?
   end
 
   def path_ids

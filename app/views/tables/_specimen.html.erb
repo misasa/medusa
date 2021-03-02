@@ -12,7 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    <%= form_tag bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
+    <%= form_with url:bundle_edit_specimens_path, id: "specimen-bundle-form" do %>
       <% @table.specimens.each do |specimen| %>
         <tr>
           <td>
@@ -35,7 +35,7 @@
   </tbody>
   <tfoot>
     <tr>
-      <%= form_for Specimen.new, url: table_specimens_path(@table, format: :json), remote: true, html: { class: "custom-message add-specimen", role: "form" }, data: { message: "Succeed adding to table and bib." } do |f|%>
+      <%= form_with model:Specimen.new, url: table_specimens_path(@table, format: :json), local: false, html: { id: "form.add-specimen", class: "custom-message add-specimen", role: "form" }, data: { message: "Succeed adding to table and bib." } do |f|%>
         <%= hidden_tabname_tag(__FILE__) %>
         <th><%= check_box_tag nil, nil, false, class: "select-row-all" %></th>
         <th><%= f.text_field :name, class: "form-control input-sm" %></th>
@@ -48,7 +48,7 @@
           <% end %>
         </th>
       <% end %>
-      <%= form_tag link_by_global_id_table_specimens_path(@table, format: :json), method: :post, remote: true, class: "custom-message add-specimen", role: "form", data: { message: "Succeed linking to table and bib." } do %>
+      <%= form_with url:link_by_global_id_table_specimens_path(@table, format: :json), method: :post, local: false, class: "custom-message add-specimen", role: "form", data: { message: "Succeed linking to table and bib." } do %>
         <%= hidden_tabname_tag(__FILE__) %>
         <th>
 	  <div class="input-group">
@@ -69,7 +69,7 @@
     </tr>
   </tfoot>
 </table>
-<%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
+<%= link_to content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), '#', onclick: "$('#specimen-bundle-form').submit();", class: "btn btn-default" %>
 
 <%= javascript_tag do %>
   $(document).on("succeed.ajaxForm", "form.add-specimen", function() {

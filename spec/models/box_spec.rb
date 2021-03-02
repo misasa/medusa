@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe Box do
-  let(:user) { FactoryGirl.create(:user) }
+  let(:user) { FactoryBot.create(:user) }
   before { User.current = user }
 
   describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:box, name: name) }
+      let(:obj) { FactoryBot.build(:box, name: name) }
       context "is presence" do
         let(:name) { "sample_box_type" }
         it { expect(obj).to be_valid }
@@ -26,9 +26,9 @@ describe Box do
         end
       end
       describe "uniqueness" do
-        let(:parent_box) { FactoryGirl.create(:box) }
-        let(:child_box) { FactoryGirl.create(:box, name: "box", parent_id: parent_box.id) }
-        let(:obj) { FactoryGirl.build(:box, name: "box", parent_id: parent_id) }
+        let(:parent_box) { FactoryBot.create(:box) }
+        let(:child_box) { FactoryBot.create(:box, name: "box", parent_id: parent_box.id) }
+        let(:obj) { FactoryBot.build(:box, name: "box", parent_id: parent_id) }
         before { child_box }
         context "uniq name with parent" do
           let(:parent_id) { nil }
@@ -41,10 +41,10 @@ describe Box do
       end
     end
     describe "parent_id" do
-      let(:parent_box) { FactoryGirl.create(:box) }
-      let(:box) { FactoryGirl.create(:box, parent_id: parent_id) }
-      let(:child_box) { FactoryGirl.create(:box, parent_id: box.id) }
-      let(:user) { FactoryGirl.create(:user) }
+      let(:parent_box) { FactoryBot.create(:box) }
+      let(:box) { FactoryBot.create(:box, parent_id: parent_id) }
+      let(:child_box) { FactoryBot.create(:box, parent_id: box.id) }
+      let(:user) { FactoryBot.create(:user) }
       before do
         User.current = user
         parent_box
@@ -72,7 +72,7 @@ describe Box do
     end
 
     describe "quantity" do
-      let(:obj) { FactoryGirl.build(:box, quantity: quantity, quantity_unit: quantity_unit) }
+      let(:obj) { FactoryBot.build(:box, quantity: quantity, quantity_unit: quantity_unit) }
       let(:quantity_unit) { "kg" }
       context "num" do
         let(:quantity){ "1" }
@@ -103,7 +103,7 @@ describe Box do
     end
 
     describe "quantity_unit" do
-      let(:obj) { FactoryGirl.build(:box, quantity: quantity, quantity_unit: quantity_unit) }
+      let(:obj) { FactoryBot.build(:box, quantity: quantity, quantity_unit: quantity_unit) }
       let(:quantity){ "1" }
       context "exists" do
         let(:quantity_unit) { "kgram" }
@@ -129,7 +129,7 @@ describe Box do
   describe "callbacks" do
     describe "after_save" do
       describe "reset_path" do
-        let(:box) { FactoryGirl.build(:box, path: "path", parent_id: parent_id) }
+        let(:box) { FactoryBot.build(:box, path: "path", parent_id: parent_id) }
         before { box.save }
         context "box has no parent" do
           let(:parent_id) { nil }
@@ -137,13 +137,13 @@ describe Box do
         end
         context "box has a parent" do
           let(:parent_id) { parent.id }
-          let(:parent) { FactoryGirl.create(:box) }
+          let(:parent) { FactoryBot.create(:box) }
           it { expect(box.path).to eq "/#{parent.name}" }
         end
         context "box has parent and grand_parent" do
           let(:parent_id) { parent.id }
-          let(:parent) { FactoryGirl.create(:box, parent_id: grand_parent.id) }
-          let(:grand_parent) { FactoryGirl.create(:box) }
+          let(:parent) { FactoryBot.create(:box, parent_id: grand_parent.id) }
+          let(:grand_parent) { FactoryBot.create(:box) }
           it { expect(box.path).to eq "/#{grand_parent.name}/#{parent.name}" }
           it { expect(box.box_path).to eq "/#{grand_parent.name}/#{parent.name}/#{box.name}" }
           it { expect(box.blood_path).to eq "/#{grand_parent.name}/#{parent.name}/#{box.name}" }          
@@ -155,14 +155,14 @@ describe Box do
 
   describe "to_bibtex", :current => true do
     subject {obj.to_bibtex}
-    let(:obj) { FactoryGirl.create(:box) }
+    let(:obj) { FactoryBot.create(:box) }
     it { expect(subject).to match(/^\@article/) }
   end
   describe "#paths", :current => true do
-    let(:box) { FactoryGirl.build(:box, path: "path", parent_id: parent_id, name: 'box') }
+    let(:box) { FactoryBot.build(:box, path: "path", parent_id: parent_id, name: 'box') }
     let(:parent_id) { parent.id }
-    let(:parent) { FactoryGirl.create(:box, parent_id: grand_parent.id, name: 'parent') }
-    let(:grand_parent) { FactoryGirl.create(:box, name: 'grand_parent') }
+    let(:parent) { FactoryBot.create(:box, parent_id: grand_parent.id, name: 'parent') }
+    let(:grand_parent) { FactoryBot.create(:box, name: 'grand_parent') }
 
     before { 
       box.save
@@ -173,9 +173,9 @@ describe Box do
   end
 
   describe "#descendants" do
-    let(:root) { FactoryGirl.create(:box, name: "root") }
-    let(:child_1){ FactoryGirl.create(:box, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:box, parent_id: child_1.id) }
+    let(:root) { FactoryBot.create(:box, name: "root") }
+    let(:child_1){ FactoryBot.create(:box, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:box, parent_id: child_1.id) }
     before do
       root;child_1;child_1_1;
     end
@@ -185,9 +185,9 @@ describe Box do
   end
 
   describe "#self_and_descendants" do
-    let(:root) { FactoryGirl.create(:box, name: "root") }
-    let(:child_1){ FactoryGirl.create(:box, parent_id: root.id) }
-    let(:child_1_1){ FactoryGirl.create(:box, parent_id: child_1.id) }
+    let(:root) { FactoryBot.create(:box, name: "root") }
+    let(:child_1){ FactoryBot.create(:box, parent_id: root.id) }
+    let(:child_1_1){ FactoryBot.create(:box, parent_id: child_1.id) }
     before do
       root;child_1;child_1_1;
     end
@@ -198,7 +198,7 @@ describe Box do
 
   describe "analyses" do
     subject{obj.analyses}
-    let(:obj){FactoryGirl.create(:box)}
+    let(:obj){FactoryBot.create(:box)}
     context "no analysis" do
       before{obj.specimens.clear}
       it { expect(subject.count).to eq 0}
@@ -206,9 +206,9 @@ describe Box do
     end
 
     context "many analysis" do
-      let(:analysis){FactoryGirl.create(:analysis)}
-      let(:specimen1){FactoryGirl.create(:specimen)}
-      let(:specimen2){FactoryGirl.create(:specimen)}
+      let(:analysis){FactoryBot.create(:analysis)}
+      let(:specimen1){FactoryBot.create(:specimen)}
+      let(:specimen2){FactoryBot.create(:specimen)}
       before do
         obj.specimens.clear
         obj.specimens << specimen1
@@ -228,16 +228,16 @@ describe Box do
   end
 
   describe "total_decimal_quantity" do
-    let!(:box1) { FactoryGirl.create(:box, quantity: 1, quantity_unit: "kg") }
-    let!(:box2) { FactoryGirl.create(:box, quantity: 2, quantity_unit: "kg", parent: box1) }
-    let!(:box3) { FactoryGirl.create(:box, quantity: 4, quantity_unit: "kg", parent: box2) }
-    let!(:box4) { FactoryGirl.create(:box, quantity: 8, quantity_unit: "kg", parent: box2) }
-    let!(:box5) { FactoryGirl.create(:box, quantity: 16, quantity_unit: "kg", parent: box2) }
-    let!(:specimen1) { FactoryGirl.create(:specimen, quantity: 1, quantity_unit: "g", box: box1) }
-    let!(:specimen2) { FactoryGirl.create(:specimen, quantity: 2, quantity_unit: "g", box: box2) }
-    let!(:specimen3) { FactoryGirl.create(:specimen, quantity: 4, quantity_unit: "g", box: box3) }
-    let!(:specimen4) { FactoryGirl.create(:specimen, quantity: 8, quantity_unit: "g", box: box4) }
-    let!(:specimen5) { FactoryGirl.create(:specimen, quantity: 16, quantity_unit: "g", box: box5) }
+    let!(:box1) { FactoryBot.create(:box, quantity: 1, quantity_unit: "kg") }
+    let!(:box2) { FactoryBot.create(:box, quantity: 2, quantity_unit: "kg", parent: box1) }
+    let!(:box3) { FactoryBot.create(:box, quantity: 4, quantity_unit: "kg", parent: box2) }
+    let!(:box4) { FactoryBot.create(:box, quantity: 8, quantity_unit: "kg", parent: box2) }
+    let!(:box5) { FactoryBot.create(:box, quantity: 16, quantity_unit: "kg", parent: box2) }
+    let!(:specimen1) { FactoryBot.create(:specimen, quantity: 1, quantity_unit: "g", box: box1) }
+    let!(:specimen2) { FactoryBot.create(:specimen, quantity: 2, quantity_unit: "g", box: box2) }
+    let!(:specimen3) { FactoryBot.create(:specimen, quantity: 4, quantity_unit: "g", box: box3) }
+    let!(:specimen4) { FactoryBot.create(:specimen, quantity: 8, quantity_unit: "g", box: box4) }
+    let!(:specimen5) { FactoryBot.create(:specimen, quantity: 16, quantity_unit: "g", box: box5) }
     before do
       box4.record_property.lost = true
       box4.save!
@@ -249,23 +249,23 @@ describe Box do
   end
 
   describe "specimens_decimal_quantity" do
-    let(:user) { FactoryGirl.create(:user) }
-    let!(:box) { FactoryGirl.create(:box, quantity: 1, quantity_unit: "kg") }
-    let!(:specimen1) { FactoryGirl.create(:specimen, quantity: 2, quantity_unit: "kg", box: box) }
-    let!(:specimen2) { FactoryGirl.create(:specimen, quantity: 4, quantity_unit: "kg", box: box) }
-    let!(:specimen3) { FactoryGirl.create(:specimen, quantity: 8, quantity_unit: "kg", box: box) }
-    let!(:specimen4) { FactoryGirl.create(:specimen, quantity: 16, quantity_unit: "kg", box: box) }
+    let(:user) { FactoryBot.create(:user) }
+    let!(:box) { FactoryBot.create(:box, quantity: 1, quantity_unit: "kg") }
+    let!(:specimen1) { FactoryBot.create(:specimen, quantity: 2, quantity_unit: "kg", box: box) }
+    let!(:specimen2) { FactoryBot.create(:specimen, quantity: 4, quantity_unit: "kg", box: box) }
+    let!(:specimen3) { FactoryBot.create(:specimen, quantity: 8, quantity_unit: "kg", box: box) }
+    let!(:specimen4) { FactoryBot.create(:specimen, quantity: 16, quantity_unit: "kg", box: box) }
     before do
       User.current = user
-      specimen3.record_property.update_attributes(lost: true)
-      specimen4.record_property.update_attributes(disposed: true)
+      specimen3.record_property.update(lost: true)
+      specimen4.record_property.update(disposed: true)
     end
     subject { box.specimens_decimal_quantity }
     it { expect(subject).to eq 6000.to_d }
   end
 
   describe "box_decimal_quantity" do
-    let(:box) { FactoryGirl.create(:box, quantity: quantity, quantity_unit: quantity_unit) }
+    let(:box) { FactoryBot.create(:box, quantity: quantity, quantity_unit: quantity_unit) }
     subject { box.box_decimal_quantity }
     context "1" do
       let(:quantity) { 1 }
@@ -285,11 +285,11 @@ describe Box do
   end
 
   describe "recursive_inventory" do
-    let(:box) { FactoryGirl.create(:box) }
-    let!(:fixed_child) { FactoryGirl.create(:box, parent: box, fixed_in_box: true) }
-    let!(:fixed_specimen) { FactoryGirl.create(:specimen, box: box, fixed_in_box: true) }
-    let!(:unfixed_child) { FactoryGirl.create(:box, parent: box) }
-    let!(:unfixed_specimen) { FactoryGirl.create(:specimen, box: box) }
+    let(:box) { FactoryBot.create(:box) }
+    let!(:fixed_child) { FactoryBot.create(:box, parent: box, fixed_in_box: true) }
+    let!(:fixed_specimen) { FactoryBot.create(:specimen, box: box, fixed_in_box: true) }
+    let!(:unfixed_child) { FactoryBot.create(:box, parent: box) }
+    let!(:unfixed_specimen) { FactoryBot.create(:specimen, box: box) }
     let(:checked_at) { Time.current.round }
     before { box.recursive_inventory(checked_at) }
     it { expect(fixed_child.paths.current.first.checked_at).to eq checked_at }

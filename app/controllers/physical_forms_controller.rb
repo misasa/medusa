@@ -6,7 +6,7 @@ class PhysicalFormsController < ApplicationController
   layout "admin"
 
   def index
-    @search = PhysicalForm.search(params[:q])
+    @search = PhysicalForm.ransack(params[:q])
     @search.sorts = "updated_at ASC" if @search.sorts.empty?
     @physical_forms = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @physical_forms
@@ -27,7 +27,7 @@ class PhysicalFormsController < ApplicationController
   end
 
   def update
-    @physical_form.update_attributes(physical_form_params)
+    @physical_form.update(physical_form_params)
     respond_with(@physical_form, location: physical_forms_path)
   end
 

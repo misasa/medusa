@@ -1,12 +1,12 @@
 require 'spec_helper'
 
 describe SurfaceImagesController do
-  let(:parent) { FactoryGirl.create(:surface) }
-  let(:child) {FactoryGirl.create(:attachment_file) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:parent) { FactoryBot.create(:surface) }
+  let(:child) {FactoryBot.create(:attachment_file) }
+  let(:user) { FactoryBot.create(:user) }
   let(:url){"where_i_came_from"}
   let(:attributes) { {data: data} }
-  let(:data){fixture_file_upload("/files/test_image.jpg",'image/jpeg')}
+  let(:data){fixture_file_upload("test_image.jpg",'image/jpeg')}
   before { request.env["HTTP_REFERER"]  = url }
   before { sign_in user }
   before { parent }
@@ -18,42 +18,42 @@ describe SurfaceImagesController do
 
   describe "GET show" do
     #let(:method){get :show, surface_id: parent, id: child_id}
-    let(:image_1) { FactoryGirl.create(:attachment_file) }
-    let(:image_2) { FactoryGirl.create(:attachment_file) }
+    let(:image_1) { FactoryBot.create(:attachment_file) }
+    let(:image_2) { FactoryBot.create(:attachment_file) }
     before do
       image_1;image_2;
       parent.images << image_1
       parent.images << image_2
     end
-    context "without format" do    
-      before{get :show,surface_id:parent.id, id: image_2.id }
+    context "without format" do
+      before{get :show, params: { surface_id:parent.id, id: image_2.id }}
       it{expect(assigns(:surface)).to eq parent}
-      it{expect(assigns(:image)).to eq image_2}      
+      it{expect(assigns(:image)).to eq image_2}
       it{expect(response).to render_template("show") }
     end
   end
 
 
-  describe "GET calibrate" do
+  describe "GET calibrate", :type => :controller do
     render_views
-    let(:image_1) { FactoryGirl.create(:attachment_file) }
-    let(:image_2) { FactoryGirl.create(:attachment_file) }
+    let(:image_1) { FactoryBot.create(:attachment_file) }
+    let(:image_2) { FactoryBot.create(:attachment_file) }
     before do
       image_1;image_2;
       parent.images << image_1
       parent.images << image_2
     end
-    context "with calibrated" do    
-      before{get :calibrate ,surface_id:parent.id, id: image_2.id, base_id: image_1.id }
+    context "with calibrated" do
+      before{get :calibrate , params: { surface_id:parent.id, id: image_2.id, base_id: image_1.id }}
       it{expect(assigns(:surface)).to eq parent}
       it{expect(assigns(:image)).to eq image_2}
       it{expect(assigns(:base_image)).to eq parent.surface_images.where(image_id: image_1.id)[0]}
       it{expect(response).to render_template("calibrate") }
     end
 
-    context "with uncalibrated", :current => true do    
-      let(:image_2) { FactoryGirl.create(:attachment_file, :affine_matrix => nil) }
-      before{get :calibrate ,surface_id:parent.id, id: image_2.id, base_id: image_1.id }
+    context "with uncalibrated", :current => true do
+      let(:image_2) { FactoryBot.create(:attachment_file, :affine_matrix => nil) }
+      before{get :calibrate , params: { surface_id:parent.id, id: image_2.id, base_id: image_1.id }}
       #it{expect(assigns(:surface)).to eq parent}
       #it{expect(assigns(:image)).to eq image_2}
       it{expect(response).to render_template("calibrate") }
@@ -61,7 +61,7 @@ describe SurfaceImagesController do
   end
 
   describe "POST create" do
-    let(:method){post :create, surface_id: parent, attachment_file: attributes}
+    let(:method){post :create, params: { surface_id: parent, attachment_file: attributes }}
     before{child}
     it { expect{method}.to change(AttachmentFile, :count).by(1) }
     context "validate" do
@@ -79,8 +79,8 @@ describe SurfaceImagesController do
   end
 
   describe "DELETE destory" do
-    let(:method){delete :destroy, surface_id: parent, id: child_id}
-    before do 
+    let(:method){delete :destroy, params: { surface_id: parent, id: child_id }}
+    before do
       parent.images << child
     end
     let(:child_id){child.id}
@@ -98,11 +98,11 @@ describe SurfaceImagesController do
 
 
   describe "PUT update", :current => true do
-    let(:method){put :update, surface_id: parent, id: child_id, surface_image: {corners_on_world: [[-50,40],[50,40],[50,-40],[-50,-40]]}}
+    let(:method){put :update, params: { surface_id: parent, id: child_id, surface_image: {corners_on_world: [[-50,40],[50,40],[50,-40],[-50,-40]]}}}
     let(:child_id){child.id}
     it { expect {method}.to change(AttachmentFile, :count).by(0) }
     context "present child" do
-      before { put :update, surface_id: parent, id: child_id, attachment_file: attributes, "surface_image" => {hello:'world'} }
+      before { put :update, params: { surface_id: parent, id: child_id, attachment_file: attributes, "surface_image" => {hello:'world'} }}
       it { expect(parent.images.exists?(id: child.id)).to eq true}
     end
     context "none child" do
@@ -112,9 +112,9 @@ describe SurfaceImagesController do
   end
 
   describe "POST move_to_tops" do
-    let(:method){post :move_to_top, surface_id: parent.id, id: child_id }
-    let(:child_1) {FactoryGirl.create(:attachment_file, :name => "child-1") }
-    let(:child_2) {FactoryGirl.create(:attachment_file, :name => "child-2") }
+    let(:method){post :move_to_top, params: { surface_id: parent.id, id: child_id }}
+    let(:child_1) {FactoryBot.create(:attachment_file, :name => "child-1") }
+    let(:child_2) {FactoryBot.create(:attachment_file, :name => "child-2") }
 
     let(:child_id){child_2.id}
     before do
@@ -134,7 +134,7 @@ describe SurfaceImagesController do
 
 
   describe "POST link_by_global_id" do
-    let(:method){post :link_by_global_id, surface_id: parent.id, global_id: global_id }
+    let(:method){post :link_by_global_id, params: { surface_id: parent.id, global_id: global_id }}
     context "present child" do
       let(:global_id){child.global_id}
       before { method }
@@ -150,14 +150,14 @@ describe SurfaceImagesController do
       before { allow(AttachmentFile).to receive(:joins).and_raise }
       context "format html" do
         before do
-          post :link_by_global_id, surface_id: parent.id, global_id: child.global_id, format: :html
+          post :link_by_global_id, params: { surface_id: parent.id, global_id: child.global_id, format: :html}
         end
         it { expect(response.body).to render_template("parts/duplicate_global_id") }
         it { expect(response.status).to eq 422 }
       end
       context "format json" do
         before do
-          post :link_by_global_id, surface_id: parent.id, global_id: child.global_id, format: :json
+          post :link_by_global_id, params: { surface_id: parent.id, global_id: child.global_id, format: :json}
         end
         it { expect(response.body).to be_blank }
         it { expect(response.status).to eq 422 }

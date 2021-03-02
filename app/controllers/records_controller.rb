@@ -6,7 +6,7 @@ class RecordsController < ApplicationController
   rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
   def index
-    @records_search = RecordProperty.readables(current_user).where.not(datum_type: ["Chemistry", "Spot", "Table"]).search(reserved_params)
+    @records_search = RecordProperty.readables(current_user).where.not(datum_type: ["Chemistry", "Spot", "Table"]).ransack(reserved_params)
     @records_search.sorts = "updated_at DESC" if @records_search.sorts.empty?
     @records = @records_search.result.page(params[:page]).per(params[:per_page])
 #    respond_with @records, :methods  # TODO: jsonおよびxml表現ではどのような形式で欲しいのか？
@@ -86,7 +86,7 @@ class RecordsController < ApplicationController
     element_names = @records.map(&:pml_elements).flatten.map(&:name)
     #json = Rails.cache.fetch("#{@record.cache_key}/pmlame") do
     #  [ @records.map {|item| item.build_pmlame(element_names)}.flatten.uniq ]
-    #end 
+    #end
     respond_with @records do |format|
 #      format.json { render json: [ @records.map {|item| item.build_pmlame(element_names)}.flatten.uniq ], methods: [:datum_attributes] }
       format.json { render json: Rails.cache.fetch("#{@record.cache_key}/pmlame.json"){ [ @records.map {|item| item.build_pmlame(element_names)}.flatten.uniq ] } }
@@ -189,7 +189,7 @@ class RecordsController < ApplicationController
   def record_not_found(e)
     respond_to do |format|
       format.html { render 'record_not_found', status: :not_found }
-      format.all { render nothing: true, status: :not_found }
+      format.all { render body: nil, status: :not_found }
     end
   end
 

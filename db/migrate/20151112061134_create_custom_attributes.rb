@@ -1,4 +1,4 @@
-class CreateCustomAttributes < ActiveRecord::Migration
+class CreateCustomAttributes < ActiveRecord::Migration[4.2]
   def change
     create_table :custom_attributes do |t|
       t.string :name

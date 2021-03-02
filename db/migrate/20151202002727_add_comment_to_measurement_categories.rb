@@ -1,11 +1,9 @@
-class AddCommentToMeasurementCategories < ActiveRecord::Migration
+class AddCommentToMeasurementCategories < ActiveRecord::Migration[4.2]
   def change
-    change_table "measurement_categories" do |t|
-      t.comment "測定種別"
-      t.change_comment :id, "ID"
-      t.change_comment :name, "名称"
-      t.change_comment :description, "説明"
-      t.change_comment :unit_id, "単位ID"
-    end
+    change_table_comment(:measurement_categories, "測定種別")
+    change_column_comment(:measurement_categories, :id, "ID")
+    change_column_comment(:measurement_categories, :name, "名称")
+    change_column_comment(:measurement_categories, :description, "説明")
+    change_column_comment(:measurement_categories, :unit_id, "単位ID")
   end
 end

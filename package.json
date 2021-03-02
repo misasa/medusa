@@ -6,11 +6,15 @@
   "author": "Yusuke Yachi <yusuke.yachi@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@rails/webpacker": "5.2.1",
     "Leaflet.Spin": "makinacorpus/Leaflet.Spin",
     "Leaflet.ZoomLabel": "https://github.com/yyachi/Leaflet.ZoomLabel",
     "d3": "^5.16.0",
     "fitsjs": "^0.6.6",
     "handsontable": "https://github.com/handsontable/handsontable",
+    "ini": "2.0.0",
+    "jquery": "^3.5.1",
+    "kind-of": "6.0.3",
     "leaflet": "^1.7.1",
     "leaflet-control-surfacelayers": "yyachi/leaflet-control-surfacelayers",
     "leaflet-distortableimage": "yyachi/Leaflet.DistortableImage#develop",
@@ -28,5 +32,8 @@
     "perspective-transform": "https://github.com/jlouthan/perspective-transform",
     "plotty": "yyachi/plotty",
     "wcs.js": "https://github.com/astrojs/wcsjs.git"
+  },
+  "devDependencies": {
+    "webpack-dev-server": "^3.11.2"
   }
 }

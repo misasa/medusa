@@ -3,14 +3,14 @@ require 'spec_helper'
 describe NestedResources::ChemistriesController do
   let(:parent_name){:analysis}
   let(:child_name){:chemistry}
-  let(:parent) { FactoryGirl.create(parent_name) }
-  let(:child) { FactoryGirl.create(child_name) }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:parent) { FactoryBot.create(parent_name) }
+  let(:child) { FactoryBot.create(child_name) }
+  let(:user) { FactoryBot.create(:user) }
   let(:url){"where_i_came_from"}
   let(:value){1}
-  let(:unit){FactoryGirl.create(:unit) }
-  let(:measurement_item) { FactoryGirl.create(:measurement_item) }
-  let(:category_measurement_item){FactoryGirl.create(:category_measurement_item)}
+  let(:unit){FactoryBot.create(:unit) }
+  let(:measurement_item) { FactoryBot.create(:measurement_item) }
+  let(:category_measurement_item){FactoryBot.create(:category_measurement_item)}
   let(:measurement_item_id){measurement_item.id}
   let(:attributes) { {measurement_item_id: measurement_item_id,unit_id: unit.id,value: value ,uncertainty: 1} }
   let(:mesurement_category_id){category_measurement_item.measurement_category_id}
@@ -20,7 +20,7 @@ describe NestedResources::ChemistriesController do
   before { child }
 
   describe "GET multiple_new" do
-    let(:method){get :multiple_new,parent_resourece: :analysis,analysis_id: parent,measurement_category_id: mesurement_category_id}
+    let(:method){get :multiple_new, params: { parent_resourece: :analysis,analysis_id: parent,measurement_category_id: mesurement_category_id }}
     context "error measurement_category_id" do
       let(:mesurement_category_id){0}
       before{method}
@@ -37,9 +37,9 @@ describe NestedResources::ChemistriesController do
   end
 
   describe "POST multiple_create" do
-    let(:method){post :multiple_create, parent_resource: :analysis, analysis_id: parent, chemistries: attributes}
-    let(:measurement_item){FactoryGirl.create(:measurement_item) }
-    let(:measurement_item2){FactoryGirl.create(:measurement_item) }
+    let(:method){post :multiple_create, params: { parent_resource: :analysis, analysis_id: parent, chemistries: attributes }}
+    let(:measurement_item){FactoryBot.create(:measurement_item) }
+    let(:measurement_item2){FactoryBot.create(:measurement_item) }
     let(:attributes) {[{measurement_item_id: measurement_item.id,unit_id: unit.id,value: 1,uncertainty: 1},{measurement_item_id: measurement_item2.id,unit_id: unit.id,value: 2,uncertainty: 2}] }
 
     it { expect {method}.to change(Chemistry, :count).by(attributes.count) }
@@ -51,7 +51,7 @@ describe NestedResources::ChemistriesController do
   end
 
   describe "POST create" do
-    let(:method){post :create, parent_resource: parent_name, analysis_id: parent, chemistry: attributes, association_name: :chemistries}
+    let(:method){post :create, params: { parent_resource: parent_name, analysis_id: parent, chemistry: attributes, association_name: :chemistries }}
     before{child}
     it { expect{method}.to change(Chemistry, :count).by(1) }
     context "validate" do
@@ -69,7 +69,7 @@ describe NestedResources::ChemistriesController do
   end
 
   describe "PUT update" do
-    let(:method){put :update, parent_resource: parent_name, analysis_id: parent, id: child_id, association_name: :chemistries}
+    let(:method){put :update, params: { parent_resource: parent_name, analysis_id: parent, id: child_id, association_name: :chemistries }}
     let(:child_id){child.id}
     it { expect {method}.to change(Chemistry, :count).by(0) }
     context "present child" do
@@ -83,7 +83,7 @@ describe NestedResources::ChemistriesController do
     end
   end
   describe "DELETE destory" do
-    let(:method){delete :destroy, parent_resource: parent_name, analysis_id: parent, id: child_id, association_name: :chemistries}
+    let(:method){delete :destroy, params: { parent_resource: parent_name, analysis_id: parent, id: child_id, association_name: :chemistries }}
     before { parent.chemistries << child}
     let(:child_id){child.id}
     it { expect {method}.to change(Chemistry, :count).by(-1) }

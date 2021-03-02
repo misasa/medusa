@@ -2,14 +2,14 @@ require "spec_helper"
 
 describe User do
   describe "self.current" do
-    let(:user){ FactoryGirl.create(:user) }
+    let(:user){ FactoryBot.create(:user) }
     before { User.current = user }
     it{ expect(User.current.id).to eq user.id }
   end
 
   describe "box_global_id", :current => true do
-    let(:user){ FactoryGirl.create(:user) }
-    let(:box){ FactoryGirl.create(:box)}
+    let(:user){ FactoryBot.create(:user) }
+    let(:box){ FactoryBot.create(:box)}
     context "with box" do
       before { 
         user.box = box
@@ -24,8 +24,8 @@ describe User do
   end
 
   describe "as_json", :current => true do
-    let(:user){ FactoryGirl.create(:user) }
-    let(:box){ FactoryGirl.create(:box)}
+    let(:user){ FactoryBot.create(:user) }
+    let(:box){ FactoryBot.create(:box)}
     before { 
       user.box = box
       user.save
@@ -35,10 +35,10 @@ describe User do
   end
 
   describe "create_search_columns" do
-    let!(:column1) { FactoryGirl.create(:search_column, user_id: 0, name: "name1", display_name: "display_name1", datum_type: "Specimen", display_order: 1, display_type: 0) }
-    let!(:column2) { FactoryGirl.create(:search_column, user_id: 0, name: "name2", display_name: "display_name2", datum_type: "Specimen", display_order: 2, display_type: 1) }
-    let!(:column3) { FactoryGirl.create(:search_column, user_id: 0, name: "name3", display_name: "display_name3", datum_type: "Specimen", display_order: 3, display_type: 2) }
-    let(:user) { FactoryGirl.build(:user_foo) }
+    let!(:column1) { FactoryBot.create(:search_column, user_id: 0, name: "name1", display_name: "display_name1", datum_type: "Specimen", display_order: 1, display_type: 0) }
+    let!(:column2) { FactoryBot.create(:search_column, user_id: 0, name: "name2", display_name: "display_name2", datum_type: "Specimen", display_order: 2, display_type: 1) }
+    let!(:column3) { FactoryBot.create(:search_column, user_id: 0, name: "name3", display_name: "display_name3", datum_type: "Specimen", display_order: 3, display_type: 2) }
+    let(:user) { FactoryBot.build(:user_foo) }
     before { user.save! }
     describe "column1" do
       subject { SearchColumn.user_is(user).where(name: "name1") }
@@ -68,7 +68,7 @@ describe User do
 
   describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:user, username: username,email: "test1@test.co.jp") }
+      let(:obj) { FactoryBot.build(:user, username: username,email: "test1@test.co.jp") }
       context "is presence" do
         let(:username) { "sample_user" }
         it { expect(obj).to be_valid }
@@ -86,7 +86,7 @@ describe User do
         it { expect(obj).not_to be_valid }
       end
       context "is duplicate" do
-        let(:user){ FactoryGirl.create(:user) }
+        let(:user){ FactoryBot.create(:user) }
         let(:username) { user.username }
         it { expect(obj).not_to be_valid }
       end

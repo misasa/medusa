@@ -1,4 +1,4 @@
-class SpecimenQuantity < ActiveRecord::Base
+class SpecimenQuantity < ApplicationRecord
   include HasQuantity
 
   belongs_to :specimen, touch: true

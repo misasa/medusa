@@ -6,7 +6,7 @@ describe "bib master" do
     create_data
     visit bibs_path
   end
-  let(:login_user) { FactoryGirl.create(:user) }
+  let(:login_user) { FactoryBot.create(:user) }
   let(:create_data) {}
   
   describe "bib detail screen" do
@@ -15,8 +15,8 @@ describe "bib master" do
       bib.attachment_files << attachment_file 
       bib.create_record_property(user_id: login_user.id) 
     end
-    let(:bib) { FactoryGirl.create(:bib) }
-    let(:attachment_file) { FactoryGirl.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
+    let(:bib) { FactoryBot.create(:bib) }
+    let(:attachment_file) { FactoryBot.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
     
     describe "view spot" do
       describe "thumbnail" do

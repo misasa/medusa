@@ -1,4 +1,4 @@
-class AddColumnToRecordProperty < ActiveRecord::Migration
+class AddColumnToRecordProperty < ActiveRecord::Migration[4.2]
   def change
     change_table :record_properties do |t|
       t.boolean :disposed, default: false, null: false, comment: "廃棄フラグ"

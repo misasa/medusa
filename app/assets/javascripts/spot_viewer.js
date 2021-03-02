@@ -27,7 +27,7 @@
       this._initTransform(this.image.attr("width"), this.image.attr("height"), spot.attr("cx"), spot.attr("cy"));
       svg.setAttribute("width", this.image.attr("width"));
       svg.setAttribute("height", this.image.attr("height"));
-
+      
       this.group.appendChild(svg);
       $(this.image).dblclick(function(e) {
         var offsetX = e.pageX - $(this).offset().left, offsetY = e.pageY - $(this).offset().top,
@@ -77,7 +77,7 @@
       this._addZoomButtons();
       if (this.canvas.data("image")) {
         $.get(this.canvas.data("image"), function(data) {
-          self.loadImage(data.documentElement);
+          self.loadImage($(data)[0]);
         });
       }
     },
@@ -189,7 +189,7 @@
     _initThumbnails: function() {
       var self = this;
       $(self.thumbnails).on("ajax:success", "a.thumbnail", function(event, data, status) {
-        self.loadImage(data.documentElement);
+        self.loadImage($(data)[0]);
         if (self.form.length > 0) {
           var action = self.form.attr("action");
           self.form.attr("action", action.replace(/(.*attachment_files\/)\d+(\/spots)/, "$1" + self.image.data("id") + "$2"));

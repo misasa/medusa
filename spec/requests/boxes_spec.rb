@@ -6,17 +6,17 @@ describe "box" do
     create_data
     visit boxes_path
   end
-  let(:login_user) { FactoryGirl.create(:user) }
+  let(:login_user) { FactoryBot.create(:user) }
   let(:create_data) {}
-  
+
   describe "box detail screen" do
     before { click_link(box.name) }
     let(:create_data) do
       box.attachment_files << attachment_file
-      box.create_record_property(user_id: login_user.id) 
+      box.create_record_property(user_id: login_user.id)
     end
-    let(:box) { FactoryGirl.create(:box) }
-    let(:attachment_file) { FactoryGirl.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
+    let(:box) { FactoryBot.create(:box) }
+    let(:attachment_file) { FactoryBot.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
     let(:data_type) { "image/jpeg" }
 
     describe "view spot" do
@@ -58,8 +58,7 @@ describe "box" do
         end
       end
       describe "new spot" do
-        pending "new spot新規作成時の実装が困難のためpending" do
-        end
+        pending "new spot新規作成時の実装が困難のためpending"
       end
 
       describe "thumbnail" do
@@ -78,7 +77,7 @@ describe "box" do
         end
       end
     end
-    
+
     describe "at-a-glance tab" do
       before { click_link("at-a-glance") }
       describe "pdf icon" do
@@ -96,7 +95,7 @@ describe "box" do
         end
       end
     end
-    
+
     describe "file tab" do
       before { click_link("file (1)") }
       describe "pdf icon" do
@@ -115,5 +114,5 @@ describe "box" do
       end
     end
   end
-  
+
 end

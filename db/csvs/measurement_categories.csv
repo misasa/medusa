@@ -1,8 +1,8 @@
-id,name,description,unit_id
-2,trace,trace elements,9
-3,major,major element,8
-16,isotope (delta),isotope,3
-15,isotope (epsilon),isotope,4
-6,isotope (raw),isotope,1
-17,atom,"",2
-14,volatile,volatile element,8
+id,name,description,unit_id,scale,is_template
+2,trace,trace elements,9,,false
+3,major,major element,8,,fals
+16,isotope (delta),isotope,3,,fals
+15,isotope (epsilon),isotope,4,,fals
+6,isotope (raw),isotope,1,,fals
+17,atom,"",2,,fals
+14,volatile,volatile element,8,,fals

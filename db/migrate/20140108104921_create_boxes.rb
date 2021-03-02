@@ -1,4 +1,4 @@
-class CreateBoxes < ActiveRecord::Migration
+class CreateBoxes < ActiveRecord::Migration[4.2]
   def change
     create_table :boxes do |t|
       t.string  :name
@@ -6,10 +6,10 @@ class CreateBoxes < ActiveRecord::Migration
       t.integer :position
       t.string  :path
       t.integer :box_type_id
-      
+
       t.timestamps
     end
-    
+
     add_index :boxes, :parent_id
     add_index :boxes, :box_type_id
   end

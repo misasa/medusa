@@ -1,14 +1,12 @@
-class AddCommentToUnits < ActiveRecord::Migration
+class AddCommentToUnits < ActiveRecord::Migration[4.2]
   def change
-    change_table "units" do |t|
-      t.comment "単位"
-      t.change_comment :id, "ID"
-      t.change_comment :name, "名称"
-      t.change_comment :created_at, "作成日時"
-      t.change_comment :updated_at, "更新日時"
-      t.change_comment :conversion, "変換"
-      t.change_comment :html, "HTML表記"
-      t.change_comment :text, "テキスト"
-    end
+    change_table_comment(:units, "単位")
+    change_column_comment(:units, :id, "ID")
+    change_column_comment(:units, :name, "名称")
+    change_column_comment(:units, :created_at, "作成日時")
+    change_column_comment(:units, :updated_at, "更新日時")
+    change_column_comment(:units, :conversion, "変換")
+    change_column_comment(:units, :html, "HTML表記")
+    change_column_comment(:units, :text, "テキスト")
   end
 end

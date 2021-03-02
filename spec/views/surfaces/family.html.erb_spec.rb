@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe "surfaces/family.html.erb" do
-  let(:user) { FactoryGirl.create(:user) }
-  let(:obj_1){ FactoryGirl.create(:surface, name: 'hoge')  }
+  let(:user) { FactoryBot.create(:user) }
+  let(:obj_1){ FactoryBot.create(:surface, name: 'hoge')  }
   before do
     assign(:surface, obj_1.decorate)
     assign(:current_user, user)
@@ -18,7 +18,7 @@ describe "surfaces/family.html.erb" do
   end
 
   context "with image which is not calibrated" do
-    let(:image_1) { FactoryGirl.create(:attachment_file, :name => 'fuga', :affine_matrix => nil) }
+    let(:image_1) { FactoryBot.create(:attachment_file, :name => 'fuga', :affine_matrix => nil) }
     before do
       obj_1.images << image_1
     end
@@ -29,9 +29,9 @@ describe "surfaces/family.html.erb" do
   end
 
   context "with calibrated image and uncalibrated images" do
-    let(:image_1) { FactoryGirl.create(:attachment_file, :name => 'fuga_1') }
-    let(:image_2) { FactoryGirl.create(:attachment_file, :name => 'fuga_2', :affine_matrix => nil) }
-    let(:image_3) { FactoryGirl.create(:attachment_file, :name => 'fuga_3', :affine_matrix => []) }
+    let(:image_1) { FactoryBot.create(:attachment_file, :name => 'fuga_1') }
+    let(:image_2) { FactoryBot.create(:attachment_file, :name => 'fuga_2', :affine_matrix => nil) }
+    let(:image_3) { FactoryBot.create(:attachment_file, :name => 'fuga_3', :affine_matrix => []) }
 
     before do
       obj_1.images << image_1
@@ -45,7 +45,7 @@ describe "surfaces/family.html.erb" do
   end
 
   context "with calibrated image" do
-    let(:image_1) { FactoryGirl.create(:attachment_file, :name => 'fuga') }
+    let(:image_1) { FactoryBot.create(:attachment_file, :name => 'fuga') }
     before do
       obj_1.images << image_1
     end

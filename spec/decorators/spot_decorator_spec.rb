@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe SpotDecorator do
-  let(:user){ FactoryGirl.create(:user)}
-  let(:spot){ FactoryGirl.create(:spot, target_uid: target_uid).decorate }
+  let(:user){ FactoryBot.create(:user)}
+  let(:spot){ FactoryBot.create(:spot, target_uid: target_uid).decorate }
   before{User.current = user}
 
   describe "icon" do
@@ -13,7 +13,7 @@ describe SpotDecorator do
   describe ".spots_panel" do
     subject{ spot.spots_panel }
     context "attachment_file is nil" do
-      let(:spot){ FactoryGirl.create(:spot, attachment_file: nil, target_uid: nil).decorate }
+      let(:spot){ FactoryBot.create(:spot, attachment_file: nil, target_uid: nil).decorate }
       it { expect(subject).to be_nil}
     end
   end
@@ -30,7 +30,7 @@ describe SpotDecorator do
     end
     context "exists record property" do
       let(:target_uid) { bib.global_id }
-      let(:bib){FactoryGirl.create(:bib,name: "test bib")}
+      let(:bib){FactoryBot.create(:bib,name: "test bib")}
       context "not exists datum" do
         before { bib.destroy }
         it { expect(subject).to be_nil }
@@ -47,8 +47,8 @@ describe SpotDecorator do
     it { expect(subject).to include("radius_in_percent" => 1.0) }
     it { expect(subject).to include("radius_in_um" => 1.0) }
     context "without calibrated image" do
-      let(:image){FactoryGirl.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix => nil)}
-      let(:spot){FactoryGirl.create(:spot, attachment_file_id: image.id).decorate}
+      let(:image){FactoryBot.create(:attachment_file, :original_geometry => "4096x3415", :affine_matrix => nil)}
+      let(:spot){FactoryBot.create(:spot, attachment_file_id: image.id).decorate}
       it { expect(subject).to include("radius_in_percent" => 1.0) }
       it { expect(subject).to include("radius_in_um" => nil) }
     end
@@ -66,7 +66,7 @@ describe SpotDecorator do
     end
     context "exists record property" do
       let(:target_uid) { bib.global_id }
-      let(:bib){FactoryGirl.create(:bib,name: "test bib")}
+      let(:bib){FactoryBot.create(:bib,name: "test bib")}
       context "not exists datum" do
         before { bib.destroy }
         it { expect(subject).to match "/spots/#{spot.id}" }

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe BibDecorator do
-  let(:obj) { FactoryGirl.create(:bib).decorate }
-  let(:user) { FactoryGirl.create(:user) }
+  let(:obj) { FactoryBot.create(:bib).decorate }
+  let(:user) { FactoryBot.create(:user) }
   before{ User.current = user }
 
   describe "icon" do
@@ -11,7 +11,7 @@ describe BibDecorator do
   end
 
   describe ".primary_picture" do
-    let(:attachment_file){ FactoryGirl.create(:attachment_file) }
+    let(:attachment_file){ FactoryBot.create(:attachment_file) }
     let(:picture) { obj.primary_picture(width: width, height: height) }
     let(:capybara) { Capybara.string(picture) }
     let(:body) { capybara.find("body") }
@@ -42,7 +42,7 @@ describe BibDecorator do
 
   describe ".to_html" do
     subject{ obj.to_html }
-    let(:obj){FactoryGirl.create(:bib).decorate}
+    let(:obj){FactoryBot.create(:bib).decorate}
 
     context "author" do
       context "is blank" do
@@ -52,24 +52,24 @@ describe BibDecorator do
       context "is not blank 1" do
         before do
           obj.authors.clear
-          obj.authors << FactoryGirl.create(:author, name: "Test_1")
+          obj.authors << FactoryBot.create(:author, name: "Test_1")
         end
         it{expect(subject).to include "Test_1"}
       end
       context "is not blank 2" do
         before do
           obj.authors.clear
-          obj.authors << FactoryGirl.create(:author, name: "Test_1")
-          obj.authors << FactoryGirl.create(:author, name: "Test_2")
+          obj.authors << FactoryBot.create(:author, name: "Test_1")
+          obj.authors << FactoryBot.create(:author, name: "Test_2")
         end
         it{expect(subject).to include "Test_1 &amp; Test_2"}
       end
       context "is not blank 2" do
         before do
           obj.authors.clear
-          obj.authors << FactoryGirl.create(:author, name: "Test_1")
-          obj.authors << FactoryGirl.create(:author, name: "Test_2")
-          obj.authors << FactoryGirl.create(:author, name: "Test_3")
+          obj.authors << FactoryBot.create(:author, name: "Test_1")
+          obj.authors << FactoryBot.create(:author, name: "Test_2")
+          obj.authors << FactoryBot.create(:author, name: "Test_3")
         end
         it{expect(subject).to include "Test_1 et al."}
       end

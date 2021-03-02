@@ -1,14 +1,12 @@
-class AddCommentToGlobalQrs < ActiveRecord::Migration
+class AddCommentToGlobalQrs < ActiveRecord::Migration[4.2]
   def change
-    change_table "global_qrs" do |t|
-      t.comment "QRコード"
-      t.change_comment :id, "ID"
-      t.change_comment :record_property_id, "レコードプロパティID"
-      t.change_comment :file_name, "ファイル名"
-      t.change_comment :content_type, "MIME Content-Type"
-      t.change_comment :file_size, "ファイルサイズ"
-      t.change_comment :file_updated_at, "ファイル更新日時"
-      t.change_comment :identifier, "識別子"
-    end
+    change_table_comment(:global_qrs, "QRコード")
+    change_column_comment(:global_qrs, :id, "ID")
+    change_column_comment(:global_qrs, :record_property_id, "レコードプロパティID")
+    change_column_comment(:global_qrs, :file_name, "ファイル名")
+    change_column_comment(:global_qrs, :content_type, "MIME Content-Type")
+    change_column_comment(:global_qrs, :file_size, "ファイルサイズ")
+    change_column_comment(:global_qrs, :file_updated_at, "ファイル更新日時")
+    change_column_comment(:global_qrs, :identifier, "識別子")
   end
 end

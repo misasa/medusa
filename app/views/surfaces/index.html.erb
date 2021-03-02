@@ -76,7 +76,7 @@
 	<% end %>
       </thead>
       <tbody>
-	<%= form_tag bundle_edit_surfaces_path, id: "bundle-form" do %>
+	<%= form_with url:bundle_edit_surfaces_path, id: "bundle-form" do %>
 	  <%= render partial: :surface, collection: SurfaceDecorator.decorate_collection(@surfaces), locals: { checked: false } %>
 	<% end %>
       </tbody>
@@ -84,7 +84,7 @@
 	<%= render partial: "new", locals: { surface: Surface.new } %>
       </tfoot>
     </table>
-    <%= link_to_function content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), "$('#bundle-form').submit();", class: "btn btn-default" %>
+    <%= link_to content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), '#', onclick: "$('#bundle-form').submit();", class: "btn btn-default" %>
   </div>
 </div>
 <%= javascript_tag do %>

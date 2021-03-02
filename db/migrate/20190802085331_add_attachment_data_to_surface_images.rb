@@ -1,4 +1,4 @@
-class AddAttachmentDataToSurfaceImages < ActiveRecord::Migration
+class AddAttachmentDataToSurfaceImages < ActiveRecord::Migration[4.2]
   def self.up
     change_table :surface_images do |t|
       t.attachment :data

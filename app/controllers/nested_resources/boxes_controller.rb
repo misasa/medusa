@@ -8,7 +8,7 @@ class NestedResources::BoxesController < ApplicationController
     @boxes = @parent.send(params[:association_name])
     respond_with @boxes
   end
-  
+
   def create
     @box = Box.new(box_params)
     @parent.send(params[:association_name]) << @box if @box.save
@@ -34,16 +34,16 @@ class NestedResources::BoxesController < ApplicationController
   rescue
     duplicate_global_id
   end
-  
+
   def inventory
     @box= Box.find(params[:id])
-    @box.update_attributes(parent_id: params[:box_id])
-    @box.paths.current.first.update_attributes(checked_at: Time.now) if @box.paths.current.first
+    @box.update(parent_id: params[:box_id])
+    @box.paths.current.first.update(checked_at: Time.now) if @box.paths.current.first
     respond_with @box
   end
 
   private
-  
+
   def box_params
     params.require(:box).permit(
       :name,
@@ -77,7 +77,7 @@ class NestedResources::BoxesController < ApplicationController
   def duplicate_global_id
     respond_to do |format|
       format.html { render "parts/duplicate_global_id", status: :unprocessable_entity }
-      format.all { render nothing: true, status: :unprocessable_entity }
+      format.all { render body: nil, status: :unprocessable_entity }
     end
   end
 

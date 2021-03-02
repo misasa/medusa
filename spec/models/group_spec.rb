@@ -4,7 +4,7 @@ describe Group do
 
   describe "validates" do
     describe "name" do
-      let(:obj) { FactoryGirl.build(:group, name: name) }
+      let(:obj) { FactoryBot.build(:group, name: name) }
       context "is presence" do
         let(:name) { "sample_group" }
         it { expect(obj).to be_valid }

@@ -4,7 +4,7 @@
     Affine Matrix of <%= @attachment_file.name %>
   </h4>
 </div>
-<%= form_tag(update_affine_matrix_attachment_file_path(@attachment_file), remote: true, method: 'put', format: 'js') do %>
+<%= form_with url:update_affine_matrix_attachment_file_path(@attachment_file), local: false, method: 'put', format: 'js' do %>
 
   <div class="modal-body">
     <div class="alert error-message"></div>

@@ -5,7 +5,7 @@ class AttachmentFilesController < ApplicationController
   load_and_authorize_resource
 
   def index
-    @search = AttachmentFile.readables(current_user).search(params[:q])
+    @search = AttachmentFile.readables(current_user).ransack(params[:q])
     @search.sorts = "updated_at DESC" if @search.sorts.empty?
     @attachment_files = @search.result.page(params[:page]).per(params[:per_page])
     respond_with @attachment_files
@@ -49,7 +49,7 @@ class AttachmentFilesController < ApplicationController
   end
 
   def update
-    @attachment_file.update_attributes(attachment_file_params)
+    @attachment_file.update(attachment_file_params)
     respond_with @attachment_file, location: adjust_url_by_requesting_tab(request.referer), action: "error"
   end
 
@@ -60,7 +60,7 @@ class AttachmentFilesController < ApplicationController
         format.json { render status: 400}
       end
     else
-      @attachment_file.update_attributes({affine_matrix: m.map(&:to_f)})
+      @attachment_file.update({affine_matrix: m.map(&:to_f)})
       #respond_with @attachment_file
       respond_with @attachment_file do |format|
         format.json { render json: @attachment_file }
@@ -80,7 +80,7 @@ class AttachmentFilesController < ApplicationController
       a << m[key].map(&:to_f)  
     end
     if flag
-      @attachment_file.update_attributes({corners_on_world: a})
+      @attachment_file.update({corners_on_world: a})
 #      respond_with @attachment_file
       respond_with @attachment_file do |format|
         format.json { render json: @attachment_file }
@@ -123,7 +123,7 @@ class AttachmentFilesController < ApplicationController
   end
 
   def bundle_update
-    @attachment_files.each { |attachment_file| attachment_file.update_attributes(attachment_file_params.only_presence) }
+    @attachment_files.each { |attachment_file| attachment_file.update(attachment_file_params.only_presence) }
     render :bundle_edit
   end
 

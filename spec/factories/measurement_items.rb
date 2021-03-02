@@ -1,10 +1,10 @@
-FactoryGirl.define do
+FactoryBot.define do
   factory :measurement_item do
-    nickname "測定１"
-    description "説明１"
-    display_in_html "[A]"
+    nickname { "測定１" }
+    description { "説明１" }
+    display_in_html { "[A]" }
     association :unit, factory: :unit
-    display_in_tex "\text{A}"
-    scale 2
+    display_in_tex { "\text{A}" }
+    scale { 2 }
   end
 end

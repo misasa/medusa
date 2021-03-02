@@ -13,6 +13,7 @@ module Status
 end
 module HasRecordProperty
   extend ActiveSupport::Concern
+  include ActiveModel::Serializers::Xml
 
   #HasRecordProperty::Status::NORMAL = 0
 
@@ -295,7 +296,7 @@ module HasRecordProperty
   end
 
   def spot_links
-    Spot.find_all_by_target_uid(global_id)
+    Spot.where(target_uid: global_id)
   end
 
   def recursive_lose
