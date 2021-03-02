@@ -60,7 +60,7 @@ gem 'unicorn'
 # gem 'debugger', group: [:development, :test]
 
 gem 'devise'
-gem 'omniauth', '1.9.1'
+gem 'omniauth', '2.0.0'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-shibboleth'
 gem 'cancancan'
