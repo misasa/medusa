@@ -267,3 +267,6 @@ Devise.setup do |config|
   # so you need to do it manually. For the users scope, it would be:
   # config.omniauth_path_prefix = '/my_engine/users/auth'
 end
+
+# NOTE: It is explicitly set. Because omniauth-rails_csrf_protection GEM doesn't work.
+OmniAuth.config.request_validation_phase = OmniAuth::RailsCsrfProtection::TokenVerifier.new
