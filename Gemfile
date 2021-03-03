@@ -59,10 +59,11 @@ gem 'unicorn'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'devise'
-gem 'omniauth', '1.9.1'
+gem 'devise', github: 'heartcombo/devise'
+gem 'omniauth', '2.0.3'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-shibboleth'
+gem 'omniauth-rails_csrf_protection'
 gem 'cancancan'
 gem 'kaminari'
 gem 'draper'
