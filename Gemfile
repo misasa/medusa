@@ -6,7 +6,7 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '6.1.0'
+gem 'rails', '6.1.2.1'
 
 # Use postgresql as the database for Active Record
 gem 'pg'
@@ -59,10 +59,11 @@ gem 'unicorn'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'devise'
-gem 'omniauth', '1.9.1'
+gem 'devise', github: 'heartcombo/devise'
+gem 'omniauth', '2.0.3'
 gem 'omniauth-google-oauth2'
 gem 'omniauth-shibboleth'
+gem 'omniauth-rails_csrf_protection'
 gem 'cancancan'
 gem 'kaminari'
 gem 'draper'
@@ -80,9 +81,9 @@ gem 'acts-as-taggable-on'
 gem 'exception_notification'
 gem 'settingslogic'
 #gem 'acts_as_mappable', git: 'git@devel.misasa.okayama-u.ac.jp:gems/actsasmappable.git'
-gem 'acts_as_mappable', '0.1.4'
+gem 'acts_as_mappable', '0.1.5'
 #gem 'with_recursive', git: 'git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.git'
-gem 'with_recursive', '0.0.6'
+gem 'with_recursive', '0.0.7'
 gem 'thinreports', '0.7.7'
 gem 'bootstrap-sass'
 gem 'ransack'
