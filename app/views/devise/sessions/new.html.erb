@@ -12,6 +12,6 @@
 <% end %>
 <% if Settings.sign_in.enable_shibboleth %>
 <div>
-<%= link_to "Sign in", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://"), class: "btn btn-mini btn-default", method: :post %> with <%= Settings.sign_in.try(:alias_shibboleth) || "Shibboleth" %>
+<%= link_to "Sign in", user_shibboleth_omniauth_authorize_url(protocol: "https://"), class: "btn btn-mini btn-default", method: :post %> with <%= Settings.sign_in.try(:alias_shibboleth) || "Shibboleth" %>
 </div>
 <% end %>
