@@ -70,7 +70,7 @@
       	<% if @user.omniauth_uid(:shibboleth).present? %>
       	  <%= link_to("Unlink", unlink_account_path(provider: :shibboleth), method: :post, class: "btn btn-mini btn-default") %>
       	<% else %>
-      	  <%= link_to "Link", user_omniauth_authorize_path(:shibboleth, only_path: false, protocol: "https://"), class: "btn btn-mini btn-default" %>
+      	  <%= link_to "Link", user_shibboleth_omniauth_authorize_url(protocol: "https://"), class: "btn btn-mini btn-default" %>
       	<% end %>
       </div>
     <% end %>
