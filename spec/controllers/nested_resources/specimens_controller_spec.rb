@@ -31,11 +31,11 @@ describe NestedResources::SpecimensController do
         it { expect(parent.specimens.exists?(name: name)).to eq false}
         it { expect(response).to render_template("error")}
       end
-      context "name同じ" do
+      context "name同じ", :current => true do
         let(:attributes) {{name: name, box_id: id}}
         let(:name) {child.name}
         let(:id) {child.box_id}
-        it { expect{method}.to change(Specimen, :count).by(1) }
+        xit { expect{method}.to change(Specimen, :count).by(1) }
       end
     end
   end
@@ -153,5 +153,4 @@ describe NestedResources::SpecimensController do
       it { expect(assigns(:specimen).updated_at).to eq now  }
     end
   end
-
 end
