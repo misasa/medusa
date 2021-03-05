@@ -9,6 +9,7 @@
     "@rails/webpacker": "5.2.1",
     "Leaflet.Spin": "makinacorpus/Leaflet.Spin",
     "Leaflet.ZoomLabel": "https://github.com/yyachi/Leaflet.ZoomLabel",
+    "bootstrap-vue": "^2.21.2",
     "d3": "^5.16.0",
     "fitsjs": "^0.6.6",
     "handsontable": "https://github.com/handsontable/handsontable",
@@ -31,6 +32,9 @@
     "ndarray": "yyachi/ndarray",
     "perspective-transform": "https://github.com/jlouthan/perspective-transform",
     "plotty": "yyachi/plotty",
+    "vue": "^2.6.12",
+    "vue-loader": "^15.9.6",
+    "vue-template-compiler": "^2.6.12",
     "wcs.js": "https://github.com/astrojs/wcsjs.git"
   },
   "devDependencies": {
