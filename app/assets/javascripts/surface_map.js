@@ -8,8 +8,11 @@ L.Surface = L.Class.extend({
   obj2spot: function(obj){
     var surface = this;
     obj.reload = function(options = {}){
+      console.log("obj.reload...")
       var url = obj.resource_url + ".json";
-      $.get(url, {}, function(data){
+      console.log(url)
+      $.get(url, function(data){
+        console.log(data)
         var spot = surface.obj2spot(data);
         if ('onSuccess' in options){
           options.onSuccess(spot);
@@ -21,9 +24,11 @@ L.Surface = L.Class.extend({
       $.ajax(url,{
         type: 'PUT',
         data: {spot:attrib},
-        beforeSend: function(e) {console.log('saving...')},
+        beforeSend: function(e) {console.log('saving spot...')},
         complete: function(e){
+          console.log("complete", e)
           if ('onSuccess' in options){
+            console.log(options, obj)
             options.onSuccess(obj);
           }
         },
@@ -239,10 +244,12 @@ L.SpotEditor = L.Class.extend({
       attrib = spotEditor.to_attrib();
       spot.save(attrib,{
         onSuccess: function(e){
+          console.log("spot.save onSuccess")
           geometry.closePopup();
           geometry._map.removeLayer(geometry);
           spot.reload({
             onSuccess: function(spot){
+              console.log("spot.reload onSuccess")
               var pos = surface.world2latLng([spot.world_x, spot.world_y]);
               var circle = L.surfaceCircle(pos, spot.circle_options()).addTo(spotEditor.options.spotsLayer);
               spot.marker = circle;
@@ -419,10 +426,11 @@ L.SurfaceCircle.addInitHook(function(){
     this.pm.disable();
   });
   this.on('pm:edit', e => {
-    var spotEditor = e.layer.options.spotEditor;
-    var latlng1 = e.layer._latlng;
+    var target = e.target
+    var spotEditor = target.options.spotEditor;
+    var latlng1 = target._latlng;
     var world1 = surface.latLng2world(latlng1);
-    var latlng2 = e.layer.getLatLngOnCircle();
+    var latlng2 = target.getLatLngOnCircle();
     var world2 = surface.latLng2world(latlng2);
     var radius_in_um = surface.latLngDistance2um(latlng1, latlng2);
     spotEditor.inputs['world_x'].value = L.surfaceNumberFormatter(world1[0]);

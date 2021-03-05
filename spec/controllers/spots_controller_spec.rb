@@ -1,8 +1,27 @@
 require 'spec_helper'
+include ActionDispatch::TestProcess
 
 describe SpotsController do
   let(:user) { FactoryBot.create(:user) }
   before { sign_in user }
+
+  describe "GET show", :current => true do
+    let(:obj) { FactoryBot.create(:spot) }
+
+    context "without format" do
+      before { get :show, params: { id: obj.id }}
+      it { expect(assigns(:spot)).to eq obj }
+    end
+
+    context "with format 'json'" do
+      before { get :show, params: { id: obj.id, format: 'json' }}
+      it {
+        expect(response.body).to include("\"global_id\":") 
+      }
+    end
+
+  end
+
 
   describe "GET edit" do
     let(:obj) { FactoryBot.create(:spot) }
