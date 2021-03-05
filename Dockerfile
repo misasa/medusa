@@ -107,6 +107,8 @@ COPY . /medusa
 RUN bash -l -c 'bundle install'
 RUN chown -R medusa:medusa /medusa
 USER medusa
+ENV PATH /usr/local/bin:$PATH
+RUN bundle exec rake assets:precompile
 ENV PORT 3000
 EXPOSE $PORT
 CMD ["sh", "-c", "bundle exec rails server -p ${PORT}"]
