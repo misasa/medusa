@@ -565,7 +565,7 @@ function initSurfaceMap() {
   }
   var baseCount = 0;
 
-  layerGroups.concat([{ name: "top", opacity: 100 }]).forEach(function(layerGroup) {
+  layerGroups.concat([{ name: "top", opacity: 100, visible: true }]).forEach(function(layerGroup) {
     var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0, visible = layerGroup.visible, resource_url = layerGroup.resource_url, colorScale = layerGroup.colorScale, displayMin = layerGroup.displayMin, displayMax = layerGroup.displayMax;
     opts = {opacity: opacity, maxNativeZoom: 6, visible: visible, resource_url: resource_url};
     var flag = false;
