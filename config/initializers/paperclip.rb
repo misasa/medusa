@@ -14,6 +14,6 @@ module Paperclip
     end
   end
   Paperclip.options[:content_type_mappings] = {
-    fits: %w(application/octet-stream)
+    fits: %w(image/fits)
   }
 end

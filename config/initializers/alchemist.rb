@@ -6,6 +6,8 @@ begin
       Alchemist.register(:mass, name.to_sym, 1.to_d / conversion)
     end
   end
+rescue ActiveRecord::ConnectionNotEstablished
+  puts "Skipped unit registration, because the database connection is not established"
 rescue ActiveRecord::NoDatabaseError
   puts "Skipped unit registration, because the database does not exist"
 end

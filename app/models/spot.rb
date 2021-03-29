@@ -223,6 +223,7 @@ class Spot < ApplicationRecord
   end
 
   def to_svg
+    return "" if (spot_x.nan? || spot_y.nan? || radius_in_percent.nil?)
     "<g><title>#{title}</title><circle #{svg_attributes.map { |k, v| "#{k}=\"#{v}\"" }.join(" ") }/></g>"
   end
 

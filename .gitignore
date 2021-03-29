@@ -33,6 +33,9 @@ docker-compose.yml
 public/system
 public/system_ro
 public/system_rw
+public/packs
+public/packs-test
+public/assets
 vendor/bundler
 db_dump
 .ruby-version

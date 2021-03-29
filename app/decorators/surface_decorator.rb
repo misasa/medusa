@@ -16,7 +16,7 @@ class SurfaceDecorator < Draper::Decorator
   end
 
   def as_json(options = {})
-    super({ methods: [:global_id, :image_ids, :layers, :globe, :center, :length, :bounds, :url_for_tiles, :map_data] }.merge(options))
+    super({ methods: [:global_id, :image_ids, :layers, :globe, :center, :length, :url_for_tiles, :map_data] }.merge(options))
   end
 
   def layers

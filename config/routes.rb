@@ -11,7 +11,7 @@ Medusa::Application.routes.draw do
   resources :tokens, only: :create
 
   root 'records#index'
-
+  get '/front/vue', to: 'front#vue'
   concern :bundleable do
     collection do
       post :bundle_edit

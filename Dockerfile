@@ -1,6 +1,6 @@
 #Node.js & Yarn
 FROM node:13.14-stretch as node
-FROM yyachi/ruby-fits:2.1.7 as ruby-fits 
+FROM yyachi/ruby-fits:2.7.2 as ruby-fits 
 
 FROM ubuntu:bionic as build-env
 RUN apt-get update \
@@ -19,10 +19,10 @@ RUN echo 'export RBENV_ROOT="/opt/rbenv"' >> /etc/profile \
 && echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh \
 && echo 'eval "$(rbenv init -)"' >> /etc/profile \
 && sh /etc/profile.d/rbenv.sh \
-&& rbenv install 2.1.7 \
-&& rbenv global 2.1.7 \
-&& echo 'gem: --no-document' >> ~/.gemrc && cp ~/.gemrc /etc/gemrc && chmod uog+r /etc/gemrc \
-&& gem update --system 2.7.8
+&& rbenv install 2.7.2 \
+&& rbenv global 2.7.2 \
+&& echo 'gem: --no-document' >> ~/.gemrc && cp ~/.gemrc /etc/gemrc && chmod uog+r /etc/gemrc
+#&& gem update --system 2.7.8
 WORKDIR /app
 COPY Gemfile Gemfile.lock /app/
 RUN bash -l -c 'bundle install'
@@ -86,11 +86,11 @@ RUN echo 'export RBENV_ROOT="/opt/rbenv"' >> /etc/profile \
 && echo 'eval "$(rbenv init -)"' >> /etc/profile.d/rbenv.sh \
 && echo 'eval "$(rbenv init -)"' >> /etc/profile \
 && sh /etc/profile.d/rbenv.sh \
-&& rbenv global 2.1.7
+&& rbenv global 2.7.2
 
 # install RubyFits
-COPY --from=ruby-fits /root/lib/ruby/RubyFits.rb /opt/rbenv/versions/2.1.7/lib/ruby/site_ruby/RubyFits.rb
-COPY --from=ruby-fits /root/lib/ruby/fits.so /opt/rbenv/versions/2.1.7/lib/ruby/site_ruby/fits.so
+COPY --from=ruby-fits /usr/local/lib/ruby/site_ruby/RubyFits.rb /opt/rbenv/versions/2.7.2/lib/ruby/site_ruby/RubyFits.rb
+COPY --from=ruby-fits /usr/local/lib/ruby/site_ruby/fits.so /opt/rbenv/versions/2.7.2/lib/ruby/site_ruby/fits.so
 
 ARG UID=1000
 ARG GID=1000
@@ -107,6 +107,8 @@ COPY . /medusa
 RUN bash -l -c 'bundle install'
 RUN chown -R medusa:medusa /medusa
 USER medusa
+ENV PATH /usr/local/bin:$PATH
+RUN bundle exec rake assets:precompile
 ENV PORT 3000
 EXPOSE $PORT
 CMD ["sh", "-c", "bundle exec rails server -p ${PORT}"]

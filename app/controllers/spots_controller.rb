@@ -14,7 +14,11 @@ class SpotsController < ApplicationController
   end
 
   def show
-    respond_with @spot, layout: !request.xhr?
+    respond_with @spot do |format|
+      format.html
+      format.json { render json: @spot }
+      format.xml
+    end
   end
 
   def family

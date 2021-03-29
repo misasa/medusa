@@ -410,7 +410,7 @@ ActiveRecord::Schema.define(version: 2021_02_26_014610) do
     t.datetime "updated_at"
     t.integer "max_zoom_level"
     t.boolean "visible", default: true, null: false
-    t.string "color_scale", limit: 255
+    t.string "color_scale"
     t.float "display_min"
     t.float "display_max"
     t.boolean "wall", default: false, null: false

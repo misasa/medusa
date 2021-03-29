@@ -21,7 +21,7 @@ class SurfaceLayer < ApplicationRecord
   end
 
   def bounds
-    overlay_images = overlay_surface_images.map{|s_i| s_i.image if s_i.image.bounds && s_i.image.bounds.all?{|e| !e.nil? }}.compact
+    overlay_images = overlay_surface_images.map{|s_i| s_i.image if s_i.image && s_i.image.bounds && s_i.image.bounds.all?{|e| !e.nil? }}.compact
     return Array.new(4) { 0 } if surface.globe? || overlay_images.blank?
     left,upper,right,bottom = overlay_images[0].bounds
     overlay_images.each do |image|
