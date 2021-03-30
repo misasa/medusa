@@ -3,7 +3,7 @@
       <div class="panel-heading">
         <%= link_to(list_title(surface), surface, :title => "view map") %>
           <%= link_to specimen_surface_path(@specimen, surface) + tab_param(__FILE__), method: :delete, title: "unlink surface", data: {confirm: t("confirm.unlink")} do %>
-            <span class="glyphicon glyphicon-remove"></span>
+            <span class="fas fa-times"></span>
           <% end %>
           <a href="#surface-<%= surface.id %>", data-toggle="collapse", aria-expanded="false", aria-control="surface-<%= surface.id %>", title = "show and hide spots belong to the surface">
             <span class="badge" style="float:right"><%= (surface.globe? ? 1 : surface.spots.size) %></span>
@@ -89,13 +89,13 @@
           <%= text_field_tag :global_id, nil, id: "surface-global-id", :placeholder => "input ID", class: "form-control input-sm" %>
           <span class="input-group-addon">
             <%= link_to surfaces_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#surface-global-id" do %>
-              <span class="glyphicon glyphicon-search"></span>
+              <span class="fas fa-search"></span>
             <% end %>
           </span>
   
           </div>
             <%= button_tag title: "link surface by global id", class: "btn btn-default" do %>
-              <span class="glyphicon glyphicon-save"></span>
+              <span class="far fa-save"></span>
             <% end %>
       <% end %>
     </td>
@@ -104,7 +104,7 @@
           <%= hidden_tabname_tag(__FILE__) %>
           <%= f.text_field :name, :placeholder => "input name", class: "form-control input-sm" %>
             <%= f.button title:"add surface", class: "btn btn-default" do %>
-              <span class="glyphicon glyphicon-save"></span>
+              <span class="far fa-save"></span>
             <% end %>
         <% end %>
     </td>

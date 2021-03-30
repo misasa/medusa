@@ -30,12 +30,12 @@
           <td><%= attachment_file.try!(:global_id) %></td> 
           <td>
             <%= link_to move_to_top_attaching_path(attaching) + tab_param(__FILE__), method: :move_to_top ,title: "move to top" do %>
-              <span class="glyphicon glyphicon-arrow-up"></span>
+              <span class="fas fa-arrow-up"></span>
             <% end %>
           </td>
           <td>
             <%= link_to  place_attachment_file_path(@place,attachment_file) + tab_param(__FILE__), method: :delete ,title: "unlink attachment file",data: {confirm: t("confirm.unlink")} do %>
-              <span class="glyphicon glyphicon-remove"></span>
+              <span class="fas fa-times"></span>
             <% end %>
           </td>
         </tr>
@@ -53,7 +53,7 @@
         <th colspan= "2"><%= f.file_field :data %></th>
         <th>
           <%= f.button title:"add attachment file",class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-save"></span>
+            <span class="far fa-save"></span>
           <% end %>
         </th>
       <% end %>
@@ -65,19 +65,19 @@
 	    <%= text_field_tag :global_id,nil, id: "attachment-file-global-id", class: "form-control input-sm" %>
 	    <span class="input-group-addon">
 	      <%= link_to attachment_files_path(per_page: 5, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#attachment-file-global-id" do %>
-	      <span class="glyphicon glyphicon-search"></span>
+	      <span class="fas fa-search"></span>
 	      <% end %>
 	    </span>
 	  </div>
 	</th>
         <th>
           <%= button_tag title: "link attachment file by global id",class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-save"></span>
+            <span class="far fa-save"></span>
           <% end %>
         </th>
       <% end %>
     </tr>
   </tfoot>
 </table>
-<%= link_to content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), '#', onclick: "$('#attachment-file-bundle-form').submit();", class: "btn btn-default", title: "open multi-edit page with checked items" %>
+<%= link_to content_tag(:span, nil, class: "fas fa-pencil-alt"), '#', onclick: "$('#attachment-file-bundle-form').submit();", class: "btn btn-default", title: "open multi-edit page with checked items" %>
 <%= mantra "To add data, specify a file with browse button and press save button.  To let join, fill ID field and press save button.  To edit, choose record with checkbox and press pencil button.", :title => "Files related to <#{@place.name}>" %> 

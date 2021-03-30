@@ -17,7 +17,7 @@ class SurfaceImageDecorator < Draper::Decorator
   #   end
 
   def name_with_id
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-globe") +
+    h.content_tag(:span, nil, class: "fas fa-globe-asia") +
     " " + 
     h.link_to(surface.name, h.surface_path(surface)) + 
     " / #{image.name}"
@@ -134,13 +134,13 @@ class SurfaceImageDecorator < Draper::Decorator
       )
       h.concat(
         h.content_tag(:a, class:"left carousel-control", href:"##{id}", role: "button", data:{slide: "prev"}) do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-chevron-left", 'aria-hidden' => true)
+          h.concat h.content_tag(:span, nil, class: "fas fa-chevron-left", 'aria-hidden' => true)
           h.concat h.content_tag(:span, "Previous", class: "sr-only")
         end
       )
       h.concat(
         h.content_tag(:a, class:"right carousel-control", href:"##{id}", role: "button", data:{slide: "next"}) do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-chevron-right", 'aria-hidden' => true)
+          h.concat h.content_tag(:span, nil, class: "fas fa-chevron-right", 'aria-hidden' => true)
           h.concat h.content_tag(:span, "Next", class: "sr-only")
         end
       )
@@ -333,8 +333,8 @@ class SurfaceImageDecorator < Draper::Decorator
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
       #attachment_file.decorate.picture_link
       links = []
-      links << h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file, title: "show #{attachment_file.name}" )
-#                         links << h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-cog"), calibrate_surface_image_path(self.surface, attachment_file), title: "calibrate #{attachment_file.name}")
+      links << h.link_to(h.content_tag(:span, nil, class: "far fa-image"), attachment_file, title: "show #{attachment_file.name}" )
+#                         links << h.link_to(h.content_tag(:span, nil, class: "fas fa-cog"), calibrate_surface_image_path(self.surface, attachment_file), title: "calibrate #{attachment_file.name}")
       h.raw(links.join)
     end
 

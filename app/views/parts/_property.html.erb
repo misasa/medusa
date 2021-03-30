@@ -80,21 +80,21 @@
     </div>
   <% end %>
   <%= form.button class: "btn btn-default" do %>
-  <span class="glyphicon glyphicon-save"></span>
+  <span class="far fa-save"></span>
   <% end %>
 
 
   <% unless form.object.record_property.disposed %>
     <%= link_to dispose_record_path(record.global_id), class: "btn btn-default", method: :put do %>
-      <span class="glyphicon glyphicon-trash"></span>
+      <span class="far fa-trash-alt"></span>
     <% end %>
   <% else %>
     <%= link_to restore_record_path(record.global_id), class: "btn btn-default active", method: :put do %>
-      <span class="glyphicon glyphicon-trash"></span>
+      <span class="far fa-trash-alt"></span>
     <% end %>
     <% if current_user.admin? %>
       <%= link_to record_path(record.global_id), class: "btn btn-danger", method: :delete , data: { confirm: t("confirm.delete",:recordname => record.name) } do %>
-        <span class="glyphicon glyphicon-remove"></span>
+        <span class="fas fa-times"></span>
       <% end %>
 
     <% end %>

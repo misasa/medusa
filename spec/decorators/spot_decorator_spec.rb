@@ -7,7 +7,7 @@ describe SpotDecorator do
 
   describe "icon" do
     subject { SpotDecorator.icon }
-    it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-screenshot\"></span>") }
+    it { expect(subject).to eq ("<span class=\"fas fa-crosshairs\"></span>") }
   end
 
   describe ".spots_panel" do
@@ -36,7 +36,7 @@ describe SpotDecorator do
         it { expect(subject).to be_nil }
       end
       context "exists datum" do
-        it { expect(subject).to eq "<span class=\"glyphicon glyphicon-book\"></span> <a href=\"/bibs/#{bib.id}\">test bib</a>" }
+        it { expect(subject).to eq "<span class=\"fas fa-book\"></span> <a href=\"/bibs/#{bib.id}\">test bib</a>" }
       end
     end
   end

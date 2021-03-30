@@ -34,7 +34,7 @@
   </div>
   <ul id="measurement-items" class="col-lg-8">
     <li class="row list-unstyled">
-      <div class="col-lg-7">name <span class="glyphicon glyphicon-sort"></span></div>
+      <div class="col-lg-7">name <span class="fas fa-sort"></span></div>
       <div class="col-lg-2">unit</div>
       <div class="col-lg-2">ndigit</div>
       <div class="col-lg-1"></div>
@@ -47,7 +47,7 @@
 	<div class="col-lg-2"><%= g.text_field :scale, class: "form-control input-sm" %></div>
 	<div class="col-lg-1">
 	  <%= link_to category_measurement_item_path(g.object), :method => :delete ,:title => "unlink item",data: {confirm: t("confirm.unlink")} do %>
-	    <span class="glyphicon glyphicon-remove"></span>
+	    <span class="fas fa-times"></span>
 	  <% end %>
 	</div>
       </li>

@@ -8,22 +8,22 @@
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
 	<%= link_to map_place_path(@place), class: "btn btn-default activate", remote: true, title: "top" do %>
-	  <span class="glyphicon glyphicon-globe"></span>
+	  <span class="fas fa-globe-asia"></span>
 	<% end %>
       </div>
       <% if can? :update, @place %>
       <div class="btn-group btn-group-sm">
 	<%= link_to edit_place_path(@place), class: "btn btn-default", remote: true, title: "edit locality" do %>
-	  <span class="glyphicon glyphicon-pencil"></span>
+	  <span class="fas fa-pencil-alt"></span>
 	<% end %>
 	<%= link_to property_place_path(@place), class: "btn btn-default", remote: true, title: "edit global ID" do %>
-	  <span class="glyphicon glyphicon-cog"></span>
+	  <span class="fas fa-cog"></span>
 	<% end %>
       </div>
       <% end %>
       <div class="btn-group btn-group-sm">
 	<%= link_to place_path(@place, format: :kml), class: "btn btn-default", title: "download map" do %>
-	  <span class="glyphicon glyphicon-file"></span>
+	  <span class="fas fa-file"></span>
 	<% end %>
       </div>
     </div>

@@ -17,7 +17,7 @@
     <tr>
       <td>
         <%= link_to edit_measurement_item_path(measurement_item) do %>
-        <span class="glyphicon glyphicon-edit"></span>
+        <span class="far fa-edit"></span>
         <% end %>
       </td>
       <td><%= measurement_item.nickname %></td>
@@ -31,7 +31,7 @@
       <td><%= measurement_item.chemistries.size  %></td>
       <td>
         <%= link_to measurement_item_path(measurement_item), method: :delete, data: {confirm: t("confirm.delete",:recordname => measurement_item.nickname)} do %>
-        <span class="glyphicon glyphicon-remove"></span>
+        <span class="fas fa-times"></span>
         <% end %>
       </td>
     </tr>
@@ -44,7 +44,7 @@
       <td><%= f.text_field :nickname, class: "form-control input-sm" %></td>
       <td>
         <%= f.button class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-save"></span>
+        <span class="far fa-save"></span>
         <% end %>
       </td>
       <td></td>

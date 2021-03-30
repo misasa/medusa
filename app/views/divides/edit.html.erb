@@ -47,7 +47,7 @@
                 <div class="btn-group" data-toggle="buttons">
                   <%= label_tag :manual, class: "btn btn-default btn-sm active" do %>
                     <%= check_box_tag :manual, true, true, autocomplete: "off" %>
-                    <span class="glyphicon glyphicon-ok"></span>
+                    <span class="fas fa-check"></span>
                   <% end %>
                 </div>
                 and loss is
@@ -63,7 +63,7 @@
       <tr>
         <td colspan="3" class="text-right">
           <%= f.button class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-save"></span>
+            <span class="far fa-save"></span>
           <% end %>
 
           <%= link_to "cancel", specimen_path(params[:specimen_id], tab: "quantity"), class: "btn btn-default" %>
@@ -97,12 +97,12 @@
   $(document).on("change", "#manual", function() {
     if ($(this).prop('checked')) {
       $("input.parent.quantity").attr("readonly", false);
-      $(this).next().removeClass("glyphicon-minus");
-      $(this).next().addClass("glyphicon-ok");
+      $(this).next().removeClass("fa-minus");
+      $(this).next().addClass("fa-check");
     } else {
       $("input.parent.quantity").attr("readonly", true);
-      $(this).next().removeClass("glyphicon-ok");
-      $(this).next().addClass("glyphicon-minus");
+      $(this).next().removeClass("fa-check");
+      $(this).next().addClass("fa-minus");
     }
     quantity_change_check();
   });

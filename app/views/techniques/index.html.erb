@@ -4,7 +4,7 @@
     <tr>
       <th>
         <%= f.button class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-refresh"></span>
+        <span class="fas fa-redo"></span>
         <% end %>
       </th>
       <th><%= sort_link @search, :name, "name" %></th>
@@ -41,7 +41,7 @@
     <tr>
       <td>
         <%= link_to edit_technique_path(technique) do %>
-        <span class="glyphicon glyphicon-edit"></span>
+        <span class="far fa-edit"></span>
         <% end %>
       </td>
       <td><%= technique.name %> <span class="badge"><%= technique.analyses.size %></span></td>
@@ -51,7 +51,7 @@
       <td>
         <% if technique.analyses.empty? %>
         <%= link_to technique_path(technique), method: :delete , data: {confirm: t("confirm.delete",:recordname => technique.name)} do %>
-        <span class="glyphicon glyphicon-remove"></span>
+        <span class="fas fa-times"></span>
         <% end %>
         <% end %>
       </td>
@@ -65,7 +65,7 @@
       <td><%= f.text_field :name, class: "form-control input-sm" %></td>
       <td>
         <%= f.button class: "btn btn-default", id: "save-button" do %>
-        <span class="glyphicon glyphicon-save"></span>
+        <span class="far fa-save"></span>
         <% end %>
       </td>
       <td></td>

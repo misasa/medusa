@@ -13,7 +13,7 @@
       <td class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
           <%= link_to specimen.attachment_files.first.decorate.picture(width: 50, height: 50, type: :tiny), specimen, class: specimen_ghost(specimen) if specimen.attachment_files.present? %>
           <%= link_to surface_specimen_path(@surface, specimen) + tab_param(__FILE__), method: :delete, title: "unlink specimen", data: {confirm: t("confirm.unlink")} do %>
-            <span class="glyphicon glyphicon-remove"></span>
+            <span class="fas fa-times"></span>
           <% end %>
       </td>
       <td class="col-xs-10 col-sm-10 col-md-10 col-lg-10">
@@ -24,7 +24,7 @@
             <li>
               IGSN: <%= link_to specimen.igsn, Settings.sesar_url(igsn: specimen.igsn) %>
           <%= link_to Settings.sesar_url(igsn: specimen.igsn, edit: true), title: "edit on SESAR" do %>
-            <span class="glyphicon glyphicon-pencil"></span>
+            <span class="fas fa-pencil-alt"></span>
           <% end %>
 
             </li>
@@ -66,13 +66,13 @@
             <%= text_field_tag :global_id, nil, id: "specimen-global-id", :placeholder => "input ID", class: "form-control input-sm" %>
             <span class="input-group-addon">
               <%= link_to specimens_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#specimen-global-id" do %>
-                <span class="glyphicon glyphicon-search"></span>
+                <span class="fas fa-search"></span>
               <% end %>
             </span>
 
             </div>
               <%= button_tag title: "link specimen by global id", class: "btn btn-default" do %>
-                <span class="glyphicon glyphicon-save"></span>
+                <span class="far fa-save"></span>
               <% end %>
         <% end %>
       </td>
@@ -84,7 +84,7 @@
             <%= f.text_field :quantity, :placeholder => "input quantity", class: "form-control input-sm" %>
             <%= f.text_field :quantity_unit, :placeholder => "input quantity unit", class: "form-control input-sm" %>
               <%= f.button title:"add specimen file", class: "btn btn-default" do %>
-                <span class="glyphicon glyphicon-save"></span>
+                <span class="far fa-save"></span>
               <% end %>
           <% end %>
       </td>

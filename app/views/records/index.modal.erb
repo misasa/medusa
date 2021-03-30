@@ -5,7 +5,7 @@
     <tr>
       <th>
         <%= f.button class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-refresh"></span>
+        <span class="fas fa-redo"></span>
         <% end %>
       </th>
       <th><%= sort_link @records_search, :name, "name", { format: :modal }, remote: true %></th>
@@ -47,7 +47,7 @@
     <tr>
       <td>
 	<%= button_tag class: "btn btn-default btn-xs determine", "data-id" => record.global_id do %>
-	<span class="glyphicon glyphicon-link"></span>
+	<span class="fas fa-link"></span>
 	<% end %>
       </td>
       <td><%= link_to record.name, polymorphic_path(record.datum, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: specimen_ghost(record.datum) %></td>

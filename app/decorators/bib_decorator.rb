@@ -4,7 +4,7 @@ class BibDecorator < Draper::Decorator
   delegate :as_json
 
   def self.icon
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+    h.content_tag(:span, nil, class: "fas fa-book")
   end
 
   def primary_picture(width: 250, height: 250)
@@ -15,11 +15,11 @@ class BibDecorator < Draper::Decorator
   end
 
   def name_with_id
-    tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+    tag = h.content_tag(:span, nil, class: "fas fa-book")
     tag += h.raw(" ") + to_html
     tag += h.raw(" ") + h.raw("< #{h.draggable_id(global_id)} >")
     # if Settings.rplot_url
-    #   tag += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
+    #   tag += h.link_to(h.content_tag(:span, nil, class: "far fa-eye"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
     # end
     tag
   end

@@ -6,6 +6,7 @@
   "author": "Yusuke Yachi <yusuke.yachi@gmail.com>",
   "license": "MIT",
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.3",
     "@rails/webpacker": "5.2.1",
     "Leaflet.Spin": "makinacorpus/Leaflet.Spin",
     "Leaflet.ZoomLabel": "https://github.com/yyachi/Leaflet.ZoomLabel",

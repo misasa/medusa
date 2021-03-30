@@ -14,13 +14,13 @@ module ApplicationHelper
 
   def tooltip_info_sign(msg, opts = {})
     content_tag(:a, title: msg, data:{toggle: "tooltip", placement: "right"}) do
-      content_tag(:span, nil, class:"glyphicon glyphicon-info-sign")
+      content_tag(:span, nil, class:"fas fa-info-circle")
     end
   end
 
   def popover_info_sign(title, msg, opts = {})
     content_tag(:a, title: title, data:{toggle: "popover", content: msg, placement: "auto", trigger: "hover"}) do
-      content_tag(:span, nil, class:"glyphicon glyphicon-info-sign")
+      content_tag(:span, nil, class:"fas fa-info-circle")
     end
   end
 
@@ -106,7 +106,7 @@ module ApplicationHelper
   end
 
   def history_title(path)
-    html = path.boxes.map { |content| content_tag(:span, nil, class:"glyphicon glyphicon-folder-close") + ( content ? link_to_if(can?(:read, content), content.name, content) : "--" ) }.join("/") 
+    html = path.boxes.map { |content| content_tag(:span, nil, class:"fas fa-folder") + ( content ? link_to_if(can?(:read, content), content.name, content) : "--" ) }.join("/") 
     html += " " + content_tag(:span, distance_of_time_in_words(path.duration), class:"label label-default")
     raw html
   end
@@ -142,7 +142,7 @@ module ApplicationHelper
     if in_at
       stamps << in_at.strftime("%Y-%m-%d %H:%M")
     end
-    stamps << content_tag(:span, nil, class: "glyphicon glyphicon-arrow-right")
+    stamps << content_tag(:span, nil, class: "fas fa-arrow-right")
 
     if out_at
       stamps << out_at.strftime("%Y-%m-%d %H:%M")
@@ -235,11 +235,12 @@ module ApplicationHelper
 
 
   def icon_tag(icon)
-    content_tag(:span, nil, class: "glyphicon glyphicon-#{icon}")
+    content_tag(:span, nil, class: "fas fa-#{icon}")
   end
 
   def draggable_id(id)
-    content_tag(:span, id, class: "glyphicon glyphicon-transfer global-id", draggable: true)
+    id = content_tag(:span, id, class: "global-id", draggable: true)
+    content_tag(:span, nil, class: "fas fa-exchange-alt") + id
   end
 
   private

@@ -3,21 +3,21 @@ class TableDecorator < Draper::Decorator
   delegate :as_json
 
   def self.icon
-      h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list")
+      h.content_tag(:span, nil, class: "fas fa-table")
   end
 
   def bib_name_with_id
   	return unless bib
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + h.link_to_if(h.can?(:read, bib), " #{bib.name} < #{bib.global_id} >", bib)
+    h.content_tag(:span, nil, class: "fas fa-book") + h.link_to_if(h.can?(:read, bib), " #{bib.name} < #{bib.global_id} >", bib)
   end
 
   def bib_name
   	return unless bib
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + h.link_to_if(h.can?(:read, bib), " #{bib.name}", bib)
+    h.content_tag(:span, nil, class: "fas fa-book") + h.link_to_if(h.can?(:read, bib), " #{bib.name}", bib)
   end
 
   def name_with_id
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list") + h.raw(" #{caption} < #{h.draggable_id(global_id)} >")
+    h.content_tag(:span, nil, class: "fas fa-table") + h.raw(" #{caption} < #{h.draggable_id(global_id)} >")
   end
 
   def publish_badge
@@ -31,7 +31,7 @@ class TableDecorator < Draper::Decorator
   def to_link
      table_link = h.link_to(h.raw(self.caption), self )
      # if Settings.rplot_url
-     #   table_link += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + self.global_id, :title => 'plot online')
+     #   table_link += h.link_to(h.content_tag(:span, nil, class: "far fa-eye"), Settings.rplot_url + '?id=' + self.global_id, :title => 'plot online')
      # end
      table_link
   end
@@ -64,12 +64,12 @@ class TableDecorator < Draper::Decorator
         h.content_tag(:span, class: "panel-title pull-left") do
           h.concat(
               h.content_tag(:a, href: "#tableAccordionCollapse-#{self.id}", data: {toggle: "collapse"}, 'aria-expanded' => false, 'aria-control' => "tableAccordionCollapse-#{self.id}", title: "fold or unfold '#{self.caption}'") do
-              #h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list")
+              #h.concat h.content_tag(:span, nil, class: "fas fa-table")
               #h.concat h.raw(" ")
               #h.concat self.caption
               h.concat self.name_with_id
               if self.bib
-                h.concat h.raw(" in ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+                h.concat h.raw(" in ") + h.content_tag(:span, nil, class: "fas fa-book")
                 h.concat h.raw(" ") + h.link_to_if(h.can?(:read, self.bib), h.raw(self.bib.decorate.author_short_year), self.bib)
               end
               h.concat h.link_to("refreshed at #{h.difference_from_now(self.updated_at)}", h.refresh_table_path(self), title: "refresh '#{self.name}'", class: "small pull-right", method: :put, remote: true)
@@ -83,7 +83,7 @@ class TableDecorator < Draper::Decorator
 
   def panel_foot
     h.content_tag(:div, class: "panel-footer") do
-      h.concat h.link_to(h.content_tag(:span, nil, class:"glyphicon glyphicon-refresh"), h.refresh_table_path(self), title: "refresh preview for '#{self.name}'", class: "btn btn-default", method: :put, remote: true)
+      h.concat h.link_to(h.content_tag(:span, nil, class:"fas fa-redo"), h.refresh_table_path(self), title: "refresh preview for '#{self.name}'", class: "btn btn-default", method: :put, remote: true)
       h.concat h.raw(" ")
       h.concat h.content_tag(:span, "updated at #{h.difference_from_now(self.updated_at)}")
     end

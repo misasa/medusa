@@ -22,7 +22,7 @@
           <td><%= box.try!(:global_id) %></td> 
           <td>
             <%= link_to box_box_path(@box,box), method: :delete ,title: "unlink box",data: {confirm: t("confirm.unlink")} do %>
-              <span class="glyphicon glyphicon-remove"></span>
+              <span class="fas fa-times"></span>
             <% end %>
           </td>
         </tr>
@@ -38,7 +38,7 @@
         <th><%= f.select :box_type_id, BoxType.pluck(:name, :id), { include_blank: true }, class: "form-control input-sm" %></th>
         <th>
           <%= f.button title:"add box file", class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-save"></span>
+            <span class="far fa-save"></span>
           <% end %>
         </th>
       <% end %>
@@ -49,20 +49,20 @@
 	    <%= text_field_tag :global_id, nil, id: "child-global-id", class: "form-control input-sm" %>
 	    <span class="input-group-addon">
 	      <%= link_to boxes_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#child-global-id" do %>
-	      <span class="glyphicon glyphicon-search"></span>
+	      <span class="fas fa-search"></span>
 	      <% end %>
 	    </span>
 	  </div>
 	</th>
         <th>
           <%= button_tag title: "link box by global id", class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-save"></span>
+            <span class="far fa-save"></span>
           <% end %>
         </th>
       <% end %>
     </tr>
   </tfoot>
 </table>
-<%= link_to content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), '#', onclick: "$('#box-bundle-form').submit();", class: "btn btn-default" %>
+<%= link_to content_tag(:span, nil, class: "fas fa-pencil-alt"), '#', onclick: "$('#box-bundle-form').submit();", class: "btn btn-default" %>
 
 <%= mantra "To let join, fill ID field and press save button.  To create new, fill fields and press save button.", :title => "Small box included in <#{@box.name}>" %> 

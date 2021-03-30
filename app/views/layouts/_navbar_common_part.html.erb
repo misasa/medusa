@@ -3,39 +3,39 @@
   <li class="nav-item">
   <% if current_user.box %>
   <%= link_to box_path(current_user.box) do %>
-    <span class="glyphicon glyphicon-home"></span>
+    <span class="fas fa-home"></span>
   <% end %>
   <% else %>
   <%= link_to root_path do %>
-    <span class="glyphicon glyphicon-home"></span>
+    <span class="fas fa-home"></span>
   <% end %>
   <% end %>
   </li>
   <% if current_user.admin? %>
   <li class="nav-item">
   <%= link_to system_preference_path ,title: "system preference" do %>
-    <span class="glyphicon glyphicon-wrench"></span>
+    <span class="fas fa-wrench"></span>
   <% end %>
   </li>
   <% end %>
   <li class="nav-item">
   <%= link_to edit_account_path,title: "account" do %>
-    <span class="glyphicon glyphicon-user"></span>
+    <span class="fas fa-user"></span>
   <% end %>
   </li>
   <li class="nav-item">
   <%= link_to destroy_user_session_path, method: :delete, data: {confirm: t("confirm.logout")}, title: "logout" do %>
-    <span class="glyphicon glyphicon-off"></span>
+    <span class="fas fa-power-off"></span>
   <% end %>
   </li>
   <li class="nav-item">
   <%= link_to Settings.help_url, title: 'help' do %>
-    <span class="glyphicon glyphicon-question-sign"></span>
+    <span class="fas fa-question-circle"></span>
   <% end %>
   </li>
   <li class="nav-item">
   <%= link_to Settings.help_url, title: product_version do %>
-    <span class="glyphicon glyphicon-info-sign"></span>
+    <span class="fas fa-info-circle"></span>
   <% end %>
   </li>
 </ul>
@@ -46,3 +46,4 @@
   </div>
   <%= f.submit "search", class: "btn btn-default" %>
 <% end %>
+

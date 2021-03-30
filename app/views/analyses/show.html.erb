@@ -9,17 +9,17 @@
       <div class="btn-group btn-group-sm">
         <% if @analysis.has_image? %>
           <%= link_to picture_analysis_path(@analysis), class: "btn btn-default  activate", id: "picture-button", remote: true do %>
-            <span class="glyphicon glyphicon-picture"></span>
+            <span class="far fa-image"></span>
           <% end %>
         <% end %>
       </div>
       <% if can? :update, @analysis %>
       <div class="btn-group btn-group-sm">
         <%= link_to edit_analysis_path(@analysis), class: "btn btn-default", id: "pencil-button", remote: true, title: "edit analysis information" do %>
-          <span class="glyphicon glyphicon-pencil"></span>
+          <span class="fas fa-pencil-alt"></span>
         <% end %>
         <%= link_to property_analysis_path(@analysis), class: "btn btn-default", id: "cog-button", remote: true, title: "edit global ID" do %>
-          <span class="glyphicon glyphicon-cog"></span>
+          <span class="fas fa-cog"></span>
         <% end %>
       </div>
       <% end %>

@@ -3,7 +3,7 @@ class SurfaceDecorator < Draper::Decorator
   delegate :as_json
 
   def icon
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+    h.content_tag(:span, nil, class: "fas fa-globe-asia")
   end
 
   def url_for_tile
@@ -28,7 +28,7 @@ class SurfaceDecorator < Draper::Decorator
   # end
 
   def name_with_id
-    tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-globe") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
+    tag = h.content_tag(:span, nil, class: "fas fa-globe-asia") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
     if false && Settings.rplot_url
       tag += h.link_to("map", rmap_url, :title => 'map online', :target=>["_blank"])
     end
@@ -36,7 +36,7 @@ class SurfaceDecorator < Draper::Decorator
   end
 
   def link_with_id
-    tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-globe") + h.raw(" ") + h.link_to(name, h.surface_path(self)) + h.raw(" < #{h.draggable_id(global_id)} >")
+    tag = h.content_tag(:span, nil, class: "fas fa-globe-asia") + h.raw(" ") + h.link_to(name, h.surface_path(self)) + h.raw(" < #{h.draggable_id(global_id)} >")
     if false && Settings.rplot_url
       tag += h.link_to("map", rmap_url, :title => 'map online', :target=>["_blank"])
     end
@@ -114,7 +114,7 @@ class SurfaceDecorator < Draper::Decorator
   def family_tree(current_spot = nil)
     html_class = "tree-node"
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
-      picture = h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+      picture = h.content_tag(:span, nil, class: "fas fa-globe-asia")
       specimens.each do |specimen|
         next unless specimen
         link = specimen.name
@@ -122,7 +122,7 @@ class SurfaceDecorator < Draper::Decorator
         icon += h.link_to(link, specimen, class: h.specimen_ghost(specimen))
         picture += icon        
       end
-      picture += h.icon_tag("screenshot") + h.content_tag(:a, h.content_tag(:span, spots.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if surface.spots.size > 0
+      picture += h.icon_tag("crosshairs") + h.content_tag(:a, h.content_tag(:span, spots.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if surface.spots.size > 0
       picture
     end
     html
@@ -160,9 +160,9 @@ class SurfaceDecorator < Draper::Decorator
   def my_tree
     html_class = "tree-node"
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
-      picture = h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+      picture = h.content_tag(:span, nil, class: "fas fa-globe-asia")
       picture += h.link_to(surface.name, surface)
-      #picture = h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-globe"), self)
+      #picture = h.link_to(h.content_tag(:span, nil, class: "fas fa-globe-asia"), self)
 
       # specimens.each do |specimen|
       #   next unless specimen
@@ -171,8 +171,8 @@ class SurfaceDecorator < Draper::Decorator
       #   icon += h.link_to(link, specimen)
       #   picture += icon        
       # end
-      picture += h.icon_tag("picture") + h.content_tag(:a, h.content_tag(:span, images.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if images.size > 1
-      picture += h.icon_tag("screenshot") + h.content_tag(:a, h.content_tag(:span, spots.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if surface.spots.size > 0
+      picture += h.icon_tag("image") + h.content_tag(:a, h.content_tag(:span, images.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if images.size > 1
+      picture += h.icon_tag("crosshairs") + h.content_tag(:a, h.content_tag(:span, spots.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if surface.spots.size > 0
       picture
     end
 

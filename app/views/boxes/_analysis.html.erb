@@ -7,7 +7,7 @@ else
 end
 %>
 <% unless analyses.empty? %>
-  Table of analysis on <%= content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + link_to(@box.name, box_path(@box)) %>
+  Table of analysis on <%= content_tag(:span, nil, class: "fas fa-folder") + link_to(@box.name, box_path(@box)) %>
   <table class="table table-condensed table-striped">
     <thead>
       <tr><th colspan="<%= analyses.size + 2 %>"></th></tr>

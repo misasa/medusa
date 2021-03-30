@@ -19,7 +19,7 @@
         <td><%= table.specimens.count %></td>
         <td>
           <%= link_to bib_table_path(@bib, table) + tab_param(__FILE__), method: :delete ,title: "delete table",data: {confirm: t("confirm.delete",:recordname => table.caption)} do %>
-            <span class="glyphicon glyphicon-remove"></span>
+            <span class="fas fa-times"></span>
           <% end %>
         </td>
       </tr>
@@ -36,7 +36,7 @@
         <th>manual<%= f.check_box :flag_ignore_take_over_specimen, {}, true, false %></th>
         <th>
           <%= f.button title:"add table",class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-save"></span>
+            <span class="far fa-save"></span>
           <% end %>        
         </th>
       <% end %>

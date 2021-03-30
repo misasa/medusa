@@ -2,7 +2,7 @@ class SurfaceLayerDecorator < Draper::Decorator
   delegate_all
 
   def name_with_id
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-globe") +
+    h.content_tag(:span, nil, class: "fas fa-globe-asia") +
     " " + 
     h.link_to(surface.name, h.surface_path(surface)) + 
     " / #{self.name}"
@@ -156,47 +156,47 @@ class SurfaceLayerDecorator < Draper::Decorator
       end
       h.concat(
         h.link_to(h.surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :delete, title: "delete layer '#{self.name}'", data: {confirm: "Are you sure you want to delete layer '#{self.name}'"}) do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-remove")
+          h.concat h.content_tag(:span, nil, class: "fas fa-times")
         end
       )
       h.concat(
         h.link_to(h.move_to_top_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' bottom") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-circle-arrow-down")
+          h.concat h.content_tag(:span, nil, class: "fas fa-arrow-circle-down")
         end
       )
       h.concat(
         h.link_to(h.move_higher_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' down") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-down")
+          h.concat h.content_tag(:span, nil, class: "fas fa-arrow-down")
         end
       )
       h.concat(
         h.link_to(h.move_lower_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' up") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-up")
+          h.concat h.content_tag(:span, nil, class: "fas fa-arrow-up")
         end
       )
       h.concat(
         h.link_to(h.move_to_bottom_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' top") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-circle-arrow-up")
+          h.concat h.content_tag(:span, nil, class: "fas fa-arrow-circle-up")
         end
       )
       h.concat(
                h.link_to(h.edit_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "edit name and opacity of layer '#{self.name}'") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-pencil")
+          h.concat h.content_tag(:span, nil, class: "fas fa-pencil-alt")
         end
       )
       h.concat(
         h.link_to(h.tiles_surface_layer_path(self.surface, self), method: :post, class: "btn btn-default btn-sm pull-right", title: "refresh tiles for images in layer '#{self.name}'") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-refresh")
+          h.concat h.content_tag(:span, nil, class: "fas fa-redo")
         end
       )
       h.concat(
         h.link_to(h.calibrate_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "align images in layer '#{self.name}'") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-adjust")
+          h.concat h.content_tag(:span, nil, class: "fas fa-adjust")
         end
       )
       h.concat(
         h.link_to(h.map_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "show images in layer '#{self.name}'") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+          h.concat h.content_tag(:span, nil, class: "fas fa-globe-asia")
         end
       )
       h.concat h.content_tag(:div, nil, class: "clearfix")
@@ -239,47 +239,47 @@ class SurfaceLayerDecorator < Draper::Decorator
   def panel_menu
       h.concat(
         h.link_to(h.surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :delete, title: "delete layer '#{self.name}'", data: {confirm: "Are you sure you want to delete layer '#{self.name}'"}) do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-remove")
+          h.concat h.content_tag(:span, nil, class: "fas fa-times")
         end
       )
       h.concat(
         h.link_to(h.move_to_top_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' bottom") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-circle-arrow-down")
+          h.concat h.content_tag(:span, nil, class: "fas fa-arrow-circle-down")
         end
       )
       h.concat(
         h.link_to(h.move_higher_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' down") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-down")
+          h.concat h.content_tag(:span, nil, class: "fas fa-arrow-down")
         end
       )
       h.concat(
         h.link_to(h.move_lower_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' up") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-arrow-up")
+          h.concat h.content_tag(:span, nil, class: "fas fa-arrow-up")
         end
       )
       h.concat(
         h.link_to(h.move_to_bottom_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' top") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-circle-arrow-up")
+          h.concat h.content_tag(:span, nil, class: "fas fa-arrow-circle-up")
         end
       )
       h.concat(
                h.link_to(h.edit_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "edit name and opacity of layer '#{self.name}'") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-pencil")
+          h.concat h.content_tag(:span, nil, class: "fas fa-pencil-alt")
         end
       )
       h.concat(
         h.link_to(h.tiles_surface_layer_path(self.surface, self), method: :post, class: "btn btn-default btn-sm pull-right", title: "refresh tiles for images in layer '#{self.name}'") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-refresh")
+          h.concat h.content_tag(:span, nil, class: "fas fa-redo")
         end
       )
       h.concat(
         h.link_to(h.calibrate_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "align images in layer '#{self.name}'") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-adjust")
+          h.concat h.content_tag(:span, nil, class: "fas fa-adjust")
         end
       )
       h.concat(
         h.link_to(h.map_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "show images in layer '#{self.name}'") do
-          h.concat h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+          h.concat h.content_tag(:span, nil, class: "fas fa-globe-asia")
         end
       )
       h.concat h.content_tag(:div, nil, class: "clearfix")

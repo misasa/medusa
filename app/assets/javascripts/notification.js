@@ -1,13 +1,13 @@
 (function($) {
   $.notification = {
     success: function(message) {
-      notify("alert-success", "<span class='glyphicon glyphicon-ok-circle'></span> Success", message);
+      notify("alert-success", "<span class='far fa-check-circle'></span> Success", message);
     },
     warning: function(message) {
-      notify("alert-warning", "<span class='glyphicon glyphicon-exclamation-sign'></span> Warning", message);
+      notify("alert-warning", "<span class='fas fa-exclamation-sign'></span> Warning", message);
     },
     error: function(message) {
-      notify("alert-danger", "<span class='glyphicon glyphicon-remove-circle'></span> Error", message);
+      notify("alert-danger", "<span class='far fa-times-circle'></span> Error", message);
     },
     errorMessages: function(errors) {
       var $dl = $("<dl>");

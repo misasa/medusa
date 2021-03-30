@@ -4,11 +4,11 @@ class PlaceDecorator < Draper::Decorator
   delegate :as_json
 
   def self.icon
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+    h.content_tag(:span, nil, class: "fas fa-globe-asia")
   end
 
   def name_with_id
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-globe") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
+    h.content_tag(:span, nil, class: "fas fa-globe-asia") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
   end
 
   def icon

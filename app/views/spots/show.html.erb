@@ -9,7 +9,7 @@
       <% if @spot.attachment_file %>
       <div class="btn-group btn-group-sm">
         <%= link_to family_spot_path(@spot), class: "btn btn-default activate", id: "tree-conifer-button", remote: true do %>
-        <span class="glyphicon glyphicon-tree-conifer"></span>
+        <span class="fas fa-tree"></span>
         <% end %>
       </div>
       <% end %>
@@ -17,10 +17,10 @@
       <% if can? :update, @spot %>
       <div class="btn-group btn-group-sm">
         <%= link_to edit_spot_path(@spot), class: @spot.attachment_file ? "btn btn-default": "btn btn-default activate", id: "pencil-button", remote: true do %>
-          <span class="glyphicon glyphicon-pencil"></span>
+          <span class="fas fa-pencil-alt"></span>
         <% end %>
         <%= link_to property_spot_path(@spot), class: "btn btn-default", remote: true do  %>
-          <span class="glyphicon glyphicon-cog"></span>
+          <span class="fas fa-cog"></span>
         <% end %>
       </div>
       <% end %>
@@ -42,7 +42,7 @@
         <%= f.hidden_field :spot_x, class: "form-control" %>
         <%= f.hidden_field :spot_y, class: "form-control" %>
 	<%= button_tag title: "update coordinate", id: "update-coordinate-button", class: "btn btn-default" do %>
-	  <span class="glyphicon glyphicon-refresh"></span>
+	  <span class="fas fa-redo"></span>
 	<% end %>
       <% end %>
     <% else %>

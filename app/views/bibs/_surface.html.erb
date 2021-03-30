@@ -3,7 +3,7 @@
     <div class="panel-heading">
       <%= link_to(list_title(surface), surface, :title => "view map") %>
         <%= link_to bib_surface_path(@bib, surface) + tab_param(__FILE__), method: :delete, title: "unlink surface", data: {confirm: t("confirm.unlink")} do %>
-          <span class="glyphicon glyphicon-remove"></span>
+          <span class="fas fa-times"></span>
         <% end %>
         <a href="#surface-<%= surface.id %>", data-toggle="collapse", aria-expanded="false", aria-control="surface-<%= surface.id %>", title = "show and hide spots belong to the surface">
           <span class="badge" style="float:right"><%= (surface.globe ? @bib.all_places.size : surface.spots.size) %></span>
@@ -39,7 +39,7 @@
             <td><%= place.try!(:global_id) %></td> 
             <td>
               <%= link_to bib_place_path(@bib, place) + tab_param(__FILE__), method: :delete, title: "unlink place", data: {confirm: t("confirm.unlink")} do %>
-                <span class="glyphicon glyphicon-remove"></span>
+                <span class="fas fa-times"></span>
               <% end %>
             </td>
           </tr>
@@ -56,7 +56,7 @@
             <th><%= f.text_field :longitude, class: "form-control input-sm" %></th>
             <th>
               <%= f.button title:"add box file", class: "btn btn-default" do %>
-                <span class="glyphicon glyphicon-save"></span>
+                <span class="far fa-save"></span>
               <% end %>
             </th>
           <% end %>
@@ -67,21 +67,21 @@
               <%= text_field_tag :global_id, nil, id: "place-global-id", class: "form-control input-sm" %>
               <span class="input-group-addon">
                 <%= link_to places_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#place-global-id" do %>
-                  <span class="glyphicon glyphicon-search"></span>
+                  <span class="fas fa-search"></span>
                 <% end %>
               </span>
             </div>
             </th>
             <th>
             <%= button_tag title: "link place by global id",class: "btn btn-default" do %>
-              <span class="glyphicon glyphicon-save"></span>
+              <span class="far fa-save"></span>
             <% end %>
             </th>
           <% end %>
           </tr>
         </tfoot>
       </table>
-      <%= link_to content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), '#', onclick: "$('#place-bundle-form').submit();", class: "btn btn-default", title: "open multi-edit page with checked items" %>
+      <%= link_to content_tag(:span, nil, class: "fas fa-pencil-alt"), '#', onclick: "$('#place-bundle-form').submit();", class: "btn btn-default", title: "open multi-edit page with checked items" %>
       <%= mantra "To let join, fill ID field and press save button.  To create new, fill fields and press save button.", :title => "Places related to bibliography" %>
     <% else %>
       <table class="table table-condensed table-striped">
@@ -127,13 +127,13 @@
         <%= text_field_tag :global_id, nil, id: "surface-global-id", :placeholder => "input ID", class: "form-control input-sm" %>
         <span class="input-group-addon">
           <%= link_to surfaces_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#surface-global-id" do %>
-            <span class="glyphicon glyphicon-search"></span>
+            <span class="fas fa-search"></span>
           <% end %>
         </span>
 
         </div>
           <%= button_tag title: "link surface by global id", class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-save"></span>
+            <span class="far fa-save"></span>
           <% end %>
     <% end %>
   </td>
@@ -142,7 +142,7 @@
         <%= hidden_tabname_tag(__FILE__) %>
         <%= f.text_field :name, :placeholder => "input name", class: "form-control input-sm" %>
           <%= f.button title:"add surface", class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-save"></span>
+            <span class="far fa-save"></span>
           <% end %>
       <% end %>
   </td>

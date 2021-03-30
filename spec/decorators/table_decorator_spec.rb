@@ -7,6 +7,6 @@ describe TableDecorator do
     subject { obj.name_with_id }
     it { expect(subject).to include(obj.caption) }
     it { expect(subject).to include(obj.global_id) }
-    it { expect(subject).to include("<span class=\"glyphicon glyphicon-th-list\"></span>") } 
+    it { expect(subject).to include("<span class=\"fas fa-table\"></span>") } 
   end
 end

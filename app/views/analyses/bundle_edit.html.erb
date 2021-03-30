@@ -35,7 +35,7 @@
       <%= f.text_field :specimen_global_id, id: "analysis_specimen_global_id", class: "form-control input-sm" %>
 	  <span class="input-group-addon">
 	    <%= link_to specimens_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#analysis_specimen_global_id" do %>
-	    <span class="glyphicon glyphicon-search"></span>
+	    <span class="fas fa-search"></span>
 	    <% end %>
 	  </span>
 	</div>
@@ -51,7 +51,7 @@
       <% end %>
       <th>
         <%= f.button class: "btn btn-default" do %>
-          <span class="glyphicon glyphicon-save"></span>
+          <span class="far fa-save"></span>
         <% end %>
       </th>
       <th></th>
