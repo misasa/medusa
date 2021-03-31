@@ -4668,7 +4668,7 @@ last-call-webpack-plugin@^3.0.0:
 
 leaflet-control-surfacelayers@yyachi/leaflet-control-surfacelayers:
   version "0.0.0"
-  resolved "https://codeload.github.com/yyachi/leaflet-control-surfacelayers/tar.gz/444634d7b47452665312f8631883af60eb957986"
+  resolved "https://codeload.github.com/yyachi/leaflet-control-surfacelayers/tar.gz/74f847aec2dc26023c7884bce62238321a3dc68a"
 
 leaflet-distortableimage@yyachi/Leaflet.DistortableImage#develop:
   version "0.6.0"
