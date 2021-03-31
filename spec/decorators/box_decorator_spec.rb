@@ -129,7 +129,7 @@ describe BoxDecorator do
           + "</span>"\
           + "<a href=\"/specimens/#{specimen.id}\">test_2</a>"\
           + "<span title=\"status:\" class=\"\">"\
-          + "<span class=\"fas fa-\"></span>"\
+          + "<span class=\"fas fa-check-circle\"></span>"\
           + "</span>"\
           + "</div>"\
           + "<div class=\"collapse\" id=\"tree-Analysis-#{specimen.record_property_id}\"></div>"\
@@ -297,7 +297,7 @@ describe BoxDecorator do
 
   describe "boxes_count" do
     subject{obj.boxes_count}
-    let(:icon){"folder-close"}
+    let(:icon){"folder"}
     let(:klass){"Box"}
     let(:count){obj.children.count}
     let(:child){FactoryBot.create(:box)}
@@ -344,7 +344,7 @@ describe BoxDecorator do
 
   describe "analyses_count" do
     subject{obj.analyses_count}
-    let(:icon){"stats"}
+    let(:icon){"chart-bar"}
     let(:count){obj.analyses.count}
     context "count zero" do
       before{obj.analyses.clear}
