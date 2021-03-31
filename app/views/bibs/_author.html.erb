@@ -1,7 +1,7 @@
 <%= form_with model:@bib, local: false, format: :json, html: { id: "edit_bib_#{@bib.id}", class: "update", role: "form" } do |f| %>
   <ul>
     <li class="row list-unstyled">
-      <div class="col-lg-12">name <span class="glyphicon glyphicon-sort"></span></div>
+      <div class="col-lg-12">name <span class="fas fa-sort"></span></div>
     </li>
   </ul>
   <ul class="bib-authors">
@@ -18,7 +18,7 @@
   </ul>
   <div class="pull-right">
     <%= f.button class: "btn btn-default" do %>
-      <span class="glyphicon glyphicon-save"></span>
+      <span class="far fa-save"></span>
     <% end %>
   </div>
 <% end %>

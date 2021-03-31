@@ -1,5 +1,5 @@
 <%= link_to show_title(@surface), surface_path(@surface) %> <%= @image.name %> <%= link_to(download_attachment_file_path(@image), :title => "download #{@image.name}") do %>
-             <span class="glyphicon glyphicon-download"></span>
+             <span class="fas fa-file-download"></span>
     <% end %>
 
 <%= @surface_image.calibrator([], class: "large-map") %>

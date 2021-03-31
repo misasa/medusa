@@ -5,7 +5,7 @@
     <tr>
       <th>
         <%= f.button class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-refresh"></span>
+        <span class="fas fa-redo"></span>
         <% end %>
       </th>
       <th><%= sort_link @search, :username, "name" %></th>
@@ -48,7 +48,7 @@
     <tr>
       <td>
         <%= link_to edit_user_path(user) do %>
-        <span class="glyphicon glyphicon-edit"></span>
+        <span class="far fa-edit"></span>
         <% end %>
       </td>
       <td><%= user.username %></td>
@@ -59,7 +59,7 @@
       <td><%= difference_from_now(user.created_at) %></td>
       <td>
         <%= link_to user_path(user), method: :delete , data: {confirm: t("confirm.delete",:recordname =>user.username)} do %>
-        <span class="glyphicon glyphicon-remove"></span>
+        <span class="fas fa-times"></span>
         <% end %>
       </td>
     </tr>

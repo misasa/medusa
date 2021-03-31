@@ -12,18 +12,18 @@ class SpecimenDecorator < Draper::Decorator
   }
 
   STATUS_ICON_NAME = {
-    Status::NORMAL => "",
-    Status::UNDETERMINED_QUANTITY => "question-sign",
-    Status::DISAPPEARANCE => "ban-circle",
+    Status::NORMAL => "check-circle",
+    Status::UNDETERMINED_QUANTITY => "question-circle",
+    Status::DISAPPEARANCE => "ban",
     Status::DISPOSAL => "trash",
-    Status::LOSS => "warning-sign"
+    Status::LOSS => "exclamation-triangle"
   }
 
 
 
   class << self
     def icon
-      h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
+      h.content_tag(:span, nil, class: "fas fa-cloud")
     end
 
     def search_name(column)
@@ -47,7 +47,7 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def name_with_id(flag_link = false)
-    tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-cloud")
+    tag = h.content_tag(:span, nil, class: "fas fa-cloud")
     if flag_link
       tag += h.raw(" ") + h.link_to(name, specimen)
     else
@@ -63,13 +63,13 @@ class SpecimenDecorator < Draper::Decorator
     contents = []
     full_surfaces.each do |surface|
       content = h.raw("")
-      content += h.link_to_if(h.can?(:read, surface), h.content_tag(:span, nil, class: "glyphicon glyphicon-edit"), surface, :title => "edit map")
-      content += h.content_tag(:span, nil, class: "glyphicon glyphicon-globe")
+      content += h.link_to_if(h.can?(:read, surface), h.content_tag(:span, nil, class: "far fa-edit"), surface, :title => "edit map")
+      content += h.content_tag(:span, nil, class: "fas fa-globe-asia")
       content += ""
       content += h.link_to_if(h.can?(:read, surface), h.raw(surface.name), surface.rmap_url, :title => "view map")
 #      content += " "
       #<%= link_to(surface, :title => "edit map") do %>
-      #<span class="glyphicon glyphicon-edit"></span>
+      #<span class="far fa-edit"></span>
       #<% end %>
       content = h.content_tag(:li, content)
       contents << content
@@ -91,11 +91,11 @@ class SpecimenDecorator < Draper::Decorator
   def bibs_with_link
     contents = []
     full_bibs.each do |bib| 
-      content = h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+      content = h.content_tag(:span, nil, class: "fas fa-book")
       content += ""
       content += h.link_to_if(h.can?(:read, bib), h.raw(bib.to_html), bib)
       # if Settings.rplot_url
-      #   content += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + bib.global_id, :title => 'plot online')
+      #   content += h.link_to(h.content_tag(:span, nil, class: "far fa-eye"), Settings.rplot_url + '?id=' + bib.global_id, :title => 'plot online')
       # end
 
       #content = h.content_tag(:li, content)
@@ -105,7 +105,7 @@ class SpecimenDecorator < Draper::Decorator
          table_link = h.link_to(h.raw(table.caption), table )
 
          #if Settings.rplot_url
-         #  table_link += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + table.global_id, :title => 'plot online')
+         #  table_link += h.link_to(h.content_tag(:span, nil, class: "far fa-eye"), Settings.rplot_url + '?id=' + table.global_id, :title => 'plot online')
          #end
          table_links << h.content_tag(:li, table_link)
          #table_links << h.link_to_if(true, h.raw(table.description), table )
@@ -127,8 +127,8 @@ class SpecimenDecorator < Draper::Decorator
     contents = []
     full_tables.each do |table|
       #next unless full_tables.include?(table) 
-      #table_link = h.content_tag(:span, nil, class: "glyphicon glyphicon-th-list") + h.raw("") + h.link_to(h.raw(table.caption), table )
-      #table_link += h.raw(" ") + h.content_tag(:span, nil, class: "glyphicon glyphicon-book")
+      #table_link = h.content_tag(:span, nil, class: "fas fa-table") + h.raw("") + h.link_to(h.raw(table.caption), table )
+      #table_link += h.raw(" ") + h.content_tag(:span, nil, class: "fas fa-book")
       #table_link += h.raw(" ")
       #table_link += h.link_to_if(h.can?(:read, table.bib), h.raw(table.bib.decorate.author_short_year), table.bib)
       #contents << h.content_tag(:li, table_link)
@@ -213,16 +213,16 @@ class SpecimenDecorator < Draper::Decorator
     specimen_tag = icon + h.link_to_if( h.can?(:read, self), ( current ? h.content_tag(:strong, name, class: "text-primary bg-primary") : name ), self)
     specimen_tag = h.content_tag(:span, specimen_tag, class: "ghost") if specimen.ghost?
     content = specimen_tag
-    content += h.content_tag(:span, nil, class: "glyphicon glyphicon-stats")    
+    content += h.content_tag(:span, nil, class: "fas fa-chart-bar")    
     # if Settings.rplot_url
-    #   content += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + self.global_id, :title => 'plot online')
+    #   content += h.link_to(h.content_tag(:span, nil, class: "far fa-eye"), Settings.rplot_url + '?id=' + self.global_id, :title => 'plot online')
     # end
     content += h.content_tag(:a, h.content_tag(:span, analyses.size, class: "badge"), href: "#specimen-analyses-#{self.id}", :"data-toggle" => "collapse", class: "collapse-active")
 
     lis = [] 
     measurement_items.each do |item|
       lis << h.raw(item.display_name) + h.link_to(h.content_tag(:span, item_counts[item], class:"badge"), h.chemistries_specimen_path(self, measurement_item_id: item.id, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal" ) if item_counts[item]
-# + h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
+# + h.link_to(h.icon_tag('info-circle'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
     end
     #content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: ( current ? "collapse in" : "collapse" ) )
     content += h.content_tag(:div, h.raw(lis.join), id: "specimen-analyses-#{self.id}", class: "collapse" )
@@ -438,7 +438,7 @@ class SpecimenDecorator < Draper::Decorator
       tds = []
       row_id = row[:id]
       link = h.link_to(h.edit_divide_path(row[:id], specimen_id: id)) do
-        h.content_tag(:span,nil,class: "glyphicon glyphicon-edit")
+        h.content_tag(:span,nil,class: "far fa-edit")
       end
       tds << h.content_tag(:td, link)
       tds << h.content_tag(:td, row[:date_str])
@@ -461,7 +461,7 @@ class SpecimenDecorator < Draper::Decorator
         confirm = h.t("confirm.delete",:recordname =>"operation \"#{row[:comment]}\" at #{row[:date_str]}")
         confirm += "\nAre you sure you want to permanently delete divided specimens #{row[:child_specimens].map{|sq| sq.name}.join(', ')}] too?" if row[:divide_flg] && !row[:child_specimens].empty?
         delete_tag = h.link_to(h.divide_path(row[:id], specimen_id: id), method: :delete , data: { confirm: confirm }) do
-          h.content_tag(:span, nil, class:"glyphicon glyphicon-remove")
+          h.content_tag(:span, nil, class:"fas fa-times")
         end
 
       end
@@ -611,7 +611,7 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def icon(in_list_include=false)
-    h.content_tag(:span, self.class.icon, class: (in_list_include ? "glyphicon-active-color" : ""))
+    h.content_tag(:span, self.class.icon, class: (in_list_include ? "fa-active-color" : ""))
   end
 
   def status_name
@@ -619,8 +619,8 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def status_icon(in_list_include=false)
-    status_icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-#{STATUS_ICON_NAME[status]}")
-    h.content_tag(:span, status_icon, title: "status:" + status_name, class: (in_list_include ? "glyphicon-active-color" : ""))
+    status_icon = h.content_tag(:span, nil, class: "fas fa-#{STATUS_ICON_NAME[status]}")
+    h.content_tag(:span, status_icon, title: "status:" + status_name, class: (in_list_include ? "fa-active-color" : ""))
   end
 
   private
@@ -653,7 +653,7 @@ class SpecimenDecorator < Draper::Decorator
     def create_form_global_id(f, column, path)
       field = f.text_field(:"#{column.name}_global_id", id: "specimen_#{column.name}_global_id", class: "form-control input-sm", style: "min-width: 60px;")
       link = h.link_to(path, "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#specimen_#{column.name}_global_id") do
-        h.content_tag(:span, link, class: "glyphicon glyphicon-search")
+        h.content_tag(:span, link, class: "fas fa-search")
       end
       button = h.content_tag(:span, link, class: "input-group-addon")
       h.content_tag(:div, field + button, class: "input-group")
@@ -760,7 +760,7 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def box_node(box)
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + h.link_to_if(h.can?(:read, box), box.name, box)
+    h.content_tag(:span, nil, class: "fas fa-folder") + h.link_to_if(h.can?(:read, box), box.name, box)
   end
 
   def icon_with_count(klass, count)
@@ -770,7 +770,7 @@ class SpecimenDecorator < Draper::Decorator
   def icon_with_badge_count(klass, count, in_list_include=false)
     if count.nonzero?
       badge = h.content_tag(:span, count, :"data-klass" => "#{klass}", :"data-record_property_id" => record_property_id, class: (in_list_include ? "badge badge-active" : "badge"))
-      html = h.content_tag(:span, "#{klass}Decorator".constantize.try(:icon), class: (in_list_include ? "glyphicon-active-color" : ""))
+      html = h.content_tag(:span, "#{klass}Decorator".constantize.try(:icon), class: (in_list_include ? "fa-active-color" : ""))
       html += h.content_tag(:a, badge, href: "#tree-#{klass}-#{record_property_id}", :"data-toggle" => "collapse", class: "collapse-active")
     end
   end

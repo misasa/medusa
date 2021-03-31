@@ -13,18 +13,18 @@
       <% if can? :update, @table %>
 	<div class="btn-group btn-group-sm">
 	  <%= link_to edit_table_path(@table), class: "btn btn-default", remote: true do %>
-	    <span class="glyphicon glyphicon-pencil"></span>
+	    <span class="fas fa-pencil-alt"></span>
     <% end %>
     <%= link_to refresh_table_path(@table), class: "btn btn-default", id: "tree-conifer-button", method: :put, title: "refresh preview for '#{@table.name}'" do %>
-      <span class="glyphicon glyphicon-refresh"></span>
+      <span class="fas fa-redo"></span>
     <% end %>
 	  <%= link_to property_table_path(@table), class: "btn btn-default", remote: true do %>
-	    <span class="glyphicon glyphicon-cog"></span>
+	    <span class="fas fa-cog"></span>
 	  <% end %>
 	</div>
 	<div class="btn-group btn-group-sm">
 	  <%= link_to table_path(@table, format: :csv), class: "btn btn-default" do %>
-	    <span class="glyphicon glyphicon-th-list"></span>
+	    <span class="fas fa-table"></span>
 	  <% end %>
 	</div>
       <% end %>

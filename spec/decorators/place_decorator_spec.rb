@@ -10,7 +10,7 @@ describe PlaceDecorator do
 
   describe "icon" do
     subject { PlaceDecorator.icon }
-    it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-globe\"></span>") }
+    it { expect(subject).to eq ("<span class=\"fas fa-globe-asia\"></span>") }
   end
 
   describe ".latitude_to_text" do

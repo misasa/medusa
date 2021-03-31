@@ -69,7 +69,7 @@
         <td><%== chemistry.description %></td>
         <td>
           <%= link_to analysis_chemistry_path(@analysis,chemistry), method: :delete ,title: "delete chemistory",data: {confirm: t("confirm.delete",:recordname => chemistry.measurement_item.nickname)} do %>
-              <span class="glyphicon glyphicon-remove"></span>
+              <span class="fas fa-times"></span>
             <% end %>
         </td>
       </tr>
@@ -85,7 +85,7 @@
         <th><%= f.text_field :description, class: "form-control input-sm" %></th>
         <th>
           <%= f.button title:"add chemistry",class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-save"></span>
+            <span class="far fa-save"></span>
           <% end %>
         </th>
       <% end %>

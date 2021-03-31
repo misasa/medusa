@@ -1,7 +1,7 @@
 <tr>
   <td>
     <%= button_tag class: "btn btn-default btn-xs determine", "data-id" => specimen.global_id do %>
-    <span class="glyphicon glyphicon-link"></span>
+    <span class="fas fa-link"></span>
     <% end %>
   </td>
   <td><%= link_to specimen.name, specimen_path(specimen, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: specimen_ghost(specimen)  %></td>

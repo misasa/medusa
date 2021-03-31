@@ -9,7 +9,7 @@ describe SpecimenDecorator do
 
   describe "icon" do
     subject { SpecimenDecorator.icon }
-    it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-cloud\"></span>") }
+    it { expect(subject).to eq ("<span class=\"fas fa-cloud\"></span>") }
   end
 
   describe "search_name" do
@@ -366,7 +366,7 @@ describe SpecimenDecorator do
             + "<input id=\"specimen_parent_global_id\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[parent_global_id]\" />"\
             + "<span class=\"input-group-addon\">"\
             + "<a data-toggle=\"modal\" data-target=\"#search-modal\" data-input=\"#specimen_parent_global_id\" href=\"/specimens.modal?per_page=10\">"\
-            + "<span class=\"glyphicon glyphicon-search\"></span>"\
+            + "<span class=\"fas fa-search\"></span>"\
             + "</a>"\
             + "</span>"\
             + "</div>"
@@ -381,7 +381,7 @@ describe SpecimenDecorator do
             + "<input id=\"specimen_parent_global_id\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[parent_global_id]\" />"\
             + "<span class=\"input-group-addon\">"\
             + "<a data-toggle=\"modal\" data-target=\"#search-modal\" data-input=\"#specimen_parent_global_id\" href=\"/specimens.modal?per_page=10\">"\
-            + "<span class=\"glyphicon glyphicon-search\"></span>"\
+            + "<span class=\"fas fa-search\"></span>"\
             + "</a>"\
             + "</span>"\
             + "</div>"
@@ -399,7 +399,7 @@ describe SpecimenDecorator do
             + "<input id=\"specimen_box_global_id\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[box_global_id]\" />"\
             + "<span class=\"input-group-addon\">"\
             + "<a data-toggle=\"modal\" data-target=\"#search-modal\" data-input=\"#specimen_box_global_id\" href=\"/boxes.modal?per_page=10\">"\
-            + "<span class=\"glyphicon glyphicon-search\"></span>"\
+            + "<span class=\"fas fa-search\"></span>"\
             + "</a>"\
             + "</span>"\
             + "</div>"
@@ -414,7 +414,7 @@ describe SpecimenDecorator do
             + "<input id=\"specimen_box_global_id\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[box_global_id]\" />"\
             + "<span class=\"input-group-addon\">"\
             + "<a data-toggle=\"modal\" data-target=\"#search-modal\" data-input=\"#specimen_box_global_id\" href=\"/boxes.modal?per_page=10\">"\
-            + "<span class=\"glyphicon glyphicon-search\"></span>"\
+            + "<span class=\"fas fa-search\"></span>"\
             + "</a>"\
             + "</span>"\
             + "</div>"
@@ -633,7 +633,7 @@ describe SpecimenDecorator do
             + "<input id=\"specimen_place_global_id\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[place_global_id]\" />"\
             + "<span class=\"input-group-addon\">"\
             + "<a data-toggle=\"modal\" data-target=\"#search-modal\" data-input=\"#specimen_place_global_id\" href=\"/places.modal?per_page=10\">"\
-            + "<span class=\"glyphicon glyphicon-search\"></span>"\
+            + "<span class=\"fas fa-search\"></span>"\
             + "</a>"\
             + "</span>"\
             + "</div>"
@@ -648,7 +648,7 @@ describe SpecimenDecorator do
             + "<input id=\"specimen_place_global_id\" class=\"form-control input-sm\" style=\"min-width: 60px;\" type=\"text\" name=\"specimen[place_global_id]\" />"\
             + "<span class=\"input-group-addon\">"\
             + "<a data-toggle=\"modal\" data-target=\"#search-modal\" data-input=\"#specimen_place_global_id\" href=\"/places.modal?per_page=10\">"\
-            + "<span class=\"glyphicon glyphicon-search\"></span>"\
+            + "<span class=\"fas fa-search\"></span>"\
             + "</a>"\
             + "</span>"\
             + "</div>"
@@ -968,7 +968,7 @@ describe SpecimenDecorator do
     describe "name_link" do
       let(:column_name){ "name" }
       it do
-        expect(subject).to eq("<a class=\" ghost\" href=\"/specimens/#{specimen.id}\"><span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span> specimen1 <span class=\"label label-danger\">pub</span></a>")
+        expect(subject).to eq("<a class=\" ghost\" href=\"/specimens/#{specimen.id}\"><span class=\"\"><span class=\"fas fa-cloud\"></span></span> specimen1 <span class=\"label label-danger\">pub</span></a>")
         #expect(subject).to eq("<a class=\" ghost\" href=\"/specimens/#{specimen.id}\">specimen1</a>")
       end
     end
@@ -1072,20 +1072,20 @@ describe SpecimenDecorator do
     subject{obj.name_with_id}
     it{expect(subject).to include(obj.name)}
     it{expect(subject).to include(obj.global_id)}
-    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")}
+    it{expect(subject).to include("<span class=\"fas fa-cloud\"></span>")}
   end
 
   describe ".path" do
-    let(:me){"<span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span>#{obj.name}"}
+    let(:me){"<span class=\"\"><span class=\"fas fa-cloud\"></span></span>#{obj.name}"}
     subject{obj.path}
     before { allow(obj.h).to receive(:can?).and_return(true) }
     context "box is nil" do
       before{obj.box = nil}
-      it{expect(subject).to eq "<span class=\"\"><span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span>#{obj.name}</span>"}
+      it{expect(subject).to eq "<span class=\"\"><span class=\"\"><span class=\"fas fa-cloud\"></span></span>#{obj.name}</span>"}
     end
     context "box is not nil" do
       before{obj.box = box}
-      it{expect(subject).to include("<span class=\"glyphicon glyphicon-folder-close\"></span>")}
+      it{expect(subject).to include("<span class=\"fas fa-folder\"></span>")}
       it{expect(subject).to include("<a href=\"/boxes/#{box.id}\">#{box.name}</a>")}
       it{expect(subject).to include(me)}
     end
@@ -1122,7 +1122,7 @@ describe SpecimenDecorator do
     subject{obj.family_tree}
     before { allow(obj.h).to receive(:can?).and_return(true) }
     it{expect(subject).to match("<div class=\"tree-node\" data-depth=\"1\">.*</div>")}
-    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")}
+    it{expect(subject).to include("<span class=\"fas fa-cloud\"></span>")}
     it{expect(subject).to match("<a href=\"/specimens/#{obj.id}\">.*</a>")}
     it{expect(subject).to include("<strong class=\"text-primary bg-primary\">#{obj.name}</strong>")}
   end
@@ -1146,7 +1146,7 @@ describe SpecimenDecorator do
         expect(subject).to eq(
           "<div class=\"collapse in\" id=\"tree-#{klass}-#{obj.record_property_id}\">"\
           + "<div class=\"tree-node\" data-depth=\"10\">"\
-          + "<span class=\"glyphicon glyphicon-stats\"></span>"\
+          + "<span class=\"fas fa-chart-bar\"></span>"\
           + "<a href=\"/analyses/#{analysis.id}\">test_2</a>"\
           + "<a data-toggle=\"modal\" data-target=\"#show-modal\" href=\"/analyses/#{analysis.id}.modal\"><span class=\"badge\">0</span></a>"\
           + "</div>"\
@@ -1160,7 +1160,7 @@ describe SpecimenDecorator do
         expect(subject).to eq(
           "<div class=\"collapse in\" id=\"tree-#{klass}-#{obj.record_property_id}\">"\
           + "<div class=\"tree-node\" data-depth=\"10\">"\
-          + "<span class=\"glyphicon glyphicon-book\"></span>"\
+          + "<span class=\"fas fa-book\"></span>"\
           + "<a href=\"/bibs/#{bib.id}\">test_3</a>"\
           + "</div>"\
           + "</div>"
@@ -1173,7 +1173,7 @@ describe SpecimenDecorator do
         expect(subject).to eq(
           "<div class=\"collapse in\" id=\"tree-#{klass}-#{obj.record_property_id}\">"\
           + "<div class=\"tree-node\" data-depth=\"10\">"\
-          + "<span class=\"glyphicon glyphicon-file\"></span>"\
+          + "<span class=\"fas fa-file\"></span>"\
           + "<a href=\"/attachment_files/#{attachment_file.id}\">test_4.jpg</a>"\
           + "</div>"\
           + "</div>"
@@ -1193,7 +1193,7 @@ describe SpecimenDecorator do
     let(:analysis){FactoryBot.create(:analysis)}
     let(:bib){FactoryBot.create(:bib)}
     let(:attachment_file){FactoryBot.create(:attachment_file)}
-    it{expect(subject).to include("<span class=\"glyphicon glyphicon-cloud\"></span>")}
+    it{expect(subject).to include("<span class=\"fas fa-cloud\"></span>")}
     it{expect(subject).to include("#{obj.name}")}
     before do
       obj.children << child
@@ -1201,24 +1201,24 @@ describe SpecimenDecorator do
       obj.bibs << bib
       obj.attachment_files << attachment_file
     end
-    it {expect(subject).to_not include("<span class=\"glyphicon glyphicon-cloud \"></span><span>#{obj.children.count}</span>") }
+    it {expect(subject).to_not include("<span class=\"fas fa-cloud \"></span><span>#{obj.children.count}</span>") }
     it do
       expect(subject).to include(
-        "<span class=\"\"><span class=\"glyphicon glyphicon-stats\"></span></span>"\
+        "<span class=\"\"><span class=\"fas fa-chart-bar\"></span></span>"\
         + "<a href=\"#tree-Analysis-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
         + "<span data-klass=\"Analysis\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.analyses.count}</span></a>"
       )
     end
     it do
       expect(subject).to include(
-        "<span class=\"\"><span class=\"glyphicon glyphicon-book\"></span></span>"\
+        "<span class=\"\"><span class=\"fas fa-book\"></span></span>"\
         + "<a href=\"#tree-Bib-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
         + "<span data-klass=\"Bib\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.bibs.count}</span></a>"
       )
     end
     it do
       expect(subject).to include(
-        "<span class=\"\"><span class=\"glyphicon glyphicon-file\"></span></span>"\
+        "<span class=\"\"><span class=\"fas fa-file\"></span></span>"\
         + "<a href=\"#tree-AttachmentFile-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
         + "<span data-klass=\"AttachmentFile\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.attachment_files.count}</span></a>"
       )
@@ -1236,50 +1236,50 @@ describe SpecimenDecorator do
         subject{ obj.tree_node(current_type: true, in_list_include: true) }
         it do
           expect(subject).to include(
-            "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-cloud\"></span></span>"\
+            "<span class=\"fa-active-color\"><span class=\"fas fa-cloud\"></span></span>"\
             + "<a href=\"#tree-Specimen-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
             + "<span data-klass=\"Specimen\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{obj.children.count}</span></a>"
           )
         end
-        it { expect(subject).to include("<span class=\"glyphicon glyphicon-stats\"></span><span>#{obj.analyses.count}</span>") }
-        it { expect(subject).to include("<span class=\"glyphicon glyphicon-book\"></span><span>#{obj.bibs.count}</span>") }
-        it { expect(subject).to include("<span class=\"glyphicon glyphicon-file\"></span><span>#{obj.attachment_files.count}</span>") }
+        it { expect(subject).to include("<span class=\"fas fa-chart-bar\"></span><span>#{obj.analyses.count}</span>") }
+        it { expect(subject).to include("<span class=\"fas fa-book\"></span><span>#{obj.bibs.count}</span>") }
+        it { expect(subject).to include("<span class=\"fas fa-file\"></span><span>#{obj.attachment_files.count}</span>") }
       end
       context "not in_list_include" do
         subject{ obj.tree_node(current_type: true, in_list_include: false) }
         it do
           expect(subject).to include(
-            "<span class=\"\"><span class=\"glyphicon glyphicon-cloud\"></span></span>"\
+            "<span class=\"\"><span class=\"fas fa-cloud\"></span></span>"\
             + "<a href=\"#tree-Specimen-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
             + "<span data-klass=\"Specimen\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.children.count}</span></a>"
           )
         end
-        it { expect(subject).to include("<span class=\"glyphicon glyphicon-stats\"></span><span>#{obj.analyses.count}</span>") }
-        it { expect(subject).to include("<span class=\"glyphicon glyphicon-book\"></span><span>#{obj.bibs.count}</span>") }
-        it { expect(subject).to include("<span class=\"glyphicon glyphicon-file\"></span><span>#{obj.attachment_files.count}</span>") }
+        it { expect(subject).to include("<span class=\"fas fa-chart-bar\"></span><span>#{obj.analyses.count}</span>") }
+        it { expect(subject).to include("<span class=\"fas fa-book\"></span><span>#{obj.bibs.count}</span>") }
+        it { expect(subject).to include("<span class=\"fas fa-file\"></span><span>#{obj.attachment_files.count}</span>") }
       end
     end
     context "not current_type" do
       context "in_list_include" do
         subject{ obj.tree_node(current_type: false, in_list_include: true) }
-        it{ expect(subject).to_not include("<span class=\"glyphicon glyphicon-cloud\"></span><span>#{obj.children.count}</span>") }
+        it{ expect(subject).to_not include("<span class=\"fas fa-cloud\"></span><span>#{obj.children.count}</span>") }
         it do
           expect(subject).to include(
-            "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-stats\"></span></span>"\
+            "<span class=\"fa-active-color\"><span class=\"fas fa-chart-bar\"></span></span>"\
             + "<a href=\"#tree-Analysis-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
             + "<span data-klass=\"Analysis\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{obj.analyses.count}</span></a>"
           )
         end
         it do
           expect(subject).to include(
-            "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-book\"></span></span>"\
+            "<span class=\"fa-active-color\"><span class=\"fas fa-book\"></span></span>"\
             + "<a href=\"#tree-Bib-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
             + "<span data-klass=\"Bib\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{obj.bibs.count}</span></a>"
           )
         end
         it do
           expect(subject).to include(
-            "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-file\"></span></span>"\
+            "<span class=\"fa-active-color\"><span class=\"fas fa-file\"></span></span>"\
             + "<a href=\"#tree-AttachmentFile-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
             + "<span data-klass=\"AttachmentFile\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{obj.attachment_files.count}</span></a>"
           )
@@ -1287,24 +1287,24 @@ describe SpecimenDecorator do
       end
       context "not in_list_include" do
         subject{ obj.tree_node(current_type: false, in_list_include: false) }
-        it{ expect(subject).to_not include("<span class=\"glyphicon glyphicon-cloud\"></span><span>#{obj.children.count}</span>") }
+        it{ expect(subject).to_not include("<span class=\"fas fa-cloud\"></span><span>#{obj.children.count}</span>") }
         it do
           expect(subject).to include(
-            "<span class=\"\"><span class=\"glyphicon glyphicon-stats\"></span></span>"\
+            "<span class=\"\"><span class=\"fas fa-chart-bar\"></span></span>"\
             + "<a href=\"#tree-Analysis-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
             + "<span data-klass=\"Analysis\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.analyses.count}</span></a>"
           )
         end
         it do
           expect(subject).to include(
-            "<span class=\"\"><span class=\"glyphicon glyphicon-book\"></span></span>"\
+            "<span class=\"\"><span class=\"fas fa-book\"></span></span>"\
             + "<a href=\"#tree-Bib-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
             + "<span data-klass=\"Bib\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.bibs.count}</span></a>"
           )
         end
         it do
           expect(subject).to include(
-            "<span class=\"\"><span class=\"glyphicon glyphicon-file\"></span></span>"\
+            "<span class=\"\"><span class=\"fas fa-file\"></span></span>"\
             + "<a href=\"#tree-AttachmentFile-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
             + "<span data-klass=\"AttachmentFile\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{obj.attachment_files.count}</span></a>"
           )
@@ -1330,7 +1330,7 @@ describe SpecimenDecorator do
           subject { obj.children_count(true, true) }
           it do
             expect(subject).to eq(
-              "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              "<span class=\"fa-active-color\"><span class=\"fas fa-#{icon}\"></span></span>"\
               + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
               + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{count}</span></a>"
             )
@@ -1340,7 +1340,7 @@ describe SpecimenDecorator do
           subject { obj.children_count(true, false) }
           it do
             expect(subject).to eq(
-              "<span class=\"\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              "<span class=\"\"><span class=\"fas fa-#{icon}\"></span></span>"\
               + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
               + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{count}</span></a>"
             )
@@ -1369,11 +1369,11 @@ describe SpecimenDecorator do
       context "current_type" do
         context "in_list_include" do
           subject { obj.analyses_count(true, true) }
-          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon}\"></span><span>#{count}</span>") }
+          it { expect(subject).to eq("<span class=\"fas fa-#{icon}\"></span><span>#{count}</span>") }
         end
         context "not in_list_include" do
           subject { obj.analyses_count(true, false) }
-          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon}\"></span><span>#{count}</span>") }
+          it { expect(subject).to eq("<span class=\"fas fa-#{icon}\"></span><span>#{count}</span>") }
         end
       end
       context "not current_type" do
@@ -1381,7 +1381,7 @@ describe SpecimenDecorator do
           subject { obj.analyses_count(false, true) }
           it do
             expect(subject).to eq(
-              "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              "<span class=\"fa-active-color\"><span class=\"fas fa-#{icon}\"></span></span>"\
               + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
               + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{count}</span></a>"
             )
@@ -1391,7 +1391,7 @@ describe SpecimenDecorator do
           subject { obj.analyses_count(false, false) }
           it do
             expect(subject).to eq(
-              "<span class=\"\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              "<span class=\"\"><span class=\"fas fa-#{icon}\"></span></span>"\
               + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
               + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{count}</span></a>"
             )
@@ -1416,11 +1416,11 @@ describe SpecimenDecorator do
       context "current_type" do
         context "in_list_include" do
           subject { obj.bibs_count(true, true) }
-          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon}\"></span><span>#{count}</span>") }
+          it { expect(subject).to eq("<span class=\"fas fa-#{icon}\"></span><span>#{count}</span>") }
         end
         context "not in_list_include" do
           subject { obj.bibs_count(true, false) }
-          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon}\"></span><span>#{count}</span>") }
+          it { expect(subject).to eq("<span class=\"fas fa-#{icon}\"></span><span>#{count}</span>") }
         end
       end
       context "not current_type" do
@@ -1428,7 +1428,7 @@ describe SpecimenDecorator do
           subject { obj.bibs_count(false, true) }
           it do
             expect(subject).to eq(
-              "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              "<span class=\"fa-active-color\"><span class=\"fas fa-#{icon}\"></span></span>"\
               + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
               + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{count}</span></a>"
             )
@@ -1438,7 +1438,7 @@ describe SpecimenDecorator do
           subject { obj.bibs_count(false, false) }
           it do
             expect(subject).to eq(
-              "<span class=\"\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              "<span class=\"\"><span class=\"fas fa-#{icon}\"></span></span>"\
               + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
               + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{count}</span></a>"
             )
@@ -1463,11 +1463,11 @@ describe SpecimenDecorator do
       context "current_type" do
         context "in_list_include" do
           subject { obj.files_count(true, true) }
-          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon}\"></span><span>#{count}</span>") }
+          it { expect(subject).to eq("<span class=\"fas fa-#{icon}\"></span><span>#{count}</span>") }
         end
         context "not in_list_include" do
           subject { obj.files_count(true, false) }
-          it { expect(subject).to eq("<span class=\"glyphicon glyphicon-#{icon}\"></span><span>#{count}</span>") }
+          it { expect(subject).to eq("<span class=\"fas fa-#{icon}\"></span><span>#{count}</span>") }
         end
       end
       context "not current_type" do
@@ -1475,7 +1475,7 @@ describe SpecimenDecorator do
           subject { obj.files_count(false, true) }
           it do
             expect(subject).to eq(
-              "<span class=\"glyphicon-active-color\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              "<span class=\"fa-active-color\"><span class=\"fas fa-#{icon}\"></span></span>"\
               + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
               + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge badge-active\">#{count}</span></a>"
             )
@@ -1485,7 +1485,7 @@ describe SpecimenDecorator do
           subject { obj.files_count(false, false) }
           it do
             expect(subject).to eq(
-              "<span class=\"\"><span class=\"glyphicon glyphicon-#{icon}\"></span></span>"\
+              "<span class=\"\"><span class=\"fas fa-#{icon}\"></span></span>"\
               + "<a href=\"#tree-#{klass}-#{obj.record_property_id}\" data-toggle=\"collapse\" class=\"collapse-active\">"\
               + "<span data-klass=\"#{klass}\" data-record_property_id=\"#{obj.record_property_id}\" class=\"badge\">#{count}</span></a>"
             )
@@ -1538,23 +1538,23 @@ describe SpecimenDecorator do
     subject { obj.status_icon }
     context "normal" do
       before { obj.update(quantity: 0.5, quantity_unit: "mg") }
-      it {expect(subject).to eq("<span title=\"status:\" class=\"\"><span class=\"glyphicon glyphicon-\"></span></span>") }
+      it {expect(subject).to eq("<span title=\"status:\" class=\"\"><span class=\"fas fa-\"></span></span>") }
     end
     context "undetermined quantity" do
       before { obj.update(quantity: "", quantity_unit: "") }
-      it {expect(subject).to eq("<span title=\"status:unknown\" class=\"\"><span class=\"glyphicon glyphicon-question-sign\"></span></span>") }
+      it {expect(subject).to eq("<span title=\"status:unknown\" class=\"\"><span class=\"fas fa-question-circle\"></span></span>") }
     end
     context "disappearance" do
       before { obj.update(quantity: "0", quantity_unit: "kg") }
-      it { expect(subject).to eq("<span title=\"status:zero\" class=\"\"><span class=\"glyphicon glyphicon-ban-circle\"></span></span>") }
+      it { expect(subject).to eq("<span title=\"status:zero\" class=\"\"><span class=\"fas fa-ban\"></span></span>") }
     end
     context "disposal" do
       before { obj.record_property.update(disposed: true) }
-      it { expect(subject).to eq("<span title=\"status:trash\" class=\"\"><span class=\"glyphicon glyphicon-trash\"></span></span>") }
+      it { expect(subject).to eq("<span title=\"status:trash\" class=\"\"><span class=\"far fa-trash-alt\"></span></span>") }
     end
     context "loss" do
       before { obj.record_property.update(lost: true) }
-      it { expect(subject).to eq("<span title=\"status:lost\" class=\"\"><span class=\"glyphicon glyphicon-warning-sign\"></span></span>") }
+      it { expect(subject).to eq("<span title=\"status:lost\" class=\"\"><span class=\"fas fa-exclamation-triangle\"></span></span>") }
     end
   end
 end

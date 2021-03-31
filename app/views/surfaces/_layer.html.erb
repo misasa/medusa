@@ -41,10 +41,10 @@
             <%= f.text_field :affine_matrix_in_string, class: "form-control", value:"", placeholder:"[1,0,0;0,1,0;0,0,1]" %>
             <div class="input-group-btn">
               <%= content_tag(:button, type: "button", title:"matrix form", class: "btn btn-default", data: {toggle:"collapse", target: "#collapseMatrixForm"}) do %>
-                <span class="glyphicon glyphicon-pencil"></span>
+                <span class="fas fa-pencil-alt"></span>
               <% end %>
               <%= f.button title:"add image to #{@surface.name} with affine matrix", class: "btn btn-default" do %>
-                <span class="glyphicon glyphicon-save"></span>
+                <span class="far fa-save"></span>
               <% end %>
             </div>
           </div>
@@ -57,13 +57,13 @@
 	  <div class="input-group">
 	    <span class="input-group-addon">
 	      <%= link_to attachment_files_path(per_page: 5, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#attachment-file-global-id", title: "search files and input global-ID" do %>
-	        <span class="glyphicon glyphicon-search"></span>
+	        <span class="fas fa-search"></span>
 	      <% end %>
 	    </span>
 	    <%= text_field_tag :global_id, nil, id: "attachment-file-global-id", class: "form-control", placeholder:"global-ID" %>
             <div class="input-group-btn">
               <%= button_tag title: "link image to #{@surface.name} by global id", class: "btn btn-default" do %>
-                <span class="glyphicon glyphicon-save"></span>
+                <span class="far fa-save"></span>
               <% end %>
             </div>
 	  </div>
@@ -82,7 +82,7 @@
       opacity
       <%= f.text_field :opacity %>
       <%= f.button title:"add layer", class: "btn btn-default btn-sm pull-right" do %>
-        <span class="glyphicon glyphicon-plus"></span>
+        <span class="fas fa-plus"></span>
       <% end %>
     <% end %>
   </div>

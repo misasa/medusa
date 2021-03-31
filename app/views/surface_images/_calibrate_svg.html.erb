@@ -15,12 +15,12 @@
             <%= f.text_field :affine_matrix_in_string, readonly: true, id: "affine_matrix", class: "form-control" %>
             <span class="input-group-btn">
              <%= link_to(edit_attachment_file_path(@image), class: "btn btn-default", :title => "edit affine matrix", :type => "button") do %>
-               <span class="glyphicon glyphicon-edit"></span>
+               <span class="far fa-edit"></span>
              <% end %>
             </span>
             <span class="input-group-btn">
 	      <%= button_tag title: "update affine matrix", id: "calibrator-button", class: "btn btn-default" do %>
-	         <span class="glyphicon glyphicon-save"></span>
+	         <span class="far fa-save"></span>
 	      <% end %>
             </span>
           </div>
@@ -34,16 +34,16 @@
   <span id="base_info">
   </span>
   <a id="base_image_download_link" hidden> 
-    <span class="glyphicon glyphicon-download"></span>
+    <span class="fas fa-file-download"></span>
   </a>
   <span id="debug_info">
   </span>
   </div>
   <div class="col-lg-5">
-  <span class="glyphicon glyphicon-arrow-left"></span>
+  <span class="fas fa-arrow-left"></span>
   <span id="overlay_info">
   <%= @image.name %> <%= link_to(download_attachment_file_path(@image), :title => "download #{@image.name}") do %>
-           <span class="glyphicon glyphicon-download"></span>
+           <span class="fas fa-file-download"></span>
   <% end %>
   </div>
   <div class="col-lg-2">
@@ -66,7 +66,7 @@
         <td></td>
         <td>
         <%= button_tag title: "move to up", class: "btn btn-default move", data: { direction: "up" } do %>
-          <span class="glyphicon glyphicon-arrow-up"></span>
+          <span class="fas fa-arrow-up"></span>
         <% end %>
         </td>
         <td></td>
@@ -74,13 +74,13 @@
       <tr>
         <td>
         <%= button_tag title: "move to left", class: "btn btn-default move", data: { direction: "left" } do %>
-          <span class="glyphicon glyphicon-arrow-left"></span>
+          <span class="fas fa-arrow-left"></span>
         <% end %>
         </td>
         <td></td>
         <td>
         <%= button_tag title: "move to right", class: "btn btn-default move", data: { direction: "right" } do %>
-          <span class="glyphicon glyphicon-arrow-right"></span>
+          <span class="fas fa-arrow-right"></span>
         <% end %>
         </td>
       </tr>
@@ -88,7 +88,7 @@
         <td></td>
         <td>
         <%= button_tag title: "move to down", class: "btn btn-default move", data: { direction: "down" } do %>
-         <span class="glyphicon glyphicon-arrow-down"></span>
+         <span class="fas fa-arrow-down"></span>
         <% end %>
         </td>
         <td></td>

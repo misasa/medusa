@@ -9,13 +9,13 @@
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
         <%= link_to map_surface_layer_path(@surface,@surface_layer), class: "btn btn-default activate", id: "tree-conifer-button", remote: true, title: "top" do %>
-          <span class="glyphicon glyphicon-globe"></span>
+          <span class="fas fa-globe-asia"></span>
         <% end %>
       </div>
       <% if can? :update, @surface %>
       <div class="btn-group btn-group-sm">
 	<%= link_to edit_surface_layer_path(@surface, @surface_layer), class: "btn btn-default", remote: true do %>
-	  <span class="glyphicon glyphicon-pencil"></span>
+	  <span class="fas fa-pencil-alt"></span>
 	<% end %>
       </div>
       <% end %>

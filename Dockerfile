@@ -4,8 +4,16 @@ FROM yyachi/ruby-fits:2.7.2 as ruby-fits
 
 FROM ubuntu:bionic as build-env
 RUN apt-get update \
-&& apt-get -y install git curl make openssl zlib1g-dev libssl1.0-dev libreadline-dev build-essential \
+&& apt-get -y install git \
+curl \
+make \
+openssl \
+zlib1g-dev \
+libssl1.0-dev \
+libreadline-dev \
+build-essential \
 libpq-dev \
+shared-mime-info \
 #postgresql-client \
 && apt-get clean \
 && rm -rf /var/lib/apt/lists/*

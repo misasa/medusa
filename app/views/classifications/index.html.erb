@@ -15,7 +15,7 @@
     <tr>
       <td>
         <%= link_to edit_classification_path(classification) do %>
-        <span class="glyphicon glyphicon-edit"></span>
+        <span class="far fa-edit"></span>
         <% end %>
       </td>
       <td><%= classification.full_name %></td>
@@ -23,7 +23,7 @@
       <td><%= classification.sesar_material %></td>
       <td>
         <%= link_to classification_path(classification), method: :delete, data: {confirm: t("confirm.delete",:recordname => classification.full_name)} do %>
-        <span class="glyphicon glyphicon-remove"></span>
+        <span class="fas fa-times"></span>
         <% end %>
       </td>
     </tr>
@@ -38,7 +38,7 @@
       <td><%= f.select :sesar_material, @material.map{|str| [str,str]}, { include_blank: true }, class: "form-control input-sm" %></td>
       <td>
         <%= f.button class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-save"></span>
+        <span class="far fa-save"></span>
         <% end %>
       </td>
       <td></td>

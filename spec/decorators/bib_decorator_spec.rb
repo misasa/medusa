@@ -7,7 +7,7 @@ describe BibDecorator do
 
   describe "icon" do
     subject { BibDecorator.icon }
-    it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-book\"></span>") }
+    it { expect(subject).to eq ("<span class=\"fas fa-book\"></span>") }
   end
 
   describe ".primary_picture" do

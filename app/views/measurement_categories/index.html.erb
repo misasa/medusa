@@ -20,18 +20,18 @@
     <tr>
       <td>
         <%= link_to edit_measurement_category_path(measurement_category) do %>
-        <span class="glyphicon glyphicon-edit"></span>
+        <span class="far fa-edit"></span>
         <% end %>
       </td>
       <td><%= measurement_category.name %></td>
       <td>
         <%= link_to duplicate_measurement_category_path(measurement_category), :method => :duplicate ,:title => "duplicate" do %>
-          <span class="glyphicon glyphicon-plus-sign"></span>
+          <span class="fas fa-plus-circle"></span>
         <% end %>
       </td>
       <td>
         <%= link_to measurement_category_path(measurement_category), method: :delete, data: {confirm: t("confirm.delete",:recordname => measurement_category.name)} do %>
-        <span class="glyphicon glyphicon-remove"></span>
+        <span class="fas fa-times"></span>
         <% end %>
       </td>
     </tr>
@@ -44,7 +44,7 @@
       <td><%= f.text_field :name, class: "form-control input-sm" %></td>
       <td>
         <%= f.button class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-save"></span>
+        <span class="far fa-save"></span>
         <% end %>
       </td>
       <td></td>

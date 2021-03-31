@@ -60,7 +60,7 @@
     <%= f.collection_select(:author_ids, Author.all.order(:name).to_a, :id, :name, {}, multiple: true, class: "form-control input-sm") %>
   </div>
   <%= f.button class: "btn btn-default" do %>
-  <span class="glyphicon glyphicon-save"></span>
+  <span class="far fa-save"></span>
   <% end %>
 <% end %>
 

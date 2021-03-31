@@ -14,7 +14,7 @@
     <tr>
       <td>
         <%= link_to edit_physical_form_path(physical_form) do %>
-        <span class="glyphicon glyphicon-edit"></span>
+        <span class="far fa-edit"></span>
         <% end %>
       </td>
       <td><%= physical_form.name %></td>
@@ -22,7 +22,7 @@
       <td></td>
       <td>
         <%= link_to physical_form_path(physical_form), method: :delete, data: {confirm: t("confirm.delete",:recordname => physical_form.name)} do %>
-        <span class="glyphicon glyphicon-remove"></span>
+        <span class="fas fa-times"></span>
         <% end %>
       </td>
     </tr>
@@ -36,7 +36,7 @@
       <td><%= f.select :sesar_sample_type, @sample_types.map { |s| [s, s] }, {include_blank: true }, class: "form-control input-sm" %></td>
       <td>
         <%= f.button class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-save"></span>
+        <span class="far fa-save"></span>
         <% end %>
       </td>
       <td></td>

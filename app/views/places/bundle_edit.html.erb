@@ -2,7 +2,7 @@
   <% place_ids = @places.pluck(:id) %>
   <div class="text-right">
     <%= link_to download_bundle_label_places_path(ids: place_ids) do %>
-      <i class="glyphicon glyphicon-tag"></i>
+      <i class="fas fa-tag"></i>
     <% end %>
     ,<%= link_to(image_pack_tag("icon_pdf_1.png", size: "24x24"), download_bundle_card_places_path(ids: place_ids)) %>,
     and <%= link_to("A4", download_bundle_card_places_path(ids: place_ids, a4: true)) %>
@@ -48,7 +48,7 @@
       <% end %>
       <th>
 	<%= f.button class: "btn btn-default" do %>
-	<span class="glyphicon glyphicon-save"></span>
+	<span class="far fa-save"></span>
 	<% end %>
       </th>
       <th></th>

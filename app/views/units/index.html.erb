@@ -5,7 +5,7 @@
     <tr>
       <th>
         <%= f.button class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-refresh"></span>
+        <span class="fas fa-redo"></span>
         <% end %>
       </th>
       <th><%= sort_link @search, :name, "name" %></th>
@@ -51,7 +51,7 @@
     <tr>
       <td>
         <%= link_to edit_unit_path(unit) do %>
-        <span class="glyphicon glyphicon-edit"></span>
+        <span class="far fa-edit"></span>
         <% end %>
       </td>
       <td><%= unit.name %></td>
@@ -63,7 +63,7 @@
       <td><%= difference_from_now(unit.created_at) %></td>
       <td>
         <%= link_to unit_path(unit), method: :delete , data: {confirm: t("confirm.delete",:recordname => unit.name)} do %>
-        <span class="glyphicon glyphicon-remove"></span>
+        <span class="fas fa-times"></span>
         <% end %>
       </td>
     </tr>
@@ -79,7 +79,7 @@
       <td><%= f.text_field :text, class: "form-control input-sm" %></td>
       <td>
         <%= f.button class: "btn btn-default", id: "save-button" do %>
-        <span class="glyphicon glyphicon-save"></span>
+        <span class="far fa-save"></span>
         <% end %>
       </td>
       <td></td>

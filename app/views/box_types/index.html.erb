@@ -11,14 +11,14 @@
     <tr>
       <td>
         <%= link_to edit_box_type_path(box_type) do %>
-        <span class="glyphicon glyphicon-edit"></span>
+        <span class="far fa-edit"></span>
         <% end %>
       </td>
       <td><%= box_type.name %></td>
       <td></td>
       <td>
         <%= link_to box_type_path(box_type), method: :delete , data: {confirm: t("confirm.delete",:recordname => box_type.name)} do %>
-        <span class="glyphicon glyphicon-remove"></span>
+        <span class="fas fa-times"></span>
         <% end %>
       </td>
     </tr>
@@ -31,7 +31,7 @@
       <td><%= f.text_field :name, class: "form-control input-sm" %></td>
       <td>
         <%= f.button class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-save"></span>
+        <span class="far fa-save"></span>
         <% end %>
       </td>
       <td></td>

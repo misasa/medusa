@@ -16,7 +16,7 @@ module ToggleColumn
       end
 
       def icon
-        @template.content_tag :span, nil, class: "glyphicon #{icon_name}"
+        @template.content_tag :span, nil, class: "fas #{icon_name}"
       end
 
       def url_for(toggle_column)
@@ -30,7 +30,7 @@ module ToggleColumn
       private
 
       def icon_name
-        expand? ? "glyphicon-chevron-left" : "glyphicon-chevron-right"
+        expand? ? "fa-chevron-left" : "fa-chevron-right"
       end
 
       def toggled_param

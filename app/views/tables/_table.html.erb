@@ -12,10 +12,10 @@
           <th class="sortable">
             <%= f.fields_for :table_specimens, table_specimen do |g| %>
               <% specimen = g.object.specimen %>
-              <span class="glyphicon glyphicon-transfer"></span> <%= link_to_if can?(:read, specimen), specimen.name, specimen, class: specimen_ghost(specimen) %>
+              <span class="far fa-copy"></span> <%= link_to_if can?(:read, specimen), specimen.name, specimen, class: specimen_ghost(specimen) %>
               <%= g.hidden_field :position, class: "position" %>
               <%= link_to table_specimen_path(@table,specimen), method: :delete ,title: "unlink specimen",data: {confirm: "Are you sure you want to unlink #{specimen.name}?"} do %>
-                <span class="glyphicon glyphicon-remove"></span>
+                <span class="fas fa-times"></span>
               <% end %>
             <% end %>
 
@@ -60,7 +60,7 @@
   <% end %>
   <div class="pull-right">
     <%= f.button class: "btn btn-default" do %>
-      <span class="glyphicon glyphicon-save"></span>
+      <span class="far fa-save"></span>
     <% end %>
   </div>
 <% end %>

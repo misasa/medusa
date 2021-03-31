@@ -4,7 +4,7 @@ class AnalysisDecorator < Draper::Decorator
   delegate :as_json
 
   def self.icon
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-stats")
+    h.content_tag(:span, nil, class: "fas fa-chart-bar")
   end
 
   def primary_picture(width: 250, height: 250)
@@ -12,7 +12,7 @@ class AnalysisDecorator < Draper::Decorator
   end
 
   def name_with_id
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-stats") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
+    h.content_tag(:span, nil, class: "fas fa-chart-bar") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
   end
 
   def badge_link

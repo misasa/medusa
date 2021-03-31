@@ -5,7 +5,7 @@
     <tr>
       <th>
         <%= f.button class: "btn btn-default" do %>
-        <span class="glyphicon glyphicon-refresh"></span>
+        <span class="fas fa-redo"></span>
         <% end %>
       </th>
       <th><%= sort_link @search, :data_file_name, "name" %></th>
@@ -71,5 +71,5 @@
     <%= render partial: "new", locals: { attachment_file: AttachmentFile.new } %>
   </tfoot>
 </table>
-<%= link_to content_tag(:span, nil, class: "glyphicon glyphicon-pencil"), '#', onclick: "$('#bundle-form').submit();", class: "btn btn-default" %>
+<%= link_to content_tag(:span, nil, class: "fas fa-pencil-alt"), '#', onclick: "$('#bundle-form').submit();", class: "btn btn-default" %>
 <%= mantra "To create new, specify a file with browse button, fill fields and press save button.  To attach coordinates to image, prepare'.jpg' and'.geo' files and use 'orochi-upload'.  To edit, choose record with checkbox and press pencil button.", :title => "All attachment files" %> 

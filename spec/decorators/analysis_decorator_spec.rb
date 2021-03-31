@@ -7,7 +7,7 @@ describe AnalysisDecorator do
 
   describe "icon" do
     subject { AnalysisDecorator.icon }
-    it { expect(subject).to eq ("<span class=\"glyphicon glyphicon-stats\"></span>") }
+    it { expect(subject).to eq ("<span class=\"fas fa-chart-bar\"></span>") }
   end
 
   describe ".primary_picture" do

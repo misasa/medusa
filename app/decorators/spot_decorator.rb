@@ -5,7 +5,7 @@ class SpotDecorator < Draper::Decorator
   delegate :as_json
 
   def self.icon
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-screenshot")
+    h.content_tag(:span, nil, class: "fas fa-crosshairs")
   end
 
   def xy_to_text(fmt = "%.2f")
@@ -102,15 +102,15 @@ class SpotDecorator < Draper::Decorator
     end
 
     links = []
-    links << h.link_to(h.icon_tag("picture"), h.attachment_file_path(file))
+    links << h.link_to(h.icon_tag("image"), h.attachment_file_path(file))
     link = h.link_to(h.spot_path(self)) do
       im = h.raw("")
       file.attachings.each do |attaching|
          attachable = attaching.attachable
          im += attachable.decorate.try(:icon) + attachable.name if attachable
       end
-      im += h.raw (h.icon_tag("screenshot") + "#{file.spots.size}" )
-      im += h.raw ("/" + h.icon_tag("screenshot"))
+      im += h.raw (h.icon_tag("crosshairs") + "#{file.spots.size}" )
+      im += h.raw ("/" + h.icon_tag("crosshairs"))
       im += h.raw ("#{spot.target.decorate.try(:icon)}#{spot.target.name}" )
       im
     end
@@ -155,21 +155,21 @@ class SpotDecorator < Draper::Decorator
 
     html_class = "tree-node"
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
-      picture = h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file)
+      picture = h.link_to(h.content_tag(:span, nil, class: "far fa-image"), attachment_file)
       attachment_file.attachings.each do |attaching|
         attachable = attaching.attachable
         if attachable
           link = attachable.name
           icon = attachable.decorate.icon
           if h.can?(:read, attachable)
-            icon += h.link_to(link, attachable) + h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
+            icon += h.link_to(link, attachable) + h.link_to(h.icon_tag('info-circle'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(attachable))
           else
             icon += link
           end
           picture += icon
         end
       end
-      picture += h.raw (h.icon_tag("screenshot") + "#{attachment_file.spots.size}") if attachment_file.spots.size > 0      
+      picture += h.raw (h.icon_tag("crosshairs") + "#{attachment_file.spots.size}") if attachment_file.spots.size > 0      
       picture
     end
 
@@ -182,14 +182,14 @@ class SpotDecorator < Draper::Decorator
   end
 
   def tree_node(current: false, current_type: false, in_list_include: false)
-    icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-screenshot")
+    icon = h.content_tag(:span, nil, class: "fas fa-crosshairs")
     link = current ? icon : h.link_to_if(h.can?(:read, self), icon, self, :title => spot.name )
 #    link += spot.name
     #node = icon + h.link_to_if(h.can?(:read, self), link, self)
     node = link
     if spot.target
       node += spot.target.decorate.try(:icon) + h.link_to_if(h.can?(:read, spot.target), spot.target.name, polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root), class: h.specimen_ghost(spot.target))
-      node += h.link_to_if(h.can?(:read, spot.target), h.icon_tag('info-sign'), polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))
+      node += h.link_to_if(h.can?(:read, spot.target), h.icon_tag('info-circle'), polymorphic_path(spot.target, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal", class: h.specimen_ghost(spot.target))
     else
       node += spot.name
     end

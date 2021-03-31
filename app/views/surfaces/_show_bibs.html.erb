@@ -21,14 +21,14 @@
 	    <%= text_field_tag :global_id, "", id: "bib-global-id", placeholder: "global-id", class: "form-control input-sm" %>
 	    <span class="input-group-addon">
 	      <%= link_to bibs_path(per_page: 10, format: :modal), "data-toggle" => "modal", "data-target" => "#search-modal", "data-input" => "#bib-global-id" do %>
-	      <span class="glyphicon glyphicon-search"></span>
+	      <span class="fas fa-search"></span>
 	      <% end %>
 	    </span>
 	  </div>
 	</th>
         <th>
           <%= button_tag title: "link bib by global id",class: "btn btn-default" do %>
-            <span class="glyphicon glyphicon-save"></span>
+            <span class="far fa-save"></span>
           <% end %>
         </th>
       <% end %>

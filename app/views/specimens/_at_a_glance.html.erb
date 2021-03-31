@@ -12,7 +12,7 @@
         <li>
           IGSN: <%= link_to @specimen.igsn, Settings.sesar_url(igsn: @specimen.igsn) %>
       <%= link_to Settings.sesar_url(igsn: @specimen.igsn, edit: true), title: "edit on SESAR" do %>
-        <span class="glyphicon glyphicon-pencil"></span>
+        <span class="fas fa-pencil-alt"></span>
       <% end %>
 
         </li>

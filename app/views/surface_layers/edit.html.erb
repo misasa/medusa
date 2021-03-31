@@ -36,13 +36,13 @@
     <% end %>
   </div>
   <%= f.button class: "btn btn-default" do %>
-  <span class="glyphicon glyphicon-save"></span>
+  <span class="far fa-save"></span>
   <% end %>
   <%= mantra "When an image is coarse, feed large max zoom to avoid bluring. Leave empty to be default.", :title => "Layer preferences" %> 
 <% end %>
 <div>
 <%= link_to(tiles_surface_layer_path(@surface_layer.surface, @surface_layer), method: :post, class: "btn btn-default btn-sm", title: "refresh tiles for images in layer '#{@surface_layer.name}'") do %>
-        <span class="glyphicon glyphicon-refresh"></span>
+        <span class="fas fa-redo"></span>
 <% end %>
 <%= @surface_layer.fits_viewer(class: "large-map") %>
 </div>

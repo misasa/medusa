@@ -27,30 +27,30 @@
     <div class="row btn-toolbar tool-selector" role="toolbar">
       <div class="btn-group btn-group-sm">
         <%= link_to family_box_path(@box), class: "btn btn-default activate",  id: "tree-conifer-button", remote: true, title: "top" do %>
-          <span class="glyphicon glyphicon-tree-conifer"></span>
+          <span class="fas fa-tree"></span>
         <% end %>
         <% if @box.has_image? %>
           <%= link_to picture_box_path(@box), class: "btn btn-default", id: "picture-button", remote: true do %>
-            <span class="glyphicon glyphicon-picture"></span>
+            <span class="far fa-image"></span>
           <% end %>
         <% end %>
       </div>
       <% if can? :update, @box %>
       <div class="btn-group btn-group-sm">
         <%= link_to edit_box_path(@box), class: "btn btn-default", id: "pencil-button", remote: true, title: "edit box information" do %>
-          <span class="glyphicon glyphicon-pencil"></span>
+          <span class="fas fa-pencil-alt"></span>
         <% end %>
         <%= link_to property_box_path(@box), class: "btn btn-default", id: "cog-button", remote: true, title: "edit global ID" do %>
-          <span class="glyphicon glyphicon-cog"></span>
+          <span class="fas fa-cog"></span>
         <% end %>
       </div>
       <% end %>
       <div class="btn-group btn-group-sm">
         <%= link_to download_label_box_path(@box), class: "btn btn-default", id: "tag-button", title: "print barcode label" do %>
-          <span class="glyphicon glyphicon-tag"></span>
+          <span class="fas fa-tag"></span>
         <% end %>
         <%= link_to download_card_box_path(@box), class: "btn btn-default", id: "file-button", title: "download PDF" do %>
-          <span class="glyphicon glyphicon-file"></span>
+          <span class="fas fa-file"></span>
         <% end %>
       </div>
     </div>

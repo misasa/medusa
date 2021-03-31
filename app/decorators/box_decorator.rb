@@ -12,19 +12,19 @@ class BoxDecorator < Draper::Decorator
   }
 
   STATUS_ICON_NAME = {
-    Status::NORMAL => "",
-    Status::UNDETERMINED_QUANTITY => "question-sign",
-    Status::DISAPPEARANCE => "ban-circle",
+    Status::NORMAL => "check-circle",
+    Status::UNDETERMINED_QUANTITY => "question-circle",
+    Status::DISAPPEARANCE => "ban",
     Status::DISPOSAL => "trash",
-    Status::LOSS => "warning-sign"
+    Status::LOSS => "exclamation-triangle"
   }
 
   def self.icon(in_list_include=false)
-    h.content_tag(:span, nil, class: in_list_include ? "glyphicon glyphicon-folder-open" : "glyphicon glyphicon-folder-close")
+    h.content_tag(:span, nil, class: in_list_include ? "fas fa-folder-open" : "fas fa-folder")
   end
 
   def name_with_id
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + " #{name} < #{global_id} >"
+    h.content_tag(:span, nil, class: "fas fa-folder") + " #{name} < #{global_id} >"
   end
 
   def box_path_with_id(link_flag = false)
@@ -141,8 +141,8 @@ class BoxDecorator < Draper::Decorator
   end
 
   def status_icon(in_list_include=false)
-    status_icon = h.content_tag(:span, nil, class: "glyphicon glyphicon-#{STATUS_ICON_NAME[status]}")
-    h.content_tag(:span, status_icon, title: "status:" + status_name, class: (in_list_include ? "glyphicon-active-color" : ""))
+    status_icon = h.content_tag(:span, nil, class: "fas fa-#{STATUS_ICON_NAME[status]}")
+    h.content_tag(:span, status_icon, title: "status:" + status_name, class: (in_list_include ? "fa-active-color" : ""))
   end
 
   def specimens_count(current_type=false, in_list_include=false)
@@ -168,7 +168,7 @@ class BoxDecorator < Draper::Decorator
   def bibs_with_link
     contents = []
     bibs.each do |bib| 
-      content = h.content_tag(:span, nil, class: "glyphicon glyphicon-book") + "" + h.link_to_if(h.can?(:read, bib), h.raw(bib.to_html), bib)
+      content = h.content_tag(:span, nil, class: "fas fa-book") + "" + h.link_to_if(h.can?(:read, bib), h.raw(bib.to_html), bib)
       content = h.content_tag(:li, content)
       contents << content
     end
@@ -232,7 +232,7 @@ class BoxDecorator < Draper::Decorator
     if box
       nodes += box.ancestors.map { |b| box_node(b) }
     end
-    #nodes += [h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + name]
+    #nodes += [h.content_tag(:span, nil, class: "fas fa-folder") + name]
     nodes << box_node(self)
     h.raw(nodes.join("/"))
   end
@@ -243,7 +243,7 @@ class BoxDecorator < Draper::Decorator
 
 
   def icon(in_list_include=false)
-    h.content_tag(:span, self.class.icon(in_list_include), class: (in_list_include ? "box glyphicon-active-color" : "box"))
+    h.content_tag(:span, self.class.icon(in_list_include), class: (in_list_include ? "box fa-active-color" : "box"))
   end
 
 
@@ -264,7 +264,7 @@ class BoxDecorator < Draper::Decorator
   private
 
   def box_node(box)
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-folder-close") + h.link_to_if(h.can?(:read, box), box.name, box)
+    h.content_tag(:span, nil, class: "fas fa-folder") + h.link_to_if(h.can?(:read, box), box.name, box)
   end
 
   def icon_with_count(klass, count)
@@ -274,7 +274,7 @@ class BoxDecorator < Draper::Decorator
   def icon_with_badge_count(klass, count, in_list_include=false)
     if count.nonzero?
       badge = h.content_tag(:span, count, :"data-klass" => "#{klass}", :"data-record_property_id" => record_property_id, class: (in_list_include ? "badge badge-active" : "badge"))
-      html = h.content_tag(:span, "#{klass}Decorator".constantize.try(:icon), class: (in_list_include ? "glyphicon-active-color" : ""))
+      html = h.content_tag(:span, "#{klass}Decorator".constantize.try(:icon), class: (in_list_include ? "fa-active-color" : ""))
       html += h.content_tag(:a, badge, href: "#tree-#{klass}-#{record_property_id}", :"data-toggle" => "collapse", class: "collapse-active")
     end
   end

@@ -4,13 +4,13 @@ class AttachmentFileDecorator < Draper::Decorator
   delegate :as_json
 
   def self.icon
-    h.content_tag(:span, nil, class: "glyphicon glyphicon-file")
+    h.content_tag(:span, nil, class: "fas fa-file")
   end
 
   def name_with_id
-    tag = h.content_tag(:span, nil, class: "glyphicon glyphicon-file") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
+    tag = h.content_tag(:span, nil, class: "fas fa-file") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
 #    if Settings.rplot_url
-#      tag += h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-eye-open"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
+#      tag += h.link_to(h.content_tag(:span, nil, class: "far fa-eye"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
 #    end
     tag
   end
@@ -99,7 +99,7 @@ class AttachmentFileDecorator < Draper::Decorator
     row = h.content_tag(:div, left + right, class: "row")
     header = h.content_tag(:div, class: "panel-heading") do
       #tag = h.content_tag(:h3, picture_link, class: "panel-title")
-      #tag += h.content_tag(:span, h.content_tag(:i, nil, class: "glyphicon glyphicon-chevron-down"), class: "pull-right clickable")
+      #tag += h.content_tag(:span, h.content_tag(:i, nil, class: "fas fa-chevron-down"), class: "pull-right clickable")
     end
 
     body = h.content_tag(:div, row, class: "panel-body")
@@ -144,7 +144,7 @@ class AttachmentFileDecorator < Draper::Decorator
   end
 
   def picture_link
-    picture = h.link_to(h.content_tag(:span, nil, class: "glyphicon glyphicon-picture"), attachment_file)
+    picture = h.link_to(h.content_tag(:span, nil, class: "far fa-image"), attachment_file)
     attachings.each do |attaching|
       attachable = attaching.attachable
       if attachable
@@ -152,14 +152,14 @@ class AttachmentFileDecorator < Draper::Decorator
         icon = attachable.decorate.icon
         if h.can?(:read, attachable)
           icon += h.link_to(link, attachable, class: h.specimen_ghost(attachable))
-          icon += h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal")
+          icon += h.link_to(h.icon_tag('info-circle'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal")
         else
           icon += link
         end
         picture += icon
       end
     end
-    picture += h.icon_tag("screenshot") + h.content_tag(:a, h.content_tag(:span, spots.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if attachment_file.spots.size > 0
+    picture += h.icon_tag("crosshairs") + h.content_tag(:a, h.content_tag(:span, spots.size, class: "badge"), href:"#spots-#{id}", :"data-toggle" => "collapse") if attachment_file.spots.size > 0
     picture
   end
 
@@ -168,7 +168,7 @@ class AttachmentFileDecorator < Draper::Decorator
   def family_tree(current_spot = nil)
     html_class = "tree-node"
     html = h.content_tag(:div, class: html_class, "data-depth" => 1) do
-      picture = h.content_tag(:span, nil, class: "glyphicon glyphicon-picture")
+      picture = h.content_tag(:span, nil, class: "far fa-image")
       #picture += 
       surfaces.each do |surface|
         link = surface.name
@@ -183,14 +183,14 @@ class AttachmentFileDecorator < Draper::Decorator
           link = attachable.name
           icon = attachable.decorate.icon
           if h.can?(:read, attachable)
-            icon += h.link_to(link, attachable, class: h.specimen_ghost(attachable)) + h.link_to(h.icon_tag('info-sign'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal")
+            icon += h.link_to(link, attachable, class: h.specimen_ghost(attachable)) + h.link_to(h.icon_tag('info-circle'), h.polymorphic_path(attachable, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal")
           else
             icon += link
           end
           picture += icon
         end
       end
-      picture += h.raw (h.icon_tag("screenshot") + "#{spots.size}") if attachment_file.spots.size > 0
+      picture += h.raw (h.icon_tag("crosshairs") + "#{spots.size}") if attachment_file.spots.size > 0
       picture
     end
 
@@ -211,13 +211,13 @@ class AttachmentFileDecorator < Draper::Decorator
   def thumblink_with_spot_info
     link = h.link_to(h.attachment_file_path(self), class: "thumbnail") do
       im = h.image_tag path
-#      im += h.icon_tag("screenshot") + "#{spots.size}" if !spots.empty?
-#      im += h.content_tag(:span, nil, class: "glyphicon glyphicon-picture") + " "
+#      im += h.icon_tag("crosshairs") + "#{spots.size}" if !spots.empty?
+#      im += h.content_tag(:span, nil, class: "far fa-image") + " "
       attachings.each do |attaching|
         attachable = attaching.attachable
         im += attachable.decorate.try(:icon) + attachable.name if attachable
       end
-      im += h.raw (h.icon_tag("screenshot") + "#{spots.size}") if spots.size > 0
+      im += h.raw (h.icon_tag("crosshairs") + "#{spots.size}") if spots.size > 0
       im
     end
     link
@@ -249,7 +249,7 @@ class AttachmentFileDecorator < Draper::Decorator
   end
 
   def image_link(width: 40, height: 40)
-    content = image? ? decorate.picture(width: width, height: height, type: :thumb) : h.content_tag(:span, nil, class: "glyphicon glyphicon-file")
+    content = image? ? decorate.picture(width: width, height: height, type: :thumb) : h.content_tag(:span, nil, class: "fas fa-file")
     h.link_to(content, h.attachment_file_path(self))
   end
 
@@ -297,7 +297,7 @@ class AttachmentFileDecorator < Draper::Decorator
       h.concat(h.content_tag(:div,nil,id:"affine_editor_#{self.id}"))
       h.concat form.hidden_field :affine_matrix_in_string
       h.concat(form.button(class: "btn btn-default") do
-        h.concat h.content_tag(:span, nil, class:"glyphicon glyphicon-save")
+        h.concat h.content_tag(:span, nil, class:"far fa-save")
       end)
     end
   end
