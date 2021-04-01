@@ -181,17 +181,17 @@ class SurfaceImageDecorator < Draper::Decorator
           h.concat h.content_tag(:li, attachment_file.name, class: "dropdown-header")
           #h.concat h.content_tag(:li, h.link_to("show image", h.attachment_file_path(attachment_file), class: "dropdown-item"))
 #          h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_affine_matrix_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
+          h.concat h.content_tag(:li, h.link_to("align and export", h.calibrate_svg_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("align on layer 'Base'", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
           h.concat h.content_tag(:li, h.content_tag(:a, "type in affine matrix", href: "#collapseAffine-#{attachment_file.id}", class: "dropdown-item", title: "#{attachment_file.name}", data: {toggle:"collapse"}))
 #          h.concat h.content_tag(:li, h.link_to("type in affine matrix", h.edit_attachment_file_path(attachment_file), class: "dropdown-item", title: "#{attachment_file.name}", :target => ["_blank"] ))
           h.concat h.content_tag(:li, h.link_to("type in coordinates of 4 corners", h.edit_corners_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
-          h.concat h.content_tag(:li, h.link_to("align and export", h.calibrate_svg_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
-          h.concat h.content_tag(:li, h.link_to("align on layer 'Base'", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
 #          surface.base_surface_images.each do |base_image|
 #                   h.concat h.content_tag(:li, h.link_to("calibrate on #{base_image.image.name}", h.calibrate_surface_image_path(self.surface, attachment_file, base_id: base_image.image.id), class: "dropdown-item"))
 #          end
           if attachment_file.try!(:affine_matrix).present?
-            h.concat h.content_tag(:li, h.link_to("show on layer 'Base'", h.map_surface_image_path(surface, attachment_file)))
-            h.concat h.content_tag(:li, h.link_to("show tiles", h.zooms_surface_image_path(surface, attachment_file)))
+#            h.concat h.content_tag(:li, h.link_to("show on layer 'Base'", h.map_surface_image_path(surface, attachment_file)))
+#            h.concat h.content_tag(:li, h.link_to("show tiles", h.zooms_surface_image_path(surface, attachment_file)))
             h.concat h.content_tag(:li, h.link_to("refresh tiles", h.tiles_surface_image_path(surface, attachment_file), method: :post))
           end
           if self.wall
