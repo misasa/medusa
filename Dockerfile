@@ -5,7 +5,10 @@ From ruby:2.7.2 as build-env
 # build image_mosaic
 RUN apt-get update \
 && apt-get install -y python3-pip \
-&& apt-get install -y libopencv-dev 
+libopencv-dev \
+ghostscript \
+libgs-dev \
+imagemagick
 RUN git clone https://github.com/misasa/image_mosaic.git
 RUN pip3 install -r /image_mosaic/requirements.txt \
 && pip3 install /image_mosaic
@@ -33,11 +36,11 @@ RUN addgroup -gid ${GID} medusa && useradd -m --home-dir /medusa --shell /bin/sh
 WORKDIR /medusa
 COPY Gemfile Gemfile.lock /medusa/
 COPY package.json yarn.lock /medusa/
+RUN yarn install
 #RUN bash -l -c 'yarn install'
-COPY . /medusa
 RUN bash -l -c 'bundle install'
 ENV PATH /usr/local/bin:$PATH
-RUN yarn install
+COPY . /medusa
 RUN bundle exec rake assets:precompile
 RUN chown -R medusa:medusa /medusa
 USER medusa

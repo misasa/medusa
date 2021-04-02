@@ -1,6 +1,12 @@
 From yyachi/medusa_devel as devel
 From ruby:2.7.2
 
+RUN apt-get update \
+&& apt-get install -y \
+ghostscript \
+libgs-dev \
+imagemagick
+
 ARG UID=1000
 ARG GID=1000
 RUN addgroup -gid ${GID} medusa && useradd -m --home-dir /medusa --shell /bin/sh --gid ${GID} --uid ${UID} medusa
