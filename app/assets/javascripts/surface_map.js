@@ -670,7 +670,7 @@ function initSurfaceMap() {
   });
 
   var spotsLayer = L.layerGroup([],{markerLayer: true});
-  overlayMaps['spot'] = spotsLayer
+  overlayMaps['spots'] = spotsLayer
   map.addLayer(spotsLayer);
   surface.spotsLayer = spotsLayer;
   var styleEditor =  L.control.styleEditor({

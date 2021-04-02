@@ -1,0 +1,32 @@
+From yyachi/medusa_devel as devel
+From ruby:2.7.2
+
+RUN apt-get update \
+&& apt-get install -y \
+ghostscript \
+libgs-dev \
+imagemagick
+
+ARG UID=1000
+ARG GID=1000
+RUN addgroup -gid ${GID} medusa && useradd -m --home-dir /medusa --shell /bin/sh --gid ${GID} --uid ${UID} medusa
+
+COPY --from=devel /usr/local/lib/ruby/site_ruby/RubyFits.rb /usr/local/lib/ruby/site_ruby/RubyFits.rb
+COPY --from=devel /usr/local/lib/ruby/site_ruby/fits.so /usr/local//lib/ruby/site_ruby/fits.so
+COPY --from=devel /usr/local/lib/python3.7 /usr/local/lib/python3.7 
+COPY --from=devel /usr/local/bin/make_tiles /usr/local/bin/make_tiles
+COPY --from=devel /usr/local/bin/image_in_image /usr/local/bin/image_in_image
+COPY --from=devel /usr/local/bin/Haffine_from_points /usr/local/bin/Haffine_from_points
+COPY ImageMagick-6-policy.xml /etc/ImageMagick-6/policy.xml
+WORKDIR /medusa
+COPY Gemfile Gemfile.lock /medusa/
+COPY package.json yarn.lock /medusa/
+COPY . /medusa
+COPY --from=devel /medusa/public/assets /medusa/public/assets 
+COPY --from=devel /medusa/public/packs /medusa/public/packs 
+
+RUN bash -l -c 'bundle install --without test development'
+RUN mkdir -p /medusa/public/system \
+ && chown -R medusa:medusa /medusa
+USER medusa
+

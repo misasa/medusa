@@ -1356,7 +1356,7 @@ describe SpecimenDecorator do
 
   describe "analyses_count" do
     subject { obj.analyses_count }
-    let(:icon) { "stats" }
+    let(:icon) { "chart-bar" }
     let(:klass) { "Analysis" }
     let(:count) { obj.analyses.count }
     let(:analysis) { FactoryBot.create(:analysis) }
@@ -1538,7 +1538,7 @@ describe SpecimenDecorator do
     subject { obj.status_icon }
     context "normal" do
       before { obj.update(quantity: 0.5, quantity_unit: "mg") }
-      it {expect(subject).to eq("<span title=\"status:\" class=\"\"><span class=\"fas fa-\"></span></span>") }
+      it {expect(subject).to eq("<span title=\"status:\" class=\"\"><span class=\"fas fa-check-circle\"></span></span>") }
     end
     context "undetermined quantity" do
       before { obj.update(quantity: "", quantity_unit: "") }
@@ -1550,7 +1550,7 @@ describe SpecimenDecorator do
     end
     context "disposal" do
       before { obj.record_property.update(disposed: true) }
-      it { expect(subject).to eq("<span title=\"status:trash\" class=\"\"><span class=\"far fa-trash-alt\"></span></span>") }
+      it { expect(subject).to eq("<span title=\"status:trash\" class=\"\"><span class=\"fas fa-trash\"></span></span>") }
     end
     context "loss" do
       before { obj.record_property.update(lost: true) }
