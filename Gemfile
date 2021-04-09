@@ -1,12 +1,11 @@
 source 'https://rubygems.org'
-source 'http://dream.misasa.okayama-u.ac.jp/rubygems/'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'rails', '6.1.2.1'
+gem 'rails', '6.1.3.1'
 
 # Use postgresql as the database for Active Record
 gem 'pg'
@@ -80,10 +79,14 @@ gem 'comma'
 gem 'acts-as-taggable-on'
 gem 'exception_notification'
 gem 'settingslogic'
+
+source 'http://dream.misasa.okayama-u.ac.jp/rubygems/' do
+  gem 'acts_as_mappable', '0.1.5'
+  gem 'with_recursive', '0.0.7'
+end
 #gem 'acts_as_mappable', git: 'git@devel.misasa.okayama-u.ac.jp:gems/actsasmappable.git'
-gem 'acts_as_mappable', '0.1.5'
 #gem 'with_recursive', git: 'git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.git'
-gem 'with_recursive', '0.0.7'
+
 gem 'thinreports', '0.7.7'
 gem 'bootstrap-sass'
 gem 'ransack'
@@ -109,7 +112,7 @@ group :development, :test do
   gem 'bullet'
   gem 'rak'
   gem 'pry-rails'
-  gem 'pry-doc'
+  #gem 'pry-doc'
   gem 'pry-stack_explorer'
   gem 'pry-byebug'
   gem 'rspec-rails', '~> 4.0.2'

@@ -1,0 +1,12 @@
+.git
+.gitignore
+.launch.json
+.env.*
+docker-compose.yml
+docker-compose.test.yml
+/public/system
+/public/system_test
+/log/*
+/tmp/*
+/db/*.sql
+Dockerfile.slim_production
