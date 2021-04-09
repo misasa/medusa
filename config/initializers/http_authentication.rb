@@ -1,1 +1,1 @@
-ActionController::HttpAuthentication::Token::TOKEN_REGEX = /^(Token|Bearer)\s+/
+#ActionController::HttpAuthentication::Token::TOKEN_REGEX = /^(Token|Bearer)\s+/
