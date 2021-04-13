@@ -1,0 +1,546 @@
+Al27/Mg24	ratio of aluminum isotope Al-27 to magnesium isotope Mg-24
+Acetate	acetate
+Ag	silver
+Age	sample age
+Al	aluminum
+Al26	aluminum isotope Al-26
+Al2O2	Dialuminum dioxide
+Al2O3	aluminium oxide
+Alk	alkalinity
+Ar	argon
+Ar36	argon isotope Ar-36
+Ar36/Ar38	ratio of argon isotopes Ar-36 to Ar-38
+Ar36/Ar39	ratio of argon isotopes Ar-36 to Ar-39
+Ar36/Ar40	ratio of argon isotopes Ar-36 to Ar-40
+Ar36/Xe132	ratio of argon isotope Ar-36 to xenon isotope Xe-132
+Ar37	argon isotope Ar-37
+Ar37/Ar40	ratio of Ar-37 to Ar-40
+Ar38	argon isotope Ar-38
+Ar38/Ar36	ratio of argon isotopes Ar-38 to Ar-36
+Ar38/Ar40	ratio of argon isotopes Ar-38 to Ar-40
+Ar39	argon isotope Ar-39
+Ar39/Ar40	ratio of argon isotopes Ar-39 to Ar-40
+Ar40	argon isotope Ar-40
+Ar40/Ar36	ratio of argon isotopes Ar-40 to Ar-36
+Ar40/Ar36_Initial	initial ratio of argon isotopes Ar-40 to Ar-37
+Ar40/Ar39	ratio of argon isotopes Ar-40 to Ar-39
+Ar40/ATM	atmospheric argon isotope ar40
+Ar40/He4	ratio of argon isotopes Ar-40 to helium isotope He-4
+Ar40*	radiogenic ar40
+Ar40*/Ar39_K	ratio of argon isotopes, radiogenic Ar-40 to Ar-39 produced from K
+As	arsenic
+Au	gold
+B	boron
+B/Ca	ratio of boron to calcium
+B11/B10	ratio of boron isotopes B-11 to B-10
+Ba	barium
+Ba/Ca	ratio of barium to calcium
+BaO	barium oxide
+BaSO4	barite
+Be	beryllium
+Be10	beryllium isotope Be-10
+Be10/Be9	ratio of beryllium isotopes Be-10 to Be-9
+Be10/Be9(T)	ratio of isotopes Be-10 to Be-9, time corrected
+Be9	beryllium isotope Be-9
+Bi	bismuth
+Br	bromium
+Br-	bromide
+C	carbon
+C(inorg)	inorganic carbon
+C(org)	organic carbon
+C(tot)	total carbon
+C(non-carb)	non-carbonate carbon
+C/N	ratio of organic carbon to total nitrogen
+C14	carbon isotope C-14
+C14_Age	C-14_Age
+Ca	calcium
+Ca/K	ratio of calcium to potassium
+Ca41	calcium isotope Ca-41
+CaCO3	calcium carbonate
+C14_Age_Calibrated	calibrated C-14_Age
+CaO	calcium oxide
+Cap_Delta_O17	deviation from the Earth-Moon line of O17/O16 and O18/O16 ratios as the vertical displacement of any point from it, calculated as Cap_Delta_O17=1000*ln(1+(delta_O17/1000))-0.52*1000*ln(1+(delta_O18/1000))
+Cap_Delta_S33	deviation of Delta_S33 from the terrestrial fractionation array, calculated as Cap_Delta_S33=Delta_S33-(Delta_S34/1000+1)^0.515-1)*1000
+Cap_Delta_S36	deviation of Delta_S36 from the terrestrial fractionation array, calculated as"Cap_Delta_S36=Delta_S36-((Delta_S34/1000+1)^1.9-1)*1000
+CaSO4	calcium sulfate
+Cd	cadmium
+Cd/Ca	ratio of cadmium to calcium
+Ce	cerium
+Ce136/Ce142	ratio of cerium isotopes Ce-136 to Ce-142
+Ce138/Ce142	ratio of cerium isotopes Ce-138 to Ce-142
+Ce140/Nd146	ratio of cerium to neodymium isotopes Ce-140 to Nd-146
+Ce2O3	cerium oxide
+CeO2	cerium dioxide
+CH4	methane
+Cl	chlorine
+Chrg_Bal 	electrical charge balance, calculated as the sum of cations vs. anions
+Cl	chlorine
+Cl36	radiogenic Cl isotope Cl-36
+Cl38	radiogenic Cl isotope Cl-38
+Co	cobalt
+CO	carbon monoxide
+CO2	carbon dioxide
+Co56	cobalt isotope Co-56
+CoO	cobalt oxide
+Cr	chromium
+Cr2O3	chromium oxide
+Cs	cesium
+Cs137_Activity	cesium isotope Cs-137 reported as activity
+Cu	copper
+Cu2O	copper(i) oxide (cuprous oxide)
+CuO	copper oxide
+Delta_B11	calculated as (B11/B10_sample / B11/B10_ NIST SRM951 -1)*1000
+Delta_C13	calculated as (C13/C12_sample / C13/C12_PDB -1)*1000
+Delta_Ca44	calculated as (Ca44/Ca40_sample / Ca44/Ca40_std -1)*1000
+Delta_Cl37	calculated as (Cl37/Cl35_sample / Cl37/Cl35_SMOC -1)*1000
+DELTA_Cu65	calculated as (Cu65/Cu63_sample / Cu65/Cu63_NIST-976 - 1)*1000
+DELTA_D	calculated as (H2/H1_sample / H2/H1_std -1)*1000
+DELTA_Fe56	calculated as (Fe56/Fe54_ sample / Fe56/Fe54_IRMM-014 -1)*1000
+DELTA_Fe57	calculated as (Fe57/Fe54_sample / Fe57/Fe54_IRMM-014 -1)*1000
+DELTA_Li6	calculated as (Li6/Li7_sample / Li6/Li7_std -1)*1000
+DELTA_Li7	calculated as (Li7/Li6_sample / Li7/Li6_std -1)*1000
+DELTA_Mg25	calculated as (Mg25/Mg24_sample / Mg25/Mg24_std - 1)*1000
+DELTA_Mg26	calculated as (Mg26/Mg24_sample / Mg26/Mg24_std - 1)*1000
+DELTA_Mo98	calculated as (Mo98/Mo95_sample / Mo98/Mo95_std - 1)*1000
+DELTA_N15	calculated as (N15/N14_sample / N15/N14_std - 1)*1000
+DELTA_Ni60	calculated as (Ni60/Ni58_sample / Ni60/Ni58_std - 1)*1000
+DELTA_O17	calculated as (O17/O16_sample / O17/O16_std - 1)*1000
+DELTA_O18	calculated as (O18/O16_sample / O18/O16_std - 1)*1000
+DELTA_S33	calculated as (S33/S32_sample / S33/S32_std - 1)*1000
+DELTA_S34	calculated as (S34/S32_sample / S34/S32_std - 1)*1000
+DELTA_S34SO4	sulfur isotope of the sulfate. calculated as (S33/S32_sample / S33/S32_std - 1)*1000
+DELTA_S36	calculated as (S36/S32_sample / S36/S32_std - 1)*1000
+DELTA_Si29	calculated as (Si29/Si28_sample / Si29/Si28_std - 1)*1000
+DELTA_Si30	calculated as (Si30/Si28_sample / Si30/Si28_std - 1)*1000
+DELTA_Ti49	calculated as (Ti49/Ti47_sample / Ti49/Ti47_std - 1)*1000
+DELTA_U234	calculated as (U234/U238_sample / U234/U238_secular_equilibrium - 1)*1000
+DELTA_U238	calculated as (U238/U235_sample / U238/U235_secular_equilibrium - 1)*1000
+DELTA_V51	calculated as (V51/V50_sample / V51/V50_std - 1)*1000
+DELTA_Zn66	calculated as (Zn66/Zn64_sample / Zn66/Zn64_std - 1)*1000
+DELTA_Zn68	calculated as (Zn68/Zn64_sample / Zn68/Zn64_std - 1)*1000
+DIC	dissolved inorganic carbon
+Dy	dysprosium
+Dy2O3	dysprosium oxide
+E_Cd	calculated as (Cd114/Cd110_sample/ Cd114/Cd110_std - 1)*1000
+E_Ce	calculated as (Ce138/Ce142_sample/ Ce138/Ce142_std - 1)*1000
+E_Hf	calculated as (176Hf/177Hf_sample/ 176Hf/177Hf_std - 1)*1000
+E_Hf(T)	calculated as (176Hf/177Hf_sample/ 176Hf/177Hf_std - 1)*1000, time corrected
+E_Mg25	calculated as (Mg25/Mg24_sample/ Mg25/Mg24_std - 1)*1000
+E_Mg26	calculated as (Mg26/Mg24_sample/ Mg26/Mg24_std - 1)*1000
+E_Nd	calculated as (Nd143/Nd144_sample/ Nd143/Nd144_std - 1)*1000
+E_Nd(T)	calculated as (Nd143/Nd144_sample/ Nd143/Nd144_std - 1)*1000, time corrected
+E_Sr	calculated as (Sr87/Sr86_sample/ Sr87/Sr86_std - 1)*1000
+E_Sr(T)	calculated as (Sr87/Sr86_sample/ Sr87/Sr86_std - 1)*1000, time corrected
+E_Tl	calculated as (Tl205/Tl203_sample/ Tl205/Tl203_std - 1)*1000
+E_W182	calculated as (W182/W184_sample/ W182/W184_std - 1)*1000
+E_W183	calculated as (W183/W184_sample/ W183/W184_std - 1)*1000
+Er	erbium
+Er2O3	erbium oxide
+Eu	europium
+Eu2O3	europium oxide
+F	fluorine
+Fe	iron
+Fe2O3	ferric iron oxide (tri-valent iron)
+Fe2O3T	total iron oxide content reported as ferric (tri-valent) iron
+Fe3O4	ferrosoferric oxide (Iron (II,III) oxide)
+Fe3/FeT	ratio of feric iron to total iron 
+FeCO3	siderite
+Fe-Fe	iron ferrite (FeFe2O4)
+FeO	ferrous iron oxide (di-valent)
+FeOT	total iron oxide content reported as ferrous (di-valent) iron
+FeS	ferrous sulfide (di-valent)
+FeS2	iron sulfide
+Fr	francium
+G_Os	gamma osmium
+G_Os(T)	gamma osmium, time corrected
+Ga	gallium
+Gd	gadolinium
+Gd155/Sm152	ratio of gadolinium isotope Gd155 to samarium isotope Sm152
+Gd2O3	gadolinium oxide
+Ge	germanium
+H	hydrogen
+H(TOT)	total hydrogen
+H2	hydrogen
+H2O	water
+H2OM	crystal water (h2o-)
+H2OP	crystal water (h2o+)
+H2S	hydrogen sulfide
+H2S(TOT)	total hydrogen sulfide
+H4SiO4	silicic acid
+HCO3	bicarbonate
+He	helium
+He3	helium isotope He3
+He3/He4	ratio of helium isotopes He3 to He4
+He3/He4(R/Ra)	ratio of helium isotopes He3 to He4 expressed relative to the helium isotope ratio of the atmosphere
+He4	helium isotope He4
+He4(NCC)	helium isotope He4 measured by neutron coincidence counting
+He4/Ar40	ratio of helium isotope He4 to argon isotope Ar40
+He4/He3	ratio of helium isotopes He4 to He3
+He4/Ne20	ratio of helium isotope He4 to neon isotope Ne20
+He4/Ne21	ratio of helium isotope He4 to neon isotope Ne21
+Hf	hafnium
+Hf174/Hf177	ratio of hafnium isotopes Hf174 to Hf177
+Hf176/Hf177	ratio of hafnium isotopes Hf176 to Hf177
+Hf176/Hf177(I)	ratio of hafnium isotopes Hf176 to Hf177 at initial time
+Hf176/Hf177(T)	ratio of hafnium isotopes Hf176 to Hf177, time corrected
+Hf177/Hf178	ratio of hafnium isotopes Hf177 to Hf178
+Hf178/Hf177	ratio of hafnium isotopes Hf178 to Hf177 
+Hf179/Hf177	ratio of hafnium isotopes Hf179 to Hf177
+Hf180/Hf177	ratio of hafnium isotopes Hf180 to Hf177
+Hf180/W184	ratio of hafnium isotope Hf180 to wolfram isotope W184
+HfO	hafnium dioxide
+HfO2	hafnium oxide
+Hg	mercury
+Ho	holmium
+Ho2O3	holmium oxide
+I	iodine
+In	indium
+Ir	iridium
+K	potassium
+K2O	potassium oxide
+Kr	krypton
+Kr78	krypton isotope Kr78
+Kr78/Kr83	ratio of krypton isotopes Kr78 to Kr83
+Kr78/Kr84	ratio of krypton isotopes Kr78 to Kr84
+Kr78/Kr86	ratio of krypton isotopes Kr78 to Kr86
+Kr80	krypton isotope Kr80
+Kr80/Kr83	ratio of krypton isotopes Kr80 to Kr83
+Kr80/Kr84	ratio of krypton isotopes Kr80 to Kr84
+Kr80/Kr86	ratio of krypton isotopes Kr80 to Kr86
+Kr81	krypton isotope Kr81
+Kr81/Kr86	ratio of krypton isotopes Kr81 to Kr86
+Kr82	krypton isotope Kr82
+Kr82/Kr83	ratio of krypton isotopes Kr82 to Kr83
+Kr82/Kr84	ratio of krypton isotopes Kr82 to Kr84
+Kr82/Kr86	ratio of krypton isotopes Kr82 to Kr86
+Kr83	krypton isotope Kr83
+Kr83/Kr84	ratio of krypton isotopes Kr83 to Kr84
+Kr83/Kr86	ratio of krypton isotopes Kr83 to Kr86
+Kr84	krypton isotope kr84
+Kr84/Kr83	ratio of krypton isotopes Kr84 to Kr83
+Kr84/Kr86	ratio of krypton isotopes Kr84 to Kr86
+Kr84/Xe132	ratio of krypton isotopes Kr84 to xenon isotopes Xe132
+Kr86	krypton isotope Kr86
+Kr86/Kr84	ratio of krypton isotopes Kr86 to Kr84
+Kr90	krypton isotope Kr90
+La	lanthanum
+La2O3	lanthanum oxide
+Li	lithium
+Li7/Li6	ratio of lithium isotopes Li7 to Li6 
+LOI	loss on ignition
+Lu	lutetium
+Lu176/Hf177	ratio of lutetium isotope Lu176 to hafnium isotope Hf177
+Lu176/Hf177(T)	ratio of lutetium isotope Lu176 to hafnium isotope Hf177, time corrected
+Lu176/Lu177	ratio of lutetium isotopes Lu176 to Lu177
+Lu2O3	lutetium oxide
+Mg	magnesium
+Mg/Ca	ratio of magnesium to calcium
+MgO	magnesium oxide
+Min[EM]	End member (replace Min with mineral abbreviation)
+Mn	manganese
+Mn_Ca	ratio of manganese to calcium
+Mn3O4	manganese tetroxide
+Mn54	manganese isotope Mn54
+MnCO3	manganese carbonate
+MnO	manganese oxide
+N	nitrogen
+N(A)	percent nitrogen in the a defect site of diamonds
+N(B)	percent nitrogen in the b defect site of diamonds
+N(ORG)	organic nitrogen
+N(TOT)	total nitrogen
+N2	nitrogen
+N2[nmol]	nitrogen measured in nanomols
+N2/Ar36	ratio of nitrogen isotope N2 to argon isotope Ar36
+N2/He3	ratio of nitrogen isotope N2 to helium isotope He3
+Na	sodium
+Na22	sodium isotope Na22
+Na2O	sodium oxide
+Nb	niobium
+Nb2O3	niobium oxide
+Nb2O5	niobium pentoxide
+NCU	native copper
+Nd	neodymium
+Nd/Ca	ratio of neodymium to calcium
+Nd142/Nd144	ratio of neodymium isotopes Nd142 to Nd144
+Nd143/Nd144	ratio of neodymium isotopes Nd143 to Nd144
+Nd143/Nd144(I)	ratio of neodymium isotopes Nd143 to Nd144 at initial age
+Nd143/Nd144(T)	ratio of neodymium isotopes Nd143 to Nd144, time corrected
+Nd144	neodymium isotope Nd144
+Nd144/Nd146	ratio of neodymium isotopes Nd144 to Nd146
+Nd145/Nd144	ratio of neodymium isotopes Nd145 to Nd144
+Nd146/Nd142	ratio of neodymium isotopes Nd146 to Nd142
+Nd146/Nd144	ratio of neodymium isotopes Nd146 to Nd144
+Nd146/Nd145	ratio of neodymium isotopes Nd146 to Nd145
+Nd146/Sm152	ratio of neodymium isotope Nd146 to samarium isotope Sm152
+Nd148/Nd144	ratio of neodymium isotopes Nd148 to Nd144
+Nd148O/Nd144O	ratio of neodymium Nd148 oxide to neodymium Nd144 oxide
+Nd150/Nd144	ratio of neodymium isotopes Nd150 to Nd144 
+Nd2O3	neodymium oxide
+Ne	neon
+Ne20	neon isotope ne20
+Ne20/Ne21	ratio of neon isotope Ne20 to Ne21
+Ne20/Ne22	ratio of neon isotope Ne20 to Ne22
+Ne21	neon isotope Ne21
+Ne21/He4	ratio of neon isotope Ne21 to helium isotope He4
+Ne21/Ne20	ratio of neon isotope Ne21 to Ne20
+Ne21/Ne22	ratio of neon isotope Ne21 to Ne22
+Ne22	neon isotope Ne22
+Ne22/Ne20	ratio of neon isotope Ne22 to Ne20
+Ne22/Ne21	ratio of neon isotope Ne22 to Ne21
+Ne23	neon isotope Ne23
+NH3	ammonia
+NH4	ammonium
+Ni	nickel
+NiO	nickel oxide
+NO2	nitrogen dioxide
+NO3	nitrate
+O	oxygen
+O17/O16	ratio of oxygen isotopes O17 to O16
+O18/O16	ratio of oxygen isotopes O18 to O16
+O2	dioxygen
+OH	hydroxide
+Os	osmium
+Os(I)	common osmium at initial age
+Os184/Os188	ratio of osmium isotopes Os184 to Os188
+Os186/Os188	ratio of osmium isotopes Os186 to Os188
+Os187/Os186	ratio of osmium isotopes Os187 to Os186
+Os187/Os188	ratio of osmium isotopes Os187 to Os188
+Os187/Os188(I)	ratio of osmium isotopes Os187 to Os188 at initial age
+Os187/Os188(T)	ratio of osmium isotopes Os187 to Os188, time corrected
+Os188	osmium isotope Os188
+Os188/Os192	ratio of osmium isotopes Os188 to Os192
+Os189/Os188	ratio of osmium isotopes Os189 to Os188
+Os190/Os188	ratio of osmium isotopes Os190 to Os188
+Os192/Os188	ratio of osmium isotopes Os192 to Os188
+P	phosphorus
+P(ORG)	phosphorous, organic
+P2O3	phosphorus trioxide
+P2O5	phosphorus oxide
+Pa	protactinium
+Pa231	protactinium isotope Pa231
+Pa231_ACTIVITY	protactinium isotope Pa231, reported as activity
+Pa231/Th230	ratio of protactinium isotope Pa231 to thorium isotope Th230
+Pa231/U235_ACTIVITY	ratio of protactinium isotope Pa231 to uranium isotope U235, reported as activity
+Pa231_XS	excess protactinium Pa231
+Pb	lead
+Pb204	lead isotope Pb204
+Pb204_Pb206	ratio of lead isotopes Pb204 to Pb206
+Pb204_Pb208	ratio of lead isotopes Pb204 to Pb208
+Pb206	lead isotope 206
+Pb206_Pb204	ratio of lead isotopes Pb206 to Pb204
+Pb206/Pb204(I)	ratio of lead isotopes Pb206 to Pb204 at initial age
+Pb206/Pb204(T)	ratio of lead isotopes Pb206 to Pb204, time corrected
+Pb206/Pb207	ratio of lead isotopes Pb206 to Pb207
+Pb206/Pb208	ratio of lead isotopes Pb206 to Pb208
+Pb206/U235	ratio of lead isotope Pb206 to uranium isotope U235
+Pb206/U238	ratio of lead isotope Pb206 to uranium isotope U238
+Pb206/U238(T)	ratio of lead isotope Pb206 to uranium isotope U238, time corrected
+Pb207	lead isotope Pb207
+Pb207/Pb204	ratio of lead isotopes Pb207 to Pb204
+Pb207/Pb204(I)	ratio of lead isotopes Pb207 to Pb204 at initial age
+Pb207/Pb204(T)	ratio of lead isotopes Pb207 to Pb204, time corrected
+Pb207/Pb206	ratio of lead isotopes Pb207 to Pb206
+Pb207/Pb206(I)	ratio of lead isotopes Pb207 to Pb206 at initial age
+Pb207/Pb208	ratio of lead isotopes Pb207 to Pb208
+Pb207/U235	ratio of lead isotope Pb207 to uranium isotope U235
+Pb207/U235(T)	ratio of lead isotope Pb207 to uranium isotope U235, time corrected
+Pb208	 lead isotope Pb208
+Pb208/Pb204	ratio of lead isotopes Pb208 to Pb204
+Pb208/Pb204(I)	ratio of lead isotopes Pb208 to Pb204 at initial age
+Pb208/Pb204(T)	ratio of lead isotopes Pb208 to Pb204, time corrected
+Pb208/Pb206	ratio of lead isotopes Pb208 to Pb206
+Pb208/Pb206(I)	ratio of lead isotopes Pb208 to Pb206 at initial age
+Pb208/Th232	ratio of lead isotope Pb208 to thorium isotope Th232
+Pb208/Th232(T)	ratio of lead isotope Pb208 to thorium isotope Th232, time corrected
+Pb210	lead isotope Pb210
+Pb210_ACTIVITY	lead isotope Pb210, reported as activity
+Pb210/Ra226	ratio of lead isotope Pb210 to radium isotope Ra226
+Pb210/Ra226_ACTIVITY	ratio of lead isotope Pb210 to radium isotope Ra226, reported as activity
+Pb210/U238	ratio of lead isotope Pb210 to uranium isotope U238
+Pb210_XS	excess lead Pb210
+PbO	lead oxide
+Pd	palladium
+pH	pH
+Po210	polonium isotope Po210
+Po210_ACTIVITY	polonium isotope Po210, reported as activity
+Po210/Pb210	ratio of polonium isotope Po210 to lead isotope Pb210
+PO4	phosphate
+Pr	praseodymium
+Pr2O3	praseodymium oxide
+Pr6O11	praseodymium (III, IV) oxide
+PRESS	pressure
+Pt	platinum
+Pt190/Os188	ratio of platinum isotope Pt190 to osmium isotope Os188
+r2 	 the correlation coefficient used to calculate the best-fit line
+Ra	radium
+Ra226	radium isotope Ra226
+Ra226_ACTIVITY	radium isotope Ra226, reported as activity
+Ra226/Th230	ratio of radium isotope Ra226 to thorium isotope Th230
+Ra226/Th230/ACTIVITY	ratio of radium isotope Ra226 to thorium isotope Th230, reported as activity
+Rb	rubidium
+Rb87	rubidium isotope Rb87
+Rb87/Rb86	ratio of rubidium isotopes Rb87 to Rb86
+Rb87/Sr86	ratio of rubidium isotope Rb87 to strontium isotope Sr86
+Re	rhenium
+Re187/Os186	ratio of rhenium isotope Re187 to osmium isotope Os186
+Re187/Os188	ratio of rhenium isotope Re187 to osmium isotope Os188
+Re187/Os189	ratio of rhenium isotope Re187 to osmium isotope Os189
+Rh	rhodium
+Ru	ruthenium
+S	sulfur
+S(TOT)	total sulfur
+S_(SLFI)	sulfur present as sulfide
+S_PY	sulfur present in pyrite form
+SAL	salinity
+Sb	antimony
+Sc	scandium
+Sc2O3	scandium oxide
+Sc46	scandium isotope Sc46
+Se	selenium
+Si	silica
+Si(AMORPH)	amorphous silica
+SiO2	silica oxide
+SIOH	sio2, high pressure
+Sm	samarium
+Sm144/Sm152	ratio of samarium isotopes Sm144 to Sm152
+Sm147	samarium isotope Sm147
+Sm147/Nd143	ratio of samarium isotope Sm147 to neodymium isotope Nd143
+Sm147/Nd144	ratio of samarium isotope Sm147 to neodymium isotope Nd144
+Sm147/Nd146	ratio of samarium to neodymium isotopes Sm147 to Nd146
+Sm148/Sm152	ratio of samarium isotopes Sm148 to Sm152
+Sm149/Sm152	ratio of samarium isotopes Sm149 to Sm152
+Sm150/Sm152	ratio of samarium isotopes Sm150 to Sm152
+Sm154/Sm152	ratio of samarium isotopes Sm154 to Sm152
+Sm2O3	samarium oxide
+Sn	tin
+SO2	sulfur dioxide
+SO3	sulfur trioxide
+SO4	sulfate
+Sr	strontium
+Sr/Ca	ratio of Sr to Ca
+Sr84/Sr86	ratio of strontium isotopes Sr84 to Sr86
+Sr84/Sr88	ratio of strontium isotopes Sr84 to Sr88
+Sr86	strontium isotope 86
+Sr86/Sr88	ratio of strontium isotopes Sr86 to Sr88
+Sr87/Sr86	ratio of strontium isotopes Sr87 to Sr86
+Sr87/Sr86(I)	ratio of strontium isotopes Sr87 to Sr86 at initial age
+Sr87/Sr86(T)	ratio of strontium isotopes Sr87 to Sr86, time corrected
+Sr87/Sr88	ratio of strontium isotopes Sr87 to Sr88
+Sr88/Sr86	ratio of strontium isotopes Sr88 to Sr86
+SrO	strontium oxide
+Ta	tantalum
+Ta2O5	tantalum oxide
+TALC	talc
+Tb	terbium
+Tb2O3	terbium oxide
+Te	tellurium
+TEMP	temperature
+Th	thorium
+Th227_ACTIVITY	Th227 reported as activity
+Th228/Th232	ratio of thorium isotopes Th228 to Th232
+Th230	thorium isotope Th230
+Th230_ACTIVITY	thorium isotope Th230, reported as activity
+Th230/Th232	ratio of thorium isotopes Th230 to Th232
+Th230/Th232_ACTIVITY	ratio of thorium isotopes Th230 to Th232, reported as activity
+Th230/U238	ratio of thorium isotope Th230 to uranium isotope U238
+Th230_U238_ACTIVITY	ratio of thorium isotope Th230 to uranium isotope U238, reported as activity
+Th230_XS	excess thorium 230
+Th232	thorium 232
+Th232_ACTIVITY	thorium isotope Th232, reported as activity
+Th232_Pb204	ratio of thorium isotope Th232 to lead isotope Pb204
+Th232_Pb208	ratio of thorium isotope Th232 to lead isotope Pb208
+Th232_Th230	ratio of isotopes Th232 to Th230
+Th232/Th230_ACTIVITY	ratio of isotopes Th232 to Th230 measured as activity
+Th232/U238	ratio of thorium isotope Th232 to uranium isotope U238
+Th234	thorium 234
+Th234_XS	thorium 234 excess
+Th238/Th232_ACTIVITY	ratio of thorium isotopes Th238 to Th232, reported as activity
+ThO	thorium monoxide
+ThO2	thorium dioxide
+Ti	titanium
+Ti2O3	titanium(III) oxide
+TIC	total inorganic carbon
+TI-MT	ti-magnetite
+TI-NB	titanoniobate
+TiO	titanium(II) oxide
+TiO2	titanium oxide
+Tl	thallium
+Tl203/Tl205	ratio of thallium isotopes Tl203 to Tl205
+Tl205/Tl203	ratio of thallium isotopes Tl205 to Tl203
+Tm	thulium
+Tm2O3	thulium oxide
+TOC	total organic carbon
+TOTAL	Total weight percent of anlyzed parameters
+U	uranium
+U/Zr91	ratio of uranium to zirconium isotope Zr91
+U/Zr92	ratio of uranium to zirconium isotope Zr92
+U230/Th232_ACTIVITY	ratio of uranium isotope U230 to thorium isotope Th232, reported as activity
+U234	uranium isotope U234
+U234_ACTIVITY	uranium isotope U234, reported as activity
+U234/U238	ratio of uranium isotopes U234 to U238
+U234/U238_ACTIVITY	ratio of uranium isotopes U234 to U238, measured as activity
+U234/U238_ACTIVITY(T)	ratio of uranium isotopes U234 to U238, measured as activity at time t
+U234/U238_ACTIVITY	ratio of uranium isotopes U234 to U238, reported as activity
+U235/Pb204	ratio of uranium isotope U235 to lead isotope Pb204
+U235/Pb207	ratio of uranium isotope U235 to lead isotope Pb207
+U235/U234	ratio of isotopes U235 to U234
+U236/Pb204	ratio of uranium isotope U236 to lead isotope Pb204
+U236/U238	ratio of isotopes U236 to U238
+U238	uranium isotope U238
+U238_ACTIVITY	uranium isotope U238, reported as activity
+U238/Pb204	ratio of uranium isotope U238 to lead isotope Pb204
+U238/Pb206	ratio of uranium isotope U238 to lead isotope Pb206
+U238/Pb208	ratio of uranium isotope U238 to lead isotope Pb208
+U238/Th230	ratio of uranium isotope U238 to thorium isotope Th230
+U238/Th230_ACTIVITY	ratio of uranium isotope U238 to thorium isotope Th230, reported as activity
+U238/Th232	ratio of uranium isotope U238 to thorium isotope Th232
+U238/Th232_ACTIVITY	ratio of uranium isotope U238 to thorium isotope Th232, reported as activity
+UO2	uranium oxide
+V	vanadium
+V2O3	vanadium sesquioxide
+V2O5	vanadium pentoxide
+V48	vanadium isotope V48
+W	tungsten
+WO3	tungsten trioxide
+Xe	xenon
+Xe124	xenon isotope xe124
+Xe124/Xe126	ratio of xenon isotopes Xe124 to Xe126
+Xe124/Xe130	ratio of xenon isotopes Xe124 to Xe130
+Xe124/Xe132	ratio of xenon isotopes Xe124 to Xe132
+Xe126	xenon isotope Xe126
+Xe126/Xe130	ratio of xenon isotopes Xe126 to Xe130
+Xe126/Xe132	ratio of xenon isotopes Xe126 to Xe132
+Xe128	xenon isotope Xe128
+Xe128/Xe130	ratio of xenon isotopes Xe128 to Xe130
+Xe128/Xe132	ratio of xenon isotopes Xe128 to Xe132
+Xe129	xenon isotope Xe129
+Xe129/Xe130	ratio of xenon isotopes Xe129 to Xe130
+Xe129/Xe132	ratio of xenon isotopes Xe129 to Xe132
+Xe129/Xe136	ratio of xenon isotopes Xe129 to Xe136
+Xe130	xenon isotope Xe130
+Xe130/Xe132	ratio of xenon isotopes Xe130 to Xe132
+Xe131	xenon isotope Xe131
+Xe131/Xe126	ratio of xenon isotopes Xe131 to Xe126
+Xe131/Xe130	ratio of xenon isotopes Xe131 to Xe130
+Xe131/Xe132	ratio of xenon isotopes Xe131 to Xe132
+Xe132	xenon isotope Xe132
+Xe132/Xe130	ratio of xenon isotopes Xe132 to Xe130
+Xe134	xenon isotope Xe134
+Xe134/Xe130	ratio of xenon isotopes Xe134 to Xe130
+Xe134/Xe132	ratio of xenon isotopes Xe134 to Xe132
+Xe134/Xe136	ratio of xenon isotopes Xe134 to Xe136
+Xe136	xenon isotope Xe136
+Xe136/He4	ratio of xenon isotope Xe136 to helium isotope he4
+Xe136/Xe130	ratio of xenon isotopes Xe136 to Xe130
+Xe136/Xe132	ratio of xenon isotopes Xe136 to Xe132
+Y	yttrium
+Y2O3	Ytterbium(III) oxide
+Yb	ytterbium
+Yb176/Hf177	ratio of ytterbium isotope Yb176 to hafnium isotope Hf177
+Yb2O3	yttrium oxide
+YO2	yttrium oxide
+Zn	zinc
+ZnO	zinc oxide
+Zr	zirconium
+Zr2O3	zirconium pentoxide
+ZrO2	zirconium oxide
