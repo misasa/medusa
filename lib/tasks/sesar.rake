@@ -51,6 +51,7 @@ namespace :sesar do
         Classification.destroy_all
         h = Hash.new
         h_tokenss.each do |material, tokenss|
+          #next unless material == 'Rock'
           tokenss.each do |tokens|
             h = rread(h, tokens)
           end
