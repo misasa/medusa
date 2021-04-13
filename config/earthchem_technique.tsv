@@ -1,0 +1,139 @@
+14C	Carbon 14 Age Determination
+AA	Activation Analysis
+AAS	Atomic Absorption
+AGE:ASSIG	Assigned Sample Age
+AGE:GEO	Geological Sample Age
+ALPHA	Alpha Counting
+ALPHA-ID	Alpha Counting Isotope Dilution
+AMS	Accelerator Mass Spectrometry
+ANC	Anion Chromatography
+AR_AR	Ar40_Ar39 Age Determination
+ARC	Arc Spectrometry
+AUT	Auto Analyzer
+AUTLCH	Automated Leaching
+BOMB	Carbonate Bomb
+CALC	Calculated
+CCP	Calcium Carbonate Preservation
+CHN	Carbon Hydrogen Nitrogen Analysis
+CHN-G	Carbon Hydrogen Nitrogen Gas Chromatography
+CHS	Carbon Hydrogen Sulfur Elemental Analyzer
+CMBN	Combustion
+CNS	Carbon Nitrogen Sulfur Analyzer
+COL	Colorimetric Analysis
+COUL	Coulometrical Analysis
+CSA	Carbon Sulfur Analysis
+DCP	Direct Current Plasma (Further Detail Not Provided)
+DCP-AES	Direct Current Plasma Atomic Emission Spectrometry
+DROES	Direct Reading Optical Emissions Spectroscopy
+EA	Elemental Analysis
+EA-CF-IRMS	Elemental Analyzer-Continuous Flow Isotope Ratio Mass Spectrometry
+EMP	Electron Microprobe
+ENAA	Epithermal Neutron Activation Analysis
+ES	Emission Spectrometry
+FIS	Fission Track
+FL-ES	Flame Emission Spectroscopy
+FP	Film Polarography
+FPHOT	Flame Photometry
+FTIR	Fourier Transform Infrared Spectrometry
+GAMMA	Gamma Counting
+GC	Gas Chromatography
+GC-MS	Gas Chromatography- Mass Spectrometry
+GF-AAS	Graphite Furnace Atomic Absorption Spectrometry
+GIO	Gradient Ion-Chromatography
+GL-EL	Glass Electrode
+GRAV	Gravimetry
+GS	Gasometric Technique
+HPLC	High-Performance Liquid Chromatography
+HR-ICP-MS	High-Resolution Inductively Coupled Plasma Mass Spectrometry
+IA	Image Analysis
+ICP	Inductively Coupled Plasma (Further Detail Not Provided)
+ICP:AES	Inductively Coupled Plasma Atomic Emission Spectroscopy
+ICP:ES	Inductively Coupled Plasma Source Emission Spectrometry
+ICP:LA	Inductively Coupled Plasma Laser Ablation (Further Detail Not Provided)
+ICP:LAM	Inductively Coupled Plasma Mass Spectrometry Laser Ablation Microprobe
+ICP:MS	Inductively Coupled Plasma Mass Spectrometry
+ICP:MS-HR	Inductively Coupled Plasma Mass Spectrometry High-Resolution
+ICP:MS-ID	Inductively Coupled Plasma Mass Spectrometry Isotope Dilution
+ICP:MS-LA	Inductively Coupled Plasma Mass Spectrometry Laser Ablation
+ICP:MS-LA-MC	Inductively Coupled Plasma Mass Spectrometry Laser Ablation Multicollector
+ICP:MS-MC	Inductively Coupled Plasma Mass Spectrometry Multi-Collector
+ICP-OES	Optical Emission Spectrospcopy
+ICS	Iridium Coincidence Spectrometry
+IGN	Ignition
+IMP	Ion Microprobe
+INAA	Instrumental Neutron Activation Analysis
+INC	Ion Chromatography
+IR-SP	Infra-Red Spectroscopy
+ISE	Ion Sensitive Electrode
+IVA	Inversion Volt-Ampermetry
+K-AR	K-Ar Age Determination
+LAICP	Inductively Coupled Plasma Laser Ablation (Further Detail Not Provided)
+LA-ICPMS	Laser Ablation Inductively Coupled Plasma Mass Spectrometry
+LF	Laser Fluorination
+LU-HF	Lutetium-Hafnium Age Determination
+MANO	Manometry
+MBS	Molybdate-Blue Spectrometry
+MC-ICP-MS	Laser Ablation Multicollector Inductively Coupled Plasma Mass Spectrometry
+MOSS	Mossbauer Spectra
+MS	Mass Spectrometry
+MS:ID	Isotope Dilution Mass Spectrometry
+MS:SIMS	Secondary Ionization Mass Spectrometry
+MS:SS-ID	Spark Source Mass Spectrometry - Isotope Dilution
+MS:SSMS	Spark Source Mass Spectrometry
+MS:TIMS	Thermal Ionization Mass Spectrometry
+MS:TIMS-ID	Tims Isotope Dilution
+MS:TIMS-ID-NEG	Negative Thermal Ionization Mass Spectrometry Isotope Dilution
+MS:TIMS-NEG	Negative Thermal Ionization Mass Spectrometry
+MS-ID	Mass Spectrometry Isotope Dilution
+NAA	Neutron Activation Analysis
+NAA-PG	Prompt-Gamma Neutron Activation Analysis
+NCC	Neutron Coincidence Counting
+NN	Unknown
+NSFA-ID	Nickel Sulfide Fire Assay Isotope Dilution
+NTIMS	Negative Thermal Ionization Mass Spectrometry
+NTIMS-ID	Negative Thermal Ionization Mass Spectrometry Isotope Dilution
+OES	Optical Emission Spectrometry
+OPS	Optical Spectroscopy
+PB-PB	Pb-Pb Dating
+PC	Point-Counting
+PEN	Penfield Method
+PGNAA	Prompt-Gamma Neutron Activation Analysis
+PMP	Proton Microprobe
+POT	Potentiometry
+PYHY	Pyrohydrolysis
+RA-TH	Ra226_Th230 Age Determination
+RB-SR	Rb-Sr Age Determination
+REF	Refractometer
+RE-OS	Rhenium-Osmium Age Determination
+REP	Rock Eval Pyrolysis
+RNAA	Radioanalytical Neutron Activation
+RR	Rapid Rock
+RSA	Radio-Isotopic Sample Age
+SEM	Scanning Electron Microscope
+SEM-EDS	SEM-Energy Dispersive X-rays
+SIMS	Secondary Ion Mass Spectrometry
+SMA	Solid's Moisture Analysis
+SM-ND	Samarium-Neodymium Age Determination
+SPEC	Spectrographic Analysis
+SP-PH	Spectrophotometry
+SS-ID	Spark Source Mass Spectrometry - Isotope Dilution
+SSMS	Spark Source Mass Spectrometry
+TH_PB	Thorium-Lead Age Determination
+TIMS	Thermal Ionization Mass Spectrometer
+TIMS-ID	Thermal Ionization Mass Spectrometry Isotope Dilution
+TITR	Titration
+U_PA	U235_Pa231 Age Determination
+U_PB	Uranium Lead Age Determination
+U_TH	U238_Th230 Age Determination
+U_TH_HE	U-Th-He Age Determination
+UNKNOWN	Unknown
+U-PB	Uranium-Lead Age Determination
+UV-ES	Ultraviolet Emission Spectrography
+VAC-F	Vacuum Fusion
+VOL	Volumetric Analysis
+WET	Wet Chemistry
+XANES	X-Ray Absorption Near-Edge Structure Spectroscopy
+XRD	X-Ray Dispersive Spectrometry
+XRF	X-Ray Fluorescence
+XRF-EDS	Energy-Dispersive X-Ray Fluorescence
+XRF-SCAN	X-Ray Fluorescence Scanning
