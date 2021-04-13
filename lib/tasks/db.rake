@@ -42,12 +42,27 @@ namespace :db do
 
   desc "Execute database import task."
   task import: :environment do
+    #puts $stdin.read
     db_config = Rails.application.config.database_configuration[Rails.env]
-    db_import = "#{ENV["DB_IMPORT"]}"
-    command = "psql -U #{db_config["username"]} -h #{db_config["host"]} #{db_config["database"]} < #{db_import}"
-    Rails.logger.info command
-    success = system command
-    Rails.logger.info "Database import task is #{success ? "succeed" : "failed"}."
+    #db_import = "#{ENV["DB_IMPORT"]}"
+    command = "psql -h #{db_config["host"]} -U #{db_config["username"]} -h #{db_config["host"]} #{db_config["database"]}"
+    io = IO.popen(command, :in => $stdin, :err=>:out)
+    puts io.read
+    #Rails.logger.info command
+    #success = system command
+    #Rails.logger.info "Database import task is #{success ? "succeed" : "failed"}."
+  end
+
+  desc "Execute database export task."
+  task export: :environment do
+    db_config = Rails.application.config.database_configuration[Rails.env]
+    file_name = "#{Date.today.strftime("%Y%m%d")}.dump"
+    dir_path = Pathname.new(Backup.dir_path.db)
+    file_path = dir_path.join(file_name)
+
+    command = "pg_dump -h #{db_config["host"]} -U #{db_config["username"]} #{db_config["database"]}"
+    io = IO.popen(command, :err=>:out)
+    puts io.read
   end
 
 end

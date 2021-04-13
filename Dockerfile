@@ -101,6 +101,7 @@ RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get -yq dist-upgrad
   ghostscript \
   imagemagick \
   libpq-dev \
+  postgresql-client \
   shared-mime-info &&\
   apt-get clean &&\
   rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* &&\
