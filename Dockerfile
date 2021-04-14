@@ -40,6 +40,26 @@ From ruby:${RUBY_VERSION} as build
 ARG RAILS_ENV
 ARG BUNDLER_VERSION
 ARG YARN_VERSION
+RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get -yq dist-upgrade &&\
+  DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends\
+  ghostscript \
+  postgresql-client &&\
+  apt-get clean &&\
+  rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* &&\
+  truncate -s 0 /var/log/*log
+
+COPY --from=ruby-fits /usr/local/lib/ruby/site_ruby/RubyFits.rb /usr/local/lib/ruby/site_ruby/RubyFits.rb
+COPY --from=ruby-fits /usr/local/lib/ruby/site_ruby/fits.so /usr/local//lib/ruby/site_ruby/fits.so
+
+COPY --from=build-python /usr/lib/x86_64-linux-gnu/libSM.so.6 /usr/lib/x86_64-linux-gnu/libSM.so.6
+COPY --from=build-python /usr/lib/x86_64-linux-gnu/libICE.so.6 /usr/lib/x86_64-linux-gnu/libICE.so.6
+
+COPY --from=build-python /usr/local/lib/python3.7 /usr/local/lib/python3.7 
+COPY --from=build-python /usr/local/bin/make_tiles /usr/local/bin/make_tiles
+COPY --from=build-python /usr/local/bin/image_in_image /usr/local/bin/image_in_image
+COPY --from=build-python /usr/local/bin/Haffine_from_points /usr/local/bin/Haffine_from_points
+COPY --from=build-python /usr/local/bin/H_from_points /usr/local/bin/H_from_points
+COPY ImageMagick-6-policy.xml /etc/ImageMagick-6/policy.xml
 
 RUN mkdir -p /opt
 COPY --from=node /opt/yarn-v${YARN_VERSION} /opt/yarn
@@ -88,9 +108,6 @@ COPY --chown=medusa:medusa LICENSE /medusa/LICENSE
 COPY --chown=medusa:medusa spec /medusa/spec
 ENV PATH $PATH:/medusa/bin
 
-
-
-
 From ruby:${RUBY_VERSION}-slim as prod
 ARG RAILS_ENV
 ARG YARN_VERSION
@@ -112,10 +129,13 @@ COPY --from=ruby-fits /usr/local/lib/ruby/site_ruby/fits.so /usr/local//lib/ruby
 
 COPY --from=build-python /usr/lib/x86_64-linux-gnu/libSM.so.6 /usr/lib/x86_64-linux-gnu/libSM.so.6
 COPY --from=build-python /usr/lib/x86_64-linux-gnu/libICE.so.6 /usr/lib/x86_64-linux-gnu/libICE.so.6
+COPY --from=build-python /usr/lib/x86_64-linux-gnu/libXrender.so.1 /usr/lib/x86_64-linux-gnu/libXrender.so.1
+
 COPY --from=build-python /usr/local/lib/python3.7 /usr/local/lib/python3.7 
 COPY --from=build-python /usr/local/bin/make_tiles /usr/local/bin/make_tiles
 COPY --from=build-python /usr/local/bin/image_in_image /usr/local/bin/image_in_image
 COPY --from=build-python /usr/local/bin/Haffine_from_points /usr/local/bin/Haffine_from_points
+COPY --from=build-python /usr/local/bin/H_from_points /usr/local/bin/H_from_points
 
 COPY ImageMagick-6-policy.xml /etc/ImageMagick-6/policy.xml
 
