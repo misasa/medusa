@@ -24,7 +24,7 @@ describe DevicesController do
 
     context "sort condition is nil" do
       let(:query) { {} }
-      it { expect(assigns(:devices).to_a).to eq [device_1, device_2, device_3] }
+      it { expect(assigns(:devices).to_a).to include(device_1, device_2, device_3) }
     end
   end
 

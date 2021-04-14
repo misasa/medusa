@@ -33,7 +33,7 @@ describe ClassificationsController do
       get :edit, params: { id: classification.id }
     end
     it { expect(assigns(:classification)).to eq classification }
-    it { expect(assigns(:material)).to eq ["Biology","Gas","Ice","Liquid>aqueous","Liquid>organic","Mineral","Not applicable","Other","Particulate","Rock","Sedimen","Soil","Synthetic"] }
+    it { expect(assigns(:material)).to eq ["Biology","Gas","Ice","Liquid>aqueous","Liquid>organic","Mineral","Not applicable","Other","Particulate","Rock","Sediment","Soil","Synthetic"] }
   end
 
   describe "POST create" do
