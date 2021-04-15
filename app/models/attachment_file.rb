@@ -8,7 +8,26 @@ class AttachmentFile < ApplicationRecord
     url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension",
     restricted_characters: /[&$+,x\/:;=?<>\[\]\{\}\|\\\^~%# ]/
 
-  validates_attachment_content_type :data, :content_type => ["image/jpg", "image/jpeg", "image/pjpeg", "image/png", "image/gif", "application/pdf", "application/octet-stream", "text/plain", "image/bmp", "image/fits" ]
+  validates_attachment_content_type :data, 
+  :content_type => [
+    "application/msword",
+    "application/octet-stream",
+    "application/pdf",
+    "application/vnd.ms-excel",
+    "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "application/x-photoshop",
+    "application/x-zip-compressed",
+    "application/zip",
+    "image/bmp",
+    "image/gif",
+    "image/jpeg",
+    "image/jpg",
+    "image/pjpeg",
+    "image/png",
+    "image/svg+xml",
+    "image/tiff",
+    "text/plain",
+    "image/fits" ]
 
   alias_attribute :name, :data_file_name
 
