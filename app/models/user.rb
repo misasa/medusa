@@ -7,7 +7,7 @@ class User < ApplicationRecord
   devise :omniauthable, omniauth_providers: [:google_oauth2, :shibboleth]
 
   after_create :create_search_columns
-
+  before_save :check_api_key
   has_many :group_members, dependent: :destroy
   has_many :groups, through: :group_members
   has_many :record_properties
@@ -16,7 +16,7 @@ class User < ApplicationRecord
   belongs_to :box
   
   validates :username, presence: true, length: {maximum: 255}, uniqueness: true
-  validates :api_key, uniqueness: true, allow_blank: true
+  validates_uniqueness_of :api_key, allow_blank: true, allow_nil: true
   validates :box, presence: { message: :required, if: -> { box_id.present? } }
 
   alias_attribute :admin?, :administrator
@@ -56,7 +56,9 @@ class User < ApplicationRecord
   end
 
   private
-
+  def check_api_key
+    self.api_key = nil if self.api_key == ""
+  end
   def create_search_columns
     SearchColumn.master.each do |master_search_column|
       search_column = master_search_column.dup
