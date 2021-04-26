@@ -87,6 +87,7 @@ class AttachmentFile < ApplicationRecord
       spot.attachment_file_id = self.id if spot.attachment_file_id != self.id
       spot.spot_x = spot_xys[index][0]
       spot.spot_y = spot_xys[index][1]
+      spot.radius_in_percent = spot.radius_percent_from_um
     end
     ospots
   end

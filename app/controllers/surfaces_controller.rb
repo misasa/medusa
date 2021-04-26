@@ -33,6 +33,12 @@ class SurfacesController < ApplicationController
     end
   end
 
+  def show_spot_specimens
+    respond_with @spot_specimens do |format|
+      format.js
+    end
+  end
+
   def edit
     respond_with @surface
   end
@@ -131,6 +137,7 @@ class SurfacesController < ApplicationController
     specimens_per_page = 5
     @bibs = Bib.where(id: Referring.where(referable_type: "Surface").where(referable_id: @surface.id).pluck(:bib_id)).order("updated_at DESC").page(params[:page]).per(bibs_per_page)
     @specimens = @surface.specimens.order("updated_at DESC").page(params[:page]).per(specimens_per_page)
+    @spot_specimens = @surface.spot_specimens.order("specimens.updated_at DESC").page(params[:page]).per(specimens_per_page)
   end
 
   def find_resources

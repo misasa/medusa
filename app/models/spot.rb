@@ -228,20 +228,22 @@ class Spot < ApplicationRecord
   end
 
   def svg_attributes
-    {
+    attr = {
       cx: spot_x,
       cy: spot_y,
       r: [attachment_file.original_width, attachment_file.original_height].max * radius_in_percent / 100,
-      fill: fill_color,
+      fill: fill_color || "",
       #title: "spot of '#{name}'",
       title: title,
-      "fill-opacity" => opacity,
-      stroke: stroke_color,
-      "stroke-width" => stroke_width,
+      "fill-opacity" => opacity|| 0,
+      stroke: stroke_color || "blue",
+      "stroke-width" => 10,
       #"data-spot" => Rails.application.routes.url_helpers.spot_path(self, script_name: Rails.application.config.relative_url_root),
       "data-spot" => decorate.target_path,
       "data-target-uid" => target_uid
     }
+    attr["stroke"]
+    attr
   end
 
   def title

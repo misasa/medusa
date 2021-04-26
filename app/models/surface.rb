@@ -60,6 +60,19 @@ class Surface < ApplicationRecord
   def spots
     Spot.preload(:record_property, :attachment_file, {target_property: [{analysis: [:chemistries]}, {specimen: {analyses: [:chemistries]} }]}).where("surface_id = ? or attachment_file_id IN (?)", self.id, self.image_ids)
   end
+
+  def target_uids
+    spots.pluck(:target_uid)
+  end
+
+  def spot_specimens
+    Specimen.eager_load(:record_property).where(record_property: {global_id: target_uids})
+  end
+
+  def spot_analyses
+    Analysis.eager_load(:record_property).where(record_property: {global_id: target_uids})
+  end
+
 #  def spots
 #    ss = []
 #    ss.concat(direct_spots) unless direct_spots.blank?

@@ -193,18 +193,20 @@ class AttachmentFileDecorator < Draper::Decorator
       picture += h.raw (h.icon_tag("crosshairs") + "#{spots.size}") if attachment_file.spots.size > 0
       picture
     end
-
-    spots.each do |spot|
-      html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-        spot.decorate.tree_node(current: false)
+    
+    if surfaces.empty?
+      spots.each do |spot|
+        html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+          spot.decorate.tree_node(current: false)
+        end
+      end
+    else
+      surface_spots_within_bounds.each do |spot|
+        html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+          spot.decorate.tree_node(current: false)
+        end
       end
     end
-    surface_spots_within_bounds.each do |spot|
-      html += h.content_tag(:div, class: html_class, "data-depth" => 3) do
-        spot.decorate.tree_node(current: false)
-      end
-    end
-
     html
   end
 

@@ -183,7 +183,7 @@ class SpotDecorator < Draper::Decorator
 
   def tree_node(current: false, current_type: false, in_list_include: false)
     icon = h.content_tag(:span, nil, class: "fas fa-crosshairs")
-    link = current ? icon : h.link_to_if(h.can?(:read, self), icon, self, :title => spot.name )
+    link = spot.attachment_file_id ? icon : h.link_to_if(h.can?(:read, self), icon, self, :title => spot.name )
 #    link += spot.name
     #node = icon + h.link_to_if(h.can?(:read, self), link, self)
     node = link
