@@ -1,6 +1,8 @@
 <div>
   <% if @specimen.attachment_files.present? %>
     <%= @specimen.primary_picture_with_link %>
+  <% else %>
+    <%= @specimen.decorate.picture_with_spot %>
   <% end %>
 </div>
 <div id="family-tree">

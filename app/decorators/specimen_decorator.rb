@@ -168,7 +168,12 @@ class SpecimenDecorator < Draper::Decorator
       end
     end
     if picture_file
-      picture_file.decorate.picture(width: width, height: height)
+      spots = picture_file.spots.where(target_uid: self.global_id)
+      if spots.blank?
+        return picture_file.decorate.picture(width: width, height: height)
+      else
+        return picture_file.decorate.picture_with_spots(width: width, height: height, spots: spots, with_cross: true)
+      end
     end
   end
 
@@ -183,7 +188,16 @@ class SpecimenDecorator < Draper::Decorator
       end
     end
     if picture_file
-      h.link_to(picture_file.decorate.picture(width: width, height: height), h.attachment_file_path(picture_file), class: h.specimen_ghost(self))
+      spots = picture_file.spots.where(target_uid: self.global_id)
+      if spots.blank?
+        h.link_to(picture_file.decorate.picture(width: width, height: height), h.attachment_file_path(picture_file), class: h.specimen_ghost(self))
+      else
+        svg = picture_file.decorate.picture_with_spots(width: width, height: height, spots: spots, with_cross: true)
+        svg_link = h.link_to(h.spot_path(spots[0])) do
+          svg
+        end
+        return svg_link
+      end
     end
   end
 
@@ -562,7 +576,7 @@ class SpecimenDecorator < Draper::Decorator
     end
   end
 
-  def related_pictures
+  def related_spots_panels
     links = []
     surfaces.each do |surface|
       next unless surface
@@ -581,6 +595,26 @@ class SpecimenDecorator < Draper::Decorator
     attachment_image_files.each do |file|
       links << h.content_tag(:div, file.decorate.spots_panel(spots: file.spots) , class: "col-lg-3") if file.image?
     end
+    links
+  end
+
+  def picture_with_spot
+    if !spot_links.blank?
+      spot = spot_links[0]
+      file = spot.attachment_file
+      if file
+        svg = file.decorate.picture_with_spots(spots:[spot], with_cross: true)
+        svg_link = h.link_to(h.spot_path(spot)) do
+          svg
+        end
+        return svg_link
+      end
+    end
+    nil
+  end
+
+  def related_pictures
+    links = related_spots_panels
     h.content_tag(:div, h.raw( links.join ), class: "row spot-thumbnails")
   end
 
