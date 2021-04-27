@@ -96,9 +96,10 @@ COPY --chown=medusa:medusa app/webpack /medusa/app/webpack
 COPY --chown=medusa:medusa app/assets /medusa/app/assets
 COPY --chown=medusa:medusa bin /medusa/bin
 COPY --chown=medusa:medusa postcss.config.js /medusa/postcss.config.js
+COPY --chown=medusa:medusa public/assets /medusa/public/assets
 RUN if [ "${RAILS_ENV}" = "production" ]; then \
   bundle exec rake assets:precompile &&\
-  rm -rf node_modules/*; \
+  rm -rf node_modules/*; \ 
 fi
 COPY --chown=medusa:medusa app /medusa/app
 COPY --chown=medusa:medusa config.ru /medusa/config.ru
