@@ -599,8 +599,9 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def picture_with_spot
-    if !spot_links.blank?
-      spot = spot_links[0]
+    spots = spot_links.where.not(attachment_file_id: nil)
+    if !spots.blank?
+      spot = spots[0]
       file = spot.attachment_file
       if file
         svg = file.decorate.picture_with_spots(spots:[spot], with_cross: true)
