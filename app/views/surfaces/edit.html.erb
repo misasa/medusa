@@ -7,17 +7,19 @@
 
 <div class="row">
   <div class="form-inline col-lg-5">
-<%= form_with model:@surface, local: false, format: :json, html: { id: "edit_surface_#{@surface.id}", class: "update", role: "form" } do |f| %>
-  <div class="input-group">
-    <span class="input-group-addon">Name</span>
-    <%= f.text_field :name, class: "form-control" %>
-    <div class="input-group-btn">
-      <%= f.button class: "btn btn-default" do %>
-       <span class="far fa-save"></span>
-      <% end %>
-    </div>
-  </div>
-<% end %>
+    <%= form_with model:@surface, local: false, format: :json, html: { id: "edit_surface_#{@surface.id}", class: "update", role: "form" } do |f| %>
+      <div class="input-group">
+        <span class="input-group-addon">Name</span>
+        <%= f.text_field :name, class: "form-control" %>
+        <span class="input-group-addon">Edge length (um)</span>
+        <%= f.text_field :length, class: "form-control" %>
+        <div class="input-group-btn">
+          <%= f.button class: "btn btn-default" do %>
+          <span class="far fa-save"></span>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
   </div>
 </div>
 <div class="row">

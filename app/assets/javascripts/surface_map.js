@@ -493,7 +493,11 @@ function initSurfaceMap() {
   var fitsLayers = {};
   var circleMarkers = [];
   var zoom = 1;
-  
+  var left = center[0] - length/2.0;
+  var right = center[0] + length/2.0;
+  var up = center[1] - length/2.0;
+  var bottom = center[1] + length/2.0;
+
   var surface = L.surface({center_x: center[0], center_y: center[1], length: length, resourceUrl: resourceUrl, baseUrl: baseUrl});
   var map = L.map('surface-map', {
     maxZoom: 14,
@@ -547,15 +551,23 @@ function initSurfaceMap() {
       return L.latLngBounds([world2latLng([world_bounds[0], world_bounds[1]]),world2latLng([world_bounds[2], world_bounds[3]])]);
   };
 
+  var polyline = L.polyline([[
+    world2latLng([left, up]),
+    world2latLng([right, up]),
+    world2latLng([right, bottom]),
+    world2latLng([left, bottom]),
+    world2latLng([left, up]),
+  ]], {color: 'green', weight: 1, opacity: 1}).addTo(map);
+
   var map_LabelFcn = function(ll, opts){
     lng =L.NumberFormatter.round(ll.lng, opts.decimals, opts.decimalSeperator);
     lat = L.NumberFormatter.round(ll.lat, opts.decimals, opts.decimalSeperator);
-    point = map.project(ll,0)
-    xy_str = "x: " + point.x + " y: " + point.y;
+    //point = map.project(ll,0)
+    //xy_str = "x: " + point.x + " y: " + point.y;
     world = latLng2world(ll);
-    gxy_str = "x_vs: " + world[0] + " y_vs: " + world[1];
-    lngLat_str = "lng:" + lng + " lat:" + lat;
-    str = gxy_str + " " + xy_str + " " + lngLat_str;
+    gxy_str = L.NumberFormatter.round(world[0], opts.decimals, opts.decimalSeperator) + "," + L.NumberFormatter.round(world[1], opts.decimals, opts.decimalSeperator);
+    //lngLat_str = "lng:" + lng + " lat:" + lat;
+    str = gxy_str;
     return str;
   };
   map.addControl(new L.Control.Coordinates({position: 'topright', customLabelFcn:map_LabelFcn}));
@@ -567,7 +579,7 @@ function initSurfaceMap() {
 
   layerGroups.concat([{ name: "top", opacity: 100, visible: true }]).forEach(function(layerGroup) {
     var group = L.layerGroup(), name = layerGroup.name, opacity = layerGroup.opacity / 100.0, visible = layerGroup.visible, resource_url = layerGroup.resource_url, colorScale = layerGroup.colorScale, displayMin = layerGroup.displayMin, displayMax = layerGroup.displayMax;
-    opts = {opacity: opacity, maxNativeZoom: 6, visible: visible, resource_url: resource_url};
+    opts = {noWrap: true, opacity: opacity, maxNativeZoom: 6, visible: visible, resource_url: resource_url};
     var flag = false;
     var group_fits = L.layerGroup();
     var flag_fits = false;
@@ -650,7 +662,7 @@ function initSurfaceMap() {
   });
 
   baseImages.forEach(function(baseImage) {
-    var opts = {maxNativeZoom: 6}
+    var opts = {maxNativeZoom: 6, noWrap: true}
 
     if (baseImage.bounds){
 	    opts = Object.assign(opts, {bounds: worldBounds(baseImage.bounds)});

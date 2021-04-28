@@ -59,6 +59,7 @@ COPY --from=build-python /usr/local/bin/make_tiles /usr/local/bin/make_tiles
 COPY --from=build-python /usr/local/bin/image_in_image /usr/local/bin/image_in_image
 COPY --from=build-python /usr/local/bin/Haffine_from_points /usr/local/bin/Haffine_from_points
 COPY --from=build-python /usr/local/bin/H_from_points /usr/local/bin/H_from_points
+COPY --from=build-python /usr/local/bin/transform_points /usr/local/bin/transform_points
 COPY ImageMagick-6-policy.xml /etc/ImageMagick-6/policy.xml
 
 RUN mkdir -p /opt
@@ -137,6 +138,7 @@ COPY --from=build-python /usr/local/bin/make_tiles /usr/local/bin/make_tiles
 COPY --from=build-python /usr/local/bin/image_in_image /usr/local/bin/image_in_image
 COPY --from=build-python /usr/local/bin/Haffine_from_points /usr/local/bin/Haffine_from_points
 COPY --from=build-python /usr/local/bin/H_from_points /usr/local/bin/H_from_points
+COPY --from=build-python /usr/local/bin/transform_points /usr/local/bin/transform_points
 
 COPY ImageMagick-6-policy.xml /etc/ImageMagick-6/policy.xml
 

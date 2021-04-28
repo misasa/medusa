@@ -253,6 +253,7 @@ Medusa::Application.routes.draw do
       get :show_specimens
       get :show_spot_specimens
       post 'tiles'
+      post 'scale'
     end
     resources :images, concerns: [:link_by_global_id], only: [:index, :show, :create, :update, :destroy], controller: "surface_images" do
       member do

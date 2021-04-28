@@ -72,10 +72,6 @@ class SurfacesController < ApplicationController
     respond_with @surface, layour: !request.xhr?
   end
 
-  
-
-  
-
   def picture
     respond_with @surface, layout: !request.xhr?
   end
@@ -102,11 +98,17 @@ class SurfacesController < ApplicationController
     respond_with @surface, location: adjust_url_by_requesting_tab(request.referer)
   end
 
+  def scale
+    p "scale..."
+    respond_with @surface
+  end
+
   private
 
   def surface_params
     params.require(:surface).permit(
       :name,
+      :length,
         :global_id,
         :user_id,
         :group_id,

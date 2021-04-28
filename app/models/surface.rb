@@ -170,6 +170,11 @@ class Surface < ApplicationRecord
     l
   end
 
+  def length=(_length)
+    r = _length.to_f/self.length
+    scale(r)
+  end
+  
   def image_bounds
     return Array.new(4) { nil } if globe? || surface_images.blank?
     left,upper,right,bottom = [nil,nil,nil,nil]
@@ -357,6 +362,45 @@ class Surface < ApplicationRecord
       surface_image.update_attribute(:position, index + 1)
     }
   end
+  def scale(r = 1.0)
+      affine_matrix = "[[#{r},0.0,0.0],[0.0,#{r},0.0],[0.0,0.0,1.0]]"
+      surface_spots = spots.where(attachment_file_id: nil)
+      if !surface_spots.blank?
+        spots_str = surface_spots.map{|spot| [spot.world_x,spot.world_y]}.to_s.gsub(" ","")
+        cmd_args = "--matrix=" + affine_matrix + " " + spots_str
+        line = Terrapin::CommandLine.new("transform_points", cmd_args, logger: logger)
+        line.run
+        _spots_str = line.output.output.chomp
+        _spots_str.gsub("[","").gsub("]]","").gsub("],","|").split("|").each_with_index do |_spot_str, index|
+          spot = surface_spots[index]
+          spot.world_x, spot.world_y = _spot_str.split(",").map(&:to_f)
+          spot.radius_in_um = spot.radius_in_um * r
+          spot.save
+        end
+      end
+      surface_images.each do |surface_image|
+      image = surface_image.image
+      next unless image
+      points = surface_image.corners_on_world_str
+      if points
+        cmd_args = "--matrix=" + affine_matrix + " " + points
+        line = Terrapin::CommandLine.new("transform_points", cmd_args, logger: logger)
+        line.run
+        _corners_on_world_str = line.output.output.chomp
+        line = Terrapin::CommandLine.new("H_from_points", "#{surface_image.corners_on_image_str} #{_corners_on_world_str} -f yaml", logger: logger)
+        line.run
+        _out = line.output.output.chomp
+        a = YAML.load(_out)
+        image.affine_matrix = a.flatten
+        image.save
+        image.spots.each do |spot|
+          spot.world_x, spot.world_y = spot.spot_world_xy
+          spot.radius_in_um = spot.radius_in_um * r
+          spot.save
+        end
+      end
+    end
+  end  
 
   private
 
@@ -372,4 +416,5 @@ class Surface < ApplicationRecord
     return unless index
     TileWorker.perform_async(surface_images[index].id, :transparent => index > 0)
   end
+
 end
