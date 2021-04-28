@@ -68,7 +68,7 @@ class AttachmentFileDecorator < Draper::Decorator
     #options = (width_rate >= height_rate) ? { width: width, height: original_height * scale } : { width: original_width * scale, height: height }
     options = { width: width, height: height}
     svg_options = {xmlns: "http://www.w3.org/2000/svg", 'xmlns:xlink' => "http://www.w3.org/1999/xlink", version: "1.1"}.merge(options)
-    image_path = attachment_file.path(:thumb)
+    image_path = attachment_file.path
     image_tag = %Q|<image xlink:href="#{image_path}" x="0" y="0" width="#{attachment_file.original_width}" height="#{attachment_file.original_height}" data-id="#attachment_file.id}"/>|
     spots.each do |spot|
       spot_options = spot.svg_attributes

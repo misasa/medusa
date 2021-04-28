@@ -178,14 +178,18 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def primary_picture_with_link(width: 250, height: 250)
-    picture_file = nil
-    atts = attachings.where(attachable_type: "Specimen").order("position ASC")
-    atts.each do |attaching|
-      attachment_file = attaching.attachment_file
-      if attachment_file.image?
-        picture_file = attachment_file
-        break
-      end
+    #picture_file = nil
+    #atts = attachings.where(attachable_type: "Specimen").order("position ASC")
+    #atts.each do |attaching|
+    #  attachment_file = attaching.attachment_file
+    #  if attachment_file.image?
+    #    picture_file = attachment_file
+    #    break
+    #  end
+    #end
+    picture_file = self.image_file
+    unless picture_file
+      picture_file = self.box.image_file if self.box
     end
     if picture_file
       spots = picture_file.spots.where(target_uid: self.global_id)
@@ -599,19 +603,31 @@ class SpecimenDecorator < Draper::Decorator
   end
 
   def picture_with_spot
-    spots = spot_links.where.not(attachment_file_id: nil)
+    spots = spot_links
     if !spots.blank?
       spot = spots[0]
+
       file = spot.attachment_file
+      unless file
+        file = self.image_file
+      end
+      unless file
+        file = self.box.image_file if self.box
+      end
       if file
-        svg = file.decorate.picture_with_spots(spots:[spot], with_cross: true)
+        if !file.surfaces.blank?
+          spots = file.surface_spots_within_bounds_converted
+        else
+          spots = file.spots
+        end
+        spot = spots.select{|spot| spot.target_uid == self.global_id }
+        svg = file.decorate.picture_with_spots(spots:spot, with_cross: true)
         svg_link = h.link_to(h.spot_path(spot)) do
           svg
         end
         return svg_link
       end
     end
-    nil
   end
 
   def related_pictures

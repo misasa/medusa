@@ -288,7 +288,8 @@ L.SpotEditor = L.Class.extend({
     var title = L.DomUtil.create('div', 'nowrap', container);
     title.innerHTML = spot.name_with_id;
     if (spot.attachment_file_id){
-      var image_url = surface.resourceUrl + '/images/' + spot.attachment_file_id;
+      //var image_url = surface.UrlRoot + '/images/' + spot.attachment_file_id;
+      var image_url = "../attachment_files/" + spot.attachment_file_id;
       var image = L.DomUtil.create('div', '', container);
       var label = L.DomUtil.create('span','',image);
       label.innerHTML = 'image: '
@@ -498,7 +499,7 @@ function initSurfaceMap() {
   var up = center[1] - length/2.0;
   var bottom = center[1] + length/2.0;
 
-  var surface = L.surface({center_x: center[0], center_y: center[1], length: length, resourceUrl: resourceUrl, baseUrl: baseUrl});
+  var surface = L.surface({center_x: center[0], center_y: center[1], length: length, resourceUrl: resourceUrl, baseUrl: baseUrl, urlRoot: urlRoot});
   var map = L.map('surface-map', {
     maxZoom: 14,
     minZoom: 0,

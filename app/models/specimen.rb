@@ -76,6 +76,19 @@ class Specimen < ApplicationRecord
     end
   end
 
+  def image_file
+    _file = nil
+    atts = attachings.where(attachable_type: "Specimen").order("position ASC")
+    atts.each do |attaching|
+      attachment_file = attaching.attachment_file
+      if attachment_file.image?
+        _file = attachment_file
+        break
+      end
+    end
+    _file
+  end
+
   def root_with_includes
     Specimen.includes({children: [:record_property]}).find(root.id)
   end

@@ -59,7 +59,20 @@ class BoxDecorator < Draper::Decorator
       end
     end
     if picture_file
-      h.link_to(picture_file.decorate.picture(width: width, height: height), h.attachment_file_path(picture_file), class: h.specimen_ghost(self))
+      if picture_file.surfaces.empty?
+        spots = picture_file.spots
+      else
+        spots = picture_file.surface_spots_within_bounds_converted
+      end
+      if spots.blank?
+        h.link_to(picture_file.decorate.picture(width: width, height: height), h.attachment_file_path(picture_file), class: h.specimen_ghost(self))
+      else
+        svg = picture_file.decorate.picture_with_spots(spots: spots)
+        svg_link = h.link_to(h.attachment_file_path(picture_file), class: h.specimen_ghost(self)) do
+          svg
+        end
+        return svg_link
+      end
     end
   end
 
