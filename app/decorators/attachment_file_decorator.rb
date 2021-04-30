@@ -7,6 +7,11 @@ class AttachmentFileDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "fas fa-file")
   end
 
+
+  def icon_with_name
+    tag = h.content_tag(:span, nil, class: "fas fa-file") + h.raw(" #{name}")
+    tag
+  end
   def name_with_id
     tag = h.content_tag(:span, nil, class: "fas fa-file") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
 #    if Settings.rplot_url

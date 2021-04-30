@@ -27,6 +27,10 @@ class SurfaceDecorator < Draper::Decorator
   #   Settings.rplot_url + '?id=' + global_id
   # end
 
+  def icon_with_name
+    tag = h.content_tag(:span, nil, class: "fas fa-globe-asia") + h.raw(" #{name}")
+  end
+
   def name_with_id
     tag = h.content_tag(:span, nil, class: "fas fa-globe-asia") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
     if false && Settings.rplot_url
@@ -196,13 +200,7 @@ class SurfaceDecorator < Draper::Decorator
   end
 
   def base_image_url
-    return if surface_images.blank?
-    if wall_surface_images.blank?
-      si = surface_images.last
-    else
-      si = wall_surface_images.first
-    end
-    return unless si.image
-    h.raw(h.url_for_tile(si) + "#{si.image.id}/0/0_0.png")
+    return unless appearance
+    return h.raw(h.url_for_tile(appearance))
   end
 end

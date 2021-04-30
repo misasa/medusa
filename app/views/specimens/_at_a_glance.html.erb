@@ -50,6 +50,9 @@
           <% end %>
         </li>
       <% end %>
+      <% @specimen.spot_links.each do |spot| %>
+        <li><%= spot.decorate.list_item %></li>
+      <% end %>
       <% if false %><li>analysis:<%= @specimen.list_of_summary_of_analysis %></li><% end %>
     </ul>
     <div class="row spot-thumbnails">

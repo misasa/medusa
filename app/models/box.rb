@@ -80,6 +80,14 @@ class Box < ApplicationRecord
     ancestors.map{|box| box.spot_links }.flatten
   end
 
+  def spots
+    specimens.map{|specimen| specimen.spot_links }.flatten
+  end
+
+  def surfaces
+    spots.map{|spot| spot.surface }.compact.uniq
+  end
+
   def total_decimal_quantity
     descendants.inject(specimens_decimal_quantity) do |sum, box|
       (box.disposal_or_loss? ? sum : sum + box.box_decimal_quantity) + box.specimens_decimal_quantity

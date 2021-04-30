@@ -174,7 +174,7 @@ class Surface < ApplicationRecord
     r = _length.to_f/self.length
     scale(r)
   end
-  
+
   def image_bounds
     return Array.new(4) { nil } if globe? || surface_images.blank?
     left,upper,right,bottom = [nil,nil,nil,nil]
@@ -316,7 +316,6 @@ class Surface < ApplicationRecord
     i
   end
 
-
   def tile_j_at(zoom, y)
     n = ntiles(zoom)
     left, upper, right, bottom = bbox
@@ -362,6 +361,7 @@ class Surface < ApplicationRecord
       surface_image.update_attribute(:position, index + 1)
     }
   end
+
   def scale(r = 1.0)
       affine_matrix = "[[#{r},0.0,0.0],[0.0,#{r},0.0],[0.0,0.0,1.0]]"
       surface_spots = spots.where(attachment_file_id: nil)
@@ -401,6 +401,26 @@ class Surface < ApplicationRecord
       end
     end
   end  
+
+  def appearance
+    candidate_images = calibrated_surface_images
+    wall_images = candidate_images.where(wall: true)
+    wall_images.each do |wall_image|
+      return wall_image if File.exists?(wall_image.tile_image_path(0,0,0))
+    end
+    wall_surface_layers.each do |wall_layer|
+      return wall_layer if File.exists?(wall_layer.tile_image_path(0,0,0))
+    end
+    candidate_images.each do |candidate_image|
+      layer = candidate_image.surface_layer
+      if layer
+        return layer if File.exists?(layer.tile_image_path(0,0,0))
+      else
+        return candidate_image if File.exists?(candidate_image.tile_image_path(0,0,0))
+      end
+    end
+    return nil
+  end
 
   private
 

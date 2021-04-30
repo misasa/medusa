@@ -16,6 +16,9 @@
       <% end %>
     </li>
   <% end %>
+  <% @box.surfaces.each do |surface| %>
+    <li><%= link_to(surface.decorate.icon_with_name, surface_path(surface)) %></li>
+  <% end %>
 </ul>
 
 <div class="row spot-thumbnails">

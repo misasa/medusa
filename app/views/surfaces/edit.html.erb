@@ -11,8 +11,10 @@
       <div class="input-group">
         <span class="input-group-addon">Name</span>
         <%= f.text_field :name, class: "form-control" %>
-        <span class="input-group-addon">Edge length (um)</span>
-        <%= f.text_field :length, class: "form-control" %>
+        <% if false %>
+          <span class="input-group-addon">Edge length (um)</span>
+          <%= f.text_field :length, class: "form-control" %>
+        <% end %>
         <div class="input-group-btn">
           <%= f.button class: "btn btn-default" do %>
           <span class="far fa-save"></span>
