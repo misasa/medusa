@@ -331,7 +331,7 @@ class SurfaceImage < ApplicationRecord
       corners_str = corners_on_world_str
       center_str = sprintf("[%.2f,%.2f]", ce[0], ce[1])
       length_str = sprintf("%.2f", surface.length)
-      cmd = "#{image_path} #{corners_str} #{length_str} #{center_str} -o #{tile_dir} -z #{maxzoom}"
+      cmd = "'#{image_path}' #{corners_str} #{length_str} #{center_str} -o #{tile_dir} -z #{maxzoom}"
     end
     cmd += " -t" if transparent
     cmd += " #{transparent_color}" if transparent_color
