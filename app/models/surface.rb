@@ -395,7 +395,7 @@ class Surface < ApplicationRecord
         image.save
         image.spots.each do |spot|
           spot.world_x, spot.world_y = spot.spot_world_xy
-          spot.radius_in_um = spot.radius_in_um * r
+          spot.radius_in_um = spot.radius_in_um * r if spot.radius_in_um
           spot.save
         end
       end
