@@ -210,7 +210,7 @@ class AttachmentFileDecorator < Draper::Decorator
         end
       end
     else
-      surface_spots_within_bounds.each do |spot|
+      surface_spots_within_image.each do |spot|
         html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
           spot.decorate.tree_node(current: false)
         end

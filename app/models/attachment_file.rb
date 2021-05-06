@@ -76,8 +76,33 @@ class AttachmentFile < ApplicationRecord
     Spot.with_surfaces(self.surfaces)
   end
 
+  def surface_spots_within_image
+    surface_spots.within_image(self)
+  end
+
   def surface_spots_within_bounds
     surface_spots.within_bounds(self.bounds)
+  end
+
+  def surface_spots_within_image_converted
+    ospots = []
+    #ospots = surface_spots_within_image
+    #spot_xys = self.world_pairs_on_pixel(ospots.pluck(:world_x, :world_y))
+    surface_spots_within_image.each_with_index do |spot, index|
+      if spot.attachment_file_id == self.id
+        ospots << spot
+      else
+        spot.attachment_file_id = self.id
+        if spot.world_x && spot.world_y
+          spot_xys = self.world_pairs_on_pixel([[spot.world_x, spot.world_y]])
+          spot.spot_x = spot_xys[0][0]
+          spot.spot_y = spot_xys[0][1]
+          spot.radius_in_percent = spot.radius_percent_from_um
+          ospots << spot
+        end
+      end
+    end
+    ospots
   end
 
   def surface_spots_within_bounds_converted
@@ -221,8 +246,12 @@ class AttachmentFile < ApplicationRecord
 
 
   def update_spots_world_xy
-    return unless affine_matrix_changed?
-    spots.each(&:save!)
+    #return unless affine_matrix_changed?
+    spots.each do |spot|
+      spot.world_x, spot.world_y = spot.spot_world_xy
+      spot.radius_in_um = spot.radius_um_from_percent
+      spot.save
+    end
   end
 
   def rename_attached_files_if_needed
@@ -441,7 +470,7 @@ class AttachmentFile < ApplicationRecord
     if surfaces.empty?
       spots.inject(image) { |svg, spot| svg + spot.to_svg }
     else
-      surface_spots_within_bounds_converted.inject(image) { |svg, spot| svg + spot.to_svg }
+      surface_spots_within_image_converted.inject(image) { |svg, spot| svg + spot.to_svg }
     end
   end
 

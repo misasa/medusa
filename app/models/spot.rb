@@ -29,7 +29,14 @@ class Spot < ApplicationRecord
   scope :with_surface, -> (surface){
     where("surface_id = ? or attachment_file_id IN (?)", surface.id, surface.image_ids)
   }
-
+  scope :within_image, -> (image){
+    bounds = image.bounds
+    if bounds
+      where("(world_x >= ? and world_x <= ? and world_y >= ? and world_y <= ?) or (attachment_file_id = ?)",bounds[0],bounds[2],bounds[3],bounds[1], image.id)
+    else
+      where(attachment_file_id: image.id)
+    end
+  }
   scope :within_bounds, -> (bounds){
     where("world_x >= ? and world_x <= ? and world_y >= ? and world_y <= ?",bounds[0],bounds[2],bounds[3],bounds[1])
   }
