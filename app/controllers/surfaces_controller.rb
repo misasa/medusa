@@ -109,6 +109,7 @@ class SurfacesController < ApplicationController
     params.require(:surface).permit(
       :name,
       :length,
+      record_property_attributes: [
         :global_id,
         :user_id,
         :group_id,
@@ -119,7 +120,8 @@ class SurfacesController < ApplicationController
         :guest_readable,
         :guest_writable,
         :published,
-        :lost,
+        :lost
+      ], 
       surface_images_attributes: [
         :id,
         :surface_layer_id
