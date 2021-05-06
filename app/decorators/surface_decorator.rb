@@ -66,6 +66,15 @@ class SurfaceDecorator < Draper::Decorator
     }
   end
 
+  def center_str
+    x,y = self.center
+    sprintf("[%.3f,%.3f]", x, y)
+  end
+
+  def length_str
+    sprintf("%.3f", self.length)
+  end
+
   def map_data(options = {})
     surface_length = self.length
     tilesize = self.tilesize

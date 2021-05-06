@@ -1,7 +1,7 @@
 <%#= render partial: "layer" %>
 <ul>
-  <li>center (&mu;m): <%= @surface.center %></li>
-  <li>edge-length (&mu;m): <%= @surface.length %></li>
+  <li>center (&mu;m): <%= @surface.decorate.center_str %></li>
+  <li>edge-length (&mu;m): <%= @surface.decorate.length_str %></li>
   <% unless @surface.image_box_ids.blank? %>
     <% @surface.image_boxes.each do |image_box| %>
     <li>
@@ -9,7 +9,6 @@
     </li>  
     <% end %>
   <% end %>
-
   <% unless @surface.image_specimen_ids.blank? %>
     <% @surface.image_specimens.each do |image_specimen| %>
     <li>
