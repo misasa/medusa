@@ -1,1 +1,31 @@
-<%= render partial: "layer" %>
+<%#= render partial: "layer" %>
+<ul>
+  <li>center (&mu;m): <%= @surface.center %></li>
+  <li>edge-length (&mu;m): <%= @surface.length %></li>
+  <% unless @surface.image_box_ids.blank? %>
+    <% @surface.image_boxes.each do |image_box| %>
+    <li>
+      <%= image_box[:box].decorate.name_with_id(true) %> with <%= image_box[:image].decorate.name_with_id(true) %>
+    </li>  
+    <% end %>
+  <% end %>
+
+  <% unless @surface.image_specimen_ids.blank? %>
+    <% @surface.image_specimens.each do |image_specimen| %>
+    <li>
+      <%= image_specimen[:specimen].decorate.name_with_id(true) %> with <%= image_specimen[:image].decorate.name_with_id %>
+    </li>  
+    <% end %>
+  <% end %>
+
+  <% unless @surface.specimens.blank? %>
+    <% @surface.specimens.each do |specimen| %>
+    <li>
+        <%= specimen.decorate.name_with_id(true) %>
+        <%= link_to surface_specimen_path(@surface, specimen) + tab_param(__FILE__), method: :delete, title: "unlink `#{specimen.name}'", data: {confirm: t("confirm.unlink")} do %>
+          <span class="fas fa-times"></span>
+        <% end %>
+    </li>
+    <% end %>
+  <% end %>
+</ul>

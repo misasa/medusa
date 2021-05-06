@@ -12,11 +12,15 @@ class AttachmentFileDecorator < Draper::Decorator
     tag = h.content_tag(:span, nil, class: "fas fa-file") + h.raw(" #{name}")
     tag
   end
-  def name_with_id
-    tag = h.content_tag(:span, nil, class: "fas fa-file") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
-#    if Settings.rplot_url
-#      tag += h.link_to(h.content_tag(:span, nil, class: "far fa-eye"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
-#    end
+  def name_with_id(flag_link = false)
+#    tag = h.content_tag(:span, nil, class: "fas fa-file") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
+    tag = h.content_tag(:span, nil, class: "fas fa-file")
+    if flag_link
+      tag += h.raw(" ") + h.link_to(name, attachment_file)
+    else
+      tag += " #{name}"
+    end
+    tag += h.raw(" < #{h.draggable_id(global_id)} >")
     tag
   end
 

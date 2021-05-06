@@ -65,6 +65,38 @@ class Surface < ApplicationRecord
     spots.pluck(:target_uid)
   end
 
+  def attachment_file_ids
+    surface_images.pluck(:image_id)
+  end
+
+  def image_specimen_ids
+    Attaching.where(attachment_file_id: attachment_file_ids).where(attachable_type: "Specimen").pluck(:attachment_file_id, :attachable_id)
+  end
+
+  def image_specimens
+    a = []
+    image_specimen_ids.each do |image_id, specimen_id|
+      image = AttachmentFile.find(image_id)
+      specimen = Specimen.find(specimen_id)
+      a << {image: image, specimen: specimen}
+    end
+    a
+  end
+
+  def image_box_ids
+    Attaching.where(attachment_file_id: attachment_file_ids).where(attachable_type: "Box").pluck(:attachment_file_id, :attachable_id)
+  end
+
+  def image_boxes
+    a = []
+    image_box_ids.each do |image_id, box_id|
+      image = AttachmentFile.find(image_id)
+      box = Box.find(box_id)
+      a << {image: image, box: box}
+    end
+    a
+  end
+
   def spot_specimens
     Specimen.eager_load(:record_property).where(record_property: {global_id: target_uids})
   end
