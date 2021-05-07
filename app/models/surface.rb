@@ -69,6 +69,14 @@ class Surface < ApplicationRecord
     surface_images.pluck(:image_id)
   end
 
+  def attaching_image_ids
+    Attaching.where(attachment_file_id: attachment_file_ids).pluck(:attachment_file_id)
+  end
+
+  def images_with_object
+    AttachmentFile.where(id: attaching_image_ids)
+  end
+
   def image_specimen_ids
     Attaching.where(attachment_file_id: attachment_file_ids).where(attachable_type: "Specimen").pluck(:attachment_file_id, :attachable_id)
   end

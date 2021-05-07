@@ -12,6 +12,7 @@ class AttachmentFileDecorator < Draper::Decorator
     tag = h.content_tag(:span, nil, class: "fas fa-file") + h.raw(" #{name}")
     tag
   end
+  
   def name_with_id(flag_link = false)
 #    tag = h.content_tag(:span, nil, class: "fas fa-file") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
     tag = h.content_tag(:span, nil, class: "fas fa-file")

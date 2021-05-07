@@ -46,6 +46,17 @@ class SpecimenDecorator < Draper::Decorator
     send(column_type.call_content) if column_type && column_type.call_content.present?
   end
 
+  def icon_name_info_link
+    link = name
+    icon = self.icon
+    if h.can?(:read, self)
+      icon += h.link_to(link, self, class: h.specimen_ghost(self))
+      icon += h.link_to(h.icon_tag('info-circle'), h.polymorphic_path(self, script_name: Rails.application.config.relative_url_root, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal")
+    else
+      icon += link
+    end
+  end
+
   def name_with_id(flag_link = false)
     tag = h.content_tag(:span, nil, class: "fas fa-cloud")
     if flag_link
