@@ -3,7 +3,12 @@ require 'RubyFits'
 class AttachmentFile < ApplicationRecord
   include HasRecordProperty
   has_attached_file :data,
-    styles: { thumb: "160x120>", tiny: "50x50"},
+    styles: { 
+      :large => ["100%", :png],
+      :medium => ["250x250>", :png],
+      :thumb => ["160x120>", :png], 
+      :tiny => ["50x50", :png]
+    },
     path: ":rails_root/public/system/:class/:id_partition/:basename_with_style.:extension",
     url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension",
     restricted_characters: /[&$+,x\/:;=?<>\[\]\{\}\|\\\^~%# ]/
@@ -466,7 +471,7 @@ class AttachmentFile < ApplicationRecord
     height = opts[:height] || original_height
 
 
-    image = %Q|<image xlink:href="#{path}" x="0" y="0" width="#{original_width}" height="#{original_height}" data-id="#{id}"/>|
+    image = %Q|<image xlink:href="#{path(:large)}" x="0" y="0" width="#{original_width}" height="#{original_height}" data-id="#{id}"/>|
     if surfaces.empty?
       spots.inject(image) { |svg, spot| svg + spot.to_svg }
     else

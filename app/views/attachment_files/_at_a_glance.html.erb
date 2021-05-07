@@ -31,8 +31,7 @@
   <li>modified at <%= difference_from_now(@attachment_file.updated_at) -%></li>
   <% if @attachment_file.pdf? %>
     <li>
-      <%= @attachment_file.name %>
-      <%= link_to(image_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(@attachment_file.id), id: "file-#{@attachment_file.id}-button") %>
+      <%= @attachment_file.pdf_link %>
     </li>
   <% end %>
 </ul>

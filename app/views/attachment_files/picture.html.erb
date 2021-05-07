@@ -39,6 +39,11 @@
 <% if @attachment_file.fits_file? %>
   <%= image_tag(fits_image_attachment_file_path(@attachment_file), :size => '256x256') %>  
 <% end %>
+
+<% if @attachment_file.pdf? %>
+  <%= image_tag(@attachment_file.path(:large), :width => '100%') %>
+<% end %>
+
 <div id="family-tree">
   <%= @attachment_file.family_tree %>
 </div>
