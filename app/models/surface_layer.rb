@@ -2,9 +2,9 @@ class SurfaceLayer < ApplicationRecord
   belongs_to :surface
   has_many :surface_images, -> { order('position DESC') }, dependent: :nullify
   has_many :wall_surface_images, -> { wall }, class_name: 'SurfaceImage'
-  has_many :overlay_surface_images, -> { overlay }, class_name: 'SurfaceImage'
-  has_many :calibrated_surface_images, -> { calibrated }, class_name: 'SurfaceImage'
-  has_many :uncalibrated_surface_images, -> { uncalibrated }, class_name: 'SurfaceImage'
+  has_many :overlay_surface_images, -> { overlay.order('position DESC') }, class_name: 'SurfaceImage'
+  has_many :calibrated_surface_images, -> { calibrated.order('position DESC') }, class_name: 'SurfaceImage'
+  has_many :uncalibrated_surface_images, -> { uncalibrated.order('position DESC') }, class_name: 'SurfaceImage'
   has_many :fits_surface_images, -> { fits_file }, class_name: 'SurfaceImage'
   has_many :images, through: :surface_images
   acts_as_list :scope => :surface_id, column: :priority
