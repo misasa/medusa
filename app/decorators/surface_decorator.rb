@@ -6,9 +6,13 @@ class SurfaceDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "fas fa-globe-asia")
   end
 
+  def maps_url
+    Settings.map_url.blank? ? "#{Rails.application.config.relative_url_root}/system/maps/" : Settings.map_url
+  end
+
   def url_for_tile
 #    h.root_url + "system/maps/#{global_id}/"
-    Settings.map_url + "#{global_id}/"
+    maps_url + "#{global_id}/"
   end
 
   def url_for_tiles
@@ -93,7 +97,7 @@ class SurfaceDecorator < Draper::Decorator
       end
     end
     {
-      base_url: Settings.map_url,
+      base_url: maps_url,
       resource_url: h.surface_path(surface),
       url_root: "#{Rails.application.config.relative_url_root}/",
       global_id: global_id,

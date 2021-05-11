@@ -92,17 +92,20 @@ module HasRecordProperty
     @pml_elements = array.flatten.compact.uniq
   end
 
+  def rplot_base
+    _path = Settings.rplot_url
+    if _path.blank?
+      _path = "/rplot/"
+    end
+    _path
+  end
+
   def rplot_url
-    return unless Settings.rplot_url
-#    Settings.rplot_url + '?id=' + global_id
-    Settings.rplot_url + 'chelyabinsk/?id=' + global_id
+    return File.join(rplot_base, 'chelyabinsk/?id=' + global_id)
   end
 
   def rmap_url
-    return unless Settings.rplot_url
-#    Settings.rplot_url + '?id=' + global_id
-#    Settings.rplot_url + 'surfaces/?id=' + global_id
-    Settings.rplot_url + 'map/?id=' + global_id
+    return File.join(rplot_base, 'map/?id=' + global_id)
   end
 
   def form_name

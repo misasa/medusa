@@ -18,13 +18,21 @@ class Settings < Settingslogic
     end
   end
 
-  def self.rplot_url
-    if has_key?("rplot_url") && rplot_url.present?
-      rplot_url
-    else
-      nil
-    end
-  end
+  #def self.rplot_url
+  #  if has_key?("rplot_url") && !rplot_url.blank?
+  #    return rplot_url
+  #  else
+  #    return "/rplot/"
+  #  end
+  #end
+
+#  def self.map_url
+#    if has_key?("map_url") && map_url.present?
+#      return map_url
+#    else
+#      return "/public/system/maps/"
+#    end
+#  end
 
   def self.autologin
     if has_key?("autologin") && autologin.present?
