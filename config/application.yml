@@ -1,5 +1,5 @@
 ---
-defaults:
+defaults: &defaults
   site_name: "<%= ENV['SITE_NAME'] || 'medusa' %>"
   alias_specimen: "<%= ENV['ALIAS_SPECIMEN'] || 'stone' %>"
   help_url: <%= ENV["HELP_URL"] || 'http://dream.misasa.okayama-u.ac.jp/documentation/'
@@ -7,18 +7,18 @@ defaults:
   rplot_url: "<%= ENV['RPLOT_URL'] || '/rplot/' %>"
   map_url: "<%= ENV['MAP_URL'] %>"
   autologin: "<%= ENV['AUTOLOGIN'] || 'guest' %>"
-  admin: &1
+  admin:
     email: "<%= ENV['ADMIN_EMAIL'] || 'medusa@example.com' %>"
     initial_password: "<%= ENV['ADMIN_PASSWORD'] || 'admin' %>"
-  barcode: &2
-    prefix: 
-    type: 3D
-  backup: &3
+  barcode:
+    prefix: <%= ENV['BARCODE_PREFIX'] %> 
+    type: <%=ENV['BARCODE_TYPE'] || '3D' %>
+  backup:
     files:
       dir_path: <%= ENV['BACKUP_FILES_PATH'] || "/tmp/medusa/backup/files" %>
     db:
       dir_path: <%= ENV['BACKUP_DB_PATH'] || "/tmp/medusa/backup/db" %>
-  sesar: &4
+  sesar:
     user: "<%= ENV['SESAR_USER'] %>"
     password: "<%= ENV['SESAR_PASSWORD'] %>"
     user_code: "<%= ENV['SESAR_USER_CODE'] %>"
@@ -29,76 +29,21 @@ defaults:
         %>"
       description: 
       url_type: regular URL
-  sign_in: &5
+  sign_in:
     enable_password: "<%= ENV['SIGNIN_ENABLE_PASSWORD'] || true %>"
     enable_google: "<%= ENV['SIGNIN_ENABLE_GOOGLE'] || true %>"
     enable_shibboleth: "<%= ENV['SIGNIN_ENABLE_SHIBBOLETH'] || true %>"
     alias_shibboleth: "<%= ENV['SIGNIN_ALIAS_SHIBBOLETH'] || 'okayama-u' %>"
 development:
-  site_name: "<%= ENV['SITE_NAME'] || 'medusa' %>"
-  alias_specimen: "<%= ENV['ALIAS_SPECIMEN'] || 'stone' %>"
-  help_url: <%= ENV["HELP_URL"] || 'http://dream.misasa.okayama-u.ac.jp/documentation/'
-    %>
-  rplot_url: "<%= ENV['RPLOT_URL'] || '/rplot/' %>"
-  map_url: "<%= ENV['MAP_URL'] %>"
-  autologin: "<%= ENV['AUTOLOGIN'] || 'guest' %>"
-  admin: *1
-  barcode: *2
-  backup: *3
-  sesar: *4
-  sign_in: *5
+  <<: *defaults
 test:
-  site_name: "<%= ENV['SITE_NAME'] || 'medusa' %>"
-  alias_specimen: stone
-  help_url: <%= ENV["HELP_URL"] || 'http://dream.misasa.okayama-u.ac.jp/documentation/'
-    %>
-  rplot_url: "<%= ENV['RPLOT_URL'] || '/rplot/' %>"
-  map_url: "<%= ENV['MAP_URL'] %>"
-  autologin: "<%= ENV['AUTOLOGIN'] || 'guest' %>"
-  admin: *1
-  barcode: *2
-  backup: *3
-  sesar: *4
-  sign_in: *5
+  <<: *defaults
 production:
-  site_name: "<%= ENV['SITE_NAME'] || 'medusa' %>"
-  alias_specimen: "<%= ENV['ALIAS_SPECIMEN'] || 'stone' %>"
-  help_url: <%= ENV["HELP_URL"] || 'http://dream.misasa.okayama-u.ac.jp/documentation/'
-    %>
-  rplot_url: "<%= ENV['RPLOT_URL'] || '/rplot/' %>"
-  map_url: "<%= ENV['MAP_URL'] %>"
-  autologin: "<%= ENV['AUTOLOGIN'] || 'guest' %>"
-  admin: *1
-  barcode: *2
-  backup: *3
-  sesar: *4
-  sign_in: *5
+  <<: *defaults
 staging:
-  site_name: "<%= ENV['SITE_NAME'] || 'medusa' %>"
-  alias_specimen: "<%= ENV['ALIAS_SPECIMEN'] || 'stone' %>"
-  help_url: <%= ENV["HELP_URL"] || 'http://dream.misasa.okayama-u.ac.jp/documentation/'
-    %>
-  rplot_url: "<%= ENV['RPLOT_URL'] || '/rplot/' %>"
-  map_url: "<%= ENV['MAP_URL'] %>"
-  autologin: "<%= ENV['AUTOLOGIN'] || 'guest' %>"
-  admin: *1
-  barcode: *2
-  backup: *3
-  sesar: *4
-  sign_in: *5
+  <<: *defaults
 timemachine:
-  site_name: "<%= ENV['SITE_NAME'] || 'medusa' %>"
-  alias_specimen: "<%= ENV['ALIAS_SPECIMEN'] || 'stone' %>"
-  help_url: <%= ENV["HELP_URL"] || 'http://dream.misasa.okayama-u.ac.jp/documentation/'
-    %>
-  rplot_url: "<%= ENV['RPLOT_URL'] || '/rplot/' %>"
-  map_url: "<%= ENV['MAP_URL'] %>"
-  autologin: "<%= ENV['AUTOLOGIN'] || 'guest' %>"
-  admin: *1
-  barcode: *2
-  backup: *3
-  sesar: *4
-  sign_in: *5
+  <<: *defaults
 backup:
   host: "<%= ENV['BACKUP_HOST'] || 'backup.example.com' %>"
   username: "<%= ENV['BACKUP_USERNAME'] || 'medusa' %>"
