@@ -85,10 +85,21 @@ COPY --chown=medusa:medusa package.json yarn.lock /medusa/
 RUN yarn install && yarn cache clean
 RUN mkdir /medusa/app
 RUN mkdir /medusa/log
+RUN mkdir /medusa/config
 RUN mkdir -p /medusa/public/assets
 RUN mkdir -p /medusa/public/packs
 COPY --chown=medusa:medusa Rakefile /medusa/
-COPY --chown=medusa:medusa config /medusa/config
+COPY --chown=medusa:medusa config/boot.rb config/application.rb config/environment.rb config/routes.rb config/database.yml config/application.yml config/google.yml config/webpacker.yml config/schedule.rb /medusa/config/
+COPY --chown=medusa:medusa config/environments /medusa/config/environments
+COPY --chown=medusa:medusa config/initializers /medusa/config/initializers
+COPY --chown=medusa:medusa config/locales /medusa/config/locales
+COPY --chown=medusa:medusa config/unicorn /medusa/config/unicorn
+COPY --chown=medusa:medusa config/webpack /medusa/config/webpack
+
+
+
+
+
 COPY --chown=medusa:medusa app/models/application_record.rb /medusa/app/models/application_record.rb
 COPY --chown=medusa:medusa app/models/unit.rb /medusa/app/models/unit.rb
 COPY --chown=medusa:medusa app/models/user.rb /medusa/app/models/user.rb
