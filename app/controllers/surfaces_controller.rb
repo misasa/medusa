@@ -33,6 +33,12 @@ class SurfacesController < ApplicationController
     end
   end
 
+  def show_spot_specimens
+    respond_with @spot_specimens do |format|
+      format.js
+    end
+  end
+
   def edit
     respond_with @surface
   end
@@ -66,10 +72,6 @@ class SurfacesController < ApplicationController
     respond_with @surface, layour: !request.xhr?
   end
 
-  
-
-  
-
   def picture
     respond_with @surface, layout: !request.xhr?
   end
@@ -96,11 +98,18 @@ class SurfacesController < ApplicationController
     respond_with @surface, location: adjust_url_by_requesting_tab(request.referer)
   end
 
+  def scale
+    p "scale..."
+    respond_with @surface
+  end
+
   private
 
   def surface_params
     params.require(:surface).permit(
       :name,
+      :length,
+      record_property_attributes: [
         :global_id,
         :user_id,
         :group_id,
@@ -111,7 +120,8 @@ class SurfacesController < ApplicationController
         :guest_readable,
         :guest_writable,
         :published,
-        :lost,
+        :lost
+      ], 
       surface_images_attributes: [
         :id,
         :surface_layer_id
@@ -131,6 +141,7 @@ class SurfacesController < ApplicationController
     specimens_per_page = 5
     @bibs = Bib.where(id: Referring.where(referable_type: "Surface").where(referable_id: @surface.id).pluck(:bib_id)).order("updated_at DESC").page(params[:page]).per(bibs_per_page)
     @specimens = @surface.specimens.order("updated_at DESC").page(params[:page]).per(specimens_per_page)
+    @spot_specimens = @surface.spot_specimens.order("specimens.updated_at DESC").page(params[:page]).per(specimens_per_page)
   end
 
   def find_resources

@@ -45,10 +45,12 @@
       <% if @specimen.attachment_pdf_files.present? %>
         <li>
           <% @specimen.attachment_pdf_files.each do |attachment_pdf_file| %>
-            <%= attachment_pdf_file.name %>
-            <%= link_to(image_pack_tag("icon_pdf_1.png", size: "24x24"), download_attachment_file_path(attachment_pdf_file.id), id: "file-#{attachment_pdf_file.id}-button") %>
+            <%= attachment_pdf_file.decorate.pdf_link %>
           <% end %>
         </li>
+      <% end %>
+      <% @specimen.spot_links.each do |spot| %>
+        <li><%= spot.decorate.list_item %></li>
       <% end %>
       <% if false %><li>analysis:<%= @specimen.list_of_summary_of_analysis %></li><% end %>
     </ul>

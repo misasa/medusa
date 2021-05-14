@@ -6,9 +6,13 @@ class SurfaceDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "fas fa-globe-asia")
   end
 
+  def maps_url
+    Settings.map_url.blank? ? "#{Rails.application.config.relative_url_root}/system/maps/" : Settings.map_url
+  end
+
   def url_for_tile
 #    h.root_url + "system/maps/#{global_id}/"
-    Settings.map_url + "#{global_id}/"
+    maps_url + "#{global_id}/"
   end
 
   def url_for_tiles
@@ -26,6 +30,10 @@ class SurfaceDecorator < Draper::Decorator
   #   return unless Settings.rplot_url
   #   Settings.rplot_url + '?id=' + global_id
   # end
+
+  def icon_with_name
+    tag = h.content_tag(:span, nil, class: "fas fa-globe-asia") + h.raw(" #{name}")
+  end
 
   def name_with_id
     tag = h.content_tag(:span, nil, class: "fas fa-globe-asia") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
@@ -62,6 +70,15 @@ class SurfaceDecorator < Draper::Decorator
     }
   end
 
+  def center_str
+    x,y = self.center
+    sprintf("[%.3f,%.3f]", x, y)
+  end
+
+  def length_str
+    sprintf("%.3f", self.length)
+  end
+
   def map_data(options = {})
     surface_length = self.length
     tilesize = self.tilesize
@@ -80,7 +97,7 @@ class SurfaceDecorator < Draper::Decorator
       end
     end
     {
-      base_url: Settings.map_url,
+      base_url: maps_url,
       resource_url: h.surface_path(surface),
       url_root: "#{Rails.application.config.relative_url_root}/",
       global_id: global_id,
@@ -196,13 +213,7 @@ class SurfaceDecorator < Draper::Decorator
   end
 
   def base_image_url
-    return if surface_images.blank?
-    if wall_surface_images.blank?
-      si = surface_images.last
-    else
-      si = wall_surface_images.first
-    end
-    return unless si.image
-    h.raw(h.url_for_tile(si) + "#{si.image.id}/0/0_0.png")
+    return unless appearance
+    return h.raw(h.url_for_tile(appearance))
   end
 end

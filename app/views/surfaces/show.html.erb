@@ -36,8 +36,10 @@
     </div>
     <div id="show-body" class="col-lg-12">
       <% tab_info = [
-         [@alias_specimen,@surface.specimens,"show samples related to the surface","specimen"],
-         ["bib",@surface.bibs,"show bibliography related to the surface"],
+          ["at-a-glance",nil,"show representative properties of the surface"],
+          ["spot",@surface.spot_specimens,"show samples related to the surface with spot","spot_specimen"],
+          [@alias_specimen,@surface.specimens,"show samples related to the surface","specimen"],
+          ["bib",@surface.bibs,"show bibliography related to the surface"],
          ] 
       %>
      <!-- Nav tabs -->

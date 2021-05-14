@@ -1,0 +1,28 @@
+default: &default
+  adapter: postgresql
+  pool: <%= ENV["DB_POOL"] %>
+  timeout: 5000
+  encoding: unicode
+development:
+  <<: *default
+  database: <%= ENV['DB_NAME'] || 'medusa_development' %>
+  username: <%= ENV['DB_USER'] || 'postgres' %>
+  password: <%= ENV['DB_PASS'] || '' %>
+  host: <%= ENV['DB_HOST'] || 'postgres' %>
+  port: <%= ENV['DB_PORT'] || 5432 %>
+test:
+  <<: *default
+  database: <%= ENV['DB_NAME'] || 'medusa_test' %>
+  username: <%= ENV['DB_USER'] || 'postgres' %>
+  password: <%= ENV['DB_PASS'] || '' %>
+  host: <%= ENV['DB_HOST'] || 'postgres' %>
+  port: <%= ENV['DB_PORT'] || 5432 %>
+
+production:
+  <<: *default
+  database: <%= ENV['DB_NAME'] || 'medusa_production' %>
+  username: <%= ENV['DB_USER'] || 'postgres' %>
+  password: <%= ENV['DB_PASS'] || '' %>
+  host: <%= ENV['DB_HOST'] || 'postgres' %>
+  port: <%= ENV['DB_PORT'] || 5432 %>
+  prepared_statements: <%= ENV['PREPARED_STATEMENTS'] || 'true' %>

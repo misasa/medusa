@@ -7,11 +7,25 @@ class AttachmentFileDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: "fas fa-file")
   end
 
-  def name_with_id
-    tag = h.content_tag(:span, nil, class: "fas fa-file") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
-#    if Settings.rplot_url
-#      tag += h.link_to(h.content_tag(:span, nil, class: "far fa-eye"), Settings.rplot_url + '?id=' + global_id, :title => 'plot online')
-#    end
+  def title
+    tag = name_with_id(true)
+    tag += h.link_to("Download", h.download_attachment_file_path(self), class: "btn btn-default", title: "download the image")
+  end
+
+  def icon_with_name
+    tag = h.content_tag(:span, nil, class: "fas fa-file") + h.raw(" #{name}")
+    tag
+  end
+
+  def name_with_id(flag_link = false)
+#    tag = h.content_tag(:span, nil, class: "fas fa-file") + h.raw(" #{name} < #{h.draggable_id(global_id)} >")
+    tag = h.content_tag(:span, nil, class: "fas fa-file")
+    if flag_link
+      tag += h.raw(" ") + h.link_to(name, attachment_file)
+    else
+      tag += " #{name}"
+    end
+    tag += h.raw(" < #{h.draggable_id(global_id)} >")
     tag
   end
 
@@ -68,7 +82,7 @@ class AttachmentFileDecorator < Draper::Decorator
     #options = (width_rate >= height_rate) ? { width: width, height: original_height * scale } : { width: original_width * scale, height: height }
     options = { width: width, height: height}
     svg_options = {xmlns: "http://www.w3.org/2000/svg", 'xmlns:xlink' => "http://www.w3.org/1999/xlink", version: "1.1"}.merge(options)
-    image_path = attachment_file.path(:thumb)
+    image_path = attachment_file.path(:large)
     image_tag = %Q|<image xlink:href="#{image_path}" x="0" y="0" width="#{attachment_file.original_width}" height="#{attachment_file.original_height}" data-id="#attachment_file.id}"/>|
     spots.each do |spot|
       spot_options = spot.svg_attributes
@@ -107,8 +121,8 @@ class AttachmentFileDecorator < Draper::Decorator
     tag
   end
 
-  def picture(width: 250, height: 250, type: nil)
-    return unless image?
+  def picture(width: 250, height: 250, type: :medium)
+    return unless (image? || pdf?)
     height_rate = original_height.to_f / height
     width_rate = original_width.to_f / width
     options = (width_rate >= height_rate) ? { width: width } : { height: height }
@@ -141,6 +155,16 @@ class AttachmentFileDecorator < Draper::Decorator
       h.concat h.image_tag(self.path(:thumb))
       h.concat h.content_tag(:small, self.name)
     end
+  end
+
+  def pdf_link
+    link = h.link_to(name, h.attachment_file_path(self))
+    link += h.raw(" ")
+    link += h.link_to(h.content_tag(:span, nil, class: "fas fa-file-pdf"), h.download_attachment_file_path(self), id: "file-#{self.id}-button")
+    link += h.raw(" ")
+    link += h.link_to(h.content_tag(:span, nil, class: "far fa-image"), self.path(:large))
+    link += h.link_to(h.icon_tag('info-circle'), h.attachment_file_path(self, format: :modal), "data-toggle" => "modal", "data-target" => "#show-modal")
+    link
   end
 
   def picture_link
@@ -193,18 +217,20 @@ class AttachmentFileDecorator < Draper::Decorator
       picture += h.raw (h.icon_tag("crosshairs") + "#{spots.size}") if attachment_file.spots.size > 0
       picture
     end
-
-    spots.each do |spot|
-      html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
-        spot.decorate.tree_node(current: false)
+    
+    if surfaces.empty?
+      spots.each do |spot|
+        html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+          spot.decorate.tree_node(current: false)
+        end
+      end
+    else
+      surface_spots_within_image.each do |spot|
+        html += h.content_tag(:div, class: html_class, "data-depth" => 2) do
+          spot.decorate.tree_node(current: false)
+        end
       end
     end
-    surface_spots_within_bounds.each do |spot|
-      html += h.content_tag(:div, class: html_class, "data-depth" => 3) do
-        spot.decorate.tree_node(current: false)
-      end
-    end
-
     html
   end
 

@@ -60,6 +60,59 @@ class Surface < ApplicationRecord
   def spots
     Spot.preload(:record_property, :attachment_file, {target_property: [{analysis: [:chemistries]}, {specimen: {analyses: [:chemistries]} }]}).where("surface_id = ? or attachment_file_id IN (?)", self.id, self.image_ids)
   end
+
+  def target_uids
+    spots.pluck(:target_uid)
+  end
+
+  def attachment_file_ids
+    surface_images.pluck(:image_id)
+  end
+
+  def attaching_image_ids
+    Attaching.where(attachment_file_id: attachment_file_ids).pluck(:attachment_file_id)
+  end
+
+  def images_with_object
+    AttachmentFile.where(id: attaching_image_ids)
+  end
+
+  def image_specimen_ids
+    Attaching.where(attachment_file_id: attachment_file_ids).where(attachable_type: "Specimen").pluck(:attachment_file_id, :attachable_id)
+  end
+
+  def image_specimens
+    a = []
+    image_specimen_ids.each do |image_id, specimen_id|
+      image = AttachmentFile.find(image_id)
+      specimen = Specimen.find(specimen_id)
+      a << {image: image, specimen: specimen}
+    end
+    a
+  end
+
+  def image_box_ids
+    Attaching.where(attachment_file_id: attachment_file_ids).where(attachable_type: "Box").pluck(:attachment_file_id, :attachable_id)
+  end
+
+  def image_boxes
+    a = []
+    image_box_ids.each do |image_id, box_id|
+      image = AttachmentFile.find(image_id)
+      box = Box.find(box_id)
+      a << {image: image, box: box}
+    end
+    a
+  end
+
+  def spot_specimens
+    Specimen.eager_load(:record_property).where(record_property: {global_id: target_uids})
+  end
+
+  def spot_analyses
+    Analysis.eager_load(:record_property).where(record_property: {global_id: target_uids})
+  end
+
 #  def spots
 #    ss = []
 #    ss.concat(direct_spots) unless direct_spots.blank?
@@ -155,6 +208,11 @@ class Surface < ApplicationRecord
     l = width if width > l unless width.blank?
     l = height if height > l unless height.blank?
     l
+  end
+
+  def length=(_length)
+    r = _length.to_f/self.length
+    scale(r)
   end
 
   def image_bounds
@@ -298,7 +356,6 @@ class Surface < ApplicationRecord
     i
   end
 
-
   def tile_j_at(zoom, y)
     n = ntiles(zoom)
     left, upper, right, bottom = bbox
@@ -345,6 +402,66 @@ class Surface < ApplicationRecord
     }
   end
 
+  def scale(r = 1.0)
+      affine_matrix = "[[#{r},0.0,0.0],[0.0,#{r},0.0],[0.0,0.0,1.0]]"
+      surface_spots = spots.where(attachment_file_id: nil)
+      if !surface_spots.blank?
+        spots_str = surface_spots.map{|spot| [spot.world_x,spot.world_y]}.to_s.gsub(" ","")
+        cmd_args = "--matrix=" + affine_matrix + " " + spots_str
+        line = Terrapin::CommandLine.new("transform_points", cmd_args, logger: logger)
+        line.run
+        _spots_str = line.output.output.chomp
+        _spots_str.gsub("[","").gsub("]]","").gsub("],","|").split("|").each_with_index do |_spot_str, index|
+          spot = surface_spots[index]
+          spot.world_x, spot.world_y = _spot_str.split(",").map(&:to_f)
+          spot.radius_in_um = spot.radius_in_um * r
+          spot.save
+        end
+      end
+      surface_images.each do |surface_image|
+      image = surface_image.image
+      next unless image
+      points = surface_image.corners_on_world_str
+      if points
+        cmd_args = "--matrix=" + affine_matrix + " " + points
+        line = Terrapin::CommandLine.new("transform_points", cmd_args, logger: logger)
+        line.run
+        _corners_on_world_str = line.output.output.chomp
+        line = Terrapin::CommandLine.new("H_from_points", "#{surface_image.corners_on_image_str} #{_corners_on_world_str} -f yaml", logger: logger)
+        line.run
+        _out = line.output.output.chomp
+        a = YAML.load(_out)
+        image.affine_matrix = a.flatten
+        image.save
+        image.spots.each do |spot|
+          spot.world_x, spot.world_y = spot.spot_world_xy
+          spot.radius_in_um = spot.radius_in_um * r if spot.radius_in_um
+          spot.save
+        end
+      end
+    end
+  end  
+
+  def appearance
+    candidate_images = calibrated_surface_images
+    wall_images = candidate_images.where(wall: true)
+    wall_images.each do |wall_image|
+      return wall_image if File.exists?(wall_image.tile_image_path(0,0,0))
+    end
+    wall_surface_layers.each do |wall_layer|
+      return wall_layer if File.exists?(wall_layer.tile_image_path(0,0,0))
+    end
+    candidate_images.each do |candidate_image|
+      layer = candidate_image.surface_layer
+      if layer
+        return layer if File.exists?(layer.tile_image_path(0,0,0))
+      else
+        return candidate_image if File.exists?(candidate_image.tile_image_path(0,0,0))
+      end
+    end
+    return nil
+  end
+
   private
 
   def check_image_bounds
@@ -359,4 +476,5 @@ class Surface < ApplicationRecord
     return unless index
     TileWorker.perform_async(surface_images[index].id, :transparent => index > 0)
   end
+
 end

@@ -7,7 +7,7 @@ describe User do
     it{ expect(User.current.id).to eq user.id }
   end
 
-  describe "box_global_id", :current => true do
+  describe "box_global_id" do
     let(:user){ FactoryBot.create(:user) }
     let(:box){ FactoryBot.create(:box)}
     context "with box" do
@@ -23,7 +23,7 @@ describe User do
 
   end
 
-  describe "as_json", :current => true do
+  describe "as_json" do
     let(:user){ FactoryBot.create(:user) }
     let(:box){ FactoryBot.create(:box)}
     before { 
@@ -67,6 +67,28 @@ describe User do
   end
 
   describe "validates" do
+    describe "api_key", :current => true do
+      let(:obj) { FactoryBot.build(:user, api_key: api_key,email: "test1@test.co.jp") }
+      context "is presence" do
+        let(:api_key) { "111111" }
+        it { expect(obj).to be_valid }
+      end
+      context "is blank" do
+        let(:api_key) { "" }
+        it { expect(obj).to be_valid }
+      end
+      context "is duplicate" do
+        let(:user){ FactoryBot.create(:user) }
+        let(:api_key) { user.api_key }
+        it { expect(obj).not_to be_valid }
+      end
+      context "is duplicate empty" do
+        let(:user){ FactoryBot.create(:user, username: 'deleteme-1', api_key: "") }
+        let(:api_key) { user.api_key }
+        it { expect(obj).to be_valid }
+        it { expect(obj.save).to be_truthy }
+      end
+    end
     describe "name" do
       let(:obj) { FactoryBot.build(:user, username: username,email: "test1@test.co.jp") }
       context "is presence" do

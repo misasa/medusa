@@ -1,6 +1,6 @@
 <tr>
   <td><%= check_box_tag("ids[]", attachment_file.id, checked, id: "ids_#{attachment_file.id}", class: "select-row") if can?(:update, attachment_file) %>
-  <%= link_to attachment_file.decorate.picture(width: 70, height: 70, type: :thumb), attachment_file if attachment_file.image? %></td>
+  <%= link_to attachment_file.decorate.picture(width: 70, height: 70, type: :thumb), attachment_file if attachment_file.image? || attachment_file.pdf? %></td>
   <td>
     <%= link_to list_title(attachment_file), attachment_file %>
     <% if attachment_file.pdf? %>

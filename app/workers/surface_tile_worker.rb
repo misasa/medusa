@@ -13,6 +13,13 @@ class SurfaceTileWorker
     end
     n = surface.base_surface_images.count + surface.top_surface_images.count + surface.surface_layers.count
     total n
+    surface.surface_images.each do |surface_image|
+      image = surface_image.image
+      next unless image
+      left,upper,right,bottom = image.bounds
+      surface_image.update(left: left, upper: upper, right: right, bottom: bottom)
+    end
+    surface.save
     index = 1
     surface.wall_surface_images.reverse.each_with_index do |surface_image, idx|
       at index, "processing #{surface.name}/#{surface_image.image.name} ... (#{index + 1}/#{n})"

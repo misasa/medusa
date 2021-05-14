@@ -22,7 +22,7 @@
       </div>
       <% end %>
       <div class="btn-group btn-group-sm">
-        <%= link_to @attachment_file.path, class: "btn btn-default", title: "magnify the image" do %>
+        <%= link_to @attachment_file.path(:large), class: "btn btn-default", title: "magnify the image" do %>
           <span class="far fa-image"></span>
         <% end %>
         <%= link_to download_attachment_file_path(@attachment_file), class: "btn btn-default", title: "download the image" do %>

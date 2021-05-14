@@ -49,6 +49,18 @@ class Box < ApplicationRecord
     return unless quantity
     "#{quantity} #{quantity_unit}"
   end
+  def image_file
+    _file = nil
+    atts = attachings.where(attachable_type: "Box").order("position ASC")
+    atts.each do |attaching|
+      attachment_file = attaching.attachment_file
+      if attachment_file.image?
+        _file = attachment_file
+        break
+      end
+    end
+    _file
+  end
 
   def quantity_with_unit=(string)
     vals = string.split(/\s/)
@@ -66,6 +78,14 @@ class Box < ApplicationRecord
 
   def related_spots
     ancestors.map{|box| box.spot_links }.flatten
+  end
+
+  def spots
+    specimens.map{|specimen| specimen.spot_links }.flatten
+  end
+
+  def surfaces
+    spots.map{|spot| spot.surface }.compact.uniq
   end
 
   def total_decimal_quantity

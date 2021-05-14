@@ -23,8 +23,17 @@ class BoxDecorator < Draper::Decorator
     h.content_tag(:span, nil, class: in_list_include ? "fas fa-folder-open" : "fas fa-folder")
   end
 
-  def name_with_id
-    h.content_tag(:span, nil, class: "fas fa-folder") + " #{name} < #{global_id} >"
+  def name_with_id(flag_link = false)
+    #h.content_tag(:span, nil, class: "fas fa-folder") + " #{name} < #{global_id} >"
+    tag = h.content_tag(:span, nil, class: "fas fa-folder")
+    if flag_link
+      tag += h.raw(" ") + h.link_to(name, box)
+    else
+      tag += " #{name}"
+    end
+    tag += " < #{global_id} >"
+    tag += h.published_label(object) if object.published
+    tag
   end
 
   def box_path_with_id(link_flag = false)
@@ -59,7 +68,20 @@ class BoxDecorator < Draper::Decorator
       end
     end
     if picture_file
-      h.link_to(picture_file.decorate.picture(width: width, height: height), h.attachment_file_path(picture_file), class: h.specimen_ghost(self))
+      if picture_file.surfaces.empty?
+        spots = picture_file.spots
+      else
+        spots = picture_file.surface_spots_within_bounds_converted
+      end
+      if spots.blank?
+        h.link_to(picture_file.decorate.picture(width: width, height: height), h.attachment_file_path(picture_file), class: h.specimen_ghost(self))
+      else
+        svg = picture_file.decorate.picture_with_spots(spots: spots)
+        svg_link = h.link_to(h.attachment_file_path(picture_file), class: h.specimen_ghost(self)) do
+          svg
+        end
+        return svg_link
+      end
     end
   end
 

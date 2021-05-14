@@ -4,6 +4,7 @@
 .env.*
 docker-compose.yml
 docker-compose.test.yml
+/config/apache2
 /public/system
 /public/system_test
 /log/*

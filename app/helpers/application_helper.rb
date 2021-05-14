@@ -61,11 +61,19 @@ module ApplicationHelper
     tag
   end
 
-  def url_for_tile(surface_image, zoom=0,x=0,y=0)
-    surface = surface_image.surface
-    image = surface_image.image
-    return "#{root_path}system/maps/#{surface.global_id}/"
+  def url_for_tile(_image_or_layer, zoom=0,x=0,y=0)
+    surface = _image_or_layer.surface
+    url = "#{root_path}system/maps/#{surface.global_id}/"
+    if _image_or_layer.is_a?(SurfaceLayer)
+      url += "layers/#{_image_or_layer.id}/"
+    else
+      image = _image_or_layer.image
+      url += "#{image.id}/"
+    end
+    url += "#{zoom}/#{x}_#{y}.png"
+    url
   end
+
   def content_tag_if(boolean, name, content_or_options_with_block = nil, options = nil, escape = true, &block)
     if boolean
       content_tag(name, content_or_options_with_block, options, escape, &block)

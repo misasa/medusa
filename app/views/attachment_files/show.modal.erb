@@ -1,8 +1,13 @@
+<% content_for :modal_title do %>
+ <%= @attachment_file.decorate.title %>
+<% end %>
 <div class="row">
-  <div class="col-lg-4">
-    <%= image_tag @attachment_file.path, width: 250, height: 250 %>
+  <div class="col-lg-12">
+    <%= image_tag @attachment_file.path(:large) %>
   </div>
-  <div class="col-lg-8">
+</div>
+<div class="row">
+  <div class="col-lg-12">
     <dl class="dl-horizontal">
       <dt>name</dt>
       <dd><%= @attachment_file.name %></dd>

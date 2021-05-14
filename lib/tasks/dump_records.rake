@@ -1,3 +1,10 @@
+#module Warning
+#  def warn(str)
+#    return if str.match?("gems")
+#    super
+#  end
+#end
+$VERBOSE = nil
 def fmt_long(obj)
   items = ["<#{obj.class.human_name.downcase}: #{obj.uniq_id}>"]
   items << "<link: specimen=#{obj.specimen_count} box=#{obj.box_count} analysis=#{obj.analysis_count} file=#{obj.file_count} bib=#{obj.bib_count} locality=#{obj.locality_count} point=#{obj.point_count}>"
@@ -17,10 +24,12 @@ namespace :record do
 			physicalitems = boxes
 			physicalitems.concat(specimens)
 
-		  	output_path = ENV['output_path'] || "tmp/auto-specimen-list"
-			#STDERR.puts "writing |#{output_path}|..."
-		  	output = File.open(output_path,"w")
-			physicalitems.each do |obj|
+      if ENV['output_path']
+        output = File.open(ENV['output_path'],"w")
+      else
+        output = $stdout
+      end
+      physicalitems.each do |obj|
 				output.puts "#{obj.latex_mode(:box)}"
 				#puts "#{obj.full_name(:box)} #{fmt_long(obj)}" 
 			end
@@ -49,15 +58,15 @@ namespace :record do
 			items = Box.order(updated_at: :desc).to_a
 			items.concat(Specimen.order(updated_at: :desc).to_a)
 			items.concat(Bib.order(updated_at: :desc).to_a)
-		  	output_path = ENV['output_path'] || "tmp/ref_dream.bib"
-			#STDERR.puts "writing |#{output_path}|..."
-		  	output = File.open(output_path,"w")
-
+      if ENV['output_path']
+        output = File.open(ENV['output_path'],"w")
+      else
+        output = $stdout
+      end
 			items.each do |obj|
 				output.puts "#{obj.to_bibtex}"
 			end
 			output.close
-
 		end
 	end
 end

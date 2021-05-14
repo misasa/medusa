@@ -29,7 +29,14 @@ class Spot < ApplicationRecord
   scope :with_surface, -> (surface){
     where("surface_id = ? or attachment_file_id IN (?)", surface.id, surface.image_ids)
   }
-
+  scope :within_image, -> (image){
+    bounds = image.bounds
+    if bounds
+      where("(world_x >= ? and world_x <= ? and world_y >= ? and world_y <= ?) or (attachment_file_id = ?)",bounds[0],bounds[2],bounds[3],bounds[1], image.id)
+    else
+      where(attachment_file_id: image.id)
+    end
+  }
   scope :within_bounds, -> (bounds){
     where("world_x >= ? and world_x <= ? and world_y >= ? and world_y <= ?",bounds[0],bounds[2],bounds[3],bounds[1])
   }
@@ -228,20 +235,22 @@ class Spot < ApplicationRecord
   end
 
   def svg_attributes
-    {
+    attr = {
       cx: spot_x,
       cy: spot_y,
       r: [attachment_file.original_width, attachment_file.original_height].max * radius_in_percent / 100,
-      fill: fill_color,
+      fill: fill_color || "",
       #title: "spot of '#{name}'",
       title: title,
-      "fill-opacity" => opacity,
-      stroke: stroke_color,
-      "stroke-width" => stroke_width,
+      "fill-opacity" => opacity|| 0,
+      stroke: stroke_color || "blue",
+      "stroke-width" => 10,
       #"data-spot" => Rails.application.routes.url_helpers.spot_path(self, script_name: Rails.application.config.relative_url_root),
       "data-spot" => decorate.target_path,
       "data-target-uid" => target_uid
     }
+    attr["stroke"]
+    attr
   end
 
   def title
