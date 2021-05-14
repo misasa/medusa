@@ -86,20 +86,31 @@ RUN yarn install && yarn cache clean
 RUN mkdir /medusa/app
 RUN mkdir /medusa/log
 RUN mkdir /medusa/config
+RUN mkdir /medusa/db
 RUN mkdir -p /medusa/public/assets
 RUN mkdir -p /medusa/public/packs
 COPY --chown=medusa:medusa Rakefile /medusa/
-COPY --chown=medusa:medusa config/boot.rb config/application.rb config/environment.rb config/routes.rb config/database.yml config/application.yml config/google.yml config/webpacker.yml config/schedule.rb /medusa/config/
+COPY --chown=medusa:medusa  config/boot.rb \
+                            config/application.rb \
+                            config/environment.rb \
+                            config/routes.rb \
+                            config/schedule.rb \
+                            config/database.yml \
+                            config/application.yml \
+                            config/google.yml \
+                            config/webpacker.yml \
+                            config/search_column_types.yml \
+                            config/age_unit.yml \
+                            config/sample_type.yml \
+                            config/material_classification.yml \
+                            config/earthchem_parameter.tsv \
+                            config/earthchem_technique.tsv \
+                            /medusa/config/
 COPY --chown=medusa:medusa config/environments /medusa/config/environments
 COPY --chown=medusa:medusa config/initializers /medusa/config/initializers
 COPY --chown=medusa:medusa config/locales /medusa/config/locales
 COPY --chown=medusa:medusa config/unicorn /medusa/config/unicorn
 COPY --chown=medusa:medusa config/webpack /medusa/config/webpack
-
-
-
-
-
 COPY --chown=medusa:medusa app/models/application_record.rb /medusa/app/models/application_record.rb
 COPY --chown=medusa:medusa app/models/unit.rb /medusa/app/models/unit.rb
 COPY --chown=medusa:medusa app/models/user.rb /medusa/app/models/user.rb
@@ -115,7 +126,8 @@ RUN if [ "${RAILS_ENV}" = "production" ]; then \
 fi
 COPY --chown=medusa:medusa app /medusa/app
 COPY --chown=medusa:medusa config.ru /medusa/config.ru
-COPY --chown=medusa:medusa db /medusa/db
+COPY --chown=medusa:medusa db/schema.rb db/seeds.rb /medusa/db/
+COPY --chown=medusa:medusa db/migrate /medusa/db/migrate
 COPY --chown=medusa:medusa README.md /medusa/README.md
 COPY --chown=medusa:medusa LICENSE /medusa/LICENSE
 COPY --chown=medusa:medusa spec /medusa/spec
