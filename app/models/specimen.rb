@@ -444,7 +444,7 @@ class Specimen < ApplicationRecord
   end
 
   def path_ids
-    box.present? ? box.ancestors + [box.id] : []
+    box.present? ? box.send(:path_ids).concat([box.id]) : []
   end
 
   def delete_table_analysis(analysis)
