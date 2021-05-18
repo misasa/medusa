@@ -40,6 +40,10 @@
       <% end %> 
       <li>modified at <%= difference_from_now(@specimen.updated_at) %></li>
       <%= li_if_exist("surface:", @specimen.surfaces_with_link) %>
+      <% @specimen.candidate_surfaces.each do |surface| %>
+        <li><%= link_to(surface.decorate.icon_with_name, surface_path(surface)) %></li>
+      <% end %>
+
       <%#= li_if_exist("bib:", @specimen.bibs_with_link) %>
       <%#= li_if_exist("table:", @specimen.tables_with_link) %>
       <% if @specimen.attachment_pdf_files.present? %>
