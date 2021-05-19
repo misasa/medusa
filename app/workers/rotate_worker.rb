@@ -1,5 +1,5 @@
-class RotateWorker
-  include Sidekiq::Worker
+class RotateWorker < BaseWorker
+#  include Sidekiq::Worker
 
   def perform(image_id)
     # Do something

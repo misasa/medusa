@@ -1,6 +1,5 @@
-class SurfaceTileWorker
-  include Sidekiq::Worker
-  include Sidekiq::Status::Worker
+class SurfaceTileWorker < BaseWorker
+#  include Sidekiq::Worker
 
   def perform(surface_id, opts = {})
     surface = Surface.find(surface_id)

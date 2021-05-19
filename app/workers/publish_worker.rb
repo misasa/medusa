@@ -1,5 +1,5 @@
-class PublishWorker
-  include Sidekiq::Worker
+class PublishWorker < BaseWorker
+#  include Sidekiq::Worker
 
   def perform(id)
     # Do something

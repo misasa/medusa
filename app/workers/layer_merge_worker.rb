@@ -1,6 +1,6 @@
-class LayerMergeWorker
-    include Sidekiq::Worker
-    include Sidekiq::Status::Worker
+class LayerMergeWorker < BaseWorker
+#    include Sidekiq::Worker
+#    include Sidekiq::Status::Worker
 
     def perform2(surface_layer_id, opts = {})
       logger.info "Things are happening."
