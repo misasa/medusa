@@ -502,6 +502,7 @@ GEM
       rack-protection (= 2.0.8.1)
       sinatra (= 2.0.8.1)
       tilt (~> 2.0)
+    slack-notifier (2.4.0)
     spinjs-rails (1.4)
       rails (>= 3.1)
     spring (2.1.1)
@@ -642,6 +643,7 @@ DEPENDENCIES
   sidekiq-status
   simplecov
   simplecov-rcov
+  slack-notifier
   spinjs-rails
   spring
   sprockets (= 3.7.2)
