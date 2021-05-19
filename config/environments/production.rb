@@ -86,7 +86,7 @@ Medusa::Application.configure do
   #  :exception_recipients => %w{} # Set e-mail address.
   #},
   slack: {
-    webhook_url: ENV['EXCEPTION_NOTIFICATION_SLACK_WEBHOOK_URL'],
-    channel: ENV['EXCEPTION_NOTIFICATION_SLACK_CHANNEL'],
+    webhook_url: ENV['SLACK_WEBHOOK_URL'],
+    channel: ENV['SLACK_CHANNEL_EXCEPTION_NOTIFICATION'],
   }
 end
