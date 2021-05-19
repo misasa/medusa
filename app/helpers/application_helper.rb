@@ -205,7 +205,8 @@ module ApplicationHelper
     if params[:tab]
       " active" if params[:tab] == tabname
     else 
-      " active" if tabname == "at-a-glance" 
+      #" active" if tabname == "at-a-glance"
+      " active" if tabname == "dashboard"
     end
   end
 

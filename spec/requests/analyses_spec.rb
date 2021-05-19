@@ -38,9 +38,9 @@ describe "analysis" do
       end
     end
     
-    describe "at-a-glance tab" do
+    describe "dashboard tab" do
       pending("") do
-      before { click_link("at-a-glance") }
+      before { click_link("dashboard") }
       describe "pdf icon" do
         context "data_content_type is pdf" do
           let(:data_type) { "application/pdf" }
