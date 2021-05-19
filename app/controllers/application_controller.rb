@@ -18,7 +18,10 @@ class ApplicationController < ActionController::Base
   before_action :set_notification
 
   def set_notification
-    request.env['exception_notifier.exception_data'] = { 'server' => request.env['SERVER_NAME'] }
+    #request.env['exception_notifier.exception_data'] = { 
+    #  'request' => request.env
+    #}
+    request.env['exception_notifier.exception_data'] = request.env
     # can be any key-value pairs
   end
 

@@ -80,6 +80,7 @@ Medusa::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   config.middleware.use ExceptionNotification::Rack,
+  ignore_crawlers: ENV['EXCEPTION_NOTIFICATION_IGNORE_CRAWLERS'] ? ENV['EXCEPTION_NOTIFICATION_IGNORE_CRAWLERS'].split : [],
   #:email => {
   #  :email_prefix => "[Medusa exception] ",
   #  :sender_address => %{"no reply" <medusa@example.com>},
