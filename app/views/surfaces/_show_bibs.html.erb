@@ -13,6 +13,7 @@
     <% end %>
   </tbody>
   <tfoot>
+    <% if can? :update, @surface %>
     <tr>
     <%= form_with url:link_by_global_id_surface_bibs_path(@surface), method: :post do %>
         <%= hidden_tabname_tag(__FILE__) %>
@@ -33,5 +34,6 @@
         </th>
       <% end %>
     <tr>
+    <% end %>
   </tfoot>
 </table>

@@ -19,8 +19,10 @@
         <%= link_to map_surface_path(@surface), class: "btn btn-default activate", id: "tree-conifer-button", remote: true, title: "top" do %>
           <span class="fas fa-globe-asia"></span>
         <% end %>
-        <%= link_to tiles_surface_path(@surface), class: "btn btn-default", id: "tree-conifer-button", method: :post, title: "refresh tiles for all images in surface '#{@surface.name}'" do %>
-          <span class="fas fa-redo"></span>
+        <% if can? :update, @surface %>
+          <%= link_to tiles_surface_path(@surface), class: "btn btn-default", id: "tree-conifer-button", method: :post, title: "refresh tiles for all images in surface '#{@surface.name}'" do %>
+            <span class="fas fa-redo"></span>
+          <% end %>
         <% end %>
       </div>    
       <% if can? :update, @surface %>
