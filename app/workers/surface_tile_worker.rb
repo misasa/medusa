@@ -33,11 +33,13 @@ class SurfaceTileWorker < BaseWorker
     surface.surface_layers.reverse.each_with_index do |surface_layer, idx|
       at index, "processing #{surface.name}/#{surface_layer.name} ... (#{index + 1}/#{n})"
       surface_layer.clean_tiles
+      surface_layer.update_attribute(:tiled, false)
       surface_layer.generate_pngs
       line = surface_layer.make_tiles_cmd(opts)
       next unless line
       logger.info(line.command)
       line.run
+      surface_layer.update_attribute(:tiled, true)
       index += 1
     end
 

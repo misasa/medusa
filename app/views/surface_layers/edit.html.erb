@@ -24,6 +24,12 @@
     <%= f.select :color_scale, [['rainbow','rainbow'], ['viridis', 'viridis'], ['greys', 'greys']], class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
+    <label class="small">Tiled</label>
+    <%= f.label :tiled, class: "checkbox-inline" do %>
+    <%= f.check_box :tiled %>
+    <% end %>
+  </div>
+  <div class="form-group form-group-sm">
     <label class="small">Visible</label>
     <%= f.label :visible, class: "checkbox-inline" do %>
     <%= f.check_box :visible %>

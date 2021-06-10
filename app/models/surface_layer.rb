@@ -39,9 +39,9 @@ class SurfaceLayer < ApplicationRecord
     File.join(surface.map_dir, "layers","#{id}")
   end
 
-  def tiled?
-    File.exist?(tile_dir)
-  end
+#  def tiled?
+#    File.exist?(tile_dir)
+#  end
 
   def original_zoom_level
   #  surface_images.each do |surface_image|
@@ -52,12 +52,14 @@ class SurfaceLayer < ApplicationRecord
 
   def zooms
     return unless tiled?
-    (Dir.entries(tile_dir) - [".", ".."]).map{|e| e.to_i }
+    #(Dir.entries(tile_dir) - [".", ".."]).map{|e| e.to_i }
+    0.upto(maxzoom).to_a
   end
 
   def maxzoom
     return unless tiled?
-    zooms.max
+    #zooms.max
+    max_zoom_level.blank? ? original_zoom_level : max_zoom_level
   end
 
   def minzoom

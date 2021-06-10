@@ -13,10 +13,12 @@ class LayerTileWorker < BaseWorker
       surface.reorder_images
     end
     surface_layer.clean_tiles
+    surface_layer.update_attribute(:tiled, false)
     surface_layer.generate_pngs
     line = surface_layer.make_tiles_cmd(opts)
     logger.info(line.command)
     line.run
+    surface_layer.update_attribute(:tiled, true)    
     at n, "Tile making job for #{surface_layer.name} is done."
   end
 
