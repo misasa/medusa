@@ -78,8 +78,8 @@ describe "box" do
       end
     end
 
-    describe "at-a-glance tab" do
-      before { click_link("at-a-glance") }
+    describe "dashboard tab" do
+      before { click_link("dashboard") }
       describe "pdf icon" do
         context "data_content_type is pdf" do
           let(:data_type) { "application/pdf" }

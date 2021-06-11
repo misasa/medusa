@@ -1,6 +1,6 @@
     <ul class="nav nav-tabs">
-      <li class="<%= active_if_current('at-a-glance') %>">
-        <a href="#at-a-glance" data-toggle="tab">at-a-glance</a>
+      <li class="<%= active_if_current('dashboard') %>">
+        <a href="#dashboard" data-toggle="tab">dashboard</a>
       </li>
       <li class="<%= active_if_current('specimen') %>">
         <a href="#specimen" data-toggle="tab"><%= @alias_specimen + data_count(@table.specimens) %></a>
@@ -11,7 +11,7 @@
     </ul>
     <!-- Tab panes -->
     <% tab_info = [
-      ["at-a-glance",nil],
+      ["dashboard",nil],
       ["specimen",@table.specimens],
       ["analysis",@table.analyses]
     ] %>

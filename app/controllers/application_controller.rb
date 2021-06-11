@@ -15,6 +15,16 @@ class ApplicationController < ActionController::Base
   before_action :authenticate, :set_current_user
   before_action :set_searchable_records, if: Proc.new {|controller| controller.current_user }
   before_action :set_alias_specimen
+  before_action :set_notification
+
+  def set_notification
+    #request.env['exception_notifier.exception_data'] = { 
+    #  'request' => request.env
+    #}
+    request.env['exception_notifier.exception_data'] = request.env
+    # can be any key-value pairs
+  end
+
   before_action do
     resource = controller_name.singularize.to_sym
     method = "#{resource}_params"

@@ -138,11 +138,11 @@ describe ApplicationHelper do
     end
     context "param[:tab] is nil" do
       before { allow(helper).to receive(:params).and_return({tab: nil}) }
-      context "tabname is at-a-glance" do
-        let(:tabname) { "at-a-glance" }
+      context "tabname is dashboard" do
+        let(:tabname) { "dashboard" }
         it { expect(subject).to eq " active" }
       end
-      context "tabname is not at-a-glance" do
+      context "tabname is not dashboard" do
         let(:tabname) { "box" }
         it { expect(subject).to eq nil }
       end

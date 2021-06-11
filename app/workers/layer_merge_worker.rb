@@ -1,6 +1,6 @@
-class LayerMergeWorker
-    include Sidekiq::Worker
-    include Sidekiq::Status::Worker
+class LayerMergeWorker < BaseWorker
+#    include Sidekiq::Worker
+#    include Sidekiq::Status::Worker
 
     def perform2(surface_layer_id, opts = {})
       logger.info "Things are happening."
@@ -12,6 +12,7 @@ class LayerMergeWorker
       n = surface_layer.surface_images.count
       total n
       surface_layer.clean_tiles
+      surface_layer.update_attribute(:tiled, false)
       surface_layer.surface_images.reverse.each_with_index do |surface_image, index|
         if surface_image.wall
           at index, "#{surface_layer.name}/#{surface_image.image.name} ... (skipped)"
@@ -23,7 +24,8 @@ class LayerMergeWorker
         line = surface_image.merge_tiles_cmd(opts)
         logger.info(line.command)
         line.run
-      end    
+      end
+      surface_layer.update_attribute(:tiled, true)
       at n, "Layer merging job for #{surface_layer.name} is done."
     end
   end

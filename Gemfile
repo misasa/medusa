@@ -78,6 +78,7 @@ gem 'rubyzip'
 gem 'comma'
 gem 'acts-as-taggable-on'
 gem 'exception_notification'
+gem 'slack-notifier'
 gem 'settingslogic'
 
 source 'http://dream.misasa.okayama-u.ac.jp/rubygems/' do

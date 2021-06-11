@@ -18,8 +18,8 @@ describe "place" do
     let(:place) { FactoryBot.create(:place) }
     let(:attachment_file) { FactoryBot.create(:attachment_file, data_file_name: "file_name", data_content_type: data_type) }
     
-    describe "at-a-glance tab" do
-      before { click_link("at-a-glance") }
+    describe "dashboard tab" do
+      before { click_link("dashboard") }
       describe "pdf icon" do
         context "data_content_type is pdf" do
           let(:data_type) { "application/pdf" }

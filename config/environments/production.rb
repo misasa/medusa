@@ -80,9 +80,14 @@ Medusa::Application.configure do
   config.log_formatter = ::Logger::Formatter.new
 
   config.middleware.use ExceptionNotification::Rack,
-  :email => {
-    :email_prefix => "[Medusa exception] ",
-    :sender_address => %{"no reply" <medusa@example.com>},
-    :exception_recipients => %w{} # Set e-mail address.
+  ignore_crawlers: ENV['EXCEPTION_NOTIFICATION_IGNORE_CRAWLERS'] ? ENV['EXCEPTION_NOTIFICATION_IGNORE_CRAWLERS'].split : [],
+  #:email => {
+  #  :email_prefix => "[Medusa exception] ",
+  #  :sender_address => %{"no reply" <medusa@example.com>},
+  #  :exception_recipients => %w{} # Set e-mail address.
+  #},
+  slack: {
+    webhook_url: ENV['SLACK_WEBHOOK_URL'],
+    channel: ENV['SLACK_CHANNEL_EXCEPTION_NOTIFICATION'],
   }
 end

@@ -12,8 +12,10 @@
   </td>
   <td><%#= link_to list_title(surface), surface %>
     <%= link_to(list_title(surface), surface, class: "btn radio-button-group", :title => "view map") %>
-    <%= link_to(edit_surface_path(surface), title: "edit name, layers, and images", :target => ["_blank"]) do %>
-      <span class="far fa-edit"></span>
+    <% if can? :update, surface %>
+      <%= link_to(edit_surface_path(surface), title: "edit name, layers, and images", :target => ["_blank"]) do %>
+        <span class="far fa-edit"></span>
+      <% end %>
     <% end %>
     <%#= link_to('map', surface.rmap_url, class: "btn radio-button-group", :title => "edit map", :target => ["_blank"]) %>
   </td>

@@ -1,6 +1,6 @@
-class TileWorker
-  include Sidekiq::Worker
-  include Sidekiq::Status::Worker
+class TileWorker < BaseWorker
+#  include Sidekiq::Worker
+#  include Sidekiq::Status::Worker
 
   def perform(surface_image_id, opts = {})
     # Do something

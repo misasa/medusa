@@ -102,6 +102,7 @@ class SurfaceLayersController < ApplicationController
       :display_min,
       :display_max,
       :max_zoom_level,
+      :tiled,
       :visible,
       :wall,
       :priority

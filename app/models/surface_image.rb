@@ -138,18 +138,26 @@ class SurfaceImage < ApplicationRecord
   end
 
   def zooms
-    return unless tiled?
-    (Dir.entries(tile_dir) - [".", ".."]).map{|e| e.to_i }
+    #return unless tiled?
+    #(Dir.entries(tile_dir) - [".", ".."]).map{|e| e.to_i }
+    minzoom.upto(maxzoom)
   end
 
   def maxzoom
-    return unless tiled?
-    zooms.max
+    #return unless tiled?
+    #zooms.max
+    if surface_layer
+      zoom = surface_layer.max_zoom_level || surface_layer.original_zoom_level
+    else
+      zoom = original_zoom_level
+    end
+    zoom
   end
 
   def minzoom
-    return unless tiled?
-    zooms.min
+    #return unless tiled?
+    #zooms.min
+    0
   end
 
   def warped_image_path

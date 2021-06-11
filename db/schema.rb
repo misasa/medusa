@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_26_014610) do
+ActiveRecord::Schema.define(version: 2021_06_10_021858) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -410,10 +410,11 @@ ActiveRecord::Schema.define(version: 2021_02_26_014610) do
     t.datetime "updated_at"
     t.integer "max_zoom_level"
     t.boolean "visible", default: true, null: false
-    t.string "color_scale"
+    t.string "color_scale", limit: 255
     t.float "display_min"
     t.float "display_max"
     t.boolean "wall", default: false, null: false
+    t.boolean "tiled", default: false, null: false
     t.index ["surface_id", "name"], name: "index_surface_layers_on_surface_id_and_name", unique: true
     t.index ["surface_id"], name: "index_surface_layers_on_surface_id"
   end

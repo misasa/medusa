@@ -45,10 +45,18 @@ namespace :record do
 			output.close
 		end
 
-		desc "Dump records in pmlame"
+		desc "Dump analyses in pmlame"
 		task :pmlame => [:environment] do |t|
 		  records = Analysis.all
 		  puts [ records.uniq.map {|item| item.to_pmlame } ].to_json
+		  #p [ records.map {|item| item.build_pmlame([])}.flatten.uniq].to_json
+		  #element_names = records.map()
+		end
+
+		desc "Dump surfaces in json"
+		task :surface => [:environment] do |t|
+		  records = Surface.all
+		  puts [ records.uniq.map {|item| item.to_json } ].to_json
 		  #p [ records.map {|item| item.build_pmlame([])}.flatten.uniq].to_json
 		  #element_names = records.map()
 		end

@@ -57,10 +57,10 @@ describe "attachment_file" do
       end
     end
 
-    # describe "at-a-glance tab" do
+    # describe "dashboard tab" do
     #   let(:create_data) { attachment_file.create_record_property(user_id: login_user.id) }
     #   let(:attachment_file) { FactoryBot.create(:attachment_file, data_file_name: "file_name", data_content_type: data_content_type, original_geometry: "", affine_matrix: []) }
-    #   before { click_link("at-a-glance") }
+    #   before { click_link("dashboard") }
     #   describe "pdf icon" do
     #     context "data_content_type is pdf" do
     #       let(:data_content_type) { "application/pdf" }

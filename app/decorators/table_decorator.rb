@@ -93,6 +93,7 @@ class TableDecorator < Draper::Decorator
     l = []
     self.table_specimens.each.with_index(1) do |ts, idx|
       specimen = ts.specimen
+      next unless specimen
       if fids.include?(specimen.id)
         l << h.content_tag(:span, "#{idx}: " + specimen.name, id:"select_row_#{idx}_in_table_#{self.id}", class: "label label-primary")
       else
@@ -126,7 +127,7 @@ EOS
       bs << code      
     end
 
-    m[0] = ["",""].concat( self.table_specimens.map.with_index(1){|ts, idx| h.link_to(h.content_tag(:span, "#{idx}", class:"label label-default"), h.specimen_path(ts.specimen), title: "#{ts.specimen.name}") } ) if m
+    m[0] = ["",""].concat( self.table_specimens.map.with_index(1){|ts, idx| ts.specimen ? h.link_to(h.content_tag(:span, "#{idx}", class:"label label-default"), h.specimen_path(ts.specimen), title: "#{ts.specimen.name}") : "#{idx}"} ) if m
     h.javascript_tag do
       code = <<EOS
       var container = document.getElementById("table_#{self.id}");

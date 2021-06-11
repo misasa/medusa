@@ -1,6 +1,6 @@
-class TableRefreshWorker
-    include Sidekiq::Worker
-    include Sidekiq::Status::Worker
+class TableRefreshWorker < BaseWorker
+#    include Sidekiq::Worker
+#    include Sidekiq::Status::Worker
   
     def perform(table_id, opts = {})
       table = Table.find(table_id)
