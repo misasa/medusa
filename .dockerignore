@@ -11,3 +11,4 @@ docker-compose.test.yml
 /tmp/*
 /db/*.sql
 Dockerfile.slim_production
+/mosquitto/
