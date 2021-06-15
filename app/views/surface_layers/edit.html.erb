@@ -12,12 +12,12 @@
     <%= f.text_field :max_zoom_level, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
-    <%= f.label 'display min', class: "small" %> ( default: <%= @surface_layer.default_display_range[0] %> )
-    <%= f.text_field :display_min, class: "form-control input-sm" %>
-  </div>
-  <div class="form-group form-group-sm">
     <%= f.label 'display max', class: "small" %> ( default: <%= @surface_layer.default_display_range[1] %>)
     <%= f.text_field :display_max, class: "form-control input-sm" %>
+  </div>
+  <div class="form-group form-group-sm">
+    <%= f.label 'display min', class: "small" %> ( default: <%= @surface_layer.default_display_range[0] %> )
+    <%= f.text_field :display_min, class: "form-control input-sm" %>
   </div>
   <div class="form-group form-group-sm">
     <%= f.label 'color scale', class: "small" %>
