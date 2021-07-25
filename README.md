@@ -11,7 +11,7 @@ current storage location, the relationship, if any between the
 original rock and any sub-samples, and correlate any and all
 geochemical datasets associated with the rock.
 
-As of February 27, 2018, Medusa runs with Ruby version `2.1.7`.
+As of July, 2021, Medusa runs with Ruby version `2.7`.
 
 # Documentation
 
