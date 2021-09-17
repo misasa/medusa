@@ -86,7 +86,7 @@ class AttachmentFile < ApplicationRecord
   end
 
   def as_json(options = {})
-    super({:methods => [:bounds, :corners_on_world, :width_in_um, :height_in_um, :original_path, :thumbnail_path, :tiny_path, :global_id]}.merge(options))
+    super({:methods => [:affine_matrix_in_string, :bounds, :corners_on_world, :width_in_um, :height_in_um, :original_path, :thumbnail_path, :tiny_path, :global_id]}.merge(options))
   end
 
   def surface_spots

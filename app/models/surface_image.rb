@@ -47,6 +47,7 @@ class SurfaceImage < ApplicationRecord
 
   def original_zoom_level
     return unless image
+    return unless resolution
 #    Math.log(surface.length/image.length_in_um * image.length/surface.tilesize, 2).ceil
     Math.log(surface.length/surface.tilesize * resolution, 2).ceil
   end
