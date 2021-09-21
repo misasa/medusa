@@ -137,7 +137,6 @@ class AttachmentFilesController < ApplicationController
       :data,
       :original_geometry,
       :affine_matrix_in_string,
-      :affine_matrix,
       :user_id,
       :group_id,
       :published,
