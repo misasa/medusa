@@ -291,6 +291,7 @@ Medusa::Application.routes.draw do
       member do
         get :map
         get :calibrate
+        get :images
         post 'move_to_top'
         post 'move_to_bottom'
         post 'move_higher'

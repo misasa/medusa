@@ -289,11 +289,12 @@ class SurfaceImageDecorator < Draper::Decorator
             unless self.calibrated?
               h.concat h.content_tag(:span, "not calibrated", class:"label label-danger")
             end
-            if self.image.fits_file?              
-              h.concat h.link_to(h.image_tag(self.image.png_url), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
-            else
-              h.concat h.link_to(h.image_tag(self.image.path(:thumb)), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
-            end
+            #if self.image.fits_file?              
+            #  h.concat h.link_to(h.image_tag(self.image.png_url), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
+            #else
+            #  h.concat h.link_to(h.image_tag(self.image.path(:thumb)), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
+            #end
+            h.concat h.link_to("", h.attachment_file_path(self.image), id: "thumbnail-#{self.image.id}") if File.exist?(self.image.data.path)
             #h.concat h.content_tag(:small, self.image.name)
             h.concat drop_down_menu
             #h.concat h.content_tag(:small, "(#{position})" )

@@ -297,7 +297,7 @@ class SurfaceLayerDecorator < Draper::Decorator
   end
 
   def panel_body(tokens)
-    h.content_tag(:div, class: "panel-body collapse", id: "surface-layer-#{self.id}") do
+    h.content_tag(:div, class: "panel-body collapse", id: "surface-layer-#{self.id}", data: {id: self.id, surface_id: self.surface_id}) do
       thumbnails_list(tokens, calibrated_surface_images)
     end
   end

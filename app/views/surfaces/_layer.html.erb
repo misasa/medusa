@@ -1,3 +1,4 @@
+
 <%= mantra "An image located leftward is piled on upward in each layer.", :title => "Image alignment" %> 
 <% not_belongs_to_layer = @surface.top_surface_images%>
 <div class="panel panel-default">
@@ -117,7 +118,7 @@
 <%= javascript_tag do %>
   $(document).on("succeed.ajaxForm", function() {
     location.href="";
-  });    
+  });
   <% @surface.surface_images.each do |surface_image| %>
     <% image = surface_image.image %>
     <% m = image.affine_matrix %>
@@ -150,6 +151,14 @@
   }, hot);
 
   (function($) {
+    $("[id^=surface-layer]").on("show.bs.collapse",function(){
+        var id = $(this).attr('data-id');
+        $.ajax({
+          url: 'layers/' + id + '/images',
+          type: 'GET',
+          dataType: 'script'
+        });
+    });
     $("ul.surface-layer").sortable({
       connectWith: ".surface-layer",
       stop: function(event, ui){
