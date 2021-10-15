@@ -209,7 +209,7 @@ class SurfaceLayerDecorator < Draper::Decorator
         h.content_tag(:span, class: "panel-title pull-left") do
           h.concat(
               h.content_tag(:a, href: "#surface-layer-#{self.id}", data: {toggle: "collapse"}, 'aria-expanded' => false, 'aria-control' => "surface-layer-#{self.id}", title: "fold layer '#{self.name}'") do
-              h.concat h.content_tag(:span, self.calibrated_surface_images.count ,class: "badge")
+              h.concat h.content_tag(:span, self.calibrated_surface_images.size ,class: "badge")
               h.concat " "
               h.concat self.name
             end
@@ -340,7 +340,7 @@ class SurfaceLayerDecorator < Draper::Decorator
       end
     end
     t = panel_head(layer_tokens){ panel_menu } + panel_body(layer_tokens)
-    t += panel_footer(layer_tokens) if uncalibrated_surface_images.count > 0
+    t += panel_footer(layer_tokens) if uncalibrated_surface_images.size > 0
     h.content_tag(:div, class: "panel panel-default") do
       t
     end

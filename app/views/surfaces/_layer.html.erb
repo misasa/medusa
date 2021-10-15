@@ -90,15 +90,15 @@
 
 </div>
 
-<% @surface.surface_layers.each do |surface_layer| %>
-  <%= surface_layer.decorate.panel %>
+<% SurfaceLayerDecorator.decorate_collection(@surface.surface_layers).each do |surface_layer| %>
+  <%= surface_layer.panel %>
 <% end %>
 
 <div class="panel panel-default">
   <div class="panel-heading">
     <span class="panel-title pull-lfet">
      <a href="#surface-layer-base", data-toggle="collapse", aria-expanded="false", aria-control="surface-layer-top", title = "show and hide images belong to base">
-      <span class="badge"><%= @surface.wall_surface_images.count %></span>
+      <span class="badge"><%= @surface.wall_surface_images.size %></span>
       Base
      </a>
     </span>
