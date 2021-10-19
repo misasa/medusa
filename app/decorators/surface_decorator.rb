@@ -86,7 +86,8 @@ class SurfaceDecorator < Draper::Decorator
   def map_data(options = {})
     surface_length = self.length
     tilesize = self.tilesize
-    s_images = surface_images.calibrated.reverse
+    #s_images = surface_images.calibrated.reverse
+    s_images = calibrated_surface_images.reverse
     a_zooms = s_images.map{|s_image| Math.log(surface_length/tilesize * s_image.resolution, 2).ceil if s_image.resolution }
     layer_groups = []
     base_images = []

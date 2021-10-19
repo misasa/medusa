@@ -134,9 +134,11 @@ class SurfacesController < ApplicationController
       {surface_layers: [:surface, {
         surface_images: [:image, :surface],
         calibrated_surface_images: [:image, :surface],
+        overlay_surface_images: [:image, :surface],
         uncalibrated_surface_images: [:image, :surface]
         }]}, 
-      {surface_images: [:surface, {image: [:record_property, :spots]}]}, 
+      {surface_images: [:surface, {image: [:record_property, :spots]}]},
+      {calibrated_surface_images: [:image, :surface, :surface_layer]},
       {not_belongs_to_layer_surface_images: [:image, :surface]}, 
       {top_surface_images: [:image, :surface]},
       {uncalibrated_top_surface_images: [:image, :surface]},
