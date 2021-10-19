@@ -1,0 +1,3 @@
+<% SurfaceImageDecorator.decorate_collection(@surface_layer.calibrated_surface_images).each do |surface_image| %>
+$('#surface-image-<%= surface_image.id %>').html("<%= escape_javascript(render partial: 'thumbnail', locals: {surface_image: surface_image, layer_tokens: @layer_tokens}) %>");
+<% end %>

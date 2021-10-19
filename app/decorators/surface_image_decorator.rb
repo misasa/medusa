@@ -220,7 +220,7 @@ class SurfaceImageDecorator < Draper::Decorator
       h.concat(
         h.content_tag(:ul, class: "dropdown-menu", 'aria-labelledby' => "dropdownMenu1") do
           h.concat h.content_tag(:li, attachment_file.name, class: "dropdown-header")
-          h.concat h.content_tag(:li, h.content_tag(:a, "type in affine matrix", href: "#collapseAffine-#{attachment_file.id}", class: "dropdown-item", title: "#{attachment_file.name}", data: {toggle:"collapse"}))
+          #h.concat h.content_tag(:li, h.content_tag(:a, "type in affine matrix", href: "#collapseAffine-#{attachment_file.id}", class: "dropdown-item", title: "#{attachment_file.name}", data: {toggle:"collapse"}))
           h.concat h.content_tag(:li, h.link_to("type in coordinates of 4 corners", h.edit_corners_attachment_file_path(attachment_file, format: :modal), class: "dropdown-item", "data-toggle" => "modal", "data-target" => "#show-modal", title: "#{attachment_file.name}"))
           #h.concat h.content_tag(:li, h.link_to("align and export", h.calibrate_svg_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
           #h.concat h.content_tag(:li, h.link_to("align on layer 'Base'", h.calibrate_surface_image_path(self.surface, attachment_file), class: "dropdown-item"))
@@ -275,34 +275,31 @@ class SurfaceImageDecorator < Draper::Decorator
 
   def li_thumbnail(ptokens = [])
     return unless self.image
-    #return li_fits_file(ptokens) if self.image.fits_file?
     return unless self.image.image? || self.image.fits_file?
-    #return unless File.exist?(self.image.data.path)
-      h.content_tag(:li, class: "surface-image", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do
-        h.concat(
-          h.content_tag(:div, class:"thumbnail") do
-            tokens = self.tokenize
-            (tokens - ptokens).each do |token|
-              h.concat h.content_tag(:span, token, class:"label label-success")
-            end
-            h.concat h.content_tag(:span, "Fits", class:"label label-warning") if self.image.fits_file?
-            unless self.calibrated?
-              h.concat h.content_tag(:span, "not calibrated", class:"label label-danger")
-            end
-            #if self.image.fits_file?              
-            #  h.concat h.link_to(h.image_tag(self.image.png_url), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
-            #else
-            #  h.concat h.link_to(h.image_tag(self.image.path(:thumb)), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
-            #end
-            h.concat h.link_to("", h.attachment_file_path(self.image), id: "thumbnail-#{self.image.id}") if File.exist?(self.image.data.path)
-            #h.concat h.content_tag(:small, self.image.name)
-            h.concat drop_down_menu
-            #h.concat h.content_tag(:small, "(#{position})" )
-            h.concat h.content_tag(:div, self.image.decorate.matrix_form, class:"collapse", id:"collapseAffine-#{self.image.id}")
-          end
-        )
-        #h.concat self.image.decorate.thumbnail
+    h.content_tag(:li, class: "surface-image", id: "surface-image-#{self.id}", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do
+    end
+  end
+
+  def thumbnail(ptokens = [])
+    return unless self.image
+    return unless self.image.image? || self.image.fits_file?
+    h.content_tag(:div, class:"thumbnail") do
+      tokens = self.tokenize
+      (tokens - ptokens).each do |token|
+        h.concat h.content_tag(:span, token, class:"label label-success")
       end
+      h.concat h.content_tag(:span, "Fits", class:"label label-warning") if self.image.fits_file?
+      unless self.calibrated?
+        h.concat h.content_tag(:span, "not calibrated", class:"label label-danger")
+      end
+      if self.image.fits_file?              
+        h.concat h.link_to(h.image_tag(self.image.png_url), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
+      else
+        h.concat h.link_to(h.image_tag(self.image.path(:thumb)), h.attachment_file_path(self.image)) if File.exist?(self.image.data.path)
+      end
+      h.concat drop_down_menu
+      h.concat h.content_tag(:div, h.content_tag(:small, self.image.decorate.matrix_form))
+    end
   end
 
   def spots_panel(width: 40, height:40, spots:[], options:{})

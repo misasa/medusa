@@ -328,6 +328,32 @@ class AttachmentFileDecorator < Draper::Decorator
     end
   end
 
+  def matrix_script
+    image = self
+    m = image.affine_matrix
+    script = <<-"JS"
+    var thot_#{image.id} = new Handsontable(document.getElementById('affine_editor_#{image.id}'), {
+      data: [[#{m[0]}, #{m[1]}, #{m[2]}, ],[#{m[3]}, #{m[4]}, #{m[5]}, ],[#{m[6]}, #{m[7]}, #{m[8]}, ]],
+      licenseKey: 'non-commercial-and-evaluation',
+      width: '150',
+      colWidths: '50',
+      height: '90',
+      rowHeights: '20',
+    });
+    Handsontable.hooks.add('afterChange', function() {
+      console.log(arguments);
+      m = thot_#{image.id}.getData();
+      str = '[' + m[0].join(',') + ';' + m[1].join(',') + ';' + m[2].join(',') + ']'
+      $('#edit_attachment_file_#{image.id}').find('#attachment_file_affine_matrix_in_string').val(str);
+      console.log(str);
+    }, thot_#{image.id});
+    $(document).on("succeed.ajaxForm", "#edit_attachment_file_#{image.id}", function() {
+      location.href="";
+    });          
+    JS
+    script
+  end
+
   private
 
   def icon_with_count(klass, count)
