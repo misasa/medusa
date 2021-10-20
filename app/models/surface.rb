@@ -465,9 +465,11 @@ class Surface < ApplicationRecord
   private
 
   def check_image_bounds
-    self.center_x, self.center_y = image_bounds_center if image_bounds_center
-    self.width = image_bounds_width if image_bounds_width
-    self.height = image_bounds_height if image_bounds_height
+    if self.auto?
+      self.center_x, self.center_y = image_bounds_center if image_bounds_center
+      self.width = image_bounds_width if image_bounds_width
+      self.height = image_bounds_height if image_bounds_height
+    end
   end
 
   def make_tile_of_added_image(image)

@@ -59,6 +59,25 @@ class SurfaceDecorator < Draper::Decorator
     #   tag = h.content_tag(:iframe, nil, src: rplot_url, width: size, height: size, frameborder: "no", class: "embed-responsive-item")
     # end
 
+  def format_number(number, format = "%.3f")
+    sprintf(format, number)
+  end
+
+  def center_x_in_string
+    format_number(center_x)
+  end
+
+  def center_y_in_string
+    format_number(center_y)
+  end
+
+  def width_in_string
+    format_number(width)
+  end
+  def height_in_string
+    format_number(height)
+  end
+
   def to_tex
     return unless surface_images[0]
     return unless surface_images[0].image

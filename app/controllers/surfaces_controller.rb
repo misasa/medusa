@@ -109,6 +109,11 @@ class SurfacesController < ApplicationController
     params.require(:surface).permit(
       :name,
       :length,
+      :auto,
+      :center_x,
+      :center_y,
+      :width,
+      :height,
       record_property_attributes: [
         :global_id,
         :user_id,
