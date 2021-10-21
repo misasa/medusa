@@ -261,11 +261,11 @@ class SurfaceLayerDecorator < Draper::Decorator
 
   def panel_menu
       #h.concat drop_down_menu
-      h.concat(
-        h.link_to(h.surface_layer_path(self.surface, self), class: "btn btn-danger btn-sm pull-right", method: :delete, title: "delete layer '#{self.name}'", data: {confirm: "Are you sure you want to delete layer '#{self.name}'"}) do
-          h.concat h.content_tag(:span, nil, class: "fas fa-times")
-        end
-      )
+      #h.concat(
+      #  h.link_to(h.surface_layer_path(self.surface, self), class: "btn btn-danger btn-sm pull-right", method: :delete, title: "delete layer '#{self.name}'", data: {confirm: "Are you sure you want to delete layer '#{self.name}'"}) do
+      #    h.concat h.content_tag(:span, nil, class: "fas fa-times")
+      #  end
+      #)
       #h.concat(
       #  h.link_to(h.move_to_top_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm", method: :post, title: "move layer '#{self.name}' bottom") do
       #    h.concat h.content_tag(:span, nil, class: "fas fa-arrow-circle-down")

@@ -60,7 +60,9 @@ class SurfaceDecorator < Draper::Decorator
     # end
 
   def format_number(number, format = "%.3f")
-    sprintf(format, number)
+    if number
+      sprintf(format, number)
+    end
   end
 
   def center_x_in_string
