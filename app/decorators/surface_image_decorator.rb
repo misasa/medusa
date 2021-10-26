@@ -277,6 +277,14 @@ class SurfaceImageDecorator < Draper::Decorator
     return unless self.image
     return unless self.image.image? || self.image.fits_file?
     h.content_tag(:li, class: "surface-image", id: "surface-image-#{self.id}", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do
+      h.render 'surface_images/thumbnail', {surface_image: self, layer_tokens: ptokens}
+    end
+  end
+
+  def li_thumbnail_for_js(ptokens = [])
+    return unless self.image
+    return unless self.image.image? || self.image.fits_file?
+    h.content_tag(:li, class: "surface-image", id: "surface-image-#{self.id}", data: {id: self.id, image_id: self.image.id, surface_id: self.surface.id, position: self.position}) do
     end
   end
 

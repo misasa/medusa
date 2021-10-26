@@ -317,7 +317,7 @@ class SurfaceLayerDecorator < Draper::Decorator
       s_images.each do |surface_image|
         next unless surface_image.image
         next if surface_image.wall
-        h.concat surface_image.decorate.li_thumbnail(tokens)
+        h.concat surface_image.decorate.li_thumbnail_for_js(tokens)
       end
     end
   end
