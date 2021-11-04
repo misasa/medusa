@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_10_021858) do
+ActiveRecord::Schema.define(version: 2021_10_20_060916) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -428,6 +428,7 @@ ActiveRecord::Schema.define(version: 2021_06_10_021858) do
     t.float "center_y"
     t.float "width"
     t.float "height"
+    t.boolean "auto", default: true, null: false
   end
 
   create_table "table_analyses", id: { type: :serial, comment: "ID" }, comment: "表内分析情報", force: :cascade do |t|

@@ -1,5 +1,5 @@
 class SurfaceLayersController < ApplicationController
-  respond_to :html, :xml, :json, :svg
+  respond_to :html, :xml, :json, :svg, :js
   before_action :find_surface
   before_action :find_resource, except: [:index, :new, :create, :link_by_global_id]
 
@@ -30,6 +30,10 @@ class SurfaceLayersController < ApplicationController
     @surface_layer = SurfaceLayer.find(params[:id])
     @surface_layer.update(surface_layer_params)
     respond_with @surface_layer
+  end
+
+  def images
+    respond_with @surface_layer.calibrated_surface_images
   end
 
   def tiles
@@ -115,5 +119,16 @@ class SurfaceLayersController < ApplicationController
 
   def find_resource
     @surface_layer = @surface.surface_layers.includes({surface: {surface_images: :image}}, {surface_images: :image}).find(params[:id]).decorate
+    layer_tokens = []
+    @surface_layer.surface_images.each do |surface_image|
+      image = surface_image.image
+      tokens = surface_image.decorate.tokenize
+      if layer_tokens.empty?
+        layer_tokens = tokens
+      else
+        layer_tokens = layer_tokens & tokens
+      end
+    end
+    @layer_tokens = layer_tokens    
   end
 end

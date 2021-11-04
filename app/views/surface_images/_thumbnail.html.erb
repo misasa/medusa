@@ -1,0 +1,4 @@
+<%= surface_image.thumbnail(layer_tokens) %>
+<%= javascript_tag do %>
+    <%= raw surface_image.image.decorate.matrix_script %>
+<% end %>

@@ -12,6 +12,7 @@ Medusa::Application.routes.draw do
 
   root 'records#index'
   get '/front/vue', to: 'front#vue'
+
   concern :bundleable do
     collection do
       post :bundle_edit
@@ -53,6 +54,16 @@ Medusa::Application.routes.draw do
   concern :sesar_upload do
     member do
       post :sesar_upload
+    end
+  end
+
+  namespace :api, defaults: { format: :json } do
+    namespace :v1 do
+      resources :records, only: %i[show]
+      resources :spots
+      resources :surfaces do
+        resources :spots, concerns: [:link_by_global_id], only: [:index, :show, :create, :update, :destroy], controller: "surface_spots"
+      end
     end
   end
 
@@ -280,6 +291,7 @@ Medusa::Application.routes.draw do
       member do
         get :map
         get :calibrate
+        get :images
         post 'move_to_top'
         post 'move_to_bottom'
         post 'move_higher'

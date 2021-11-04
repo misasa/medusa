@@ -8,17 +8,34 @@
 <div class="row">
   <div class="form-inline col-lg-5">
     <%= form_with model:@surface, local: false, format: :json, html: { id: "edit_surface_#{@surface.id}", class: "update", role: "form" } do |f| %>
+
       <div class="input-group">
         <span class="input-group-addon">Name</span>
         <%= f.text_field :name, class: "form-control" %>
-        <% if false %>
-          <span class="input-group-addon">Edge length (um)</span>
-          <%= f.text_field :length, class: "form-control" %>
-        <% end %>
         <div class="input-group-btn">
           <%= f.button class: "btn btn-default" do %>
           <span class="far fa-save"></span>
           <% end %>
+        </div>
+      </div>
+      <br/>
+      <div class="input-group">
+      <%= f.label :auto, class: "checkbox-inline" do %>
+        <%= f.check_box :auto %> auto canvas
+      <% end %>          
+      </div>
+        <div class="input-group">
+          <span class="input-group-addon">Center (um)</span>
+          <span class="input-group-addon">x</span>
+          <%= f.number_field :center_x, value: @surface.center_x_in_string, readonly: @surface.auto?, step: "0.001", class: "form-control" %>
+          <span class="input-group-addon">y</span>
+          <%= f.text_field :center_y, value: @surface.center_y_in_string, readonly: @surface.auto?, step: "0.001", class: "form-control" %>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon">Width (um)</span>
+          <%= f.text_field :width, value: @surface.width_in_string, readonly: @surface.auto?, step: "0.001", class: "form-control" %>
+          <span class="input-group-addon">Height (um)</span>
+          <%= f.number_field :height, value: @surface.height_in_string, readonly: @surface.auto?, step: "0.001", class: "form-control" %>
         </div>
       </div>
     <% end %>

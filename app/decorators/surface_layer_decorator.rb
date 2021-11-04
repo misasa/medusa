@@ -209,7 +209,7 @@ class SurfaceLayerDecorator < Draper::Decorator
         h.content_tag(:span, class: "panel-title pull-left") do
           h.concat(
               h.content_tag(:a, href: "#surface-layer-#{self.id}", data: {toggle: "collapse"}, 'aria-expanded' => false, 'aria-control' => "surface-layer-#{self.id}", title: "fold layer '#{self.name}'") do
-              h.concat h.content_tag(:span, self.calibrated_surface_images.count ,class: "badge")
+              h.concat h.content_tag(:span, self.calibrated_surface_images.size ,class: "badge")
               h.concat " "
               h.concat self.name
             end
@@ -236,54 +236,80 @@ class SurfaceLayerDecorator < Draper::Decorator
     end
   end
 
+  def drop_down_menu
+    h.content_tag(:span, class: "dropdown") do
+      h.concat(
+          h.content_tag(:button, class: "btn btn-default btn-sm dropdown-toggle", :title => "dropdown menu for #{name}",  :type => "button", :id => "dropdownMenu1", 'data-toggle' => "dropdown", 'aria-haspopup' => true, 'aria-expanded' => false) do
+          h.concat h.content_tag(:span, nil, class: "fas fa-ellipsis-h")
+        end
+      )
+      h.concat(
+        h.content_tag(:ul, class: "dropdown-menu", 'aria-labelledby' => "dropdownMenu1") do
+          #h.concat h.content_tag(:li, h.link_to("show images in layer '#{self.name}'", h.map_surface_layer_path(self.surface, self), class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("edit name and opacity of layer '#{self.name}'", h.edit_surface_layer_path(self.surface, self), class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("align images in layer '#{self.name}'", h.calibrate_surface_layer_path(self.surface, self), class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("refresh tiles for images in layer '#{self.name}'", h.tiles_surface_layer_path(self.surface, self), method: :post, class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("move layer '#{self.name}' top", h.move_to_bottom_surface_layer_path(self.surface, self), method: :post, class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("move layer '#{self.name}' up", h.move_lower_surface_layer_path(self.surface, self), method: :post, class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("move layer '#{self.name}' down", h.move_higher_surface_layer_path(self.surface, self), method: :post, class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("move layer '#{self.name}' bottom", h.move_to_top_surface_layer_path(self.surface, self), method: :post, class: "dropdown-item"))
+          h.concat h.content_tag(:li, h.link_to("delete layer '#{self.name}'", h.surface_layer_path(self.surface, self), method: :delete, data: {confirm: "Are you sure you want to delete layer '#{self.name}'"}, class: "dropdown-item"))          
+        end
+      )
+    end    
+  end
+
   def panel_menu
+      #h.concat drop_down_menu
+      #h.concat(
+      #  h.link_to(h.surface_layer_path(self.surface, self), class: "btn btn-danger btn-sm pull-right", method: :delete, title: "delete layer '#{self.name}'", data: {confirm: "Are you sure you want to delete layer '#{self.name}'"}) do
+      #    h.concat h.content_tag(:span, nil, class: "fas fa-times")
+      #  end
+      #)
+      #h.concat(
+      #  h.link_to(h.move_to_top_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm", method: :post, title: "move layer '#{self.name}' bottom") do
+      #    h.concat h.content_tag(:span, nil, class: "fas fa-arrow-circle-down")
+      #  end
+      #)
+      #h.concat(
+      #  h.link_to(h.move_higher_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' down") do
+      #    h.concat h.content_tag(:span, nil, class: "fas fa-arrow-down")
+      #  end
+      #)
+      #h.concat(
+      #  h.link_to(h.move_lower_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' up") do
+      #    h.concat h.content_tag(:span, nil, class: "fas fa-arrow-up")
+      #  end
+      #)
+      #h.concat(
+      #  h.link_to(h.move_to_bottom_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm", method: :post, title: "move layer '#{self.name}' top") do
+      #    h.concat h.content_tag(:span, nil, class: "fas fa-arrow-circle-up")
+      #  end
+      #)
+      #h.concat(
+      #         h.link_to(h.edit_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "edit name and opacity of layer '#{self.name}'") do
+      #    h.concat h.content_tag(:span, nil, class: "fas fa-pencil-alt")
+      #  end
+      #)
+      h.concat h.raw("&nbsp;")
       h.concat(
-        h.link_to(h.surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :delete, title: "delete layer '#{self.name}'", data: {confirm: "Are you sure you want to delete layer '#{self.name}'"}) do
-          h.concat h.content_tag(:span, nil, class: "fas fa-times")
-        end
-      )
-      h.concat(
-        h.link_to(h.move_to_top_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' bottom") do
-          h.concat h.content_tag(:span, nil, class: "fas fa-arrow-circle-down")
-        end
-      )
-      h.concat(
-        h.link_to(h.move_higher_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' down") do
-          h.concat h.content_tag(:span, nil, class: "fas fa-arrow-down")
-        end
-      )
-      h.concat(
-        h.link_to(h.move_lower_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' up") do
-          h.concat h.content_tag(:span, nil, class: "fas fa-arrow-up")
-        end
-      )
-      h.concat(
-        h.link_to(h.move_to_bottom_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", method: :post, title: "move layer '#{self.name}' top") do
-          h.concat h.content_tag(:span, nil, class: "fas fa-arrow-circle-up")
-        end
-      )
-      h.concat(
-               h.link_to(h.edit_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "edit name and opacity of layer '#{self.name}'") do
-          h.concat h.content_tag(:span, nil, class: "fas fa-pencil-alt")
-        end
-      )
-      h.concat(
-        h.link_to(h.tiles_surface_layer_path(self.surface, self), method: :post, class: "btn btn-default btn-sm pull-right", title: "refresh tiles for images in layer '#{self.name}'") do
+        h.link_to(h.tiles_surface_layer_path(self.surface, self), method: :post, class: "btn btn-default btn-sm", title: "refresh tiles for images in layer '#{self.name}'") do
           h.concat h.content_tag(:span, nil, class: "fas fa-redo")
         end
       )
-      h.concat(
-        h.link_to(h.calibrate_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "align images in layer '#{self.name}'") do
-          h.concat h.content_tag(:span, nil, class: "fas fa-adjust")
-        end
-      )
-      h.concat(
-        h.link_to(h.map_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "show images in layer '#{self.name}'") do
-          h.concat h.content_tag(:span, nil, class: "fas fa-globe-asia")
-        end
-      )
+      #h.concat(
+      #  h.link_to(h.calibrate_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "align images in layer '#{self.name}'") do
+      #    h.concat h.content_tag(:span, nil, class: "fas fa-adjust")
+      #  end
+      #)
+      #h.concat(
+      #  h.link_to(h.map_surface_layer_path(self.surface, self), class: "btn btn-default btn-sm pull-right", title: "show images in layer '#{self.name}'") do
+      #    h.concat h.content_tag(:span, nil, class: "fas fa-globe-asia")
+      #  end
+      #)
+      h.concat drop_down_menu
       h.concat h.content_tag(:div, nil, class: "clearfix")
-  end
+    end
 
   def thumbnails_list(tokens, s_images = surface_images)
     h.content_tag(:ul, class: "list-inline thumbnails surface-layer", data: {id: self.id}, style: "min-height: 100px;" ) do
@@ -291,13 +317,13 @@ class SurfaceLayerDecorator < Draper::Decorator
       s_images.each do |surface_image|
         next unless surface_image.image
         next if surface_image.wall
-        h.concat surface_image.decorate.li_thumbnail(tokens)
+        h.concat surface_image.decorate.li_thumbnail_for_js(tokens)
       end
     end
   end
 
   def panel_body(tokens)
-    h.content_tag(:div, class: "panel-body collapse", id: "surface-layer-#{self.id}") do
+    h.content_tag(:div, class: "panel-body collapse", id: "surface-layer-#{self.id}", data: {id: self.id, surface_id: self.surface_id}) do
       thumbnails_list(tokens, calibrated_surface_images)
     end
   end
@@ -340,7 +366,7 @@ class SurfaceLayerDecorator < Draper::Decorator
       end
     end
     t = panel_head(layer_tokens){ panel_menu } + panel_body(layer_tokens)
-    t += panel_footer(layer_tokens) if uncalibrated_surface_images.count > 0
+    t += panel_footer(layer_tokens) if uncalibrated_surface_images.size > 0
     h.content_tag(:div, class: "panel panel-default") do
       t
     end

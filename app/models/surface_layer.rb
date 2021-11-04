@@ -47,7 +47,7 @@ class SurfaceLayer < ApplicationRecord
   #  surface_images.each do |surface_image|
   #    p surface_image.original_zoom_level
   #  end
-    surface_images.map(&:original_zoom_level).max
+    surface_images.map(&:original_zoom_level).compact.max
   end
 
   def zooms

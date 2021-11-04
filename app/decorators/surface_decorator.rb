@@ -20,11 +20,15 @@ class SurfaceDecorator < Draper::Decorator
   end
 
   def as_json(options = {})
-    super({ methods: [:global_id, :image_ids, :layers, :globe, :center, :length, :url_for_tiles, :map_data] }.merge(options))
+    super({ methods: [:global_id, :image_ids, :layers, :layers_priority, :globe, :center, :length, :url_for_tiles, :map_data] }.merge(options))
   end
 
   def layers
     surface_layers.pluck(:id, :name)
+  end
+
+  def layers_priority
+    surface_layers.pluck(:priority, :name)
   end
     # def rplot_url
   #   return unless Settings.rplot_url
@@ -55,6 +59,27 @@ class SurfaceDecorator < Draper::Decorator
     #   tag = h.content_tag(:iframe, nil, src: rplot_url, width: size, height: size, frameborder: "no", class: "embed-responsive-item")
     # end
 
+  def format_number(number, format = "%.3f")
+    if number
+      sprintf(format, number)
+    end
+  end
+
+  def center_x_in_string
+    format_number(center_x)
+  end
+
+  def center_y_in_string
+    format_number(center_y)
+  end
+
+  def width_in_string
+    format_number(width)
+  end
+  def height_in_string
+    format_number(height)
+  end
+
   def to_tex
     return unless surface_images[0]
     return unless surface_images[0].image
@@ -82,7 +107,8 @@ class SurfaceDecorator < Draper::Decorator
   def map_data(options = {})
     surface_length = self.length
     tilesize = self.tilesize
-    s_images = surface_images.calibrated.reverse
+    #s_images = surface_images.calibrated.reverse
+    s_images = calibrated_surface_images.reverse
     a_zooms = s_images.map{|s_image| Math.log(surface_length/tilesize * s_image.resolution, 2).ceil if s_image.resolution }
     layer_groups = []
     base_images = []

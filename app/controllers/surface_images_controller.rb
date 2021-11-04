@@ -115,7 +115,7 @@ class SurfaceImagesController < ApplicationController
 
   def layer
     @surface_image.update(surface_layer_id: params["layer_id"])
-    render :nothing => true
+    render head: ok
   end
 
   def calibrate_svg

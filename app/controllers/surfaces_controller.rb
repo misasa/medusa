@@ -109,6 +109,11 @@ class SurfacesController < ApplicationController
     params.require(:surface).permit(
       :name,
       :length,
+      :auto,
+      :center_x,
+      :center_y,
+      :width,
+      :height,
       record_property_attributes: [
         :global_id,
         :user_id,
@@ -131,9 +136,17 @@ class SurfacesController < ApplicationController
 
   def find_resource
     @surface = Surface.includes(:record_property, 
-      {surface_layers: [:surface, {surface_images: [:image, :surface]}]}, 
-      {surface_images: [:surface, {image: [:record_property, :spots]}]}, 
+      {surface_layers: [:surface, {
+        surface_images: [:image, :surface],
+        calibrated_surface_images: [:image, :surface],
+        overlay_surface_images: [:image, :surface],
+        uncalibrated_surface_images: [:image, :surface]
+        }]}, 
+      {surface_images: [:surface, {image: [:record_property, :spots]}]},
+      {calibrated_surface_images: [:image, :surface, :surface_layer]},
       {not_belongs_to_layer_surface_images: [:image, :surface]}, 
+      {top_surface_images: [:image, :surface]},
+      {uncalibrated_top_surface_images: [:image, :surface]},
       {wall_surface_images: [:image, :surface]}).find(params[:id]).decorate
     #@surface_layers = SurfaceLayer.where(surface_id: params[:id]).includes({surface_images: [:image,:surface]})
     @image = @surface.first_image
