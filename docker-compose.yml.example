@@ -26,6 +26,7 @@ services:
       - ./config:/medusa/config
       - ./public:/medusa/public
       - ./db:/medusa/db
+      - ./log:/medusa/log
     ports:
       - "3000:3000"
     depends_on:
@@ -46,6 +47,7 @@ services:
       - ./app:/medusa/app
       - ./config:/medusa/config
       - ./public/system:/medusa/public/system
+      - ./log:/medusa/log
     command: bundle exec sidekiq
     links:
       - postgres
