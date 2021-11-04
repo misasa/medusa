@@ -1,8 +1,9 @@
 ARG RAILS_ENV="production"
+ARG NODE_VERSION="14.16.1"
 ARG YARN_VERSION="1.22.5"
 ARG RUBY_VERSION="2.7.2"
 ARG BUNDLER_VERSION="2.2.8"
-FROM node:lts-buster-slim as node
+FROM node:${NODE_VERSION}-buster-slim as node
 From ruby:${RUBY_VERSION} as ruby-fits
 RUN apt-get update && apt-get install -y \
 build-essential \
