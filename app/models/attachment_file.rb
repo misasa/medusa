@@ -11,7 +11,7 @@ class AttachmentFile < ApplicationRecord
     },
     path: ":rails_root/public/system/:class/:id_partition/:basename_with_style.:extension",
     url: "#{Rails.application.config.relative_url_root}/system/:class/:id_partition/:basename_with_style.:extension",
-    restricted_characters: /[&$+,x\/:;=?<>\[\]\{\}\|\\\^~%# ]/
+    restricted_characters: /[&$+,\/:;=?<>\[\]\{\}\|\\\^~%# ]/
 
   validates_attachment_content_type :data, 
   :content_type => [
@@ -47,7 +47,7 @@ class AttachmentFile < ApplicationRecord
   has_many :surfaces, :through => :surface_images, dependent: :destroy
   has_one :analysis, foreign_key: :fits_file_id
   attr_accessor :path
-  before_post_process :skip_for_fits
+  before_post_process :check_for_thumbnails
   after_post_process :save_geometry
 
 #  after_save :rotate
@@ -272,17 +272,20 @@ class AttachmentFile < ApplicationRecord
   end
 
   def rename_attached_files_if_needed
-    return if !name_changed? || data_updated_at_changed?
+    logger.info("rename_attached_files_if_needed")
+    return if !saved_change_to_name?
     logger.info("renameing...")
     (data.styles.keys+[:original]).each do |style|
       path = data.path(style)
       dirname = File.dirname(path)
       extname = File.extname(path)
       basename = File.basename(data_file_name,'.*')
-      old_basename = File.basename(data_file_name_was, '.*')
+      old_basename = File.basename(data_file_name_before_last_save, '.*')
       old_path = File.join(dirname, File.basename(path).sub(basename, old_basename))
       logger.info("rename_attached_files: #{old_path} ->  #{path}")
-      FileUtils.mv(old_path, path)
+      if (File.exists?(old_path) && !File.exists?(path))
+        FileUtils.cp(old_path, path)
+      end
     end
   end
 
@@ -605,10 +608,11 @@ class AttachmentFile < ApplicationRecord
   end
 
   private
-  def skip_for_fits
-    flag = !(File.extname(data_file_name) == '.fits')
-    flag
-  end
+  def check_for_thumbnails
+    logger.info("=== check_for_thumbnails ===")
+    logger.info("data_content_type: #{data_content_type}")
+    !fits_file? && (image? || pdf?)
+  end  
 
   def generate_analysis
     if fits_file?
