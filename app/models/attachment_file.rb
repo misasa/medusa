@@ -285,7 +285,6 @@ class AttachmentFile < ApplicationRecord
       logger.info("rename_attached_files: #{old_path} ->  #{path}")
       if (File.exists?(old_path) && !File.exists?(path))
         FileUtils.cp(old_path, path)
-        data.reprocess!
       end
     end
   end
