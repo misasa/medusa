@@ -3,8 +3,10 @@ ARG NODE_VERSION="14.16.1"
 ARG YARN_VERSION="1.22.5"
 ARG RUBY_VERSION="2.7.2"
 ARG BUNDLER_VERSION="2.2.8"
+ARG UID=1000
+ARG GID=1000
 FROM node:${NODE_VERSION}-buster-slim as node
-From ruby:${RUBY_VERSION} as ruby-fits
+FROM ruby:${RUBY_VERSION} as ruby-fits
 RUN apt-get update && apt-get install -y \
 build-essential \
 libpcre3-dev \
@@ -41,6 +43,8 @@ From ruby:${RUBY_VERSION} as build
 ARG RAILS_ENV
 ARG BUNDLER_VERSION
 ARG YARN_VERSION
+ARG UID
+ARG GID
 RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get -yq dist-upgrade &&\
   DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends\
   ghostscript \
@@ -72,7 +76,8 @@ RUN ln -s /opt/yarn/bin/yarn /usr/local/bin/yarn \
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
   && ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
   && ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npx
-RUN useradd -m --home-dir /medusa medusa
+RUN groupadd -g ${GID} medusa
+RUN useradd -m --home-dir /medusa -u ${UID} -g ${GID} medusa
 USER medusa
 WORKDIR /medusa
 COPY --chown=medusa:medusa Gemfile Gemfile.lock /medusa/
@@ -137,6 +142,8 @@ ENV PATH $PATH:/medusa/bin
 From ruby:${RUBY_VERSION}-slim as prod
 ARG RAILS_ENV
 ARG YARN_VERSION
+ARG UID
+ARG GID
 RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get -yq dist-upgrade &&\
   DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends\
   python3 \
@@ -176,7 +183,8 @@ RUN ln -s /opt/yarn/bin/yarn /usr/local/bin/yarn \
   && ln -s /usr/local/bin/node /usr/local/bin/nodejs \
   && ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
   && ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npx
-RUN useradd -m --home-dir /medusa medusa
+RUN groupadd -g ${GID} medusa
+RUN useradd -m --home-dir /medusa -u ${UID} -g ${GID} medusa
 USER medusa
 WORKDIR /medusa
 COPY --chown=medusa:medusa --from=build /medusa /medusa
