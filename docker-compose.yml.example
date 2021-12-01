@@ -55,3 +55,9 @@ services:
 volumes:
   postgres_data:
     external: true
+  stone_data:
+    driver_opts:
+      type: nfs
+      o: "addr=172.24.1.36,nfsvers=4"
+      device: ":/"
+    external: true
