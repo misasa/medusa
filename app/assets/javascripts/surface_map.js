@@ -67,7 +67,9 @@ L.Surface = L.Class.extend({
         radius_in_um = this.radius_in_um;
       }
       var pos = surface.world2latLng([this.world_x, this.world_y]);
-      var opts = {radius: surface.um2distance(radius_in_um, pos), surface:surface, obj:this};
+      var styleEditor = surface.styleEditor;
+      var spotsLayer = surface.spotsLayer;
+      var opts = {radius: surface.um2distance(radius_in_um, pos), surface:surface, styleEditor:styleEditor, spotsLayer:spotsLayer, obj:this};
       if ('stroke_color' in this && this.stroke_color !== null && this.stroke_color !== ""){
         opts.color = this.stroke_color;
       }
@@ -119,6 +121,7 @@ L.Surface = L.Class.extend({
 L.surface = function(options) {
   return new L.Surface(options);
 }
+
 L.SpotEditor = L.Class.extend({
   options: {
     placeholderHTML: ``
@@ -438,6 +441,9 @@ L.SurfaceCircle.addInitHook(function(){
     spotEditor.inputs['world_y'].value = L.surfaceNumberFormatter(world1[1]);
     spotEditor.inputs['radius_in_um'].value = L.surfaceNumberFormatter(radius_in_um);
   });
+  if (spot !== undefined){
+    this.bindTooltip(spot.name, {permanent: true, className: 'spotLabel', offset: [0, 0], opacity: 0.9 });
+  }
 });
 L.surfaceCircle = function(latlng, options) {
   return new L.SurfaceCircle(latlng, options);
@@ -720,6 +726,7 @@ function initSurfaceMap() {
     onSuccess: function(spot){
       var pos = world2latLng([spot.world_x, spot.world_y]);
       var circle = L.surfaceCircle(pos, spot.circle_options()).addTo(spotsLayer);
+      //circle.bindTooltip(spot.name, {permanent: true, className: "my-label", offset: [0, 0] });
       spot.marker = circle;
     }
   });

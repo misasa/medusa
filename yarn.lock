@@ -4693,7 +4693,7 @@ leaflet-fullscreen@Leaflet/Leaflet.fullscreen:
 
 leaflet-surfacemap@yyachi/leaflet-surfacemap:
   version "0.0.0"
-  resolved "https://codeload.github.com/yyachi/leaflet-surfacemap/tar.gz/f9ac216583329143cfc23a1688a658667dba1b8d"
+  resolved "https://codeload.github.com/yyachi/leaflet-surfacemap/tar.gz/db7245d99f96673ab1b20cf91e937c819036f02f"
 
 leaflet-surfacescale@yyachi/leaflet-surfacescale:
   version "0.0.0"

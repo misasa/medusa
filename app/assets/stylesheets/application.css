@@ -22,6 +22,7 @@
  *= require leaflet.coordinates/dist/Leaflet.Coordinates-0.1.5.css
  *= require leaflet.pm/dist/leaflet.pm.css
  *= require leaflet-styleeditor/dist/css/Leaflet.StyleEditor.min.css
+ *= require leaflet-surfacemap/src/leaflet-surfacemap.css
  *= require handsontable/dist/handsontable.full.min.css
  *= require_tree .
  */
