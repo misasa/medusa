@@ -88,6 +88,22 @@ describe AttachmentFile do
     it {expect(obj.original_geometry).to eq("2352x1568")}
   end
 
+  describe "corners_on_world_in_string=" do
+    let(:user) { FactoryBot.create(:user) }
+    let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.jpg",'image/jpeg')) }
+    let(:corners_on_world){ [[1492.8272, 2371.039],[1576.2872, 2368.185],[1573.1728, 2304.961],[1489.7128, 2307.815]]}
+    let(:string){ "176.33,46.50:179.07,46.60:178.97,48.67:176.23,48.58" }
+    before do
+      User.current = user
+      obj
+      
+      obj.corners_on_world_in_string = string
+    end
+    it { expect(obj.affine_matrix).not_to be_eql([])}
+    it { expect{obj.save}.not_to raise_error}
+    after { obj.destroy }
+  end
+
   describe "corners_on_world=" do
     let(:user) { FactoryBot.create(:user) }
     let(:obj) { AttachmentFile.create(data: fixture_file_upload("test_image.jpg",'image/jpeg')) }
@@ -97,6 +113,7 @@ describe AttachmentFile do
       obj
       obj.corners_on_world = corners_on_world
     end
+    it { expect(obj.affine_matrix).not_to be_eql([])}
     it { expect{obj.save}.not_to raise_error}
     after { obj.destroy }
   end
