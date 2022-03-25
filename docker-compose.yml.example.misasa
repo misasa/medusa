@@ -1,0 +1,305 @@
+version: '3.5'
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+      - "1883:1883"
+      - "8883:8883"
+    networks:
+      - container-link
+    environment:
+      MQTT_HOST: mosquitto:1883
+      MQTT_PORT: 1883
+      MQTT_WS_HOST: mosquitto:8883
+      MQTT_WS_PORT: 8883
+      MEDUSA_PATH: /stone/
+      MEDUSA_URL: http://medusa:3000/stone/
+      MAP_PATH: /maps/
+      MAP_URL: http://map_httpd/maps/
+      MACHINE_TIME_PATH: /machine/
+      MACHINE_TIME_URL: http://machine_time:3000/machine/
+      JXA_8530_PATH: /JXA-8530F/
+      JXA_8530_URL: http://jxa_8530:3000/JXA-8530F/
+      SHINY_PATH: /rplot/
+      SHINY_URL: http://shiny:3838/visual_analysis/
+      STAGE_VIEW_PATH: /stage-view/
+      STAGE_VIEW_URL: http://stage_view/
+    depends_on:
+      - mosquitto
+      - medusa
+      - map_httpd
+      - machine_time
+      - jxa_8530
+      - shiny
+      - stage_view
+    command: >
+      /bin/sh -c 
+      "envsubst '
+      $$MQTT_HOST
+      $$MQTT_PORT
+      $$MQTT_WS_HOST
+      $$MQTT_WS_PORT
+      ' < /tmp/nginx/nginx.conf 
+      > /etc/nginx/nginx.conf
+      && envsubst '
+      $$MEDUSA_PATH
+      $$MEDUSA_URL
+      $$MAP_PATH
+      $$MAP_URL
+      $$MACHINE_TIME_PATH
+      $$MACHINE_TIME_URL
+      $$JXA_8530_PATH
+      $$JXA_8530_URL      
+      $$SHINY_PATH
+      $$SHINY_URL
+      $$STAGE_VIEW_PATH
+      $$STAGE_VIEW_URL
+      ' < /tmp/nginx/templates/default.conf.template
+      > /etc/nginx/conf.d/default.conf 
+      && nginx -g 'daemon off;'"
+    volumes:
+      - /srv/apps/stone/html:/usr/share/nginx/html
+      - /srv/apps/stone/nginx:/tmp/nginx
+      - /srv/apps/stone/nginx/templates:/etc/nginx/templates
+  postgres:
+    image: postgres:9
+    environment:
+      - "POSTGRES_HOST_AUTH_METHOD=trust"
+    volumes:
+      - /srv/apps/stone/postgres_data:/var/lib/postgresql/data
+      - /srv/apps/stone/db:/root/db
+    networks:
+      - container-link
+  redis:
+    image: redis
+    volumes:
+      - /srv/apps/stone/redis_data:/data
+    networks:
+      - container-link
+  mosquitto:
+    image: eclipse-mosquitto:1.6
+    networks:
+      - container-link
+    volumes:
+      - /srv/apps/stone/mosquitto/config:/mosquitto/config
+      - /srv/apps/stone/mosquitto/data:/mosquitto/data
+      - /srv/apps/stone/mosquitto/log:/mosquitto/log
+  machine_time:
+    image: yyachi/machine_time:0.1.1
+    ports:
+      - 3334:3000
+    networks:
+      - container-link
+    depends_on:
+      - postgres
+    environment:
+      RAILS_ENV: production
+      DB_NAME: machine_time
+      DB_USER: postgres
+      DB_HOST: postgres
+      DISABLE_DATABASE_ENVIRONMENT_CHECK: 1
+      RAILS_SERVE_STATIC_FILES: 'true'
+      RAILS_RELATIVE_URL_ROOT: /machine
+    command: bundle exec unicorn_rails -p 3000 -E production
+    volumes:
+      - /srv/apps/machine_time/public:/machine_time/public
+      - /srv/apps/machine_time/config/settings:/machine_time/config/settings
+  jxa_8530:
+    image: yyachi/epma_archiver:0.0.4
+    ports:
+      - 3335:3000
+    networks:
+      - container-link
+    depends_on:
+      - postgres
+    environment:
+      RAILS_ENV: production
+      DB_NAME: jxa_8530
+      DB_USER: postgres
+      DB_HOST: postgres
+      DISABLE_DATABASE_ENVIRONMENT_CHECK: 1
+      RAILS_SERVE_STATIC_FILES: 'true'
+      RAILS_LOG_TO_STDOUT: 'true'
+      RAILS_RELATIVE_URL_ROOT: /JXA-8530F
+      SYNC_PATH: '/backup/JXA-8530F/sync/'
+      SECRET_KEY_BASE: 23876c1f85d194174449d9f6618f243b8c60d080d698afa5c9fa1d0c4ac90e1a01a2615cb30b5fc487a96ee81e6eec0eabef3219244d458a00338b7b109fde7e
+    command: bundle exec unicorn_rails -p 3000 -E production
+    volumes:
+      - /srv/apps/jxa_8530/public:/app/public
+      - /srv/apps/jxa_8530/config/environments:/app/config/environments
+      - /backup/JXA-8530F:/backup/JXA-8530F
+  jxa_8530_runner:
+    image: yyachi/epma_archiver:0.0.4
+    tty: true
+    networks:
+      - container-link
+    depends_on:
+      - postgres
+    environment:
+      RAILS_ENV: production
+      DB_NAME: jxa_8530
+      DB_USER: postgres
+      DB_HOST: postgres
+      DISABLE_DATABASE_ENVIRONMENT_CHECK: 1
+      RAILS_SERVE_STATIC_FILES: 'true'
+      RAILS_LOG_TO_STDOUT: 'true'
+      #RAILS_RELATIVE_URL_ROOT: /JXA-8530F
+      SYNC_PATH: '/backup/JXA-8530F/sync/'
+      #SECRET_KEY_BASE: 23876c1f85d194174449d9f6618f243b8c60d080d698afa5c9fa1d0c4ac90e1a01a2615cb30b5fc487a96ee81e6eec0eabef3219244d458a00338b7b109fde7e
+    command: bash
+    volumes:
+      - /srv/apps/jxa_8530/public:/app/public
+      - /srv/apps/jxa_8530/config/environments:/app/config/environments
+      - /backup/JXA-8530F:/backup/JXA-8530F
+  medusa_runner:
+    image: "yyachi/medusa:10.0.91-production"
+    tty: true
+    networks:
+      - container-link
+    depends_on: 
+      - postgres
+    environment:
+      REDIS_URL: redis://redis:6379
+      RAILS_ENV: production
+      DB_NAME: stone
+      DISABLE_DATABASE_ENVIRONMENT_CHECK: 1
+      RAILS_SERVE_STATIC_FILES: 'true'
+      RAILS_RELATIVE_URL_ROOT: /stone
+      SITE_NAME: stone      
+      RPLOT_URL: /rplot/
+      MAP_URL: /maps/
+      SLACK_WEBHOOK_URL: 'https://hooks.slack.com/services/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'
+      SLACK_CHANNEL_EXCEPTION_NOTIFICATION: '#echo-exception'
+      EXCEPTION_NOTIFICATION_IGNORE_CRAWLERS: 'SemrushBot'
+    command: bash
+    volumes:
+      - /srv/apps/stone/log:/medusa/log
+      - /srv/apps/stone/public/system:/medusa/public/system
+  medusa:
+    image: "yyachi/medusa:10.0.91-production"
+    ports:
+      - 3333:3000
+    networks:
+      - container-link
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      REDIS_URL: redis://redis:6379
+      RAILS_ENV: production
+      DB_NAME: stone
+      DISABLE_DATABASE_ENVIRONMENT_CHECK: 1
+      RAILS_SERVE_STATIC_FILES: 'true'
+      RAILS_RELATIVE_URL_ROOT: /stone
+      SITE_NAME: stone      
+      RPLOT_URL: /rplot/
+      MAP_URL: /maps/
+      SLACK_WEBHOOK_URL: 'https://hooks.slack.com/services/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'
+      SLACK_CHANNEL_EXCEPTION_NOTIFICATION: '#echo-exception'
+      EXCEPTION_NOTIFICATION_IGNORE_CRAWLERS: 'SemrushBot'
+    command: bundle exec unicorn_rails -p 3000 -E production
+    volumes:
+      - /srv/apps/stone/log:/medusa/log
+      - /srv/apps/stone/public/system:/medusa/public/system
+      - /srv/apps/stone/db:/medusa/db
+  map_httpd:
+    image: httpd:2.4
+    networks:
+      - container-link
+    volumes:
+      - /srv/apps/stone/public/system/maps:/usr/local/apache2/htdocs/maps  
+  sidekiq:
+    image: "yyachi/medusa:10.0.91-production"
+    networks:
+      - container-link
+    depends_on:
+      - postgres
+      - redis
+    environment:
+      REDIS_URL: redis://redis:6379
+      RAILS_ENV: production
+      DB_NAME: stone
+      DISABLE_DATABASE_ENVIRONMENT_CHECK: 1
+      RAILS_SERVE_STATIC_FILES: 'true'
+      RAILS_RELATIVE_URL_ROOT: /stone
+      SITE_NAME: stone      
+      RPLOT_URL: /rplot/
+      SLACK_WEBHOOK_URL: 'https://hooks.slack.com/services/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'
+      SLACK_CHANNEL_EXCEPTION_NOTIFICATION: '#echo-sidekiq-exception'
+      EXCEPTION_NOTIFICATION_IGNORE_CRAWLERS: 'SemrushBot'
+    command: bundle exec sidekiq
+    volumes:
+      - /srv/apps/stone/log:/medusa/log
+      - /srv/apps/stone/public/system/attachment_files:/medusa/public/system/attachment_files
+      - /srv/apps/stone/public/system/surface_images:/medusa/public/system/surface_images
+      - /srv/apps/stone/public/system/maps:/medusa/public/system/maps
+      - /srv/apps/stone/db:/medusa/db    
+  stage_view:
+    image: yyachi/stage-view:0.0.21
+    volumes:
+      - /srv/apps/stone/stage_view/nginx_conf:/etc/nginx/conf.d
+      - /srv/apps/stone/stage_view/data:/app/data
+    networks:
+      - container-link
+    depends_on:
+      - medusa
+  shiny:
+    image: yyachi/visual_analysis:0.0.8
+    networks:
+      - container-link
+    depends_on:
+      - medusa
+    environment: 
+      PASSWORD: rstudi0
+      MEDUSA_URL: http://medusa:3000/stone/
+      MEDUSA_USER: dream.misasa
+      MEDUSA_PASSWORD: password
+      RDS_PATH: /srv/shiny-server/visual_analysis/data/analyses.rds
+    command: bash -c "envsubst < /tmp/zdata/shiny.yaml.template > /srv/shiny-server/visual_analysis/config/medusa.yaml && /init"
+    volumes:
+      - /srv/apps/stone/log:/var/log/shiny-server
+      - /srv/apps/stone/shiny_data:/srv/shiny-server/visual_analysis/data
+      - /srv/apps/stone:/tmp/zdata     
+  redmine:
+    image: redmine:4.2.3
+    user: 1000:1000
+    ports:
+      - 8090:3000
+    depends_on:
+      - redmine_db
+    environment:
+      REDMINE_DB_POSTGRES: redmine_db
+      REDMINE_DB_DATABASE: dream_tracker
+      REDMINE_DB_USERNAME: postgres
+      REDMINE_DB_PASSWORD: postgres
+      REDMINE_DB_ENCODING: utf8
+      REDMINE_SECRET_KEY_BASE: supersecretkey
+      RAILS_RELATIVE_URL_ROOT: /redmine
+    #configs:
+    #  - source: redmine_config_ru
+    #    target: /usr/src/redmine/config.ru
+    volumes:
+      - /srv/apps/redmine/config.ru:/usr/src/redmine/config.ru
+      - /srv/apps/redmine/files:/usr/src/redmine/files
+      - /srv/apps/redmine/public/plugin_assets:/usr/src/redmine/public/plugin_assets
+      #- /srv/apps/redmine/config:/usr/src/redmine/config
+    networks:
+      - container-link
+  redmine_db:
+    image: postgres:9
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    volumes:
+      - /srv/apps/redmine/postgres_data:/var/lib/postgresql/data
+      - /srv/apps/redmine:/root/tmp
+    networks:
+      - container-link    
+networks:
+  container-link:
+    name: stone
+    ipam:
+      config:
+        - subnet: 192.168.112.0/24
