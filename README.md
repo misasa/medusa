@@ -28,6 +28,6 @@ available at http://dream.misasa.okayama-u.ac.jp/documentation/.
 
 # Application
 
-- [web app -- Medusa for stone](https://database.misasa.okayama-u.ac.jp/stone/)
-- [web app -- Medusa for demo](https://dream.misasa.okayama-u.ac.jp/demo)
+- [web app -- Medusa for stone](https://database.misasa.okayama-u.ac.jp/stone)
+- [web app -- Medusa for demo](https://dream.misasa.okayama-u.ac.jp/pub)
 - [web app -- Medusa for GFZ-Potsdam](http://rz-vm169.gfz-potsdam.de/medusa)
