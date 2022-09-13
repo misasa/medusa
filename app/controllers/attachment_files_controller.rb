@@ -137,6 +137,7 @@ class AttachmentFilesController < ApplicationController
       :data,
       :original_geometry,
       :affine_matrix_in_string,
+      :corners_on_world_in_string,
       :user_id,
       :group_id,
       :published,

@@ -413,6 +413,10 @@ class AttachmentFile < ApplicationRecord
     [image_xy2image_coord(0,0), image_xy2image_coord(x_max,0), image_xy2image_coord(x_max,y_max), image_xy2image_coord(0,y_max)]
   end
 
+  def corners_on_world_in_string=(_corners)
+    self.corners_on_world = _corners.split(':').map{|xy| xy.split(',').map{|v| v.to_f}}
+  end
+
   def corners_on_world=(_corners)
     corners_on_world_str = "[" + _corners.map{|_corner| _corner.join(',')}.join('],[') + "]"
     corners_on_image_str = "[" + self.corners_on_image.map{|_corner| _corner.join(',')}.join('],[') + "]"

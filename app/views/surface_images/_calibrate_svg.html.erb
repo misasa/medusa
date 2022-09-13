@@ -349,6 +349,7 @@
     warp_cmd += " " + this.overlay_image_name;
     warp_cmd += " " + "-g [" + this.baseTriangle.image.width + "," + this.baseTriangle.image.height + "]"
     warp_cmd += " " +  " -m [" + array_ij.join(",") + "]";
+    warp_cmd += " " +  "--interpolation-method nearest";
     warp_cmd += " -o deleteme.png";
     $("#warp_cmd").text(warp_cmd);
 
@@ -360,7 +361,8 @@
     var overlay_cmd = "warp_image";
     overlay_cmd += " " + this.overlay_image_name;
     overlay_cmd += " " + "-b " + this.base_image_name;
-    overlay_cmd += " " +  " -n [" + array_corners.join(",") + "]";
+    overlay_cmd += " " +  "-n [" + array_corners.join(",") + "]";
+    overlay_cmd += " " +  "--interpolation-method nearest";
     overlay_cmd += " -o " + this.overlay_image_name.split('.').shift() + "-on-" + this.base_image_name.split('.').shift() + ".png";
     //$("#overlay_cmd").text("2> " + overlay_cmd);
     
