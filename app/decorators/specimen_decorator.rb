@@ -633,10 +633,12 @@ class SpecimenDecorator < Draper::Decorator
         end
         spot = spots.select{|spot| spot.target_uid == self.global_id }
         svg = file.decorate.picture_with_spots(spots:spot, with_cross: true)
-        svg_link = h.link_to(h.spot_path(spot)) do
-          svg
+        if spot.try(:id)
+          svg_link = h.link_to(h.spot_path(spot)) do
+            svg
+          end
+          return svg_link
         end
-        return svg_link
       end
     end
   end
