@@ -58,7 +58,7 @@
       	<% if @user.omniauth_uid(:google_oauth2).present? %>
       	  <%= link_to("Unlink", unlink_account_path(provider: :google_oauth2), method: :post, class: "btn btn-mini btn-default") %>
       	<% else %>
-      	  <%= link_to("Link", user_google_oauth2_omniauth_authorize_path, class: "btn btn-mini btn-default") %>
+      	  <%= link_to("Link", user_google_oauth2_omniauth_authorize_path, method: :post, class: "btn btn-mini btn-default") %>
       	<% end %>
       </div>
     <% end %>
