@@ -38,6 +38,9 @@ RSpec.configure do |config|
 
   config.include ControllerSpecHelper, type: :controller
   config.include RequestSpecHelper, type: :request
+  
+  # Include DecoratorSpecHelper for Decorator specs (provides 'h' view context helper)
+  config.include DecoratorSpecHelper, type: :decorator
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -59,6 +62,11 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.infer_spec_type_from_file_location!
+  
+  # Register :decorator type for specs in spec/decorators/
+  config.define_derived_metadata(file_path: %r{/spec/decorators/}) do |metadata|
+    metadata[:type] = :decorator
+  end
 
   config.before(:all) do
     RSpec::Rails::FixtureFileUploadSupport::RailsFixtureFileWrapper.include RSpec::Rails::FileFixtureSupport
