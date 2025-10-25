@@ -28,6 +28,9 @@ docker-compose.yml
 /coverage
 /spec/reports
 
+# Ignore Yarn cache file
+.yarnrc
+
 # Ignore eclipse files.
 .project
 public/system
