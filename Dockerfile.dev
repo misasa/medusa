@@ -1,4 +1,4 @@
-FROM ruby:2.7.2
+FROM ruby:2.7.2-slim
 
 ARG BUNDLER_VERSION="2.2.8"
 ARG UID=1000
@@ -18,6 +18,7 @@ RUN apt-get update -qq && \
       nodejs \
       ghostscript \
       imagemagick \
+      git \
       curl && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
@@ -36,6 +37,11 @@ RUN useradd -m --home-dir /medusa -u ${UID} -g ${GID} medusa || true
 
 USER medusa
 WORKDIR /medusa
+
+# CRITICAL FIX: Remove system bundler to avoid double-loading conflicts
+# The ruby:2.7.2 image ships with bundler 2.1.4, but we need 2.2.8
+# Having both causes "already registered" errors in RSpec
+RUN gem uninstall bundler -x -I || true
 
 # Install bundler
 RUN gem install bundler --version ${BUNDLER_VERSION}
