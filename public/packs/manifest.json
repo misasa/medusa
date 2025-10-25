@@ -1,16 +1,42 @@
 {
-  "application.js": "/packs/js/application-e716752655c4c0073cd7.js",
-  "application.js.map": "/packs/js/application-e716752655c4c0073cd7.js.map",
+  "application.css": "/packs/css/application-2d057392.css",
+  "application.css.map": "/packs/css/application-2d057392.css.map",
+  "application.js": "/packs/js/application-28ff8f615af928b42aea.js",
+  "application.js.map": "/packs/js/application-28ff8f615af928b42aea.js.map",
   "entrypoints": {
     "application": {
+      "css": [
+        "/packs/css/application-2d057392.css"
+      ],
       "js": [
-        "/packs/js/application-e716752655c4c0073cd7.js"
+        "/packs/js/application-28ff8f615af928b42aea.js"
+      ],
+      "css.map": [
+        "/packs/css/application-2d057392.css.map"
       ],
       "js.map": [
-        "/packs/js/application-e716752655c4c0073cd7.js.map"
+        "/packs/js/application-28ff8f615af928b42aea.js.map"
+      ]
+    },
+    "main_vue": {
+      "css": [
+        "/packs/css/main_vue-06cc6ec3.css"
+      ],
+      "js": [
+        "/packs/js/main_vue-661984ee53272198c8f1.js"
+      ],
+      "css.map": [
+        "/packs/css/main_vue-06cc6ec3.css.map"
+      ],
+      "js.map": [
+        "/packs/js/main_vue-661984ee53272198c8f1.js.map"
       ]
     }
   },
+  "main_vue.css": "/packs/css/main_vue-06cc6ec3.css",
+  "main_vue.css.map": "/packs/css/main_vue-06cc6ec3.css.map",
+  "main_vue.js": "/packs/js/main_vue-661984ee53272198c8f1.js",
+  "main_vue.js.map": "/packs/js/main_vue-661984ee53272198c8f1.js.map",
   "media/images/icon_ghost.png": "/packs/media/images/icon_ghost-ebe895c7c031cbd011445c7c40de7cbd.png",
   "media/images/icon_pdf_1.png": "/packs/media/images/icon_pdf_1-42227ccb99213da2456d0df61b2f7c3b.png"
 }

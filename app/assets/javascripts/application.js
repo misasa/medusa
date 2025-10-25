@@ -49,9 +49,8 @@
 //= require fitsjs/lib/fits.js
 //= require wcs.js/wcs.js
 //= require_tree .
-//= require highcharts/highcharts
-//= require highcharts/highcharts-more
 //= require highcharts/highstock
+//= require highcharts/highcharts-more
 function basename(path) {
   return path.substr(0, path.lastIndexOf("."));
 }

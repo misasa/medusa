@@ -1,5 +1,9 @@
 require 'matrix'
-require 'RubyFits'
+begin
+  require 'RubyFits'
+rescue LoadError
+  # RubyFits not available - FITS file support disabled
+end
 class AttachmentFile < ApplicationRecord
   include HasRecordProperty
   has_attached_file :data,

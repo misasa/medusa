@@ -81,12 +81,13 @@ gem 'exception_notification'
 gem 'slack-notifier'
 gem 'settingslogic'
 
-source 'http://dream.misasa.okayama-u.ac.jp/rubygems/' do
-  gem 'acts_as_mappable', '0.1.5'
-  gem 'with_recursive', '0.0.7'
-end
-#gem 'acts_as_mappable', git: 'git@devel.misasa.okayama-u.ac.jp:gems/actsasmappable.git'
-#gem 'with_recursive', git: 'git@devel.misasa.okayama-u.ac.jp:gems/withrecursive.git'
+# Custom gem server not accessible - using commented git sources or skipping
+# source 'http://dream.misasa.okayama-u.ac.jp/rubygems/' do
+#   gem 'acts_as_mappable', '0.1.5'
+#   gem 'with_recursive', '0.0.7'
+# end
+gem 'acts_as_mappable', git: 'https://github.com/misasa/actsasmappable.git'
+gem 'with_recursive', git: 'https://github.com/misasa/withrecursive.git'
 
 gem 'thinreports', '0.7.7'
 gem 'bootstrap-sass'

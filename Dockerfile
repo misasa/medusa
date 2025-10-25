@@ -7,6 +7,9 @@ ARG UID=1000
 ARG GID=1000
 FROM node:${NODE_VERSION}-buster-slim as node
 FROM ruby:${RUBY_VERSION} as ruby-fits
+RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
+    sed -i '/buster-updates/d' /etc/apt/sources.list
 RUN apt-get update && apt-get install -y \
 build-essential \
 libpcre3-dev \
@@ -32,6 +35,9 @@ RUN mkdir -p RubyFits/swig/build && cd RubyFits/swig/build && cmake .. && make i
 RUN cp /root/lib/ruby/* /usr/local/lib/ruby/site_ruby/
 
 From ruby:${RUBY_VERSION} as build-python
+RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
+    sed -i '/buster-updates/d' /etc/apt/sources.list
 RUN apt-get update \
 && apt-get install -y python3-pip \
 && apt-get install -y libopencv-dev 
@@ -45,6 +51,9 @@ ARG BUNDLER_VERSION
 ARG YARN_VERSION
 ARG UID
 ARG GID
+RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
+    sed -i '/buster-updates/d' /etc/apt/sources.list
 RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get -yq dist-upgrade &&\
   DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends\
   ghostscript \
@@ -144,6 +153,9 @@ ARG RAILS_ENV
 ARG YARN_VERSION
 ARG UID
 ARG GID
+RUN sed -i 's|http://deb.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
+    sed -i 's|http://security.debian.org|http://archive.debian.org|g' /etc/apt/sources.list && \
+    sed -i '/buster-updates/d' /etc/apt/sources.list
 RUN apt-get update -qq && DEBIAN_FRONTEND=noninteractive apt-get -yq dist-upgrade &&\
   DEBIAN_FRONTEND=noninteractive apt-get install -yq --no-install-recommends\
   python3 \
