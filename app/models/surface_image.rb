@@ -1,3 +1,5 @@
+require 'shellwords'
+
 class SurfaceImage < ApplicationRecord
   has_attached_file :data,
   styles: { thumb: "160x120>", tiny: "50x50"},
@@ -340,7 +342,7 @@ class SurfaceImage < ApplicationRecord
       corners_str = corners_on_world_str
       center_str = sprintf("[%.2f,%.2f]", ce[0], ce[1])
       length_str = sprintf("%.2f", surface.length)
-      cmd = "'#{image_path}' #{corners_str} #{length_str} #{center_str} -o #{tile_dir} -z #{maxzoom}"
+      cmd = "#{Shellwords.escape(image_path)} #{corners_str} #{length_str} #{center_str} -o #{Shellwords.escape(tile_dir)} -z #{maxzoom}"
     end
     cmd += " -t" if transparent
     cmd += " #{transparent_color}" if transparent_color
@@ -361,7 +363,7 @@ class SurfaceImage < ApplicationRecord
       bounds_str = sprintf("[%.2f,%.2f,%.2f,%.2f]", bs[0], bs[1], bs[2], bs[3])
       center_str = sprintf("[%.2f,%.2f]", ce[0], ce[1])
       length_str = sprintf("%.2f", surface.length)
-      cmd = "#{image_path} #{bounds_str} #{length_str} #{center_str} -o #{surface_layer.tile_dir} -z #{maxzoom}"
+      cmd = "#{Shellwords.escape(image_path)} #{bounds_str} #{length_str} #{center_str} -o #{Shellwords.escape(surface_layer.tile_dir)} -z #{maxzoom}"
     end
     cmd += " -t" if transparent
     cmd += " #{transparent_color}" if transparent_color

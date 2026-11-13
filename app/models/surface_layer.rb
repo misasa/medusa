@@ -1,3 +1,5 @@
+require 'shellwords'
+
 class SurfaceLayer < ApplicationRecord
   belongs_to :surface
   has_many :surface_images, -> { order('position DESC') }, dependent: :nullify
@@ -96,7 +98,7 @@ class SurfaceLayer < ApplicationRecord
         image_path = surface_image.image_path
       end
       next unless File.exist?(image_path)
-      args << image_path
+      args << Shellwords.escape(image_path)
       args << surface_image.corners_on_world_str("%.2f")
     end
     return if args.empty?
@@ -105,7 +107,7 @@ class SurfaceLayer < ApplicationRecord
     if ce && ce.size == 2
       center_str = sprintf("[%.2f,%.2f]", ce[0], ce[1])
       length_str = sprintf("%.2f", surface.length)
-      cmd += " #{length_str} #{center_str} -o #{tile_dir} -z #{maxzoom}"
+      cmd += " #{length_str} #{center_str} -o #{Shellwords.escape(tile_dir)} -z #{maxzoom}"
     end
     cmd += " -t" if transparent
     cmd += " #{transparent_color}" if transparent_color
