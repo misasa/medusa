@@ -1,4 +1,5 @@
 require 'matrix'
+require 'shellwords'
 require 'RubyFits'
 class AttachmentFile < ApplicationRecord
   include HasRecordProperty
@@ -255,7 +256,8 @@ class AttachmentFile < ApplicationRecord
     png.save(image_2)
     array_str = corners_on_new_image.to_s.gsub(/\s+/,"")
 
-    line = Terrapin::CommandLine.new("image_in_image", "#{image_1} #{image_2} #{array_str} -p nearest -o #{image_2}", logger: logger)
+    args = [image_1, image_2, array_str, "-p", "nearest", "-o", image_2]
+    line = Terrapin::CommandLine.new("image_in_image", Shellwords.join(args), logger: logger)
     puts(line.command)
     line.run
     return image_2
